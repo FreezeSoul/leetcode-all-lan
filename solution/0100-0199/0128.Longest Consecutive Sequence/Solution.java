@@ -5,14 +5,14 @@ class Solution {
             s.add(x);
         }
         int ans = 0;
+        Map<Integer, Integer> d = new HashMap<>();
         for (int x : nums) {
-            if (!s.contains(x - 1)) {
-                int y = x + 1;
-                while (s.contains(y)) {
-                    ++y;
-                }
-                ans = Math.max(ans, y - x);
+            int y = x;
+            while (s.contains(y)) {
+                s.remove(y++);
             }
+            d.put(x, d.getOrDefault(y, 0) + y - x);
+            ans = Math.max(ans, d.get(x));
         }
         return ans;
     }

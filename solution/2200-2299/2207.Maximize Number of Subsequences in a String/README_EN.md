@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2207.Maximize%20Number%20of%20Subsequences%20in%20a%20String/README_EN.md
+rating: 1550
+source: Biweekly Contest 74 Q2
+tags:
+    - Greedy
+    - String
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2207. Maximize Number of Subsequences in a String](https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string)
 
 [中文文档](/solution/2200-2299/2207.Maximize%20Number%20of%20Subsequences%20in%20a%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> string <code>text</code> and another <strong>0-indexed</strong> string <code>pattern</code> of length <code>2</code>, both of which consist of only lowercase English letters.</p>
 
@@ -43,101 +59,129 @@ Some of the strings which can be obtained from text and have 6 subsequences &quo
 	<li><code>text</code> and <code>pattern</code> consist only of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Traversal + Counting
+
+We can use two variables $x$ and $y$ to record the current counts of $\textit{pattern}[0]$ and $\textit{pattern}[1]$ in the string, respectively.
+
+Then, traverse the string $\textit{text}$. For the current character $c$:
+
+-   If $c$ equals $\textit{pattern}[1]$, increment $y$ by one. At this point, all previously encountered $\textit{pattern}[0]$ can form a $\textit{pattern}$ subsequence with the current $c$, so add $x$ to the answer.
+-   If $c$ equals $\textit{pattern}[0]$, increment $x$ by one.
+
+After the traversal, since we can insert one character, if we add $\textit{pattern}[0]$ at the beginning of the string, we can get $y$ $\textit{pattern}$ subsequences. If we add $\textit{pattern}[1]$ at the end of the string, we can get $x$ $\textit{pattern}$ subsequences. Therefore, we add the larger value of $x$ and $y$ to the answer.
+
+The time complexity is $O(n)$, where $n$ is the length of the string $\textit{text}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maximumSubsequenceCount(self, text: str, pattern: str) -> int:
-        ans = 0
-        cnt = Counter()
+        ans = x = y = 0
         for c in text:
             if c == pattern[1]:
-                ans += cnt[pattern[0]]
-            cnt[c] += 1
-        ans += max(cnt[pattern[0]], cnt[pattern[1]])
+                y += 1
+                ans += x
+            if c == pattern[0]:
+                x += 1
+        ans += max(x, y)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public long maximumSubsequenceCount(String text, String pattern) {
-        int[] cnt = new int[26];
-        char a = pattern.charAt(0);
-        char b = pattern.charAt(1);
         long ans = 0;
-        for (char c : text.toCharArray()) {
-            if (c == b) {
-                ans += cnt[a - 'a'];
+        int x = 0, y = 0;
+        for (int i = 0; i < text.length(); ++i) {
+            if (text.charAt(i) == pattern.charAt(1)) {
+                ++y;
+                ans += x;
             }
-            cnt[c - 'a']++;
+            if (text.charAt(i) == pattern.charAt(0)) {
+                ++x;
+            }
         }
-        ans += Math.max(cnt[a - 'a'], cnt[b - 'a']);
+        ans += Math.max(x, y);
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long maximumSubsequenceCount(string text, string pattern) {
         long long ans = 0;
-        char a = pattern[0], b = pattern[1];
-        vector<int> cnt(26);
+        int x = 0, y = 0;
         for (char& c : text) {
-            if (c == b) ans += cnt[a - 'a'];
-            cnt[c - 'a']++;
+            if (c == pattern[1]) {
+                ++y;
+                ans += x;
+            }
+            if (c == pattern[0]) {
+                ++x;
+            }
         }
-        ans += max(cnt[a - 'a'], cnt[b - 'a']);
+        ans += max(x, y);
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func maximumSubsequenceCount(text string, pattern string) int64 {
-	ans := 0
-	cnt := make([]int, 26)
-	a, b := pattern[0], pattern[1]
-	for i := range text {
-		c := text[i]
-		if c == b {
-			ans += cnt[a-'a']
+func maximumSubsequenceCount(text string, pattern string) (ans int64) {
+	x, y := 0, 0
+	for _, c := range text {
+		if byte(c) == pattern[1] {
+			y++
+			ans += int64(x)
 		}
-		cnt[c-'a']++
+		if byte(c) == pattern[0] {
+			x++
+		}
 	}
-	ans += max(cnt[a-'a'], cnt[b-'a'])
-	return int64(ans)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	ans += int64(max(x, y))
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function maximumSubsequenceCount(text: string, pattern: string): number {
+    let ans = 0;
+    let [x, y] = [0, 0];
+    for (const c of text) {
+        if (c === pattern[1]) {
+            ++y;
+            ans += x;
+        }
+        if (c === pattern[0]) {
+            ++x;
+        }
+    }
+    ans += Math.max(x, y);
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

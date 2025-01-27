@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1630.Arithmetic%20Subarrays/README_EN.md
+rating: 1421
+source: Weekly Contest 212 Q2
+tags:
+    - Array
+    - Hash Table
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1630. Arithmetic Subarrays](https://leetcode.com/problems/arithmetic-subarrays)
 
 [中文文档](/solution/1600-1699/1630.Arithmetic%20Subarrays/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A sequence of numbers is called <strong>arithmetic</strong> if it consists of at least two elements, and the difference between every two consecutive elements is the same. More formally, a sequence <code>s</code> is arithmetic if and only if <code>s[i+1] - s[i] == s[1] - s[0] </code>for all valid <code>i</code>.</p>
 
@@ -53,26 +69,34 @@ In the 2<sup>nd</sup> query, the subarray is <code>[5,9,3,7]. This</code> can be
 	<li><code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def checkArithmeticSubarrays(self, nums: List[int], l: List[int], r: List[int]) -> List[bool]:
+    def checkArithmeticSubarrays(
+        self, nums: List[int], l: List[int], r: List[int]
+    ) -> List[bool]:
         def check(nums, l, r):
             n = r - l + 1
-            s = set(nums[l: l + n])
-            a1, an = min(nums[l: l + n]), max(nums[l: l + n])
+            s = set(nums[l : l + n])
+            a1, an = min(nums[l : l + n]), max(nums[l : l + n])
             d, mod = divmod(an - a1, n - 1)
             return mod == 0 and all((a1 + (i - 1) * d) in s for i in range(1, n))
 
         return [check(nums, left, right) for left, right in zip(l, r)]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkArithmeticSubarrays(nums []int, l []int, r []int) (ans []bool) {
@@ -177,14 +201,10 @@ func checkArithmeticSubarrays(nums []int, l []int, r []int) (ans []bool) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function checkArithmeticSubarrays(
-    nums: number[],
-    l: number[],
-    r: number[],
-): boolean[] {
+function checkArithmeticSubarrays(nums: number[], l: number[], r: number[]): boolean[] {
     const check = (nums: number[], l: number, r: number): boolean => {
         const s = new Set<number>();
         const n = r - l + 1;
@@ -214,7 +234,7 @@ function checkArithmeticSubarrays(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -236,10 +256,37 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+class Solution {
+    public bool Check(int[] arr) {
+        Array.Sort(arr);
+        int diff = arr[1] - arr[0];
+        for (int i = 2; i < arr.Length; i++) {
+            if (arr[i] - arr[i - 1] != diff) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    public IList<bool> CheckArithmeticSubarrays(int[] nums, int[] l, int[] r) {
+        List<bool> ans = new List<bool>();
+        for (int i = 0; i < l.Length; i++) {
+            int[] arr = new int[r[i] - l[i] + 1];
+            for (int j = 0; j < arr.Length; j++) {
+                arr[j] = nums[l[i] + j];
+            }
+            ans.Add(Check(arr));
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

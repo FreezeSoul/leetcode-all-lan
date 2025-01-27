@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0789.Escape%20The%20Ghosts/README.md
+tags:
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [789. 逃脱阻碍者](https://leetcode.cn/problems/escape-the-ghosts)
 
 [English Version](/solution/0700-0799/0789.Escape%20The%20Ghosts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你在进行一个简化版的吃豆人游戏。你从 <code>[0, 0]</code> 点开始出发，你的目的地是&nbsp;<code>target = [x<sub>target</sub>, y<sub>target</sub>]</code> 。地图上有一些阻碍者，以数组 <code>ghosts</code> 给出，第 <code>i</code> 个阻碍者从&nbsp;<code>ghosts[i] = [x<sub>i</sub>, y<sub>i</sub>]</code>&nbsp;出发。所有输入均为 <strong>整数坐标</strong> 。</p>
 
@@ -52,11 +63,13 @@
 	<li><code>-10<sup>4</sup> &lt;= x<sub>target</sub>, y<sub>target</sub> &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：曼哈顿距离**
+### 方法一：曼哈顿距离
 
 对于任意一个阻碍者，如果它到目的地的曼哈顿距离小于等于你到目的地的曼哈顿距离，那么它就可以在你到达目的地之前抓住你。因此，我们只需要判断所有阻碍者到目的地的曼哈顿距离是否都大于你到目的地的曼哈顿距离即可。
 
@@ -64,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +86,7 @@ class Solution:
         return all(abs(tx - x) + abs(ty - y) > abs(tx) + abs(ty) for x, y in ghosts)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func escapeGhosts(ghosts [][]int, target []int) bool {
@@ -134,16 +143,13 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function escapeGhosts(ghosts: number[][], target: number[]): boolean {
     const [tx, ty] = target;
     for (const [x, y] of ghosts) {
-        if (
-            Math.abs(tx - x) + Math.abs(ty - y) <=
-            Math.abs(tx) + Math.abs(ty)
-        ) {
+        if (Math.abs(tx - x) + Math.abs(ty - y) <= Math.abs(tx) + Math.abs(ty)) {
             return false;
         }
     }
@@ -151,10 +157,8 @@ function escapeGhosts(ghosts: number[][], target: number[]): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

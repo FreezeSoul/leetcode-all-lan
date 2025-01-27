@@ -11,13 +11,12 @@
  */
 
 function swapPairs(head: ListNode | null): ListNode | null {
-    const dummy = new ListNode(0, head);
-    let cur = dummy;
-    while (cur.next != null && cur.next.next != null) {
-        const a = cur.next;
-        const b = cur.next.next;
-        [a.next, b.next, cur.next] = [b.next, a, b];
-        cur = cur.next.next;
+    if (!head || !head.next) {
+        return head;
     }
-    return dummy.next;
+    const t = swapPairs(head.next.next);
+    const p = head.next;
+    p.next = head;
+    head.next = t;
+    return p;
 }

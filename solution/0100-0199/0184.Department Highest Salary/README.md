@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0184.Department%20Highest%20Salary/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [184. 部门工资最高的员工](https://leetcode.cn/problems/department-highest-salary)
 
 [English Version](/solution/0100-0199/0184.Department%20Highest%20Salary/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：&nbsp;<code>Employee</code></p>
 
@@ -17,9 +27,9 @@
 | salary       | int     |
 | departmentId | int     |
 +--------------+---------+
-id是此表的主键列。
-departmentId是Department表中ID的外键。
-此表的每一行都表示员工的ID、姓名和工资。它还包含他们所在部门的ID。
+在 SQL 中，id是此表的主键。
+departmentId 是 Department 表中 id 的外键（在 Pandas 中称为 join key）。
+此表的每一行都表示员工的 id、姓名和工资。它还包含他们所在部门的 id。
 </pre>
 
 <p>&nbsp;</p>
@@ -33,13 +43,13 @@ departmentId是Department表中ID的外键。
 | id          | int     |
 | name        | varchar |
 +-------------+---------+
-id是此表的主键列。
-此表的每一行都表示一个部门的ID及其名称。
+在 SQL 中，id 是此表的主键列。
+此表的每一行都表示一个部门的 id 及其名称。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写SQL查询以查找每个部门中薪资最高的员工。<br />
+<p>查找出每个部门中薪资最高的员工。<br />
 按 <strong>任意顺序</strong> 返回结果表。<br />
 查询结果格式如下例所示。</p>
 
@@ -76,74 +86,71 @@ Department 表:
 +------------+----------+--------+
 <strong>解释：</strong>Max 和 Jim 在 IT 部门的工资都是最高的，Henry 在销售部的工资最高。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：等值连接 + 子查询
+
+我们可以使用等值连接，将 `Employee` 表和 `Department` 表连接起来，连接条件为 `Employee.departmentId = Department.id`，然后使用子查询来找到每个部门的最高工资，最后使用 `WHERE` 子句来筛选出每个部门中薪资最高的员工。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT
-	Department.NAME AS Department,
-	Employee.NAME AS Employee,
-	Salary
+# Write your MySQL query statement below
+SELECT d.name AS department, e.name AS employee, salary
 FROM
-	Employee,
-	Department
+    Employee AS e
+    JOIN Department AS d ON e.departmentId = d.id
 WHERE
-	Employee.DepartmentId = Department.Id
-	AND ( Employee.DepartmentId, Salary )
-    IN (SELECT DepartmentId, max( Salary )
+    (d.id, salary) IN (
+        SELECT departmentId, MAX(salary)
         FROM Employee
-        GROUP BY DepartmentId )
-```
-
-```sql
-# Write your MySQL query statement below
-SELECT
-	d.NAME AS Department,
-	e1.NAME AS Employee,
-	e1.salary AS Salary
-FROM
-	Employee AS e1
-	JOIN Department AS d ON e1.departmentId = d.id
-WHERE
-	e1.salary = (
-	SELECT
-		MAX( Salary )
-	FROM
-		Employee AS e2
-	WHERE
-		e2.departmentId = d.id
-	)
-```
-
-```sql
-# Write your MySQL query statement below
-with t as (
-    select
-        departmentId,
-        name,
-        salary,
-        rank() over(
-            partition by departmentId
-            order by
-                salary desc
-        ) as rk
-    from
-        Employee
-)
-select
-    d.name Department,
-    t.name Employee,
-    salary Salary
-from
-    t
-    join Department d on t.departmentId = d.id
-where
-    rk = 1;
+        GROUP BY 1
+    );
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：等值连接 + 窗口函数
+
+我们可以使用等值连接，将 `Employee` 表和 `Department` 表连接起来，连接条件为 `Employee.departmentId = Department.id`，然后使用窗口函数 `rank()`，它可以为每个部门的每个员工分配一个排名，然后我们可以选择排名为 $1$ 的行即可。
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            d.name AS department,
+            e.name AS employee,
+            salary,
+            RANK() OVER (
+                PARTITION BY d.name
+                ORDER BY salary DESC
+            ) AS rk
+        FROM
+            Employee AS e
+            JOIN Department AS d ON e.departmentId = d.id
+    )
+SELECT department, employee, salary
+FROM T
+WHERE rk = 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

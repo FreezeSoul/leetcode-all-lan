@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0059.Spiral%20Matrix%20II/README.md
+tags:
+    - 数组
+    - 矩阵
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [59. 螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii)
 
 [English Version](/solution/0000-0099/0059.Spiral%20Matrix%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数 <code>n</code> ，生成一个包含 <code>1</code> 到 <code>n<sup>2</sup></code> 所有元素，且元素按顺时针顺序螺旋排列的 <code>n x n</code> 正方形矩阵 <code>matrix</code> 。</p>
 
@@ -32,11 +44,13 @@
 	<li><code>1 <= n <= 20</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 直接模拟螺旋矩阵的生成过程。
 
@@ -48,9 +62,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -68,9 +80,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func generateMatrix(n int) [][]int {
@@ -141,36 +151,7 @@ func generateMatrix(n int) [][]int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number} n
- * @return {number[][]}
- */
-var generateMatrix = function (n) {
-    const ans = new Array(n).fill(0).map(() => new Array(n).fill(0));
-    let [i, j, k] = [0, 0, 0];
-    const dirs = [
-        [0, 1],
-        [1, 0],
-        [0, -1],
-        [-1, 0],
-    ];
-    for (let v = 1; v <= n * n; ++v) {
-        ans[i][j] = v;
-        let [x, y] = [i + dirs[k][0], j + dirs[k][1]];
-        if (x < 0 || y < 0 || x >= n || y >= n || ans[x][y] > 0) {
-            k = (k + 1) % 4;
-            [x, y] = [i + dirs[k][0], j + dirs[k][1]];
-        }
-        [i, j] = [x, y];
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function generateMatrix(n: number): number[][] {
@@ -197,32 +178,7 @@ function generateMatrix(n: number): number[][] {
 }
 ```
 
-```ts
-function generateMatrix(n: number): number[][] {
-    const res = new Array(n).fill(0).map(() => new Array(n).fill(0));
-    let num = 1;
-    for (let i = 0; i < Math.floor(n / 2); i++) {
-        for (let j = i; j < n - i - 1; j++) {
-            res[i][j] = num++;
-        }
-        for (let j = i; j < n - i - 1; j++) {
-            res[j][n - i - 1] = num++;
-        }
-        for (let j = i; j < n - i - 1; j++) {
-            res[n - i - 1][n - j - 1] = num++;
-        }
-        for (let j = i; j < n - i - 1; j++) {
-            res[n - j - 1][i] = num++;
-        }
-    }
-    if (n % 2 === 1) {
-        res[n >> 1][n >> 1] = num;
-    }
-    return res;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -256,10 +212,74 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number} n
+ * @return {number[][]}
+ */
+var generateMatrix = function (n) {
+    const ans = new Array(n).fill(0).map(() => new Array(n).fill(0));
+    let [i, j, k] = [0, 0, 0];
+    const dirs = [
+        [0, 1],
+        [1, 0],
+        [0, -1],
+        [-1, 0],
+    ];
+    for (let v = 1; v <= n * n; ++v) {
+        ans[i][j] = v;
+        let [x, y] = [i + dirs[k][0], j + dirs[k][1]];
+        if (x < 0 || y < 0 || x >= n || y >= n || ans[x][y] > 0) {
+            k = (k + 1) % 4;
+            [x, y] = [i + dirs[k][0], j + dirs[k][1]];
+        }
+        [i, j] = [x, y];
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function generateMatrix(n: number): number[][] {
+    const res = new Array(n).fill(0).map(() => new Array(n).fill(0));
+    let num = 1;
+    for (let i = 0; i < Math.floor(n / 2); i++) {
+        for (let j = i; j < n - i - 1; j++) {
+            res[i][j] = num++;
+        }
+        for (let j = i; j < n - i - 1; j++) {
+            res[j][n - i - 1] = num++;
+        }
+        for (let j = i; j < n - i - 1; j++) {
+            res[n - i - 1][n - j - 1] = num++;
+        }
+        for (let j = i; j < n - i - 1; j++) {
+            res[n - j - 1][i] = num++;
+        }
+    }
+    if (n % 2 === 1) {
+        res[n >> 1][n >> 1] = num;
+    }
+    return res;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

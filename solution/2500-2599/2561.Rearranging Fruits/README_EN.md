@@ -1,13 +1,29 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2561.Rearranging%20Fruits/README_EN.md
+rating: 2221
+source: Weekly Contest 331 Q4
+tags:
+    - Greedy
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [2561. Rearranging Fruits](https://leetcode.com/problems/rearranging-fruits)
 
 [中文文档](/solution/2500-2599/2561.Rearranging%20Fruits/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>You have two fruit baskets containing <code>n</code> fruits each. You are given two <strong>0-indexed</strong> integer arrays <code>basket1</code> and <code>basket2</code> representing the cost of fruit in each basket. You want to make both baskets <strong>equal</strong>. To do so, you can use the following operation as many times as you want:</p>
 
 <ul>
-	<li>Chose two indices <code>i</code> and <code>j</code>, and swap the <code>i<sup>th</sup> </code>fruit of <code>basket1</code> with the <code>j<sup>th</sup></code> fruit of <code>basket2</code>.</li>
+	<li>Chose two indices <code>i</code> and <code>j</code>, and swap the <code>i<font size="1">th</font>&nbsp;</code>fruit of <code>basket1</code> with the <code>j<font size="1">th</font></code>&nbsp;fruit of <code>basket2</code>.</li>
 	<li>The cost of the swap is <code>min(basket1[i],basket2[j])</code>.</li>
 </ul>
 
@@ -36,16 +52,34 @@
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>basket1.length == bakste2.length</code></li>
+	<li><code>basket1.length == basket2.length</code></li>
 	<li><code>1 &lt;= basket1.length &lt;= 10<sup>5</sup></code></li>
 	<li><code>1 &lt;= basket1[i],basket2[i]&nbsp;&lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Construction
+
+First, we can remove the common elements from both arrays. For the remaining numbers, the occurrence of each number must be even, otherwise, it is impossible to construct identical arrays. Let's denote the arrays after removing common elements as $a$ and $b$.
+
+Next, we consider how to perform the swaps.
+
+If we want to swap the smallest number in $a$, we need to find the largest number in $b$ to swap with it; similarly, if we want to swap the smallest number in $b$, we need to find the largest number in $a$ to swap with it. This can be achieved by sorting.
+
+However, there is another swapping scheme. We can use a smallest number $mi$ as a transition element, first swap the number in $a$ with $mi$, and then swap $mi$ with the number in $b$. In this way, the cost of swapping is $2 \times mi$.
+
+In the code implementation, we can directly merge arrays $a$ and $b$ into an array $nums$, and then sort the array $nums$. Next, we enumerate the first half of the numbers, calculate the minimum cost each time, and add it to the answer.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$. Where $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,7 +99,7 @@ class Solution:
         return sum(min(x, mi * 2) for x in nums[:m])
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCost(basket1 []int, basket2 []int) (ans int64) {
@@ -167,19 +201,10 @@ func abs(x int) int {
 	}
 	return x
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1302.Deepest%20Leaves%20Sum/README.md
+rating: 1387
+source: 第 16 场双周赛 Q3
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1302. 层数最深叶子节点的和](https://leetcode.cn/problems/deepest-leaves-sum)
 
 [English Version](/solution/1300-1399/1302.Deepest%20Leaves%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵二叉树的根节点 <code>root</code> ，请你返回 <strong>层数最深的叶子节点的和</strong> 。</p>
 
@@ -35,25 +50,21 @@
 	<li><code>1 <= Node.val <= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
-可以忽略一些细节，每次都统计当前遍历层级的数值和，当 BFS 结束时，最后一次数值和便是结果。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是树中节点的数目。
-
-**方法二：DFS**
+我们可以使用广度优先搜索，逐层遍历二叉树，并在遍历到每一层时计算该层的节点值之和。遍历完成后，返回最后一层的节点值之和。
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是树中节点的数目。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -68,14 +79,224 @@ class Solution:
         while q:
             ans = 0
             for _ in range(len(q)):
-                root = q.popleft()
-                ans += root.val
-                if root.left:
-                    q.append(root.left)
-                if root.right:
-                    q.append(root.right)
+                node = q.popleft()
+                ans += node.val
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
         return ans
 ```
+
+#### Java
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int deepestLeavesSum(TreeNode root) {
+        Deque<TreeNode> q = new ArrayDeque<>();
+        q.offer(root);
+        int ans = 0;
+        while (!q.isEmpty()) {
+            ans = 0;
+            for (int k = q.size(); k > 0; --k) {
+                TreeNode node = q.poll();
+                ans += node.val;
+                if (node.left != null) {
+                    q.offer(node.left);
+                }
+                if (node.right != null) {
+                    q.offer(node.right);
+                }
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int deepestLeavesSum(TreeNode* root) {
+        int ans = 0;
+        queue<TreeNode*> q{{root}};
+        while (!q.empty()) {
+            ans = 0;
+            for (int k = q.size(); k; --k) {
+                TreeNode* node = q.front();
+                q.pop();
+                ans += node->val;
+                if (node->left) {
+                    q.push(node->left);
+                }
+                if (node->right) {
+                    q.push(node->right);
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func deepestLeavesSum(root *TreeNode) (ans int) {
+	q := []*TreeNode{root}
+	for len(q) > 0 {
+		ans = 0
+		for k := len(q); k > 0; k-- {
+			node := q[0]
+			q = q[1:]
+			ans += node.Val
+			if node.Left != nil {
+				q = append(q, node.Left)
+			}
+			if node.Right != nil {
+				q = append(q, node.Right)
+			}
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function deepestLeavesSum(root: TreeNode | null): number {
+    let q: TreeNode[] = [root];
+    let ans = 0;
+    while (q.length) {
+        const nq: TreeNode[] = [];
+        ans = 0;
+        for (const { val, left, right } of q) {
+            ans += val;
+            left && nq.push(left);
+            right && nq.push(right);
+        }
+        q = nq;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+use std::collections::VecDeque;
+
+impl Solution {
+    pub fn deepest_leaves_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        let mut q = VecDeque::new();
+        q.push_back(root);
+        let mut ans = 0;
+        while !q.is_empty() {
+            ans = 0;
+            for _ in 0..q.len() {
+                if let Some(Some(node)) = q.pop_front() {
+                    let node = node.borrow();
+                    ans += node.val;
+                    if node.left.is_some() {
+                        q.push_back(node.left.clone());
+                    }
+                    if node.right.is_some() {
+                        q.push_back(node.right.clone());
+                    }
+                }
+            }
+        }
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：DFS
+
+我们可以使用深度优先搜索，递归遍历二叉树，并在遍历的过程中记录当前节点的深度，以及最大深度和最深叶子节点的和。遍历到当前节点时，如果当前节点的深度等于最大深度，则将当前节点的值加到最深叶子节点的和中；如果当前节点的深度大于最大深度，则将最大深度更新为当前节点的深度，并将最深叶子节点的和更新为当前节点的值。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是树中节点的数目。
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -103,48 +324,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public int deepestLeavesSum(TreeNode root) {
-        Deque<TreeNode> q = new ArrayDeque<>();
-        q.offer(root);
-        int ans = 0;
-        while (!q.isEmpty()) {
-            ans = 0;
-            for (int n = q.size(); n > 0; --n) {
-                root = q.pollFirst();
-                ans += root.val;
-                if (root.left != null) {
-                    q.offer(root.left);
-                }
-                if (root.right != null) {
-                    q.offer(root.right);
-                }
-            }
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 /**
@@ -187,7 +367,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -204,90 +384,27 @@ class Solution {
 class Solution {
 public:
     int deepestLeavesSum(TreeNode* root) {
-        int ans = 0;
-        queue<TreeNode*> q {{root}};
-        while (!q.empty()) {
-            ans = 0;
-            for (int n = q.size(); n; --n) {
-                root = q.front();
-                q.pop();
-                ans += root->val;
-                if (root->left) q.push(root->left);
-                if (root->right) q.push(root->right);
+        int mx = 0, ans = 0;
+        auto dfs = [&](this auto&& dfs, TreeNode* root, int i) {
+            if (!root) {
+                return;
             }
-        }
-        return ans;
-    }
-};
-```
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    int mx = 0;
-    int ans = 0;
-
-    int deepestLeavesSum(TreeNode* root) {
+            if (i == mx) {
+                ans += root->val;
+            } else if (i > mx) {
+                mx = i;
+                ans = root->val;
+            }
+            dfs(root->left, i + 1);
+            dfs(root->right, i + 1);
+        };
         dfs(root, 1);
         return ans;
     }
-
-    void dfs(TreeNode* root, int i) {
-        if (!root) return;
-        if (i == mx) {
-            ans += root->val;
-        } else if (i > mx) {
-            mx = i;
-            ans = root->val;
-        }
-        dfs(root->left, i + 1);
-        dfs(root->right, i + 1);
-    }
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func deepestLeavesSum(root *TreeNode) int {
-	q := []*TreeNode{root}
-	ans := 0
-	for len(q) > 0 {
-		ans = 0
-		for n := len(q); n > 0; n-- {
-			root = q[0]
-			q = q[1:]
-			ans += root.Val
-			if root.Left != nil {
-				q = append(q, root.Left)
-			}
-			if root.Right != nil {
-				q = append(q, root.Right)
-			}
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 /**
@@ -319,7 +436,44 @@ func deepestLeavesSum(root *TreeNode) int {
 }
 ```
 
-### **C**
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function deepestLeavesSum(root: TreeNode | null): number {
+    let [ans, mx] = [0, 0];
+    const dfs = (root: TreeNode | null, i: number) => {
+        if (!root) {
+            return;
+        }
+        if (i > mx) {
+            mx = i;
+            ans = root.val;
+        } else if (i === mx) {
+            ans += root.val;
+        }
+        dfs(root.left, i + 1);
+        dfs(root.right, i + 1);
+    };
+    dfs(root, 1);
+    return ans;
+}
+```
+
+#### C
 
 ```c
 /**
@@ -330,7 +484,6 @@ func deepestLeavesSum(root *TreeNode) int {
  *     struct TreeNode *right;
  * };
  */
-
 
 void dfs(struct TreeNode* root, int depth, int* maxDepth, int* res) {
     if (!root->left && !root->right) {
@@ -350,7 +503,7 @@ void dfs(struct TreeNode* root, int depth, int* maxDepth, int* res) {
     }
 }
 
-int deepestLeavesSum(struct TreeNode* root){
+int deepestLeavesSum(struct TreeNode* root) {
     int res = 0;
     int maxDepth = 0;
     dfs(root, 0, &maxDepth, &res);
@@ -358,131 +511,8 @@ int deepestLeavesSum(struct TreeNode* root){
 }
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function deepestLeavesSum(root: TreeNode | null): number {
-    const queue = [root];
-    let res = 0;
-    while (queue.length !== 0) {
-        const n = queue.length;
-        let sum = 0;
-        for (let i = 0; i < n; i++) {
-            const { val, left, right } = queue.shift();
-            sum += val;
-            left && queue.push(left);
-            right && queue.push(right);
-        }
-        res = sum;
-    }
-    return res;
-}
-```
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function deepestLeavesSum(root: TreeNode | null): number {
-    let res = 0;
-    let maxDepath = 0;
-    const dfs = ({ val, left, right }: TreeNode, depth: number) => {
-        if (left == null && right == null) {
-            if (depth === maxDepath) {
-                res += val;
-            } else if (depth > maxDepath) {
-                maxDepath = depth;
-                res = val;
-            }
-            return;
-        }
-        left && dfs(left, depth + 1);
-        right && dfs(right, depth + 1);
-    };
-    dfs(root, 0);
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
-use std::rc::Rc;
-use std::cell::RefCell;
-impl Solution {
-    fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, depth: i32, max_depth: &mut i32, res: &mut i32) {
-        if let Some(node) = root {
-            let node = node.borrow();
-            if node.left.is_none() && node.right.is_none() {
-                if depth == *max_depth {
-                    *res += node.val;
-                } else if depth > *max_depth {
-                    *max_depth = depth;
-                    *res = node.val
-                }
-                return;
-            }
-            Self::dfs(&node.left, depth + 1, max_depth, res);
-            Self::dfs(&node.right, depth + 1, max_depth, res);
-        }
-    }
-
-    pub fn deepest_leaves_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        let mut res = 0;
-        let mut max_depth = 0;
-        Self::dfs(&root, 0, &mut max_depth, &mut res);
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

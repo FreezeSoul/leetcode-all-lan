@@ -1,8 +1,28 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2343.Query%20Kth%20Smallest%20Trimmed%20Number/README_EN.md
+rating: 1651
+source: Weekly Contest 302 Q3
+tags:
+    - Array
+    - String
+    - Divide and Conquer
+    - Quickselect
+    - Radix Sort
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [2343. Query Kth Smallest Trimmed Number](https://leetcode.com/problems/query-kth-smallest-trimmed-number)
 
 [中文文档](/solution/2300-2399/2343.Query%20Kth%20Smallest%20Trimmed%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array of strings <code>nums</code>, where each string is of <strong>equal length</strong> and consists of only digits.</p>
 
@@ -65,11 +85,21 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you use the <strong>Radix Sort Algorithm</strong> to solve this problem? What will be the complexity of that solution?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+According to the problem description, we can simulate the cropping process, then sort the cropped strings, and finally find the corresponding number based on the index.
+
+The time complexity is $O(m \times n \times \log n \times s)$, and the space complexity is $O(n)$. Here, $m$ and $n$ are the lengths of $\textit{nums}$ and $\textit{queries}$ respectively, and $s$ is the length of the string $\textit{nums}[i]$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -83,7 +113,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +160,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestTrimmedNumbers(nums []string, queries [][]int) []int {
@@ -151,16 +181,8 @@ func smallestTrimmedNumbers(nums []string, queries [][]int) []int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/16.02.Words%20Frequency/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 16.02. 单词频率](https://leetcode.cn/problems/words-frequency-lcci)
 
 [English Version](/lcci/16.02.Words%20Frequency/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>设计一个方法，找出任意指定单词在一本书中的出现频率。</p>
 <p>你的实现应该支持如下操作：</p>
 <ul>
@@ -27,21 +36,23 @@ wordsFrequency.get("pen"); //返回1
 <li><code>get</code>函数的调用次数不会超过100000</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
-我们用哈希表 `cnt` 统计每个单词出现的次数，`get` 函数直接返回 `cnt[word]` 即可。
+我们用哈希表 $cnt$ 统计 $book$ 中每个单词出现的次数。
 
-初始化哈希表 `cnt` 的时间复杂度为 $O(n)$，其中 $n$ 为 `book` 的长度。`get` 函数的时间复杂度为 $O(1)$。空间复杂度为 $O(n)$。
+调用 `get` 函数时，我们只需要返回 $cnt$ 中对应的单词的出现次数即可。
+
+时间复杂度方面，初始化哈希表 $cnt$ 的时间复杂度为 $O(n)$，其中 $n$ 为 $book$ 的长度。`get` 函数的时间复杂度为 $O(1)$。空间复杂度为 $O(n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class WordsFrequency:
@@ -57,9 +68,7 @@ class WordsFrequency:
 # param_1 = obj.get(word)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class WordsFrequency {
@@ -83,7 +92,7 @@ class WordsFrequency {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class WordsFrequency {
@@ -109,7 +118,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type WordsFrequency struct {
@@ -135,7 +144,60 @@ func (this *WordsFrequency) Get(word string) int {
  */
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+class WordsFrequency {
+    private cnt: Map<string, number>;
+
+    constructor(book: string[]) {
+        const cnt = new Map<string, number>();
+        for (const word of book) {
+            cnt.set(word, (cnt.get(word) ?? 0) + 1);
+        }
+        this.cnt = cnt;
+    }
+
+    get(word: string): number {
+        return this.cnt.get(word) ?? 0;
+    }
+}
+
+/**
+ * Your WordsFrequency object will be instantiated and called as such:
+ * var obj = new WordsFrequency(book)
+ * var param_1 = obj.get(word)
+ */
+```
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+struct WordsFrequency {
+    cnt: HashMap<String, i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl WordsFrequency {
+    fn new(book: Vec<String>) -> Self {
+        let mut cnt = HashMap::new();
+        for word in book.into_iter() {
+            *cnt.entry(word).or_insert(0) += 1;
+        }
+        Self { cnt }
+    }
+
+    fn get(&self, word: String) -> i32 {
+        *self.cnt.get(&word).unwrap_or(&0)
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -163,71 +225,26 @@ WordsFrequency.prototype.get = function (word) {
  */
 ```
 
-### **TypeScript**
+#### Swift
 
-```ts
+```swift
 class WordsFrequency {
-    private cnt: Map<string, number>;
+    private var cnt: [String: Int] = [:]
 
-    constructor(book: string[]) {
-        const cnt = new Map<string, number>();
-        for (const word of book) {
-            cnt.set(word, (cnt.get(word) ?? 0) + 1);
+    init(_ book: [String]) {
+        for word in book {
+            cnt[word, default: 0] += 1
         }
-        this.cnt = cnt;
     }
 
-    get(word: string): number {
-        return this.cnt.get(word) ?? 0;
-    }
-}
-
-/**
- * Your WordsFrequency object will be instantiated and called as such:
- * var obj = new WordsFrequency(book)
- * var param_1 = obj.get(word)
- */
-```
-
-### **Rust**
-
-```rust
-use std::collections::HashMap;
-struct WordsFrequency {
-    counter: HashMap<String, i32>
-}
-
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl WordsFrequency {
-
-    fn new(book: Vec<String>) -> Self {
-        let mut counter = HashMap::new();
-        for word in book.into_iter() {
-            *counter.entry(word).or_insert(0) += 1;
-        }
-        Self { counter }
-    }
-
-    fn get(&self, word: String) -> i32 {
-        *self.counter.get(&word).unwrap_or(&0)
+    func get(_ word: String) -> Int {
+        return cnt[word, default: 0]
     }
 }
-
-/**
- * Your WordsFrequency object will be instantiated and called as such:
- * let obj = WordsFrequency::new(book);
- * let ret_1: i32 = obj.get(word);
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

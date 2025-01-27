@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2439.Minimize%20Maximum%20of%20Array/README.md
+rating: 1965
+source: 第 89 场双周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 二分查找
+    - 动态规划
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2439. 最小化数组中的最大值](https://leetcode.cn/problems/minimize-maximum-of-array)
 
 [English Version](/solution/2400-2499/2439.Minimize%20Maximum%20of%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的数组&nbsp;<code>nums</code>&nbsp;，它含有&nbsp;<code>n</code>&nbsp;个非负整数。</p>
 
@@ -51,21 +67,21 @@ nums 中最大值为 5 。无法得到比 5 更小的最大值。
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
 最小化数组的最大值，容易想到二分查找。我们二分枚举数组的最大值 $mx$，找到一个满足题目要求的、且值最小的 $mx$ 即可。
 
-时间复杂度 $O(n\times \log M)$，其中 $n$ 为数组的长度，而 $M$ 为数组中的最大值。
+时间复杂度 $O(n \times \log M)$，其中 $n$ 为数组的长度，而 $M$ 为数组中的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +102,7 @@ class Solution:
         return left
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -126,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,22 +156,20 @@ public:
         };
         while (left < right) {
             int mid = (left + right) >> 1;
-            if (check(mid)) right = mid;
-            else left = mid + 1;
+            if (check(mid))
+                right = mid;
+            else
+                left = mid + 1;
         }
         return left;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimizeArrayValue(nums []int) int {
-	left, right := 0, 0
-	for _, x := range nums {
-		right = max(right, x)
-	}
 	check := func(mx int) bool {
 		d := 0
 		for i := len(nums) - 1; i > 0; i-- {
@@ -165,6 +177,8 @@ func minimizeArrayValue(nums []int) int {
 		}
 		return nums[0]+d <= mx
 	}
+
+	left, right := 0, slices.Max(nums)
 	for left < right {
 		mid := (left + right) >> 1
 		if check(mid) {
@@ -175,25 +189,10 @@ func minimizeArrayValue(nums []int) int {
 	}
 	return left
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

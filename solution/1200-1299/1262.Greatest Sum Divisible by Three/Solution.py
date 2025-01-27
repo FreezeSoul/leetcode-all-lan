@@ -1,9 +1,9 @@
 class Solution:
     def maxSumDivThree(self, nums: List[int]) -> int:
-        f = [0] * 3
-        for x in nums:
-            a, b, c = f[0] + x, f[1] + x, f[2] + x
-            f[a % 3] = max(f[a % 3], a)
-            f[b % 3] = max(f[b % 3], b)
-            f[c % 3] = max(f[c % 3], c)
-        return f[0]
+        n = len(nums)
+        f = [[-inf] * 3 for _ in range(n + 1)]
+        f[0][0] = 0
+        for i, x in enumerate(nums, 1):
+            for j in range(3):
+                f[i][j] = max(f[i - 1][j], f[i - 1][(j - x) % 3] + x)
+        return f[n][0]

@@ -1,10 +1,23 @@
-# [1772. 按受欢迎程度排列功能](https://leetcode.cn/problems/sort-features-by-popularity)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1772.Sort%20Features%20by%20Popularity/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [1772. 按受欢迎程度排列功能 🔒](https://leetcode.cn/problems/sort-features-by-popularity)
 
 [English Version](/solution/1700-1799/1772.Sort%20Features%20by%20Popularity/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串数组 <code>features</code> ，其中 <code>features[i]</code> 是一个单词，描述你最近参与开发的项目中一个功能的名称。你调查了用户喜欢哪些功能。另给定一个字符串数组 <code>responses</code>，其中 <code>responses[i]</code> 是一个包含以空格分隔的一系列单词的字符串。</p>
 
@@ -45,13 +58,15 @@
 	<li><code>responses[i]</code> 没有前置或后置空格。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 自定义排序**
+### 方法一：哈希表 + 自定义排序
 
-我们遍历 `responses`，对于 `responses[i]` 中的每个单词，我们用一个哈希表 `ws` 暂存。接下来将 `ws` 中的单词记录到哈希表 `cnt` 中，记录每个单词出现的次数。
+我们遍历 `responses`，对于 `responses[i]` 中的每个单词，我们用一个哈希表 `vis` 暂存。接下来将 `vis` 中的单词记录到哈希表 `cnt` 中，记录每个单词出现的次数。
 
 接下来，采用自定义排序，将 `features` 中的单词按照出现次数从大到小排序，如果出现次数相同，则按照出现的下标从小到大排序。
 
@@ -59,49 +74,44 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def sortFeatures(self, features: List[str], responses: List[str]) -> List[str]:
         cnt = Counter()
-        for r in responses:
-            ws = set(r.split())
-            for s in ws:
-                cnt[s] += 1
-        return sorted(features, key=lambda x: -cnt[x])
+        for s in responses:
+            for w in set(s.split()):
+                cnt[w] += 1
+        return sorted(features, key=lambda w: -cnt[w])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public String[] sortFeatures(String[] features, String[] responses) {
         Map<String, Integer> cnt = new HashMap<>();
-        for (String r : responses) {
-            Set<String> ws = new HashSet<>();
-            for (String w : r.split(" ")) {
-                ws.add(w);
-            }
-            for (String w : ws) {
-                cnt.put(w, cnt.getOrDefault(w, 0) + 1);
+        for (String s : responses) {
+            Set<String> vis = new HashSet<>();
+            for (String w : s.split(" ")) {
+                if (vis.add(w)) {
+                    cnt.merge(w, 1, Integer::sum);
+                }
             }
         }
         int n = features.length;
         Integer[] idx = new Integer[n];
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; i++) {
             idx[i] = i;
         }
         Arrays.sort(idx, (i, j) -> {
-            int d = cnt.getOrDefault(features[j], 0) - cnt.getOrDefault(features[i], 0);
-            return d == 0 ? i - j : d;
+            int x = cnt.getOrDefault(features[i], 0);
+            int y = cnt.getOrDefault(features[j], 0);
+            return x == y ? i - j : y - x;
         });
         String[] ans = new String[n];
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; i++) {
             ans[i] = features[idx[i]];
         }
         return ans;
@@ -109,30 +119,30 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> sortFeatures(vector<string>& features, vector<string>& responses) {
         unordered_map<string, int> cnt;
-        for (auto& r : responses) {
-            stringstream ss(r);
-            string t;
-            unordered_set<string> ws;
-            while (ss >> t) {
-                ws.insert(t);
+        for (auto& s : responses) {
+            istringstream iss(s);
+            string w;
+            unordered_set<string> st;
+            while (iss >> w) {
+                st.insert(w);
             }
-            for (auto& w : ws) {
-                cnt[w]++;
+            for (auto& w : st) {
+                ++cnt[w];
             }
         }
         int n = features.size();
         vector<int> idx(n);
         iota(idx.begin(), idx.end(), 0);
-        sort(idx.begin(), idx.end(), [&](int i, int j) -> bool {
-            int d = cnt[features[i]] - cnt[features[j]];
-            return d > 0 || (d == 0 && i < j);
+        sort(idx.begin(), idx.end(), [&](int i, int j) {
+            int x = cnt[features[i]], y = cnt[features[j]];
+            return x == y ? i < j : x > y;
         });
         vector<string> ans(n);
         for (int i = 0; i < n; ++i) {
@@ -143,41 +153,53 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortFeatures(features []string, responses []string) []string {
 	cnt := map[string]int{}
-	for _, r := range responses {
-		ws := map[string]bool{}
-		for _, s := range strings.Split(r, " ") {
-			ws[s] = true
+	for _, s := range responses {
+		vis := map[string]bool{}
+		for _, w := range strings.Split(s, " ") {
+			if !vis[w] {
+				cnt[w]++
+				vis[w] = true
+			}
 		}
-		for w := range ws {
-			cnt[w]++
-		}
 	}
-	n := len(features)
-	idx := make([]int, n)
-	for i := range idx {
-		idx[i] = i
-	}
-	sort.Slice(idx, func(i, j int) bool {
-		d := cnt[features[idx[i]]] - cnt[features[idx[j]]]
-		return d > 0 || (d == 0 && idx[i] < idx[j])
-	})
-	ans := make([]string, n)
-	for i := range ans {
-		ans[i] = features[idx[i]]
-	}
-	return ans
+	sort.SliceStable(features, func(i, j int) bool { return cnt[features[i]] > cnt[features[j]] })
+	return features
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function sortFeatures(features: string[], responses: string[]): string[] {
+    const cnt: Map<string, number> = new Map();
+    for (const s of responses) {
+        const vis: Set<string> = new Set();
+        for (const w of s.split(' ')) {
+            if (vis.has(w)) {
+                continue;
+            }
+            vis.add(w);
+            cnt.set(w, (cnt.get(w) || 0) + 1);
+        }
+    }
+    const n = features.length;
+    const idx: number[] = Array.from({ length: n }, (_, i) => i);
+    idx.sort((i, j) => {
+        const x = cnt.get(features[i]) || 0;
+        const y = cnt.get(features[j]) || 0;
+        return x === y ? i - j : y - x;
+    });
+    return idx.map(i => features[i]);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

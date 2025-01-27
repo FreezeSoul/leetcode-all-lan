@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1590.Make%20Sum%20Divisible%20by%20P/README_EN.md
+rating: 2038
+source: Biweekly Contest 35 Q3
+tags:
+    - Array
+    - Hash Table
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [1590. Make Sum Divisible by P](https://leetcode.com/problems/make-sum-divisible-by-p)
 
 [中文文档](/solution/1500-1599/1590.Make%20Sum%20Divisible%20by%20P/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of positive integers <code>nums</code>, remove the <strong>smallest</strong> subarray (possibly <strong>empty</strong>) such that the <strong>sum</strong> of the remaining elements is divisible by <code>p</code>. It is <strong>not</strong> allowed to remove the whole array.</p>
 
@@ -44,11 +60,29 @@
 	<li><code>1 &lt;= p &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Sum + Hash Table
+
+First, we calculate the sum of all elements in the array $\textit{nums}$ modulo $p$, denoted as $k$. If $k$ is $0$, it means the sum of all elements in the array $\textit{nums}$ is a multiple of $p$, so we directly return $0$.
+
+If $k$ is not $0$, we need to find the shortest subarray such that removing this subarray makes the sum of the remaining elements modulo $p$ equal to $0$.
+
+We can traverse the array $\textit{nums}$, maintaining the current prefix sum modulo $p$, denoted as $cur$. We use a hash table $last$ to record the last occurrence of each prefix sum modulo $p$.
+
+If there exists a subarray ending at $\textit{nums}[i]$ such that removing this subarray makes the sum of the remaining elements modulo $p$ equal to $0$, we need to find a previous prefix sum modulo $p$ equal to $target$ at position $j$ such that $(target + k - cur) \bmod p = 0$. If found, we can remove the subarray $\textit{nums}[j+1,..i]$ to make the sum of the remaining elements modulo $p$ equal to $0$.
+
+Therefore, if there exists a $target = (cur - k + p) \bmod p$, we can update the answer to $\min(ans, i - j)$. Then, we update $last[cur]$ to $i$. We continue traversing the array $\textit{nums}$ until the end to get the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +102,7 @@ class Solution:
         return -1 if ans == len(nums) else ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSubarray(nums []int, p int) int {
@@ -157,16 +191,9 @@ func minSubarray(nums []int, p int) int {
 	}
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minSubarray(nums: number[], p: number): number {
@@ -195,10 +222,81 @@ function minSubarray(nums: number[], p: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn min_subarray(nums: Vec<i32>, p: i32) -> i32 {
+        let mut k = 0;
+        for &x in &nums {
+            k = (k + x) % p;
+        }
+        if k == 0 {
+            return 0;
+        }
+
+        let mut last = HashMap::new();
+        last.insert(0, -1);
+        let n = nums.len();
+        let mut ans = n as i32;
+        let mut cur = 0;
+
+        for i in 0..n {
+            cur = (cur + nums[i]) % p;
+            let target = (cur - k + p) % p;
+            if let Some(&prev_idx) = last.get(&target) {
+                ans = ans.min(i as i32 - prev_idx);
+            }
+            last.insert(cur, i as i32);
+        }
+
+        if ans == n as i32 {
+            -1
+        } else {
+            ans
+        }
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} p
+ * @return {number}
+ */
+var minSubarray = function (nums, p) {
+    let k = 0;
+    for (const x of nums) {
+        k = (k + x) % p;
+    }
+    if (k === 0) {
+        return 0;
+    }
+    const last = new Map();
+    last.set(0, -1);
+    const n = nums.length;
+    let ans = n;
+    let cur = 0;
+    for (let i = 0; i < n; ++i) {
+        cur = (cur + nums[i]) % p;
+        const target = (cur - k + p) % p;
+        if (last.has(target)) {
+            const j = last.get(target);
+            ans = Math.min(ans, i - j);
+        }
+        last.set(cur, i);
+    }
+    return ans === n ? -1 : ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

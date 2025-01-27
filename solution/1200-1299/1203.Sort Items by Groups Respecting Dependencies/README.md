@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1203.Sort%20Items%20by%20Groups%20Respecting%20Dependencies/README.md
+rating: 2418
+source: 第 155 场周赛 Q4
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 图
+    - 拓扑排序
+---
+
+<!-- problem:start -->
+
 # [1203. 项目管理](https://leetcode.cn/problems/sort-items-by-groups-respecting-dependencies)
 
 [English Version](/solution/1200-1299/1203.Sort%20Items%20by%20Groups%20Respecting%20Dependencies/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有 <code>n</code> 个项目，每个项目或者不属于任何小组，或者属于 <code>m</code> 个小组之一。<code>group[i]</code> 表示第 <code>i</code> 个项目所属的小组，如果第 <code>i</code> 个项目不属于任何小组，则 <code>group[i]</code> 等于 <code>-1</code>。项目和小组都是从零开始编号的。可能存在小组不负责任何项目，即没有任何项目属于这个小组。</p>
 
@@ -50,11 +65,13 @@
 	<li><code>beforeItems[i]</code> 不含重复元素</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：拓扑排序**
+### 方法一：拓扑排序
 
 我们先遍历数组 $group$，对于每个项目，如果其不属于任何小组，则将其新建一个小组，编号为 $m$，并将 $m$ 的值加一。这样我们就能保证所有项目都属于某个小组了。然后，我们用一个数组 $groupItems$ 记录每个小组包含的项目，数组下标为小组编号，数组值为包含的项目列表。
 
@@ -66,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -122,9 +137,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -197,7 +210,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -266,7 +279,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortItems(n int, m int, group []int, beforeItems [][]int) []int {
@@ -337,15 +350,10 @@ func sortItems(n int, m int, group []int, beforeItems [][]int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function sortItems(
-    n: number,
-    m: number,
-    group: number[],
-    beforeItems: number[][],
-): number[] {
+function sortItems(n: number, m: number, group: number[], beforeItems: number[][]): number[] {
     let idx = m;
     const groupItems: number[][] = new Array(n + m).fill(0).map(() => []);
     const itemDegree: number[] = new Array(n).fill(0);
@@ -370,11 +378,7 @@ function sortItems(
         }
     }
     let items = new Array(n + m).fill(0).map((_, i) => i);
-    const topoSort = (
-        graph: number[][],
-        degree: number[],
-        items: number[],
-    ): number[] => {
+    const topoSort = (graph: number[][], degree: number[], items: number[]): number[] => {
         const q: number[] = [];
         for (const i of items) {
             if (degree[i] === 0) {
@@ -410,10 +414,8 @@ function sortItems(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

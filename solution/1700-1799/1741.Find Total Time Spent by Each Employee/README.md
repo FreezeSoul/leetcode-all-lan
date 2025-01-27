@@ -1,14 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1741.Find%20Total%20Time%20Spent%20by%20Each%20Employee/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1741. 查找每个员工花费的总时间](https://leetcode.cn/problems/find-total-time-spent-by-each-employee)
 
 [English Version](/solution/1700-1799/1741.Find%20Total%20Time%20Spent%20by%20Each%20Employee/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Employees</code></p>
 
-<pre>+-------------+------+
+<pre>
++-------------+------+
 | Column Name | Type |
 +-------------+------+
 | emp_id      | int  |
@@ -16,21 +27,27 @@
 | in_time     | int  |
 | out_time    | int  |
 +-------------+------+
-(emp_id, event_day, in_time) 是这个表的主键。
+在 SQL 中，(emp_id, event_day, in_time) 是这个表的主键。
 该表显示了员工在办公室的出入情况。
 event_day 是此事件发生的日期，in_time 是员工进入办公室的时间，而 out_time 是他们离开办公室的时间。
 in_time 和 out_time 的取值在1到1440之间。
 题目保证同一天没有两个事件在时间上是相交的，并且保证 in_time 小于 out_time。
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
-<p>编写一个SQL查询以计算每位员工每天在办公室花费的总时间（以分钟为单位）。 请注意，在一天之内，同一员工是可以多次进入和离开办公室的。 在办公室里一次进出所花费的时间为out_time 减去 in_time。</p>
+<p>计算每位员工每天在办公室花费的总时间（以分钟为单位）。 请注意，在一天之内，同一员工是可以多次进入和离开办公室的。 在办公室里一次进出所花费的时间为out_time 减去 in_time。</p>
 
-<p>返回结果表单的顺序无要求。<br>
+<p>返回结果表单的顺序无要求。<br />
 查询结果的格式如下：</p>
 
-<pre>Employees table:
+<p>&nbsp;</p>
+
+<p><strong class="example">示例 1：</strong></p>
+
+<pre>
+<strong>输入：</strong>
+Employees table:
 +--------+------------+---------+----------+
 | emp_id | event_day  | in_time | out_time |
 +--------+------------+---------+----------+
@@ -40,7 +57,7 @@ in_time 和 out_time 的取值在1到1440之间。
 | 2      | 2020-11-28 | 3       | 33       |
 | 2      | 2020-12-09 | 47      | 74       |
 +--------+------------+---------+----------+
-Result table:
+<strong>输出：</strong>
 +------------+--------+------------+
 | day        | emp_id | total_time |
 +------------+--------+------------+
@@ -49,27 +66,34 @@ Result table:
 | 2020-12-03 | 1      | 41         |
 | 2020-12-09 | 2      | 27         |
 +------------+--------+------------+
+<strong>解释：</strong>
 雇员 1 有三次进出: 有两次发生在 2020-11-28 花费的时间为 (32 - 4) + (200 - 55) = 173, 有一次发生在 2020-12-03 花费的时间为 (42 - 1) = 41。
 雇员 2 有两次进出: 有一次发生在 2020-11-28 花费的时间为 (33 - 3) = 30,  有一次发生在 2020-12-09 花费的时间为 (74 - 47) = 27。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分组求和
+
+我们可以先按照 `emp_id` 和 `event_day` 进行分组，然后计算每个分组的总时间。总时间等于每个分组的 `out_time` 减去 `in_time` 的和。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT
-    event_day AS day,
-    emp_id,
-    SUM(out_time - in_time) AS  total_time
-FROM
-    Employees
-GROUP BY
-    emp_id, event_day;
+# Write your MySQL query statement below
+SELECT event_day AS day, emp_id, SUM(out_time - in_time) AS total_time
+FROM Employees
+GROUP BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

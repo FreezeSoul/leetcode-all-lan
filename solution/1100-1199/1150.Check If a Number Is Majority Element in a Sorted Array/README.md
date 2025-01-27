@@ -1,10 +1,23 @@
-# [1150. 检查一个数是否在数组中占绝大多数](https://leetcode.cn/problems/check-if-a-number-is-majority-element-in-a-sorted-array)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1150.Check%20If%20a%20Number%20Is%20Majority%20Element%20in%20a%20Sorted%20Array/README.md
+rating: 1249
+source: 第 6 场双周赛 Q1
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
+# [1150. 检查一个数是否在数组中占绝大多数 🔒](https://leetcode.cn/problems/check-if-a-number-is-majority-element-in-a-sorted-array)
 
 [English Version](/solution/1100-1199/1150.Check%20If%20a%20Number%20Is%20Majority%20Element%20in%20a%20Sorted%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给出一个按 <strong>非递减</strong> 顺序排列的数组 <code>nums</code>，和一个目标数值 <code>target</code>。假如数组 <code>nums</code> 中绝大多数元素的数值都等于 <code>target</code>，则返回 <code>True</code>，否则请返回 <code>False</code>。</p>
 
@@ -42,27 +55,21 @@
 	<li><code>1 <= target <= 10^9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
 我们注意到，数组 $nums$ 中的元素是非递减的，也就是说，数组 $nums$ 中的元素单调递增。因此，我们可以使用二分查找的方法，找到数组 $nums$ 中第一个大于等于 $target$ 的元素的下标 $left$，以及第一个大于 $target$ 的元素的下标 $right$。如果 $right - left > \frac{n}{2}$，则说明数组 $nums$ 中的元素 $target$ 出现的次数超过了数组长度的一半，因此返回 $true$，否则返回 $false$。
 
 时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 $nums$ 的长度。
 
-**方法二：二分查找（优化）**
-
-方法一中，我们使用了两次二分查找，分别找到数组 $nums$ 中第一个大于等于 $target$ 的元素的下标 $left$，以及第一个大于 $target$ 的元素的下标 $right$。但是，我们可以使用一次二分查找，找到数组 $nums$ 中第一个大于等于 $target$ 的元素的下标 $left$，然后判断 $nums[left + \frac{n}{2}]$ 是否等于 $target$，如果相等，说明数组 $nums$ 中的元素 $target$ 出现的次数超过了数组长度的一半，因此返回 $true$，否则返回 $false$。
-
-时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 $nums$ 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,17 +79,7 @@ class Solution:
         return right - left > len(nums) // 2
 ```
 
-```python
-class Solution:
-    def isMajorityElement(self, nums: List[int], target: int) -> bool:
-        left = bisect_left(nums, target)
-        right = left + len(nums) // 2
-        return right < len(nums) and nums[right] == target
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,6 +103,78 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isMajorityElement(vector<int>& nums, int target) {
+        auto left = lower_bound(nums.begin(), nums.end(), target);
+        auto right = upper_bound(nums.begin(), nums.end(), target);
+        return right - left > nums.size() / 2;
+    }
+};
+```
+
+#### Go
+
+```go
+func isMajorityElement(nums []int, target int) bool {
+	left := sort.SearchInts(nums, target)
+	right := sort.SearchInts(nums, target+1)
+	return right-left > len(nums)/2
+}
+```
+
+#### TypeScript
+
+```ts
+function isMajorityElement(nums: number[], target: number): boolean {
+    const search = (x: number) => {
+        let left = 0;
+        let right = nums.length;
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (nums[mid] >= x) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    };
+    const left = search(target);
+    const right = search(target + 1);
+    return right - left > nums.length >> 1;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：二分查找（优化）
+
+方法一中，我们使用了两次二分查找，分别找到数组 $nums$ 中第一个大于等于 $target$ 的元素的下标 $left$，以及第一个大于 $target$ 的元素的下标 $right$。但是，我们可以使用一次二分查找，找到数组 $nums$ 中第一个大于等于 $target$ 的元素的下标 $left$，然后判断 $nums[left + \frac{n}{2}]$ 是否等于 $target$，如果相等，说明数组 $nums$ 中的元素 $target$ 出现的次数超过了数组长度的一半，因此返回 $true$，否则返回 $false$。
+
+时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 $nums$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isMajorityElement(self, nums: List[int], target: int) -> bool:
+        left = bisect_left(nums, target)
+        right = left + len(nums) // 2
+        return right < len(nums) and nums[right] == target
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -131,18 +200,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool isMajorityElement(vector<int>& nums, int target) {
-        auto left = lower_bound(nums.begin(), nums.end(), target);
-        auto right = upper_bound(nums.begin(), nums.end(), target);
-        return right - left > nums.size() / 2;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -156,48 +214,18 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isMajorityElement(nums []int, target int) bool {
 	n := len(nums)
-	left := sort.Search(n, func(i int) bool { return nums[i] >= target })
-	right := sort.Search(n, func(i int) bool { return nums[i] > target })
-	return right-left > n/2
-}
-```
-
-```go
-func isMajorityElement(nums []int, target int) bool {
-	n := len(nums)
-	left := sort.Search(n, func(i int) bool { return nums[i] >= target })
+	left := sort.SearchInts(nums, target)
 	right := left + n/2
 	return right < n && nums[right] == target
 }
 ```
 
-### **TypeScript**
-
-```ts
-function isMajorityElement(nums: number[], target: number): boolean {
-    const search = (x: number) => {
-        let left = 0;
-        let right = nums.length;
-        while (left < right) {
-            const mid = (left + right) >> 1;
-            if (nums[mid] >= x) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return left;
-    };
-    const left = search(target);
-    const right = search(target + 1);
-    return right - left > nums.length >> 1;
-}
-```
+#### TypeScript
 
 ```ts
 function isMajorityElement(nums: number[], target: number): boolean {
@@ -221,10 +249,8 @@ function isMajorityElement(nums: number[], target: number): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

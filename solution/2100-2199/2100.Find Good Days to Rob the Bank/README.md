@@ -1,24 +1,38 @@
-# [2100. 适合打劫银行的日子](https://leetcode.cn/problems/find-good-days-to-rob-the-bank)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2100.Find%20Good%20Days%20to%20Rob%20the%20Bank/README.md
+rating: 1702
+source: 第 67 场双周赛 Q2
+tags:
+    - 数组
+    - 动态规划
+    - 前缀和
+---
+
+<!-- problem:start -->
+
+# [2100. 适合野炊的日子](https://leetcode.cn/problems/find-good-days-to-rob-the-bank)
 
 [English Version](/solution/2100-2199/2100.Find%20Good%20Days%20to%20Rob%20the%20Bank/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>你和一群强盗准备打劫银行。给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>security</code>&nbsp;，其中&nbsp;<code>security[i]</code>&nbsp;是第 <code>i</code>&nbsp;天执勤警卫的数量。日子从 <code>0</code>&nbsp;开始编号。同时给你一个整数&nbsp;<code>time</code>&nbsp;。</p>
+<p>你和朋友们准备去野炊。给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>security</code>&nbsp;，其中&nbsp;<code>security[i]</code>&nbsp;是第 <code>i</code>&nbsp;天的建议出行指数。日子从 <code>0</code>&nbsp;开始编号。同时给你一个整数&nbsp;<code>time</code>&nbsp;。</p>
 
-<p>如果第 <code>i</code>&nbsp;天满足以下所有条件，我们称它为一个适合打劫银行的日子：</p>
+<p>如果第 <code>i</code>&nbsp;天满足以下所有条件，我们称它为一个适合野炊的日子：</p>
 
 <ul>
 	<li>第 <code>i</code>&nbsp;天前和后都分别至少有 <code>time</code>&nbsp;天。</li>
-	<li>第 <code>i</code>&nbsp;天前连续 <code>time</code>&nbsp;天警卫数目都是非递增的。</li>
-	<li>第 <code>i</code>&nbsp;天后连续 <code>time</code>&nbsp;天警卫数目都是非递减的。</li>
+	<li>第 <code>i</code>&nbsp;天前连续 <code>time</code>&nbsp;天建议出行指数都是非递增的。</li>
+	<li>第 <code>i</code>&nbsp;天后连续 <code>time</code>&nbsp;天建议出行指数都是非递减的。</li>
 </ul>
 
-<p>更正式的，第 <code>i</code> 天是一个合适打劫银行的日子当且仅当：<code>security[i - time] &gt;= security[i - time + 1] &gt;= ... &gt;= security[i] &lt;= ... &lt;= security[i + time - 1] &lt;= security[i + time]</code>.</p>
+<p>更正式的，第 <code>i</code> 天是一个适合野炊的日子当且仅当：<code>security[i - time] &gt;= security[i - time + 1] &gt;= ... &gt;= security[i] &lt;= ... &lt;= security[i + time - 1] &lt;= security[i + time]</code>.</p>
 
-<p>请你返回一个数组，包含 <strong>所有</strong> 适合打劫银行的日子（下标从 <strong>0</strong>&nbsp;开始）。返回的日子可以 <strong>任意</strong>&nbsp;顺序排列。</p>
+<p>请你返回一个数组，包含 <strong>所有</strong> 适合野炊的日子（下标从 <strong>0</strong>&nbsp;开始）。返回的日子可以 <strong>任意</strong>&nbsp;顺序排列。</p>
 
 <p>&nbsp;</p>
 
@@ -30,7 +44,7 @@
 <strong>解释：</strong>
 第 2 天，我们有 security[0] &gt;= security[1] &gt;= security[2] &lt;= security[3] &lt;= security[4] 。
 第 3 天，我们有 security[1] &gt;= security[2] &gt;= security[3] &lt;= security[4] &lt;= security[5] 。
-没有其他日子符合这个条件，所以日子 2 和 3 是适合打劫银行的日子。
+没有其他日子符合这个条件，所以日子 2 和 3 是适合野炊的日子。
 </pre>
 
 <p><strong>示例 2：</strong></p>
@@ -39,7 +53,7 @@
 <b>输入：</b>security = [1,1,1,1,1], time = 0
 <b>输出：</b>[0,1,2,3,4]
 <strong>解释：</strong>
-因为 time 等于 0 ，所以每一天都是适合打劫银行的日子，所以返回每一天。
+因为 time 等于 0 ，所以每一天都是适合野炊的日子，所以返回每一天。
 </pre>
 
 <p><strong>示例 3：</strong></p>
@@ -48,8 +62,8 @@
 <b>输入：</b>security = [1,2,3,4,5,6], time = 2
 <b>输出：</b>[]
 <strong>解释：</strong>
-没有任何一天的前 2 天警卫数目是非递增的。
-所以没有适合打劫银行的日子，返回空数组。
+没有任何一天的前 2 天建议出行指数是非递增的。
+所以没有适合野炊的日子，返回空数组。
 </pre>
 
 <p>&nbsp;</p>
@@ -61,17 +75,17 @@
 	<li><code>0 &lt;= security[i], time &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-left, right 分别记录左右符合要求的天数。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +103,7 @@ class Solution:
         return [i for i in range(n) if time <= min(left[i], right[i])]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -123,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -148,7 +160,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func goodDaysToRobBank(security []int, time int) []int {
@@ -169,7 +181,7 @@ func goodDaysToRobBank(security []int, time int) []int {
 		}
 	}
 	var ans []int
-	for i := time; i < n - time; i++ {
+	for i := time; i < n-time; i++ {
 		if time <= left[i] && time <= right[i] {
 			ans = append(ans, i)
 		}
@@ -178,7 +190,7 @@ func goodDaysToRobBank(security []int, time int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function goodDaysToRobBank(security: number[], time: number): number[] {
@@ -206,7 +218,7 @@ function goodDaysToRobBank(security: number[], time: number): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::cmp::Ordering;
@@ -224,17 +236,17 @@ impl Solution {
                 Ordering::Less => -1,
                 Ordering::Greater => 1,
                 Ordering::Equal => 0,
-            }
+            };
         }
         let (mut a, mut b) = (vec![0; n + 1], vec![0; n + 1]);
         for i in 1..=n {
-            a[i] = a[i - 1] + if g[i - 1] == 1 { 1 } else { 0 };
-            b[i] = b[i - 1] + if g[i - 1] == -1 { 1 } else { 0 };
+            a[i] = a[i - 1] + (if g[i - 1] == 1 { 1 } else { 0 });
+            b[i] = b[i - 1] + (if g[i - 1] == -1 { 1 } else { 0 });
         }
         let mut res = vec![];
         for i in time..n - time {
             if a[i + 1] - a[i + 1 - time] == 0 && b[i + 1 + time] - b[i + 1] == 0 {
-                res.push((i) as i32);
+                res.push(i as i32);
             }
         }
         res
@@ -242,10 +254,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

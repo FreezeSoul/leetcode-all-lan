@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2648.Generate%20Fibonacci%20Sequence/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2648. 生成斐波那契数列](https://leetcode.cn/problems/generate-fibonacci-sequence)
 
 [English Version](/solution/2600-2699/2648.Generate%20Fibonacci%20Sequence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你编写一个生成器函数，并返回一个可以生成 <strong>斐波那契数列</strong> 的生成器对象。</p>
 
@@ -44,13 +54,17 @@ gen.next().value; // 3
 	<li><code>0 &lt;= callCount &lt;= 50</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function* fibGenerator(): Generator<number, any, number> {
@@ -69,10 +83,8 @@ function* fibGenerator(): Generator<number, any, number> {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

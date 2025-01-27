@@ -1,8 +1,25 @@
-# [1166. Design File System](https://leetcode.com/problems/design-file-system)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1166.Design%20File%20System/README_EN.md
+rating: 1479
+source: Biweekly Contest 7 Q2
+tags:
+    - Design
+    - Trie
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
+# [1166. Design File System 🔒](https://leetcode.com/problems/design-file-system)
 
 [中文文档](/solution/1100-1199/1166.Design%20File%20System/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are asked to design a file system&nbsp;that allows you to create new paths and associate them with different values.</p>
 
@@ -59,11 +76,31 @@ fileSystem.get(&quot;/c&quot;); // return -1 because this path doesn&#39;t exist
 	<li>At most <code>10<sup>4</sup></code> calls <strong>in total</strong> will be made to <code>createPath</code> and <code>get</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Trie
+
+We can use a trie to store the paths, where each node stores a value, representing the value of the path corresponding to the node.
+
+The structure of the trie node is defined as follows:
+
+-   `children`: Child nodes, stored in a hash table, where the key is the path of the child node, and the value is the reference to the child node.
+-   `v`: The value of the path corresponding to the current node.
+
+The methods of the trie are defined as follows:
+
+-   `insert(w, v)`: Insert the path $w$ and set its corresponding value to $v$. If the path $w$ already exists or its parent path does not exist, return `false`, otherwise return `true`. The time complexity is $O(|w|)$, where $|w|$ is the length of the path $w$.
+-   `search(w)`: Return the value corresponding to the path $w$. If the path $w$ does not exist, return $-1$. The time complexity is $O(|w|)$.
+
+The total time complexity is $O(\sum_{w \in W}|w|)$, and the total space complexity is $O(\sum_{w \in W}|w|)$, where $W$ is the set of all inserted paths.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Trie:
@@ -109,7 +146,7 @@ class FileSystem:
 # param_2 = obj.get(path)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Trie {
@@ -155,7 +192,6 @@ class FileSystem {
     private Trie trie = new Trie(-1);
 
     public FileSystem() {
-
     }
 
     public boolean createPath(String path, int value) {
@@ -175,7 +211,7 @@ class FileSystem {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -217,7 +253,6 @@ public:
         return node->v;
     }
 
-
 private:
     vector<string> split(string& s, char delim) {
         stringstream ss(s);
@@ -256,7 +291,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type trie struct {
@@ -320,7 +355,7 @@ func (this *FileSystem) Get(path string) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class Trie {
@@ -386,10 +421,8 @@ class FileSystem {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

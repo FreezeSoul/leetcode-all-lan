@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0473.Matchsticks%20to%20Square/README_EN.md
+tags:
+    - Bit Manipulation
+    - Array
+    - Dynamic Programming
+    - Backtracking
+    - Bitmask
+---
+
+<!-- problem:start -->
+
 # [473. Matchsticks to Square](https://leetcode.com/problems/matchsticks-to-square)
 
 [中文文档](/solution/0400-0499/0473.Matchsticks%20to%20Square/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>matchsticks</code> where <code>matchsticks[i]</code> is the length of the <code>i<sup>th</sup></code> matchstick. You want to use <strong>all the matchsticks</strong> to make one square. You <strong>should not break</strong> any stick, but you can link them up, and each matchstick must be used <strong>exactly one time</strong>.</p>
 
@@ -33,11 +49,17 @@
 	<li><code>1 &lt;= matchsticks[i] &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,30 +84,7 @@ class Solution:
         return dfs(0)
 ```
 
-```python
-class Solution:
-    def makesquare(self, matchsticks: List[int]) -> bool:
-        @cache
-        def dfs(state, t):
-            if state == (1 << len(matchsticks)) - 1:
-                return True
-            for i, v in enumerate(matchsticks):
-                if (state & (1 << i)):
-                    continue
-                if t + v > s:
-                    break
-                if dfs(state | (1 << i), (t + v) % s):
-                    return True
-            return False
-
-        s, mod = divmod(sum(matchsticks), 4)
-        matchsticks.sort()
-        if mod:
-            return False
-        return dfs(0, 0)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -123,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -154,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makesquare(matchsticks []int) bool {
@@ -188,7 +187,7 @@ func makesquare(matchsticks []int) bool {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -224,10 +223,43 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def makesquare(self, matchsticks: List[int]) -> bool:
+        @cache
+        def dfs(state, t):
+            if state == (1 << len(matchsticks)) - 1:
+                return True
+            for i, v in enumerate(matchsticks):
+                if state & (1 << i):
+                    continue
+                if t + v > s:
+                    break
+                if dfs(state | (1 << i), (t + v) % s):
+                    return True
+            return False
+
+        s, mod = divmod(sum(matchsticks), 4)
+        matchsticks.sort()
+        if mod:
+            return False
+        return dfs(0, 0)
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

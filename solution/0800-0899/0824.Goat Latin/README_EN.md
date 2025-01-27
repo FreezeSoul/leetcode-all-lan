@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0824.Goat%20Latin/README_EN.md
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [824. Goat Latin](https://leetcode.com/problems/goat-latin)
 
 [中文文档](/solution/0800-0899/0824.Goat%20Latin/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>sentence</code> that consist of words separated by spaces. Each word consists of lowercase and uppercase letters only.</p>
 
@@ -10,6 +22,7 @@
 
 <ul>
 	<li>If a word begins with a vowel (<code>&#39;a&#39;</code>, <code>&#39;e&#39;</code>, <code>&#39;i&#39;</code>, <code>&#39;o&#39;</code>, or <code>&#39;u&#39;</code>), append <code>&quot;ma&quot;</code> to the end of the word.
+
     <ul>
     	<li>For example, the word <code>&quot;apple&quot;</code> becomes <code>&quot;applema&quot;</code>.</li>
     </ul>
@@ -24,6 +37,7 @@
     	<li>For example, the first word gets <code>&quot;a&quot;</code> added to the end, the second word gets <code>&quot;aa&quot;</code> added to the end, and so on.</li>
     </ul>
     </li>
+
 </ul>
 
 <p>Return<em> the final sentence representing the conversion from sentence to Goat Latin</em>.</p>
@@ -46,11 +60,17 @@
 	<li>All the words in <code>sentence</code> are separated by a single space.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,7 +85,7 @@ class Solution:
         return ' '.join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +114,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function toGoatLatin(sentence: string): string {
@@ -113,7 +133,7 @@ function toGoatLatin(sentence: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -141,10 +161,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

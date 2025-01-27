@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0674.Longest%20Continuous%20Increasing%20Subsequence/README.md
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [674. 最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence)
 
 [English Version](/solution/0600-0699/0674.Longest%20Continuous%20Increasing%20Subsequence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个未经排序的整数数组，找到最长且<strong> 连续递增的子序列</strong>，并返回该序列的长度。</p>
 
@@ -38,141 +48,130 @@
 	<li><code>-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-设 f(i) 表示将数组第 i 项作为最长连续递增子序列的最后一项时，子序列的长度。
+### 方法一：一次遍历
 
-那么，当 `nums[i - 1] < nums[i]`，即 `f(i) = f(i - 1)` + 1，否则 `f(i) = 1`。问题转换为求 f(i) (`i ∈ [0 ,n - 1]`) 的最大值。
+我们可以遍历数组 $nums$，用变量 $cnt$ 记录当前连续递增序列的长度。初始时 $cnt = 1$。
 
-由于 f(i) 只与前一项 f(i - 1) 有关联，故不需要用一个数组存储。
+然后，我们从下标 $i = 1$ 开始，向右遍历数组 $nums$。每次遍历时，如果 $nums[i - 1] < nums[i]$，则说明当前元素可以加入到连续递增序列中，因此令 $cnt = cnt + 1$，然后更新答案为 $ans = \max(ans, cnt)$。否则，说明当前元素无法加入到连续递增序列中，因此令 $cnt = 1$。
+
+遍历结束后，返回答案 $ans$ 即可。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findLengthOfLCIS(self, nums: List[int]) -> int:
-        res, n = 1, len(nums)
-        i = 0
-        while i < n:
-            j = i + 1
-            while j < n and nums[j] > nums[j - 1]:
-                j += 1
-            res = max(res, j - i)
-            i = j
-        return res
+        ans = cnt = 1
+        for i, x in enumerate(nums[1:]):
+            if nums[i] < x:
+                cnt += 1
+                ans = max(ans, cnt)
+            else:
+                cnt = 1
+        return ans
 ```
 
-```python
-class Solution:
-    def findLengthOfLCIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        res = f = 1
-        for i in range(1, n):
-            f = 1 + (f if nums[i - 1] < nums[i] else 0)
-            res = max(res, f)
-        return res
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int findLengthOfLCIS(int[] nums) {
-        int res = 1;
-        for (int i = 1, f = 1; i < nums.length; ++i) {
-            f = 1 + (nums[i - 1] < nums[i] ? f : 0);
-            res = Math.max(res, f);
-        }
-        return res;
-    }
-}
-```
-
-双指针：
-
-```java
-class Solution {
-    public int findLengthOfLCIS(int[] nums) {
-        int res = 1;
-        for (int i = 0, n = nums.length; i < n;) {
-            int j = i + 1;
-            while (j < n && nums[j] > nums[j - 1]) {
-                ++j;
+        int ans = 1;
+        for (int i = 1, cnt = 1; i < nums.length; ++i) {
+            if (nums[i - 1] < nums[i]) {
+                ans = Math.max(ans, ++cnt);
+            } else {
+                cnt = 1;
             }
-            res = Math.max(res, j - i);
-            i = j;
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findLengthOfLCIS(vector<int>& nums) {
-        int res = 1;
-        for (int i = 1, f = 1; i < nums.size(); ++i) {
-            f = 1 + (nums[i - 1] < nums[i] ? f : 0);
-            res = max(res, f);
+        int ans = 1;
+        for (int i = 1, cnt = 1; i < nums.size(); ++i) {
+            if (nums[i - 1] < nums[i]) {
+                ans = max(ans, ++cnt);
+            } else {
+                cnt = 1;
+            }
         }
-        return res;
+        return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findLengthOfLCIS(nums []int) int {
-	res, f := 1, 1
-	for i := 1; i < len(nums); i++ {
-		if nums[i-1] < nums[i] {
-			f += 1
-			res = max(res, f)
+	ans, cnt := 1, 1
+	for i, x := range nums[1:] {
+		if nums[i] < x {
+			cnt++
+			ans = max(ans, cnt)
 		} else {
-			f = 1
+			cnt = 1
 		}
 	}
-	return res
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return ans
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findLengthOfLCIS(nums: number[]): number {
-    const n = nums.length;
-    let res = 1;
-    let i = 0;
-    for (let j = 1; j < n; j++) {
-        if (nums[j - 1] >= nums[j]) {
-            res = Math.max(res, j - i);
-            i = j;
+    let [ans, cnt] = [1, 1];
+    for (let i = 1; i < nums.length; ++i) {
+        if (nums[i - 1] < nums[i]) {
+            ans = Math.max(ans, ++cnt);
+        } else {
+            cnt = 1;
         }
     }
-    return Math.max(res, n - i);
+    return ans;
 }
 ```
 
-### **PHP**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find_length_of_lcis(nums: Vec<i32>) -> i32 {
+        let mut ans = 1;
+        let mut cnt = 1;
+        for i in 1..nums.len() {
+            if nums[i - 1] < nums[i] {
+                ans = ans.max(cnt + 1);
+                cnt += 1;
+            } else {
+                cnt = 1;
+            }
+        }
+        ans
+    }
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -181,22 +180,175 @@ class Solution {
      * @return Integer
      */
     function findLengthOfLCIS($nums) {
-        $tmp = $max = 1;
-        for ($i = 0; $i < count($nums) - 1; $i++) {
-            if ($nums[$i] < $nums[$i + 1]) {
-                $tmp++;
-                $max = max($max, $tmp);
-            } else $tmp = 1;
+        $ans = 1;
+        $cnt = 1;
+        for ($i = 1; $i < count($nums); ++$i) {
+            if ($nums[$i - 1] < $nums[$i]) {
+                $ans = max($ans, ++$cnt);
+            } else {
+                $cnt = 1;
+            }
         }
-        return $max;
+        return $ans;
     }
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：双指针
+
+我们也可以用双指针 $i$ 和 $j$ 找到每一段连续递增序列，找出最长的连续递增序列的长度作为答案。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组 $nums$ 的长度。空间复杂度 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def findLengthOfLCIS(self, nums: List[int]) -> int:
+        ans, n = 1, len(nums)
+        i = 0
+        while i < n:
+            j = i + 1
+            while j < n and nums[j - 1] < nums[j]:
+                j += 1
+            ans = max(ans, j - i)
+            i = j
+        return ans
 ```
 
+#### Java
+
+```java
+class Solution {
+    public int findLengthOfLCIS(int[] nums) {
+        int ans = 1;
+        int n = nums.length;
+        for (int i = 0; i < n;) {
+            int j = i + 1;
+            while (j < n && nums[j - 1] < nums[j]) {
+                ++j;
+            }
+            ans = Math.max(ans, j - i);
+            i = j;
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int findLengthOfLCIS(vector<int>& nums) {
+        int ans = 1;
+        int n = nums.size();
+        for (int i = 0; i < n;) {
+            int j = i + 1;
+            while (j < n && nums[j - 1] < nums[j]) {
+                ++j;
+            }
+            ans = max(ans, j - i);
+            i = j;
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func findLengthOfLCIS(nums []int) int {
+	ans := 1
+	n := len(nums)
+	for i := 0; i < n; {
+		j := i + 1
+		for j < n && nums[j-1] < nums[j] {
+			j++
+		}
+		ans = max(ans, j-i)
+		i = j
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function findLengthOfLCIS(nums: number[]): number {
+    let ans = 1;
+    const n = nums.length;
+    for (let i = 0; i < n; ) {
+        let j = i + 1;
+        while (j < n && nums[j - 1] < nums[j]) {
+            ++j;
+        }
+        ans = Math.max(ans, j - i);
+        i = j;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find_length_of_lcis(nums: Vec<i32>) -> i32 {
+        let mut ans = 1;
+        let n = nums.len();
+        let mut i = 0;
+        while i < n {
+            let mut j = i + 1;
+            while j < n && nums[j - 1] < nums[j] {
+                j += 1;
+            }
+            ans = ans.max(j - i);
+            i = j;
+        }
+        ans as i32
+    }
+}
+```
+
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function findLengthOfLCIS($nums) {
+        $ans = 1;
+        $n = count($nums);
+        $i = 0;
+        while ($i < $n) {
+            $j = $i + 1;
+            while ($j < $n && $nums[$j - 1] < $nums[$j]) {
+                $j++;
+            }
+            $ans = max($ans, $j - $i);
+            $i = $j;
+        }
+        return $ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,7 @@
 func minimizeTheDifference(mat [][]int, target int) int {
 	f := []int{1}
 	for _, row := range mat {
-		mx := 0
-		for _, x := range row {
-			mx = max(mx, x)
-		}
+		mx := slices.Max(row)
 		g := make([]int, len(f)+mx)
 		for _, x := range row {
 			for j := x; j < len(f)+x; j++ {
@@ -20,20 +17,6 @@ func minimizeTheDifference(mat [][]int, target int) int {
 		}
 	}
 	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
 
 func abs(x int) int {

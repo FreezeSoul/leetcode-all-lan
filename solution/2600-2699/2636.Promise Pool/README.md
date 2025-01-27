@@ -1,10 +1,20 @@
-# [2636. Promise 对象池](https://leetcode.cn/problems/promise-pool)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2636.Promise%20Pool/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2636. Promise 对象池 🔒](https://leetcode.cn/problems/promise-pool)
 
 [English Version](/solution/2600-2699/2636.Promise%20Pool/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你编写一个异步函数 <code>promisePool</code> ，它接收一个异步函数数组 <code>functions</code> 和 <strong>池限制</strong> <code>n</code>。它应该返回一个 promise 对象，当所有输入函数都执行完毕后，promise 对象就执行完毕。</p>
 
@@ -80,15 +90,17 @@ n = 1
 	<li><code><font face="monospace">1 &lt;= n &lt;= 10</font></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 type F = () => Promise<any>;
@@ -106,10 +118,8 @@ function promisePool(functions: F[], n: number): Promise<any> {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

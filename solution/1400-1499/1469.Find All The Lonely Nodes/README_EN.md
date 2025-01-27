@@ -1,8 +1,23 @@
-# [1469. Find All The Lonely Nodes](https://leetcode.com/problems/find-all-the-lonely-nodes)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1469.Find%20All%20The%20Lonely%20Nodes/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
+# [1469. Find All The Lonely Nodes 🔒](https://leetcode.com/problems/find-all-the-lonely-nodes)
 
 [中文文档](/solution/1400-1499/1469.Find%20All%20The%20Lonely%20Nodes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>In a binary tree, a <strong>lonely</strong> node is a node that is the only child of its parent node. The root of the tree is not lonely because it does not have a parent node.</p>
 
@@ -46,11 +61,26 @@ All other nodes are lonely.
 	<li><code>1 &lt;= Node.val &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+We can use Depth-First Search (DFS) to traverse the entire tree. We design a function $\textit{dfs}$, which traverses each node in the tree. If the current node is a lone child, we add its value to the answer array. The execution process of the function $\textit{dfs}$ is as follows:
+
+1. If the current node is null, or the current node is a leaf node (i.e., both the left and right children of the current node are null), then return directly.
+2. If the left child of the current node is null, then the right child of the current node is a lone child, and we add its value to the answer array.
+3. If the right child of the current node is null, then the left child of the current node is a lone child, and we add its value to the answer array.
+4. Recursively traverse the left and right children of the current node.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -61,8 +91,8 @@ All other nodes are lonely.
 #         self.right = right
 class Solution:
     def getLonelyNodes(self, root: Optional[TreeNode]) -> List[int]:
-        def dfs(root):
-            if root is None or (root.left is None and root.right is None):
+        def dfs(root: Optional[TreeNode]):
+            if root is None or root.left == root.right:
                 return
             if root.left is None:
                 ans.append(root.right.val)
@@ -76,7 +106,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -103,7 +133,7 @@ class Solution {
     }
 
     private void dfs(TreeNode root) {
-        if (root == null || (root.left == null && root.right == null)) {
+        if (root == null || (root.left == root.right)) {
             return;
         }
         if (root.left == null) {
@@ -118,7 +148,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -136,11 +166,16 @@ class Solution {
 public:
     vector<int> getLonelyNodes(TreeNode* root) {
         vector<int> ans;
-        function<void(TreeNode* root)> dfs;
-        dfs = [&](TreeNode* root) {
-            if (!root || (!root->left && !root->right)) return;
-            if (!root->left) ans.push_back(root->right->val);
-            if (!root->right) ans.push_back(root->left->val);
+        auto dfs = [&](this auto&& dfs, TreeNode* root) {
+            if (!root || (root->left == root->right)) {
+                return;
+            }
+            if (!root->left) {
+                ans.push_back(root->right->val);
+            }
+            if (!root->right) {
+                ans.push_back(root->left->val);
+            }
             dfs(root->left);
             dfs(root->right);
         };
@@ -150,7 +185,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -161,11 +196,10 @@ public:
  *     Right *TreeNode
  * }
  */
-func getLonelyNodes(root *TreeNode) []int {
-	ans := []int{}
+ func getLonelyNodes(root *TreeNode) (ans []int) {
 	var dfs func(*TreeNode)
 	dfs = func(root *TreeNode) {
-		if root == nil || (root.Left == nil && root.Right == nil) {
+		if root == nil || (root.Left == root.Right) {
 			return
 		}
 		if root.Left == nil {
@@ -178,14 +212,49 @@ func getLonelyNodes(root *TreeNode) []int {
 		dfs(root.Right)
 	}
 	dfs(root)
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
 
+function getLonelyNodes(root: TreeNode | null): number[] {
+    const ans: number[] = [];
+    const dfs = (root: TreeNode | null) => {
+        if (!root || root.left === root.right) {
+            return;
+        }
+        if (!root.left) {
+            ans.push(root.right.val);
+        }
+        if (!root.right) {
+            ans.push(root.left.val);
+        }
+        dfs(root.left);
+        dfs(root.right);
+    };
+    dfs(root);
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,17 +1,29 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0977.Squares%20of%20a%20Sorted%20Array/README.md
+tags:
+    - 数组
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array)
 
 [English Version](/solution/0900-0999/0977.Squares%20of%20a%20Sorted%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个按 <strong>非递减顺序</strong> 排序的整数数组 <code>nums</code>，返回 <strong>每个数字的平方</strong> 组成的新数组，要求也按 <strong>非递减顺序</strong> 排序。</p>
 
 <ul>
 </ul>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
@@ -28,152 +40,150 @@
 <strong>输出：</strong>[4,9,9,49,121]
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code><span>1 <= nums.length <= </span>10<sup>4</sup></code></li>
-	<li><code>-10<sup>4</sup> <= nums[i] <= 10<sup>4</sup></code></li>
+	<li><code><span>1 &lt;= nums.length &lt;= </span>10<sup>4</sup></code></li>
+	<li><code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code></li>
 	<li><code>nums</code> 已按 <strong>非递减顺序</strong> 排序</li>
 </ul>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>进阶：</strong></p>
 
 <ul>
-	<li>请你<span style="color: rgb(36, 41, 46); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;">设计时间复杂度为 <code>O(n)</code> 的算法解决本问题</span></li>
+	<li>请你设计时间复杂度为 <code>O(n)</code> 的算法解决本问题</li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**暴力**：
+### 方法一：双指针
 
-1. 遍历数组，并将元素修改为对应的平方值。
-2. 排序，返回。
+由于数组 $nums$ 已经按照非递减顺序排好序，所以数组中负数的平方值是递减的，正数的平方值是递增的。我们可以使用双指针，分别指向数组的两端，每次比较两个指针指向的元素的平方值，将较大的平方值放入结果数组的末尾。
 
-_分析_：
-
-因为 `nums` 中存在负数，`-10` 与 `5` 转换为平方值之后，`-10` 反而要更大，因此需要额外进行一次排序。
-
-**双指针**：
-
-该过程需要原数组保持不变动，对此声明一个等长数组存储计算结果，作为返回值。
-
-声明头尾指针，并进行比较，哪方指针所指向元素的平方值更大，哪方平方值进入返回数组当中，并移动对应指针。重复比较过程，直到头指针超过尾指针。
-
-由于是头尾指针，平方值获取过程是**从大到小**，对此存入数组的过程是**逆序**的。
-
-```txt
-SORTED-SQUARES(A)
-    n = A.length
-    i = 0
-    j = n - 1
-    k = n - 1
-    let r[0..n]be a new array
-    while i < j
-        if A[i] * A[i] > A[j] * A[j]
-            r[k] = A[i] * A[i]
-            i += 1
-        else
-            r[k] = A[j] * A[j]
-            j -= 1
-        k -= 1
-    return r
-```
+时间复杂度 $O(n)$，其中 $n$ 是数组 $nums$ 的长度。忽略答案数组的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def sortedSquares(self, nums: List[int]) -> List[int]:
-        n = len(nums)
-        res = [0] * n
-        i, j, k = 0, n - 1, n - 1
+        ans = []
+        i, j = 0, len(nums) - 1
         while i <= j:
-            if nums[i] * nums[i] > nums[j] * nums[j]:
-                res[k] = nums[i] * nums[i]
+            a = nums[i] * nums[i]
+            b = nums[j] * nums[j]
+            if a > b:
+                ans.append(a)
                 i += 1
             else:
-                res[k] = nums[j] * nums[j]
+                ans.append(b)
                 j -= 1
-            k -= 1
-        return res
+        return ans[::-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int[] sortedSquares(int[] nums) {
         int n = nums.length;
-        int[] res = new int[n];
-        for (int i = 0, j = n - 1, k = n - 1; i <= j;) {
-            if (nums[i] * nums[i] > nums[j] * nums[j]) {
-                res[k--] = nums[i] * nums[i];
+        int[] ans = new int[n];
+        for (int i = 0, j = n - 1, k = n - 1; i <= j; --k) {
+            int a = nums[i] * nums[i];
+            int b = nums[j] * nums[j];
+            if (a > b) {
+                ans[k] = a;
                 ++i;
             } else {
-                res[k--] = nums[j] * nums[j];
+                ans[k] = b;
                 --j;
             }
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> sortedSquares(vector<int>& nums) {
         int n = nums.size();
-        vector<int> res(n);
-        for (int i = 0, j = n - 1, k = n - 1; i <= j;) {
-            if (nums[i] * nums[i] > nums[j] * nums[j]) {
-                res[k--] = nums[i] * nums[i];
+        vector<int> ans(n);
+        for (int i = 0, j = n - 1, k = n - 1; i <= j; --k) {
+            int a = nums[i] * nums[i];
+            int b = nums[j] * nums[j];
+            if (a > b) {
+                ans[k] = a;
                 ++i;
             } else {
-                res[k--] = nums[j] * nums[j];
+                ans[k] = b;
                 --j;
             }
         }
-        return res;
+        return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortedSquares(nums []int) []int {
 	n := len(nums)
-	res := make([]int, n)
-	for i, j, k := 0, n-1, n-1; i <= j; {
-		if nums[i]*nums[i] > nums[j]*nums[j] {
-			res[k] = nums[i] * nums[i]
+	ans := make([]int, n)
+	for i, j, k := 0, n-1, n-1; i <= j; k-- {
+		a := nums[i] * nums[i]
+		b := nums[j] * nums[j]
+		if a > b {
+			ans[k] = a
 			i++
 		} else {
-			res[k] = nums[j] * nums[j]
+			ans[k] = b
 			j--
 		}
-		k--
 	}
-	return res
+	return ans
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn sorted_squares(nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len();
+        let mut ans = vec![0; n];
+        let (mut i, mut j) = (0, n - 1);
+        for k in (0..n).rev() {
+            let a = nums[i] * nums[i];
+            let b = nums[j] * nums[j];
+            if a > b {
+                ans[k] = a;
+                i += 1;
+            } else {
+                ans[k] = b;
+                j -= 1;
+            }
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -182,46 +192,22 @@ func sortedSquares(nums []int) []int {
  */
 var sortedSquares = function (nums) {
     const n = nums.length;
-    const res = new Array(n);
-    for (let i = 0, j = n - 1, k = n - 1; i <= j; ) {
-        if (nums[i] * nums[i] > nums[j] * nums[j]) {
-            res[k--] = nums[i] * nums[i];
+    const ans = Array(n).fill(0);
+    for (let i = 0, j = n - 1, k = n - 1; i <= j; --k) {
+        const [a, b] = [nums[i] * nums[i], nums[j] * nums[j]];
+        if (a > b) {
+            ans[k] = a;
             ++i;
         } else {
-            res[k--] = nums[j] * nums[j];
+            ans[k] = b;
             --j;
         }
     }
-    return res;
+    return ans;
 };
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn sorted_squares(nums: Vec<i32>) -> Vec<i32> {
-        let n = nums.len();
-        let mut l = 0;
-        let mut r = n - 1;
-        let mut res = vec![0; n];
-        for i in (0..n).rev() {
-            let a = nums[l] * nums[l];
-            let b = nums[r] * nums[r];
-            if a < b {
-                res[i] = b;
-                r -= 1;
-            } else {
-                res[i] = a;
-                l += 1;
-            }
-        }
-        res
-    }
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -230,30 +216,26 @@ class Solution {
      * @return Integer[]
      */
     function sortedSquares($nums) {
-        $i = 0;
-        $j = $k = count($nums) - 1;
-        $rs = array_fill(0, count($nums), -1);
-        while ($i <= $j) {
-            $max1 = $nums[$i] * $nums[$i];
-            $max2 = $nums[$j] * $nums[$j];
-            if ($max1 > $max2) {
-                $rs[$k] = $max1;
-                $i++;
+        $n = count($nums);
+        $ans = array_fill(0, $n, 0);
+        for ($i = 0, $j = $n - 1, $k = $n - 1; $i <= $j; --$k) {
+            $a = $nums[$i] * $nums[$i];
+            $b = $nums[$j] * $nums[$j];
+            if ($a > $b) {
+                $ans[$k] = $a;
+                ++$i;
             } else {
-                $rs[$k] = $max2;
-                $j--;
+                $ans[$k] = $b;
+                --$j;
             }
-            $k--;
         }
-        return $rs;
+        return $ans;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

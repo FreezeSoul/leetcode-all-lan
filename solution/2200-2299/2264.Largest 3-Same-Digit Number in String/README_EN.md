@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2264.Largest%203-Same-Digit%20Number%20in%20String/README_EN.md
+rating: 1308
+source: Weekly Contest 292 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2264. Largest 3-Same-Digit Number in String](https://leetcode.com/problems/largest-3-same-digit-number-in-string)
 
 [中文文档](/solution/2200-2299/2264.Largest%203-Same-Digit%20Number%20in%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>num</code> representing a large integer. An integer is <strong>good</strong> if it meets the following conditions:</p>
 
@@ -54,31 +68,42 @@
 	<li><code>num</code> only consists of digits.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+We can enumerate each digit $i$ from large to small, where $0 \le i \le 9$, and then check whether the string $s$ consisting of three consecutive $i$ is a substring of $num$. If it is, we directly return $s$.
+
+If we have enumerated all the possible values of $i$ and still haven't found a substring that satisfies the condition, we return an empty string.
+
+The time complexity is $O(10 \times n)$, where $n$ is the length of the string $num$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def largestGoodInteger(self, num: str) -> str:
         for i in range(9, -1, -1):
-            t = str(i) * 3
-            if t in num:
-                return t
-        return ''
+            if (s := str(i) * 3) in num:
+                return s
+        return ""
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public String largestGoodInteger(String num) {
         for (int i = 9; i >= 0; i--) {
-            String ret = String.valueOf(i).repeat(3);
-            if (num.contains(ret)) {
-                return ret;
+            String s = String.valueOf(i).repeat(3);
+            if (num.contains(s)) {
+                return s;
             }
         }
         return "";
@@ -86,51 +111,52 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function largestGoodInteger(num: string): string {
-    for (let i = 9; i >= 0; i--) {
-        const c = String(i).repeat(3);
-        if (num.includes(c)) return c;
-    }
-    return '';
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string largestGoodInteger(string num) {
         for (char i = '9'; i >= '0'; --i) {
-            string t(3, i);
-            if (num.find(t) != string::npos) return t;
+            string s(3, i);
+            if (num.find(s) != string::npos) {
+                return s;
+            }
         }
         return "";
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestGoodInteger(num string) string {
 	for c := '9'; c >= '0'; c-- {
-		t := strings.Repeat(string(c), 3)
-		if strings.Contains(num, t) {
-			return t
+		if s := strings.Repeat(string(c), 3); strings.Contains(num, s) {
+			return s
 		}
 	}
 	return ""
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function largestGoodInteger(num: string): string {
+    for (let i = 9; i >= 0; i--) {
+        const s = String(i).repeat(3);
+        if (num.includes(s)) {
+            return s;
+        }
+    }
+    return '';
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

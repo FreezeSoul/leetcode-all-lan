@@ -1,8 +1,20 @@
-# [1479. Sales by Day of the Week](https://leetcode.com/problems/sales-by-day-of-the-week)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1479.Sales%20by%20Day%20of%20the%20Week/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1479. Sales by Day of the Week 🔒](https://leetcode.com/problems/sales-by-day-of-the-week)
 
 [中文文档](/solution/1400-1499/1479.Sales%20by%20Day%20of%20the%20Week/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Orders</code></p>
 
@@ -16,7 +28,7 @@
 | item_id       | varchar |
 | quantity      | int     |
 +---------------+---------+
-(ordered_id, item_id) is the primary key for this table.
+(ordered_id, item_id) is the primary key (combination of columns with unique values) for this table.
 This table contains information on the orders placed.
 order_date is the date item_id was ordered by the customer with id customer_id.
 </pre>
@@ -33,7 +45,7 @@ order_date is the date item_id was ordered by the customer with id customer_id.
 | item_name           | varchar |
 | item_category       | varchar |
 +---------------------+---------+
-item_id is the primary key for this table.
+item_id is the primary key (column with unique values) for this table.
 item_name is the name of the item.
 item_category is the category of the item.
 </pre>
@@ -42,11 +54,11 @@ item_category is the category of the item.
 
 <p>You are the business owner and would like to obtain a sales report for category items and the day of the week.</p>
 
-<p>Write an SQL query to report how many units in each category have been ordered on each <strong>day of the week</strong>.</p>
+<p>Write a solution to report how many units in each category have been ordered on each <strong>day of the week</strong>.</p>
 
 <p>Return the result table <strong>ordered</strong> by <code>category</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -98,14 +110,38 @@ On Sunday (2020-06-14, 2020-06-21) were sold a total of 10 units (5 +5) in the c
 There are no sales of T-shirts.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    item_category AS category,
+    SUM(IF(DAYOFWEEK(order_date) = '2', quantity, 0)) AS Monday,
+    SUM(IF(DAYOFWEEK(order_date) = '3', quantity, 0)) AS Tuesday,
+    SUM(IF(DAYOFWEEK(order_date) = '4', quantity, 0)) AS Wednesday,
+    SUM(IF(DAYOFWEEK(order_date) = '5', quantity, 0)) AS Thursday,
+    SUM(IF(DAYOFWEEK(order_date) = '6', quantity, 0)) AS Friday,
+    SUM(IF(DAYOFWEEK(order_date) = '7', quantity, 0)) AS Saturday,
+    SUM(IF(DAYOFWEEK(order_date) = '1', quantity, 0)) AS Sunday
+FROM
+    Orders AS o
+    RIGHT JOIN Items AS i ON o.item_id = i.item_id
+GROUP BY category
+ORDER BY category;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

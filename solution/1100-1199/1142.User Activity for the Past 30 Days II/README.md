@@ -1,10 +1,20 @@
-# [1142. 过去 30 天的用户活动 II](https://leetcode.cn/problems/user-activity-for-the-past-30-days-ii)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1142.User%20Activity%20for%20the%20Past%2030%20Days%20II/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1142. 过去30天的用户活动 II 🔒](https://leetcode.cn/problems/user-activity-for-the-past-30-days-ii)
 
 [English Version](/solution/1100-1199/1142.User%20Activity%20for%20the%20Past%2030%20Days%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><code>Activity</code> 表：</p>
 
@@ -24,9 +34,9 @@ activity_type 列是 ENUM 类型，可以取（“ open_session”，“ end_ses
 
 <p>&nbsp;</p>
 
-<p>编写 SQL 查询以查找截至 <code>2019-07-27</code>（含）的 <code>30</code> 天内每个用户的平均会话数，<strong>四舍五入到小数点后两位</strong>。只统计那些会话期间用户至少进行一项活动的有效会话。</p>
+<p>编写解决方案，统计截至 <code>2019-07-27</code>（含）的 <code>30</code> 天内每个用户的平均会话数，<strong>四舍五入到小数点后两位</strong>。只统计那些会话期间用户至少进行一项活动的有效会话。</p>
 
-<p>查询结果格式如下例所示。</p>
+<p>结果格式如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -62,23 +72,56 @@ Activity 表：
 <strong>解释：</strong>用户 1 和 2 每人在过去 30 天有 1 个会话，而用户 3 有 2 个会话。所以平均是 (1 + 1 + 2) / 3 = 1.33 。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT
-	IFNULL( ROUND( COUNT( DISTINCT session_id ) / COUNT( DISTINCT user_id ), 2 ), 0 ) AS average_sessions_per_user
-FROM
-	Activity
-WHERE
-	DATEDIFF( '2019-07-27', activity_date ) >= 0
-	AND DATEDIFF( '2019-07-27', activity_date ) < 30
+WITH
+    T AS (
+        SELECT
+            COUNT(DISTINCT session_id) AS sessions
+        FROM Activity
+        WHERE activity_date <= '2019-07-27' AND DATEDIFF('2019-07-27', activity_date) < 30
+        GROUP BY user_id
+    )
+SELECT IFNULL(ROUND(AVG(sessions), 2), 0) AS average_sessions_per_user
+FROM T;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+SELECT
+    IFNULL(
+        ROUND(COUNT(DISTINCT session_id) / COUNT(DISTINCT user_id), 2),
+        0
+    ) AS average_sessions_per_user
+FROM Activity
+WHERE DATEDIFF('2019-07-27', activity_date) < 30;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

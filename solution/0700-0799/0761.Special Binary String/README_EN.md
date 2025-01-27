@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0761.Special%20Binary%20String/README_EN.md
+tags:
+    - Recursion
+    - String
+---
+
+<!-- problem:start -->
+
 # [761. Special Binary String](https://leetcode.com/problems/special-binary-string)
 
 [中文文档](/solution/0700-0799/0761.Special%20Binary%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p><strong>Special binary strings</strong> are binary strings with the following two properties:</p>
 
@@ -43,11 +56,17 @@ This is the lexicographically largest string possible after some number of swaps
 	<li><code>s</code> is a special binary string.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +86,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -107,13 +126,13 @@ public:
                 j = i + 1;
             }
         }
-        sort(ans.begin(), ans.end(), greater<string> {});
+        sort(ans.begin(), ans.end(), greater<string>{});
         return accumulate(ans.begin(), ans.end(), ""s);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeLargestSpecial(s string) string {
@@ -138,10 +157,8 @@ func makeLargestSpecial(s string) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

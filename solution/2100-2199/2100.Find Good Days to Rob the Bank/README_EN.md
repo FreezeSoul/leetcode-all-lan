@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2100.Find%20Good%20Days%20to%20Rob%20the%20Bank/README_EN.md
+rating: 1702
+source: Biweekly Contest 67 Q2
+tags:
+    - Array
+    - Dynamic Programming
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2100. Find Good Days to Rob the Bank](https://leetcode.com/problems/find-good-days-to-rob-the-bank)
 
 [中文文档](/solution/2100-2199/2100.Find%20Good%20Days%20to%20Rob%20the%20Bank/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You and a gang of thieves are planning on robbing a bank. You are given a <strong>0-indexed</strong> integer array <code>security</code>, where <code>security[i]</code> is the number of guards on duty on the <code>i<sup>th</sup></code> day. The days are numbered starting from <code>0</code>. You are also given an integer <code>time</code>.</p>
 
@@ -57,11 +73,17 @@ Thus, no day is a good day to rob the bank, so return an empty list.
 	<li><code>0 &lt;= security[i], time &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -79,7 +101,7 @@ class Solution:
         return [i for i in range(n) if time <= min(left[i], right[i])]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -136,7 +158,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func goodDaysToRobBank(security []int, time int) []int {
@@ -157,7 +179,7 @@ func goodDaysToRobBank(security []int, time int) []int {
 		}
 	}
 	var ans []int
-	for i := time; i < n - time; i++ {
+	for i := time; i < n-time; i++ {
 		if time <= left[i] && time <= right[i] {
 			ans = append(ans, i)
 		}
@@ -166,7 +188,7 @@ func goodDaysToRobBank(security []int, time int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function goodDaysToRobBank(security: number[], time: number): number[] {
@@ -194,7 +216,7 @@ function goodDaysToRobBank(security: number[], time: number): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::cmp::Ordering;
@@ -212,17 +234,17 @@ impl Solution {
                 Ordering::Less => -1,
                 Ordering::Greater => 1,
                 Ordering::Equal => 0,
-            }
+            };
         }
         let (mut a, mut b) = (vec![0; n + 1], vec![0; n + 1]);
         for i in 1..=n {
-            a[i] = a[i - 1] + if g[i - 1] == 1 { 1 } else { 0 };
-            b[i] = b[i - 1] + if g[i - 1] == -1 { 1 } else { 0 };
+            a[i] = a[i - 1] + (if g[i - 1] == 1 { 1 } else { 0 });
+            b[i] = b[i - 1] + (if g[i - 1] == -1 { 1 } else { 0 });
         }
         let mut res = vec![];
         for i in time..n - time {
             if a[i + 1] - a[i + 1 - time] == 0 && b[i + 1 + time] - b[i + 1] == 0 {
-                res.push((i) as i32);
+                res.push(i as i32);
             }
         }
         res
@@ -230,10 +252,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

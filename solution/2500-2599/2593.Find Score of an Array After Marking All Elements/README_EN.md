@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2593.Find%20Score%20of%20an%20Array%20After%20Marking%20All%20Elements/README_EN.md
+rating: 1665
+source: Biweekly Contest 100 Q3
+tags:
+    - Array
+    - Hash Table
+    - Sorting
+    - Simulation
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [2593. Find Score of an Array After Marking All Elements](https://leetcode.com/problems/find-score-of-an-array-after-marking-all-elements)
 
 [中文文档](/solution/2500-2599/2593.Find%20Score%20of%20an%20Array%20After%20Marking%20All%20Elements/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>nums</code> consisting of positive integers.</p>
 
@@ -50,9 +68,13 @@ Our score is 1 + 2 + 2 = 5.
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Priority Queue (Min Heap)**
+<!-- solution:start -->
+
+### Solution 1: Priority Queue (Min Heap)
 
 We use a priority queue to maintain the unmarked elements in the array, and each item in the queue is a tuple $(x, i)$, where $x$ and $i$ represent the element value and index of the array respectively. An array $vis$ is used to record whether the element in the array is marked.
 
@@ -62,21 +84,9 @@ Finally, return the answer.
 
 The time complexity is $O(n \times \log n)$ and the space complexity is $O(n)$, where $n$ is the length of the array.
 
-**Approach 2: Sorting**
-
-We can create an index array $idx$ where $idx[i]=i$, and then we sort the index array $idx$ according to the element values in the array $nums$. If the element values are the same, then sort them according to the index values.
-
-Next, create an array $vis$ of length $n+2$ where $vis[i]=false$, which means whether the element in the array is marked.
-
-We traverse the index array $idx$, and for each index $i$ in the array, if $vis[i+1]$ is $false$, that is, the element at position $i$ is not marked, we add $nums[i]$ to the answer, and then mark the element at position $i$, and the left and right adjacent elements at position $i$, that is, the elements at positions $i-1$ and $i+1$. Continue to traverse the index array $idx$ until the end.
-
-Finally, return the answer.
-
-The time complexity is $O(n \times \log n)$ and the space complexity is $O(n)$, where $n$ is the length of the array.
-
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -98,28 +108,15 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def findScore(self, nums: List[int]) -> int:
-        n = len(nums)
-        vis = [False] * (n + 2)
-        idx = sorted(range(n), key=lambda i: (nums[i], i))
-        ans = 0
-        for i in idx:
-            if not vis[i + 1]:
-                ans += nums[i]
-                vis[i] = vis[i + 2] = True
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public long findScore(int[] nums) {
         int n = nums.length;
         boolean[] vis = new boolean[n];
-        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+        PriorityQueue<int[]> q
+            = new PriorityQueue<>((a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
         for (int i = 0; i < n; ++i) {
             q.offer(new int[] {nums[i], i});
         }
@@ -142,30 +139,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public long findScore(int[] nums) {
-        int n = nums.length;
-        boolean[] vis = new boolean[n + 2];
-        Integer[] idx = new Integer[n];
-        for (int i = 0; i < n; ++i) {
-            idx[i] = i;
-        }
-        Arrays.sort(idx, (i, j) -> nums[i] - nums[j]);
-        long ans = 0;
-        for (int i : idx) {
-            if (!vis[i + 1]) {
-                ans += nums[i];
-                vis[i] = true;
-                vis[i + 2] = true;
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -199,30 +173,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    long long findScore(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> idx(n);
-        iota(idx.begin(), idx.end(), 0);
-        sort(idx.begin(), idx.end(), [&](int i, int j) {
-            return nums[i] < nums[j] || (nums[i] == nums[j] && i < j);
-        });
-        long long ans = 0;
-        vector<bool> vis(n + 2);
-        for (int i : idx) {
-            if (!vis[i + 1]) {
-                ans += nums[i];
-                vis[i] = vis[i + 2] = true;
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func findScore(nums []int) (ans int64) {
@@ -252,36 +203,14 @@ func findScore(nums []int) (ans int64) {
 type pair struct{ x, i int }
 type hp []pair
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].x < h[j].x || (h[i].x == h[j].x && h[i].i < h[j].i) }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].x < h[j].x || (h[i].x == h[j].x && h[i].i < h[j].i) }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
-```go
-func findScore(nums []int) (ans int64) {
-	n := len(nums)
-	idx := make([]int, n)
-	for i := range idx {
-		idx[i] = i
-	}
-	sort.Slice(idx, func(i, j int) bool {
-		i, j = idx[i], idx[j]
-		return nums[i] < nums[j] || (nums[i] == nums[j] && i < j)
-	})
-	vis := make([]bool, n+2)
-	for _, i := range idx {
-		if !vis[i+1] {
-			ans += int64(nums[i])
-			vis[i], vis[i+2] = true, true
-		}
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 interface pair {
@@ -320,6 +249,118 @@ function findScore(nums: number[]): number {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Sorting
+
+We can create an index array $idx$ where $idx[i]=i$, and then we sort the index array $idx$ according to the element values in the array $nums$. If the element values are the same, then sort them according to the index values.
+
+Next, create an array $vis$ of length $n+2$ where $vis[i]=false$, which means whether the element in the array is marked.
+
+We traverse the index array $idx$, and for each index $i$ in the array, if $vis[i+1]$ is $false$, that is, the element at position $i$ is not marked, we add $nums[i]$ to the answer, and then mark the element at position $i$, and the left and right adjacent elements at position $i$, that is, the elements at positions $i-1$ and $i+1$. Continue to traverse the index array $idx$ until the end.
+
+Finally, return the answer.
+
+The time complexity is $O(n \times \log n)$ and the space complexity is $O(n)$, where $n$ is the length of the array.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def findScore(self, nums: List[int]) -> int:
+        n = len(nums)
+        vis = [False] * (n + 2)
+        idx = sorted(range(n), key=lambda i: (nums[i], i))
+        ans = 0
+        for i in idx:
+            if not vis[i + 1]:
+                ans += nums[i]
+                vis[i] = vis[i + 2] = True
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public long findScore(int[] nums) {
+        int n = nums.length;
+        boolean[] vis = new boolean[n + 2];
+        Integer[] idx = new Integer[n];
+        for (int i = 0; i < n; ++i) {
+            idx[i] = i;
+        }
+        Arrays.sort(idx, (i, j) -> nums[i] - nums[j]);
+        long ans = 0;
+        for (int i : idx) {
+            if (!vis[i + 1]) {
+                ans += nums[i];
+                vis[i] = true;
+                vis[i + 2] = true;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    long long findScore(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&](int i, int j) {
+            return nums[i] < nums[j] || (nums[i] == nums[j] && i < j);
+        });
+        long long ans = 0;
+        vector<bool> vis(n + 2);
+        for (int i : idx) {
+            if (!vis[i + 1]) {
+                ans += nums[i];
+                vis[i] = vis[i + 2] = true;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func findScore(nums []int) (ans int64) {
+	n := len(nums)
+	idx := make([]int, n)
+	for i := range idx {
+		idx[i] = i
+	}
+	sort.Slice(idx, func(i, j int) bool {
+		i, j = idx[i], idx[j]
+		return nums[i] < nums[j] || (nums[i] == nums[j] && i < j)
+	})
+	vis := make([]bool, n+2)
+	for _, i := range idx {
+		if !vis[i+1] {
+			ans += int64(nums[i])
+			vis[i], vis[i+2] = true, true
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
 ```ts
 function findScore(nums: number[]): number {
     const n = nums.length;
@@ -341,10 +382,8 @@ function findScore(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

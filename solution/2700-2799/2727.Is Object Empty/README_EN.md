@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2727.Is%20Object%20Empty/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2727. Is Object Empty](https://leetcode.com/problems/is-object-empty)
 
 [中文文档](/solution/2700-2799/2727.Is%20Object%20Empty/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an object or an array, return if it is empty.</p>
 
@@ -42,17 +54,24 @@
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li>&nbsp;<code>2 &lt;= JSON.stringify(obj).length &lt;= 10<sup>5</sup></code></li>
+	<li><code>obj</code> is a valid JSON object or array</li>
+	<li><code>2 &lt;= JSON.stringify(obj).length &lt;= 10<sup>5</sup></code></li>
 </ul>
 
 <p>&nbsp;</p>
 <strong>Can you solve it in O(1) time?</strong>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isEmpty(obj: Record<string, any> | any[]): boolean {
@@ -63,4 +82,41 @@ function isEmpty(obj: Record<string, any> | any[]): boolean {
 }
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {Object | Array} obj
+ * @return {boolean}
+ */
+var isEmpty = function (obj) {
+    for (const x in obj) {
+        return false;
+    }
+    return true;
+};
+```
+
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function isEmpty(obj: Record<string, any> | any[]): boolean {
+    return Object.keys(obj).length === 0;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

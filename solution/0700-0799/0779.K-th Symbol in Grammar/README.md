@@ -1,10 +1,22 @@
-# [779. 第 K 个语法符号](https://leetcode.cn/problems/k-th-symbol-in-grammar)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0779.K-th%20Symbol%20in%20Grammar/README.md
+tags:
+    - 位运算
+    - 递归
+    - 数学
+---
+
+<!-- problem:start -->
+
+# [779. 第K个语法符号](https://leetcode.cn/problems/k-th-symbol-in-grammar)
 
 [English Version](/solution/0700-0799/0779.K-th%20Symbol%20in%20Grammar/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们构建了一个包含 <code>n</code> 行(&nbsp;<strong>索引从 1&nbsp; 开始&nbsp;</strong>)的表。首先在第一行我们写上一个 <code>0</code>。接下来的每一行，将前一行中的<code>0</code>替换为<code>01</code>，<code>1</code>替换为<code>10</code>。</p>
 
@@ -52,11 +64,13 @@
 	<li><code>1 &lt;= k &lt;= 2<sup>n - 1</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 我们先来看一下前几行的规律：
 
@@ -77,7 +91,70 @@ n = 5: 0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。
 
-**方法二：位运算 + 脑筋急转弯**
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def kthGrammar(self, n: int, k: int) -> int:
+        if n == 1:
+            return 0
+        if k <= (1 << (n - 2)):
+            return self.kthGrammar(n - 1, k)
+        return self.kthGrammar(n - 1, k - (1 << (n - 2))) ^ 1
+```
+
+#### Java
+
+```java
+class Solution {
+    public int kthGrammar(int n, int k) {
+        if (n == 1) {
+            return 0;
+        }
+        if (k <= (1 << (n - 2))) {
+            return kthGrammar(n - 1, k);
+        }
+        return kthGrammar(n - 1, k - (1 << (n - 2))) ^ 1;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int kthGrammar(int n, int k) {
+        if (n == 1) return 0;
+        if (k <= (1 << (n - 2))) return kthGrammar(n - 1, k);
+        return kthGrammar(n - 1, k - (1 << (n - 2))) ^ 1;
+    }
+};
+```
+
+#### Go
+
+```go
+func kthGrammar(n int, k int) int {
+	if n == 1 {
+		return 0
+	}
+	if k <= (1 << (n - 2)) {
+		return kthGrammar(n-1, k)
+	}
+	return kthGrammar(n-1, k-(1<<(n-2))) ^ 1
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：位运算 + 脑筋急转弯
 
 题目中索引从 $1$ 开始，我们将 $k$ 改成 $k-1$，将索引转换为从 $0$ 开始。在接下来的讨论中，索引均从 $0$ 开始。
 
@@ -111,19 +188,7 @@ n = 5: 0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def kthGrammar(self, n: int, k: int) -> int:
-        if n == 1:
-            return 0
-        if k <= (1 << (n - 2)):
-            return self.kthGrammar(n - 1, k)
-        return self.kthGrammar(n - 1, k - (1 << (n - 2))) ^ 1
-```
+#### Python3
 
 ```python
 class Solution:
@@ -131,23 +196,7 @@ class Solution:
         return (k - 1).bit_count() & 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int kthGrammar(int n, int k) {
-        if (n == 1) {
-            return 0;
-        }
-        if (k <= (1 << (n - 2))) {
-            return kthGrammar(n - 1, k);
-        }
-        return kthGrammar(n - 1, k - (1 << (n - 2))) ^ 1;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -157,18 +206,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int kthGrammar(int n, int k) {
-        if (n == 1) return 0;
-        if (k <= (1 << (n - 2))) return kthGrammar(n - 1, k);
-        return kthGrammar(n - 1, k - (1 << (n - 2))) ^ 1;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -179,19 +217,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func kthGrammar(n int, k int) int {
-	if n == 1 {
-		return 0
-	}
-	if k <= (1 << (n - 2)) {
-		return kthGrammar(n-1, k)
-	}
-	return kthGrammar(n-1, k-(1<<(n-2))) ^ 1
-}
-```
+#### Go
 
 ```go
 func kthGrammar(n int, k int) int {
@@ -199,10 +225,8 @@ func kthGrammar(n int, k int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

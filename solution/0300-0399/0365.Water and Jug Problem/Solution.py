@@ -1,9 +1,16 @@
 class Solution:
-    def canMeasureWater(
-        self, jug1Capacity: int, jug2Capacity: int, targetCapacity: int
-    ) -> bool:
-        if jug1Capacity + jug2Capacity < targetCapacity:
-            return False
-        if jug1Capacity == 0 or jug2Capacity == 0:
-            return targetCapacity == 0 or jug1Capacity + jug2Capacity == targetCapacity
-        return targetCapacity % gcd(jug1Capacity, jug2Capacity) == 0
+    def canMeasureWater(self, x: int, y: int, z: int) -> bool:
+        def dfs(i: int, j: int) -> bool:
+            if (i, j) in vis:
+                return False
+            vis.add((i, j))
+            if i == z or j == z or i + j == z:
+                return True
+            if dfs(x, j) or dfs(i, y) or dfs(0, j) or dfs(i, 0):
+                return True
+            a = min(i, y - j)
+            b = min(j, x - i)
+            return dfs(i - a, j + a) or dfs(i + b, j - b)
+
+        vis = set()
+        return dfs(0, 0)

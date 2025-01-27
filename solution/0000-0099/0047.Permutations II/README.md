@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0047.Permutations%20II/README.md
+tags:
+    - 数组
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [47. 全排列 II](https://leetcode.cn/problems/permutations-ii)
 
 [English Version](/solution/0000-0099/0047.Permutations%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个可包含重复数字的序列 <code>nums</code> ，<em><strong>按任意顺序</strong></em> 返回所有不重复的全排列。</p>
 
@@ -36,11 +47,13 @@
 	<li><code>-10 &lt;= nums[i] &lt;= 10</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 回溯**
+### 方法一：排序 + 回溯
 
 我们可以先对数组进行排序，这样就可以将重复的数字放在一起，方便我们进行去重。
 
@@ -55,13 +68,11 @@
 
 相似题目：
 
--   [46. 全排列](/solution/0000-0099/0046.Permutations/README.md)
+-   [46. 全排列](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0046.Permutations/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +98,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -125,7 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -157,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func permuteUnique(nums []int) (ans [][]int) {
@@ -168,9 +177,7 @@ func permuteUnique(nums []int) (ans [][]int) {
 	var dfs func(int)
 	dfs = func(i int) {
 		if i == n {
-			cp := make([]int, n)
-			copy(cp, t)
-			ans = append(ans, cp)
+			ans = append(ans, slices.Clone(t))
 			return
 		}
 		for j := 0; j < n; j++ {
@@ -188,7 +195,7 @@ func permuteUnique(nums []int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function permuteUnique(nums: number[]): number[][] {
@@ -217,7 +224,38 @@ function permuteUnique(nums: number[]): number[][] {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+use std::collections::HashSet;
+impl Solution {
+    fn dfs(i: usize, nums: &mut Vec<i32>, res: &mut Vec<Vec<i32>>) {
+        let n = nums.len();
+        if i == n {
+            res.push(nums.clone());
+            return;
+        }
+        let mut set = HashSet::new();
+        for j in i..n {
+            if set.contains(&nums[j]) {
+                continue;
+            }
+            set.insert(nums[j]);
+            nums.swap(i, j);
+            Self::dfs(i + 1, nums, res);
+            nums.swap(i, j);
+        }
+    }
+
+    pub fn permute_unique(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
+        let mut res = vec![];
+        Self::dfs(0, &mut nums, &mut res);
+        res
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -254,41 +292,8 @@ public class Solution {
 }
 ```
 
-### **Rust**
-
-```rust
-use std::collections::HashSet;
-impl Solution {
-    fn dfs(i: usize, nums: &mut Vec<i32>, res: &mut Vec<Vec<i32>>) {
-        let n = nums.len();
-        if i == n {
-            res.push(nums.clone());
-            return;
-        }
-        let mut set = HashSet::new();
-        for j in i..n {
-            if set.contains(&nums[j]) {
-                continue;
-            }
-            set.insert(nums[j]);
-            nums.swap(i, j);
-            Self::dfs(i + 1, nums, res);
-            nums.swap(i, j);
-        }
-    }
-
-    pub fn permute_unique(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
-        let mut res = vec![];
-        Self::dfs(0, &mut nums, &mut res);
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

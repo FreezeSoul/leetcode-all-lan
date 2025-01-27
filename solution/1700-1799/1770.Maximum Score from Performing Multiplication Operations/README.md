@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1770.Maximum%20Score%20from%20Performing%20Multiplication%20Operations/README.md
+rating: 2068
+source: 第 229 场周赛 Q3
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1770. 执行乘法运算的最大分数](https://leetcode.cn/problems/maximum-score-from-performing-multiplication-operations)
 
 [English Version](/solution/1700-1799/1770.Maximum%20Score%20from%20Performing%20Multiplication%20Operations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个长度分别 <code>n</code> 和 <code>m</code> 的整数数组 <code>nums</code> 和 <code>multipliers</code><strong> </strong>，其中 <code>n &gt;= m</code> ，数组下标 <strong>从 1 开始</strong> 计数。</p>
 
@@ -55,11 +68,13 @@
 	<li><code>-1000 &lt;= nums[i], multipliers[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i, j)$，表示从 `nums` 数组头部第 $i$ 个元素开始，从 `nums` 数组尾部第 $j$ 个元素开始，能够获得的最大分数。那么答案就是 $dfs(0, 0)$。
 
@@ -72,23 +87,9 @@
 
 时间复杂度 $O(m^2)$，空间复杂度 $O(m^2)$。其中 $m$ 为 `multipliers` 数组的长度。
 
-**方法二：动态规划**
-
-我们可以将方法一中的记忆化搜索改写为动态规划的形式。
-
-我们用 $f[i][j]$ 表示取数组 $nums$ 的前 $i$ 个元素，以及取数组 $nums$ 的后 $j$ 个元素，能够获得的最大分数。初始时 $f[0][0] = 0$，其余元素均为 $-\infty$。答案为 $\max_{0 \leq i \leq m} f[i][m-i]$。
-
-考虑 $f[i][j]$，那么当前我们可以选择 `nums` 数组头部的第 $i$ 个元素，或者选择 `nums` 数组尾部的第 $j$ 个元素。如果选择了 `nums` 数组头部的第 $i$ 个元素，那么能够获得的最大分数为 $f[i-1][j] + nums[i-1] \times multipliers[i+j-1]$；如果选择了 `nums` 数组尾部的第 $j$ 个元素，那么能够获得的最大分数为 $f[i][j-1] + nums[n-j] \times multipliers[i+j-1]$。我们取两者的最大值作为 $f[i][j]$ 的值。如果 $i + j = m$，我们我们更新答案 $ans = \max(ans, f[i][j])$。
-
-最后返回答案 $ans$ 即可。
-
-时间复杂度 $O(m^2)$，空间复杂度 $O(m^2)$。其中 $m$ 为 `multipliers` 数组的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -106,28 +107,7 @@ class Solution:
         return f(0, n - 1, 0)
 ```
 
-```python
-class Solution:
-    def maximumScore(self, nums: List[int], multipliers: List[int]) -> int:
-        n, m = len(nums), len(multipliers)
-        f = [[-inf] * (m + 1) for _ in range(m + 1)]
-        f[0][0] = 0
-        ans = -inf
-        for i in range(m + 1):
-            for j in range(m - i + 1):
-                k = i + j - 1
-                if i > 0:
-                    f[i][j] = max(f[i][j], f[i - 1][j] + multipliers[k] * nums[i - 1])
-                if j > 0:
-                    f[i][j] = max(f[i][j], f[i][j - 1] + multipliers[k] * nums[n - j])
-                if i + j == m:
-                    ans = max(ans, f[i][j])
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -162,6 +142,129 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, vector<int>& multipliers) {
+        int n = nums.size(), m = multipliers.size();
+        int f[m][m];
+        memset(f, 0x3f, sizeof f);
+        function<int(int, int)> dfs = [&](int i, int j) -> int {
+            if (i >= m || j >= m || (i + j) >= m) return 0;
+            if (f[i][j] != 0x3f3f3f3f) return f[i][j];
+            int k = i + j;
+            int a = dfs(i + 1, j) + nums[i] * multipliers[k];
+            int b = dfs(i, j + 1) + nums[n - j - 1] * multipliers[k];
+            return f[i][j] = max(a, b);
+        };
+        return dfs(0, 0);
+    }
+};
+```
+
+#### Go
+
+```go
+func maximumScore(nums []int, multipliers []int) int {
+	n, m := len(nums), len(multipliers)
+	f := make([][]int, m)
+	for i := range f {
+		f[i] = make([]int, m)
+		for j := range f[i] {
+			f[i][j] = 1 << 30
+		}
+	}
+	var dfs func(i, j int) int
+	dfs = func(i, j int) int {
+		if i >= m || j >= m || i+j >= m {
+			return 0
+		}
+		if f[i][j] != 1<<30 {
+			return f[i][j]
+		}
+		k := i + j
+		a := dfs(i+1, j) + nums[i]*multipliers[k]
+		b := dfs(i, j+1) + nums[n-j-1]*multipliers[k]
+		f[i][j] = max(a, b)
+		return f[i][j]
+	}
+	return dfs(0, 0)
+}
+```
+
+#### TypeScript
+
+```ts
+function maximumScore(nums: number[], multipliers: number[]): number {
+    const inf = 1 << 30;
+    const n = nums.length;
+    const m = multipliers.length;
+    const f = new Array(m + 1).fill(0).map(() => new Array(m + 1).fill(-inf));
+    f[0][0] = 0;
+    let ans = -inf;
+    for (let i = 0; i <= m; ++i) {
+        for (let j = 0; j <= m - i; ++j) {
+            const k = i + j - 1;
+            if (i > 0) {
+                f[i][j] = Math.max(f[i][j], f[i - 1][j] + nums[i - 1] * multipliers[k]);
+            }
+            if (j > 0) {
+                f[i][j] = Math.max(f[i][j], f[i][j - 1] + nums[n - j] * multipliers[k]);
+            }
+            if (i + j === m) {
+                ans = Math.max(ans, f[i][j]);
+            }
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+我们可以将方法一中的记忆化搜索改写为动态规划的形式。
+
+我们用 $f[i][j]$ 表示取数组 $nums$ 的前 $i$ 个元素，以及取数组 $nums$ 的后 $j$ 个元素，能够获得的最大分数。初始时 $f[0][0] = 0$，其余元素均为 $-\infty$。答案为 $\max_{0 \leq i \leq m} f[i][m-i]$。
+
+考虑 $f[i][j]$，那么当前我们可以选择 `nums` 数组头部的第 $i$ 个元素，或者选择 `nums` 数组尾部的第 $j$ 个元素。如果选择了 `nums` 数组头部的第 $i$ 个元素，那么能够获得的最大分数为 $f[i-1][j] + nums[i-1] \times multipliers[i+j-1]$；如果选择了 `nums` 数组尾部的第 $j$ 个元素，那么能够获得的最大分数为 $f[i][j-1] + nums[n-j] \times multipliers[i+j-1]$。我们取两者的最大值作为 $f[i][j]$ 的值。如果 $i + j = m$，我们我们更新答案 $ans = \max(ans, f[i][j])$。
+
+最后返回答案 $ans$ 即可。
+
+时间复杂度 $O(m^2)$，空间复杂度 $O(m^2)$。其中 $m$ 为 `multipliers` 数组的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maximumScore(self, nums: List[int], multipliers: List[int]) -> int:
+        n, m = len(nums), len(multipliers)
+        f = [[-inf] * (m + 1) for _ in range(m + 1)]
+        f[0][0] = 0
+        ans = -inf
+        for i in range(m + 1):
+            for j in range(m - i + 1):
+                k = i + j - 1
+                if i > 0:
+                    f[i][j] = max(f[i][j], f[i - 1][j] + multipliers[k] * nums[i - 1])
+                if j > 0:
+                    f[i][j] = max(f[i][j], f[i][j - 1] + multipliers[k] * nums[n - j])
+                if i + j == m:
+                    ans = max(ans, f[i][j])
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int maximumScore(int[] nums, int[] multipliers) {
@@ -192,27 +295,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maximumScore(vector<int>& nums, vector<int>& multipliers) {
-        int n = nums.size(), m = multipliers.size();
-        int f[m][m];
-        memset(f, 0x3f, sizeof f);
-        function<int(int, int)> dfs = [&](int i, int j) -> int {
-            if (i >= m || j >= m || (i + j) >= m) return 0;
-            if (f[i][j] != 0x3f3f3f3f) return f[i][j];
-            int k = i + j;
-            int a = dfs(i + 1, j) + nums[i] * multipliers[k];
-            int b = dfs(i, j + 1) + nums[n - j - 1] * multipliers[k];
-            return f[i][j] = max(a, b);
-        };
-        return dfs(0, 0);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -242,42 +325,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func maximumScore(nums []int, multipliers []int) int {
-	n, m := len(nums), len(multipliers)
-	f := make([][]int, m)
-	for i := range f {
-		f[i] = make([]int, m)
-		for j := range f[i] {
-			f[i][j] = 1 << 30
-		}
-	}
-	var dfs func(i, j int) int
-	dfs = func(i, j int) int {
-		if i >= m || j >= m || i+j >= m {
-			return 0
-		}
-		if f[i][j] != 1<<30 {
-			return f[i][j]
-		}
-		k := i + j
-		a := dfs(i+1, j) + nums[i]*multipliers[k]
-		b := dfs(i, j+1) + nums[n-j-1]*multipliers[k]
-		f[i][j] = max(a, b)
-		return f[i][j]
-	}
-	return dfs(0, 0)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func maximumScore(nums []int, multipliers []int) int {
@@ -308,53 +356,10 @@ func maximumScore(nums []int, multipliers []int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function maximumScore(nums: number[], multipliers: number[]): number {
-    const inf = 1 << 30;
-    const n = nums.length;
-    const m = multipliers.length;
-    const f = new Array(m + 1).fill(0).map(() => new Array(m + 1).fill(-inf));
-    f[0][0] = 0;
-    let ans = -inf;
-    for (let i = 0; i <= m; ++i) {
-        for (let j = 0; j <= m - i; ++j) {
-            const k = i + j - 1;
-            if (i > 0) {
-                f[i][j] = Math.max(
-                    f[i][j],
-                    f[i - 1][j] + nums[i - 1] * multipliers[k],
-                );
-            }
-            if (j > 0) {
-                f[i][j] = Math.max(
-                    f[i][j],
-                    f[i][j - 1] + nums[n - j] * multipliers[k],
-                );
-            }
-            if (i + j === m) {
-                ans = Math.max(ans, f[i][j]);
-            }
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

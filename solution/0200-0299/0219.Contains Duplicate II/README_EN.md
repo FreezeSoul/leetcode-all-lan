@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0219.Contains%20Duplicate%20II/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [219. Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii)
 
 [中文文档](/solution/0200-0299/0219.Contains%20Duplicate%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <code>true</code> <em>if there are two <strong>distinct indices</strong> </em><code>i</code><em> and </em><code>j</code><em> in the array such that </em><code>nums[i] == nums[j]</code><em> and </em><code>abs(i - j) &lt;= k</code>.</p>
 
@@ -37,9 +51,13 @@
 	<li><code>0 &lt;= k &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Hash Table**
+<!-- solution:start -->
+
+### Solution 1: Hash Table
 
 We use a hash table $d$ to store the nearest index of the number it has visited.
 
@@ -51,7 +69,7 @@ The time complexity is $O(n)$ and the space complexity is $O(n)$. Here $n$ is th
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +82,7 @@ class Solution:
         return False
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -81,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -99,7 +117,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func containsNearbyDuplicate(nums []int, k int) bool {
@@ -114,7 +132,42 @@ func containsNearbyDuplicate(nums []int, k int) bool {
 }
 ```
 
-### **C#**
+#### TypeScript
+
+```ts
+function containsNearbyDuplicate(nums: number[], k: number): boolean {
+    const d: Map<number, number> = new Map();
+    for (let i = 0; i < nums.length; ++i) {
+        if (d.has(nums[i]) && i - d.get(nums[i])! <= k) {
+            return true;
+        }
+        d.set(nums[i], i);
+    }
+    return false;
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+var containsNearbyDuplicate = function (nums, k) {
+    const d = new Map();
+    for (let i = 0; i < nums.length; ++i) {
+        if (d.has(nums[i]) && i - d.get(nums[i]) <= k) {
+            return true;
+        }
+        d.set(nums[i], i);
+    }
+    return false;
+};
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -131,25 +184,31 @@ public class Solution {
 }
 ```
 
-### **TypeScript**
+#### PHP
 
-```ts
-function containsNearbyDuplicate(nums: number[], k: number): boolean {
-    const d: Map<number, number> = new Map();
-    for (let i = 0; i < nums.length; ++i) {
-        if (d.has(nums[i]) && i - d.get(nums[i])! <= k) {
-            return true;
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $k
+     * @return Boolean
+     */
+    function containsNearbyDuplicate($nums, $k) {
+        $hashtable = [];
+        for ($i = 0; $i < count($nums); $i++) {
+            $tmp = $nums[$i];
+            if (array_key_exists($tmp, $hashtable) && $k >= $i - $hashtable[$tmp]) {
+                return true;
+            }
+            $hashtable[$tmp] = $i;
         }
-        d.set(nums[i], i);
+        return false;
     }
-    return false;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

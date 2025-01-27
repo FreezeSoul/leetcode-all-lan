@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1096.Brace%20Expansion%20II/README_EN.md
+rating: 2348
+source: Weekly Contest 142 Q4
+tags:
+    - Stack
+    - Breadth-First Search
+    - String
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [1096. Brace Expansion II](https://leetcode.com/problems/brace-expansion-ii)
 
 [中文文档](/solution/1000-1099/1096.Brace%20Expansion%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Under the grammar given below, strings can represent a set of lowercase words. Let&nbsp;<code>R(expr)</code>&nbsp;denote the set of words the expression represents.</p>
 
@@ -64,11 +81,17 @@
 	<li>The given&nbsp;<code>expression</code>&nbsp;represents a set of words based on the grammar given in the description.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -79,8 +102,8 @@ class Solution:
                 s.add(exp)
                 return
             i = exp.rfind('{', 0, j - 1)
-            a, c = exp[:i], exp[j + 1:]
-            for b in exp[i + 1: j].split(','):
+            a, c = exp[:i], exp[j + 1 :]
+            for b in exp[i + 1 : j].split(','):
                 dfs(a + b + c)
 
         s = set()
@@ -88,7 +111,7 @@ class Solution:
         return sorted(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -115,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -146,7 +169,7 @@ private:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func braceExpansionII(expression string) []string {
@@ -174,7 +197,7 @@ func braceExpansionII(expression string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function braceExpansionII(expression: string): string[] {
@@ -197,10 +220,8 @@ function braceExpansionII(expression: string): string[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

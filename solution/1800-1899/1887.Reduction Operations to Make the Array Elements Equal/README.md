@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1887.Reduction%20Operations%20to%20Make%20the%20Array%20Elements%20Equal/README.md
+rating: 1427
+source: 第 244 场周赛 Q2
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1887. 使数组元素相等的减少操作次数](https://leetcode.cn/problems/reduction-operations-to-make-the-array-elements-equal)
 
 [English Version](/solution/1800-1899/1887.Reduction%20Operations%20to%20Make%20the%20Array%20Elements%20Equal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，你的目标是令 <code>nums</code> 中的所有元素相等。完成一次减少操作需要遵照下面的几个步骤：</p>
 
@@ -58,11 +71,13 @@
 	<li><code>1 <= nums[i] <= 5 * 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 对 $nums$ 进行排序，用 $cnt$ 表示元素所需的操作次数，初始时 $cnt=0$。
 
@@ -72,9 +87,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,19 +101,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def reductionOperations(self, nums: List[int]) -> int:
-        ans = cnt = 0
-        for _, v in sorted(Counter(nums).items()):
-            ans += cnt * v
-            cnt += 1
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,6 +118,98 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int reductionOperations(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int ans = 0, cnt = 0;
+        for (int i = 1; i < nums.size(); ++i) {
+            cnt += nums[i] != nums[i - 1];
+            ans += cnt;
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func reductionOperations(nums []int) int {
+	sort.Ints(nums)
+	ans, cnt := 0, 0
+	for i, v := range nums[1:] {
+		if v != nums[i] {
+			cnt++
+		}
+		ans += cnt
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function reductionOperations(nums: number[]): number {
+    nums.sort((a, b) => a - b);
+    let ans = 0;
+    let cnt = 0;
+    for (let i = 1; i < nums.length; ++i) {
+        if (nums[i] != nums[i - 1]) {
+            ++cnt;
+        }
+        ans += cnt;
+    }
+    return ans;
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int ReductionOperations(int[] nums) {
+        Array.Sort(nums);
+        int ans = 0, up = 0;
+        for (int i = 1; i < nums.Length; i++) {
+            if (nums[i] != nums[i - 1]) {
+                up++;
+            }
+            ans += up;
+        }
+        return ans;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def reductionOperations(self, nums: List[int]) -> int:
+        ans = cnt = 0
+        for _, v in sorted(Counter(nums).items()):
+            ans += cnt * v
+            cnt += 1
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -135,39 +228,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function reductionOperations(nums: number[]): number {
-    nums.sort((a, b) => a - b);
-    let ans = 0;
-    let cnt = 0;
-    for (let i = 1; i < nums.length; ++i) {
-        if (nums[i] != nums[i - 1]) {
-            ++cnt;
-        }
-        ans += cnt;
-    }
-    return ans;
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int reductionOperations(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int ans = 0, cnt = 0;
-        for (int i = 1; i < nums.size(); ++i) {
-            cnt += nums[i] != nums[i - 1];
-            ans += cnt;
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -176,8 +237,7 @@ public:
         map<int, int> m;
         for (int v : nums) ++m[v];
         int ans = 0, cnt = 0;
-        for (auto [_, v] : m)
-        {
+        for (auto [_, v] : m) {
             ans += cnt * v;
             ++cnt;
         }
@@ -186,26 +246,8 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func reductionOperations(nums []int) int {
-	sort.Ints(nums)
-	ans, cnt := 0, 0
-	for i, v := range nums[1:] {
-		if v != nums[i] {
-			cnt++
-		}
-		ans += cnt
-	}
-	return ans
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

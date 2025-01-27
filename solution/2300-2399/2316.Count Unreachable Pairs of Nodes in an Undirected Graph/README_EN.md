@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2316.Count%20Unreachable%20Pairs%20of%20Nodes%20in%20an%20Undirected%20Graph/README_EN.md
+rating: 1604
+source: Biweekly Contest 81 Q2
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Union Find
+    - Graph
+---
+
+<!-- problem:start -->
+
 # [2316. Count Unreachable Pairs of Nodes in an Undirected Graph](https://leetcode.com/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph)
 
 [中文文档](/solution/2300-2399/2316.Count%20Unreachable%20Pairs%20of%20Nodes%20in%20an%20Undirected%20Graph/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code>. There is an <strong>undirected</strong> graph with <code>n</code> nodes, numbered from <code>0</code> to <code>n - 1</code>. You are given a 2D integer array <code>edges</code> where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> denotes that there exists an <strong>undirected</strong> edge connecting nodes <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code>.</p>
 
@@ -39,48 +56,57 @@ Therefore, we return 14.
 	<li>There are no repeated edges.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+For any two nodes in an undirected graph, if there is a path between them, then they are mutually reachable.
+
+Therefore, we can use depth-first search to find the number of nodes $t$ in each connected component, and then multiply the current number of nodes $t$ in the connected component by the number of nodes $s$ in all previous connected components to obtain the number of unreachable node pairs in the current connected component, which is $s \times t$. Then, we add $t$ to $s$ and continue to search for the next connected component until all connected components have been searched, and we can obtain the final answer.
+
+The time complexity is $O(n + m)$, and the space complexity is $O(n + m)$. Here, $n$ and $m$ are the number of nodes and edges, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def countPairs(self, n: int, edges: List[List[int]]) -> int:
-        def dfs(i):
-            vis.add(i)
-            cnt = 1
-            for j in g[i]:
-                if j not in vis:
-                    cnt += dfs(j)
-            return cnt
+        def dfs(i: int) -> int:
+            if vis[i]:
+                return 0
+            vis[i] = True
+            return 1 + sum(dfs(j) for j in g[i])
 
-        g = defaultdict(list)
+        g = [[] for _ in range(n)]
         for a, b in edges:
             g[a].append(b)
             g[b].append(a)
-        vis = set()
+        vis = [False] * n
         ans = s = 0
         for i in range(n):
-            if i not in vis:
-                t = dfs(i)
-                ans += s * t
-                s += t
+            t = dfs(i)
+            ans += s * t
+            s += t
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-    private boolean[] vis;
     private List<Integer>[] g;
+    private boolean[] vis;
 
     public long countPairs(int n, int[][] edges) {
-        vis = new boolean[n];
         g = new List[n];
-        Arrays.setAll(g, k -> new ArrayList<>());
+        vis = new boolean[n];
+        Arrays.setAll(g, i -> new ArrayList<>());
         for (var e : edges) {
             int a = e[0], b = e[1];
             g[a].add(b);
@@ -88,65 +114,64 @@ class Solution {
         }
         long ans = 0, s = 0;
         for (int i = 0; i < n; ++i) {
-            if (!vis[i]) {
-                long t = dfs(i);
-                ans += s * t;
-                s += t;
-            }
+            int t = dfs(i);
+            ans += s * t;
+            s += t;
         }
         return ans;
     }
 
     private int dfs(int i) {
+        if (vis[i]) {
+            return 0;
+        }
         vis[i] = true;
         int cnt = 1;
         for (int j : g[i]) {
-            if (!vis[j]) {
-                cnt += dfs(j);
-            }
+            cnt += dfs(j);
         }
         return cnt;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long countPairs(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> g(n);
+        vector<int> g[n];
         for (auto& e : edges) {
             int a = e[0], b = e[1];
-            g[a].emplace_back(b);
-            g[b].emplace_back(a);
+            g[a].push_back(b);
+            g[b].push_back(a);
         }
-        vector<bool> vis(n);
-        function<int(int)> dfs = [&](int i) -> int {
+        bool vis[n];
+        memset(vis, 0, sizeof(vis));
+        function<int(int)> dfs = [&](int i) {
+            if (vis[i]) {
+                return 0;
+            }
             vis[i] = true;
             int cnt = 1;
             for (int j : g[i]) {
-                if (!vis[j]) {
-                    cnt += dfs(j);
-                }
+                cnt += dfs(j);
             }
             return cnt;
         };
         long long ans = 0, s = 0;
         for (int i = 0; i < n; ++i) {
-            if (!vis[i]) {
-                long long t = dfs(i);
-                ans += s * t;
-                s += t;
-            }
+            int t = dfs(i);
+            ans += s * t;
+            s += t;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPairs(n int, edges [][]int) (ans int64) {
@@ -159,64 +184,98 @@ func countPairs(n int, edges [][]int) (ans int64) {
 	vis := make([]bool, n)
 	var dfs func(int) int
 	dfs = func(i int) int {
+		if vis[i] {
+			return 0
+		}
 		vis[i] = true
 		cnt := 1
 		for _, j := range g[i] {
-			if !vis[j] {
-				cnt += dfs(j)
-			}
+			cnt += dfs(j)
 		}
 		return cnt
 	}
 	var s int64
 	for i := 0; i < n; i++ {
-		if !vis[i] {
-			t := int64(dfs(i))
-			ans += s * t
-			s += t
-		}
+		t := int64(dfs(i))
+		ans += s * t
+		s += t
 	}
 	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countPairs(n: number, edges: number[][]): number {
-    const g = Array.from({ length: n }, () => []);
+    const g: number[][] = Array.from({ length: n }, () => []);
     for (const [a, b] of edges) {
         g[a].push(b);
         g[b].push(a);
     }
-    const vis = new Array(n).fill(false);
-    const dfs = (i: number) => {
+    const vis: boolean[] = Array(n).fill(false);
+    const dfs = (i: number): number => {
+        if (vis[i]) {
+            return 0;
+        }
         vis[i] = true;
         let cnt = 1;
         for (const j of g[i]) {
-            if (!vis[j]) {
-                cnt += dfs(j);
-            }
+            cnt += dfs(j);
         }
         return cnt;
     };
-    let ans = 0;
-    let s = 0;
+    let [ans, s] = [0, 0];
     for (let i = 0; i < n; ++i) {
-        if (!vis[i]) {
-            const t = dfs(i);
-            ans += s * t;
-            s += t;
-        }
+        const t = dfs(i);
+        ans += s * t;
+        s += t;
     }
     return ans;
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn count_pairs(n: i32, edges: Vec<Vec<i32>>) -> i64 {
+        let n = n as usize;
+        let mut g = vec![vec![]; n];
+        let mut vis = vec![false; n];
+        for e in edges {
+            let u = e[0] as usize;
+            let v = e[1] as usize;
+            g[u].push(v);
+            g[v].push(u);
+        }
 
+        fn dfs(g: &Vec<Vec<usize>>, vis: &mut Vec<bool>, u: usize) -> i64 {
+            if vis[u] {
+                return 0;
+            }
+            vis[u] = true;
+            let mut cnt = 1;
+            for &v in &g[u] {
+                cnt += dfs(g, vis, v);
+            }
+            cnt
+        }
+
+        let mut ans = 0;
+        let mut s = 0;
+        for u in 0..n {
+            let t = dfs(&g, &mut vis, u);
+            ans += t * s;
+            s += t;
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

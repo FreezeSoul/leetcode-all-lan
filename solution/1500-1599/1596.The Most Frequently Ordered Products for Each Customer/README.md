@@ -1,10 +1,20 @@
-# [1596. 每位顾客最经常订购的商品](https://leetcode.cn/problems/the-most-frequently-ordered-products-for-each-customer)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1596.The%20Most%20Frequently%20Ordered%20Products%20for%20Each%20Customer/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1596. 每位顾客最经常订购的商品 🔒](https://leetcode.cn/problems/the-most-frequently-ordered-products-for-each-customer)
 
 [English Version](/solution/1500-1599/1596.The%20Most%20Frequently%20Ordered%20Products%20for%20Each%20Customer/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>Customers</code></p>
 
@@ -15,7 +25,7 @@
 | customer_id   | int     |
 | name          | varchar |
 +---------------+---------+
-customer_id 是该表主键
+customer_id 是该表具有唯一值的列
 该表包含所有顾客的信息
 </pre>
 
@@ -32,7 +42,7 @@ customer_id 是该表主键
 | customer_id   | int     |
 | product_id    | int     |
 +---------------+---------+
-order_id 是该表主键
+order_id 是该表具有唯一值的列
 该表包含顾客 customer_id 的订单信息
 没有顾客会在一天内订购相同的商品<strong> 多于一次</strong></pre>
 
@@ -48,13 +58,13 @@ order_id 是该表主键
 | product_name  | varchar |
 | price         | int     |
 +---------------+---------+
-product_id 是该表主键
+product_id 是该表具有唯一值的列
 该表包含了所有商品的信息
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写一个 SQL 语句，找到每一个顾客最经常订购的商品。</p>
+<p>写一个解决方案，找到每一个顾客最经常订购的商品。</p>
 
 <p>结果表单应该有每一位至少下过一次单的顾客 <code>customer_id</code>&nbsp;,&nbsp;他最经常订购的商品的&nbsp;<code>product_id</code>&nbsp;和&nbsp;<code>product_name</code>。</p>
 
@@ -120,41 +130,43 @@ Tom (customer 3) 只两次订购显示器, 所以显示器是 Tom 最经常订�
 Jerry (customer 4) 只一次订购键盘, 所以键盘是 Jerry 最经常订购的商品.
 John (customer 5) 没有订购过商品, 所以我们并没有把 John 包含在结果表中.</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分组 + 窗口函数
+
+我们将 `Orders` 表按照 `customer_id` 和 `product_id` 进行分组，然后利用窗口函数 `rank()`，按照 `customer_id` 分区，并且按照 `count(1)` 降序排列，得到每个 `customer_id` 下对应的 `product_id` 的排名，排名为 $1$ 的就是该 `customer_id` 下最经常订购的商品。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    customer_id,
-    p.product_id,
-    p.product_name
-from
-    (
-        select
+WITH
+    T AS (
+        SELECT
             customer_id,
             product_id,
-            rank() over(
-                partition by customer_id
-                order by
-                    count(1) desc
-            ) rk
-        from
-            Orders
-        group by
-            customer_id,
-            product_id
-    ) o
-    join Products p on o.product_id = p.product_id
-where
-    rk = 1;
+            RANK() OVER (
+                PARTITION BY customer_id
+                ORDER BY COUNT(1) DESC
+            ) AS rk
+        FROM Orders
+        GROUP BY 1, 2
+    )
+SELECT customer_id, product_id, product_name
+FROM
+    T
+    JOIN Products USING (product_id)
+WHERE rk = 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

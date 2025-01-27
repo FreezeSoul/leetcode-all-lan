@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0506.Relative%20Ranks/README_EN.md
+tags:
+    - Array
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [506. Relative Ranks](https://leetcode.com/problems/relative-ranks)
 
 [中文文档](/solution/0500-0599/0506.Relative%20Ranks/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>score</code> of size <code>n</code>, where <code>score[i]</code> is the score of the <code>i<sup>th</sup></code> athlete in a competition. All the scores are guaranteed to be <strong>unique</strong>.</p>
 
@@ -44,11 +58,23 @@
 	<li>All the values in <code>score</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting
+
+We use an array $\textit{idx}$ to store the indices from $0$ to $n-1$, then sort $\textit{idx}$ based on the values in $\textit{score}$ in descending order.
+
+Next, we define an array $\textit{top3} = [\text{Gold Medal}, \text{Silver Medal}, \text{Bronze Medal}]$. We traverse $\textit{idx}$, and for each index $j$, if $j$ is less than $3$, then $\textit{ans}[j]$ is $\textit{top3}[j]$; otherwise, it is $j+1$.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{score}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,14 +82,14 @@ class Solution:
         n = len(score)
         idx = list(range(n))
         idx.sort(key=lambda x: -score[x])
-        top3 = ['Gold Medal', 'Silver Medal', 'Bronze Medal']
+        top3 = ["Gold Medal", "Silver Medal", "Bronze Medal"]
         ans = [None] * n
-        for i in range(n):
-            ans[idx[i]] = top3[i] if i < 3 else str(i + 1)
+        for i, j in enumerate(idx):
+            ans[j] = top3[i] if i < 3 else str(i + 1)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,28 +110,29 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> findRelativeRanks(vector<int>& score) {
         int n = score.size();
-        vector<pair<int, int>> idx;
-        for (int i = 0; i < n; ++i)
-            idx.push_back(make_pair(score[i], i));
-        sort(idx.begin(), idx.end(),
-            [&](const pair<int, int>& x, const pair<int, int>& y) { return x.first > y.first; });
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&score](int a, int b) {
+            return score[a] > score[b];
+        });
         vector<string> ans(n);
         vector<string> top3 = {"Gold Medal", "Silver Medal", "Bronze Medal"};
-        for (int i = 0; i < n; ++i)
-            ans[idx[i].second] = i < 3 ? top3[i] : to_string(i + 1);
+        for (int i = 0; i < n; ++i) {
+            ans[idx[i]] = i < 3 ? top3[i] : to_string(i + 1);
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findRelativeRanks(score []int) []string {
@@ -130,10 +157,28 @@ func findRelativeRanks(score []int) []string {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function findRelativeRanks(score: number[]): string[] {
+    const n = score.length;
+    const idx = Array.from({ length: n }, (_, i) => i);
+    idx.sort((a, b) => score[b] - score[a]);
+    const top3 = ['Gold Medal', 'Silver Medal', 'Bronze Medal'];
+    const ans: string[] = Array(n);
+    for (let i = 0; i < n; i++) {
+        if (i < 3) {
+            ans[idx[i]] = top3[i];
+        } else {
+            ans[idx[i]] = (i + 1).toString();
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

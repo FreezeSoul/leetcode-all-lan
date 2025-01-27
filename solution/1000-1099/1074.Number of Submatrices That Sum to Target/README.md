@@ -1,18 +1,33 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1074.Number%20of%20Submatrices%20That%20Sum%20to%20Target/README.md
+rating: 2189
+source: 第 139 场周赛 Q4
+tags:
+    - 数组
+    - 哈希表
+    - 矩阵
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [1074. 元素和为目标值的子矩阵数量](https://leetcode.cn/problems/number-of-submatrices-that-sum-to-target)
 
 [English Version](/solution/1000-1099/1074.Number%20of%20Submatrices%20That%20Sum%20to%20Target/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给出矩阵 <code>matrix</code> 和目标值 <code>target</code>，返回元素总和等于目标值的非空子矩阵的数量。</p>
+<p>给出矩阵&nbsp;<code>matrix</code>&nbsp;和目标值&nbsp;<code>target</code>，返回元素总和等于目标值的非空子矩阵的数量。</p>
 
-<p>子矩阵 <code>x1, y1, x2, y2</code> 是满足 <code>x1 <= x <= x2</code> 且 <code>y1 <= y <= y2</code> 的所有单元 <code>matrix[x][y]</code> 的集合。</p>
+<p>子矩阵&nbsp;<code>x1, y1, x2, y2</code>&nbsp;是满足 <code>x1 &lt;= x &lt;= x2</code>&nbsp;且&nbsp;<code>y1 &lt;= y &lt;= y2</code>&nbsp;的所有单元&nbsp;<code>matrix[x][y]</code>&nbsp;的集合。</p>
 
-<p>如果 <code>(x1, y1, x2, y2)</code> 和 <code>(x1', y1', x2', y2')</code> 两个子矩阵中部分坐标不同（如：<code>x1 != x1'</code>），那么这两个子矩阵也不同。</p>
+<p>如果&nbsp;<code>(x1, y1, x2, y2)</code> 和&nbsp;<code>(x1', y1', x2', y2')</code>&nbsp;两个子矩阵中部分坐标不同（如：<code>x1 != x1'</code>），那么这两个子矩阵也不同。</p>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
@@ -39,22 +54,24 @@
 <strong>输出：</strong>0
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong><strong>提示：</strong></strong></p>
 
 <ul>
-	<li><code>1 <= matrix.length <= 100</code></li>
-	<li><code>1 <= matrix[0].length <= 100</code></li>
-	<li><code>-1000 <= matrix[i] <= 1000</code></li>
-	<li><code>-10^8 <= target <= 10^8</code></li>
+	<li><code>1 &lt;= matrix.length &lt;= 100</code></li>
+	<li><code>1 &lt;= matrix[0].length &lt;= 100</code></li>
+	<li><code>-1000 &lt;= matrix[i][j] &lt;= 1000</code></li>
+	<li><code>-10^8 &lt;= target &lt;= 10^8</code></li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举上下边界 + 前缀和 + 哈希表**
+### 方法一：枚举上下边界 + 前缀和 + 哈希表
 
 我们可以枚举矩阵的上下边界 $i$ 和 $j$，每次算出当前上下边界内每列的元素和，记为数组 $col$，然后问题就转换为如何在数组 $col$ 中寻找和为目标值 $target$ 的子数组个数。我们累加这些子数组的个数，就是题目要求的答案。
 
@@ -71,9 +88,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,9 +114,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -134,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -169,7 +182,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numSubmatrixSumTarget(matrix [][]int, target int) (ans int) {
@@ -200,7 +213,7 @@ func f(nums []int, target int) (cnt int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numSubmatrixSumTarget(matrix: number[][], target: number): number {
@@ -235,10 +248,8 @@ function f(nums: number[], target: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

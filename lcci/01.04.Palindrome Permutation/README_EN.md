@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/01.04.Palindrome%20Permutation/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [01.04. Palindrome Permutation](https://leetcode.cn/problems/palindrome-permutation-lcci)
 
 [中文文档](/lcci/01.04.Palindrome%20Permutation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string, write a function to check if it is a permutation of a palin&shy; drome. A palindrome is a word or phrase that is the same forwards and backwards. A permutation is a rearrangement of letters. The palindrome does not need to be limited to just dictionary words.</p>
 
@@ -18,11 +28,21 @@
 
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We use a hash table $cnt$ to store the occurrence count of each character. If more than $1$ character has an odd count, then it is not a palindrome permutation.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -31,24 +51,12 @@ class Solution:
         return sum(v & 1 for v in cnt.values()) < 2
 ```
 
-```python
-class Solution:
-    def canPermutePalindrome(self, s: str) -> bool:
-        vis = set()
-        for c in s:
-            if c in vis:
-                vis.remove(c)
-            else:
-                vis.add(c)
-        return len(vis) < 2
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public boolean canPermutePalindrome(String s) {
-        Map<Character, Integer> cnt =  new HashMap<>();
+        Map<Character, Integer> cnt = new HashMap<>();
         for (int i = 0; i < s.length(); ++i) {
             cnt.merge(s.charAt(i), 1, Integer::sum);
         }
@@ -61,22 +69,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean canPermutePalindrome(String s) {
-        Set<Character> vis = new HashSet<>();
-        for (int i = 0; i < s.length(); ++i) {
-            char c = s.charAt(i);
-            if (!vis.add(c)) {
-                vis.remove(c);
-            }
-        }
-        return vis.size() < 2;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,24 +88,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool canPermutePalindrome(string s) {
-        unordered_set<char> vis;
-        for (auto& c : s) {
-            if (vis.count(c)) {
-                vis.erase(c);
-            } else {
-                vis.insert(c);
-            }
-        }
-        return vis.size() < 2;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func canPermutePalindrome(s string) bool {
@@ -131,7 +107,7 @@ func canPermutePalindrome(s string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canPermutePalindrome(s: string): boolean {
@@ -147,7 +123,7 @@ function canPermutePalindrome(s: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -167,10 +143,94 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func canPermutePalindrome(_ s: String) -> Bool {
+        var cnt = [Character: Int]()
+        for char in s {
+            cnt[char, default: 0] += 1
+        }
 
+        var sum = 0
+        for count in cnt.values {
+            sum += count % 2
+        }
+
+        return sum < 2
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Another Implementation of Hash Table
+
+We use a hash table $vis$ to store whether each character has appeared. If it has appeared, we remove the character from the hash table; otherwise, we add the character to the hash table.
+
+Finally, we check whether the number of characters in the hash table is less than $2$. If it is, then it is a palindrome permutation.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def canPermutePalindrome(self, s: str) -> bool:
+        vis = set()
+        for c in s:
+            if c in vis:
+                vis.remove(c)
+            else:
+                vis.add(c)
+        return len(vis) < 2
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean canPermutePalindrome(String s) {
+        Set<Character> vis = new HashSet<>();
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (!vis.add(c)) {
+                vis.remove(c);
+            }
+        }
+        return vis.size() < 2;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool canPermutePalindrome(string s) {
+        unordered_set<char> vis;
+        for (auto& c : s) {
+            if (vis.count(c)) {
+                vis.erase(c);
+            } else {
+                vis.insert(c);
+            }
+        }
+        return vis.size() < 2;
+    }
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

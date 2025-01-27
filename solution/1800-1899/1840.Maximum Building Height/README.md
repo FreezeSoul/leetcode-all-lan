@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1840.Maximum%20Building%20Height/README.md
+rating: 2374
+source: 第 238 场周赛 Q4
+tags:
+    - 数组
+    - 数学
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1840. 最高建筑高度](https://leetcode.cn/problems/maximum-building-height)
 
 [English Version](/solution/1800-1899/1840.Maximum%20Building%20Height/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一座城市里，你需要建 <code>n</code> 栋新的建筑。这些新的建筑会从 <code>1</code> 到 <code>n</code> 编号排成一列。</p>
 
@@ -62,17 +76,19 @@
 	<li><code>0 <= maxHeight<sub>i</sub> <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 数学**
+### 方法一：排序 + 数学
 
 首先，我们将所有的限制条件按照建筑物的编号从小到大排序。
 
-然后我们从左到右遍历所有的限制条件，对于每个限制条件，我们可以得到一个最高高度的上界，即 $r_i[1] = min(r_i[1], r_{i-1}[1] + r_i[0] - r_{i-1}[0])$，其中 $r_i$ 表示第 $i$ 个限制条件，而 $r_i[0]$ 和 $r_i[1]$ 分别表示建筑物的编号以及建筑物的最高高度的上界。
+然后我们从左到右遍历所有的限制条件，对于每个限制条件，我们可以得到一个最高高度的上界，即 $r_i[1] = \min(r_i[1], r_{i-1}[1] + r_i[0] - r_{i-1}[0])$，其中 $r_i$ 表示第 $i$ 个限制条件，而 $r_i[0]$ 和 $r_i[1]$ 分别表示建筑物的编号以及建筑物的最高高度的上界。
 
-然后我们从右到左遍历所有的限制条件，对于每个限制条件，我们可以得到一个最高高度的上界，即 $r_i[1] = min(r_i[1], r_{i+1}[1] + r_{i+1}[0] - r_i[0])$。
+然后我们从右到左遍历所有的限制条件，对于每个限制条件，我们可以得到一个最高高度的上界，即 $r_i[1] = \min(r_i[1], r_{i+1}[1] + r_{i+1}[0] - r_i[0])$。
 
 这样，我们就得到了每个限制建筑物的最高高度的上界。
 
@@ -82,9 +98,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -106,9 +120,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -140,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -148,8 +160,10 @@ public:
     int maxBuilding(int n, vector<vector<int>>& restrictions) {
         auto&& r = restrictions;
         r.push_back({1, 0});
-        sort(r.begin(), r.end());
-        if (r[r.size() - 1][0] != n) r.push_back({n, n - 1});
+        ranges::sort(r);
+        if (r[r.size() - 1][0] != n) {
+            r.push_back({n, n - 1});
+        }
         int m = r.size();
         for (int i = 1; i < m; ++i) {
             r[i][1] = min(r[i][1], r[i - 1][1] + r[i][0] - r[i - 1][0]);
@@ -167,7 +181,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxBuilding(n int, restrictions [][]int) (ans int) {
@@ -190,26 +204,51 @@ func maxBuilding(n int, restrictions [][]int) (ans int) {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function maxBuilding(n: number, restrictions: number[][]): number {
+    restrictions.push([1, 0]);
+    restrictions.sort((a, b) => a[0] - b[0]);
+    if (restrictions[restrictions.length - 1][0] !== n) {
+        restrictions.push([n, n - 1]);
+    }
 
+    const m = restrictions.length;
+    for (let i = 1; i < m; ++i) {
+        restrictions[i][1] = Math.min(
+            restrictions[i][1],
+            restrictions[i - 1][1] + restrictions[i][0] - restrictions[i - 1][0],
+        );
+    }
+
+    for (let i = m - 2; i >= 0; --i) {
+        restrictions[i][1] = Math.min(
+            restrictions[i][1],
+            restrictions[i + 1][1] + restrictions[i + 1][0] - restrictions[i][0],
+        );
+    }
+
+    let ans = 0;
+    for (let i = 0; i < m - 1; ++i) {
+        const t = Math.floor(
+            (restrictions[i][1] +
+                restrictions[i + 1][1] +
+                restrictions[i + 1][0] -
+                restrictions[i][0]) /
+                2,
+        );
+        ans = Math.max(ans, t);
+    }
+
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

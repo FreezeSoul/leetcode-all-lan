@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1545.Find%20Kth%20Bit%20in%20Nth%20Binary%20String/README.md
+rating: 1479
+source: 第 201 场周赛 Q2
+tags:
+    - 递归
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [1545. 找出第 N 个二进制字符串中的第 K 位](https://leetcode.cn/problems/find-kth-bit-in-nth-binary-string)
 
 [English Version](/solution/1500-1599/1545.Find%20Kth%20Bit%20in%20Nth%20Binary%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个正整数 <code>n</code> 和 <code>k</code>，二进制字符串  <code>S<sub>n</sub></code> 的形成规则如下：</p>
 
@@ -67,32 +81,161 @@
 	<li><code>1 <= k <= 2<sup>n</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分类讨论 + 递归
+
+我们可以发现，对于 $S_n$，其前半部分和 $S_{n-1}$ 是一样的，而后半部分是 $S_{n-1}$ 的反转取反。因此我们可以设计一个函数 $dfs(n, k)$，表示第 $n$ 个字符串的第 $k$ 位字符。答案即为 $dfs(n, k)$。
+
+函数 $dfs(n, k)$ 的计算过程如下：
+
+-   如果 $k = 1$，那么答案为 $0$；
+-   如果 $k$ 是 $2$ 的幂次方，那么答案为 $1$；
+-   如果 $k \times 2 \lt 2^n - 1$，说明 $k$ 在前半部分，答案为 $dfs(n - 1, k)$；
+-   否则，答案为 $dfs(n - 1, 2^n - k) \oplus 1$，其中 $\oplus$ 表示异或运算。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为题目给定的 $n$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
+class Solution:
+    def findKthBit(self, n: int, k: int) -> str:
+        def dfs(n: int, k: int) -> int:
+            if k == 1:
+                return 0
+            if (k & (k - 1)) == 0:
+                return 1
+            m = 1 << n
+            if k * 2 < m - 1:
+                return dfs(n - 1, k)
+            return dfs(n - 1, m - k) ^ 1
 
+        return str(dfs(n, k))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
+class Solution {
+    public char findKthBit(int n, int k) {
+        return (char) ('0' + dfs(n, k));
+    }
 
+    private int dfs(int n, int k) {
+        if (k == 1) {
+            return 0;
+        }
+        if ((k & (k - 1)) == 0) {
+            return 1;
+        }
+        int m = 1 << n;
+        if (k * 2 < m - 1) {
+            return dfs(n - 1, k);
+        }
+        return dfs(n - 1, m - k) ^ 1;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    char findKthBit(int n, int k) {
+        function<int(int, int)> dfs = [&](int n, int k) {
+            if (k == 1) {
+                return 0;
+            }
+            if ((k & (k - 1)) == 0) {
+                return 1;
+            }
+            int m = 1 << n;
+            if (k * 2 < m - 1) {
+                return dfs(n - 1, k);
+            }
+            return dfs(n - 1, m - k) ^ 1;
+        };
+        return '0' + dfs(n, k);
+    }
+};
 ```
 
+#### Go
+
+```go
+func findKthBit(n int, k int) byte {
+	var dfs func(n, k int) int
+	dfs = func(n, k int) int {
+		if k == 1 {
+			return 0
+		}
+		if k&(k-1) == 0 {
+			return 1
+		}
+		m := 1 << n
+		if k*2 < m-1 {
+			return dfs(n-1, k)
+		}
+		return dfs(n-1, m-k) ^ 1
+	}
+	return byte('0' + dfs(n, k))
+}
+```
+
+#### TypeScript
+
+```ts
+function findKthBit(n: number, k: number): string {
+    const dfs = (n: number, k: number): number => {
+        if (k === 1) {
+            return 0;
+        }
+        if ((k & (k - 1)) === 0) {
+            return 1;
+        }
+        const m = 1 << n;
+        if (k * 2 < m - 1) {
+            return dfs(n - 1, k);
+        }
+        return dfs(n - 1, m - k) ^ 1;
+    };
+    return dfs(n, k).toString();
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：位运算
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+const findKthBit = (n: number, k: number): string =>
+    String((((k / (k & -k)) >> 1) & 1) ^ (k & 1) ^ 1);
+```
+
+#### JavaScript
+
+```js
+const findKthBit = (n, k) => String((((k / (k & -k)) >> 1) & 1) ^ (k & 1) ^ 1);
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

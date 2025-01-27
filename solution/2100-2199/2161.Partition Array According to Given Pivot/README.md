@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2161.Partition%20Array%20According%20to%20Given%20Pivot/README.md
+rating: 1337
+source: 第 71 场双周赛 Q2
+tags:
+    - 数组
+    - 双指针
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2161. 根据给定数字划分数组](https://leetcode.cn/problems/partition-array-according-to-given-pivot)
 
 [English Version](/solution/2100-2199/2161.Partition%20Array%20According%20to%20Given%20Pivot/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code>&nbsp;和一个整数&nbsp;<code>pivot</code>&nbsp;。请你将&nbsp;<code>nums</code>&nbsp;重新排列，使得以下条件均成立：</p>
 
@@ -52,15 +66,21 @@
 	<li><code>pivot</code>&nbsp;等于&nbsp;<code>nums</code>&nbsp;中的一个元素。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：模拟
+
+我们可以遍历数组 $\textit{nums}$，按顺序找出所有小于 $\textit{pivot}$ 的元素，所有等于 $\textit{pivot}$ 的元素，以及所有大于 $\textit{pivot}$ 的元素，然后将它们按照题目要求的顺序拼接起来。
+
+时间复杂度 $O(n)$，其中 $n$ 为数组 $\textit{nums}$ 的长度。忽略答案数组的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +96,7 @@ class Solution:
         return a + b + c
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,25 +124,34 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> pivotArray(vector<int>& nums, int pivot) {
         vector<int> ans;
-        for (int& x : nums)
-            if (x < pivot) ans.push_back(x);
-        for (int& x : nums)
-            if (x == pivot) ans.push_back(x);
-        for (int& x : nums)
-            if (x > pivot) ans.push_back(x);
+        for (int& x : nums) {
+            if (x < pivot) {
+                ans.push_back(x);
+            }
+        }
+        for (int& x : nums) {
+            if (x == pivot) {
+                ans.push_back(x);
+            }
+        }
+        for (int& x : nums) {
+            if (x > pivot) {
+                ans.push_back(x);
+            }
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pivotArray(nums []int, pivot int) []int {
@@ -148,16 +175,31 @@ func pivotArray(nums []int, pivot int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function pivotArray(nums: number[], pivot: number): number[] {
+    const ans: number[] = [];
+    for (const x of nums) {
+        if (x < pivot) {
+            ans.push(x);
+        }
+    }
+        if (x === pivot) {
+            ans.push(x);
+        }
+    }
+    for (const x of nums) {
+        if (x > pivot) {
+            ans.push(x);
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

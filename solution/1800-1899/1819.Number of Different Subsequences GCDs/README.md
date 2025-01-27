@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1819.Number%20of%20Different%20Subsequences%20GCDs/README.md
+rating: 2539
+source: 第 235 场周赛 Q4
+tags:
+    - 数组
+    - 数学
+    - 计数
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [1819. 序列中不同最大公约数的数目](https://leetcode.cn/problems/number-of-different-subsequences-gcds)
 
 [English Version](/solution/1800-1899/1819.Number%20of%20Different%20Subsequences%20GCDs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由正整数组成的数组 <code>nums</code> 。</p>
 
@@ -49,25 +64,25 @@
 	<li><code>1 <= nums[i] <= 2 * 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举 + 数学**
+### 方法一：枚举 + 数学
 
-对于数组 `nums` 的所有子序列，其最大公约数一定不超过数组中的最大值 $mx$。
+对于数组 $nums$ 的所有子序列，其最大公约数一定不超过数组中的最大值 $mx$。
 
-因此我们可以枚举 $[1,.. mx]$ 中的每个数 $x$，判断 $x$ 是否为数组 `nums` 的子序列的最大公约数，如果是，则答案加一。
+因此我们可以枚举 $[1,.. mx]$ 中的每个数 $x$，判断 $x$ 是否为数组 $nums$ 的子序列的最大公约数，如果是，则答案加一。
 
-那么问题转换为：判断 $x$ 是否为数组 `nums` 的子序列的最大公约数。我们可以通过枚举 $x$ 的倍数 $y$，判断 $y$ 是否在数组 `nums` 中，如果 $y$ 在数组 `nums` 中，则计算 $y$ 的最大公约数 $g$，如果出现 $g = x$，则 $x$ 是数组 `nums` 的子序列的最大公约数。
+那么问题转换为：判断 $x$ 是否为数组 $nums$ 的子序列的最大公约数。我们可以通过枚举 $x$ 的倍数 $y$，判断 $y$ 是否在数组 $nums$ 中，如果 $y$ 在数组 $nums$ 中，则计算 $y$ 的最大公约数 $g$，如果出现 $g = x$，则 $x$ 是数组 $nums$ 的子序列的最大公约数。
 
-时间复杂度 $O(n + M \times \log M)$，空间复杂度 $O(M)$。其中 $n$ 和 $M$ 分别是数组 `nums` 的长度和数组 `nums` 中的最大值。
+时间复杂度 $O(n + M \times \log M)$，空间复杂度 $O(M)$。其中 $n$ 和 $M$ 分别是数组 $nums$ 的长度和数组 $nums$ 中的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -149,14 +162,11 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countDifferentSubsequenceGCDs(nums []int) (ans int) {
-	mx := 0
-	for _, x := range nums {
-		mx = max(mx, x)
-	}
+	mx := slices.Max(nums)
 	vis := make([]bool, mx+1)
 	for _, x := range nums {
 		vis[x] = true
@@ -176,13 +186,6 @@ func countDifferentSubsequenceGCDs(nums []int) (ans int) {
 	return
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func gcd(a, b int) int {
 	if b == 0 {
 		return a
@@ -191,10 +194,8 @@ func gcd(a, b int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

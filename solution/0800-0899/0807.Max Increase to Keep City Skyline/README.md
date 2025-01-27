@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0807.Max%20Increase%20to%20Keep%20City%20Skyline/README.md
+tags:
+    - 贪心
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [807. 保持城市天际线](https://leetcode.cn/problems/max-increase-to-keep-city-skyline)
 
 [English Version](/solution/0800-0899/0807.Max%20Increase%20to%20Keep%20City%20Skyline/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一座由 <code>n x n</code> 个街区组成的城市，每个街区都包含一座立方体建筑。给你一个下标从 <strong>0</strong> 开始的 <code>n x n</code> 整数矩阵 <code>grid</code> ，其中 <code>grid[r][c]</code> 表示坐落于 <code>r</code> 行 <code>c</code> 列的建筑物的 <strong>高度</strong> 。</p>
 
@@ -49,50 +61,54 @@ gridNew = [ [8, 4, 8, 7],
 	<li><code>0 &lt;= grid[r][c] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-先求每一行、每一列的最大值 `rmx`, `cmx`，然后对于每个元素 `grid[i][j]`，能增加的高度是 `min(rmx[i], cmx[j]) - grid[i][j]`。累加所有能增加的高度即可。
+### 方法一：贪心
+
+根据题目描述，我们可以将每个单元格 $(i, j)$ 的值增加至第 $i$ 行的最大值和第 $j$ 列的最大值中的较小值，这样可以保证不影响天际线，即每个单元格增加的高度为 $\min(\textit{rowMax}[i], \textit{colMax}[j]) - \textit{grid}[i][j]$。
+
+因此，我们可以先遍历一次矩阵，分别计算出每行和每列的最大值，记录在数组 $\textit{rowMax}$ 和 $\textit{colMax}$ 中，然后再遍历一次矩阵，计算出答案即可。
+
+时间复杂度 $O(n^2)$，空间复杂度 $O(n)$。其中 $n$ 为矩阵 $\textit{grid}$ 的边长。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
-        rmx = [max(row) for row in grid]
-        cmx = [max(col) for col in zip(*grid)]
+        row_max = [max(row) for row in grid]
+        col_max = [max(col) for col in zip(*grid)]
         return sum(
-            (min(rmx[i], cmx[j]) - grid[i][j])
-            for i in range(len(grid))
-            for j in range(len(grid[0]))
+            min(row_max[i], col_max[j]) - x
+            for i, row in enumerate(grid)
+            for j, x in enumerate(row)
         )
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int maxIncreaseKeepingSkyline(int[][] grid) {
         int m = grid.length, n = grid[0].length;
-        int[] rmx = new int[m];
-        int[] cmx = new int[n];
+        int[] rowMax = new int[m];
+        int[] colMax = new int[n];
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                rmx[i] = Math.max(rmx[i], grid[i][j]);
-                cmx[j] = Math.max(cmx[j], grid[i][j]);
+                rowMax[i] = Math.max(rowMax[i], grid[i][j]);
+                colMax[j] = Math.max(colMax[j], grid[i][j]);
             }
         }
         int ans = 0;
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                ans += Math.min(rmx[i], cmx[j]) - grid[i][j];
+                ans += Math.min(rowMax[i], colMax[j]) - grid[i][j];
             }
         }
         return ans;
@@ -100,96 +116,80 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxIncreaseKeepingSkyline(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<int> rowMax(m);
+        vector<int> colMax(n);
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                rowMax[i] = max(rowMax[i], grid[i][j]);
+                colMax[j] = max(colMax[j], grid[i][j]);
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                ans += min(rowMax[i], colMax[j]) - grid[i][j];
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxIncreaseKeepingSkyline(grid [][]int) (ans int) {
+	rowMax := make([]int, len(grid))
+	colMax := make([]int, len(grid[0]))
+	for i, row := range grid {
+		for j, x := range row {
+			rowMax[i] = max(rowMax[i], x)
+			colMax[j] = max(colMax[j], x)
+		}
+	}
+	for i, row := range grid {
+		for j, x := range row {
+			ans += min(rowMax[i], colMax[j]) - x
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
 
 ```ts
 function maxIncreaseKeepingSkyline(grid: number[][]): number {
-    let rows = grid.map(arr => Math.max(...arr)),
-        cols = [];
-    let m = grid.length,
-        n = grid[0].length;
-    for (let j = 0; j < n; ++j) {
-        cols[j] = grid[0][j];
-        for (let i = 1; i < m; ++i) {
-            cols[j] = Math.max(cols[j], grid[i][j]);
+    const m = grid.length;
+    const n = grid[0].length;
+    const rowMax = Array(m).fill(0);
+    const colMax = Array(n).fill(0);
+    for (let i = 0; i < m; ++i) {
+        for (let j = 0; j < n; ++j) {
+            rowMax[i] = Math.max(rowMax[i], grid[i][j]);
+            colMax[j] = Math.max(colMax[j], grid[i][j]);
         }
     }
-
     let ans = 0;
     for (let i = 0; i < m; ++i) {
         for (let j = 0; j < n; ++j) {
-            ans += Math.min(rows[i], cols[j]) - grid[i][j];
+            ans += Math.min(rowMax[i], colMax[j]) - grid[i][j];
         }
     }
     return ans;
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxIncreaseKeepingSkyline(vector<vector<int>>& grid) {
-        int m = grid.size(), n = grid[0].size();
-        vector<int> rmx(m, 0);
-        vector<int> cmx(n, 0);
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                rmx[i] = max(rmx[i], grid[i][j]);
-                cmx[j] = max(cmx[j], grid[i][j]);
-            }
-        }
-        int ans = 0;
-        for (int i = 0; i < m; ++i)
-            for (int j = 0; j < n; ++j)
-                ans += min(rmx[i], cmx[j]) - grid[i][j];
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-```go
-func maxIncreaseKeepingSkyline(grid [][]int) int {
-	m, n := len(grid), len(grid[0])
-	rmx := make([]int, m)
-	cmx := make([]int, n)
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			rmx[i] = max(rmx[i], grid[i][j])
-			cmx[j] = max(cmx[j], grid[i][j])
-		}
-	}
-	ans := 0
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			ans += min(rmx[i], cmx[j]) - grid[i][j]
-		}
-	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0989.Add%20to%20Array-Form%20of%20Integer/README_EN.md
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [989. Add to Array-Form of Integer](https://leetcode.com/problems/add-to-array-form-of-integer)
 
 [中文文档](/solution/0900-0999/0989.Add%20to%20Array-Form%20of%20Integer/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>The <strong>array-form</strong> of an integer <code>num</code> is an array representing its digits in left to right order.</p>
 
@@ -47,11 +60,17 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +86,7 @@ class Solution:
         return ans[::-1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +104,49 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> addToArrayForm(vector<int>& num, int k) {
+        int i = num.size() - 1, carry = 0;
+        vector<int> ans;
+        for (; i >= 0 || k || carry; --i) {
+            carry += (i < 0 ? 0 : num[i]) + k % 10;
+            ans.push_back(carry % 10);
+            carry /= 10;
+            k /= 10;
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func addToArrayForm(num []int, k int) []int {
+	i, carry := len(num)-1, 0
+	ans := []int{}
+	for ; i >= 0 || k > 0 || carry > 0; i-- {
+		if i >= 0 {
+			carry += num[i]
+		}
+		carry += k % 10
+		ans = append(ans, carry%10)
+		carry /= 10
+		k /= 10
+	}
+	for i, j := 0, len(ans)-1; i < j; i, j = i+1, j-1 {
+		ans[i], ans[j] = ans[j], ans[i]
+	}
+	return ans
+}
+```
+
+#### TypeScript
 
 ```ts
 function addToArrayForm(num: number[], k: number): number[] {
@@ -103,23 +164,7 @@ function addToArrayForm(num: number[], k: number): number[] {
 }
 ```
 
-```ts
-function addToArrayForm(num: number[], k: number): number[] {
-    const n = num.length;
-    const res = [];
-    let sum = 0;
-    for (let i = 0; i < n || sum !== 0 || k !== 0; i++) {
-        sum += num[n - i - 1] ?? 0;
-        sum += k % 10;
-        res.push(sum % 10);
-        k = Math.floor(k / 10);
-        sum = Math.floor(sum / 10);
-    }
-    return res.reverse();
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -143,52 +188,36 @@ impl Solution {
 }
 ```
 
-### **C++**
+<!-- tabs:end -->
 
-```cpp
-class Solution {
-public:
-    vector<int> addToArrayForm(vector<int>& num, int k) {
-        int i = num.size() - 1, carry = 0;
-        vector<int> ans;
-        for (; i >= 0 || k || carry; --i) {
-            carry += (i < 0 ? 0 : num[i]) + k % 10;
-            ans.push_back(carry % 10);
-            carry /= 10;
-            k /= 10;
-        }
-        reverse(ans.begin(), ans.end());
-        return ans;
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function addToArrayForm(num: number[], k: number): number[] {
+    const n = num.length;
+    const res = [];
+    let sum = 0;
+    for (let i = 0; i < n || sum !== 0 || k !== 0; i++) {
+        sum += num[n - i - 1] ?? 0;
+        sum += k % 10;
+        res.push(sum % 10);
+        k = Math.floor(k / 10);
+        sum = Math.floor(sum / 10);
     }
-};
-```
-
-### **Go**
-
-```go
-func addToArrayForm(num []int, k int) []int {
-	i, carry := len(num)-1, 0
-	ans := []int{}
-	for ; i >= 0 || k > 0 || carry > 0; i-- {
-		if i >= 0 {
-			carry += num[i]
-		}
-		carry += k % 10
-		ans = append(ans, carry%10)
-		carry /= 10
-		k /= 10
-	}
-	for i, j := 0, len(ans)-1; i < j; i, j = i+1, j-1 {
-		ans[i], ans[j] = ans[j], ans[i]
-	}
-	return ans
+    return res.reverse();
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

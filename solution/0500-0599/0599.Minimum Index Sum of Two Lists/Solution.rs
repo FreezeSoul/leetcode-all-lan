@@ -10,7 +10,7 @@ impl Solution {
             if map.contains_key(&key) {
                 let sum_i = map.get(&key).unwrap() + i;
                 if sum_i <= min_i {
-                    if (sum_i < min_i) {
+                    if sum_i < min_i {
                         min_i = sum_i;
                         res.clear();
                     }

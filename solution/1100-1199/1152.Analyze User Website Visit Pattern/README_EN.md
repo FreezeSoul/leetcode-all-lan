@@ -1,8 +1,24 @@
-# [1152. Analyze User Website Visit Pattern](https://leetcode.com/problems/analyze-user-website-visit-pattern)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1152.Analyze%20User%20Website%20Visit%20Pattern/README_EN.md
+rating: 1850
+source: Biweekly Contest 6 Q3
+tags:
+    - Array
+    - Hash Table
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [1152. Analyze User Website Visit Pattern 🔒](https://leetcode.com/problems/analyze-user-website-visit-pattern)
 
 [中文文档](/solution/1100-1199/1152.Analyze%20User%20Website%20Visit%20Pattern/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two string arrays <code>username</code> and <code>website</code> and an integer array <code>timestamp</code>. All the given arrays are of the same length and the tuple <code>[username[i], website[i], timestamp[i]]</code> indicates that the user <code>username[i]</code> visited the website <code>website[i]</code> at time <code>timestamp[i]</code>.</p>
 
@@ -20,7 +36,9 @@
 	<li>Also, if the pattern is <code>[&quot;luffy&quot;, &quot;luffy&quot;, &quot;luffy&quot;]</code>, the score is the number of users <code>x</code> such that <code>x</code> visited <code>&quot;luffy&quot;</code> three different times at different timestamps.</li>
 </ul>
 
-<p>Return <em>the <strong>pattern</strong> with the largest <strong>score</strong></em>. If there is more than one pattern with the same largest score, return the lexicographically smallest such pattern.</p>
+<p>Return the <strong>pattern</strong> with the largest <strong>score</strong>. If there is more than one pattern with the same largest score, return the lexicographically smallest such pattern.</p>
+
+<p>Note that the websites in a pattern <strong>do not</strong> need to be visited <em>contiguously</em>, they only need to be visited in the order they appeared in the pattern.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -60,17 +78,31 @@ The pattern (&quot;home&quot;, &quot;home&quot;, &quot;home&quot;) has score 0 (
 	<li>All the tuples <code>[username[i], timestamp[i], website[i]]</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Sorting
+
+First, we use a hash table $d$ to record the websites each user visits. Then we traverse $d$. For each user, we enumerate all the triplets they visited, count the occurrence of distinct triplets, and finally traverse all triplets, returning the one with the highest occurrence and the smallest lexicographic order.
+
+The time complexity is $O(n^3)$, and the space complexity is $O(n^3)$. Here, $n$ is the length of `username`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def mostVisitedPattern(self, username: List[str], timestamp: List[int], website: List[str]) -> List[str]:
+    def mostVisitedPattern(
+        self, username: List[str], timestamp: List[int], website: List[str]
+    ) -> List[str]:
         d = defaultdict(list)
-        for user, _, site in sorted(zip(username, timestamp, website), key=lambda x: x[1]):
+        for user, _, site in sorted(
+            zip(username, timestamp, website), key=lambda x: x[1]
+        ):
             d[user].append(site)
 
         cnt = Counter()
@@ -87,7 +119,7 @@ class Solution:
         return sorted(cnt.items(), key=lambda x: (-x[1], x[0]))[0][0]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -144,7 +176,7 @@ class Node {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -199,7 +231,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mostVisitedPattern(username []string, timestamp []int, website []string) []string {
@@ -243,10 +275,8 @@ type pair struct {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

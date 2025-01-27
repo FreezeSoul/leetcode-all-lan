@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2331.Evaluate%20Boolean%20Binary%20Tree/README.md
+rating: 1303
+source: 第 82 场双周赛 Q1
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [2331. 计算布尔二叉树的值](https://leetcode.cn/problems/evaluate-boolean-binary-tree)
 
 [English Version](/solution/2300-2399/2331.Evaluate%20Boolean%20Binary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵 <strong>完整二叉树</strong>&nbsp;的根，这棵树有以下特征：</p>
 
@@ -58,46 +72,26 @@ OR 运算节点的值为 True OR False = True 。
 	<li>非叶子节点的值为&nbsp;<code>2</code>&nbsp;或&nbsp;<code>3</code> 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 我们可以使用递归的方式来求解本题。
 
-对于当前节点 `root`：
+对于当前节点 $\textit{root}$：
 
--   如果其左右孩子都为空，说明是叶子节点，此时判断其值是否为 $1$，如果是，则返回 `true`，否则返回 `false`。
--   否则，对其左右孩子分别递归求解，得到其左右孩子的值 $l$ 和 $r$。然后根据当前节点值的不同，分别进行如下操作：
-    -   如果当前节点值为 $2$，则返回 `l or r`。
-    -   如果当前节点值为 $3$，则返回 `l && r`。
+-   如果其左孩子为空，说明当前节点是叶子节点。如果当前节点的值为 $1$，则返回 $\textit{true}$，否则返回 $\textit{false}$；
+-   如果当前节点的值为 $2$，则返回其左孩子和右孩子的递归结果的逻辑或，否则返回其左孩子和右孩子的递归结果的逻辑与。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树节点个数。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def evaluateTree(self, root: Optional[TreeNode]) -> bool:
-        def dfs(root):
-            if root.left is None and root.right is None:
-                return bool(root.val)
-            l, r = dfs(root.left), dfs(root.right)
-            return (l or r) if root.val == 2 else (l and r)
-
-        return dfs(root)
-```
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -110,48 +104,11 @@ class Solution:
     def evaluateTree(self, root: Optional[TreeNode]) -> bool:
         if root.left is None:
             return bool(root.val)
-        l = self.evaluateTree(root.left)
-        r = self.evaluateTree(root.right)
-        return l or r if root.val == 2 else l and r
+        op = or_ if root.val == 2 else and_
+        return op(self.evaluateTree(root.left), self.evaluateTree(root.right))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public boolean evaluateTree(TreeNode root) {
-        return dfs(root);
-    }
-
-    private boolean dfs(TreeNode root) {
-        if (root.left == null && root.right == null) {
-            return root.val == 1;
-        }
-        boolean l = dfs(root.left), r = dfs(root.right);
-        if (root.val == 2) {
-            return l || r;
-        }
-        return l && r;
-    }
-}
-```
+#### Java
 
 ```java
 /**
@@ -174,41 +131,15 @@ class Solution {
         if (root.left == null) {
             return root.val == 1;
         }
-        boolean l = evaluateTree(root.left);
-        boolean r = evaluateTree(root.right);
-        return root.val == 2 ? l || r : l && r;
+        if (root.val == 2) {
+            return evaluateTree(root.left) || evaluateTree(root.right);
+        }
+        return evaluateTree(root.left) && evaluateTree(root.right);
     }
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    bool evaluateTree(TreeNode* root) {
-        return dfs(root);
-    }
-
-    bool dfs(TreeNode* root) {
-        if (!root->left && !root->right) return root->val;
-        bool l = dfs(root->left), r = dfs(root->right);
-        if (root->val == 2) return l || r;
-        return l && r;
-    }
-};
-```
+#### C++
 
 ```cpp
 /**
@@ -228,39 +159,15 @@ public:
         if (!root->left) {
             return root->val;
         }
-        bool l = evaluateTree(root->left);
-        bool r = evaluateTree(root->right);
-        return root->val == 2 ? l or r : l and r;
+        if (root->val == 2) {
+            return evaluateTree(root->left) || evaluateTree(root->right);
+        }
+        return evaluateTree(root->left) && evaluateTree(root->right);
     }
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func evaluateTree(root *TreeNode) bool {
-	var dfs func(*TreeNode) bool
-	dfs = func(root *TreeNode) bool {
-		if root.Left == nil && root.Right == nil {
-			return root.Val == 1
-		}
-		l, r := dfs(root.Left), dfs(root.Right)
-		if root.Val == 2 {
-			return l || r
-		}
-		return l && r
-	}
-	return dfs(root)
-}
-```
+#### Go
 
 ```go
 /**
@@ -275,15 +182,15 @@ func evaluateTree(root *TreeNode) bool {
 	if root.Left == nil {
 		return root.Val == 1
 	}
-	l, r := evaluateTree(root.Left), evaluateTree(root.Right)
 	if root.Val == 2 {
-		return l || r
+		return evaluateTree(root.Left) || evaluateTree(root.Right)
+	} else {
+		return evaluateTree(root.Left) && evaluateTree(root.Right)
 	}
-	return l && r
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -302,7 +209,7 @@ func evaluateTree(root *TreeNode) bool {
 
 function evaluateTree(root: TreeNode | null): boolean {
     const { val, left, right } = root;
-    if (left == null) {
+    if (left === null) {
         return val === 1;
     }
     if (val === 2) {
@@ -312,7 +219,7 @@ function evaluateTree(root: TreeNode | null): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -333,27 +240,30 @@ function evaluateTree(root: TreeNode | null): boolean {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
-impl Solution {
-    fn dfs(root: &Option<Rc<RefCell<TreeNode>>>) -> bool {
-        let root = root.as_ref().unwrap().as_ref().borrow();
-        if root.left.is_none() {
-            return root.val == 1;
-        }
-        if root.val == 2 {
-            return Self::dfs(&root.left) || Self::dfs(&root.right);
-        }
-        Self::dfs(&root.left) && Self::dfs(&root.right)
-    }
+use std::rc::Rc;
 
+impl Solution {
     pub fn evaluate_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        Self::dfs(&root)
+        match root {
+            Some(node) => {
+                let node = node.borrow();
+                if node.left.is_none() {
+                    return node.val == 1;
+                }
+                if node.val == 2 {
+                    return Self::evaluate_tree(node.left.clone())
+                        || Self::evaluate_tree(node.right.clone());
+                }
+                Self::evaluate_tree(node.left.clone()) && Self::evaluate_tree(node.right.clone())
+            }
+            None => false,
+        }
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
@@ -364,7 +274,7 @@ impl Solution {
  *     struct TreeNode *right;
  * };
  */
-bool evaluateTree(struct TreeNode *root) {
+bool evaluateTree(struct TreeNode* root) {
     if (!root->left) {
         return root->val == 1;
     }
@@ -375,10 +285,8 @@ bool evaluateTree(struct TreeNode *root) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

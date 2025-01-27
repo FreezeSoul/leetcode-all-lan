@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2560.House%20Robber%20IV/README.md
+rating: 2081
+source: 第 331 场周赛 Q3
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [2560. 打家劫舍 IV](https://leetcode.cn/problems/house-robber-iv)
 
 [English Version](/solution/2500-2599/2560.House%20Robber%20IV/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>沿街有一排连续的房屋。每间房屋内都藏有一定的现金。现在有一位小偷计划从这些房屋中窃取现金。</p>
 
@@ -51,21 +64,21 @@
 	<li><code>1 &lt;= k &lt;= (nums.length + 1)/2</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找 + 贪心**
+### 方法一：二分查找 + 贪心
 
 题目求的是窃贼的最小窃取能力，我们可以二分枚举窃贼的窃取能力，对于枚举的能力 $x$，我们可以通过贪心的方式判断窃贼是否能够窃取至少 $k$ 间房屋，具体地，我们从左到右遍历数组，对于当前遍历到的房屋 $i$，如果 $nums[i] \leq x$ 且 $i$ 与上一个窃取的房屋的下标之差大于 $1$，则窃贼可以窃取房屋 $i$，否则窃贼不能窃取房屋 $i$。累计窃取的房屋数，如果窃取的房屋数大于等于 $k$，则说明窃贼可以窃取至少 $k$ 间房屋，此时窃贼的窃取能力 $x$ 可能是最小的，否则窃贼的窃取能力 $x$ 不是最小的。
 
-时间复杂度 $O(n \times \log m)$，空间复杂度 $O(1)$。其中 $n$ 和 $m$ 分别是数组 `nums` 的长度和数组 `nums` 中的最大值。
+时间复杂度 $O(n \times \log m)$，空间复杂度 $O(1)$。其中 $n$ 和 $m$ 分别是数组 $nums$ 的长度和数组 $nums$ 中的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,9 +95,7 @@ class Solution:
         return bisect_left(range(max(nums) + 1), True, key=f)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -115,7 +126,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -146,7 +157,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCapability(nums []int, k int) int {
@@ -164,10 +175,38 @@ func minCapability(nums []int, k int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function minCapability(nums: number[], k: number): number {
+    const f = (mx: number): boolean => {
+        let cnt = 0;
+        let j = -2;
+        for (let i = 0; i < nums.length; ++i) {
+            if (nums[i] <= mx && i - j > 1) {
+                ++cnt;
+                j = i;
+            }
+        }
+        return cnt >= k;
+    };
 
+    let left = 1;
+    let right = Math.max(...nums);
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (f(mid)) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

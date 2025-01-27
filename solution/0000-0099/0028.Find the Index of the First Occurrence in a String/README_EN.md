@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0028.Find%20the%20Index%20of%20the%20First%20Occurrence%20in%20a%20String/README_EN.md
+tags:
+    - Two Pointers
+    - String
+    - String Matching
+---
+
+<!-- problem:start -->
+
 # [28. Find the Index of the First Occurrence in a String](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string)
 
 [中文文档](/solution/0000-0099/0028.Find%20the%20Index%20of%20the%20First%20Occurrence%20in%20a%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>needle</code> and <code>haystack</code>, return the index of the first occurrence of <code>needle</code> in <code>haystack</code>, or <code>-1</code> if <code>needle</code> is not part of <code>haystack</code>.</p>
 
@@ -32,35 +46,33 @@ The first occurrence is at index 0, so we return 0.
 	<li><code>haystack</code> and <code>needle</code> consist of only lowercase English characters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Traverse**
+<!-- solution:start -->
 
-Time complexity $O((n-m) \times m)$, Space complexity $O(1)$.
+### Solution 1: Traversal
 
-**Approach 2: Rabin-Karp**
+We compare the string `needle` with each character of the string `haystack` as the starting point. If we find a matching index, we return it directly.
 
-Time complexity $O(n+m)$, Space complexity $O(1)$.
-
-**Approach 3: KMP**
-
-Time complexity $O(n+m)$, Space complexity $O(m)$.
+Assuming the length of the string `haystack` is $n$ and the length of the string `needle` is $m$, the time complexity is $O((n-m) \times m)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         n, m = len(haystack), len(needle)
-        for i in range(n-m+1):
-            if haystack[i:i+m] == needle:
+        for i in range(n - m + 1):
+            if haystack[i : i + m] == needle:
                 return i
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,28 +159,7 @@ public:
 };
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int StrStr(string haystack, string needle) {
-        for (var i = 0; i < haystack.Length - needle.Length + 1; ++i)
-        {
-            var j = 0;
-            for (; j < needle.Length; ++j)
-            {
-                if (haystack[i + j] != needle[j]) break;
-            }
-            if (j == needle.Length) return i;
-        }
-        return -1;
-    }
-}
-```
-
-### **Go**
-
-Traverse:
+#### Go
 
 ```go
 func strStr(haystack string, needle string) int {
@@ -182,66 +173,7 @@ func strStr(haystack string, needle string) int {
 }
 ```
 
-Rabin-Karp:
-
-```go
-func strStr(haystack string, needle string) int {
-	n, m := len(haystack), len(needle)
-	sha, target, left, right, mod := 0, 0, 0, 0, 1<<31-1
-	multi := 1
-	for i := 0; i < m; i++ {
-		target = (target*256%mod + int(needle[i])) % mod
-	}
-	for i := 1; i < m; i++ {
-		multi = multi * 256 % mod
-	}
-
-	for ; right < n; right++ {
-		sha = (sha*256%mod + int(haystack[right])) % mod
-		if right-left+1 < m {
-			continue
-		}
-		// 此时 left~right 的长度已经为 needle 的长度 m 了，只需要比对 sha 值与 target 是否一致即可
-		// 为避免 hash 冲突，还需要确保 haystack[left:right+1] 与 needle 相同
-		if sha == target && haystack[left:right+1] == needle {
-			return left
-		}
-		// 未匹配成功，left 右移一位
-		sha = (sha - (int(haystack[left])*multi)%mod + mod) % mod
-		left++
-	}
-	return -1
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {string} haystack
- * @param {string} needle
- * @return {number}
- */
-var strStr = function (haystack, needle) {
-    const slen = haystack.length;
-    const plen = needle.length;
-    if (slen == plen) {
-        return haystack == needle ? 0 : -1;
-    }
-    for (let i = 0; i <= slen - plen; i++) {
-        let j;
-        for (j = 0; j < plen; j++) {
-            if (haystack[i + j] != needle[j]) {
-                break;
-            }
-        }
-        if (j == plen) return i;
-    }
-    return -1;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function strStr(haystack: string, needle: string): number {
@@ -263,38 +195,7 @@ function strStr(haystack: string, needle: string): number {
 }
 ```
 
-```ts
-function strStr(haystack: string, needle: string): number {
-    const m = haystack.length;
-    const n = needle.length;
-    const next = new Array(n).fill(0);
-    let j = 0;
-    for (let i = 1; i < n; i++) {
-        while (j > 0 && needle[i] !== needle[j]) {
-            j = next[j - 1];
-        }
-        if (needle[i] === needle[j]) {
-            j++;
-        }
-        next[i] = j;
-    }
-    j = 0;
-    for (let i = 0; i < m; i++) {
-        while (j > 0 && haystack[i] !== needle[j]) {
-            j = next[j - 1];
-        }
-        if (haystack[i] === needle[j]) {
-            j++;
-        }
-        if (j === n) {
-            return i - n + 1;
-        }
-    }
-    return -1;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -331,7 +232,53 @@ impl Solution {
 }
 ```
 
-### **PHP**
+#### JavaScript
+
+```js
+/**
+ * @param {string} haystack
+ * @param {string} needle
+ * @return {number}
+ */
+var strStr = function (haystack, needle) {
+    const slen = haystack.length;
+    const plen = needle.length;
+    if (slen == plen) {
+        return haystack == needle ? 0 : -1;
+    }
+    for (let i = 0; i <= slen - plen; i++) {
+        let j;
+        for (j = 0; j < plen; j++) {
+            if (haystack[i + j] != needle[j]) {
+                break;
+            }
+        }
+        if (j == plen) return i;
+    }
+    return -1;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int StrStr(string haystack, string needle) {
+        for (var i = 0; i < haystack.Length - needle.Length + 1; ++i)
+        {
+            var j = 0;
+            for (; j < needle.Length; ++j)
+            {
+                if (haystack[i + j] != needle[j]) break;
+            }
+            if (j == needle.Length) return i;
+        }
+        return -1;
+    }
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -341,11 +288,11 @@ class Solution {
      * @return Integer
      */
     function strStr($haystack, $needle) {
-        $strNew = str_replace($needle, "+", $haystack);
-        $cnt = substr_count($strNew, "+");
+        $strNew = str_replace($needle, '+', $haystack);
+        $cnt = substr_count($strNew, '+');
         if ($cnt > 0) {
             for ($i = 0; $i < strlen($strNew); $i++) {
-                if ($strNew[$i] == "+") {
+                if ($strNew[$i] == '+') {
                     return $i;
                 }
             }
@@ -356,10 +303,95 @@ class Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Rabin-Karp String Matching Algorithm
+
+The [Rabin-Karp algorithm](https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm) essentially uses a sliding window combined with a hash function to compare the hashes of fixed-length strings, which can reduce the time complexity of comparing whether two strings are the same to $O(1)$.
+
+Assuming the length of the string `haystack` is $n$ and the length of the string `needle` is $m$, the time complexity is $O(n+m)$, and the space complexity is $O(1)$.
+
+<!-- tabs:start -->
+
+#### Go
+
+```go
+func strStr(haystack string, needle string) int {
+	n, m := len(haystack), len(needle)
+	sha, target, left, right, mod := 0, 0, 0, 0, 1<<31-1
+	multi := 1
+	for i := 0; i < m; i++ {
+		target = (target*256%mod + int(needle[i])) % mod
+	}
+	for i := 1; i < m; i++ {
+		multi = multi * 256 % mod
+	}
+
+	for ; right < n; right++ {
+		sha = (sha*256%mod + int(haystack[right])) % mod
+		if right-left+1 < m {
+			continue
+		}
+		// 此时 left~right 的长度已经为 needle 的长度 m 了，只需要比对 sha 值与 target 是否一致即可
+		// 为避免 hash 冲突，还需要确保 haystack[left:right+1] 与 needle 相同
+		if sha == target && haystack[left:right+1] == needle {
+			return left
+		}
+		// 未匹配成功，left 右移一位
+		sha = (sha - (int(haystack[left])*multi)%mod + mod) % mod
+		left++
+	}
+	return -1
+}
 ```
 
+#### TypeScript
+
+```ts
+function strStr(haystack: string, needle: string): number {
+    const m = haystack.length;
+    const n = needle.length;
+    const next = new Array(n).fill(0);
+    let j = 0;
+    for (let i = 1; i < n; i++) {
+        while (j > 0 && needle[i] !== needle[j]) {
+            j = next[j - 1];
+        }
+        if (needle[i] === needle[j]) {
+            j++;
+        }
+        next[i] = j;
+    }
+    j = 0;
+    for (let i = 0; i < m; i++) {
+        while (j > 0 && haystack[i] !== needle[j]) {
+            j = next[j - 1];
+        }
+        if (haystack[i] === needle[j]) {
+            j++;
+        }
+        if (j === n) {
+            return i - n + 1;
+        }
+    }
+    return -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 3: KMP String Matching Algorithm
+
+Assuming the length of the string `haystack` is $n$ and the length of the string `needle` is $m$, the time complexity is $O(n+m)$, and the space complexity is $O(m)$.
+
+<!-- solution:end -->
+
+<!-- problem:end -->

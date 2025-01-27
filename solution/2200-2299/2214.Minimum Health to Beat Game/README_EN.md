@@ -1,8 +1,21 @@
-# [2214. Minimum Health to Beat Game](https://leetcode.com/problems/minimum-health-to-beat-game)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2214.Minimum%20Health%20to%20Beat%20Game/README_EN.md
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
+# [2214. Minimum Health to Beat Game 🔒](https://leetcode.com/problems/minimum-health-to-beat-game)
 
 [中文文档](/solution/2200-2299/2214.Minimum%20Health%20to%20Beat%20Game/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are playing a game that has <code>n</code> levels numbered from <code>0</code> to <code>n - 1</code>. You are given a <strong>0-indexed</strong> integer array <code>damage</code> where <code>damage[i]</code> is the amount of health you will lose to complete the <code>i<sup>th</sup></code> level.</p>
 
@@ -61,11 +74,21 @@ Note that you did not use your armor ability.
 	<li><code>0 &lt;= armor &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+We can greedily choose to use the armor skill in the round with the highest damage. Suppose the maximum damage is $\textit{mx}$, then we can avoid $\min(\textit{mx}, \textit{armor})$ damage. Therefore, the minimum health required is $\sum(\textit{damage}) - \min(\textit{mx}, \textit{armor}) + 1$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{damage}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +96,7 @@ class Solution:
         return sum(damage) - min(max(damage), armor) + 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumHealth(damage []int, armor int) int64 {
@@ -118,23 +141,9 @@ func minimumHealth(damage []int, armor int) int64 {
 	}
 	return s - int64(min(mx, armor)) + 1
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumHealth(damage: number[], armor: number): number {
@@ -148,10 +157,8 @@ function minimumHealth(damage: number[], armor: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

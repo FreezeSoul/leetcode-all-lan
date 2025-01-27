@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1830.Minimum%20Number%20of%20Operations%20to%20Make%20String%20Sorted/README.md
+rating: 2620
+source: 第 50 场双周赛 Q4
+tags:
+    - 数学
+    - 字符串
+    - 组合数学
+---
+
+<!-- problem:start -->
+
 # [1830. 使字符串有序的最少操作次数](https://leetcode.cn/problems/minimum-number-of-operations-to-make-string-sorted)
 
 [English Version](/solution/1800-1899/1830.Minimum%20Number%20of%20Operations%20to%20Make%20String%20Sorted/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>s</code> （<strong>下标从 0 开始</strong>）。你需要对 <code>s</code> 执行以下操作直到它变为一个有序字符串：</p>
 
@@ -60,11 +74,13 @@
 	<li><code>s</code>​ 只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 排列组合 + 预处理**
+### 方法一：计数 + 排列组合 + 预处理
 
 题目中的操作实际上是求当前排列的上一个字典序排列，因此，我们只需要求出比当前排列小的排列的数量，就是答案。
 
@@ -82,9 +98,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 n = 3010
@@ -113,9 +127,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -169,7 +181,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 const int N = 3010;
@@ -198,7 +210,6 @@ int init = []() {
     return 0;
 }();
 
-
 class Solution {
 public:
     int makeStringSorted(string s) {
@@ -225,7 +236,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 const n = 3010
@@ -275,10 +286,8 @@ func makeStringSorted(s string) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

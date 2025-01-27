@@ -1,10 +1,20 @@
-# [2632. 柯里化](https://leetcode.cn/problems/curry)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2632.Curry/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2632. 柯里化 🔒](https://leetcode.cn/problems/curry)
 
 [English Version](/solution/2600-2699/2632.Curry/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你编写一个函数，它接收一个其他的函数，并返回该函数的&nbsp;<strong>柯里化&nbsp;</strong>后的形式。</p>
 
@@ -72,29 +82,29 @@ curriedLife() === 42
 	<li><code>0 &lt;= fn.length &lt;= 1000</code></li>
 	<li><code>inputs.flat().length == fn.length</code></li>
 	<li><code>函数参数需要被显式定义</code></li>
+	<li>如果&nbsp;<code>fn.length &gt; 0</code>&nbsp;则最后一个数组&nbsp;<code>inputs</code>&nbsp;不为空</li>
+	<li>如果&nbsp;<code>fn.length === 0</code>&nbsp;则&nbsp;<code>inputs.length === 1</code>&nbsp;</li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 function curry(fn: Function): Function {
-    const n = fn.length;
-    const allArgs: any[] = [];
-
-    return function curried(...args: any[]) {
-        allArgs.push(...args);
-        if (allArgs.length < n) {
-            return curried;
+    return function curried(...args) {
+        if (args.length >= fn.length) {
+            return fn(...args);
         }
-        return fn(...allArgs);
+        return (...nextArgs) => curried(...args, ...nextArgs);
     };
 }
 
@@ -105,10 +115,8 @@ function curry(fn: Function): Function {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

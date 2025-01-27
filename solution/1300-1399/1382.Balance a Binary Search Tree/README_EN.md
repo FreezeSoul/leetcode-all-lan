@@ -1,8 +1,27 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1382.Balance%20a%20Binary%20Search%20Tree/README_EN.md
+rating: 1540
+source: Weekly Contest 180 Q3
+tags:
+    - Greedy
+    - Tree
+    - Depth-First Search
+    - Binary Search Tree
+    - Divide and Conquer
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [1382. Balance a Binary Search Tree](https://leetcode.com/problems/balance-a-binary-search-tree)
 
 [中文文档](/solution/1300-1399/1382.Balance%20a%20Binary%20Search%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary search tree, return <em>a <strong>balanced</strong> binary search tree with the same node values</em>. If there is more than one answer, return <strong>any of them</strong>.</p>
 
@@ -32,11 +51,26 @@
 	<li><code>1 &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: In-order Traversal + Construct Balanced Binary Search Tree
+
+Since the original tree is a binary search tree, we can save the result of the in-order traversal in an array $nums$. Then we design a function $build(i, j)$, which is used to construct a balanced binary search tree within the index range $[i, j]$ in $nums$. The answer is $build(0, |nums| - 1)$.
+
+The execution logic of the function $build(i, j)$ is as follows:
+
+-   If $i > j$, then the balanced binary search tree is empty, return an empty node;
+-   Otherwise, we take $mid = (i + j) / 2$ as the root node, then recursively build the left and right subtrees, and return the root node.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the binary search tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -47,28 +81,27 @@
 #         self.right = right
 class Solution:
     def balanceBST(self, root: TreeNode) -> TreeNode:
-        def dfs(root):
+        def dfs(root: TreeNode):
             if root is None:
                 return
             dfs(root.left)
-            vals.append(root.val)
+            nums.append(root.val)
             dfs(root.right)
 
-        def build(i, j):
+        def build(i: int, j: int) -> TreeNode:
             if i > j:
                 return None
             mid = (i + j) >> 1
-            root = TreeNode(vals[mid])
-            root.left = build(i, mid - 1)
-            root.right = build(mid + 1, j)
-            return root
+            left = build(i, mid - 1)
+            right = build(mid + 1, j)
+            return TreeNode(nums[mid], left, right)
 
-        vals = []
+        nums = []
         dfs(root)
-        return build(0, len(vals) - 1)
+        return build(0, len(nums) - 1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -87,12 +120,11 @@ class Solution:
  * }
  */
 class Solution {
-    private List<Integer> vals;
+    private List<Integer> nums = new ArrayList<>();
 
     public TreeNode balanceBST(TreeNode root) {
-        vals = new ArrayList<>();
         dfs(root);
-        return build(0, vals.size() - 1);
+        return build(0, nums.size() - 1);
     }
 
     private void dfs(TreeNode root) {
@@ -100,7 +132,7 @@ class Solution {
             return;
         }
         dfs(root.left);
-        vals.add(root.val);
+        nums.add(root.val);
         dfs(root.right);
     }
 
@@ -109,15 +141,14 @@ class Solution {
             return null;
         }
         int mid = (i + j) >> 1;
-        TreeNode root = new TreeNode(vals.get(mid));
-        root.left = build(i, mid - 1);
-        root.right = build(mid + 1, j);
-        return root;
+        TreeNode left = build(i, mid - 1);
+        TreeNode right = build(mid + 1, j);
+        return new TreeNode(nums.get(mid), left, right);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -133,32 +164,36 @@ class Solution {
  */
 class Solution {
 public:
-    vector<int> vals;
-
     TreeNode* balanceBST(TreeNode* root) {
         dfs(root);
-        return build(0, vals.size() - 1);
+        return build(0, nums.size() - 1);
     }
 
+private:
+    vector<int> nums;
+
     void dfs(TreeNode* root) {
-        if (!root) return;
+        if (!root) {
+            return;
+        }
         dfs(root->left);
-        vals.push_back(root->val);
+        nums.push_back(root->val);
         dfs(root->right);
     }
 
     TreeNode* build(int i, int j) {
-        if (i > j) return nullptr;
+        if (i > j) {
+            return nullptr;
+        }
         int mid = (i + j) >> 1;
-        TreeNode* root = new TreeNode(vals[mid]);
-        root->left = build(i, mid - 1);
-        root->right = build(mid + 1, j);
-        return root;
+        TreeNode* left = build(i, mid - 1);
+        TreeNode* right = build(mid + 1, j);
+        return new TreeNode(nums[mid], left, right);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -170,33 +205,74 @@ public:
  * }
  */
 func balanceBST(root *TreeNode) *TreeNode {
-	var vals []int
-	var dfs func(root *TreeNode)
+	ans := []int{}
+	var dfs func(*TreeNode)
 	dfs = func(root *TreeNode) {
 		if root == nil {
 			return
 		}
 		dfs(root.Left)
-		vals = append(vals, root.Val)
+		ans = append(ans, root.Val)
 		dfs(root.Right)
 	}
-	dfs(root)
 	var build func(i, j int) *TreeNode
 	build = func(i, j int) *TreeNode {
 		if i > j {
 			return nil
 		}
 		mid := (i + j) >> 1
-		return &TreeNode{vals[mid], build(i, mid-1), build(mid+1, j)}
+		left := build(i, mid-1)
+		right := build(mid+1, j)
+		return &TreeNode{Val: ans[mid], Left: left, Right: right}
 	}
-	return build(0, len(vals)-1)
+	dfs(root)
+	return build(0, len(ans)-1)
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
 
+function balanceBST(root: TreeNode | null): TreeNode | null {
+    const nums: number[] = [];
+    const dfs = (root: TreeNode | null): void => {
+        if (root == null) {
+            return;
+        }
+        dfs(root.left);
+        nums.push(root.val);
+        dfs(root.right);
+    };
+    const build = (i: number, j: number): TreeNode | null => {
+        if (i > j) {
+            return null;
+        }
+        const mid: number = (i + j) >> 1;
+        const left: TreeNode | null = build(i, mid - 1);
+        const right: TreeNode | null = build(mid + 1, j);
+        return new TreeNode(nums[mid], left, right);
+    };
+    dfs(root);
+    return build(0, nums.length - 1);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

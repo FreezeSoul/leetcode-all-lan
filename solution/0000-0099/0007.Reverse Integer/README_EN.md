@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0007.Reverse%20Integer/README_EN.md
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [7. Reverse Integer](https://leetcode.com/problems/reverse-integer)
 
 [中文文档](/solution/0000-0099/0007.Reverse%20Integer/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a signed 32-bit integer <code>x</code>, return <code>x</code><em> with its digits reversed</em>. If reversing <code>x</code> causes the value to go outside the signed 32-bit integer range <code>[-2<sup>31</sup>, 2<sup>31</sup> - 1]</code>, then return <code>0</code>.</p>
 
@@ -37,39 +49,43 @@
 	<li><code>-2<sup>31</sup> &lt;= x &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Mathematical**
+<!-- solution:start -->
 
-Let $mi$ and $mx$ be $-2^{31}$ and $2^{31} - 1$ respectively. The reversed result $ans$ needs to satisfy $mi \le ans \le mx$.
+### Solution 1: Mathematics
 
-We can get the last digit $y$ of $x$ by repeatedly taking the remainder of $x$ by $10$, and then add $y$ to the end of $ans$. Before adding $y$, we need to determine whether $ans$ will overflow. That is, whether $ans \times 10 + y$ is within the range $[mi, mx]$.
+Let's denote $mi$ and $mx$ as $-2^{31}$ and $2^{31} - 1$ respectively, then the reverse result of $x$, $ans$, needs to satisfy $mi \le ans \le mx$.
 
-If $x \gt 0$, then $ans \times 10 + y \leq mx$ should be satisfied. That is, $ans \times 10 + y \leq \left \lfloor \frac{mx}{10} \right \rfloor \times 10 + 7$. Rearrange to get $(ans - \left \lfloor \frac{mx}{10} \right \rfloor) \times 10 \leq 7 - y$.
+We can continuously take the remainder of $x$ to get the last digit $y$ of $x$, and add $y$ to the end of $ans$. Before adding $y$, we need to check if $ans$ overflows. That is, check whether $ans \times 10 + y$ is within the range $[mi, mx]$.
 
-The following conditions need to be satisfied for the above inequality to hold:
+If $x \gt 0$, it needs to satisfy $ans \times 10 + y \leq mx$, that is, $ans \times 10 + y \leq \left \lfloor \frac{mx}{10} \right \rfloor \times 10 + 7$. Rearranging gives $(ans - \left \lfloor \frac{mx}{10} \right \rfloor) \times 10 \leq 7 - y$.
+
+Next, we discuss the conditions for the inequality to hold:
 
 -   When $ans \lt \left \lfloor \frac{mx}{10} \right \rfloor$, the inequality obviously holds;
--   When $ans = \left \lfloor \frac{mx}{10} \right \rfloor$, the necessary and sufficient conditions for the above inequality to hold are $y \leq 7$. If $ans = \left \lfloor \frac{mx}{10} \right \rfloor$ and can still continue to add digits, it means that the current digit is the most significant digit. Therefore, $y$ must be less than or equal to $2$, so the inequality must hold;
+-   When $ans = \left \lfloor \frac{mx}{10} \right \rfloor$, the necessary and sufficient condition for the inequality to hold is $y \leq 7$. If $ans = \left \lfloor \frac{mx}{10} \right \rfloor$ and we can still add numbers, it means that the number is at the highest digit, that is, $y$ must not exceed $2$, therefore, the inequality must hold;
 -   When $ans \gt \left \lfloor \frac{mx}{10} \right \rfloor$, the inequality obviously does not hold.
 
-Therefore, when $x \gt 0$, the necessary and sufficient conditions for the inequality to hold are $ans \leq \left \lfloor \frac{mx}{10} \right \rfloor$.
+In summary, when $x \gt 0$, the necessary and sufficient condition for the inequality to hold is $ans \leq \left \lfloor \frac{mx}{10} \right \rfloor$.
 
-Similarly, when $x \lt 0$, the necessary and sufficient conditions for the inequality to hold are $ans \geq \left \lfloor \frac{mi}{10} \right \rfloor$.
+Similarly, when $x \lt 0$, the necessary and sufficient condition for the inequality to hold is $ans \geq \left \lfloor \frac{mi}{10} \right \rfloor$.
 
-Therefore, we can determine whether $ans$ will overflow by determining whether $ans$ is within the range $[\left \lfloor \frac{mi}{10} \right \rfloor, \left \lfloor \frac{mx}{10} \right \rfloor]$. If so, return $0$. Otherwise, add $y$ to the end of $ans$, and then remove the last digit of $x$, that is, $x \gets \left \lfloor \frac{x}{10} \right \rfloor$.
+Therefore, we can check whether $ans$ overflows by checking whether $ans$ is within the range $[\left \lfloor \frac{mi}{10} \right \rfloor, \left \lfloor \frac{mx}{10} \right \rfloor]$. If it overflows, return $0$. Otherwise, add $y$ to the end of $ans$, and then remove the last digit of $x$, that is, $x \gets \left \lfloor \frac{x}{10} \right \rfloor$.
 
-Time complexity $O(\log |x|)$, where $|x|$ is the absolute value of $x$. Space complexity $O(1)$.
+The time complexity is $O(\log |x|)$, where $|x|$ is the absolute value of $x$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def reverse(self, x: int) -> int:
         ans = 0
-        mi, mx = -2**31, 2**31 - 1
+        mi, mx = -(2**31), 2**31 - 1
         while x:
             if ans < mi // 10 + 1 or ans > mx // 10:
                 return 0
@@ -81,7 +97,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func reverse(x int) (ans int) {
@@ -130,7 +146,28 @@ func reverse(x int) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn reverse(mut x: i32) -> i32 {
+        let is_minus = x < 0;
+        match x
+            .abs()
+            .to_string()
+            .chars()
+            .rev()
+            .collect::<String>()
+            .parse::<i32>()
+        {
+            Ok(x) => x * (if is_minus { -1 } else { 1 }),
+            Err(_) => 0,
+        }
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -151,43 +188,7 @@ var reverse = function (x) {
 };
 ```
 
-### **C**
-
-```c
-int reverse(int x) {
-    int ans = 0;
-    for (; x != 0; x /= 10) {
-        if (ans > INT_MAX / 10 || ans < INT_MIN / 10) {
-            return 0;
-        }
-        ans = ans * 10 + x % 10;
-    }
-    return ans;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn reverse(mut x: i32) -> i32 {
-        let is_minus = x < 0;
-        match x
-            .abs()
-            .to_string()
-            .chars()
-            .rev()
-            .collect::<String>()
-            .parse::<i32>()
-        {
-            Ok(x) => x * if is_minus { -1 } else { 1 },
-            Err(_) => 0,
-        }
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -204,10 +205,55 @@ public class Solution {
 }
 ```
 
-### **...**
+#### C
 
+```c
+int reverse(int x) {
+    int ans = 0;
+    for (; x != 0; x /= 10) {
+        if (ans > INT_MAX / 10 || ans < INT_MIN / 10) {
+            return 0;
+        }
+        ans = ans * 10 + x % 10;
+    }
+    return ans;
+}
 ```
 
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param int $x
+     * @return int
+     */
+
+    function reverse($x) {
+        $isNegative = $x < 0;
+        $x = abs($x);
+
+        $reversed = 0;
+
+        while ($x > 0) {
+            $reversed = $reversed * 10 + ($x % 10);
+            $x = (int) ($x / 10);
+        }
+
+        if ($isNegative) {
+            $reversed *= -1;
+        }
+        if ($reversed < -pow(2, 31) || $reversed > pow(2, 31) - 1) {
+            return 0;
+        }
+
+        return $reversed;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

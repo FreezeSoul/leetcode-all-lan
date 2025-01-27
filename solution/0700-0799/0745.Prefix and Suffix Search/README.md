@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0745.Prefix%20and%20Suffix%20Search/README.md
+tags:
+    - 设计
+    - 字典树
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [745. 前缀和后缀搜索](https://leetcode.cn/problems/prefix-and-suffix-search)
 
 [English Version](/solution/0700-0799/0745.Prefix%20and%20Suffix%20Search/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个包含一些单词的特殊词典，并能够通过前缀和后缀来检索单词。</p>
 
@@ -12,7 +26,7 @@
 
 <ul>
 	<li><code>WordFilter(string[] words)</code> 使用词典中的单词 <code>words</code> 初始化对象。</li>
-	<li><code>f(string pref, string suff)</code> 返回词典中具有前缀&nbsp;<code>prefix</code>&nbsp;和后缀 <code>suff</code>&nbsp;的单词的下标。如果存在不止一个满足要求的下标，返回其中 <strong>最大的下标</strong> 。如果不存在这样的单词，返回 <code>-1</code> 。</li>
+	<li><code>f(string pref, string suff)</code> 返回词典中具有前缀&nbsp;<code>pref</code>&nbsp;和后缀 <code>suff</code>&nbsp;的单词的下标。如果存在不止一个满足要求的下标，返回其中 <strong>最大的下标</strong> 。如果不存在这样的单词，返回 <code>-1</code> 。</li>
 </ul>
 
 <p>&nbsp;</p>
@@ -27,7 +41,7 @@
 [null, 0]
 <strong>解释</strong>
 WordFilter wordFilter = new WordFilter(["apple"]);
-wordFilter.f("a", "e"); // 返回 0 ，因为下标为 0 的单词：前缀 prefix = "a" 且 后缀 suff = "e" 。
+wordFilter.f("a", "e"); // 返回 0 ，因为下标为 0 的单词：前缀 prefix = "a" 且 后缀 suffix = "e" 。
 </pre>
 
 &nbsp;
@@ -42,21 +56,19 @@ wordFilter.f("a", "e"); // 返回 0 ，因为下标为 0 的单词：前缀 pref
 	<li>最多对函数 <code>f</code> 执行 <code>10<sup>4</sup></code> 次调用</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力哈希**
+### 方法一：暴力哈希
 
 遍历 $words$ 的每个单词 $w$，将 $w$ 的所有前缀、后缀对存放到哈希表中。
 
-**方法二：双前缀树**
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class WordFilter:
@@ -79,64 +91,7 @@ class WordFilter:
 # param_1 = obj.f(pref,suff)
 ```
 
-```python
-class Trie:
-    def __init__(self):
-        self.children = [None] * 26
-        self.indexes = []
-
-    def insert(self, word, i):
-        node = self
-        for c in word:
-            idx = ord(c) - ord("a")
-            if node.children[idx] is None:
-                node.children[idx] = Trie()
-            node = node.children[idx]
-            node.indexes.append(i)
-
-    def search(self, pref):
-        node = self
-        for c in pref:
-            idx = ord(c) - ord("a")
-            if node.children[idx] is None:
-                return []
-            node = node.children[idx]
-        return node.indexes
-
-
-class WordFilter:
-
-    def __init__(self, words: List[str]):
-        self.p = Trie()
-        self.s = Trie()
-        for i, w in enumerate(words):
-            self.p.insert(w, i)
-            self.s.insert(w[::-1], i)
-
-    def f(self, pref: str, suff: str) -> int:
-        a = self.p.search(pref)
-        b = self.s.search(suff[::-1])
-        if not a or not b:
-            return -1
-        i, j = len(a) - 1, len(b) - 1
-        while ~i and ~j:
-            if a[i] == b[j]:
-                return a[i]
-            if a[i] > b[j]:
-                i -= 1
-            else:
-                j -= 1
-        return -1
-
-
-# Your WordFilter object will be instantiated and called as such:
-# obj = WordFilter(words)
-# param_1 = obj.f(pref,suff)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class WordFilter {
@@ -167,6 +122,145 @@ class WordFilter {
  * int param_1 = obj.f(pref,suff);
  */
 ```
+
+#### C++
+
+```cpp
+class WordFilter {
+public:
+    unordered_map<string, int> d;
+
+    WordFilter(vector<string>& words) {
+        for (int k = 0; k < words.size(); ++k) {
+            string w = words[k];
+            int n = w.size();
+            for (int i = 0; i <= n; ++i) {
+                string a = w.substr(0, i);
+                for (int j = 0; j <= n; ++j) {
+                    string b = w.substr(j, n - j);
+                    d[a + "." + b] = k;
+                }
+            }
+        }
+    }
+
+    int f(string pref, string suff) {
+        string key = pref + "." + suff;
+        if (d.count(key)) return d[key];
+        return -1;
+    }
+};
+
+/**
+ * Your WordFilter object will be instantiated and called as such:
+ * WordFilter* obj = new WordFilter(words);
+ * int param_1 = obj->f(pref,suff);
+ */
+```
+
+#### Go
+
+```go
+type WordFilter struct {
+	d map[string]int
+}
+
+func Constructor(words []string) WordFilter {
+	d := map[string]int{}
+	for k, w := range words {
+		n := len(w)
+		for i := 0; i <= n; i++ {
+			a := w[:i]
+			for j := 0; j <= n; j++ {
+				b := w[j:]
+				d[a+"."+b] = k
+			}
+		}
+	}
+	return WordFilter{d}
+}
+
+func (this *WordFilter) F(pref string, suff string) int {
+	if v, ok := this.d[pref+"."+suff]; ok {
+		return v
+	}
+	return -1
+}
+
+/**
+ * Your WordFilter object will be instantiated and called as such:
+ * obj := Constructor(words);
+ * param_1 := obj.F(pref,suff);
+ */
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：双前缀树
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Trie:
+    def __init__(self):
+        self.children = [None] * 26
+        self.indexes = []
+
+    def insert(self, word, i):
+        node = self
+        for c in word:
+            idx = ord(c) - ord("a")
+            if node.children[idx] is None:
+                node.children[idx] = Trie()
+            node = node.children[idx]
+            node.indexes.append(i)
+
+    def search(self, pref):
+        node = self
+        for c in pref:
+            idx = ord(c) - ord("a")
+            if node.children[idx] is None:
+                return []
+            node = node.children[idx]
+        return node.indexes
+
+
+class WordFilter:
+    def __init__(self, words: List[str]):
+        self.p = Trie()
+        self.s = Trie()
+        for i, w in enumerate(words):
+            self.p.insert(w, i)
+            self.s.insert(w[::-1], i)
+
+    def f(self, pref: str, suff: str) -> int:
+        a = self.p.search(pref)
+        b = self.s.search(suff[::-1])
+        if not a or not b:
+            return -1
+        i, j = len(a) - 1, len(b) - 1
+        while ~i and ~j:
+            if a[i] == b[j]:
+                return a[i]
+            if a[i] > b[j]:
+                i -= 1
+            else:
+                j -= 1
+        return -1
+
+
+# Your WordFilter object will be instantiated and called as such:
+# obj = WordFilter(words)
+# param_1 = obj.f(pref,suff)
+```
+
+#### Java
 
 ```java
 class Trie {
@@ -240,76 +334,7 @@ class WordFilter {
  */
 ```
 
-### **C++**
-
-```cpp
-class WordFilter {
-public:
-    unordered_map<string, int> d;
-
-    WordFilter(vector<string>& words) {
-        for (int k = 0; k < words.size(); ++k) {
-            string w = words[k];
-            int n = w.size();
-            for (int i = 0; i <= n; ++i) {
-                string a = w.substr(0, i);
-                for (int j = 0; j <= n; ++j) {
-                    string b = w.substr(j, n - j);
-                    d[a + "." + b] = k;
-                }
-            }
-        }
-    }
-
-    int f(string pref, string suff) {
-        string key = pref + "." + suff;
-        if (d.count(key)) return d[key];
-        return -1;
-    }
-};
-
-/**
- * Your WordFilter object will be instantiated and called as such:
- * WordFilter* obj = new WordFilter(words);
- * int param_1 = obj->f(pref,suff);
- */
-```
-
-### **Go**
-
-```go
-type WordFilter struct {
-	d map[string]int
-}
-
-func Constructor(words []string) WordFilter {
-	d := map[string]int{}
-	for k, w := range words {
-		n := len(w)
-		for i := 0; i <= n; i++ {
-			a := w[:i]
-			for j := 0; j <= n; j++ {
-				b := w[j:]
-				d[a+"."+b] = k
-			}
-		}
-	}
-	return WordFilter{d}
-}
-
-func (this *WordFilter) F(pref string, suff string) int {
-	if v, ok := this.d[pref+"."+suff]; ok {
-		return v
-	}
-	return -1
-}
-
-/**
- * Your WordFilter object will be instantiated and called as such:
- * obj := Constructor(words);
- * param_1 := obj.F(pref,suff);
- */
-```
+#### Go
 
 ```go
 type Trie struct {
@@ -395,10 +420,8 @@ func reverse(w string) string {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

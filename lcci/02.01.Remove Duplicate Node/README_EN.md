@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/02.01.Remove%20Duplicate%20Node/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [02.01. Remove Duplicate Node](https://leetcode.cn/problems/remove-duplicate-node-lcci)
 
 [中文文档](/lcci/02.01.Remove%20Duplicate%20Node/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write code to remove duplicates from an unsorted linked list.</p>
 
@@ -37,11 +47,27 @@
 
 <p>How would you solve this problem if a temporary buffer is not allowed?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We create a hash table $vis$ to record the values of the nodes that have been visited.
+
+Then we create a dummy node $pre$ such that $pre.next = head$.
+
+Next, we traverse the linked list. If the value of the current node is already in the hash table, we delete the current node, i.e., $pre.next = pre.next.next$; otherwise, we add the value of the current node to the hash table and move $pre$ to the next node.
+
+After the traversal, we return the head of the linked list.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the linked list.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -53,22 +79,18 @@
 
 class Solution:
     def removeDuplicateNodes(self, head: ListNode) -> ListNode:
-        if head is None or head.next is None:
-            return head
-        cache = set()
-        cache.add(head.val)
-        cur, p = head, head.next
-        while p:
-            if p.val not in cache:
-                cur.next = p
-                cur = cur.next
-                cache.add(p.val)
-            p = p.next
-        cur.next = None
+        vis = set()
+        pre = ListNode(0, head)
+        while pre.next:
+            if pre.next.val in vis:
+                pre.next = pre.next.next
+            else:
+                vis.add(pre.next.val)
+                pre = pre.next
         return head
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -81,59 +103,21 @@ class Solution:
  */
 class Solution {
     public ListNode removeDuplicateNodes(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-        Set<Integer> s = new HashSet<>();
-        s.add(head.val);
-        ListNode cur = head;
-        for (ListNode p = head.next; p != null; p = p.next) {
-            if (!s.contains(p.val)) {
-                cur.next = p;
-                cur = cur.next;
-                s.add(p.val);
+        Set<Integer> vis = new HashSet<>();
+        ListNode pre = new ListNode(0, head);
+        while (pre.next != null) {
+            if (vis.add(pre.next.val)) {
+                pre = pre.next;
+            } else {
+                pre.next = pre.next.next;
             }
         }
-        cur.next = null;
         return head;
     }
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} head
- * @return {ListNode}
- */
-var removeDuplicateNodes = function (head) {
-    if (head == null || head.next == null) return head;
-    const cache = new Set([]);
-    cache.add(head.val);
-    let cur = head,
-        fast = head.next;
-    while (fast !== null) {
-        if (!cache.has(fast.val)) {
-            cur.next = fast;
-            cur = cur.next;
-            cache.add(fast.val);
-        }
-        fast = fast.next;
-    }
-    cur.next = null;
-    return head;
-};
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -147,46 +131,47 @@ var removeDuplicateNodes = function (head) {
 class Solution {
 public:
     ListNode* removeDuplicateNodes(ListNode* head) {
-        if (head == nullptr || head->next == nullptr) {
-            return head;
-        }
-        unordered_set<int> cache = {head->val};
-        ListNode* cur = head;
-        for (ListNode* p = head->next; p != nullptr; p = p->next) {
-            if (!cache.count(p->val)) {
-                cur->next = p;
-                cur = cur->next;
-                cache.insert(p->val);
+        unordered_set<int> vis;
+        ListNode* pre = new ListNode(0, head);
+        while (pre->next) {
+            if (vis.count(pre->next->val)) {
+                pre->next = pre->next->next;
+            } else {
+                vis.insert(pre->next->val);
+                pre = pre->next;
             }
         }
-        cur->next = nullptr;
         return head;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
 func removeDuplicateNodes(head *ListNode) *ListNode {
-	if head == nil {
-		return nil
-	}
-	vis := map[int]bool{head.Val: true}
-	p := head
-	for p.Next != nil {
-		if vis[p.Next.Val] {
-			p.Next = p.Next.Next
+	vis := map[int]bool{}
+	pre := &ListNode{0, head}
+	for pre.Next != nil {
+		if vis[pre.Next.Val] {
+			pre.Next = pre.Next.Next
 		} else {
-			vis[p.Next.Val] = true
-			p = p.Next
+			vis[pre.Next.Val] = true
+			pre = pre.Next
 		}
 	}
 	return head
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -202,56 +187,21 @@ func removeDuplicateNodes(head *ListNode) *ListNode {
  */
 
 function removeDuplicateNodes(head: ListNode | null): ListNode | null {
-    if (head == null) {
-        return head;
-    }
-    const set = new Set<number>([head.val]);
-    let cur = head;
-    while (cur.next != null) {
-        if (set.has(cur.next.val)) {
-            cur.next = cur.next.next;
+    const vis: Set<number> = new Set();
+    let pre: ListNode = new ListNode(0, head);
+    while (pre.next) {
+        if (vis.has(pre.next.val)) {
+            pre.next = pre.next.next;
         } else {
-            set.add(cur.next.val);
-            cur = cur.next;
+            vis.add(pre.next.val);
+            pre = pre.next;
         }
     }
     return head;
 }
 ```
 
-Violence (not recommended)
-
-```ts
-/**
- * Definition for singly-linked list.
- * class ListNode {
- *     val: number
- *     next: ListNode | null
- *     constructor(val?: number, next?: ListNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
- */
-
-function removeDuplicateNodes(head: ListNode | null): ListNode | null {
-    let n1 = head;
-    while (n1 != null) {
-        let n2 = n1;
-        while (n2.next != null) {
-            if (n1.val === n2.next.val) {
-                n2.next = n2.next.next;
-            } else {
-                n2 = n2.next;
-            }
-        }
-        n1 = n1.next;
-    }
-    return head;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -273,32 +223,90 @@ function removeDuplicateNodes(head: ListNode | null): ListNode | null {
 use std::collections::HashSet;
 
 impl Solution {
-    pub fn remove_duplicate_nodes(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        match head {
-            None => head,
-            Some(mut head) => {
-                let mut set = HashSet::new();
-                set.insert(head.val);
-                let mut pre = &mut head;
-                while let Some(cur) = &pre.next {
-                    if set.contains(&cur.val) {
-                        pre.next = pre.next.take().unwrap().next;
-                    } else {
-                        set.insert(cur.val);
-                        pre = pre.next.as_mut().unwrap();
-                    }
-                }
-                Some(head)
+    pub fn remove_duplicate_nodes(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut vis = HashSet::new();
+        let mut pre = ListNode::new(0);
+        pre.next = head;
+        let mut cur = &mut pre;
+        while let Some(node) = cur.next.take() {
+            if vis.contains(&node.val) {
+                cur.next = node.next;
+            } else {
+                vis.insert(node.val);
+                cur.next = Some(node);
+                cur = cur.next.as_mut().unwrap();
             }
         }
+        pre.next
     }
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var removeDuplicateNodes = function (head) {
+    const vis = new Set();
+    let pre = new ListNode(0, head);
+    while (pre.next) {
+        if (vis.has(pre.next.val)) {
+            pre.next = pre.next.next;
+        } else {
+            vis.add(pre.next.val);
+            pre = pre.next;
+        }
+    }
+    return head;
+};
 ```
 
+#### Swift
+
+```swift
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *   var val: Int
+ *   var next: ListNode?
+ *   init(_ x: Int, _ next: ListNode? = nil) {
+ *       self.val = x
+ *       self.next = next
+ *   }
+ * }
+*/
+
+class Solution {
+    func removeDuplicateNodes(_ head: ListNode?) -> ListNode? {
+        var vis = Set<Int>()
+        let pre = ListNode(0, head)
+        var current: ListNode? = pre
+
+        while current?.next != nil {
+            if vis.insert(current!.next!.val).inserted {
+                current = current?.next
+            } else {
+                current?.next = current?.next?.next
+            }
+        }
+
+        return head
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

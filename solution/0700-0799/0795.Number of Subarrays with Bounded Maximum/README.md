@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0795.Number%20of%20Subarrays%20with%20Bounded%20Maximum/README.md
+tags:
+    - 数组
+    - 双指针
+---
+
+<!-- problem:start -->
+
 # [795. 区间子数组个数](https://leetcode.cn/problems/number-of-subarrays-with-bounded-maximum)
 
 [English Version](/solution/0700-0799/0795.Number%20of%20Subarrays%20with%20Bounded%20Maximum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 和两个整数：<code>left</code> 及 <code>right</code> 。找出 <code>nums</code> 中连续、非空且其中最大元素在范围&nbsp;<code>[left, right]</code> 内的子数组，并返回满足条件的子数组的个数。</p>
 
@@ -37,11 +48,13 @@
 	<li><code>0 &lt;= left &lt;= right &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：区间计数**
+### 方法一：区间计数
 
 题目要我们统计数组 `nums` 中，最大值在区间 $[left, right]$ 范围内的子数组个数。
 
@@ -59,21 +72,9 @@ $$
 
 时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 `nums` 的长度。
 
-**方法二：单调栈 + 枚举元素计算贡献**
-
-我们还可以枚举数组中每个元素 $nums[i]$ 作为子数组的最大值，然后统计以该元素为最大值的子数组的个数。问题转化为求出每个元素 $nums[i]$ 左侧第一个大于该元素的下标 $l[i]$，右侧第一个大于等于该元素的下标 $r[i]$，则以该元素为最大值的子数组的个数为 $(i - l[i]) \times (r[i] - i)$。
-
-我们可以使用单调栈方便地求出 $l[i]$ 和 $r[i]$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。
-
-相似题目：[907. 子数组的最小值之和](/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README.md)
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,6 +88,85 @@ class Solution:
 
         return f(right) - f(left - 1)
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int numSubarrayBoundedMax(int[] nums, int left, int right) {
+        return f(nums, right) - f(nums, left - 1);
+    }
+
+    private int f(int[] nums, int x) {
+        int cnt = 0, t = 0;
+        for (int v : nums) {
+            t = v > x ? 0 : t + 1;
+            cnt += t;
+        }
+        return cnt;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
+        auto f = [&](int x) {
+            int cnt = 0, t = 0;
+            for (int& v : nums) {
+                t = v > x ? 0 : t + 1;
+                cnt += t;
+            }
+            return cnt;
+        };
+        return f(right) - f(left - 1);
+    }
+};
+```
+
+#### Go
+
+```go
+func numSubarrayBoundedMax(nums []int, left int, right int) int {
+	f := func(x int) (cnt int) {
+		t := 0
+		for _, v := range nums {
+			t++
+			if v > x {
+				t = 0
+			}
+			cnt += t
+		}
+		return
+	}
+	return f(right) - f(left-1)
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：单调栈 + 枚举元素计算贡献
+
+我们还可以枚举数组中每个元素 $nums[i]$ 作为子数组的最大值，然后统计以该元素为最大值的子数组的个数。问题转化为求出每个元素 $nums[i]$ 左侧第一个大于该元素的下标 $l[i]$，右侧第一个大于等于该元素的下标 $r[i]$，则以该元素为最大值的子数组的个数为 $(i - l[i]) \times (r[i] - i)$。
+
+我们可以使用单调栈方便地求出 $l[i]$ 和 $r[i]$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。
+
+相似题目：
+
+-   [907. 子数组的最小值之和](https://github.com/doocs/leetcode/blob/main/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -107,29 +187,12 @@ class Solution:
             if stk:
                 r[i] = stk[-1]
             stk.append(i)
-        return sum((i - l[i]) * (r[i] - i) for i, v in enumerate(nums) if left <= v <= right)
+        return sum(
+            (i - l[i]) * (r[i] - i) for i, v in enumerate(nums) if left <= v <= right
+        )
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int numSubarrayBoundedMax(int[] nums, int left, int right) {
-        return f(nums, right) - f(nums, left - 1);
-    }
-
-    private int f(int[] nums, int x) {
-        int cnt = 0, t = 0;
-        for (int v : nums) {
-            t = v > x ? 0 : t + 1;
-            cnt += t;
-        }
-        return cnt;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -172,24 +235,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
-        auto f = [&](int x) {
-            int cnt = 0, t = 0;
-            for (int& v : nums) {
-                t = v > x ? 0 : t + 1;
-                cnt += t;
-            }
-            return cnt;
-        };
-        return f(right) - f(left -1);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -223,24 +269,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func numSubarrayBoundedMax(nums []int, left int, right int) int {
-	f := func(x int) (cnt int) {
-		t := 0
-		for _, v := range nums {
-			t++
-			if v > x {
-				t = 0
-			}
-			cnt += t
-		}
-		return
-	}
-	return f(right) - f(left-1)
-}
-```
+#### Go
 
 ```go
 func numSubarrayBoundedMax(nums []int, left int, right int) (ans int) {
@@ -280,10 +309,8 @@ func numSubarrayBoundedMax(nums []int, left int, right int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

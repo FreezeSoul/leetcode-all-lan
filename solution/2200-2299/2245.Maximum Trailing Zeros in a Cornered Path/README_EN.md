@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2245.Maximum%20Trailing%20Zeros%20in%20a%20Cornered%20Path/README_EN.md
+rating: 2036
+source: Weekly Contest 289 Q3
+tags:
+    - Array
+    - Matrix
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2245. Maximum Trailing Zeros in a Cornered Path](https://leetcode.com/problems/maximum-trailing-zeros-in-a-cornered-path)
 
 [中文文档](/solution/2200-2299/2245.Maximum%20Trailing%20Zeros%20in%20a%20Cornered%20Path/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a 2D integer array <code>grid</code> of size <code>m x n</code>, where each cell contains a positive integer.</p>
 
@@ -54,11 +70,41 @@ There are no cornered paths in the grid that result in a product with a trailing
 	<li><code>1 &lt;= grid[i][j] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Sum + Enumerate Turning Point
+
+Firstly, we need to understand that for a product, the number of trailing zeros depends on the smaller count of $2$ and $5$ in its factors. Also, each corner path should cover as many numbers as possible, so it must start from a boundary, reach a turning point, and then reach another boundary.
+
+Therefore, we can create four two-dimensional arrays $r2$, $c2$, $r5$, $c5$ to record the counts of $2$ and $5$ in each row and column. Where:
+
+-   `r2[i][j]` represents the count of $2$ from the first column to the $j$-th column in the $i$-th row;
+-   `c2[i][j]` represents the count of $2$ from the first row to the $i$-th row in the $j$-th column;
+-   `r5[i][j]` represents the count of $5$ from the first column to the $j$-th column in the $i$-th row;
+-   `c5[i][j]` represents the count of $5$ from the first row to the $i$-th row in the $j$-th column.
+
+Next, we traverse the two-dimensional array `grid`. For each number, we calculate its counts of $2$ and $5$, and then update the four two-dimensional arrays.
+
+Then, we enumerate the turning point $(i, j)$. For each turning point, we calculate four values:
+
+-   `a` represents the smaller count of $2$ and $5$ in the path that moves right from $(i, 1)$ to $(i, j)$, then turns and moves up to $(1, j)$;
+-   `b` represents the smaller count of $2$ and $5$ in the path that moves right from $(i, 1)$ to $(i, j)$, then turns and moves down to $(m, j)$;
+-   `c` represents the smaller count of $2$ and $5$ in the path that moves left from $(i, n)$ to $(i, j)$, then turns and moves up to $(1, j)$;
+-   `d` represents the smaller count of $2$ and $5$ in the path that moves left from $(i, n)$ to $(i, j)$, then turns and moves down to $(m, j)$.
+
+Each time we enumerate, we take the maximum of these four values, and then update the answer.
+
+Finally, we return the answer.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$, where $m$ and $n$ are the number of rows and columns of the `grid` array, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -95,7 +141,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -137,7 +183,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -179,7 +225,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxTrailingZeros(grid [][]int) (ans int) {
@@ -223,23 +269,9 @@ func get(m, n int) [][]int {
 	}
 	return f
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxTrailingZeros(grid: number[][]): number {
@@ -269,18 +301,9 @@ function maxTrailingZeros(grid: number[][]): number {
     let ans = 0;
     for (let i = 1; i <= m; ++i) {
         for (let j = 1; j <= n; ++j) {
-            const a = Math.min(
-                r2[i][j] + c2[i - 1][j],
-                r5[i][j] + c5[i - 1][j],
-            );
-            const b = Math.min(
-                r2[i][j] + c2[m][j] - c2[i][j],
-                r5[i][j] + c5[m][j] - c5[i][j],
-            );
-            const c = Math.min(
-                r2[i][n] - r2[i][j] + c2[i][j],
-                r5[i][n] - r5[i][j] + c5[i][j],
-            );
+            const a = Math.min(r2[i][j] + c2[i - 1][j], r5[i][j] + c5[i - 1][j]);
+            const b = Math.min(r2[i][j] + c2[m][j] - c2[i][j], r5[i][j] + c5[m][j] - c5[i][j]);
+            const c = Math.min(r2[i][n] - r2[i][j] + c2[i][j], r5[i][n] - r5[i][j] + c5[i][j]);
             const d = Math.min(
                 r2[i][n] - r2[i][j - 1] + c2[m][j] - c2[i][j],
                 r5[i][n] - r5[i][j - 1] + c5[m][j] - c5[i][j],
@@ -292,10 +315,8 @@ function maxTrailingZeros(grid: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

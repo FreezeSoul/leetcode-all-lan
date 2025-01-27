@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1848.Minimum%20Distance%20to%20the%20Target%20Element/README_EN.md
+rating: 1216
+source: Weekly Contest 239 Q1
+tags:
+    - Array
+---
+
+<!-- problem:start -->
+
 # [1848. Minimum Distance to the Target Element](https://leetcode.com/problems/minimum-distance-to-the-target-element)
 
 [中文文档](/solution/1800-1899/1848.Minimum%20Distance%20to%20the%20Target%20Element/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> <strong>(0-indexed)</strong> and two integers <code>target</code> and <code>start</code>, find an index <code>i</code> such that <code>nums[i] == target</code> and <code>abs(i - start)</code> is <strong>minimized</strong>. Note that&nbsp;<code>abs(x)</code>&nbsp;is the absolute value of <code>x</code>.</p>
 
@@ -45,23 +59,29 @@
 	<li><code>target</code> is in <code>nums</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Single Pass
+
+Traverse the array, find all indices equal to $target$, then calculate $|i - start|$, and take the minimum value.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $nums$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def getMinDistance(self, nums: List[int], target: int, start: int) -> int:
-        ans = inf
-        for i, x in enumerate(nums):
-            if x == target:
-                ans = min(ans, abs(i - start))
-        return ans
+        return min(abs(i - start) for i, x in enumerate(nums) if x == target)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +98,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -96,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getMinDistance(nums []int, target int, start int) int {
@@ -117,10 +137,37 @@ func abs(x int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function getMinDistance(nums: number[], target: number, start: number): number {
+    let ans = Infinity;
+    for (let i = 0; i < nums.length; ++i) {
+        if (nums[i] === target) {
+            ans = Math.min(ans, Math.abs(i - start));
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn get_min_distance(nums: Vec<i32>, target: i32, start: i32) -> i32 {
+        nums.iter()
+            .enumerate()
+            .filter(|&(_, &x)| x == target)
+            .map(|(i, _)| ((i as i32) - start).abs())
+            .min()
+            .unwrap_or_default()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

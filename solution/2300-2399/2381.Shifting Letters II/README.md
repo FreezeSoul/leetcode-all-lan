@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2381.Shifting%20Letters%20II/README.md
+rating: 1793
+source: 第 85 场双周赛 Q3
+tags:
+    - 数组
+    - 字符串
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2381. 字母移位 II](https://leetcode.cn/problems/shifting-letters-ii)
 
 [English Version](/solution/2300-2399/2381.Shifting%20Letters%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个小写英文字母组成的字符串&nbsp;<code>s</code>&nbsp;和一个二维整数数组&nbsp;<code>shifts</code>&nbsp;，其中&nbsp;<code>shifts[i] = [start<sub>i</sub>, end<sub>i</sub>, direction<sub>i</sub>]</code>&nbsp;。对于每个&nbsp;<code>i</code>&nbsp;，将&nbsp;<code>s</code>&nbsp;中从下标&nbsp;<code>start<sub>i</sub></code>&nbsp;到下标&nbsp;<code>end<sub>i</sub></code>&nbsp;（两者都包含）所有字符都进行移位运算，如果&nbsp;<code>direction<sub>i</sub> = 1</code>&nbsp;将字符向后移位，如果&nbsp;<code>direction<sub>i</sub> = 0</code>&nbsp;将字符向前移位。</p>
 
@@ -42,11 +56,13 @@
 	<li><code>s</code>&nbsp;只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：差分数组**
+### 方法一：差分数组
 
 用差分数组 $d$ 记录区间的变化，然后对 $d$ 求前缀和，得到每个下标 $i$ 的变化量 $d[i]$。
 
@@ -56,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,12 +86,12 @@ class Solution:
             d[j + 1] -= v
         for i in range(1, n + 1):
             d[i] += d[i - 1]
-        return ''.join(chr(ord('a') + (ord(s[i]) - ord('a') + d[i] + 26) % 26) for i in range(n))
+        return ''.join(
+            chr(ord('a') + (ord(s[i]) - ord('a') + d[i] + 26) % 26) for i in range(n)
+        )
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -132,7 +146,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shiftingLetters(s string, shifts [][]int) string {
@@ -157,17 +171,37 @@ func shiftingLetters(s string, shifts [][]int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
+function shiftingLetters(s: string, shifts: number[][]): string {
+    const n: number = s.length;
+    const d: number[] = new Array(n + 1).fill(0);
 
-```
+    for (let [i, j, v] of shifts) {
+        if (v === 0) {
+            v--;
+        }
+        d[i] += v;
+        d[j + 1] -= v;
+    }
 
-### **...**
+    for (let i = 1; i <= n; ++i) {
+        d[i] += d[i - 1];
+    }
 
-```
+    let ans: string = '';
+    for (let i = 0; i < n; ++i) {
+        const j = (s.charCodeAt(i) - 'a'.charCodeAt(0) + (d[i] % 26) + 26) % 26;
+        ans += String.fromCharCode('a'.charCodeAt(0) + j);
+    }
 
-
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

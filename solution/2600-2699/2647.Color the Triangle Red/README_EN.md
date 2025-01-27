@@ -1,8 +1,21 @@
-# [2647. Color the Triangle Red](https://leetcode.com/problems/color-the-triangle-red)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2647.Color%20the%20Triangle%20Red/README_EN.md
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
+# [2647. Color the Triangle Red 🔒](https://leetcode.com/problems/color-the-triangle-red)
 
 [中文文档](/solution/2600-2699/2647.Color%20the%20Triangle%20Red/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code>. Consider an equilateral triangle of side length <code>n</code>, broken up into <code>n<sup>2</sup></code> unit equilateral triangles. The triangle has <code>n</code> <strong>1-indexed</strong> rows where the <code>i<sup>th</sup></code> row has <code>2i - 1</code> unit equilateral triangles.</p>
 
@@ -20,12 +33,14 @@
 
 <ol>
 	<li>Choose a white triangle that has <strong>at least two</strong> red neighbors.
+
     <ul>
     	<li>If there is no such triangle, stop the algorithm.</li>
     </ul>
     </li>
     <li>Color that triangle <strong>red</strong>.</li>
     <li>Go to step 1.</li>
+
 </ol>
 
 <p>Choose the minimum <code>k</code> possible and set <code>k</code> triangles red before running this algorithm such that after the algorithm stops, all unit triangles are colored red.</p>
@@ -63,9 +78,13 @@ It can be shown that choosing any 2 triangles and running the algorithm will not
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Find the Pattern**
+<!-- solution:start -->
+
+### Solution 1: Find the Pattern
 
 We draw a graph to observe, and we can find that the first row only has one triangle and must be colored, and from the last row to the second row, the coloring scheme of every four rows is the same:
 
@@ -84,7 +103,7 @@ The time complexity is $(n^2)$, where $n$ is the parameter given in the problem.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -106,7 +125,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -133,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func colorRed(n int) (ans [][]int) {
@@ -185,7 +204,7 @@ func colorRed(n int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function colorRed(n: number): number[][] {
@@ -209,10 +228,8 @@ function colorRed(n: number): number[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

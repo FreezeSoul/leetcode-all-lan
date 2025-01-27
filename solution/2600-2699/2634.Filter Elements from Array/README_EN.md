@@ -1,12 +1,31 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2634.Filter%20Elements%20from%20Array/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2634. Filter Elements from Array](https://leetcode.com/problems/filter-elements-from-array)
 
 [中文文档](/solution/2600-2699/2634.Filter%20Elements%20from%20Array/README.md)
 
 ## Description
 
-<p>Given an integer array&nbsp;<code>arr</code>&nbsp;and a filtering&nbsp;function&nbsp;<code>fn</code>,&nbsp;return&nbsp;a new array with a fewer or equal number of elements.</p>
+<!-- description:start -->
 
-<p>The returned array should only contain elements where&nbsp;<code>fn(arr[i],&nbsp;i)</code>&nbsp;evaluated to a truthy value.</p>
+<p>Given an integer array <code>arr</code> and a filtering function <code>fn</code>, return a filtered array <code>filteredArr</code>.</p>
+
+<p>The <code>fn</code> function takes one or two arguments:</p>
+
+<ul>
+	<li><code>arr[i]</code> - number&nbsp;from&nbsp;the <code>arr</code></li>
+	<li><code>i</code>&nbsp;- index of <code>arr[i]</code></li>
+</ul>
+
+<p><code>filteredArr</code> should only contain the elements from the&nbsp;<code>arr</code> for which the expression <code>fn(arr[i], i)</code> evaluates to a <strong>truthy</strong> value. A&nbsp;<strong>truthy</strong>&nbsp;value is a value where&nbsp;<code>Boolean(value)</code>&nbsp;returns&nbsp;<code>true</code>.</p>
 
 <p>Please solve it without the built-in <code>Array.filter</code> method.</p>
 
@@ -44,12 +63,16 @@ Falsey values such as 0 should be filtered out
 
 <ul>
 	<li><code>0 &lt;= arr.length &lt;= 1000</code></li>
-	<li><code><font face="monospace">-10<sup>9</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>9</sup></font></code></li>
+	<li><code>-10<sup>9</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
-**Approach 1: Traversal**
+<!-- solution:start -->
+
+### Solution 1: Traversal
 
 We traverse the array $arr$ and for each element $arr[i]$, if $fn(arr[i], i)$ is true, we add it to the answer array. Finally, we return the answer array.
 
@@ -57,7 +80,7 @@ The time complexity is $O(n)$, where $n$ is the length of the array $arr$. Ignor
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function filter(arr: number[], fn: (n: number, i: number) => any): number[] {
@@ -71,10 +94,8 @@ function filter(arr: number[], fn: (n: number, i: number) => any): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

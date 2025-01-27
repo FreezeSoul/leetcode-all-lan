@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1341.Movie%20Rating/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1341. Movie Rating](https://leetcode.com/problems/movie-rating)
 
 [中文文档](/solution/1300-1399/1341.Movie%20Rating/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Movies</code></p>
 
@@ -13,7 +25,7 @@
 | movie_id      | int     |
 | title         | varchar |
 +---------------+---------+
-movie_id is the primary key for this table.
+movie_id is the primary key (column with unique values) for this table.
 title is the name of the movie.
 </pre>
 
@@ -28,10 +40,9 @@ title is the name of the movie.
 | user_id       | int     |
 | name          | varchar |
 +---------------+---------+
-user_id is the primary key for this table.
+user_id is the primary key (column with unique values) for this table.
+The column &#39;name&#39; has unique values.
 </pre>
-
-<p>&nbsp;</p>
 
 <p>Table: <code>MovieRating</code></p>
 
@@ -44,21 +55,21 @@ user_id is the primary key for this table.
 | rating        | int     |
 | created_at    | date    |
 +---------------+---------+
-(movie_id, user_id) is the primary key for this table.
+(movie_id, user_id) is the primary key (column with unique values) for this table.
 This table contains the rating of a movie by a user in their review.
 created_at is the user&#39;s review date. 
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to:</p>
+<p>Write a solution to:</p>
 
 <ul>
 	<li>Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.</li>
 	<li>Find the movie name with the <strong>highest average</strong> rating in <code>February 2020</code>. In case of a tie, return the lexicographically smaller movie name.</li>
 </ul>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -108,14 +119,44 @@ Daniel and Monica have rated 3 movies (&quot;Avengers&quot;, &quot;Frozen 2&quot
 Frozen 2 and Joker have a rating average of 3.5 in February but Frozen 2 is smaller lexicographically.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+(
+    SELECT name AS results
+    FROM
+        Users
+        JOIN MovieRating USING (user_id)
+    GROUP BY user_id
+    ORDER BY COUNT(1) DESC, name
+    LIMIT 1
+)
+UNION ALL
+(
+    SELECT title
+    FROM
+        MovieRating
+        JOIN Movies USING (movie_id)
+    WHERE DATE_FORMAT(created_at, '%Y-%m') = '2020-02'
+    GROUP BY movie_id
+    ORDER BY AVG(rating) DESC, title
+    LIMIT 1
+);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

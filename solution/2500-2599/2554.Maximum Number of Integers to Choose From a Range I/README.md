@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2554.Maximum%20Number%20of%20Integers%20to%20Choose%20From%20a%20Range%20I/README.md
+rating: 1333
+source: 第 97 场双周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 哈希表
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2554. 从一个范围内选择最多整数 I](https://leetcode.cn/problems/maximum-number-of-integers-to-choose-from-a-range-i)
 
 [English Version](/solution/2500-2599/2554.Maximum%20Number%20of%20Integers%20to%20Choose%20From%20a%20Range%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>banned</code>&nbsp;和两个整数&nbsp;<code>n</code> 和&nbsp;<code>maxSum</code>&nbsp;。你需要按照以下规则选择一些整数：</p>
 
@@ -52,11 +68,13 @@
 	<li><code>1 &lt;= maxSum &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 枚举**
+### 方法一：贪心 + 枚举
 
 我们用变量 $s$ 表示当前已经选择的整数的和，用变量 $ans$ 表示当前已经选择的整数的个数。将数组 `banned` 转换为哈希表，方便判断某个整数是否不可选。
 
@@ -66,23 +84,9 @@
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为给定的整数。
 
-**方法二：贪心 + 二分查找**
-
-如果 $n$ 很大，那么方法一中的枚举会超时。
-
-我们可以在数组 `banned` 中加入 $0$ 和 $n + 1$，并将数组 `banned` 去重且移除大于 $n+1$ 的元素，然后进行排序。
-
-接下来，我们枚举数组 `banned` 中的每两个相邻元素 $i$ 和 $j$，那么可选的整数范围就是 $[i + 1, j - 1]$。二分枚举我们在此区间内能够选择的元素个数，找到最大的可选元素个数，然后将其加到 $ans$ 中。同时在 `maxSum` 中减去这些元素的和。如果 `maxSum` 小于 $0$，那么我们跳出循环。返回答案即可。
-
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 `banned` 的长度。
-
-相似题目：[2557. 从一个范围内选择最多整数 II](/solution/2500-2599/2557.Maximum%20Number%20of%20Integers%20to%20Choose%20From%20a%20Range%20II/README.md)
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -97,6 +101,162 @@ class Solution:
                 s += i
         return ans
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int maxCount(int[] banned, int n, int maxSum) {
+        Set<Integer> ban = new HashSet<>(banned.length);
+        for (int x : banned) {
+            ban.add(x);
+        }
+        int ans = 0, s = 0;
+        for (int i = 1; i <= n && s + i <= maxSum; ++i) {
+            if (!ban.contains(i)) {
+                ++ans;
+                s += i;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxCount(vector<int>& banned, int n, int maxSum) {
+        unordered_set<int> ban(banned.begin(), banned.end());
+        int ans = 0, s = 0;
+        for (int i = 1; i <= n && s + i <= maxSum; ++i) {
+            if (!ban.count(i)) {
+                ++ans;
+                s += i;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxCount(banned []int, n int, maxSum int) (ans int) {
+	ban := map[int]bool{}
+	for _, x := range banned {
+		ban[x] = true
+	}
+	s := 0
+	for i := 1; i <= n && s+i <= maxSum; i++ {
+		if !ban[i] {
+			ans++
+			s += i
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function maxCount(banned: number[], n: number, maxSum: number): number {
+    const set = new Set(banned);
+    let sum = 0;
+    let ans = 0;
+    for (let i = 1; i <= n; i++) {
+        if (i + sum > maxSum) {
+            break;
+        }
+        if (set.has(i)) {
+            continue;
+        }
+        sum += i;
+        ans++;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::HashSet;
+impl Solution {
+    pub fn max_count(banned: Vec<i32>, n: i32, max_sum: i32) -> i32 {
+        let mut set = banned.into_iter().collect::<HashSet<i32>>();
+        let mut sum = 0;
+        let mut ans = 0;
+        for i in 1..=n {
+            if sum + i > max_sum {
+                break;
+            }
+            if set.contains(&i) {
+                continue;
+            }
+            sum += i;
+            ans += 1;
+        }
+        ans
+    }
+}
+```
+
+#### C
+
+```c
+int cmp(const void* a, const void* b) {
+    return *(int*) a - *(int*) b;
+}
+
+int maxCount(int* banned, int bannedSize, int n, int maxSum) {
+    qsort(banned, bannedSize, sizeof(int), cmp);
+    int sum = 0;
+    int ans = 0;
+    for (int i = 1, j = 0; i <= n; i++) {
+        if (sum + i > maxSum) {
+            break;
+        }
+        if (j < bannedSize && i == banned[j]) {
+            while (j < bannedSize && i == banned[j]) {
+                j++;
+            }
+        } else {
+            sum += i;
+            ans++;
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：贪心 + 二分查找
+
+如果 $n$ 很大，那么方法一中的枚举会超时。
+
+我们可以在数组 `banned` 中加入 $0$ 和 $n + 1$，并将数组 `banned` 去重且移除大于 $n+1$ 的元素，然后进行排序。
+
+接下来，我们枚举数组 `banned` 中的每两个相邻元素 $i$ 和 $j$，那么可选的整数范围就是 $[i + 1, j - 1]$。二分枚举我们在此区间内能够选择的元素个数，找到最大的可选元素个数，然后将其加到 $ans$ 中。同时在 `maxSum` 中减去这些元素的和。如果 `maxSum` 小于 $0$，那么我们跳出循环。返回答案即可。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 `banned` 的长度。
+
+相似题目：
+
+-   [2557. 从一个范围内选择最多整数 II](https://github.com/doocs/leetcode/blob/main/solution/2500-2599/2557.Maximum%20Number%20of%20Integers%20to%20Choose%20From%20a%20Range%20II/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -119,28 +279,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int maxCount(int[] banned, int n, int maxSum) {
-        Set<Integer> ban = new HashSet<>(banned.length);
-        for (int x : banned) {
-            ban.add(x);
-        }
-        int ans = 0, s = 0;
-        for (int i = 1; i <= n && s + i <= maxSum; ++i) {
-            if (!ban.contains(i)) {
-                ++ans;
-                s += i;
-            }
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -178,24 +317,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxCount(vector<int>& banned, int n, int maxSum) {
-        unordered_set<int> ban(banned.begin(), banned.end());
-        int ans = 0, s = 0;
-        for (int i = 1; i <= n && s + i <= maxSum; ++i) {
-            if (!ban.count(i)) {
-                ++ans;
-                s += i;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -229,24 +351,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func maxCount(banned []int, n int, maxSum int) (ans int) {
-	ban := map[int]bool{}
-	for _, x := range banned {
-		ban[x] = true
-	}
-	s := 0
-	for i := 1; i <= n && s+i <= maxSum; i++ {
-		if !ban[i] {
-			ans++
-			s += i
-		}
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func maxCount(banned []int, n int, maxSum int) (ans int) {
@@ -280,83 +385,8 @@ func maxCount(banned []int, n int, maxSum int) (ans int) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function maxCount(banned: number[], n: number, maxSum: number): number {
-    const set = new Set(banned);
-    let sum = 0;
-    let ans = 0;
-    for (let i = 1; i <= n; i++) {
-        if (i + sum > maxSum) {
-            break;
-        }
-        if (set.has(i)) {
-            continue;
-        }
-        sum += i;
-        ans++;
-    }
-    return ans;
-}
-```
-
-### **Rust**
-
-```rust
-use std::collections::HashSet;
-impl Solution {
-    pub fn max_count(banned: Vec<i32>, n: i32, max_sum: i32) -> i32 {
-        let mut set = banned.into_iter().collect::<HashSet<i32>>();
-        let mut sum = 0;
-        let mut ans = 0;
-        for i in 1..=n {
-            if sum + i > max_sum {
-                break;
-            }
-            if set.contains(&i) {
-                continue;
-            }
-            sum += i;
-            ans += 1;
-        }
-        ans
-    }
-}
-```
-
-### **C**
-
-```c
-int cmp(const void *a, const void *b) {
-    return *(int *) a - *(int *) b;
-}
-
-int maxCount(int *banned, int bannedSize, int n, int maxSum) {
-    qsort(banned, bannedSize, sizeof(int), cmp);
-    int sum = 0;
-    int ans = 0;
-    for (int i = 1, j = 0; i <= n; i++) {
-        if (sum + i > maxSum) {
-            break;
-        }
-        if (j < bannedSize && i == banned[j]) {
-            while (j < bannedSize && i == banned[j]) {
-                j++;
-            }
-        } else {
-            sum += i;
-            ans++;
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

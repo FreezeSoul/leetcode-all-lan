@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0960.Delete%20Columns%20to%20Make%20Sorted%20III/README.md
+tags:
+    - 数组
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [960. 删列造序 III](https://leetcode.cn/problems/delete-columns-to-make-sorted-iii)
 
 [English Version](/solution/0900-0999/0960.Delete%20Columns%20to%20Make%20Sorted%20III/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定由<meta charset="UTF-8" />&nbsp;<code>n</code>&nbsp;个小写字母字符串组成的数组<meta charset="UTF-8" />&nbsp;<code>strs</code>&nbsp;，其中每个字符串长度相等。</p>
 
@@ -24,9 +36,9 @@
 <strong>输入：</strong>strs = ["babca","bbazb"]
 <strong>输出：</strong>3
 <strong>解释：
-</strong>删除 0、1 和 4 这三列后，最终得到的数组是 A = ["bc", "az"]。
-这两行是分别按字典序排列的（即，A[0][0] &lt;= A[0][1] 且 A[1][0] &lt;= A[1][1]）。
-注意，A[0] &gt; A[1] —— 数组 A 不一定是按字典序排列的。
+</strong>删除 0、1 和 4 这三列后，最终得到的数组是 strs = ["bc", "az"]。
+这两行是分别按字典序排列的（即，strs[0][0] &lt;= strs[0][1] 且 strs[1][0] &lt;= strs[1][1]）。
+注意，strs[0] &gt; strs[1] —— 数组 strs 不一定是按字典序排列的。
 </pre>
 
 <p><strong>示例 2：</strong></p>
@@ -57,15 +69,17 @@
 	<li><code>strs[i]</code>&nbsp;由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +93,7 @@ class Solution:
         return n - max(dp)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -141,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDeletionSize(strs []string) int {
@@ -168,19 +180,10 @@ func minDeletionSize(strs []string) int {
 	}
 	return n - mx
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

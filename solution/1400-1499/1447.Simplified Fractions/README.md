@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1447.Simplified%20Fractions/README.md
+rating: 1268
+source: 第 26 场双周赛 Q2
+tags:
+    - 数学
+    - 字符串
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [1447. 最简分数](https://leetcode.cn/problems/simplified-fractions)
 
 [English Version](/solution/1400-1499/1447.Simplified%20Fractions/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数&nbsp;<code>n</code>&nbsp;，请你返回所有 0 到 1 之间（不包括 0 和 1）满足分母小于等于&nbsp;&nbsp;<code>n</code>&nbsp;的 <strong>最简&nbsp;</strong>分数&nbsp;。分数可以以 <strong>任意&nbsp;</strong>顺序返回。</p>
 
@@ -42,15 +56,21 @@
 	<li><code>1 &lt;= n &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：枚举分子分母
+
+我们可以枚举分子 $i$ 和分母 $j$，其中 $1 \leq i < j \leq n$，并判断 $i$ 和 $j$ 的最大公约数是否为 $1$，如果是则 $i/j$ 是一个最简分数。
+
+时间复杂度 $O(n^2 \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 是给定的参数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -63,9 +83,7 @@ class Solution:
         ]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -87,52 +105,29 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function simplifiedFractions(n: number): string[] {
-    let ans: Array<string> = [];
-    for (let j = 2; j <= n; j++) {
-        for (let i = 1; i < j; i++) {
-            if (gcd(i, j) == 1) {
-                ans.push(`${i}/${j}`);
-            }
-        }
-    }
-    return ans;
-}
-
-// a < b
-function gcd(a: number, b: number): number {
-    if (a > b) [a, b] = [b, a];
-    while (a) {
-        [a, b] = [b % a, a];
-    }
-    return b;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> simplifiedFractions(int n) {
         vector<string> ans;
-        for (int i = 1; i < n; ++i)
-            for (int j = i + 1; j < n + 1; ++j)
-                if (gcd(i, j) == 1)
+        for (int i = 1; i < n; ++i) {
+            for (int j = i + 1; j < n + 1; ++j) {
+                if (__gcd(i, j) == 1) {
                     ans.push_back(to_string(i) + "/" + to_string(j));
+                }
+            }
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func simplifiedFractions(n int) []string {
-	var ans []string
+func simplifiedFractions(n int) (ans []string) {
 	for i := 1; i < n; i++ {
 		for j := i + 1; j < n+1; j++ {
 			if gcd(i, j) == 1 {
@@ -144,14 +139,34 @@ func simplifiedFractions(n int) []string {
 }
 
 func gcd(a, b int) int {
-	if b <= 0 {
+	if b == 0 {
 		return a
 	}
 	return gcd(b, a%b)
 }
 ```
 
-### **Rust**
+#### TypeScript
+
+```ts
+function simplifiedFractions(n: number): string[] {
+    const ans: string[] = [];
+    for (let i = 1; i < n; ++i) {
+        for (let j = i + 1; j < n + 1; ++j) {
+            if (gcd(i, j) === 1) {
+                ans.push(`${i}/${j}`);
+            }
+        }
+    }
+    return ans;
+}
+
+function gcd(a: number, b: number): number {
+    return b === 0 ? a : gcd(b, a % b);
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
@@ -176,10 +191,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

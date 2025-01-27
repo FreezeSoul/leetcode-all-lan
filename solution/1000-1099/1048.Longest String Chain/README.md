@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1048.Longest%20String%20Chain/README.md
+rating: 1599
+source: 第 137 场周赛 Q3
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+    - 字符串
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1048. 最长字符串链](https://leetcode.cn/problems/longest-string-chain)
 
 [English Version](/solution/1000-1099/1048.Longest%20String%20Chain/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给出一个单词数组&nbsp;<code>words</code>&nbsp;，其中每个单词都由小写英文字母组成。</p>
 
@@ -54,19 +71,17 @@
 	<li><code>words[i]</code>&nbsp;仅由小写英文字母组成。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-先按字符串长度升序排列，再利用动态规划或者哈希表求解。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-动态规划：
+#### Python3
 
 ```python
 class Solution:
@@ -95,29 +110,7 @@ class Solution:
         return res
 ```
 
-哈希表：
-
-```python
-class Solution:
-    def longestStrChain(self, words: List[str]) -> int:
-        words.sort(key= lambda x: len(x))
-        res = 0
-        mp = {}
-        for word in words:
-            x = 1
-            for i in range(len(word)):
-                pre = word[:i] + word[i + 1:]
-                x = max(x, mp.get(pre, 0) + 1)
-            mp[word] = x
-            res = max(res, x)
-        return res
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-哈希表：
+#### Java
 
 ```java
 class Solution {
@@ -139,29 +132,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function longestStrChain(words: string[]): number {
-    words.sort((a, b) => a.length - b.length);
-    let ans = 0;
-    let hashTable = new Map();
-    for (let word of words) {
-        let c = 1;
-        for (let i = 0; i < word.length; i++) {
-            let pre = word.substring(0, i) + word.substring(i + 1);
-            c = Math.max(c, (hashTable.get(pre) || 0) + 1);
-        }
-        hashTable.set(word, c);
-        ans = Math.max(ans, c);
-    }
-    return ans;
-}
-```
-
-### **C++**
-
-哈希表：
+#### C++
 
 ```cpp
 class Solution {
@@ -184,9 +155,7 @@ public:
 };
 ```
 
-### **Go**
-
-哈希表：
+#### Go
 
 ```go
 func longestStrChain(words []string) int {
@@ -204,19 +173,94 @@ func longestStrChain(words []string) int {
 	}
 	return res
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function longestStrChain(words: string[]): number {
+    words.sort((a, b) => a.length - b.length);
+    let ans = 0;
+    let hashTable = new Map();
+    for (let word of words) {
+        let c = 1;
+        for (let i = 0; i < word.length; i++) {
+            let pre = word.substring(0, i) + word.substring(i + 1);
+            c = Math.max(c, (hashTable.get(pre) || 0) + 1);
+        }
+        hashTable.set(word, c);
+        ans = Math.max(ans, c);
+    }
+    return ans;
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::HashMap;
 
+impl Solution {
+    #[allow(dead_code)]
+    pub fn longest_str_chain(words: Vec<String>) -> i32 {
+        let mut words = words;
+        let mut ret = 0;
+        let mut map: HashMap<String, i32> = HashMap::new();
+
+        // Sort the words vector first
+        words.sort_by(|lhs, rhs| lhs.len().cmp(&rhs.len()));
+
+        // Begin the "dp" process
+        for w in words.iter() {
+            let n = w.len();
+            let mut x = 1;
+
+            for i in 0..n {
+                let s = w[..i].to_string() + &w[i + 1..];
+                let v = map.entry(s.clone()).or_default();
+                x = std::cmp::max(x, *v + 1);
+            }
+
+            map.insert(w.clone(), x);
+
+            ret = std::cmp::max(ret, x);
+        }
+
+        ret
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def longestStrChain(self, words: List[str]) -> int:
+        words.sort(key=lambda x: len(x))
+        res = 0
+        mp = {}
+        for word in words:
+            x = 1
+            for i in range(len(word)):
+                pre = word[:i] + word[i + 1 :]
+                x = max(x, mp.get(pre, 0) + 1)
+            mp[word] = x
+            res = max(res, x)
+        return res
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

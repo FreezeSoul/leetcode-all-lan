@@ -4,11 +4,19 @@ class Solution {
      * @return Boolean
      */
     function halvesAreAlike($s) {
+        $n = strlen($s) / 2;
+        $vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
         $cnt = 0;
-        for ($i = 0; $i < strlen($s) / 2; $i++) {
-            if (strpos("aeiouAEIOU", $s[$i]) !== false) $cnt++;
-            if (strpos("aeiouAEIOU", $s[strlen($s) / 2 + $i]) !== false) $cnt--;
+
+        for ($i = 0; $i < $n; $i++) {
+            if (in_array($s[$i], $vowels)) {
+                $cnt++;
+            }
+            if (in_array($s[$i + $n], $vowels)) {
+                $cnt--;
+            }
         }
+
         return $cnt == 0;
     }
 }

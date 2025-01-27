@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0709.To%20Lower%20Case/README.md
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [709. 转换成小写字母](https://leetcode.cn/problems/to-lower-case)
 
 [English Version](/solution/0700-0799/0709.To%20Lower%20Case/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>s</code> ，将该字符串中的大写字母转换成相同的小写字母，返回新的字符串。</p>
 
@@ -40,11 +50,13 @@
 	<li><code>s</code> 由 ASCII 字符集中的可打印字符组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们可以遍历字符串，对于每个大写字母，将其转换为小写字母。最后返回转换后的字符串即可。
 
@@ -52,9 +64,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -62,9 +72,7 @@ class Solution:
         return "".join([chr(ord(c) | 32) if c.isupper() else c for c in s])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +88,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -96,7 +104,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func toLowerCase(s string) string {
@@ -110,7 +118,7 @@ func toLowerCase(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function toLowerCase(s: string): string {
@@ -118,13 +126,7 @@ function toLowerCase(s: string): string {
 }
 ```
 
-```ts
-function toLowerCase(s: string): string {
-    return [...s].map(c => String.fromCharCode(c.charCodeAt(0) | 32)).join('');
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -133,6 +135,40 @@ impl Solution {
     }
 }
 ```
+
+#### C
+
+```c
+char* toLowerCase(char* s) {
+    int n = strlen(s);
+    for (int i = 0; i < n; i++) {
+        if (s[i] >= 'A' && s[i] <= 'Z') {
+            s[i] |= 32;
+        }
+    }
+    return s;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function toLowerCase(s: string): string {
+    return [...s].map(c => String.fromCharCode(c.charCodeAt(0) | 32)).join('');
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
@@ -145,24 +181,8 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-char *toLowerCase(char *s) {
-    int n = strlen(s);
-    for (int i = 0; i < n; i++) {
-        if (s[i] >= 'A' && s[i] <= 'Z') {
-            s[i] |= 32;
-        }
-    }
-    return s;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

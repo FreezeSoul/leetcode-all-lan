@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2630.Memoize%20II/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2630. 记忆函数 II](https://leetcode.cn/problems/memoize-ii)
 
 [English Version](/solution/2600-2699/2630.Memoize%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现给定一个函数 <code>fn</code> ，返回该函数的一个 <strong>记忆化</strong> 版本。</p>
 
@@ -65,11 +75,13 @@ fn = function (a, b) { return ({...a, ...b}); }
 	<li><code>inputs[i][j] != NaN</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双哈希表**
+### 方法一：双哈希表
 
 我们用两个哈希表，其中：
 
@@ -82,9 +94,7 @@ fn = function (a, b) { return ({...a, ...b}); }
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 type Fn = (...params: any) => any;
@@ -121,10 +131,8 @@ function memoize(fn: Fn): Fn {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

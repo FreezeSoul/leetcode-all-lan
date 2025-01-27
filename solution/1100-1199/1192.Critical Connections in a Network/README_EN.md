@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1192.Critical%20Connections%20in%20a%20Network/README_EN.md
+rating: 2084
+source: Weekly Contest 154 Q4
+tags:
+    - Depth-First Search
+    - Graph
+    - Biconnected Component
+---
+
+<!-- problem:start -->
+
 # [1192. Critical Connections in a Network](https://leetcode.com/problems/critical-connections-in-a-network)
 
 [中文文档](/solution/1100-1199/1192.Critical%20Connections%20in%20a%20Network/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> servers numbered from <code>0</code> to <code>n - 1</code> connected by undirected server-to-server <code>connections</code> forming a network where <code>connections[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> represents a connection between servers <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code>. Any server can reach other servers directly or indirectly through the network.</p>
 
@@ -37,11 +53,27 @@
 	<li>There are no repeated connections.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Tarjan Algorithm
+
+The "critical connections" in this problem can be considered as "bridges".
+
+"Bridges": In a connected undirected graph, if removing a certain edge makes the graph disconnected, then this edge can be considered as a "bridge".
+
+Correspondingly, there is also the concept of "articulation points".
+
+"Articulation Points": In a connected undirected graph, if removing a certain point and all edges connected to it makes the graph disconnected, then this point can be considered as an "articulation point".
+
+There is an algorithm called the Tarjan algorithm for finding "bridges" and "articulation points" in a graph. This algorithm uses a depth-first search (DFS) method that first recursively visits adjacent nodes and then visits the node itself. By recording the "order of visit: DFN" and updating the "earliest backtrackable node: low" when visiting the node itself after recursion ends, it can find the "bridges" and "articulation points" of the graph in $O(n)$ time. Also, this algorithm can be used to find strongly connected components in directed graphs.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +108,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -159,7 +191,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func criticalConnections(n int, connections [][]int) (ans [][]int) {
@@ -194,16 +226,9 @@ func criticalConnections(n int, connections [][]int) (ans [][]int) {
 	tarjan(0, -1)
 	return
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function criticalConnections(n: number, connections: number[][]): number[][] {
@@ -240,10 +265,8 @@ function criticalConnections(n: number, connections: number[][]): number[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

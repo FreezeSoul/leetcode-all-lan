@@ -32,11 +32,11 @@
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn build(vals: &Vec<i32>, start: usize, end: usize) -> Option<Rc<RefCell<TreeNode>>> {
-        if (start == end) {
+        if start == end {
             return None;
         }
         let mid = (start + end) >> 1;

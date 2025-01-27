@@ -1,16 +1,25 @@
 class Solution {
 public:
-    vector<int> p;
-
     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-        p.resize(n);
-        for (int i = 0; i < n; ++i) p[i] = i;
-        for (auto& e : edges) p[find(e[0])] = find(e[1]);
-        return find(source) == find(destination);
-    }
-
-    int find(int x) {
-        if (p[x] != x) p[x] = find(p[x]);
-        return p[x];
+        vector<int> g[n];
+        vector<bool> vis(n);
+        for (const auto& e : edges) {
+            int u = e[0], v = e[1];
+            g[u].push_back(v);
+            g[v].push_back(u);
+        }
+        function<bool(int)> dfs = [&](int i) -> bool {
+            if (i == destination) {
+                return true;
+            }
+            vis[i] = true;
+            for (int j : g[i]) {
+                if (!vis[j] && dfs(j)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        return dfs(source);
     }
 };

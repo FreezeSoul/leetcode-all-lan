@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0976.Largest%20Perimeter%20Triangle/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Math
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [976. Largest Perimeter Triangle](https://leetcode.com/problems/largest-perimeter-triangle)
 
 [中文文档](/solution/0900-0999/0976.Largest%20Perimeter%20Triangle/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return <em>the largest perimeter of a triangle with a non-zero area, formed from three of these lengths</em>. If it is impossible to form any triangle of a non-zero area, return <code>0</code>.</p>
 
@@ -35,11 +50,17 @@ As we cannot use any three side lengths to form a triangle of non-zero area, we 
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -51,7 +72,7 @@ class Solution:
         return 0
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -68,7 +89,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -84,7 +105,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestPerimeter(nums []int) int {
@@ -99,7 +120,7 @@ func largestPerimeter(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function largestPerimeter(nums: number[]): number {
@@ -115,7 +136,7 @@ function largestPerimeter(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -133,14 +154,14 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int cmp(const void *a, const void *b) {
-    return *(int *) b - *(int *) a;
+int cmp(const void* a, const void* b) {
+    return *(int*) b - *(int*) a;
 }
 
-int largestPerimeter(int *nums, int numsSize) {
+int largestPerimeter(int* nums, int numsSize) {
     qsort(nums, numsSize, sizeof(int), cmp);
     for (int i = 2; i < numsSize; i++) {
         if (nums[i - 2] < nums[i - 1] + nums[i]) {
@@ -151,10 +172,8 @@ int largestPerimeter(int *nums, int numsSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

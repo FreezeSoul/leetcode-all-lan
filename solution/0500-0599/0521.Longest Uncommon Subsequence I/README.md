@@ -1,14 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0521.Longest%20Uncommon%20Subsequence%20I/README.md
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [521. 最长特殊序列 Ⅰ](https://leetcode.cn/problems/longest-uncommon-subsequence-i)
 
 [English Version](/solution/0500-0599/0521.Longest%20Uncommon%20Subsequence%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串&nbsp;<code>a</code>&nbsp;和&nbsp;<code>b</code>，请返回 <em>这两个字符串中 <strong>最长的特殊序列</strong>&nbsp;</em> 的长度。如果不存在，则返回 <code>-1</code>&nbsp;。</p>
 
-<p><strong>「最长特殊序列」</strong>&nbsp;定义如下：该序列为&nbsp;<strong>某字符串独有的最长子序列（即不能是其他字符串的子序列）</strong>&nbsp;。</p>
+<p><strong>「最长特殊序列」</strong>&nbsp;定义如下：该序列为&nbsp;<strong>某字符串独有的最长<span data-keyword="subsequence-array">子序列</span>（即不能是其他字符串的子序列）</strong>&nbsp;。</p>
 
 <p>字符串&nbsp;<code>s</code>&nbsp;的子序列是在从&nbsp;<code>s</code>&nbsp;中删除任意数量的字符后可以获得的字符串。</p>
 
@@ -50,25 +60,21 @@
 	<li><code>a</code>&nbsp;和&nbsp;<code>b</code>&nbsp;由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**此题最难之处是理解题目想描述的是什么玩意**。
+### 方法一：脑筋急转弯
 
-假定： `a = "abc", b = "abb"`
+如果字符串 `a` 和 `b` 相等，那么它们没有特殊序列，返回 `-1`；否则，返回长度较长的字符串的长度。
 
-要是说其中最长的相同子序列，便是 `ab`。
-
-而特殊序列则是求**非子序列**，此时列举 `a` 的子序列 `"abc"`，`b` 拿不出来，那这就是一个成功的非子序列。
-
-如此，在 `a != b` 时，谁最长谁就是 _最长的特殊序列_
+时间复杂度 $O(n)$，其中 $n$ 为字符串 `a` 和 `b` 中较长的字符串的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +82,7 @@ class Solution:
         return -1 if a == b else max(len(a), len(b))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -88,28 +92,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function findLUSlength(a: string, b: string): number {
-    return a != b ? Math.max(a.length, b.length) : -1;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn find_lu_slength(a: String, b: String) -> i32 {
-        if a == b {
-            return -1;
-        }
-        a.len().max(b.len()) as i32
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +103,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findLUSlength(a string, b string) int {
@@ -134,10 +117,29 @@ func findLUSlength(a string, b string) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function findLUSlength(a: string, b: string): number {
+    return a === b ? -1 : Math.max(a.length, b.length);
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find_lu_slength(a: String, b: String) -> i32 {
+        if a == b {
+            return -1;
+        }
+        a.len().max(b.len()) as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

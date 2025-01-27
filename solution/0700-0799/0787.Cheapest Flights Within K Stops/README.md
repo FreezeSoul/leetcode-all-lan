@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0787.Cheapest%20Flights%20Within%20K%20Stops/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 图
+    - 动态规划
+    - 最短路
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [787. K 站中转内最便宜的航班](https://leetcode.cn/problems/cheapest-flights-within-k-stops)
 
 [English Version](/solution/0700-0799/0787.Cheapest%20Flights%20Within%20K%20Stops/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有 <code>n</code> 个城市通过一些航班连接。给你一个数组&nbsp;<code>flights</code> ，其中&nbsp;<code>flights[i] = [from<sub>i</sub>, to<sub>i</sub>, price<sub>i</sub>]</code> ，表示该航班都从城市 <code>from<sub>i</sub></code> 开始，以价格 <code>price<sub>i</sub></code> 抵达 <code>to<sub>i</sub></code>。</p>
 
@@ -13,32 +28,36 @@
 <p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
-
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0700-0799/0787.Cheapest%20Flights%20Within%20K%20Stops/images/cheapest-flights-within-k-stops-3drawio.png" style="width: 332px; height: 392px;" />
 <pre>
 <strong>输入:</strong> 
-n = 3, edges = [[0,1,100],[1,2,100],[0,2,500]]
-src = 0, dst = 2, k = 1
-<strong>输出:</strong> 200
-<strong>解释:</strong> 
-城市航班图如下
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0700-0799/0787.Cheapest%20Flights%20Within%20K%20Stops/images/995.png" style="height: 180px; width: 246px;" />
-
-从城市 0 到城市 2 在 1 站中转以内的最便宜价格是 200，如图中红色所示。</pre>
+n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1
+<strong>输出:</strong> 700 
+<strong>解释:</strong> 城市航班图如上
+从城市 0 到城市 3 经过最多 1 站的最佳路径用红色标记，费用为 100 + 600 = 700。
+请注意，通过城市 [0, 1, 2, 3] 的路径更便宜，但无效，因为它经过了 2 站。
+</pre>
 
 <p><strong>示例 2：</strong></p>
-
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0700-0799/0787.Cheapest%20Flights%20Within%20K%20Stops/images/cheapest-flights-within-k-stops-1drawio.png" style="width: 332px; height: 242px;" />
 <pre>
 <strong>输入:</strong> 
-n = 3, edges = [[0,1,100],[1,2,100],[0,2,500]]
-src = 0, dst = 2, k = 0
-<strong>输出:</strong> 500
+n = 3, edges = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
+<strong>输出:</strong> 200
 <strong>解释:</strong> 
-城市航班图如下
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0700-0799/0787.Cheapest%20Flights%20Within%20K%20Stops/images/995.png" style="height: 180px; width: 246px;" />
+城市航班图如上
+从城市 0 到城市 2 经过最多 1 站的最佳路径标记为红色，费用为 100 + 100 = 200。
+</pre>
 
-从城市 0 到城市 2 在 0 站中转以内的最便宜价格是 500，如图中蓝色所示。</pre>
-
-<p>&nbsp;</p>
+<p><strong class="example">示例 3：</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0700-0799/0787.Cheapest%20Flights%20Within%20K%20Stops/images/cheapest-flights-within-k-stops-2drawio.png" style="width: 332px; height: 242px;" />
+<pre>
+<b>输入：</b>n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 0
+<b>输出：</b>500
+<strong>解释：</strong>
+城市航班图如上
+从城市 0 到城市 2 不经过站点的最佳路径标记为红色，费用为 500。
+</pre>
 
 <p><strong>提示：</strong></p>
 
@@ -54,19 +73,17 @@ src = 0, dst = 2, k = 0
 	<li><code>src != dst</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：Bellman Ford 算法**
-
-**方法二：DFS + 记忆化搜索**
+### 方法一：Bellman Ford 算法
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,31 +100,7 @@ class Solution:
         return -1 if dist[dst] == INF else dist[dst]
 ```
 
-```python
-class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        @cache
-        def dfs(u, k):
-            if u == dst:
-                return 0
-            if k <= 0:
-                return inf
-            k -= 1
-            ans = inf
-            for v, p in g[u]:
-                ans = min(ans, dfs(v, k) + p)
-            return ans
-
-        g = defaultdict(list)
-        for u, v, p in flights:
-            g[u].append((v, p))
-        ans = dfs(src, k + 1)
-        return -1 if ans >= inf else ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -129,6 +122,91 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        const int inf = 0x3f3f3f3f;
+        vector<int> dist(n, inf);
+        vector<int> backup;
+        dist[src] = 0;
+        for (int i = 0; i < k + 1; ++i) {
+            backup = dist;
+            for (auto& e : flights) {
+                int f = e[0], t = e[1], p = e[2];
+                dist[t] = min(dist[t], backup[f] + p);
+            }
+        }
+        return dist[dst] == inf ? -1 : dist[dst];
+    }
+};
+```
+
+#### Go
+
+```go
+func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
+	const inf = 0x3f3f3f3f
+	dist := make([]int, n)
+	backup := make([]int, n)
+	for i := range dist {
+		dist[i] = inf
+	}
+	dist[src] = 0
+	for i := 0; i < k+1; i++ {
+		copy(backup, dist)
+		for _, e := range flights {
+			f, t, p := e[0], e[1], e[2]
+			dist[t] = min(dist[t], backup[f]+p)
+		}
+	}
+	if dist[dst] == inf {
+		return -1
+	}
+	return dist[dst]
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：DFS + 记忆化搜索
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def findCheapestPrice(
+        self, n: int, flights: List[List[int]], src: int, dst: int, k: int
+    ) -> int:
+        @cache
+        def dfs(u, k):
+            if u == dst:
+                return 0
+            if k <= 0:
+                return inf
+            k -= 1
+            ans = inf
+            for v, p in g[u]:
+                ans = min(ans, dfs(v, k) + p)
+            return ans
+
+        g = defaultdict(list)
+        for u, v, p in flights:
+            g[u].append((v, p))
+        ans = dfs(src, k + 1)
+        return -1 if ans >= inf else ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -174,27 +252,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        const int inf = 0x3f3f3f3f;
-        vector<int> dist(n, inf);
-        vector<int> backup;
-        dist[src] = 0;
-        for (int i = 0; i < k + 1; ++i) {
-            backup = dist;
-            for (auto& e : flights) {
-                int f = e[0], t = e[1], p = e[2];
-                dist[t] = min(dist[t], backup[f] + p);
-            }
-        }
-        return dist[dst] == inf ? -1 : dist[dst];
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -228,37 +286,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
-	const inf = 0x3f3f3f3f
-	dist := make([]int, n)
-	backup := make([]int, n)
-	for i := range dist {
-		dist[i] = inf
-	}
-	dist[src] = 0
-	for i := 0; i < k+1; i++ {
-		copy(backup, dist)
-		for _, e := range flights {
-			f, t, p := e[0], e[1], e[2]
-			dist[t] = min(dist[t], backup[f]+p)
-		}
-	}
-	if dist[dst] == inf {
-		return -1
-	}
-	return dist[dst]
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
@@ -303,19 +331,10 @@ func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
 	}
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

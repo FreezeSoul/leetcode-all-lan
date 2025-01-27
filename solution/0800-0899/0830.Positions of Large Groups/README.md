@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0830.Positions%20of%20Large%20Groups/README.md
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [830. 较大分组的位置](https://leetcode.cn/problems/positions-of-large-groups)
 
 [English Version](/solution/0800-0899/0830.Positions%20of%20Large%20Groups/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一个由小写字母构成的字符串 <code>s</code> 中，包含由一些连续的相同字符所构成的分组。</p>
 
@@ -55,11 +65,13 @@
 	<li><code>s</code> 仅含小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们用双指针 $i$ 和 $j$ 找到每个分组的起始位置和终止位置，然后判断分组长度是否大于等于 $3$，若是则将其加入结果数组。
 
@@ -67,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +110,7 @@ class Solution {
                 ++j;
             }
             if (j - i >= 3) {
-                ans.add(Arrays.asList(i, j - 1));
+                ans.add(List.of(i, j - 1));
             }
             i = j;
         }
@@ -111,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largeGroupPositions(s string) [][]int {
@@ -155,10 +163,30 @@ func largeGroupPositions(s string) [][]int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function largeGroupPositions(s: string): number[][] {
+    const n = s.length;
+    const ans: number[][] = [];
 
+    for (let i = 0; i < n; ) {
+        let j = i;
+        while (j < n && s[j] === s[i]) {
+            ++j;
+        }
+        if (j - i >= 3) {
+            ans.push([i, j - 1]);
+        }
+        i = j;
+    }
+
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

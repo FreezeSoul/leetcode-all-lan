@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0388.Longest%20Absolute%20File%20Path/README.md
+tags:
+    - 栈
+    - 深度优先搜索
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [388. 文件的最长绝对路径](https://leetcode.cn/problems/longest-absolute-file-path)
 
 [English Version](/solution/0300-0399/0388.Longest%20Absolute%20File%20Path/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>假设有一个同时存储文件和目录的文件系统。下图展示了文件系统的一个示例：</p>
 
@@ -75,17 +87,17 @@ dir
 	<li><code>input</code> 可能包含小写或大写的英文字母，一个换行符 <code>'\n'</code>，一个制表符 <code>'\t'</code>，一个点 <code>'.'</code>，一个空格 <code>' '</code>，和数字。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-遍历文件系统的时候需要在各个目录间切换，在实际的 Linux 中，有 `pushd` 和 `popd` 命令，本题可以使用栈模拟这一过程
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -124,9 +136,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -173,57 +183,7 @@ class Solution {
 }
 ```
 
-### **Go**
-
-```go
-func lengthLongestPath(input string) int {
-	i, n := 0, len(input)
-	ans := 0
-	var stk []int
-	for i < n {
-		ident := 0
-		for ; input[i] == '\t'; i++ {
-			ident++
-		}
-
-		cur, isFile := 0, false
-		for ; i < n && input[i] != '\n'; i++ {
-			cur++
-			if input[i] == '.' {
-				isFile = true
-			}
-		}
-		i++
-
-		// popd
-		for len(stk) > 0 && len(stk) > ident {
-			stk = stk[:len(stk)-1]
-		}
-
-		if len(stk) > 0 {
-			cur += stk[len(stk)-1] + 1
-		}
-
-		// pushd
-		if !isFile {
-			stk = append(stk, cur)
-			continue
-		}
-
-		ans = max(ans, cur)
-	}
-	return ans
-}
-
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -270,10 +230,51 @@ public:
 };
 ```
 
-### **...**
+#### Go
 
-```
+```go
+func lengthLongestPath(input string) int {
+	i, n := 0, len(input)
+	ans := 0
+	var stk []int
+	for i < n {
+		ident := 0
+		for ; input[i] == '\t'; i++ {
+			ident++
+		}
 
+		cur, isFile := 0, false
+		for ; i < n && input[i] != '\n'; i++ {
+			cur++
+			if input[i] == '.' {
+				isFile = true
+			}
+		}
+		i++
+
+		// popd
+		for len(stk) > 0 && len(stk) > ident {
+			stk = stk[:len(stk)-1]
+		}
+
+		if len(stk) > 0 {
+			cur += stk[len(stk)-1] + 1
+		}
+
+		// pushd
+		if !isFile {
+			stk = append(stk, cur)
+			continue
+		}
+
+		ans = max(ans, cur)
+	}
+	return ans
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

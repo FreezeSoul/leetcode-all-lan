@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1606.Find%20Servers%20That%20Handled%20Most%20Number%20of%20Requests/README_EN.md
+rating: 2275
+source: Biweekly Contest 36 Q4
+tags:
+    - Greedy
+    - Array
+    - Ordered Set
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1606. Find Servers That Handled Most Number of Requests](https://leetcode.com/problems/find-servers-that-handled-most-number-of-requests)
 
 [中文文档](/solution/1600-1699/1606.Find%20Servers%20That%20Handled%20Most%20Number%20of%20Requests/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have <code>k</code> servers numbered from <code>0</code> to <code>k-1</code> that are being used to handle multiple requests simultaneously. Each server has infinite computational capacity but <strong>cannot handle more than one request at a time</strong>. The requests are assigned to servers according to a specific algorithm:</p>
 
@@ -61,16 +78,19 @@ Server 0 handled two requests, while servers 1 and 2 handled one request each. H
 	<li><code>arrival</code> is <strong>strictly increasing</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class Solution:
     def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
         free = SortedList(range(k))
@@ -94,7 +114,7 @@ class Solution:
         return [i for i, v in enumerate(cnt) if v == mx]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -137,10 +157,44 @@ class Solution {
 }
 ```
 
-### **Go**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> busiestServers(int k, vector<int>& arrival, vector<int>& load) {
+        set<int> free;
+        for (int i = 0; i < k; ++i) free.insert(i);
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> busy;
+        vector<int> cnt(k);
+        for (int i = 0; i < arrival.size(); ++i) {
+            int start = arrival[i], end = start + load[i];
+            while (!busy.empty() && busy.top().first <= start) {
+                free.insert(busy.top().second);
+                busy.pop();
+            }
+            if (free.empty()) continue;
+            auto p = free.lower_bound(i % k);
+            if (p == free.end()) p = free.begin();
+            int server = *p;
+            ++cnt[server];
+            busy.emplace(end, server);
+            free.erase(server);
+        }
+        int mx = *max_element(cnt.begin(), cnt.end());
+        vector<int> ans;
+        for (int i = 0; i < k; ++i)
+            if (cnt[i] == mx)
+                ans.push_back(i);
+        return ans;
+    }
+};
+```
+
+#### Go
 
 ```go
-func busiestServers(k int, arrival, load []int) []int {
+func busiestServers(k int, arrival, load []int) (ans []int) {
 	free := redblacktree.NewWithIntComparator()
 	for i := 0; i < k; i++ {
 		free.Put(i, nil)
@@ -164,35 +218,27 @@ func busiestServers(k int, arrival, load []int) []int {
 		heap.Push(&busy, pair{t + load[i], server})
 		free.Remove(server)
 	}
-	mx := 0
-	for _, v := range cnt {
-		if v > mx {
-			mx = v
-		}
-	}
-	var ans []int
+	mx := slices.Max(cnt)
 	for i, v := range cnt {
 		if v == mx {
 			ans = append(ans, i)
 		}
 	}
-	return ans
+	return
 }
 
 type pair struct{ end, server int }
 type hp []pair
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].end < h[j].end }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **...**
-
-```
-
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].end < h[j].end }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

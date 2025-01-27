@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2629.Function%20Composition/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2629. 复合函数](https://leetcode.cn/problems/function-composition)
 
 [English Version](/solution/2600-2699/2629.Function%20Composition/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你编写一个函数，它接收一个函数数组 <code>[f<sub>1</sub>, f<sub>2</sub>, f<sub>3</sub>，…， f<sub>n</sub>]</code> ，并返回一个新的函数 <code>fn</code>&nbsp;，它是函数数组的 <strong>复合函数</strong> 。</p>
 
@@ -32,8 +42,8 @@ Starting with x = 4.
 <p><strong class="example">示例 2：</strong></p>
 
 <pre>
-<b>输出：</b>functions = [x =&gt; 10 * x, x =&gt; 10 * x, x =&gt; 10 * x], x = 1
-<b>输入：</b>1000
+<b>输入：</b>functions = [x =&gt; 10 * x, x =&gt; 10 * x, x =&gt; 10 * x], x = 1
+<b>输出：</b>1000
 <strong>解释：</strong>
 从右向左计算......
 10 * (1) = 10
@@ -56,18 +66,20 @@ Starting with x = 4.
 <ul>
 	<li><code><font face="monospace">-1000 &lt;= x &lt;= 1000</font></code></li>
 	<li><code><font face="monospace">0 &lt;= functions.length &lt;= 1000</font></code></li>
-	<li><font face="monospace"><code>所有函数都接受并返回一个整型</code></font></li>
+	<li><font face="monospace">所有函数都接受并返回一个整型</font></li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 type F = (x: number) => number;
@@ -84,10 +96,8 @@ function compose(functions: F[]): F {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

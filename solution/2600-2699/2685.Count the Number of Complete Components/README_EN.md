@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2685.Count%20the%20Number%20of%20Complete%20Components/README_EN.md
+rating: 1769
+source: Weekly Contest 345 Q4
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Union Find
+    - Graph
+---
+
+<!-- problem:start -->
+
 # [2685. Count the Number of Complete Components](https://leetcode.com/problems/count-the-number-of-complete-components)
 
 [中文文档](/solution/2600-2699/2685.Count%20the%20Number%20of%20Complete%20Components/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code>. There is an <strong>undirected</strong> graph with <code>n</code> vertices, numbered from <code>0</code> to <code>n - 1</code>. You are given a 2D integer array <code>edges</code> where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> denotes that there exists an <strong>undirected</strong> edge connecting vertices <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code>.</p>
 
@@ -45,11 +62,17 @@
 	<li>There are no repeated edges.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,7 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -160,7 +183,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countCompleteComponents(n int, edges [][]int) (ans int) {
@@ -196,10 +219,65 @@ func countCompleteComponents(n int, edges [][]int) (ans int) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2: Simple Method
+
+Problems needed to solve：
+
+1. How do we maintain the link state between each node and the others? 如
+2. How can one determine whether multiple points form a connected graph?
+
+For the first one: we can maintain each node's connection set(including itself).
+
+For the second one: After solving the first one, we can see:
+
+-   the node itself includes every node in the connected graph(including itself).
+-   and only connected to the nodes in the connected graph.
+
+Take example 1 to explain：
+
+-   Node 5's connected node is itself, so it is a connected graph.
+-   Node 0's connected 0, 1, 2. Same as nodes 1, 2.
+-   Nodes 3 and 4 also include themselves and each other.
+
+<!-- tabs:start -->
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countCompleteComponents(int n, vector<vector<int>>& edges) {
+        int ans = 0;
+        vector<set<int>> m(n + 1, set<int>());
+        for (int i = 0; i < n; i++) {
+            m[i].insert(i);
+        }
+        for (auto x : edges) {
+            m[x[0]].insert(x[1]);
+            m[x[1]].insert(x[0]);
+        }
+        map<set<int>, int> s;
+        for (int i = 0; i < n; i++) {
+            s[m[i]]++;
+        }
+        for (auto& [x, y] : s) {
+            if (y == x.size()) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -13,19 +13,24 @@
  */
 
 function rightSideView(root: TreeNode | null): number[] {
-    const ans = [];
+    const ans: number[] = [];
     if (!root) {
         return ans;
     }
-    const q = [root];
-    while (q.length) {
-        const n = q.length;
-        ans.push(q[n - 1].val);
-        for (let i = 0; i < n; ++i) {
-            const { left, right } = q.shift();
-            left && q.push(left);
-            right && q.push(right);
+    const q: TreeNode[] = [root];
+    while (q.length > 0) {
+        ans.push(q[0].val);
+        const nq: TreeNode[] = [];
+        for (const { left, right } of q) {
+            if (right) {
+                nq.push(right);
+            }
+            if (left) {
+                nq.push(left);
+            }
         }
+        q.length = 0;
+        q.push(...nq);
     }
     return ans;
 }

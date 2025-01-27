@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2609.Find%20the%20Longest%20Balanced%20Substring%20of%20a%20Binary%20String/README.md
+rating: 1348
+source: 第 339 场周赛 Q1
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2609. 最长平衡子字符串](https://leetcode.cn/problems/find-the-longest-balanced-substring-of-a-binary-string)
 
 [English Version](/solution/2600-2699/2609.Find%20the%20Longest%20Balanced%20Substring%20of%20a%20Binary%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个仅由 <code>0</code> 和 <code>1</code> 组成的二进制字符串 <code>s</code> 。<span style="">&nbsp;</span><span style="">&nbsp;</span></p>
 
@@ -49,34 +61,21 @@
 	<li><code>'0' &lt;= s[i] &lt;= '1'</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：暴力枚举
 
 注意到数据范围很小，因此，我们可以枚举所有的子串 $s[i..j]$，检查其是否为平衡子串，如果是，则更新答案。
 
 时间复杂度 $O(n^3)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
 
-**方法二：枚举优化**
-
-我们用变量 $zero$ 和 $one$ 分别记录当前连续的 $0$ 和 $1$ 的个数。
-
-遍历字符串 $s$，对于当前字符 $c$：
-
--   如果当前字符为 `'0'`，我们判断此时 $one$ 是否大于 $0$，是则将 $zero$ 和 $one$ 重置为 $0$，接下来将 $zero$ 加 $1$。
--   如果当前字符为 `'1'`，则将 $one$ 加 $1$，并更新答案为 $ans = max(ans, 2 \times min(one, zero))$。
-
-遍历结束后，即可得到最长的平衡子串的长度。
-
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,24 +98,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def findTheLongestBalancedSubstring(self, s: str) -> int:
-        ans = zero = one = 0
-        for c in s:
-            if c == '0':
-                if one:
-                    zero = one = 0
-                zero += 1
-            else:
-                one += 1
-                ans = max(ans, 2 * min(one, zero))
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -147,28 +129,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int findTheLongestBalancedSubstring(String s) {
-        int zero = 0, one = 0;
-        int ans = 0, n = s.length();
-        for (int i = 0; i < n; ++i) {
-            if (s.charAt(i) == '0') {
-                if (one > 0) {
-                    zero = 0;
-                    one = 0;
-                }
-                ++zero;
-            } else {
-                ans = Math.max(ans, 2 * Math.min(zero, ++one));
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -199,29 +160,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int findTheLongestBalancedSubstring(string s) {
-        int zero = 0, one = 0;
-        int ans = 0;
-        for (char& c : s) {
-            if (c == '0') {
-                if (one > 0) {
-                    zero = 0;
-                    one = 0;
-                }
-                ++zero;
-            } else {
-                ans = max(ans, 2 * min(zero, ++one));
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func findTheLongestBalancedSubstring(s string) (ans int) {
@@ -246,48 +185,9 @@ func findTheLongestBalancedSubstring(s string) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-```go
-func findTheLongestBalancedSubstring(s string) (ans int) {
-	zero, one := 0, 0
-	for _, c := range s {
-		if c == '0' {
-			if one > 0 {
-				zero, one = 0, 0
-			}
-			zero++
-		} else {
-			one++
-			ans = max(ans, 2*min(zero, one))
-		}
-	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findTheLongestBalancedSubstring(s: string): number {
@@ -315,6 +215,152 @@ function findTheLongestBalancedSubstring(s: string): number {
 }
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find_the_longest_balanced_substring(s: String) -> i32 {
+        let check = |i: usize, j: usize| -> bool {
+            let mut cnt = 0;
+
+            for k in i..=j {
+                if s.as_bytes()[k] == b'1' {
+                    cnt += 1;
+                } else if cnt > 0 {
+                    return false;
+                }
+            }
+
+            cnt * 2 == j - i + 1
+        };
+
+        let mut ans = 0;
+        let n = s.len();
+        for i in 0..n - 1 {
+            for j in (i + 1..n).rev() {
+                if j - i + 1 < ans {
+                    break;
+                }
+
+                if check(i, j) {
+                    ans = std::cmp::max(ans, j - i + 1);
+                    break;
+                }
+            }
+        }
+
+        ans as i32
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：枚举优化
+
+我们用变量 $zero$ 和 $one$ 分别记录当前连续的 $0$ 和 $1$ 的个数。
+
+遍历字符串 $s$，对于当前字符 $c$：
+
+-   如果当前字符为 `'0'`，我们判断此时 $one$ 是否大于 $0$，是则将 $zero$ 和 $one$ 重置为 $0$，接下来将 $zero$ 加 $1$。
+-   如果当前字符为 `'1'`，则将 $one$ 加 $1$，并更新答案为 $ans = \max(ans, 2 \times \min(one, zero))$。
+
+遍历结束后，即可得到最长的平衡子串的长度。
+
+时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def findTheLongestBalancedSubstring(self, s: str) -> int:
+        ans = zero = one = 0
+        for c in s:
+            if c == '0':
+                if one:
+                    zero = one = 0
+                zero += 1
+            else:
+                one += 1
+                ans = max(ans, 2 * min(one, zero))
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int findTheLongestBalancedSubstring(String s) {
+        int zero = 0, one = 0;
+        int ans = 0, n = s.length();
+        for (int i = 0; i < n; ++i) {
+            if (s.charAt(i) == '0') {
+                if (one > 0) {
+                    zero = 0;
+                    one = 0;
+                }
+                ++zero;
+            } else {
+                ans = Math.max(ans, 2 * Math.min(zero, ++one));
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int findTheLongestBalancedSubstring(string s) {
+        int zero = 0, one = 0;
+        int ans = 0;
+        for (char& c : s) {
+            if (c == '0') {
+                if (one > 0) {
+                    zero = 0;
+                    one = 0;
+                }
+                ++zero;
+            } else {
+                ans = max(ans, 2 * min(zero, ++one));
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func findTheLongestBalancedSubstring(s string) (ans int) {
+	zero, one := 0, 0
+	for _, c := range s {
+		if c == '0' {
+			if one > 0 {
+				zero, one = 0, 0
+			}
+			zero++
+		} else {
+			one++
+			ans = max(ans, 2*min(zero, one))
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
 ```ts
 function findTheLongestBalancedSubstring(s: string): number {
     let zero = 0;
@@ -335,10 +381,35 @@ function findTheLongestBalancedSubstring(s: string): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn find_the_longest_balanced_substring(s: String) -> i32 {
+        let mut zero = 0;
+        let mut one = 0;
+        let mut ans = 0;
 
+        for &c in s.as_bytes().iter() {
+            if c == b'0' {
+                if one > 0 {
+                    zero = 0;
+                    one = 0;
+                }
+                zero += 1;
+            } else {
+                one += 1;
+                ans = std::cmp::max(ans, std::cmp::min(zero, one) * 2);
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

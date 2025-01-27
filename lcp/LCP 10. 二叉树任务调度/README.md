@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2010.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 10. 二叉树任务调度](https://leetcode.cn/problems/er-cha-shu-ren-wu-diao-du)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>任务调度优化是计算机性能优化的关键任务之一。在任务众多时，不同的调度策略可能会得到不同的总体执行时间，因此寻求一个最优的调度方案是非常有必要的。</p>
 
@@ -51,32 +58,191 @@
 	<li><code>1 &lt;= 单节点执行时间 &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
+class Solution:
+    def minimalExecTime(self, root: TreeNode) -> float:
+        def dfs(root: TreeNode) -> Tuple[int, int]:
+            if not root:
+                return 0, 0
+            s1, t1 = dfs(root.left)
+            s2, t2 = dfs(root.right)
+            return s1 + s2 + root.val, max(t1, t2, (s1 + s2) / 2) + root.val
 
+        return dfs(root)[1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public double minimalExecTime(TreeNode root) {
+        return dfs(root)[1];
+    }
 
+    private double[] dfs(TreeNode root) {
+        if (root == null) {
+            return new double[] {0, 0};
+        }
+        double[] left = dfs(root.left);
+        double[] right = dfs(root.right);
+        double s = left[0] + right[0] + root.val;
+        double t = Math.max(Math.max(left[1], right[1]), (left[0] + right[0]) / 2) + root.val;
+        return new double[] {s, t};
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    double minimalExecTime(TreeNode* root) {
+        function<pair<double, double>(TreeNode*)> dfs = [&](TreeNode* root) -> pair<double, double> {
+            if (!root) {
+                return {0, 0};
+            }
+            auto [s1, t1] = dfs(root->left);
+            auto [s2, t2] = dfs(root->right);
+            double s = s1 + s2 + root->val;
+            double t = max({t1, t2, (s1 + s2) / 2}) + root->val;
+            return {s, t};
+        };
+        auto [_, t] = dfs(root);
+        return t;
+    }
+};
 ```
 
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func minimalExecTime(root *TreeNode) float64 {
+	var dfs func(*TreeNode) (float64, float64)
+	dfs = func(root *TreeNode) (float64, float64) {
+		if root == nil {
+			return 0, 0
+		}
+		s1, t1 := dfs(root.Left)
+		s2, t2 := dfs(root.Right)
+		s := s1 + s2 + float64(root.Val)
+		t := math.Max(math.Max(t1, t2), (s1+s2)/2) + float64(root.Val)
+		return s, t
+	}
+	_, t := dfs(root)
+	return t
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function minimalExecTime(root: TreeNode | null): number {
+    const dfs = (root: TreeNode | null): [number, number] => {
+        if (root === null) {
+            return [0, 0];
+        }
+        const [s1, t1] = dfs(root.left);
+        const [s2, t2] = dfs(root.right);
+        const s = s1 + s2 + root.val;
+        const t = Math.max(t1, t2, (s1 + s2) / 2) + root.val;
+        return [s, t];
+    };
+    return dfs(root)[1];
+}
+```
+
+#### Swift
+
+```swift
+/**
+* public class TreeNode {
+*     public var val: Int
+*     public var left: TreeNode?
+*     public var right: TreeNode?
+*     public init() { self.val = 0; self.left = nil; self.right = nil; }
+*     public init(_ val: Int) { self.val = val; self.left = nil; self.right = nil; }
+*     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+*         self.val = val
+*         self.left = left
+*         self.right = right
+*     }
+* }
+*/
+
+class Solution {
+    func minimalExecTime(_ root: TreeNode?) -> Double {
+        return dfs(root)[1]
+    }
+
+    private func dfs(_ root: TreeNode?) -> [Double] {
+        guard let root = root else { return [0.0, 0.0] }
+
+        let left = dfs(root.left)
+        let right = dfs(root.right)
+
+        let sum = left[0] + right[0] + Double(root.val)
+        let time = max(max(left[1], right[1]), (left[0] + right[0]) / 2) + Double(root.val)
+
+        return [sum, time]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

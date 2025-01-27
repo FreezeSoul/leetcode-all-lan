@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1984.Minimum%20Difference%20Between%20Highest%20and%20Lowest%20of%20K%20Scores/README_EN.md
+rating: 1306
+source: Weekly Contest 256 Q1
+tags:
+    - Array
+    - Sorting
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [1984. Minimum Difference Between Highest and Lowest of K Scores](https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores)
 
 [中文文档](/solution/1900-1999/1984.Minimum%20Difference%20Between%20Highest%20and%20Lowest%20of%20K%20Scores/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>, where <code>nums[i]</code> represents the score of the <code>i<sup>th</sup></code> student. You are also given an integer <code>k</code>.</p>
 
@@ -43,11 +59,23 @@ The minimum possible difference is 2.</pre>
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Sliding Window
+
+We can sort the students' scores in ascending order, then use a sliding window of size $k$ to calculate the difference between the maximum and minimum values in the window, and finally take the minimum of the differences of all windows.
+
+Why do we take the scores of $k$ consecutive students? Because if they are not consecutive, the difference between the maximum and minimum values may remain the same or increase, but it will definitely not decrease. Therefore, we only need to consider the scores of $k$ consecutive students after sorting.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the number of students.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +84,7 @@ class Solution:
         return min(nums[i + k - 1] - nums[i] for i in range(len(nums) - k + 1))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -71,7 +99,36 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minimumDifference(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int ans = 1e5;
+        for (int i = 0; i < nums.size() - k + 1; ++i) {
+            ans = min(ans, nums[i + k - 1] - nums[i]);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minimumDifference(nums []int, k int) int {
+	sort.Ints(nums)
+	ans := 100000
+	for i := 0; i < len(nums)-k+1; i++ {
+		ans = min(ans, nums[i+k-1]-nums[i])
+	}
+	return ans
+}
+```
+
+#### TypeScript
 
 ```ts
 function minimumDifference(nums: number[], k: number): number {
@@ -85,42 +142,7 @@ function minimumDifference(nums: number[], k: number): number {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minimumDifference(vector<int>& nums, int k) {
-        sort(nums.begin(), nums.end());
-        int ans = 1e5;
-        for (int i = 0; i < nums.size() - k + 1; ++i)
-            ans = min(ans, nums[i + k - 1] - nums[i]);
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-```go
-func minimumDifference(nums []int, k int) int {
-	sort.Ints(nums)
-	ans := 100000
-	for i := 0; i < len(nums)-k+1; i++ {
-		ans = min(ans, nums[i+k-1]-nums[i])
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -136,10 +158,28 @@ impl Solution {
 }
 ```
 
-### **...**
+#### PHP
 
-```
-
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $k
+     * @return Integer
+     */
+    function minimumDifference($nums, $k) {
+        sort($nums);
+        $ans = 10 ** 5;
+        for ($i = 0; $i < count($nums) - $k + 1; $i++) {
+            $ans = min($ans, $nums[$i + $k - 1] - $nums[$i]);
+        }
+        return $ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

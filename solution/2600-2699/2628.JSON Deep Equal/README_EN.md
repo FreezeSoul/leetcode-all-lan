@@ -1,16 +1,40 @@
-# [2628. JSON Deep Equal](https://leetcode.com/problems/json-deep-equal)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2628.JSON%20Deep%20Equal/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2628. JSON Deep Equal 🔒](https://leetcode.com/problems/json-deep-equal)
 
 [中文文档](/solution/2600-2699/2628.JSON%20Deep%20Equal/README.md)
 
 ## Description
 
-<p>Given two objects <code>o1</code>&nbsp;and <code>o2</code>, check if they are <strong>deeply equal</strong>.</p>
+<!-- description:start -->
 
-<p>For two objects to be <strong>deeply equal</strong>, they must contain the same keys, and the associated values must also be&nbsp;<strong>deeply equal</strong>. Two objects are also considered&nbsp;<strong>deeply equal</strong>&nbsp;if they pass the&nbsp;<code>===</code>&nbsp;equality check.</p>
+<p>Given two values&nbsp;<code>o1</code>&nbsp;and <code>o2</code>, return a boolean value indicating whether two values, <code>o1</code> and <code>o2</code>, are <strong>deeply equal</strong>.</p>
 
-<p>You may assume both objects are the output of&nbsp;<code>JSON.parse</code>. In other words, they are valid JSON.</p>
+<p>For two values to be <strong>deeply equal</strong>, the following conditions must be met:</p>
 
-<p>Please solve it without using lodash&#39;s&nbsp;<code>_.isEqual()</code>&nbsp;function.</p>
+<ul>
+	<li>
+	<p>If both values are primitive types,&nbsp;they are <strong>deeply equal</strong> if they pass the <code>===</code> equality check.</p>
+	</li>
+	<li>
+	<p>If both values are arrays, they are <strong>deeply equal</strong> if they have the same elements in the same order, and each element is also <strong>deeply equal</strong> according to these conditions.</p>
+	</li>
+	<li>
+	<p>If both values are objects, they are <strong>deeply equal</strong> if they have the same keys, and the associated values for each key are also <strong>deeply equal</strong> according to these conditions.</p>
+	</li>
+</ul>
+
+<p>You may assume both values are the output of&nbsp;<code>JSON.parse</code>. In other words, they are valid JSON.</p>
+
+<p>Please solve it without using lodash&#39;s&nbsp;<code>_.isEqual()</code>&nbsp;function</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -53,11 +77,17 @@
 	<li><code>maxNestingDepth &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function areDeeplyEqual(o1: any, o2: any): boolean {
@@ -96,10 +126,8 @@ function areDeeplyEqual(o1: any, o2: any): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

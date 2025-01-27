@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1332.Remove%20Palindromic%20Subsequences/README_EN.md
+rating: 1628
+source: Weekly Contest 173 Q1
+tags:
+    - Two Pointers
+    - String
+---
+
+<!-- problem:start -->
+
 # [1332. Remove Palindromic Subsequences](https://leetcode.com/problems/remove-palindromic-subsequences)
 
 [中文文档](/solution/1300-1399/1332.Remove%20Palindromic%20Subsequences/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> consisting <strong>only</strong> of letters <code>&#39;a&#39;</code> and <code>&#39;b&#39;</code>. In a single step you can remove one <strong>palindromic subsequence</strong> from <code>s</code>.</p>
 
@@ -47,11 +62,17 @@ Remove palindromic subsequence &quot;baab&quot; then &quot;b&quot;.
 	<li><code>s[i]</code> is either <code>&#39;a&#39;</code> or <code>&#39;b&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +80,7 @@ class Solution:
         return 1 if s[::-1] == s else 2
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -74,7 +95,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -90,7 +111,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removePalindromeSub(s string) int {
@@ -103,7 +124,7 @@ func removePalindromeSub(s string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function removePalindromeSub(s: string): number {
@@ -116,7 +137,7 @@ function removePalindromeSub(s: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -136,10 +157,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,15 +1,9 @@
 function searchMatrix(matrix: number[][], target: number): boolean {
-    let m = matrix.length,
-        n = matrix[0].length;
-    let i = m - 1,
-        j = 0;
-    while (i >= 0 && j < n) {
-        let cur = matrix[i][j];
-        if (cur == target) return true;
-        if (cur > target) {
-            --i;
-        } else {
-            ++j;
+    const n = matrix[0].length;
+    for (const row of matrix) {
+        const j = _.sortedIndex(row, target);
+        if (j < n && row[j] === target) {
+            return true;
         }
     }
     return false;

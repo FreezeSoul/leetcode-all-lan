@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2622.Cache%20With%20Time%20Limit/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2622. Cache With Time Limit](https://leetcode.com/problems/cache-with-time-limit)
 
 [中文文档](/solution/2600-2699/2622.Cache%20With%20Time%20Limit/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write a class that allows getting and setting&nbsp;key-value pairs, however a&nbsp;<strong>time until expiration</strong>&nbsp;is associated with each key.</p>
 
@@ -19,9 +31,9 @@
 
 <pre>
 <strong>Input:</strong> 
-[&quot;TimeLimitedCache&quot;, &quot;set&quot;, &quot;get&quot;, &quot;count&quot;, &quot;get&quot;]
-[[], [1, 42, 100], [1], [], [1]]
-[0, 0, 50, 50, 150]
+actions = [&quot;TimeLimitedCache&quot;, &quot;set&quot;, &quot;get&quot;, &quot;count&quot;, &quot;get&quot;]
+values = [[], [1, 42, 100], [1], [], [1]]
+timeDelays = [0, 0, 50, 50, 150]
 <strong>Output:</strong> [null, false, 42, 1, -1]
 <strong>Explanation:</strong>
 At t=0, the cache is constructed.
@@ -36,10 +48,10 @@ At t=150, get(1) is called but -1 is returned because the cache is empty.
 
 <pre>
 <strong>Input:</strong> 
-[&quot;TimeLimitedCache&quot;, &quot;set&quot;, &quot;set&quot;, &quot;get&quot;, &quot;get&quot;, &quot;get&quot;, &quot;count&quot;]
-[[], [1, 42, 50], [1, 50, 100], [1], [1], [1], []]
-[0, 0, 40, 50, 120, 200, 250]
-<strong>Output:</strong> [null, false, true, 50, 50, -1]
+actions = [&quot;TimeLimitedCache&quot;, &quot;set&quot;, &quot;set&quot;, &quot;get&quot;, &quot;get&quot;, &quot;get&quot;, &quot;count&quot;]
+values = [[], [1, 42, 50], [1, 50, 100], [1], [1], [1], []]
+timeDelays = [0, 0, 40, 50, 120, 200, 250]
+<strong>Output:</strong> [null, false, true, 50, 50, -1, 0]
 <strong>Explanation:</strong>
 At t=0, the cache is constructed.
 At t=0, a key-value pair (1: 42) is added with a time limit of 50ms. The value doesn&#39;t exist so false is returned.
@@ -55,53 +67,56 @@ At t=250, count() returns 0 because the cache is empty.
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>0 &lt;= key &lt;= 10<sup>9</sup></code></li>
-	<li><code>0 &lt;= value &lt;= 10<sup>9</sup></code></li>
+	<li><code>0 &lt;= key, value &lt;= 10<sup>9</sup></code></li>
 	<li><code>0 &lt;= duration &lt;= 1000</code></li>
-	<li><code>total method calls will not exceed 100</code></li>
+	<li><code>1 &lt;= actions.length &lt;= 100</code></li>
+	<li><code>actions.length === values.length</code></li>
+	<li><code>actions.length === timeDelays.length</code></li>
+	<li><code>0 &lt;= timeDelays[i] &lt;= 1450</code></li>
+	<li><code>actions[i]</code>&nbsp;is one of &quot;TimeLimitedCache&quot;, &quot;set&quot;, &quot;get&quot; and&nbsp;&quot;count&quot;</li>
+	<li>First action is always &quot;TimeLimitedCache&quot; and must be executed immediately, with a 0-millisecond delay</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class TimeLimitedCache {
-    private cache: Map<number, [value: number, expire: number]> = new Map();
-
-    constructor() {}
+    #cache: Map<number, [value: number, expire: number]> = new Map();
 
     set(key: number, value: number, duration: number): boolean {
-        this.removeExpire();
-        const ans = this.cache.has(key);
-        this.cache.set(key, [value, this.now() + duration]);
-        return ans;
+        const isExist = this.#cache.has(key);
+
+        if (!this.#isExpired(key)) {
+            this.#cache.set(key, [value, Date.now() + duration]);
+        }
+
+        return isExist;
     }
 
     get(key: number): number {
-        this.removeExpire();
-        return this.cache.get(key)?.[0] ?? -1;
+        if (this.#isExpired(key)) return -1;
+        const res = this.#cache.get(key)?.[0] ?? -1;
+        return res;
     }
 
     count(): number {
-        this.removeExpire();
-        return this.cache.size;
+        const xs = Array.from(this.#cache).filter(([key]) => !this.#isExpired(key));
+        return xs.length;
     }
 
-    private now(): number {
-        return new Date().getTime();
-    }
-
-    private removeExpire(): void {
-        const now = this.now();
-        for (const [key, [, expire]] of this.cache) {
-            if (expire <= now) {
-                this.cache.delete(key);
-            }
-        }
-    }
+    #isExpired = (key: number) =>
+        this.#cache.has(key) &&
+        (this.#cache.get(key)?.[1] ?? Number.NEGATIVE_INFINITY) < Date.now();
 }
 
 /**
@@ -113,10 +128,8 @@ class TimeLimitedCache {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

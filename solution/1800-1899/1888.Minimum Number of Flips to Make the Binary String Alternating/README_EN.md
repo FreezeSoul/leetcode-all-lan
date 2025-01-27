@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1888.Minimum%20Number%20of%20Flips%20to%20Make%20the%20Binary%20String%20Alternating/README_EN.md
+rating: 2005
+source: Weekly Contest 244 Q3
+tags:
+    - Greedy
+    - String
+    - Dynamic Programming
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [1888. Minimum Number of Flips to Make the Binary String Alternating](https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating)
 
 [中文文档](/solution/1800-1899/1888.Minimum%20Number%20of%20Flips%20to%20Make%20the%20Binary%20String%20Alternating/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a binary string <code>s</code>. You are allowed to perform two types of operations on the string in any sequence:</p>
 
@@ -53,29 +70,33 @@ Then, use the second operation on the third and sixth elements to make s = &quot
 	<li><code>s[i]</code> is either <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minFlips(self, s: str) -> int:
         n = len(s)
-        target = '01'
-        cnt = 0
-        for i, c in enumerate(s):
-            cnt += c != target[i & 1]
-        res = min(cnt, n - cnt)
+        target = "01"
+        cnt = sum(c != target[i & 1] for i, c in enumerate(s))
+        ans = min(cnt, n - cnt)
         for i in range(n):
             cnt -= s[i] != target[i & 1]
             cnt += s[i] != target[(i + n) & 1]
-            res = min(res, cnt, n - cnt)
-        return res
+            ans = min(ans, cnt, n - cnt)
+        return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,43 +105,108 @@ class Solution {
         String target = "01";
         int cnt = 0;
         for (int i = 0; i < n; ++i) {
-            cnt += (s.charAt(i) == target.charAt(i & 1) ? 0 : 1);
+            if (s.charAt(i) != target.charAt(i & 1)) {
+                ++cnt;
+            }
         }
-        int res = Math.min(cnt, n - cnt);
+        int ans = Math.min(cnt, n - cnt);
         for (int i = 0; i < n; ++i) {
-            cnt -= (s.charAt(i) == target.charAt(i & 1) ? 0 : 1);
-            cnt += (s.charAt(i) == target.charAt((i + n) & 1) ? 0 : 1);
-            res = Math.min(res, Math.min(cnt, n - cnt));
+            if (s.charAt(i) != target.charAt(i & 1)) {
+                --cnt;
+            }
+            if (s.charAt(i) != target.charAt((i + n) & 1)) {
+                ++cnt;
+            }
+            ans = Math.min(ans, Math.min(cnt, n - cnt));
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minFlips(string s) {
+        int n = s.size();
+        string target = "01";
+        int cnt = 0;
+        for (int i = 0; i < n; ++i) {
+            if (s[i] != target[i & 1]) {
+                ++cnt;
+            }
+        }
+        int ans = min(cnt, n - cnt);
+        for (int i = 0; i < n; ++i) {
+            if (s[i] != target[i & 1]) {
+                --cnt;
+            }
+            if (s[i] != target[(i + n) & 1]) {
+                ++cnt;
+            }
+            ans = min({ans, cnt, n - cnt});
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minFlips(s string) int {
+	n := len(s)
+	target := "01"
+	cnt := 0
+	for i := range s {
+		if s[i] != target[i&1] {
+			cnt++
+		}
+	}
+	ans := min(cnt, n-cnt)
+	for i := range s {
+		if s[i] != target[i&1] {
+			cnt--
+		}
+		if s[i] != target[(i+n)&1] {
+			cnt++
+		}
+		ans = min(ans, min(cnt, n-cnt))
+	}
+	return ans
+}
+```
+
+#### TypeScript
 
 ```ts
 function minFlips(s: string): number {
-    const n: number = s.length;
-    const target: string[] = ['0', '1'];
-    let count: number = 0;
-    for (let i: number = 0; i < n; ++i) {
-        count += s.charAt(i) == target[i & 1] ? 0 : 1;
+    const n = s.length;
+    const target = '01';
+    let cnt = 0;
+    for (let i = 0; i < n; ++i) {
+        if (s[i] !== target[i & 1]) {
+            ++cnt;
+        }
     }
-    let res = Math.min(count, n - count);
-    for (let i: number = 0; i < n; ++i) {
-        count -= s.charAt(i) == target[i & 1] ? 0 : 1;
-        count += s.charAt(i) == target[(i + n) & 1] ? 0 : 1;
-        res = Math.min(res, count, n - count);
+    let ans = Math.min(cnt, n - cnt);
+    for (let i = 0; i < n; ++i) {
+        if (s[i] !== target[i & 1]) {
+            --cnt;
+        }
+        if (s[i] !== target[(i + n) & 1]) {
+            ++cnt;
+        }
+        ans = Math.min(ans, cnt, n - cnt);
     }
-    return res;
+    return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

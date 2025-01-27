@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2562.Find%20the%20Array%20Concatenation%20Value/README_EN.md
+rating: 1259
+source: Weekly Contest 332 Q1
+tags:
+    - Array
+    - Two Pointers
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2562. Find the Array Concatenation Value](https://leetcode.com/problems/find-the-array-concatenation-value)
 
 [中文文档](/solution/2500-2599/2562.Find%20the%20Array%20Concatenation%20Value/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>.</p>
 
@@ -76,11 +92,21 @@ Since the concatenation value is 673 so the answer is 673.
 .spoilerbutton[value="Hide Message"] + .spoiler {padding:5px;}
 </style>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+Starting from both ends of the array, we take out one element at a time, concatenate it with another element, and then add the concatenated result to the answer. We repeat this process until the array is empty.
+
+The time complexity is $O(n \times \log M)$, and the space complexity is $O(\log M)$. Here, $n$ and $M$ are the length of the array and the maximum value in the array, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -95,7 +121,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -132,7 +158,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findTheArrayConcVal(nums []int) (ans int64) {
@@ -148,7 +174,7 @@ func findTheArrayConcVal(nums []int) (ans int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findTheArrayConcVal(nums: number[]): number {
@@ -168,7 +194,7 @@ function findTheArrayConcVal(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -190,7 +216,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 int getLen(int num) {
@@ -202,7 +228,7 @@ int getLen(int num) {
     return res;
 }
 
-long long findTheArrayConcVal(int *nums, int numsSize) {
+long long findTheArrayConcVal(int* nums, int numsSize) {
     long long ans = 0;
     int i = 0;
     int j = numsSize - 1;
@@ -218,10 +244,41 @@ long long findTheArrayConcVal(int *nums, int numsSize) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find_the_array_conc_val(nums: Vec<i32>) -> i64 {
+        let mut ans = 0;
+        let mut n = nums.len();
+
+        for i in 0..n / 2 {
+            ans += format!("{}{}", nums[i], nums[n - i - 1])
+                .parse::<i64>()
+                .unwrap();
+        }
+
+        if n % 2 != 0 {
+            ans += nums[n / 2] as i64;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,14 +1,32 @@
-# [2676. Throttle](https://leetcode.com/problems/throttle)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2676.Throttle/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2676. Throttle 🔒](https://leetcode.com/problems/throttle)
 
 [中文文档](/solution/2600-2699/2676.Throttle/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>Given a function <code>fn</code> and&nbsp;a time in milliseconds <code>t</code>, return&nbsp;a <strong>throttled</strong> version of that function.</p>
 
 <p>A <strong>throttled</strong> function is first called without delay and then, for a time interval of <code>t</code> milliseconds, can&#39;t be executed but should store the latest function arguments provided to call <code>fn</code> with them after the end of the delay.</p>
 
-<p>For instance, <code>t = 50ms</code>, and the function was called at <code>30ms</code>, <code>40ms</code>, and <code>60ms</code>. The first function call would block calling functions for the following <code>t</code> milliseconds. The second function call would save arguments, and the third call arguments should overwrite currently stored arguments from the second call because the second and third calls are called before <code>80ms</code>. Once the delay has passed, the throttled function should be called with the latest arguments provided during the delay period, and it should also create another delay period of <code>80ms + t</code>.</p>
+<p>For instance, <code>t = 50ms</code>, and the function was called at <code>30ms</code>, <code>40ms</code>, and <code>60ms</code>.</p>
+
+<p>At <code>30ms</code>, without delay, the&nbsp;<strong>throttled</strong> function <code>fn</code> should be called with the arguments, and calling the <strong>throttled</strong> function <code>fn</code> should be blocked for the following <code>t</code> milliseconds.</p>
+
+<p>At <code>40ms</code>, the function should just save arguments.</p>
+
+<p>At <code>60ms</code>, arguments should overwrite currently stored arguments from the second call because the second and third calls are made before <code>80ms</code>. Once the delay has passed, the <strong>throttled</strong> function <code>fn</code> should be called with the latest arguments provided during the delay period, and it should also create another delay period of <code>80ms + t</code>.</p>
 
 <p><img alt="Throttle Diagram" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2600-2699/2676.Throttle/images/screen-shot-2023-04-08-at-120313-pm.png" style="width: 1156px; height: 372px;" />The above diagram&nbsp;shows how throttle&nbsp;will transform&nbsp;events. Each rectangle represents 100ms and the throttle&nbsp;time is 400ms. Each color represents a different set of inputs.</p>
 
@@ -16,7 +34,11 @@
 <p><strong class="example">Example 1:</strong></p>
 
 <pre>
-<strong>Input:</strong> t = 100, calls = [{&quot;t&quot;:20,&quot;inputs&quot;:[1]}]
+<strong>Input:</strong> 
+t = 100, 
+calls = [
+  {&quot;t&quot;:20,&quot;inputs&quot;:[1]}
+]
 <strong>Output:</strong> [{&quot;t&quot;:20,&quot;inputs&quot;:[1]}]
 <strong>Explanation:</strong> The 1st call is always called without delay
 </pre>
@@ -24,7 +46,12 @@
 <p><strong class="example">Example 2:</strong></p>
 
 <pre>
-<strong>Input:</strong> t = 50, calls = [{&quot;t&quot;:50,&quot;inputs&quot;:[1]},{&quot;t&quot;:75,&quot;inputs&quot;:[2]}]
+<strong>Input:</strong> 
+t = 50, 
+calls = [
+  {&quot;t&quot;:50,&quot;inputs&quot;:[1]},
+  {&quot;t&quot;:75,&quot;inputs&quot;:[2]}
+]
 <strong>Output:</strong> [{&quot;t&quot;:50,&quot;inputs&quot;:[1]},{&quot;t&quot;:100,&quot;inputs&quot;:[2]}]
 <strong>Explanation:</strong> 
 The 1st is called a function with arguments (1) without delay.
@@ -34,7 +61,15 @@ The 2nd is called at 75ms, within the delay period because 50ms + 50ms = 100ms, 
 <p><strong class="example">Example 3:</strong></p>
 
 <pre>
-<strong>Input:</strong> t = 70, calls = [{&quot;t&quot;:50,&quot;inputs&quot;:[1]},{&quot;t&quot;:75,&quot;inputs&quot;:[2]},{&quot;t&quot;:90,&quot;inputs&quot;:[8]},{&quot;t&quot;: 140, &quot;inputs&quot;:[5,7]},{&quot;t&quot;: 300, &quot;inputs&quot;: [9,4]}]
+<strong>Input:</strong> 
+t = 70, 
+calls = [
+  {&quot;t&quot;:50,&quot;inputs&quot;:[1]},
+  {&quot;t&quot;:75,&quot;inputs&quot;:[2]},
+  {&quot;t&quot;:90,&quot;inputs&quot;:[8]},
+  {&quot;t&quot;: 140, &quot;inputs&quot;:[5,7]},
+  {&quot;t&quot;: 300, &quot;inputs&quot;: [9,4]}
+]
 <strong>Output:</strong> [{&quot;t&quot;:50,&quot;inputs&quot;:[1]},{&quot;t&quot;:120,&quot;inputs&quot;:[8]},{&quot;t&quot;:190,&quot;inputs&quot;:[5,7]},{&quot;t&quot;:300,&quot;inputs&quot;:[9,4]}]
 <strong>Explanation:</strong> 
 The 1st is called a function with arguments (1) without delay.
@@ -50,14 +85,20 @@ The 5th is called at 300ms, but it is after 260ms, so it should be called immedi
 	<li><code>0 &lt;= t &lt;= 1000</code></li>
 	<li><code>1 &lt;= calls.length &lt;= 10</code></li>
 	<li><code>0 &lt;= calls[i].t &lt;= 1000</code></li>
-	<li><code>0 &lt;= calls[i].inputs[i], calls[i].inputs.length &lt;= 10</code></li>
+	<li><code>0 &lt;= calls[i].inputs[j], calls[i].inputs.length &lt;= 10</code></li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 type F = (...args: any[]) => void;
@@ -88,3 +129,7 @@ const throttle = (fn: F, t: number): F => {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

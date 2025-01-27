@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/README.md
+rating: 1797
+source: 第 132 场周赛 Q4
+tags:
+    - 树
+    - 深度优先搜索
+    - 字符串
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1028. 从先序遍历还原二叉树](https://leetcode.cn/problems/recover-a-tree-from-preorder-traversal)
 
 [English Version](/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们从二叉树的根节点 <code>root</code>&nbsp;开始进行深度优先搜索。</p>
 
@@ -49,32 +64,69 @@
 	<li>每个节点的值介于 <code>1</code> 和 <code>10 ^ 9</code> 之间。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
+#### C++
 
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-
-```
-
-### **...**
-
-```
-
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* recoverFromPreorder(string S) {
+        stack<TreeNode*> st;
+        int depth = 0;
+        int num = 0;
+        for (int i = 0; i < S.length(); ++i) {
+            if (S[i] == '-') {
+                depth++;
+            } else {
+                num = 10 * num + S[i] - '0';
+            }
+            if (i + 1 >= S.length() || (isdigit(S[i]) && S[i + 1] == '-')) {
+                TreeNode* newNode = new TreeNode(num);
+                while (st.size() > depth) {
+                    st.pop();
+                }
+                if (!st.empty()) {
+                    if (st.top()->left == nullptr) {
+                        st.top()->left = newNode;
+                    } else {
+                        st.top()->right = newNode;
+                    }
+                }
+                st.push(newNode);
+                depth = 0;
+                num = 0;
+            }
+        }
+        TreeNode* res;
+        while (!st.empty()) {
+            res = st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

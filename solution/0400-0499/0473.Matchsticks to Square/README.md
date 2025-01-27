@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0473.Matchsticks%20to%20Square/README.md
+tags:
+    - 位运算
+    - 数组
+    - 动态规划
+    - 回溯
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [473. 火柴拼正方形](https://leetcode.cn/problems/matchsticks-to-square)
 
 [English Version](/solution/0400-0499/0473.Matchsticks%20to%20Square/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你将得到一个整数数组 <code>matchsticks</code> ，其中 <code>matchsticks[i]</code> 是第 <code>i</code>&nbsp;个火柴棒的长度。你要用 <strong>所有的火柴棍</strong>&nbsp;拼成一个正方形。你 <strong>不能折断</strong> 任何一根火柴棒，但你可以把它们连在一起，而且每根火柴棒必须 <strong>使用一次</strong> 。</p>
 
@@ -39,11 +53,13 @@
 	<li><code>1 &lt;= matchsticks[i] &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 回溯**
+### 方法一：排序 + 回溯
 
 用 $edges[i]$ 记录正方形每条边当前的长度，对于第 $u$ 根火柴，尝试把它加到 $edges[i]$ 每条边，若加入后 $edges[i]$ 不超过正方形期望长度 $x$，则继续往下递归 $u+1$ 根火柴。若所有火柴都能被加入，说明满足拼成正方形的要求。
 
@@ -51,22 +67,9 @@
 
 时间复杂度 $O(4^n)$，其中 $n$ 表示 $matchsticks$ 的长度。每根火柴可以被放入正方形的 $4$ 条边，共有 $n$ 根火柴。
 
-**方法二：状态压缩 + 记忆化搜索**
-
-记当前火柴被划分的情况为 $state$。对于第 $i$ 个数，若 $state \ \& \ (1<<i)=0$，说明第 $i$ 个火柴棒未被划分。我们的目标是从全部数字中凑出 $k$ 个和为 $s$ 的子集。
-
-记当前子集的和为 $t$。在未划分第 $i$ 个火柴棒时：
-
--   若 $t+matchsticks[i]>s$，说明第 $i$ 个火柴棒不能被添加到当前子集中，由于我们对 $matchsticks$ 数组进行升序排列，因此从 $matchsticks$ 从第 $i$ 个火柴棒开始的所有数字都不能被添加到当前子集，直接返回 $false$。
--   否则，将第 $i$ 个火柴棒添加到当前子集中，状态变为 $state \ |\ (1<<i)$，继续对未划分的数字进行搜索。
-
-注：若 $t+matchsticks[i]==s$，说明恰好可以得到一个和为 $s$ 的子集，下一步将 $t$ 归零（可以通过 $(t+matchsticks[i]) \%s$ 实现），并继续划分下一个子集。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,32 +94,7 @@ class Solution:
         return dfs(0)
 ```
 
-```python
-class Solution:
-    def makesquare(self, matchsticks: List[int]) -> bool:
-        @cache
-        def dfs(state, t):
-            if state == (1 << len(matchsticks)) - 1:
-                return True
-            for i, v in enumerate(matchsticks):
-                if (state & (1 << i)):
-                    continue
-                if t + v > s:
-                    break
-                if dfs(state | (1 << i), (t + v) % s):
-                    return True
-            return False
-
-        s, mod = divmod(sum(matchsticks), 4)
-        matchsticks.sort()
-        if mod:
-            return False
-        return dfs(0, 0)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -154,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -185,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makesquare(matchsticks []int) bool {
@@ -219,7 +197,7 @@ func makesquare(matchsticks []int) bool {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -255,10 +233,52 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二：状态压缩 + 记忆化搜索
+
+记当前火柴被划分的情况为 $state$。对于第 $i$ 个数，若 $state \ \& \ (1<<i)=0$，说明第 $i$ 个火柴棒未被划分。我们的目标是从全部数字中凑出 $k$ 个和为 $s$ 的子集。
+
+记当前子集的和为 $t$。在未划分第 $i$ 个火柴棒时：
+
+-   若 $t+matchsticks[i]>s$，说明第 $i$ 个火柴棒不能被添加到当前子集中，由于我们对 $matchsticks$ 数组进行升序排列，因此从 $matchsticks$ 从第 $i$ 个火柴棒开始的所有数字都不能被添加到当前子集，直接返回 $false$。
+-   否则，将第 $i$ 个火柴棒添加到当前子集中，状态变为 $state \ |\ (1<<i)$，继续对未划分的数字进行搜索。
+
+注：若 $t+matchsticks[i]==s$，说明恰好可以得到一个和为 $s$ 的子集，下一步将 $t$ 归零（可以通过 $(t+matchsticks[i]) \%s$ 实现），并继续划分下一个子集。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def makesquare(self, matchsticks: List[int]) -> bool:
+        @cache
+        def dfs(state, t):
+            if state == (1 << len(matchsticks)) - 1:
+                return True
+            for i, v in enumerate(matchsticks):
+                if state & (1 << i):
+                    continue
+                if t + v > s:
+                    break
+                if dfs(state | (1 << i), (t + v) % s):
+                    return True
+            return False
+
+        s, mod = divmod(sum(matchsticks), 4)
+        matchsticks.sort()
+        if mod:
+            return False
+        return dfs(0, 0)
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

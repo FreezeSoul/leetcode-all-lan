@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1818.Minimum%20Absolute%20Sum%20Difference/README.md
+rating: 1934
+source: 第 235 场周赛 Q3
+tags:
+    - 数组
+    - 二分查找
+    - 有序集合
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1818. 绝对差值和](https://leetcode.cn/problems/minimum-absolute-sum-difference)
 
 [English Version](/solution/1800-1899/1818.Minimum%20Absolute%20Sum%20Difference/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个正整数数组 <code>nums1</code> 和 <code>nums2</code> ，数组的长度都是 <code>n</code> 。</p>
 
@@ -62,11 +77,13 @@
 	<li><code>1 <= nums1[i], nums2[i] <= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 二分查找**
+### 方法一：排序 + 二分查找
 
 根据题意，我们可以先计算出在不进行替换的情况下，`nums1` 和 `nums2` 的绝对差值和，记为 $s$。
 
@@ -78,9 +95,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -100,9 +115,7 @@ class Solution:
         return (s - mx + mod) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -145,7 +158,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -176,7 +189,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minAbsoluteSumDiff(nums1 []int, nums2 []int) int {
@@ -193,7 +206,7 @@ func minAbsoluteSumDiff(nums1 []int, nums2 []int) int {
 	for i, a := range nums1 {
 		b := nums2[i]
 		d1, d2 := abs(a-b), 1<<30
-		j := sort.Search(n, func(k int) bool { return nums[k] >= b })
+		j := sort.SearchInts(nums, b)
 		if j < n {
 			d2 = min(d2, abs(nums[j]-b))
 		}
@@ -205,20 +218,6 @@ func minAbsoluteSumDiff(nums1 []int, nums2 []int) int {
 	return (s - mx + mod) % mod
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -227,7 +226,50 @@ func abs(x int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function minAbsoluteSumDiff(nums1: number[], nums2: number[]): number {
+    const mod = 10 ** 9 + 7;
+    const nums = [...nums1];
+    nums.sort((a, b) => a - b);
+    const n = nums.length;
+    let s = 0;
+    for (let i = 0; i < n; ++i) {
+        s = (s + Math.abs(nums1[i] - nums2[i])) % mod;
+    }
+    let mx = 0;
+    for (let i = 0; i < n; ++i) {
+        const d1 = Math.abs(nums1[i] - nums2[i]);
+        let d2 = 1 << 30;
+        let j = search(nums, nums2[i]);
+        if (j < n) {
+            d2 = Math.min(d2, Math.abs(nums[j] - nums2[i]));
+        }
+        if (j) {
+            d2 = Math.min(d2, Math.abs(nums[j - 1] - nums2[i]));
+        }
+        mx = Math.max(mx, d1 - d2);
+    }
+    return (s - mx + mod) % mod;
+}
+
+function search(nums: number[], x: number): number {
+    let left = 0;
+    let right = nums.length;
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (nums[mid] >= x) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -275,53 +317,8 @@ function search(nums, x) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function minAbsoluteSumDiff(nums1: number[], nums2: number[]): number {
-    const mod = 10 ** 9 + 7;
-    const nums = [...nums1];
-    nums.sort((a, b) => a - b);
-    const n = nums.length;
-    let s = 0;
-    for (let i = 0; i < n; ++i) {
-        s = (s + Math.abs(nums1[i] - nums2[i])) % mod;
-    }
-    let mx = 0;
-    for (let i = 0; i < n; ++i) {
-        const d1 = Math.abs(nums1[i] - nums2[i]);
-        let d2 = 1 << 30;
-        let j = search(nums, nums2[i]);
-        if (j < n) {
-            d2 = Math.min(d2, Math.abs(nums[j] - nums2[i]));
-        }
-        if (j) {
-            d2 = Math.min(d2, Math.abs(nums[j - 1] - nums2[i]));
-        }
-        mx = Math.max(mx, d1 - d2);
-    }
-    return (s - mx + mod) % mod;
-}
-
-function search(nums: number[], x: number): number {
-    let left = 0;
-    let right = nums.length;
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        if (nums[mid] >= x) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    return left;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

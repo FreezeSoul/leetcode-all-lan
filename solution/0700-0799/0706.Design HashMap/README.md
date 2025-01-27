@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0706.Design%20HashMap/README.md
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+    - 链表
+    - 哈希函数
+---
+
+<!-- problem:start -->
+
 # [706. 设计哈希映射](https://leetcode.cn/problems/design-hashmap)
 
 [English Version](/solution/0700-0799/0706.Design%20HashMap/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>不使用任何内建的哈希表库设计一个哈希映射（HashMap）。</p>
 
@@ -49,11 +63,13 @@ myHashMap.get(2);    // 返回 -1（未找到），myHashMap 现在为 [[1,1]]
 	<li>最多调用 <code>10<sup>4</sup></code> 次 <code>put</code>、<code>get</code> 和 <code>remove</code> 方法</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：静态数组实现**
+### 方法一：静态数组实现
 
 直接创建一个大小为 $1000001$ 的数组，初始时数组中的每个元素都为 $-1$，表示哈希表中不存在该键值对。
 
@@ -63,9 +79,7 @@ myHashMap.get(2);    // 返回 -1（未找到），myHashMap 现在为 [[1,1]]
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class MyHashMap:
@@ -89,9 +103,7 @@ class MyHashMap:
 # obj.remove(key)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class MyHashMap {
@@ -123,38 +135,7 @@ class MyHashMap {
  */
 ```
 
-### **TypeScript**
-
-```ts
-class MyHashMap {
-    data: Array<number>;
-    constructor() {
-        this.data = new Array(10 ** 6 + 1).fill(-1);
-    }
-
-    put(key: number, value: number): void {
-        this.data[key] = value;
-    }
-
-    get(key: number): number {
-        return this.data[key];
-    }
-
-    remove(key: number): void {
-        this.data[key] = -1;
-    }
-}
-
-/**
- * Your MyHashMap object will be instantiated and called as such:
- * var obj = new MyHashMap()
- * obj.put(key,value)
- * var param_2 = obj.get(key)
- * obj.remove(key)
- */
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class MyHashMap {
@@ -187,7 +168,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type MyHashMap struct {
@@ -223,4 +204,39 @@ func (this *MyHashMap) Remove(key int) {
  */
 ```
 
+#### TypeScript
+
+```ts
+class MyHashMap {
+    data: Array<number>;
+    constructor() {
+        this.data = new Array(10 ** 6 + 1).fill(-1);
+    }
+
+    put(key: number, value: number): void {
+        this.data[key] = value;
+    }
+
+    get(key: number): number {
+        return this.data[key];
+    }
+
+    remove(key: number): void {
+        this.data[key] = -1;
+    }
+}
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * var obj = new MyHashMap()
+ * obj.put(key,value)
+ * var param_2 = obj.get(key)
+ * obj.remove(key)
+ */
+```
+
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

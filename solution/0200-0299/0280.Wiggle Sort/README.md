@@ -1,10 +1,22 @@
-# [280. 摆动排序](https://leetcode.cn/problems/wiggle-sort)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0280.Wiggle%20Sort/README.md
+tags:
+    - 贪心
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [280. 摆动排序 🔒](https://leetcode.cn/problems/wiggle-sort)
 
 [English Version](/solution/0200-0299/0280.Wiggle%20Sort/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个的整数数组&nbsp;<code>nums</code>, 将该数组重新排序后使&nbsp;<code>nums[0] &lt;= nums[1] &gt;= nums[2] &lt;= nums[3]...</code>&nbsp;</p>
 
@@ -44,15 +56,17 @@
 
 <p><b>进阶：</b>你能在&nbsp;<code>O(n)</code>&nbsp;时间复杂度下解决这个问题吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +81,7 @@ class Solution:
                 nums[i], nums[i - 1] = nums[i - 1], nums[i]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func wiggleSort(nums []int) {
@@ -116,10 +128,8 @@ func wiggleSort(nums []int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

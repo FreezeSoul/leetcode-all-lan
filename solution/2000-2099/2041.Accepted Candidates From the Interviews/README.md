@@ -1,10 +1,20 @@
-# [2041. 面试中被录取的候选人](https://leetcode.cn/problems/accepted-candidates-from-the-interviews)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2041.Accepted%20Candidates%20From%20the%20Interviews/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2041. 面试中被录取的候选人 🔒](https://leetcode.cn/problems/accepted-candidates-from-the-interviews)
 
 [English Version](/solution/2000-2099/2041.Accepted%20Candidates%20From%20the%20Interviews/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>Candidates</code></p>
 
@@ -17,7 +27,7 @@
 | years_of_exp | int      |
 | interview_id | int      |
 +--------------+----------+
-candidate_id 是这个表的主键。
+candidate_id 是这个表的主键（具有唯一值的列）。
 该表的每一行都表示候选人的姓名、工作年限以及面试 ID 。
 </pre>
 
@@ -33,13 +43,13 @@ candidate_id 是这个表的主键。
 | round_id     | int  |
 | score        | int  |
 +--------------+------+
-(interview_id, round_id）是本表的主键。
+(interview_id, round_id）是本表的主键（具有唯一值的列的组合）。
 本表的每一行都表示一轮面试的分数
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一个 SQL 查询，查询出至少有两年工作经验、且面试分数之和 <strong>严格大于 <code>15</code>&nbsp;</strong>的候选人的 ID<strong> 。</strong></p>
+<p>编写解决方案，找出 <strong>至少有两年</strong> 工作经验、且面试分数之和 <strong>严格大于 <code>15</code>&nbsp;</strong>的候选人的 ID<strong> 。</strong></p>
 
 <p>可以以 <strong>任何顺序 </strong>返回结果表。</p>
 
@@ -47,7 +57,7 @@ candidate_id 是这个表的主键。
 
 <p>&nbsp;</p>
 
-<p><strong>示例：</strong></p>
+<p><strong>示例 1：</strong></p>
 
 <pre>
 <strong>输入：</strong>
@@ -90,18 +100,46 @@ Rounds table:
 - 候选人 8 ：总分是 6 ，0 年工作经验。由于工作年限和分数，不列入结果表。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：连接表 + 分组 + 过滤
+
+我们可以将 `Candidates` 表和 `Rounds` 表按照 `interview_id` 进行连接，筛选出工作年限至少为 2 年的候选人，然后按照 `candidate_id` 进行分组，计算每个候选人的总分，最后筛选出总分大于 15 分的候选人。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
+# Write your MySQL query statement below
+SELECT candidate_id
+FROM
+    Candidates
+    JOIN Rounds USING (interview_id)
+WHERE years_of_exp >= 2
+GROUP BY 1
+HAVING SUM(score) > 15;
+```
 
+#### Pandas
+
+```python
+import pandas as pd
+
+
+def accepted_candidates(candidates: pd.DataFrame, rounds: pd.DataFrame) -> pd.DataFrame:
+    merged_df = pd.merge(candidates, rounds, on="interview_id")
+    filtered_df = merged_df[merged_df["years_of_exp"] >= 2]
+    grouped_df = filtered_df.groupby("candidate_id").agg({"score": "sum"})
+    return grouped_df[grouped_df["score"] > 15].reset_index()[["candidate_id"]]
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

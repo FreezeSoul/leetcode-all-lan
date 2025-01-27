@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1093.Statistics%20from%20a%20Large%20Sample/README.md
+rating: 1471
+source: 第 142 场周赛 Q1
+tags:
+    - 数组
+    - 数学
+    - 概率与统计
+---
+
+<!-- problem:start -->
+
 # [1093. 大样本统计](https://leetcode.cn/problems/statistics-from-a-large-sample)
 
 [English Version](/solution/1000-1099/1093.Statistics%20from%20a%20Large%20Sample/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们对&nbsp;<code>0</code>&nbsp;到&nbsp;<code>255</code>&nbsp;之间的整数进行采样，并将结果存储在数组&nbsp;<code>count</code>&nbsp;中：<code>count[k]</code>&nbsp;就是整数&nbsp;<code>k</code> 在样本中出现的次数。</p>
 
@@ -61,11 +75,13 @@
 	<li>&nbsp;<code>count</code>&nbsp;的众数是 <strong>唯一</strong> 的</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们直接根据题目描述模拟即可，定义以下变量：
 
@@ -93,9 +109,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -125,9 +139,7 @@ class Solution:
         return [mi, mx, s / cnt, median, mode]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -166,7 +178,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -200,7 +212,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sampleStats(count []int) []float64 {
@@ -233,23 +245,9 @@ func sampleStats(count []int) []float64 {
 	}
 	return []float64{float64(mi), float64(mx), float64(s) / float64(cnt), median, float64(mode)}
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sampleStats(count: number[]): number[] {
@@ -276,17 +274,13 @@ function sampleStats(count: number[]): number[] {
         }
     }
     const median =
-        cnt % 2 === 1
-            ? find((cnt >> 1) + 1)
-            : (find(cnt >> 1) + find((cnt >> 1) + 1)) / 2;
+        cnt % 2 === 1 ? find((cnt >> 1) + 1) : (find(cnt >> 1) + find((cnt >> 1) + 1)) / 2;
     return [mi, mx, s / cnt, median, mode];
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

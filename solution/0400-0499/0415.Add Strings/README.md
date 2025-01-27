@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0415.Add%20Strings/README.md
+tags:
+    - 数学
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [415. 字符串相加](https://leetcode.cn/problems/add-strings)
 
 [English Version](/solution/0400-0499/0415.Add%20Strings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个字符串形式的非负整数&nbsp;<code>num1</code> 和<code>num2</code>&nbsp;，计算它们的和并同样以字符串形式返回。</p>
 
@@ -45,25 +57,25 @@
 	<li><code>num1</code> 和<code>num2</code> 都不包含任何前导零</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们用两个指针 $i$ 和 $j$ 分别指向两个字符串的末尾，从末尾开始逐位相加。每次取出对应位的数字 $a$ 和 $b$，计算它们的和 $a + b + c$，其中 $c$ 表示上一次相加的进位，最后将 $a + b + c$ 的个位数添加到追加到答案字符串的末尾，然后将 $a + b + c$ 的十位数作为进位 $c$ 的值，循环此过程直至两个字符串的指针都已经指向了字符串的开头并且进位 $c$ 的值为 $0$。
 
 最后将答案字符串反转并返回即可。
 
-时间复杂度 $O(max(m, n))$，其中 $m$ 和 $n$ 分别是两个字符串的长度。忽略答案字符串的空间消耗，空间复杂度 $O(1)$。
+时间复杂度 $O(\max(m, n))$，其中 $m$ 和 $n$ 分别是两个字符串的长度。忽略答案字符串的空间消耗，空间复杂度 $O(1)$。
 
 以下代码还实现了字符串相减，参考 `subStrings(num1, num2)` 函数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,9 +111,7 @@ class Solution:
         return ''.join(ans[::-1])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -144,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -188,7 +198,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func addStrings(num1 string, num2 string) string {
@@ -243,33 +253,23 @@ func subStrings(num1 string, num2 string) string {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
 
-```js
-/**
- * @param {string} num1
- * @param {string} num2
- * @return {string}
- */
-var addStrings = function (num1, num2) {
+```ts
+function addStrings(num1: string, num2: string): string {
     let i = num1.length - 1;
     let j = num2.length - 1;
-    const ans = [];
+    const ans: number[] = [];
     for (let c = 0; i >= 0 || j >= 0 || c; --i, --j) {
-        c += i < 0 ? 0 : parseInt(num1.charAt(i), 10);
-        c += j < 0 ? 0 : parseInt(num2.charAt(j), 10);
+        c += i < 0 ? 0 : +num1[i];
+        c += j < 0 ? 0 : +num2[j];
         ans.push(c % 10);
         c = Math.floor(c / 10);
     }
     return ans.reverse().join('');
-};
+}
 
-/**
- * @param {string} num1
- * @param {string} num2
- * @return {string}
- */
-var subStrings = function (num1, num2) {
+function subStrings(num1: string, num2: string): string {
     const m = num1.length;
     const n = num2.length;
     const neg = m < n || (m == n && num1 < num2);
@@ -280,45 +280,23 @@ var subStrings = function (num1, num2) {
     }
     let i = num1.length - 1;
     let j = num2.length - 1;
-    const ans = [];
+    const ans: number[] = [];
     for (let c = 0; i >= 0; --i, --j) {
-        c = parseInt(num1.charAt(i), 10) - c;
+        c = +num1[i] - c;
         if (j >= 0) {
-            c -= parseInt(num2.charAt(j), 10);
+            c -= +num2[j];
         }
         ans.push((c + 10) % 10);
         c = c < 0 ? 1 : 0;
     }
-    while (ans.length > 1 && ans[ans.length - 1] == '0') {
+    while (ans.length > 1 && ans.at(-1) === 0) {
         ans.pop();
     }
-    if (neg) {
-        ans.push('-');
-    }
-    return ans.reverse().join('');
-};
-```
-
-### **TypeScript**
-
-```ts
-function addStrings(num1: string, num2: string): string {
-    const res = [];
-    let i = num1.length - 1;
-    let j = num2.length - 1;
-    let isOver = false;
-    while (i >= 0 || j >= 0 || isOver) {
-        const x = Number(num1[i--]) || 0;
-        const y = Number(num2[j--]) || 0;
-        const sum = x + y + (isOver ? 1 : 0);
-        isOver = sum >= 10;
-        res.push(sum % 10);
-    }
-    return res.reverse().join('');
+    return (neg ? '-' : '') + ans.reverse().join('');
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -346,10 +324,87 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var addStrings = function (num1, num2) {
+    let i = num1.length - 1;
+    let j = num2.length - 1;
+    const ans = [];
+    for (let c = 0; i >= 0 || j >= 0 || c; --i, --j) {
+        c += i < 0 ? 0 : +num1[i];
+        c += j < 0 ? 0 : +num2[j];
+        ans.push(c % 10);
+        c = Math.floor(c / 10);
+    }
+    return ans.reverse().join('');
+};
+
+/**
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var subStrings = function (num1, num2) {
+    const m = num1.length;
+    const n = num2.length;
+    const neg = m < n || (m == n && num1 < num2);
+    if (neg) {
+        const t = num1;
+        num1 = num2;
+        num2 = t;
+    }
+    let i = num1.length - 1;
+    let j = num2.length - 1;
+    const ans = [];
+    for (let c = 0; i >= 0; --i, --j) {
+        c = +num1[i] - c;
+        if (j >= 0) {
+            c -= +num2[j];
+        }
+        ans.push((c + 10) % 10);
+        c = c < 0 ? 1 : 0;
+    }
+    while (ans.length > 1 && ans.at(-1) === 0) {
+        ans.pop();
+    }
+    return (neg ? '-' : '') + ans.reverse().join('');
+};
 ```
 
+#### Kotlin
+
+```kotlin
+class Solution {
+    fun addStrings(num1: String, num2: String): String {
+        val result = mutableListOf<Int>()
+
+        val chars_1 = num1.toCharArray()
+        val chars_2 = num2.toCharArray()
+        var over = 0
+        var i = num1.length
+        var j = num2.length
+
+        while (i > 0 || j > 0 || over > 0) {
+            val a = if (i > 0) chars_1[--i] - '0' else 0
+            val b = if (j > 0) chars_2[--j] - '0' else 0
+            val sum = a + b + over
+            over = sum / 10
+            result.add(sum % 10)
+        }
+
+        return result.reversed().joinToString("")
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

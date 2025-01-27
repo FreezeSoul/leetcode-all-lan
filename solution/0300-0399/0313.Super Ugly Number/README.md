@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0313.Super%20Ugly%20Number/README.md
+tags:
+    - 数组
+    - 数学
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [313. 超级丑数](https://leetcode.cn/problems/super-ugly-number)
 
 [English Version](/solution/0300-0399/0313.Super%20Ugly%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>超级丑数</strong> 是一个正整数，并满足其所有质因数都出现在质数数组 <code>primes</code> 中。</p>
 
@@ -47,11 +59,13 @@
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（小根堆）**
+### 方法一：优先队列（小根堆）
 
 我们用一个优先队列（小根堆）维护所有可能的超级丑数，初始时将 $1$ 放入队列中。
 
@@ -63,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +95,7 @@ class Solution:
         return x
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -138,7 +148,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func nthSuperUglyNumber(n int, primes []int) (x int) {
@@ -160,8 +170,8 @@ func nthSuperUglyNumber(n int, primes []int) (x int) {
 
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -169,15 +179,27 @@ func (h *hp) Pop() interface{} {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Go
+
 ```go
 type Ugly struct{ value, prime, index int }
 type Queue []Ugly
 
-func (u Queue) Len() int            { return len(u) }
-func (u Queue) Swap(i, j int)       { u[i], u[j] = u[j], u[i] }
-func (u Queue) Less(i, j int) bool  { return u[i].value < u[j].value }
-func (u *Queue) Push(v interface{}) { *u = append(*u, v.(Ugly)) }
-func (u *Queue) Pop() interface{} {
+func (u Queue) Len() int           { return len(u) }
+func (u Queue) Swap(i, j int)      { u[i], u[j] = u[j], u[i] }
+func (u Queue) Less(i, j int) bool { return u[i].value < u[j].value }
+func (u *Queue) Push(v any)        { *u = append(*u, v.(Ugly)) }
+func (u *Queue) Pop() any {
 	old, x := *u, (*u)[len(*u)-1]
 	*u = old[:len(old)-1]
 	return x
@@ -202,10 +224,8 @@ func nthSuperUglyNumber(n int, primes []int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

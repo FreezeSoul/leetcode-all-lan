@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1015.Smallest%20Integer%20Divisible%20by%20K/README.md
+rating: 1874
+source: 第 129 场周赛 Q2
+tags:
+    - 哈希表
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1015. 可被 K 整除的最小整数](https://leetcode.cn/problems/smallest-integer-divisible-by-k)
 
 [English Version](/solution/1000-1099/1015.Smallest%20Integer%20Divisible%20by%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定正整数 <code>k</code>&nbsp;，你需要找出可以被 <code>k</code>&nbsp;整除的、仅包含数字 <code><strong>1</strong></code> 的最 <strong>小</strong> 正整数 <code>n</code>&nbsp;的长度。</p>
 
@@ -43,11 +56,13 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 我们注意到，正整数 $n$ 初始值为 $1$，每次乘以 $10$ 后再加 $1$，即 $n = n \times 10 + 1$，而 $(n \times 10 + 1) \bmod k = ((n \bmod k) \times 10 + 1) \bmod k$，因此我们可以通过计算 $n \bmod k$ 来判断 $n$ 是否能被 $k$ 整除。
 
@@ -57,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,9 +85,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -109,7 +120,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestRepunitDivByK(k int) int {
@@ -124,7 +135,7 @@ func smallestRepunitDivByK(k int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallestRepunitDivByK(k: number): number {
@@ -139,10 +150,8 @@ function smallestRepunitDivByK(k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,21 @@
-# [2330. 有效的回文 IV](https://leetcode.cn/problems/valid-palindrome-iv)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2330.Valid%20Palindrome%20IV/README.md
+tags:
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [2330. 验证回文串 IV 🔒](https://leetcode.cn/problems/valid-palindrome-iv)
 
 [English Version](/solution/2300-2399/2330.Valid%20Palindrome%20IV/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始、仅由小写英文字母组成的字符串 <code>s</code> 。在一步操作中，你可以将 <code>s</code> 中的任一字符更改为其他任何字符。</p>
 
@@ -50,11 +61,13 @@
 	<li><code>s</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们可以使用双指针 $i$ 和 $j$，分别指向字符串的头尾，然后向中间移动，统计不同字符的个数，如果不同字符的个数大于 $2$，则返回 `false`，否则返回 `true`。
 
@@ -62,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,9 +88,7 @@ class Solution:
         return cnt <= 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makePalindrome(s string) bool {
@@ -127,7 +136,7 @@ func makePalindrome(s string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makePalindrome(s: string): boolean {
@@ -143,10 +152,8 @@ function makePalindrome(s: string): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0943.Find%20the%20Shortest%20Superstring/README.md
+tags:
+    - 位运算
+    - 数组
+    - 字符串
+    - 动态规划
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [943. 最短超级串](https://leetcode.cn/problems/find-the-shortest-superstring)
 
 [English Version](/solution/0900-0999/0943.Find%20the%20Shortest%20Superstring/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串数组 <code>words</code>，找到以 <code>words</code> 中每个字符串作为子字符串的最短字符串。如果有多个有效最短字符串满足题目条件，返回其中 <strong>任意一个</strong> 即可。</p>
 
@@ -36,11 +50,13 @@
 	<li><code>words</code> 中的所有字符串 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + 动态规划**
+### 方法一：状态压缩 + 动态规划
 
 由于题目中字符串数组 `words` 的长度不超过 12，因此可以使用状态压缩的方法来表示字符串数组中的每个字符串是否被选中。
 
@@ -58,9 +74,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -102,9 +116,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -175,7 +187,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -245,7 +257,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestSuperstring(words []string) string {
@@ -314,19 +326,10 @@ func shortestSuperstring(words []string) string {
 	}
 	return ans.String()
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

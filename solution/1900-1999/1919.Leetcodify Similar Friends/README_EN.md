@@ -1,8 +1,20 @@
-# [1919. Leetcodify Similar Friends](https://leetcode.com/problems/leetcodify-similar-friends)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1919.Leetcodify%20Similar%20Friends/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1919. Leetcodify Similar Friends 🔒](https://leetcode.com/problems/leetcodify-similar-friends)
 
 [中文文档](/solution/1900-1999/1919.Leetcodify%20Similar%20Friends/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Listens</code></p>
 
@@ -14,7 +26,7 @@
 | song_id     | int     |
 | day         | date    |
 +-------------+---------+
-There is no primary key for this table. It may contain duplicates.
+This table may contain duplicate rows.
 Each row of this table indicates that the user user_id listened to the song song_id on the day day.
 </pre>
 
@@ -29,14 +41,14 @@ Each row of this table indicates that the user user_id listened to the song song
 | user1_id      | int     |
 | user2_id      | int     |
 +---------------+---------+
-(user1_id, user2_id) is the primary key for this table.
+(user1_id, user2_id) is the primary key (combination of columns with unique values) for this table.
 Each row of this table indicates that the users user1_id and user2_id are friends.
 Note that user1_id &lt; user2_id.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the similar friends of Leetcodify users. A user <code>x</code> and user <code>y</code> are&nbsp;similar friends if:</p>
+<p>Write a solution to report the similar friends of Leetcodify users. A user <code>x</code> and user <code>y</code> are&nbsp;similar friends if:</p>
 
 <ul>
 	<li>Users <code>x</code> and <code>y</code> are friends, and</li>
@@ -45,7 +57,7 @@ Note that user1_id &lt; user2_id.
 
 <p>Return the result table in <strong>any order</strong>. Note that you must return the similar pairs of friends the same way they were represented in the input (i.e., always <code>user1_id &lt; user2_id</code>).</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -93,14 +105,32 @@ Users 2 and 4 are friends, but they did not listen to the same three different s
 Users 2 and 5 are friends and listened to songs 10, 11, and 12, but they did not listen to them on the same day.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT DISTINCT user1_id, user2_id
+FROM
+    Friendship AS f
+    LEFT JOIN Listens AS l1 ON user1_id = l1.user_id
+    LEFT JOIN Listens AS l2 ON user2_id = l2.user_id
+WHERE l1.song_id = l2.song_id AND l1.day = l2.day
+GROUP BY 1, 2, l1.day
+HAVING COUNT(DISTINCT l1.song_id) >= 3;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

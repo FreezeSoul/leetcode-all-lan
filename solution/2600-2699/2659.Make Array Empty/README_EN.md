@@ -1,8 +1,28 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2659.Make%20Array%20Empty/README_EN.md
+rating: 2281
+source: Biweekly Contest 103 Q4
+tags:
+    - Greedy
+    - Binary Indexed Tree
+    - Segment Tree
+    - Array
+    - Binary Search
+    - Ordered Set
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2659. Make Array Empty](https://leetcode.com/problems/make-array-empty)
 
 [中文文档](/solution/2600-2699/2659.Make%20Array%20Empty/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> containing <strong>distinct</strong> numbers, and you can perform the following operations <strong>until the array is empty</strong>:</p>
 
@@ -129,9 +149,13 @@
 	<li>All values in <code>nums</code> are <strong>distinct</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Hash Table + Sorting + Fenwick Tree**
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Sorting + Fenwick Tree
 
 First, we use a hash table $pos$ to record the position of each element in array $nums$. Then, we sort array $nums$. The initial answer is the position of the minimum element in array $nums$ plus 1, which is $ans = pos[nums[0]] + 1$.
 
@@ -143,12 +167,9 @@ The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class Solution:
     def countOperationsToEmptyArray(self, nums: List[int]) -> int:
         pos = {x: i for i, x in enumerate(nums)}
@@ -164,40 +185,7 @@ class Solution:
         return ans
 ```
 
-```python
-class BinaryIndexedTree:
-    def __init__(self, n):
-        self.n = n
-        self.c = [0] * (n + 1)
-
-    def update(self, x, delta):
-        while x <= self.n:
-            self.c[x] += delta
-            x += x & -x
-
-    def query(self, x):
-        s = 0
-        while x:
-            s += self.c[x]
-            x -= x & -x
-        return s
-
-class Solution:
-    def countOperationsToEmptyArray(self, nums: List[int]) -> int:
-        pos = {x: i for i, x in enumerate(nums)}
-        nums.sort()
-        ans = pos[nums[0]] + 1
-        n = len(nums)
-        tree = BinaryIndexedTree(n)
-        for k, (a, b) in enumerate(pairwise(nums)):
-            i, j = pos[a], pos[b]
-            d = j - i - tree.query(j + 1) + tree.query(i + 1)
-            ans += d + (n - k) * int(i > j)
-            tree.update(i + 1, 1)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -247,12 +235,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
 public:
-    BinaryIndexedTree(int _n) : n(_n), c(_n + 1) {}
+    BinaryIndexedTree(int _n)
+        : n(_n)
+        , c(_n + 1) {}
 
     void update(int x, int delta) {
         while (x <= n) {
@@ -297,7 +287,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type BinaryIndexedTree struct {
@@ -348,7 +338,7 @@ func countOperationsToEmptyArray(nums []int) int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class BinaryIndexedTree {
@@ -400,10 +390,54 @@ function countOperationsToEmptyArray(nums: number[]): number {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class BinaryIndexedTree:
+    def __init__(self, n):
+        self.n = n
+        self.c = [0] * (n + 1)
+
+    def update(self, x, delta):
+        while x <= self.n:
+            self.c[x] += delta
+            x += x & -x
+
+    def query(self, x):
+        s = 0
+        while x:
+            s += self.c[x]
+            x -= x & -x
+        return s
+
+
+class Solution:
+    def countOperationsToEmptyArray(self, nums: List[int]) -> int:
+        pos = {x: i for i, x in enumerate(nums)}
+        nums.sort()
+        ans = pos[nums[0]] + 1
+        n = len(nums)
+        tree = BinaryIndexedTree(n)
+        for k, (a, b) in enumerate(pairwise(nums)):
+            i, j = pos[a], pos[b]
+            d = j - i - tree.query(j + 1) + tree.query(i + 1)
+            ans += d + (n - k) * int(i > j)
+            tree.update(i + 1, 1)
+        return ans
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

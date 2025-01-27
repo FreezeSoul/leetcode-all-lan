@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2460.Apply%20Operations%20to%20an%20Array/README.md
+rating: 1223
+source: 第 318 场周赛 Q1
+tags:
+    - 数组
+    - 双指针
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2460. 对数组执行操作](https://leetcode.cn/problems/apply-operations-to-an-array)
 
 [English Version](/solution/2400-2499/2460.Apply%20Operations%20to%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的数组 <code>nums</code> ，数组大小为 <code>n</code> ，且由 <strong>非负</strong> 整数组成。</p>
 
@@ -57,11 +71,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们直接根据题意模拟即可。
 
@@ -75,9 +91,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -96,9 +110,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -122,7 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func applyOperations(nums []int) []int {
@@ -170,7 +182,7 @@ func applyOperations(nums []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function applyOperations(nums: number[]): number[] {
@@ -192,10 +204,35 @@ function applyOperations(nums: number[]): number[] {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn apply_operations(nums: Vec<i32>) -> Vec<i32> {
+        let mut nums = nums;
 
+        for i in 0..nums.len() - 1 {
+            if nums[i] == nums[i + 1] {
+                nums[i] <<= 1;
+                nums[i + 1] = 0;
+            }
+        }
+
+        let mut cur = 0;
+        for i in 0..nums.len() {
+            if nums[i] != 0 {
+                nums.swap(i, cur);
+                cur += 1;
+            }
+        }
+
+        nums
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

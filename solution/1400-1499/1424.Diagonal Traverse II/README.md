@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1424.Diagonal%20Traverse%20II/README.md
+rating: 1779
+source: 第 186 场周赛 Q3
+tags:
+    - 数组
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1424. 对角线遍历 II](https://leetcode.cn/problems/diagonal-traverse-ii)
 
 [English Version](/solution/1400-1499/1424.Diagonal%20Traverse%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个列表&nbsp;<code>nums</code>&nbsp;，里面每一个元素都是一个整数列表。请你依照下面各图的规则，按顺序返回&nbsp;<code>nums</code>&nbsp;中对角线上的整数。</p>
 
@@ -49,11 +63,13 @@
 	<li><code>nums</code>&nbsp;中最多有&nbsp;<code>10^5</code>&nbsp;个数字。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 我们观察到：
 
@@ -61,15 +77,13 @@
 -   下一条对角线的 $i + j$ 的值比前一条对角线的大；
 -   在同一条对角线中的 $i + j$ 是相同的，而 $j$ 值是从小到大递增。
 
-因此，我们将所有数字以 `(i + j, j, nums[i][j])` 的形式存进 `arr`，然后按照前两项排序。最后返回 `arr` 所有元素第二项组成的数组即可。
+因此，我们将所有数字以 $(i, j, \textit{nums}[i][j])$ 的形式存进 $\textit{arr}$，然后按照前两项排序。最后返回 $\textit{arr}$ 所有元素下标为 $2$ 的值组成的数组即可。
 
-时间复杂度 $O(n\log n)$，其中 $n$ 是 `nums` 数组元素的个数。
+时间复杂度 $O(n \times \log n)$，其中 $n$ 是数组 $\textit{nums}$ 中元素的个数。空间复杂度 $O(n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,9 +96,7 @@ class Solution:
         return [v[2] for v in arr]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -119,7 +131,7 @@ public:
         }
         sort(arr.begin(), arr.end());
         vector<int> ans;
-        for (auto& e: arr) {
+        for (auto& e : arr) {
             ans.push_back(get<2>(e));
         }
         return ans;
@@ -127,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findDiagonalOrder(nums [][]int) []int {
@@ -151,10 +163,44 @@ func findDiagonalOrder(nums [][]int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function findDiagonalOrder(nums: number[][]): number[] {
+    const arr: number[][] = [];
+    for (let i = 0; i < nums.length; ++i) {
+        for (let j = 0; j < nums[i].length; ++j) {
+            arr.push([i + j, j, nums[i][j]]);
+        }
+    }
+    arr.sort((a, b) => (a[0] === b[0] ? a[1] - b[1] : a[0] - b[0]));
+    return arr.map(x => x[2]);
+}
 ```
 
+#### C#
+
+```cs
+public class Solution {
+    public int[] FindDiagonalOrder(IList<IList<int>> nums) {
+        List<int[]> arr = new List<int[]>();
+        for (int i = 0; i < nums.Count; ++i) {
+            for (int j = 0; j < nums[i].Count; ++j) {
+                arr.Add(new int[] { i + j, j, nums[i][j] });
+            }
+        }
+        arr.Sort((a, b) => a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+        int[] ans = new int[arr.Count];
+        for (int i = 0; i < arr.Count; ++i) {
+            ans[i] = arr[i][2];
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

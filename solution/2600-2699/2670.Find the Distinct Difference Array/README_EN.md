@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2670.Find%20the%20Distinct%20Difference%20Array/README_EN.md
+rating: 1266
+source: Weekly Contest 344 Q1
+tags:
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [2670. Find the Distinct Difference Array](https://leetcode.com/problems/find-the-distinct-difference-array)
 
 [中文文档](/solution/2600-2699/2670.Find%20the%20Distinct%20Difference%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array <code>nums</code> of length <code>n</code>.</p>
 
@@ -45,23 +60,23 @@ For index i = 4, there are 3 distinct elements in the prefix and no elements in 
 	<li><code>1 &lt;= nums[i] &lt;= 50</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Preprocessed Suffix
+
+We can preprocess a suffix array $suf$, where $suf[i]$ represents the number of distinct elements in the suffix $nums[i, ..., n - 1]$. During the preprocessing, we use a hash table $s$ to maintain the elements that have appeared in the suffix, so we can query the number of distinct elements in the suffix in $O(1)$ time.
+
+After preprocessing the suffix array $suf$, we clear the hash table $s$, and then traverse the array $nums$ again, using the hash table $s$ to maintain the elements that have appeared in the prefix. The answer at position $i$ is the number of distinct elements in $s$ minus $suf[i + 1]$, that is, $s.size() - suf[i + 1]$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-```python
-class Solution:
-    def distinctDifferenceArray(self, nums: List[int]) -> List[int]:
-        n = len(nums)
-        ans = [0] * n
-        for i in range(n):
-            a = len(set(nums[: i + 1]))
-            b = len(set(nums[i + 1 :]))
-            ans[i] = a - b
-        return ans
-```
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +87,6 @@ class Solution:
         for i in range(n - 1, -1, -1):
             s.add(nums[i])
             suf[i] = len(s)
-
         s.clear()
         ans = [0] * n
         for i, x in enumerate(nums):
@@ -81,7 +95,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func distinctDifferenceArray(nums []int) []int {
@@ -149,19 +163,19 @@ func distinctDifferenceArray(nums []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function distinctDifferenceArray(nums: number[]): number[] {
     const n = nums.length;
-    const suf: number[] = new Array(n + 1).fill(0);
+    const suf: number[] = Array(n + 1).fill(0);
     const s: Set<number> = new Set();
     for (let i = n - 1; i >= 0; --i) {
         s.add(nums[i]);
         suf[i] = s.size;
     }
     s.clear();
-    const ans: number[] = new Array(n);
+    const ans: number[] = Array(n).fill(0);
     for (let i = 0; i < n; ++i) {
         s.add(nums[i]);
         ans[i] = s.size - suf[i + 1];
@@ -170,10 +184,36 @@ function distinctDifferenceArray(nums: number[]): number[] {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::HashSet;
 
+impl Solution {
+    pub fn distinct_difference_array(nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len();
+        let mut suf = vec![0; n + 1];
+        let mut s = HashSet::new();
+
+        for i in (0..n).rev() {
+            s.insert(nums[i]);
+            suf[i] = s.len();
+        }
+
+        let mut ans = Vec::new();
+        s.clear();
+        for i in 0..n {
+            s.insert(nums[i]);
+            ans.push((s.len() - suf[i + 1]) as i32);
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

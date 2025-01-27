@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1985.Find%20the%20Kth%20Largest%20Integer%20in%20the%20Array/README.md
+rating: 1414
+source: 第 256 场周赛 Q2
+tags:
+    - 数组
+    - 字符串
+    - 分治
+    - 快速选择
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1985. 找出数组中的第 K 大整数](https://leetcode.cn/problems/find-the-kth-largest-integer-in-the-array)
 
 [English Version](/solution/1900-1999/1985.Find%20the%20Kth%20Largest%20Integer%20in%20the%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>nums</code> 和一个整数 <code>k</code> 。<code>nums</code> 中的每个字符串都表示一个不含前导零的整数。</p>
 
@@ -55,33 +72,29 @@ nums 中的数字按非递减顺序排列为 ["0","0"]
 	<li><code>nums[i]</code> 不含任何前导零</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：自定义排序**
+### 方法一：排序或快速选择
+
+我们可以将 $\textit{nums}$ 数组中的字符串按照整数从大到小排序，然后取第 $k$ 个元素即可。也可以使用快速选择算法，找到第 $k$ 大的整数。
+
+时间复杂度 $O(n \times \log n)$ 或 $O(n)$，其中 $n$ 是 $\textit{nums}$ 数组的长度。空间复杂度 $O(\log n)$ 或 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def kthLargestNumber(self, nums: List[str], k: int) -> str:
-        def cmp(a, b):
-            if len(a) != len(b):
-                return len(b) - len(a)
-            return 1 if b > a else -1
-
-        nums.sort(key=cmp_to_key(cmp))
-        return nums[k - 1]
+        return nlargest(k, nums, key=lambda x: int(x))[k - 1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,20 +106,21 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string kthLargestNumber(vector<string>& nums, int k) {
-        auto cmp = [](const string& a, const string& b) { return a.size() == b.size() ? a > b : a.size() > b.size(); };
-        sort(nums.begin(), nums.end(), cmp);
+        nth_element(nums.begin(), nums.begin() + k - 1, nums.end(), [](const string& a, const string& b) {
+            return a.size() == b.size() ? a > b : a.size() > b.size();
+        });
         return nums[k - 1];
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func kthLargestNumber(nums []string, k int) string {
@@ -121,10 +135,8 @@ func kthLargestNumber(nums []string, k int) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

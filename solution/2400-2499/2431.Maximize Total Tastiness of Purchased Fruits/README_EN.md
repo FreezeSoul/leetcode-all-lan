@@ -1,8 +1,21 @@
-# [2431. Maximize Total Tastiness of Purchased Fruits](https://leetcode.com/problems/maximize-total-tastiness-of-purchased-fruits)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2431.Maximize%20Total%20Tastiness%20of%20Purchased%20Fruits/README_EN.md
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
+# [2431. Maximize Total Tastiness of Purchased Fruits 🔒](https://leetcode.com/problems/maximize-total-tastiness-of-purchased-fruits)
 
 [中文文档](/solution/2400-2499/2431.Maximize%20Total%20Tastiness%20of%20Purchased%20Fruits/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two non-negative integer arrays <code>price</code> and <code>tastiness</code>, both arrays have the same length <code>n</code>. You are also given two non-negative integers <code>maxAmount</code> and <code>maxCoupons</code>.</p>
 
@@ -61,15 +74,35 @@ It can be proven that 28 is the maximum total tastiness that can be obtained.
 	<li><code>0 &lt;= maxCoupons &lt;= 5</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Memoization Search
+
+We design a function $dfs(i, j, k)$ to represent the maximum total tastiness starting from the $i$th fruit, with $j$ money left, and $k$ coupons left.
+
+For the $i$th fruit, we can choose to buy or not to buy. If we choose to buy, we can decide whether to use a coupon or not.
+
+If we don't buy, the maximum total tastiness is $dfs(i + 1, j, k)$;
+
+If we buy, and choose not to use a coupon (requires $j\ge price[i]$), the maximum total tastiness is $dfs(i + 1, j - price[i], k) + tastiness[i]$; if we use a coupon (requires $k\gt 0$ and $j\ge \lfloor \frac{price[i]}{2} \rfloor$), the maximum total tastiness is $dfs(i + 1, j - \lfloor \frac{price[i]}{2} \rfloor, k - 1) + tastiness[i]$.
+
+The final answer is $dfs(0, maxAmount, maxCoupons)$.
+
+The time complexity is $O(n \times maxAmount \times maxCoupons)$, where $n$ is the number of fruits.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def maxTastiness(self, price: List[int], tastiness: List[int], maxAmount: int, maxCoupons: int) -> int:
+    def maxTastiness(
+        self, price: List[int], tastiness: List[int], maxAmount: int, maxCoupons: int
+    ) -> int:
         @cache
         def dfs(i, j, k):
             if i == len(price):
@@ -78,14 +111,13 @@ class Solution:
             if j >= price[i]:
                 ans = max(ans, dfs(i + 1, j - price[i], k) + tastiness[i])
             if j >= price[i] // 2 and k:
-                ans = max(
-                    ans, dfs(i + 1, j - price[i] // 2, k - 1) + tastiness[i])
+                ans = max(ans, dfs(i + 1, j - price[i] // 2, k - 1) + tastiness[i])
             return ans
 
         return dfs(0, maxAmount, maxCoupons)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -122,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,19 +167,20 @@ public:
             if (i == n) return 0;
             if (f[i][j][k]) return f[i][j][k];
             int ans = dfs(i + 1, j, k);
-            if (j >= price[i])  ans = max(ans, dfs(i + 1, j - price[i], k) + tastiness[i]);
+            if (j >= price[i]) ans = max(ans, dfs(i + 1, j - price[i], k) + tastiness[i]);
             if (j >= price[i] / 2 && k) ans = max(ans, dfs(i + 1, j - price[i] / 2, k - 1) + tastiness[i]);
             f[i][j][k] = ans;
             return ans;
         };
         return dfs(0, maxAmount, maxCoupons);
     }
+
 private:
     int f[101][1001][6];
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxTastiness(price []int, tastiness []int, maxAmount int, maxCoupons int) int {
@@ -179,25 +212,10 @@ func maxTastiness(price []int, tastiness []int, maxAmount int, maxCoupons int) i
 	}
 	return dfs(0, maxAmount, maxCoupons)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

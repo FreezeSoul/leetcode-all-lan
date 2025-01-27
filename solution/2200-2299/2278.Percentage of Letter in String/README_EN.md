@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2278.Percentage%20of%20Letter%20in%20String/README_EN.md
+rating: 1161
+source: Weekly Contest 294 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2278. Percentage of Letter in String](https://leetcode.com/problems/percentage-of-letter-in-string)
 
 [中文文档](/solution/2200-2299/2278.Percentage%20of%20Letter%20in%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> and a character <code>letter</code>, return<em> the <strong>percentage</strong> of characters in </em><code>s</code><em> that equal </em><code>letter</code><em> <strong>rounded down</strong> to the nearest whole percent.</em></p>
 
@@ -33,11 +47,21 @@ The percentage of characters in s that equal the letter &#39;k&#39; is 0%, so we
 	<li><code>letter</code> is a lowercase English letter.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We can traverse the string $\textit{s}$ and count the number of characters that are equal to $\textit{letter}$. Then, we calculate the percentage using the formula $\textit{count} \times 100 \, / \, \textit{len}(\textit{s})$.
+
+Time complexity is $O(n)$, where $n$ is the length of the string $\textit{s}$. Space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -45,7 +69,7 @@ class Solution:
         return s.count(letter) * 100 // len(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -61,66 +85,47 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int percentageLetter(string s, char letter) {
-        int cnt = 0;
-        for (char& c : s) cnt += c == letter;
-        return cnt * 100 / s.size();
+        return 100 * ranges::count(s, letter) / s.size();
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func percentageLetter(s string, letter byte) int {
-	cnt := 0
-	for i := range s {
-		if s[i] == letter {
-			cnt++
-		}
-	}
-	return cnt * 100 / len(s)
+	return strings.Count(s, string(letter)) * 100 / len(s)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function percentageLetter(s: string, letter: string): number {
-    let count = 0;
-    let total = s.length;
-    for (let i of s) {
-        if (i === letter) count++;
-    }
-    return Math.floor((count / total) * 100);
+    const count = s.split('').filter(c => c === letter).length;
+    return Math.floor((100 * count) / s.length);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn percentage_letter(s: String, letter: char) -> i32 {
-        let mut count = 0;
-        for c in s.chars() {
-            if c == letter {
-                count += 1;
-            }
-        }
-        (count * 100 / s.len()) as i32
+        let count = s.chars().filter(|&c| c == letter).count();
+        (100 * count as i32 / s.len() as i32) as i32
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1887.Reduction%20Operations%20to%20Make%20the%20Array%20Elements%20Equal/README_EN.md
+rating: 1427
+source: Weekly Contest 244 Q2
+tags:
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1887. Reduction Operations to Make the Array Elements Equal](https://leetcode.com/problems/reduction-operations-to-make-the-array-elements-equal)
 
 [中文文档](/solution/1800-1899/1887.Reduction%20Operations%20to%20Make%20the%20Array%20Elements%20Equal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, your goal is to make all elements in <code>nums</code> equal. To complete one operation, follow these steps:</p>
 
@@ -54,11 +69,17 @@
 	<li><code>1 &lt;= nums[i] &lt;= 5 * 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,17 +93,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def reductionOperations(self, nums: List[int]) -> int:
-        ans = cnt = 0
-        for _, v in sorted(Counter(nums).items()):
-            ans += cnt * v
-            cnt += 1
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,6 +110,98 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int reductionOperations(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int ans = 0, cnt = 0;
+        for (int i = 1; i < nums.size(); ++i) {
+            cnt += nums[i] != nums[i - 1];
+            ans += cnt;
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func reductionOperations(nums []int) int {
+	sort.Ints(nums)
+	ans, cnt := 0, 0
+	for i, v := range nums[1:] {
+		if v != nums[i] {
+			cnt++
+		}
+		ans += cnt
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function reductionOperations(nums: number[]): number {
+    nums.sort((a, b) => a - b);
+    let ans = 0;
+    let cnt = 0;
+    for (let i = 1; i < nums.length; ++i) {
+        if (nums[i] != nums[i - 1]) {
+            ++cnt;
+        }
+        ans += cnt;
+    }
+    return ans;
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int ReductionOperations(int[] nums) {
+        Array.Sort(nums);
+        int ans = 0, up = 0;
+        for (int i = 1; i < nums.Length; i++) {
+            if (nums[i] != nums[i - 1]) {
+                up++;
+            }
+            ans += up;
+        }
+        return ans;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def reductionOperations(self, nums: List[int]) -> int:
+        ans = cnt = 0
+        for _, v in sorted(Counter(nums).items()):
+            ans += cnt * v
+            cnt += 1
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -117,39 +220,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function reductionOperations(nums: number[]): number {
-    nums.sort((a, b) => a - b);
-    let ans = 0;
-    let cnt = 0;
-    for (let i = 1; i < nums.length; ++i) {
-        if (nums[i] != nums[i - 1]) {
-            ++cnt;
-        }
-        ans += cnt;
-    }
-    return ans;
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int reductionOperations(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int ans = 0, cnt = 0;
-        for (int i = 1; i < nums.size(); ++i) {
-            cnt += nums[i] != nums[i - 1];
-            ans += cnt;
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -158,8 +229,7 @@ public:
         map<int, int> m;
         for (int v : nums) ++m[v];
         int ans = 0, cnt = 0;
-        for (auto [_, v] : m)
-        {
+        for (auto [_, v] : m) {
             ans += cnt * v;
             ++cnt;
         }
@@ -168,26 +238,8 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func reductionOperations(nums []int) int {
-	sort.Ints(nums)
-	ans, cnt := 0, 0
-	for i, v := range nums[1:] {
-		if v != nums[i] {
-			cnt++
-		}
-		ans += cnt
-	}
-	return ans
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1752.Check%20if%20Array%20Is%20Sorted%20and%20Rotated/README_EN.md
+rating: 1324
+source: Weekly Contest 227 Q1
+tags:
+    - Array
+---
+
+<!-- problem:start -->
+
 # [1752. Check if Array Is Sorted and Rotated](https://leetcode.com/problems/check-if-array-is-sorted-and-rotated)
 
 [中文文档](/solution/1700-1799/1752.Check%20if%20Array%20Is%20Sorted%20and%20Rotated/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array <code>nums</code>, return <code>true</code><em> if the array was originally sorted in non-decreasing order, then rotated <strong>some</strong> number of positions (including zero)</em>. Otherwise, return <code>false</code>.</p>
 
@@ -45,11 +59,17 @@ You can rotate the array by x = 0 positions (i.e. no rotation) to make nums.
 	<li><code>1 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +77,7 @@ class Solution:
         return sum(nums[i - 1] > v for i, v in enumerate(nums)) <= 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -73,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -88,7 +108,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func check(nums []int) bool {
@@ -102,18 +122,16 @@ func check(nums []int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function check(nums: number[]): boolean {
     const n = nums.length;
-    return (
-        nums.reduce((r, v, i) => r + (v > nums[(i + 1) % n] ? 1 : 0), 0) <= 1
-    );
+    return nums.reduce((r, v, i) => r + (v > nums[(i + 1) % n] ? 1 : 0), 0) <= 1;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -130,10 +148,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-bool check(int *nums, int numsSize) {
+bool check(int* nums, int numsSize) {
     int count = 0;
     for (int i = 0; i < numsSize; i++) {
         if (nums[i] > nums[(i + 1) % numsSize]) {
@@ -144,10 +162,8 @@ bool check(int *nums, int numsSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

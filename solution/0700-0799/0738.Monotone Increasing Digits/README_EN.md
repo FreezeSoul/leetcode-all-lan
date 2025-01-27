@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0738.Monotone%20Increasing%20Digits/README_EN.md
+tags:
+    - Greedy
+    - Math
+---
+
+<!-- problem:start -->
+
 # [738. Monotone Increasing Digits](https://leetcode.com/problems/monotone-increasing-digits)
 
 [中文文档](/solution/0700-0799/0738.Monotone%20Increasing%20Digits/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>An integer has <strong>monotone increasing digits</strong> if and only if each pair of adjacent digits <code>x</code> and <code>y</code> satisfy <code>x &lt;= y</code>.</p>
 
@@ -37,11 +50,17 @@
 	<li><code>0 &lt;= n &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +80,7 @@ class Solution:
         return int(''.join(s))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -92,7 +111,8 @@ public:
     int monotoneIncreasingDigits(int n) {
         string s = to_string(n);
         int i = 1;
-        for (; i < s.size() && s[i - 1] <= s[i]; ++i);
+        for (; i < s.size() && s[i - 1] <= s[i]; ++i)
+            ;
         if (i < s.size()) {
             for (; i > 0 && s[i - 1] > s[i]; --i) {
                 --s[i - 1];
@@ -107,7 +127,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func monotoneIncreasingDigits(n int) int {
@@ -129,10 +149,8 @@ func monotoneIncreasingDigits(n int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2576.Find%20the%20Maximum%20Number%20of%20Marked%20Indices/README_EN.md
+rating: 1843
+source: Weekly Contest 334 Q3
+tags:
+    - Greedy
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2576. Find the Maximum Number of Marked Indices](https://leetcode.com/problems/find-the-maximum-number-of-marked-indices)
 
 [中文文档](/solution/2500-2599/2576.Find%20the%20Maximum%20Number%20of%20Marked%20Indices/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>.</p>
 
@@ -60,112 +78,121 @@ Since there is no other operation, the answer is 4.
 .spoilerbutton[value="Hide Message"] + .spoiler {padding:5px;}
 </style>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Two Pointers
+
+According to the problem description, the problem can generate at most $n / 2$ pairs of indices, where $n$ is the length of the array $\textit{nums}$.
+
+To mark as many indices as possible, we can sort the array $\textit{nums}$. Next, we traverse each element $\textit{nums}[j]$ in the right half of the array, using a pointer $\textit{i}$ to point to the smallest element in the left half. If $\textit{nums}[i] \times 2 \leq \textit{nums}[j]$, we can mark the indices $\textit{i}$ and $\textit{j}$, and move $\textit{i}$ one position to the right. Continue traversing the elements in the right half until reaching the end of the array. At this point, the number of indices we can mark is $\textit{i} \times 2$.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maxNumOfMarkedIndices(self, nums: List[int]) -> int:
         nums.sort()
-        n = len(nums)
-        i, j = 0, (n + 1) // 2
-        ans = 0
-        while j < n:
-            while j < n and nums[i] * 2 > nums[j]:
-                j += 1
-            if j < n:
-                ans += 2
-            i, j = i + 1, j + 1
-        return ans
+        i, n = 0, len(nums)
+        for x in nums[(n + 1) // 2 :]:
+            if nums[i] * 2 <= x:
+                i += 1
+        return i * 2
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int maxNumOfMarkedIndices(int[] nums) {
         Arrays.sort(nums);
-        int n = nums.length;
-        int ans = 0;
-        for (int i = 0, j = (n + 1) / 2; j < n; ++i, ++j) {
-            while (j < n && nums[i] * 2 > nums[j]) {
-                ++j;
-            }
-            if (j < n) {
-                ans += 2;
+        int i = 0, n = nums.length;
+        for (int j = (n + 1) / 2; j < n; ++j) {
+            if (nums[i] * 2 <= nums[j]) {
+                ++i;
             }
         }
-        return ans;
+        return i * 2;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maxNumOfMarkedIndices(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int n = nums.size();
-        int ans = 0;
-        for (int i = 0, j = (n + 1) / 2; j < n; ++i, ++j) {
-            while (j < n && nums[i] * 2 > nums[j]) {
-                ++j;
-            }
-            if (j < n) {
-                ans += 2;
+        ranges::sort(nums);
+        int i = 0, n = nums.size();
+        for (int j = (n + 1) / 2; j < n; ++j) {
+            if (nums[i] * 2 <= nums[j]) {
+                ++i;
             }
         }
-        return ans;
+        return i * 2;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxNumOfMarkedIndices(nums []int) (ans int) {
 	sort.Ints(nums)
-	n := len(nums)
-	for i, j := 0, (n+1)/2; j < n; i, j = i+1, j+1 {
-		for j < n && nums[i]*2 > nums[j] {
-			j++
-		}
-		if j < n {
-			ans += 2
+	i, n := 0, len(nums)
+	for _, x := range nums[(n+1)/2:] {
+		if nums[i]*2 <= x {
+			i++
 		}
 	}
-	return
+	return i * 2
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxNumOfMarkedIndices(nums: number[]): number {
     nums.sort((a, b) => a - b);
     const n = nums.length;
-    let ans = 0;
-    for (let i = 0, j = Math.floor((n + 1) / 2); j < n; ++i, ++j) {
-        while (j < n && nums[i] * 2 > nums[j]) {
-            ++j;
-        }
-        if (j < n) {
-            ans += 2;
+    let i = 0;
+    for (let j = (n + 1) >> 1; j < n; ++j) {
+        if (nums[i] * 2 <= nums[j]) {
+            ++i;
         }
     }
-    return ans;
+    return i * 2;
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn max_num_of_marked_indices(mut nums: Vec<i32>) -> i32 {
+        nums.sort();
+        let mut i = 0;
+        let n = nums.len();
+        for j in (n + 1) / 2..n {
+            if nums[i] * 2 <= nums[j] {
+                i += 1;
+            }
+        }
+        (i * 2) as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1655.Distribute%20Repeating%20Integers/README_EN.md
+rating: 2307
+source: Biweekly Contest 39 Q4
+tags:
+    - Bit Manipulation
+    - Array
+    - Dynamic Programming
+    - Backtracking
+    - Bitmask
+---
+
+<!-- problem:start -->
+
 # [1655. Distribute Repeating Integers](https://leetcode.com/problems/distribute-repeating-integers)
 
 [中文文档](/solution/1600-1699/1655.Distribute%20Repeating%20Integers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array of <code>n</code> integers, <code>nums</code>, where there are at most <code>50</code> unique values in the array. You are also given an array of <code>m</code> customer order quantities, <code>quantity</code>, where <code>quantity[i]</code> is the amount of integers the <code>i<sup>th</sup></code> customer ordered. Determine if it is possible to distribute <code>nums</code> such that:</p>
 
@@ -52,11 +70,31 @@
 	<li>There are at most <code>50</code> unique values in <code>nums</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: State Compression Dynamic Programming + Subset Enumeration
+
+First, we count the occurrence of each number in the array `nums`, and record it in the hash table `cnt`. Then we store the values in the hash table into the array `arr`. We denote the length of the array `arr` as `n`.
+
+Note that the length of the array `quantity` does not exceed 10, so we can use a binary number to represent a subset of `quantity`. That is, the number `j` represents a subset of `quantity`, where the `i`-th bit of the binary representation of `j` is `1` means the `i`-th number in `quantity` is selected, and `0` means the `i`-th number is not selected.
+
+We can preprocess an array `s`, where `s[j]` represents the sum of all numbers in the subset `j` of `quantity`.
+
+Next, we define `f[i][j]` to represent whether the numbers in `arr[0,..i-1]` can be successfully allocated to the subset `j` of `quantity`, where `i` ranges from `[0,..n-1]`, and `j` ranges from `[0,2^m-1]`, where `m` is the length of `quantity`.
+
+Considering `f[i][j]`, if there exists a subset `k` in `j` such that `s[k] <= arr[i]`, and `f[i-1][j XOR k]` is true, then `f[i][j]` is true, otherwise `f[i][j]` is false.
+
+The answer is `f[n-1][2^m-1]`.
+
+The time complexity is `O(n * 3^m)`, and the space complexity is `O(n * 2^m)`. Here, `n` is the number of different integers in the array `nums`, and `m` is the length of the array `quantity`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -90,7 +128,7 @@ class Solution:
         return f[-1][-1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -140,7 +178,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -192,7 +230,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canDistribute(nums []int, quantity []int) bool {
@@ -240,7 +278,7 @@ func canDistribute(nums []int, quantity []int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canDistribute(nums: number[], quantity: number[]): boolean {
@@ -263,9 +301,7 @@ function canDistribute(nums: number[], quantity: number[]): boolean {
     for (const [_, v] of cnt) {
         arr.push(v);
     }
-    const f: boolean[][] = new Array(n)
-        .fill(false)
-        .map(() => new Array(1 << m).fill(false));
+    const f: boolean[][] = new Array(n).fill(false).map(() => new Array(1 << m).fill(false));
     for (let i = 0; i < n; ++i) {
         f[i][0] = true;
     }
@@ -276,8 +312,7 @@ function canDistribute(nums: number[], quantity: number[]): boolean {
                 continue;
             }
             for (let k = j; k > 0; k = (k - 1) & j) {
-                const ok1: boolean =
-                    (i == 0 && j == k) || (i > 0 && f[i - 1][j ^ k]);
+                const ok1: boolean = (i == 0 && j == k) || (i > 0 && f[i - 1][j ^ k]);
                 const ok2: boolean = s[k] <= arr[i];
                 if (ok1 && ok2) {
                     f[i][j] = true;
@@ -290,10 +325,8 @@ function canDistribute(nums: number[], quantity: number[]): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

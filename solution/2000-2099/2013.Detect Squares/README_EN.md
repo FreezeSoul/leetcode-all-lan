@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2013.Detect%20Squares/README_EN.md
+rating: 1841
+source: Weekly Contest 259 Q3
+tags:
+    - Design
+    - Array
+    - Hash Table
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2013. Detect Squares](https://leetcode.com/problems/detect-squares)
 
 [中文文档](/solution/2000-2099/2013.Detect%20Squares/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a stream of points on the X-Y plane. Design an algorithm that:</p>
 
@@ -55,11 +72,25 @@ detectSquares.count([11, 10]); // return 2. You can choose:
 	<li>At most <code>3000</code> calls <strong>in total</strong> will be made to <code>add</code> and <code>count</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We can use a hash table $cnt$ to maintain all the information of the points, where $cnt[x][y]$ represents the count of point $(x, y)$.
+
+When calling the $add(x, y)$ method, we increase the value of $cnt[x][y]$ by $1$.
+
+When calling the $count(x_1, y_1)$ method, we need to get three other points to form an axis-aligned square. We can enumerate the point $(x_2, y_1)$ that is parallel to the $x$-axis and at a distance $d$ from $(x_1, y_1)$. If such a point exists, based on these two points, we can determine the other two points as $(x_1, y_1 + d)$ and $(x_2, y_1 + d)$, or $(x_1, y_1 - d)$ and $(x_2, y_1 - d)$. We can add up the number of schemes for these two situations.
+
+In terms of time complexity, the time complexity of calling the $add(x, y)$ method is $O(1)$, and the time complexity of calling the $count(x_1, y_1)$ method is $O(n)$; the space complexity is $O(n)$. Here, $n$ is the number of points in the data stream.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class DetectSquares:
@@ -89,7 +120,7 @@ class DetectSquares:
 # param_2 = obj.count(point)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class DetectSquares {
@@ -133,13 +164,12 @@ class DetectSquares {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class DetectSquares {
 public:
     DetectSquares() {
-
     }
 
     void add(vector<int> point) {
@@ -176,7 +206,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type DetectSquares struct {
@@ -217,10 +247,8 @@ func (this *DetectSquares) Count(point []int) (ans int) {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

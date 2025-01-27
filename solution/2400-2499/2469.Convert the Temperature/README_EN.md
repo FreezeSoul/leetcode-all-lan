@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2469.Convert%20the%20Temperature/README_EN.md
+rating: 1153
+source: Weekly Contest 319 Q1
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2469. Convert the Temperature](https://leetcode.com/problems/convert-the-temperature)
 
 [中文文档](/solution/2400-2499/2469.Convert%20the%20Temperature/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a non-negative floating point number rounded to two decimal places <code>celsius</code>, that denotes the <strong>temperature in Celsius</strong>.</p>
 
@@ -41,11 +55,21 @@
 	<li><code>0 &lt;= celsius &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can directly simulate according to the problem description.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -53,7 +77,7 @@ class Solution:
         return [celsius + 273.15, celsius * 1.8 + 32]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -63,7 +87,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -74,7 +98,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func convertTemperature(celsius float64) []float64 {
@@ -82,7 +106,7 @@ func convertTemperature(celsius float64) []float64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function convertTemperature(celsius: number): number[] {
@@ -90,7 +114,7 @@ function convertTemperature(celsius: number): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -100,14 +124,14 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-double *convertTemperature(double celsius, int *returnSize) {
-    double *ans = malloc(sizeof(double) * 2);
+double* convertTemperature(double celsius, int* returnSize) {
+    double* ans = malloc(sizeof(double) * 2);
     ans[0] = celsius + 273.15;
     ans[1] = celsius * 1.8 + 32;
     *returnSize = 2;
@@ -115,10 +139,8 @@ double *convertTemperature(double celsius, int *returnSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

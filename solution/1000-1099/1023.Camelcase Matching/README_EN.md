@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1023.Camelcase%20Matching/README_EN.md
+rating: 1537
+source: Weekly Contest 131 Q3
+tags:
+    - Trie
+    - Array
+    - Two Pointers
+    - String
+    - String Matching
+---
+
+<!-- problem:start -->
+
 # [1023. Camelcase Matching](https://leetcode.com/problems/camelcase-matching)
 
 [中文文档](/solution/1000-1099/1023.Camelcase%20Matching/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of strings <code>queries</code> and a string <code>pattern</code>, return a boolean array <code>answer</code> where <code>answer[i]</code> is <code>true</code> if <code>queries[i]</code> matches <code>pattern</code>, and <code>false</code> otherwise.</p>
 
@@ -45,9 +63,13 @@
 	<li><code>queries[i]</code> and <code>pattern</code> consist of English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Two Pointers**
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
 
 We can traverse every string in `queries` and check whether it matches `pattern` or not. If it matches, we add `true` to the answer array, otherwise we add `false`.
 
@@ -61,7 +83,7 @@ Time complexity $(n \times m)$, where $n$ and $m$ are the length of the array `q
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -82,7 +104,7 @@ class Solution:
         return [check(q, pattern) for q in queries]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -144,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func camelMatch(queries []string, pattern string) (ans []bool) {
@@ -171,7 +193,7 @@ func camelMatch(queries []string, pattern string) (ans []bool) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function camelMatch(queries: string[], pattern: string): boolean[] {
@@ -201,10 +223,8 @@ function camelMatch(queries: string[], pattern: string): boolean[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

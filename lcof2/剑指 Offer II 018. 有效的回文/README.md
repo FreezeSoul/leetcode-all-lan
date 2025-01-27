@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20018.%20%E6%9C%89%E6%95%88%E7%9A%84%E5%9B%9E%E6%96%87/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 018. 有效的回文](https://leetcode.cn/problems/XltzEq)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串 <code>s</code> ，验证 <code>s</code>&nbsp;是否是&nbsp;<strong>回文串&nbsp;</strong>，只考虑字母和数字字符，可以忽略字母的大小写。</p>
 
@@ -37,15 +44,21 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 125&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/valid-palindrome/">https://leetcode.cn/problems/valid-palindrome/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：双指针
+
+我们定义两个指针 $i$ 和 $j$，初始时分别指向字符串的首尾位置，每次判断两个指针指向的字符是否为数字或字母，如果两个指针指向的字符都为数字或字母时，判断两个指针指向的字符是否相同（忽略大小写），如果不相同则返回 `false`，否则将两个指针向中间移动一位，直到两个指针相遇时返回 `true`。
+
+时间复杂度 $O(n)$，其中 $n$ 是字符串的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -58,14 +71,11 @@ class Solution:
                 j -= 1
             if s[i].lower() != s[j].lower():
                 return False
-            i += 1
-            j -= 1
+            i, j = i + 1, j - 1
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -73,23 +83,48 @@ class Solution {
         int i = 0, j = s.length() - 1;
         while (i < j) {
             while (i < j && !Character.isLetterOrDigit(s.charAt(i))) {
-                i++;
+                ++i;
             }
             while (i < j && !Character.isLetterOrDigit(s.charAt(j))) {
-                j--;
+                --j;
             }
             if (Character.toLowerCase(s.charAt(i)) != Character.toLowerCase(s.charAt(j))) {
                 return false;
             }
-            i++;
-            j--;
+            ++i;
+            --j;
         }
         return true;
     }
 }
 ```
 
-### **Go**
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int i = 0, j = s.size() - 1;
+        while (i < j) {
+            while (i < j && !isalnum(s[i])) {
+                ++i;
+            }
+            while (i < j && !isalnum(s[j])) {
+                --j;
+            }
+            if (tolower(s[i]) != tolower(s[j])) {
+                return false;
+            }
+            ++i;
+            --j;
+        }
+        return true;
+    }
+};
+```
+
+#### Go
 
 ```go
 func isPalindrome(s string) bool {
@@ -104,8 +139,7 @@ func isPalindrome(s string) bool {
 		if tolower(s[i]) != tolower(s[j]) {
 			return false
 		}
-		i++
-		j--
+		i, j = i+1, j-1
 	}
 	return true
 }
@@ -124,7 +158,7 @@ func isalnum(b byte) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isPalindrome(s: string): boolean {
@@ -142,9 +176,7 @@ function isPalindrome(s: string): boolean {
 }
 ```
 
-### **Rust**
-
-使用 `is_alphabetic()` 与 `is_numeric()` 过滤字符
+#### Rust
 
 ```rust
 impl Solution {
@@ -174,10 +206,37 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func isPalindrome(_ s: String) -> Bool {
+        var i = s.startIndex
+        var j = s.index(before: s.endIndex)
 
+        while i < j {
+            while i < j && !s[i].isLetter && !s[i].isNumber {
+                i = s.index(after: i)
+            }
+            while i < j && !s[j].isLetter && !s[j].isNumber {
+                j = s.index(before: j)
+            }
+            if i >= j {
+                break
+            }
+            if s[i].lowercased() != s[j].lowercased() {
+                return false
+            }
+            i = s.index(after: i)
+            j = s.index(before: j)
+        }
+        return true
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2486.Append%20Characters%20to%20String%20to%20Make%20Subsequence/README_EN.md
+rating: 1362
+source: Weekly Contest 321 Q2
+tags:
+    - Greedy
+    - Two Pointers
+    - String
+---
+
+<!-- problem:start -->
+
 # [2486. Append Characters to String to Make Subsequence](https://leetcode.com/problems/append-characters-to-string-to-make-subsequence)
 
 [中文文档](/solution/2400-2499/2486.Append%20Characters%20to%20String%20to%20Make%20Subsequence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two strings <code>s</code> and <code>t</code> consisting of only lowercase English letters.</p>
 
@@ -47,86 +63,95 @@ It can be shown that appending any 4 characters to the end of s will never make 
 	<li><code>s</code> and <code>t</code> consist only of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
+
+We define two pointers $i$ and $j$, pointing to the first characters of strings $s$ and $t$ respectively. We iterate through string $s$, if $s[i] = t[j]$, then we move $j$ one step forward. Finally, we return $n - j$, where $n$ is the length of string $t$.
+
+The time complexity is $O(m + n)$, where $m$ and $n$ are the lengths of strings $s$ and $t$ respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def appendCharacters(self, s: str, t: str) -> int:
-        m, n = len(s), len(t)
-        i = 0
-        for j in range(n):
-            while i < m and s[i] != t[j]:
-                i += 1
-            if i == m:
-                return n - j
-            i += 1
-        return 0
+        n, j = len(t), 0
+        for c in s:
+            if j < n and c == t[j]:
+                j += 1
+        return n - j
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int appendCharacters(String s, String t) {
-        int m = s.length(), n = t.length();
-        for (int i = 0, j = 0; j < n; ++j) {
-            while (i < m && s.charAt(i) != t.charAt(j)) {
-                ++i;
-            }
-            if (i++ == m) {
-                return n - j;
+        int n = t.length(), j = 0;
+        for (int i = 0; i < s.length() && j < n; ++i) {
+            if (s.charAt(i) == t.charAt(j)) {
+                ++j;
             }
         }
-        return 0;
+        return n - j;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int appendCharacters(string s, string t) {
-        int m = s.size(), n = t.size();
-        for (int i = 0, j = 0; j < n; ++j) {
-            while (i < m && s[i] != t[j]) {
-                ++i;
-            }
-            if (i++ == m) {
-                return n - j;
+        int n = t.length(), j = 0;
+        for (int i = 0; i < s.size() && j < n; ++i) {
+            if (s[i] == t[j]) {
+                ++j;
             }
         }
-        return 0;
+        return n - j;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func appendCharacters(s string, t string) int {
-	m, n := len(s), len(t)
-	for i, j := 0, 0; j < n; i, j = i+1, j+1 {
-		for i < m && s[i] != t[j] {
-			i++
-		}
-		if i == m {
-			return n - j
+	n, j := len(t), 0
+	for _, c := range s {
+		if j < n && byte(c) == t[j] {
+			j++
 		}
 	}
-	return 0
+	return n - j
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function appendCharacters(s: string, t: string): number {
+    let j = 0;
+    for (const c of s) {
+        if (c === t[j]) {
+            ++j;
+        }
+    }
+    return t.length - j;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

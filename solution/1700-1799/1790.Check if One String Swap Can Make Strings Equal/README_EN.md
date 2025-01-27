@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1790.Check%20if%20One%20String%20Swap%20Can%20Make%20Strings%20Equal/README_EN.md
+rating: 1300
+source: Weekly Contest 232 Q1
+tags:
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [1790. Check if One String Swap Can Make Strings Equal](https://leetcode.com/problems/check-if-one-string-swap-can-make-strings-equal)
 
 [中文文档](/solution/1700-1799/1790.Check%20if%20One%20String%20Swap%20Can%20Make%20Strings%20Equal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two strings <code>s1</code> and <code>s2</code> of equal length. A <strong>string swap</strong> is an operation where you choose two indices in a string (not necessarily different) and swap the characters at these indices.</p>
 
@@ -42,11 +58,25 @@
 	<li><code>s1</code> and <code>s2</code> consist of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We use a variable $cnt$ to record the number of characters at the same position in the two strings that are different. If the two strings meet the requirements of the problem, then $cnt$ must be $0$ or $2$. We also use two character variables $c1$ and $c2$ to record the characters that are different at the same position in the two strings.
+
+While traversing the two strings simultaneously, for two characters $a$ and $b$ at the same position, if $a \ne b$, then $cnt$ is incremented by $1$. If at this time $cnt$ is greater than $2$, or $cnt$ is $2$ and $a \ne c2$ or $b \ne c1$, then we directly return `false`. Note to record $c1$ and $c2$.
+
+At the end of the traversal, if $cnt \neq 1$, return `true`.
+
+The time complexity is $O(n)$, where $n$ is the length of the string. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +92,7 @@ class Solution:
         return cnt != 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func areAlmostEqual(s1 string, s2 string) bool {
@@ -126,36 +156,7 @@ func areAlmostEqual(s1 string, s2 string) bool {
 }
 ```
 
-### **C**
-
-```c
-bool areAlmostEqual(char *s1, char *s2) {
-    int n = strlen(s1);
-    int i1 = -1;
-    int i2 = -1;
-    for (int i = 0; i < n; i++) {
-        if (s1[i] != s2[i]) {
-            if (i1 == -1) {
-                i1 = i;
-            } else if (i2 == -1) {
-                i2 = i;
-            } else {
-                return 0;
-            }
-        }
-    }
-    if (i1 == -1 && i2 == -1) {
-        return 1;
-    }
-    if (i1 == -1 || i2 == -1) {
-        return 0;
-    }
-    return s1[i1] == s2[i2] && s1[i2] == s2[i1];
-}
-
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function areAlmostEqual(s1: string, s2: string): boolean {
@@ -176,7 +177,7 @@ function areAlmostEqual(s1: string, s2: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -199,10 +200,36 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+bool areAlmostEqual(char* s1, char* s2) {
+    int n = strlen(s1);
+    int i1 = -1;
+    int i2 = -1;
+    for (int i = 0; i < n; i++) {
+        if (s1[i] != s2[i]) {
+            if (i1 == -1) {
+                i1 = i;
+            } else if (i2 == -1) {
+                i2 = i;
+            } else {
+                return 0;
+            }
+        }
+    }
+    if (i1 == -1 && i2 == -1) {
+        return 1;
+    }
+    if (i1 == -1 || i2 == -1) {
+        return 0;
+    }
+    return s1[i1] == s2[i2] && s1[i2] == s2[i1];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

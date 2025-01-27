@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1115.Print%20FooBar%20Alternately/README.md
+tags:
+    - 多线程
+---
+
+<!-- problem:start -->
+
 # [1115. 交替打印 FooBar](https://leetcode.cn/problems/print-foobar-alternately)
 
 [English Version](/solution/1100-1199/1115.Print%20FooBar%20Alternately/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个类：</p>
 
@@ -59,11 +69,13 @@ class FooBar {
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：多线程 + 信号量**
+### 方法一：多线程 + 信号量
 
 我们用两个信号量 $f$ 和 $b$ 来控制两个线程的执行顺序，其中 $f$ 初始值为 $1$，而 $b$ 初始值为 $0$，表示线程 $A$ 先执行。
 
@@ -77,9 +89,7 @@ class FooBar {
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 from threading import Semaphore
@@ -106,9 +116,7 @@ class FooBar:
             self.f.release()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class FooBar {
@@ -140,7 +148,7 @@ class FooBar {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 #include <semaphore.h>
@@ -160,8 +168,8 @@ public:
     void foo(function<void()> printFoo) {
         for (int i = 0; i < n; i++) {
             sem_wait(&f);
-        	// printFoo() outputs "foo". Do not change or remove this line.
-        	printFoo();
+            // printFoo() outputs "foo". Do not change or remove this line.
+            printFoo();
             sem_post(&b);
         }
     }
@@ -169,18 +177,16 @@ public:
     void bar(function<void()> printBar) {
         for (int i = 0; i < n; i++) {
             sem_wait(&b);
-        	// printBar() outputs "bar". Do not change or remove this line.
-        	printBar();
+            // printBar() outputs "bar". Do not change or remove this line.
+            printBar();
             sem_post(&f);
         }
     }
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

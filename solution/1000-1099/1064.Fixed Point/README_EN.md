@@ -1,8 +1,23 @@
-# [1064. Fixed Point](https://leetcode.com/problems/fixed-point)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1064.Fixed%20Point/README_EN.md
+rating: 1307
+source: Biweekly Contest 1 Q1
+tags:
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
+# [1064. Fixed Point 🔒](https://leetcode.com/problems/fixed-point)
 
 [中文文档](/solution/1000-1099/1064.Fixed%20Point/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of distinct integers <code>arr</code>, where <code>arr</code> is sorted in <strong>ascending order</strong>, return the smallest index <code>i</code> that satisfies <code>arr[i] == i</code>. If there is no such index, return <code>-1</code>.</p>
 
@@ -39,13 +54,17 @@
 <p>&nbsp;</p>
 <strong>Follow up:</strong> The <code>O(n)</code> solution is very straightforward. Can we do better?
 
+<!-- description:end -->
+
 ## Solutions
 
-Binary search.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -60,7 +79,7 @@ class Solution:
         return left if arr[left] == left else -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -79,7 +98,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -99,7 +118,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func fixedPoint(arr []int) int {
@@ -119,10 +138,26 @@ func fixedPoint(arr []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function fixedPoint(arr: number[]): number {
+    let left = 0;
+    let right = arr.length - 1;
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (arr[mid] >= mid) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return arr[left] === left ? left : -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

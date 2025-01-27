@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2405.Optimal%20Partition%20of%20String/README.md
+rating: 1355
+source: 第 310 场周赛 Q2
+tags:
+    - 贪心
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2405. 子字符串的最优划分](https://leetcode.cn/problems/optimal-partition-of-string)
 
 [English Version](/solution/2400-2499/2405.Optimal%20Partition%20of%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>s</code> ，请你将该字符串划分成一个或多个 <strong>子字符串</strong> ，并满足每个子字符串中的字符都是 <strong>唯一</strong> 的。也就是说，在单个子字符串中，字母的出现次数都不超过 <strong>一次</strong> 。</p>
 
@@ -42,201 +56,134 @@
 	<li><code>s</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
-根据题意，每个子字符串应该尽可能长，且包含的字符唯一。我们只需要贪心地进行划分即可。
+根据题意，每个子字符串应该尽可能长，且包含的字符唯一，因此，我们只需要贪心地进行划分即可。
 
-过程中，可以用哈希表记录当前子字符串的所有字符，空间复杂度 $O(n)$；也可以使用一个数字，用位运算的方式记录字符，空间复杂度 $O(1)$。
+我们定义一个二进制整数 $\textit{mask}$ 来记录当前子字符串中出现的字符，其中 $\textit{mask}$ 的第 $i$ 位为 $1$ 表示第 $i$ 个字母已经出现过，为 $0$ 表示未出现过。另外，我们还需要一个变量 $\textit{ans}$ 来记录划分的子字符串个数，初始时 $\textit{ans} = 1$。
 
-时间复杂度 $O(n)$。其中 $n$ 是字符串 `s` 的长度。
+遍历字符串 $s$ 中的每个字符，对于每个字符 $c$，我们将其转换为 $0$ 到 $25$ 之间的整数 $x$，然后判断 $\textit{mask}$ 的第 $x$ 位是否为 $1$，如果为 $1$，说明当前字符 $c$ 与当前子字符串中的字符有重复，此时 $\textit{ans}$ 需要加 $1$，并将 $\textit{mask}$ 置为 $0$；否则，将 $\textit{mask}$ 的第 $x$ 位置为 $1$。然后，我们将 $\textit{mask}$ 更新为 $\textit{mask}$ 与 $2^x$ 的按位或结果。
+
+最后，返回 $\textit{ans}$ 即可。
+
+时间复杂度 $O(n)$，其中 $n$ 为字符串 $s$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def partitionString(self, s: str) -> int:
-        ss = set()
-        ans = 1
-        for c in s:
-            if c in ss:
+        ans, mask = 1, 0
+        for x in map(lambda c: ord(c) - ord("a"), s):
+            if mask >> x & 1:
                 ans += 1
-                ss = set()
-            ss.add(c)
+                mask = 0
+            mask |= 1 << x
         return ans
 ```
 
-```python
-class Solution:
-    def partitionString(self, s: str) -> int:
-        ans, v = 1, 0
-        for c in s:
-            i = ord(c) - ord('a')
-            if (v >> i) & 1:
-                v = 0
-                ans += 1
-            v |= 1 << i
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int partitionString(String s) {
-        Set<Character> ss = new HashSet<>();
-        int ans = 1;
-        for (char c : s.toCharArray()) {
-            if (ss.contains(c)) {
+        int ans = 1, mask = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            int x = s.charAt(i) - 'a';
+            if ((mask >> x & 1) == 1) {
                 ++ans;
-                ss.clear();
+                mask = 0;
             }
-            ss.add(c);
+            mask |= 1 << x;
         }
         return ans;
     }
 }
 ```
 
-```java
-class Solution {
-    public int partitionString(String s) {
-        int v = 0;
-        int ans = 1;
-        for (char c : s.toCharArray()) {
-            int i = c - 'a';
-            if (((v >> i) & 1) == 1) {
-                v = 0;
-                ++ans;
-            }
-            v |= 1 << i;
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int partitionString(string s) {
-        unordered_set<char> ss;
-        int ans = 1;
-        for (char c : s) {
-            if (ss.count(c)) {
+        int ans = 1, mask = 0;
+        for (char& c : s) {
+            int x = c - 'a';
+            if (mask >> x & 1) {
                 ++ans;
-                ss.clear();
+                mask = 0;
             }
-            ss.insert(c);
+            mask |= 1 << x;
         }
         return ans;
     }
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int partitionString(string s) {
-        int ans = 1;
-        int v = 0;
-        for (char c : s) {
-            int i = c - 'a';
-            if ((v >> i) & 1) {
-                v = 0;
-                ++ans;
-            }
-            v |= 1 << i;
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func partitionString(s string) int {
-	ss := map[rune]bool{}
-	ans := 1
+	ans, mask := 1, 0
 	for _, c := range s {
-		if ss[c] {
+		x := int(c - 'a')
+		if mask>>x&1 == 1 {
 			ans++
-			ss = map[rune]bool{}
+			mask = 0
 		}
-		ss[c] = true
+		mask |= 1 << x
 	}
 	return ans
 }
 ```
 
-```go
-func partitionString(s string) int {
-	ans, v := 1, 0
-	for _, c := range s {
-		i := int(c - 'a')
-		if v>>i&1 == 1 {
-			v = 0
-			ans++
-		}
-		v |= 1 << i
-	}
-	return ans
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function partitionString(s: string): number {
-    const set = new Set();
-    let res = 1;
+    let [ans, mask] = [1, 0];
     for (const c of s) {
-        if (set.has(c)) {
-            res++;
-            set.clear();
+        const x = c.charCodeAt(0) - 97;
+        if ((mask >> x) & 1) {
+            ++ans;
+            mask = 0;
         }
-        set.add(c);
+        mask |= 1 << x;
     }
-    return res;
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
-use std::collections::HashSet;
 impl Solution {
     pub fn partition_string(s: String) -> i32 {
-        let mut set = HashSet::new();
-        let mut res = 1;
-        for c in s.as_bytes().iter() {
-            if set.contains(c) {
-                res += 1;
-                set.clear();
+        let mut ans = 1;
+        let mut mask = 0;
+        for x in s.chars().map(|c| (c as u8 - b'a') as u32) {
+            if mask >> x & 1 == 1 {
+                ans += 1;
+                mask = 0;
             }
-            set.insert(c);
+            mask |= 1 << x;
         }
-        res
+        ans
     }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2011.Final%20Value%20of%20Variable%20After%20Performing%20Operations/README_EN.md
+rating: 1165
+source: Weekly Contest 259 Q1
+tags:
+    - Array
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2011. Final Value of Variable After Performing Operations](https://leetcode.com/problems/final-value-of-variable-after-performing-operations)
 
 [中文文档](/solution/2000-2099/2011.Final%20Value%20of%20Variable%20After%20Performing%20Operations/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a programming language with only <strong>four</strong> operations and <strong>one</strong> variable <code>X</code>:</p>
 
@@ -61,11 +77,21 @@ X--: X is decremented by 1, X = 1 - 1 = 0.
 	<li><code>operations[i]</code> will be either <code>&quot;++X&quot;</code>, <code>&quot;X++&quot;</code>, <code>&quot;--X&quot;</code>, or <code>&quot;X--&quot;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We traverse the array $\textit{operations}$. For each operation $\textit{operations}[i]$, if it contains `'+'`, we increment the answer by $1$, otherwise, we decrement the answer by $1$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{operations}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +99,7 @@ class Solution:
         return sum(1 if s[1] == '+' else -1 for s in operations)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,20 +113,22 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int finalValueAfterOperations(vector<string>& operations) {
         int ans = 0;
-        for (auto& s : operations) ans += (s[1] == '+' ? 1 : -1);
+        for (auto& s : operations) {
+            ans += s[1] == '+' ? 1 : -1;
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func finalValueAfterOperations(operations []string) (ans int) {
@@ -115,41 +143,15 @@ func finalValueAfterOperations(operations []string) (ans int) {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {string[]} operations
- * @return {number}
- */
-var finalValueAfterOperations = function (operations) {
-    let ans = 0;
-    for (const s of operations) {
-        ans += s[1] === '+' ? 1 : -1;
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function finalValueAfterOperations(operations: string[]): number {
-    let ans = 0;
-    for (let operation of operations) {
-        ans += operation.includes('+') ? 1 : -1;
-    }
-    return ans;
+    return operations.reduce((acc, op) => acc + (op[1] === '+' ? 1 : -1), 0);
 }
 ```
 
-```ts
-function finalValueAfterOperations(operations: string[]): number {
-    return operations.reduce((r, v) => r + (v[1] === '+' ? 1 : -1), 0);
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -163,10 +165,22 @@ impl Solution {
 }
 ```
 
-### **C**
+#### JavaScript
+
+```js
+/**
+ * @param {string[]} operations
+ * @return {number}
+ */
+var finalValueAfterOperations = function (operations) {
+    return operations.reduce((acc, op) => acc + (op[1] === '+' ? 1 : -1), 0);
+};
+```
+
+#### C
 
 ```c
-int finalValueAfterOperations(char **operations, int operationsSize) {
+int finalValueAfterOperations(char** operations, int operationsSize) {
     int ans = 0;
     for (int i = 0; i < operationsSize; i++) {
         ans += operations[i][1] == '+' ? 1 : -1;
@@ -175,10 +189,8 @@ int finalValueAfterOperations(char **operations, int operationsSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

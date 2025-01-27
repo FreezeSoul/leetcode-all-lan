@@ -4,11 +4,16 @@ class Solution {
      * @return String
      */
     function removeStars($s) {
-        $rs = [];
-        for ($i = 0; $i < strlen($s); $i++) {
-            if ($s[$i] == "*") array_pop($rs);
-            else array_push($rs, $s[$i]);
+        $ans = [];
+        $n = strlen($s);
+        for ($i = 0; $i < $n; $i++) {
+            $c = $s[$i];
+            if ($c === '*') {
+                array_pop($ans);
+            } else {
+                $ans[] = $c;
+            }
         }
-        return join($rs);
+        return implode('', $ans);
     }
 }

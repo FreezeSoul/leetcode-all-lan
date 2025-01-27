@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0456.132%20Pattern/README.md
+tags:
+    - 栈
+    - 数组
+    - 二分查找
+    - 有序集合
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [456. 132 模式](https://leetcode.cn/problems/132-pattern)
 
 [English Version](/solution/0400-0499/0456.132%20Pattern/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，数组中共有 <code>n</code> 个整数。<strong>132 模式的子序列</strong> 由三个整数 <code>nums[i]</code>、<code>nums[j]</code> 和 <code>nums[k]</code> 组成，并同时满足：<code>i < j < k</code> 和 <code>nums[i] < nums[k] < nums[j]</code> 。</p>
 
@@ -46,11 +60,13 @@
 	<li><code>-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈**
+### 方法一：单调栈
 
 我们可以枚举从右往左枚举整数 $nums[i]$，并维护一个单调栈，栈中的元素从栈底到栈顶单调递减。维护一个变量 $vk$，表示 $nums[i]$ 右侧且小于 $nums[i]$ 的最大值。初始时，$vk$ 的值为 $-\infty$。
 
@@ -60,21 +76,9 @@
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组的长度。
 
-**方法二：离散化 + 树状数组**
-
-我们可以用树状数组维护比某个数小的元素的个数，用一个数组 $left$ 记录 $nums[i]$ 左侧的最小值。
-
-我们从右往左遍历数组，对于遍历到的每个元素 $nums[i]$，我们将 $nums[i]$ 离散化为一个整数 $x$，将 $left[i]$ 离散化为一个整数 $y$，如果此时 $x \gt y$，并且树状数组中存在比 $y$ 大但比 $x$ 小的元素，则说明存在满足 $nums[i] \lt nums[k] \lt nums[j]$ 的三元组，返回 `true`。否则，我们将 $nums[i]$ 的离散化结果 $x$ 更新到树状数组中。
-
-如果遍历结束后仍未找到满足条件的三元组，说明不存在这样的三元组，返回 `false`。
-
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,6 +93,131 @@ class Solution:
             stk.append(x)
         return False
 ```
+
+#### Java
+
+```java
+class Solution {
+    public boolean find132pattern(int[] nums) {
+        int vk = -(1 << 30);
+        Deque<Integer> stk = new ArrayDeque<>();
+        for (int i = nums.length - 1; i >= 0; --i) {
+            if (nums[i] < vk) {
+                return true;
+            }
+            while (!stk.isEmpty() && stk.peek() < nums[i]) {
+                vk = stk.pop();
+            }
+            stk.push(nums[i]);
+        }
+        return false;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool find132pattern(vector<int>& nums) {
+        int vk = INT_MIN;
+        stack<int> stk;
+        for (int i = nums.size() - 1; ~i; --i) {
+            if (nums[i] < vk) {
+                return true;
+            }
+            while (!stk.empty() && stk.top() < nums[i]) {
+                vk = stk.top();
+                stk.pop();
+            }
+            stk.push(nums[i]);
+        }
+        return false;
+    }
+};
+```
+
+#### Go
+
+```go
+func find132pattern(nums []int) bool {
+	vk := -(1 << 30)
+	stk := []int{}
+	for i := len(nums) - 1; i >= 0; i-- {
+		if nums[i] < vk {
+			return true
+		}
+		for len(stk) > 0 && stk[len(stk)-1] < nums[i] {
+			vk = stk[len(stk)-1]
+			stk = stk[:len(stk)-1]
+		}
+		stk = append(stk, nums[i])
+	}
+	return false
+}
+```
+
+#### TypeScript
+
+```ts
+function find132pattern(nums: number[]): boolean {
+    let vk = -Infinity;
+    const stk: number[] = [];
+    for (let i = nums.length - 1; i >= 0; --i) {
+        if (nums[i] < vk) {
+            return true;
+        }
+        while (stk.length && stk[stk.length - 1] < nums[i]) {
+            vk = stk.pop()!;
+        }
+        stk.push(nums[i]);
+    }
+    return false;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find132pattern(nums: Vec<i32>) -> bool {
+        let n = nums.len();
+        let mut vk = i32::MIN;
+        let mut stk = vec![];
+        for i in (0..n).rev() {
+            if nums[i] < vk {
+                return true;
+            }
+            while !stk.is_empty() && stk.last().unwrap() < &nums[i] {
+                vk = stk.pop().unwrap();
+            }
+            stk.push(nums[i]);
+        }
+        false
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：离散化 + 树状数组
+
+我们可以用树状数组维护比某个数小的元素的个数，用一个数组 $left$ 记录 $nums[i]$ 左侧的最小值。
+
+我们从右往左遍历数组，对于遍历到的每个元素 $nums[i]$，我们将 $nums[i]$ 离散化为一个整数 $x$，将 $left[i]$ 离散化为一个整数 $y$，如果此时 $x \gt y$，并且树状数组中存在比 $y$ 大但比 $x$ 小的元素，则说明存在满足 $nums[i] \lt nums[k] \lt nums[j]$ 的三元组，返回 `true`。否则，我们将 $nums[i]$ 的离散化结果 $x$ 更新到树状数组中。
+
+如果遍历结束后仍未找到满足条件的三元组，说明不存在这样的三元组，返回 `false`。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组的长度。
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class BinaryIndexedTree:
@@ -126,28 +255,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public boolean find132pattern(int[] nums) {
-        int vk = -(1 << 30);
-        Deque<Integer> stk = new ArrayDeque<>();
-        for (int i = nums.length - 1; i >= 0; --i) {
-            if (nums[i] < vk) {
-                return true;
-            }
-            while (!stk.isEmpty() && stk.peek() < nums[i]) {
-                vk = stk.pop();
-            }
-            stk.push(nums[i]);
-        }
-        return false;
-    }
-}
-```
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -217,28 +325,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool find132pattern(vector<int>& nums) {
-        int vk = INT_MIN;
-        stack<int> stk;
-        for (int i = nums.size() - 1; ~i; --i) {
-            if (nums[i] < vk) {
-                return true;
-            }
-            while (!stk.empty() && stk.top() < nums[i]) {
-                vk = stk.top();
-                stk.pop();
-            }
-            stk.push(nums[i]);
-        }
-        return false;
-    }
-};
-```
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
@@ -295,25 +382,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func find132pattern(nums []int) bool {
-	vk := -(1 << 30)
-	stk := []int{}
-	for i := len(nums) - 1; i >= 0; i-- {
-		if nums[i] < vk {
-			return true
-		}
-		for len(stk) > 0 && stk[len(stk)-1] < nums[i] {
-			vk = stk[len(stk)-1]
-			stk = stk[:len(stk)-1]
-		}
-		stk = append(stk, nums[i])
-	}
-	return false
-}
-```
+#### Go
 
 ```go
 type BinaryIndexedTree struct {
@@ -369,33 +438,9 @@ func find132pattern(nums []int) bool {
 	}
 	return false
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function find132pattern(nums: number[]): boolean {
-    let vk = -Infinity;
-    const stk: number[] = [];
-    for (let i = nums.length - 1; i >= 0; --i) {
-        if (nums[i] < vk) {
-            return true;
-        }
-        while (stk.length && stk[stk.length - 1] < nums[i]) {
-            vk = stk.pop()!;
-        }
-        stk.push(nums[i]);
-    }
-    return false;
-}
-```
+#### TypeScript
 
 ```ts
 class BinaryIndextedTree {
@@ -464,32 +509,8 @@ function search(nums: number[], x: number): number {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn find132pattern(nums: Vec<i32>) -> bool {
-        let n = nums.len();
-        let mut vk = i32::MIN;
-        let mut stk = vec![];
-        for i in (0..n).rev() {
-            if nums[i] < vk {
-                return true;
-            }
-            while !stk.is_empty() && stk.last().unwrap() < &nums[i] {
-                vk = stk.pop().unwrap();
-            }
-            stk.push(nums[i])
-        }
-        false
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

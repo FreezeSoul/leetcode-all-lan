@@ -1,23 +1,37 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1289.Minimum%20Falling%20Path%20Sum%20II/README.md
+rating: 1697
+source: 第 15 场双周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1289. 下降路径最小和 II](https://leetcode.cn/problems/minimum-falling-path-sum-ii)
 
 [English Version](/solution/1200-1299/1289.Minimum%20Falling%20Path%20Sum%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个&nbsp;<code>n x n</code> 整数矩阵&nbsp;<code>arr</code>&nbsp;，请你返回 <strong>非零偏移下降路径</strong> 数字和的最小值。</p>
+<p>给你一个&nbsp;<code>n x n</code> 整数矩阵&nbsp;<code>grid</code>&nbsp;，请你返回 <strong>非零偏移下降路径</strong> 数字和的最小值。</p>
 
-<p><strong>非零偏移下降路径</strong> 定义为：从&nbsp;<code>arr</code> 数组中的每一行选择一个数字，且按顺序选出来的数字中，相邻数字不在原数组的同一列。</p>
+<p><strong>非零偏移下降路径</strong> 定义为：从&nbsp;<code>grid</code> 数组中的每一行选择一个数字，且按顺序选出来的数字中，相邻数字不在原数组的同一列。</p>
 
 <p>&nbsp;</p>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
 <p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1289.Minimum%20Falling%20Path%20Sum%20II/images/falling-grid.jpg" style="width: 244px; height: 245px;" /></p>
 
 <pre>
-<strong>输入：</strong>arr = [[1,2,3],[4,5,6],[7,8,9]]
+<strong>输入：</strong>grid = [[1,2,3],[4,5,6],[7,8,9]]
 <strong>输出：</strong>13
 <strong>解释：</strong>
 所有非零偏移下降路径包括：
@@ -27,7 +41,7 @@
 下降路径中数字和最小的是&nbsp;[1,5,7] ，所以答案是&nbsp;13 。
 </pre>
 
-<p><strong>示例 2：</strong></p>
+<p><strong class="example">示例 2：</strong></p>
 
 <pre>
 <strong>输入：</strong>grid = [[7]]
@@ -44,11 +58,13 @@
 	<li><code>-99 &lt;= grid[i][j] &lt;= 99</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示前 $i$ 行，且最后一个数字在第 $j$ 列的最小数字和。那么状态转移方程为：
 
@@ -66,9 +82,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,29 +96,7 @@ class Solution:
         return min(f[n])
 ```
 
-```python
-class Solution:
-    def minFallingPathSum(self, grid: List[List[int]]) -> int:
-        f = g = 0
-        fp = -1
-        for row in grid:
-            ff = gg = inf
-            ffp = -1
-            for j, v in enumerate(row):
-                s = (g if j == fp else f) + v
-                if s < ff:
-                    gg = ff
-                    ff = s
-                    ffp = j
-                elif s < gg:
-                    gg = s
-            f, g, fp = ff, gg, ffp
-        return f
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -131,6 +123,95 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int f[n + 1][n];
+        memset(f, 0, sizeof(f));
+        const int inf = 1 << 30;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int x = inf;
+                for (int k = 0; k < n; ++k) {
+                    if (k != j) {
+                        x = min(x, f[i - 1][k]);
+                    }
+                }
+                f[i][j] = grid[i - 1][j] + (x == inf ? 0 : x);
+            }
+        }
+        return *min_element(f[n], f[n] + n);
+    }
+};
+```
+
+#### Go
+
+```go
+func minFallingPathSum(grid [][]int) int {
+	n := len(grid)
+	f := make([][]int, n+1)
+	for i := range f {
+		f[i] = make([]int, n)
+	}
+	const inf = 1 << 30
+	for i, row := range grid {
+		i++
+		for j, v := range row {
+			x := inf
+			for k := range row {
+				if k != j {
+					x = min(x, f[i-1][k])
+				}
+			}
+			if x == inf {
+				x = 0
+			}
+			f[i][j] = v + x
+		}
+	}
+	return slices.Min(f[n])
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minFallingPathSum(self, grid: List[List[int]]) -> int:
+        f = g = 0
+        fp = -1
+        for row in grid:
+            ff = gg = inf
+            ffp = -1
+            for j, v in enumerate(row):
+                s = (g if j == fp else f) + v
+                if s < ff:
+                    gg = ff
+                    ff = s
+                    ffp = j
+                elif s < gg:
+                    gg = s
+            f, g, fp = ff, gg, ffp
+        return f
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -160,31 +241,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minFallingPathSum(vector<vector<int>>& grid) {
-        int n = grid.size();
-        int f[n + 1][n];
-        memset(f, 0, sizeof(f));
-        const int inf = 1 << 30;
-        for (int i = 1; i <= n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                int x = inf;
-                for (int k = 0; k < n; ++k) {
-                    if (k != j) {
-                        x = min(x, f[i - 1][k]);
-                    }
-                }
-                f[i][j] = grid[i - 1][j] + (x == inf ? 0 : x);
-            }
-        }
-        return *min_element(f[n], f[n] + n);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -215,45 +272,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func minFallingPathSum(grid [][]int) int {
-	n := len(grid)
-	f := make([][]int, n+1)
-	for i := range f {
-		f[i] = make([]int, n)
-	}
-	const inf = 1 << 30
-	for i, row := range grid {
-		i++
-		for j, v := range row {
-			x := inf
-			for k := range row {
-				if k != j {
-					x = min(x, f[i-1][k])
-				}
-			}
-			if x == inf {
-				x = 0
-			}
-			f[i][j] = v + x
-		}
-	}
-	ans := inf
-	for _, x := range f[n] {
-		ans = min(ans, x)
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func minFallingPathSum(grid [][]int) int {
@@ -281,10 +300,8 @@ func minFallingPathSum(grid [][]int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

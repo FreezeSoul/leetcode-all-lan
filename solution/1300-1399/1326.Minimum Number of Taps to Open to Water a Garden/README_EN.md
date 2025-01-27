@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README_EN.md
+rating: 1885
+source: Weekly Contest 172 Q4
+tags:
+    - Greedy
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1326. Minimum Number of Taps to Open to Water a Garden](https://leetcode.com/problems/minimum-number-of-taps-to-open-to-water-a-garden)
 
 [中文文档](/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README.md)
 
 ## Description
 
-<p>There is a one-dimensional garden on the x-axis. The garden starts at the point <code>0</code> and ends at the point <code>n</code>. (i.e The length of the garden is <code>n</code>).</p>
+<!-- description:start -->
+
+<p>There is a one-dimensional garden on the x-axis. The garden starts at the point <code>0</code> and ends at the point <code>n</code>. (i.e., the&nbsp;length of the garden is <code>n</code>).</p>
 
 <p>There are <code>n + 1</code> taps located at points <code>[0, 1, ..., n]</code> in the garden.</p>
 
@@ -44,11 +60,42 @@ Opening Only the second tap will water the whole garden [0,5]
 	<li><code>0 &lt;= ranges[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+We note that for all taps that can cover a certain left endpoint, choosing the tap that can cover the farthest right endpoint is optimal.
+
+Therefore, we can preprocess the array $ranges$. For the $i$-th tap, it can cover the left endpoint $l = \max(0, i - ranges[i])$ and the right endpoint $r = i + ranges[i]$. We calculate the position of the tap that can cover the left endpoint $l$ with the farthest right endpoint and record it in the array $last[i]$.
+
+Then we define the following three variables:
+
+-   Variable $ans$ represents the final answer, i.e., the minimum number of taps;
+-   Variable $mx$ represents the farthest right endpoint that can currently be covered;
+-   Variable $pre$ represents the farthest right endpoint covered by the previous tap.
+
+We traverse all positions in the range $[0, \ldots, n-1]$. For the current position $i$, we use $last[i]$ to update $mx$, i.e., $mx = \max(mx, last[i])$.
+
+-   If $mx \leq i$, it means the next position cannot be covered, so we return $-1$.
+-   If $pre = i$, it means a new subinterval needs to be used, so we increment $ans$ by $1$ and update $pre = mx$.
+
+After the traversal, we return $ans$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the garden.
+
+Similar problems:
+
+-   [45. Jump Game II](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0045.Jump%20Game%20II/README.md)
+-   [55. Jump Game](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0055.Jump%20Game/README.md)
+-   [1024. Video Stitching](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1024.Video%20Stitching/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +116,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +169,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minTaps(n int, ranges []int) (ans int) {
@@ -144,16 +191,9 @@ func minTaps(n int, ranges []int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minTaps(n: number, ranges: number[]): number {
@@ -180,10 +220,45 @@ function minTaps(n: number, ranges: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn min_taps(n: i32, ranges: Vec<i32>) -> i32 {
+        let mut last = vec![0; (n + 1) as usize];
+        let mut ans = 0;
+        let mut mx = 0;
+        let mut pre = 0;
 
+        // Initialize the last vector
+        for (i, &r) in ranges.iter().enumerate() {
+            if (i as i32) - r >= 0 {
+                last[((i as i32) - r) as usize] =
+                    std::cmp::max(last[((i as i32) - r) as usize], (i as i32) + r);
+            } else {
+                last[0] = std::cmp::max(last[0], (i as i32) + r);
+            }
+        }
+
+        for i in 0..n as usize {
+            mx = std::cmp::max(mx, last[i]);
+            if mx <= (i as i32) {
+                return -1;
+            }
+            if pre == (i as i32) {
+                ans += 1;
+                pre = mx;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

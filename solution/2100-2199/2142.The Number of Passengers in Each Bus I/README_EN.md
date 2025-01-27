@@ -1,8 +1,20 @@
-# [2142. The Number of Passengers in Each Bus I](https://leetcode.com/problems/the-number-of-passengers-in-each-bus-i)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2142.The%20Number%20of%20Passengers%20in%20Each%20Bus%20I/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2142. The Number of Passengers in Each Bus I 🔒](https://leetcode.com/problems/the-number-of-passengers-in-each-bus-i)
 
 [中文文档](/solution/2100-2199/2142.The%20Number%20of%20Passengers%20in%20Each%20Bus%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Buses</code></p>
 
@@ -13,7 +25,7 @@
 | bus_id       | int  |
 | arrival_time | int  |
 +--------------+------+
-bus_id is the primary key column for this table.
+bus_id is the column with unique values for this table.
 Each row of this table contains information about the arrival time of a bus at the LeetCode station.
 No two buses will arrive at the same time.
 </pre>
@@ -29,7 +41,7 @@ No two buses will arrive at the same time.
 | passenger_id | int  |
 | arrival_time | int  |
 +--------------+------+
-passenger_id is the primary key column for this table.
+passenger_id is the column with unique values for this table.
 Each row of this table contains information about the arrival time of a passenger at the LeetCode station.
 </pre>
 
@@ -37,11 +49,11 @@ Each row of this table contains information about the arrival time of a passenge
 
 <p>Buses and passengers arrive at the LeetCode station. If a bus arrives at the station at time <code>t<sub>bus</sub></code> and a passenger arrived at time <code>t<sub>passenger</sub></code> where <code>t<sub>passenger</sub> &lt;= t<sub>bus</sub></code> and the passenger did not catch any bus, the passenger will use that bus.</p>
 
-<p>Write an SQL query to report the number of users that used each bus.</p>
+<p>Write a solution&nbsp;to report the number of users that used each bus.</p>
 
 <p>Return the result table ordered by <code>bus_id</code> in <strong>ascending order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -85,14 +97,34 @@ Passengers table:
 - Bus 3 arrives at time 7 and collects passengers 12, 13, and 14.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    bus_id,
+    COUNT(passenger_id) - LAG(COUNT(passenger_id), 1, 0) OVER (
+        ORDER BY b.arrival_time
+    ) AS passengers_cnt
+FROM
+    Buses AS b
+    LEFT JOIN Passengers AS p ON p.arrival_time <= b.arrival_time
+GROUP BY 1
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

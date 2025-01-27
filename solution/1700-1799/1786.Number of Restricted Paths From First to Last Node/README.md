@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1786.Number%20of%20Restricted%20Paths%20From%20First%20to%20Last%20Node/README.md
+rating: 2078
+source: 第 231 场周赛 Q3
+tags:
+    - 图
+    - 拓扑排序
+    - 动态规划
+    - 最短路
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1786. 从第一个节点出发到最后一个节点的受限路径数](https://leetcode.cn/problems/number-of-restricted-paths-from-first-to-last-node)
 
 [English Version](/solution/1700-1799/1786.Number%20of%20Restricted%20Paths%20From%20First%20to%20Last%20Node/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现有一个加权无向连通图。给你一个正整数 <code>n</code> ，表示图中有 <code>n</code> 个节点，并按从 <code>1</code> 到 <code>n</code> 给节点编号；另给你一个数组 <code>edges</code> ，其中每个 <code>edges[i] = [u<sub>i</sub>, v<sub>i</sub>, weight<sub>i</sub>]</code> 表示存在一条位于节点 <code>u<sub>i</sub></code> 和 <code>v<sub>i</sub></code> 之间的边，这条边的权重为 <code>weight<sub>i</sub></code> 。</p>
 
@@ -49,17 +65,17 @@
 	<li>任意两个节点之间至少存在一条路径</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：堆优化 Dijkstra + 记忆化搜索**
+### 方法一：堆优化 Dijkstra + 记忆化搜索
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,37 +107,7 @@ class Solution:
         return dfs(1)
 ```
 
-```python
-class Solution:
-    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
-        g = defaultdict(list)
-        for u, v, w in edges:
-            g[u].append((v, w))
-            g[v].append((u, w))
-        dist = [inf] * (n + 1)
-        dist[n] = 0
-        q = [(0, n)]
-        mod = 10**9 + 7
-        while q:
-            _, u = heappop(q)
-            for v, w in g[u]:
-                if dist[v] > dist[u] + w:
-                    dist[v] = dist[u] + w
-                    heappush(q, (dist[v], v))
-        arr = list(range(1, n + 1))
-        arr.sort(key=lambda i: dist[i])
-        f = [0] * (n + 1)
-        f[n] = 1
-        for i in arr:
-            for j, _ in g[i]:
-                if dist[i] > dist[j]:
-                    f[i] = (f[i] + f[j]) % mod
-        return f[1]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -184,56 +170,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    private static final int INF = Integer.MAX_VALUE;
-    private static final int MOD = (int) 1e9 + 7;
-
-    public int countRestrictedPaths(int n, int[][] edges) {
-        List<int[]>[] g = new List[n + 1];
-        Arrays.setAll(g, k -> new ArrayList<>());
-        for (int[] e : edges) {
-            int u = e[0], v = e[1], w = e[2];
-            g[u].add(new int[] {v, w});
-            g[v].add(new int[] {u, w});
-        }
-        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        q.offer(new int[] {0, n});
-        int[] dist = new int[n + 1];
-        Arrays.fill(dist, INF);
-        dist[n] = 0;
-        while (!q.isEmpty()) {
-            int[] p = q.poll();
-            int u = p[1];
-            for (int[] ne : g[u]) {
-                int v = ne[0], w = ne[1];
-                if (dist[v] > dist[u] + w) {
-                    dist[v] = dist[u] + w;
-                    q.offer(new int[] {dist[v], v});
-                }
-            }
-        }
-        int[] f = new int[n + 1];
-        f[n] = 1;
-        Integer[] arr = new Integer[n];
-        for (int i = 0; i < n; ++i) {
-            arr[i] = i + 1;
-        }
-        Arrays.sort(arr, (i, j) -> dist[i] - dist[j]);
-        for (int i : arr) {
-            for (int[] ne : g[i]) {
-                int j = ne[0];
-                if (dist[i] > dist[j]) {
-                    f[i] = (f[i] + f[j]) % MOD;
-                }
-            }
-        }
-        return f[1];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 using pii = pair<int, int>;
@@ -288,7 +225,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 const inf = math.MaxInt32
@@ -307,9 +244,9 @@ func (a pairs) Len() int { return len(a) }
 func (a pairs) Less(i int, j int) bool {
 	return a[i].first < a[j].first || a[i].first == a[j].first && a[i].second < a[j].second
 }
-func (a pairs) Swap(i int, j int)   { a[i], a[j] = a[j], a[i] }
-func (a *pairs) Push(x interface{}) { *a = append(*a, x.(pair)) }
-func (a *pairs) Pop() interface{}   { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
+func (a pairs) Swap(i int, j int) { a[i], a[j] = a[j], a[i] }
+func (a *pairs) Push(x any)       { *a = append(*a, x.(pair)) }
+func (a *pairs) Pop() any         { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
 
 func countRestrictedPaths(n int, edges [][]int) int {
 	g := make([]pairs, n+1)
@@ -359,10 +296,99 @@ func countRestrictedPaths(n int, edges [][]int) int {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
+        g = defaultdict(list)
+        for u, v, w in edges:
+            g[u].append((v, w))
+            g[v].append((u, w))
+        dist = [inf] * (n + 1)
+        dist[n] = 0
+        q = [(0, n)]
+        mod = 10**9 + 7
+        while q:
+            _, u = heappop(q)
+            for v, w in g[u]:
+                if dist[v] > dist[u] + w:
+                    dist[v] = dist[u] + w
+                    heappush(q, (dist[v], v))
+        arr = list(range(1, n + 1))
+        arr.sort(key=lambda i: dist[i])
+        f = [0] * (n + 1)
+        f[n] = 1
+        for i in arr:
+            for j, _ in g[i]:
+                if dist[i] > dist[j]:
+                    f[i] = (f[i] + f[j]) % mod
+        return f[1]
 ```
 
+#### Java
+
+```java
+class Solution {
+    private static final int INF = Integer.MAX_VALUE;
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int countRestrictedPaths(int n, int[][] edges) {
+        List<int[]>[] g = new List[n + 1];
+        Arrays.setAll(g, k -> new ArrayList<>());
+        for (int[] e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            g[u].add(new int[] {v, w});
+            g[v].add(new int[] {u, w});
+        }
+        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        q.offer(new int[] {0, n});
+        int[] dist = new int[n + 1];
+        Arrays.fill(dist, INF);
+        dist[n] = 0;
+        while (!q.isEmpty()) {
+            int[] p = q.poll();
+            int u = p[1];
+            for (int[] ne : g[u]) {
+                int v = ne[0], w = ne[1];
+                if (dist[v] > dist[u] + w) {
+                    dist[v] = dist[u] + w;
+                    q.offer(new int[] {dist[v], v});
+                }
+            }
+        }
+        int[] f = new int[n + 1];
+        f[n] = 1;
+        Integer[] arr = new Integer[n];
+        for (int i = 0; i < n; ++i) {
+            arr[i] = i + 1;
+        }
+        Arrays.sort(arr, (i, j) -> dist[i] - dist[j]);
+        for (int i : arr) {
+            for (int[] ne : g[i]) {
+                int j = ne[0];
+                if (dist[i] > dist[j]) {
+                    f[i] = (f[i] + f[j]) % MOD;
+                }
+            }
+        }
+        return f[1];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

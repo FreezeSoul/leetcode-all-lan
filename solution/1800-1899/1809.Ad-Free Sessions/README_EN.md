@@ -1,8 +1,20 @@
-# [1809. Ad-Free Sessions](https://leetcode.com/problems/ad-free-sessions)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1809.Ad-Free%20Sessions/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1809. Ad-Free Sessions 🔒](https://leetcode.com/problems/ad-free-sessions)
 
 [中文文档](/solution/1800-1899/1809.Ad-Free%20Sessions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Playback</code></p>
 
@@ -15,7 +27,7 @@
 | start_time  | int  |
 | end_time    | int  |
 +-------------+------+
-session_id is the primary key for this table.
+session_id is the column with unique values for this table.
 customer_id is the ID of the customer watching this session.
 The session runs during the <strong>inclusive</strong> interval between start_time and end_time.
 It is guaranteed that start_time &lt;= end_time and that two sessions for the same customer do not intersect.</pre>
@@ -32,18 +44,18 @@ It is guaranteed that start_time &lt;= end_time and that two sessions for the sa
 | customer_id | int  |
 | timestamp   | int  |
 +-------------+------+
-ad_id is the primary key for this table.
+ad_id is the column with unique values for this table.
 customer_id is the ID of the customer viewing this ad.
 timestamp is the moment of time at which the ad was shown.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report all the sessions that did not get shown any ads.</p>
+<p>Write a solution to report all the sessions that did not get shown any ads.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -83,14 +95,34 @@ The ad with ID 3 was shown to user 2 at time 20 while they were in session 4.
 We can see that sessions 1 and 4 had at least one ad. Sessions 2, 3, and 5 did not have any ads, so we return them.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT session_id
+FROM Playback
+WHERE
+    session_id NOT IN (
+        SELECT session_id
+        FROM
+            Playback AS p
+            JOIN Ads AS a
+                ON p.customer_id = a.customer_id AND a.timestamp BETWEEN p.start_time AND p.end_time
+    );
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

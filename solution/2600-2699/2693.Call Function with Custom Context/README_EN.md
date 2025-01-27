@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2693.Call%20Function%20with%20Custom%20Context/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2693. Call Function with Custom Context](https://leetcode.com/problems/call-function-with-custom-context)
 
 [中文文档](/solution/2600-2699/2693.Call%20Function%20with%20Custom%20Context/README.md)
 
 ## Description
 
-<p>Enhance all functions to have the&nbsp;<code>callPolyfill</code>&nbsp;method. The method accepts an object&nbsp;<code>obj</code>&nbsp;as it&#39;s first parameter and any number of additional arguments. The&nbsp;<code>obj</code>&nbsp;becomes the&nbsp;<code>this</code>&nbsp;context for the function. The additional arguments are passed to the function (that the <code>callPolyfill</code>&nbsp;method belongs on).</p>
+<!-- description:start -->
+
+<p>Enhance all functions to have the&nbsp;<code>callPolyfill</code>&nbsp;method. The method accepts an object&nbsp;<code>obj</code>&nbsp;as its first parameter and any number of additional arguments. The&nbsp;<code>obj</code>&nbsp;becomes the&nbsp;<code>this</code>&nbsp;context for the function. The additional arguments are passed to the function (that the <code>callPolyfill</code>&nbsp;method belongs on).</p>
 
 <p>For example if you had the function:</p>
 
@@ -43,7 +55,7 @@ callPolyfill sets the &quot;this&quot; context to {&quot;a&quot;: 5}. 7 is passe
 fn = function tax(price, taxRate) { 
 &nbsp;return `The cost of the ${this.item} is ${price * taxRate}`; 
 }
-args = [{&quot;item&quot;: &quot;burger&quot;}, 10, 1,1]
+args = [{&quot;item&quot;: &quot;burger&quot;}, 10, 1.1]
 <strong>Output:</strong> &quot;The cost of the burger is 11&quot;
 <strong>Explanation:</strong> callPolyfill sets the &quot;this&quot; context to {&quot;item&quot;: &quot;burger&quot;}. 10 and 1.1 are passed as additional arguments.
 </pre>
@@ -51,17 +63,23 @@ args = [{&quot;item&quot;: &quot;burger&quot;}, 10, 1,1]
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
 
-<ul style="list-style-type:square;">
+<ul>
 	<li><code><font face="monospace">typeof args[0] == &#39;object&#39; and args[0] != null</font></code></li>
 	<li><code>1 &lt;= args.length &lt;= 100</code></li>
 	<li><code>2 &lt;= JSON.stringify(args[0]).length &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 declare global {
@@ -82,3 +100,7 @@ Function.prototype.callPolyfill = function (context, ...args): any {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

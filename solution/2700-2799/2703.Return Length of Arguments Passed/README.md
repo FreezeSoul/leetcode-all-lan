@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2703.Return%20Length%20of%20Arguments%20Passed/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2703. 返回传递的参数的长度](https://leetcode.cn/problems/return-length-of-arguments-passed)
 
 [English Version](/solution/2700-2799/2703.Return%20Length%20of%20Arguments%20Passed/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 请你编写一个函数 <code>argumentsLength</code>，返回传递给该函数的参数数量。
 
@@ -13,7 +23,7 @@
 <p><strong class="example">示例 1：</strong></p>
 
 <pre>
-<b>输入：</b>argsArr = [5]
+<b>输入：</b>args = [5]
 <b>输出：</b>1
 <strong>解释：</strong>
 argumentsLength(5); // 1
@@ -24,7 +34,7 @@ argumentsLength(5); // 1
 <p><strong class="example">示例 2：</strong></p>
 
 <pre>
-<b>输入：</b>argsArr = [{}, null, "3"]
+<b>输入：</b>args = [{}, null, "3"]
 <b>输出：</b>3
 <b>解释：</b>
 argumentsLength({}, null, "3"); // 3
@@ -37,19 +47,21 @@ argumentsLength({}, null, "3"); // 3
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>argsArr 是一个有效的 JSON 数组</code></li>
-	<li><code>0 &lt;= argsArr.length &lt;= 100</code></li>
+	<li><code>args</code>&nbsp;是一个有效的 JSON 数组</li>
+	<li><code>0 &lt;= args.length &lt;= 100</code></li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 function argumentsLength(...args: any[]): number {
@@ -62,3 +74,7 @@ function argumentsLength(...args: any[]): number {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

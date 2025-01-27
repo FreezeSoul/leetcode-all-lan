@@ -1,10 +1,20 @@
-# [2010. 职员招聘人数 II](https://leetcode.cn/problems/the-number-of-seniors-and-juniors-to-join-the-company-ii)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2010.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company%20II/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2010. 职员招聘人数 II 🔒](https://leetcode.cn/problems/the-number-of-seniors-and-juniors-to-join-the-company-ii)
 
 [English Version](/solution/2000-2099/2010.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Candidates</code></p>
 
@@ -16,14 +26,14 @@
 | experience  | enum |
 | salary      | int  |
 +-------------+------+
-employee_id是此表的主键列。
+employee_id 是该表中具有唯一值的列。
 经验是一个枚举，其中包含一个值（“高级”、“初级”）。
 此表的每一行都显示候选人的id、月薪和经验。
 每个候选人的工资保证是 <strong>唯一</strong> 的。</pre>
 
 <p>&nbsp;</p>
 
-<p>一家公司想雇佣新员工。公司的工资预算是 7 万美元。公司的招聘标准是：</p>
+<p>一家公司想雇佣新员工。公司的工资预算是 <code>$70000</code> 。公司的招聘标准是：</p>
 
 <ol>
 	<li>继续雇佣薪水最低的高级职员，直到你不能再雇佣更多的高级职员。</li>
@@ -31,9 +41,9 @@ employee_id是此表的主键列。
 	<li>继续以最低的工资雇佣初级职员，直到你不能再雇佣更多的初级职员。</li>
 </ol>
 
-<p>编写一个SQL查询，查找根据上述条件雇用职员的 ID。<br />
+<p>编写一个解决方案，查找根据上述条件雇用职员的 ID。<br />
 按 <strong>任意顺序 </strong>返回结果表。<br />
-查询结果格式如下例所示。</p>
+返回结果格式如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -93,18 +103,58 @@ Candidates table:
 我们不能用目前的预算雇佣任何高级员工，因为我们需要至少 80000 美元来雇佣一名高级员工。
 我们可以用剩下的预算雇佣三名初级员工。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：窗口函数
+
+相似题目：
+
+-   [2004. 职员招聘人数](https://github.com/doocs/leetcode/blob/main/solution/2000-2099/2004.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company/README.md)
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    s AS (
+        SELECT
+            employee_id,
+            SUM(salary) OVER (ORDER BY salary) AS cur
+        FROM Candidates
+        WHERE experience = 'Senior'
+    ),
+    j AS (
+        SELECT
+            employee_id,
+            IFNULL(
+                SELECT
+                    MAX(cur)
+                FROM s
+                WHERE cur <= 70000,
+                0
+            ) + SUM(salary) OVER (ORDER BY salary) AS cur
+        FROM Candidates
+        WHERE experience = 'Junior'
+    )
+SELECT
+    employee_id
+FROM s
+WHERE cur <= 70000
+UNION
+SELECT
+    employee_id
+FROM j
+WHERE cur <= 70000;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

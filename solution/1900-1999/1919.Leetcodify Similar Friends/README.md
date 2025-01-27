@@ -1,10 +1,20 @@
-# [1919. 兴趣相同的朋友](https://leetcode.cn/problems/leetcodify-similar-friends)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1919.Leetcodify%20Similar%20Friends/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1919. 兴趣相同的朋友 🔒](https://leetcode.cn/problems/leetcodify-similar-friends)
 
 [English Version](/solution/1900-1999/1919.Leetcodify%20Similar%20Friends/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Listens</code></p>
 
@@ -95,18 +105,32 @@ Friendship table:
 用户 2 和 4 是朋友，但他们同一天内听过相同的歌曲的数量小于3。
 用户 2 和 5 是朋友，并且在都听了了10、11、12的歌曲，但不在同一天内。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT DISTINCT user1_id, user2_id
+FROM
+    Friendship AS f
+    LEFT JOIN Listens AS l1 ON user1_id = l1.user_id
+    LEFT JOIN Listens AS l2 ON user2_id = l2.user_id
+WHERE l1.song_id = l2.song_id AND l1.day = l2.day
+GROUP BY 1, 2, l1.day
+HAVING COUNT(DISTINCT l1.song_id) >= 3;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

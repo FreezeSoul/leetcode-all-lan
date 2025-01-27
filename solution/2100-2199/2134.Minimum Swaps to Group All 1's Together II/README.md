@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2134.Minimum%20Swaps%20to%20Group%20All%201%27s%20Together%20II/README.md
+rating: 1748
+source: 第 275 场周赛 Q2
+tags:
+    - 数组
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [2134. 最少交换次数来组合所有的 1 II](https://leetcode.cn/problems/minimum-swaps-to-group-all-1s-together-ii)
 
 [English Version](/solution/2100-2199/2134.Minimum%20Swaps%20to%20Group%20All%201%27s%20Together%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>交换</strong> 定义为选中一个数组中的两个 <strong>互不相同</strong> 的位置并交换二者的值。</p>
 
@@ -53,138 +66,242 @@
 	<li><code>nums[i]</code> 为 <code>0</code> 或者 <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-前缀和 + 滑动窗口。
+### 方法一：滑动窗口
+
+我们先统计数组中 $1$ 的个数，记为 $k$，那么题目实际上就是求一个长度为 $k$ 的环形子数组，使得子数组中 $1$ 的个数最多，那么最少交换次数就是 $k$ 减去子数组中 $1$ 的个数最多的那个子数组中 $1$ 的个数。
+
+我们可以使用滑动窗口来解决这个问题，首先统计数组中前 $k$ 个元素中 $1$ 的个数，记为 $cnt$，然后我们维护一个长度为 $k$ 的滑动窗口，每次向右移动一个位置，更新 $cnt$，同时更新最大的 $cnt$ 值，即 $mx = \max(mx, cnt)$，最后答案就是 $k - mx$。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minSwaps(self, nums: List[int]) -> int:
-        cnt = nums.count(1)
+        k = nums.count(1)
+        mx = cnt = sum(nums[:k])
         n = len(nums)
-        s = [0] * ((n << 1) + 1)
-        for i in range(n << 1):
-            s[i + 1] = s[i] + nums[i % n]
-        mx = 0
-        for i in range(n << 1):
-            j = i + cnt - 1
-            if j < (n << 1):
-                mx = max(mx, s[j + 1] - s[i])
-        return cnt - mx
+        for i in range(k, n + k):
+            cnt += nums[i % n]
+            cnt -= nums[(i - k + n) % n]
+            mx = max(mx, cnt)
+        return k - mx
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int minSwaps(int[] nums) {
-        int cnt = 0;
-        for (int v : nums) {
-            cnt += v;
-        }
+        int k = Arrays.stream(nums).sum();
         int n = nums.length;
-        int[] s = new int[(n << 1) + 1];
-        for (int i = 0; i < (n << 1); ++i) {
-            s[i + 1] = s[i] + nums[i % n];
+        int cnt = 0;
+        for (int i = 0; i < k; ++i) {
+            cnt += nums[i];
         }
-        int mx = 0;
-        for (int i = 0; i < (n << 1); ++i) {
-            int j = i + cnt - 1;
-            if (j < (n << 1)) {
-                mx = Math.max(mx, s[j + 1] - s[i]);
-            }
+        int mx = cnt;
+        for (int i = k; i < n + k; ++i) {
+            cnt += nums[i % n] - nums[(i - k + n) % n];
+            mx = Math.max(mx, cnt);
         }
-        return cnt - mx;
+        return k - mx;
     }
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```ts
-function minSwaps(nums: number[]): number {
-    const n = nums.length;
-    const m = nums.reduce((a, c) => a + c, 0);
-    let cnt = nums.reduce((a, c, i) => a + (i < m ? c : 0), 0);
-    let ans = cnt;
-    for (let i = m; i < m + n; i++) {
-        let prev = nums[i - m];
-        let post = nums[i % n];
-        cnt += post - prev;
-        ans = Math.max(cnt, ans);
-    }
-    return m - ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minSwaps(vector<int>& nums) {
-        int cnt = 0;
-        for (int& v : nums) cnt += v;
+        int k = accumulate(nums.begin(), nums.end(), 0);
         int n = nums.size();
-        vector<int> s((n << 1) + 1);
-        for (int i = 0; i < (n << 1); ++i) s[i + 1] = s[i] + nums[i % n];
-        int mx = 0;
-        for (int i = 0; i < (n << 1); ++i) {
-            int j = i + cnt - 1;
-            if (j < (n << 1)) mx = max(mx, s[j + 1] - s[i]);
+        int cnt = accumulate(nums.begin(), nums.begin() + k, 0);
+        int mx = cnt;
+        for (int i = k; i < n + k; ++i) {
+            cnt += nums[i % n] - nums[(i - k + n) % n];
+            mx = max(mx, cnt);
         }
-        return cnt - mx;
+        return k - mx;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSwaps(nums []int) int {
+	k := 0
+	for _, x := range nums {
+		k += x
+	}
 	cnt := 0
-	for _, v := range nums {
-		cnt += v
+	for i := 0; i < k; i++ {
+		cnt += nums[i]
 	}
+	mx := cnt
 	n := len(nums)
-	s := make([]int, (n<<1)+1)
-	for i := 0; i < (n << 1); i++ {
-		s[i+1] = s[i] + nums[i%n]
+	for i := k; i < n+k; i++ {
+		cnt += nums[i%n] - nums[(i-k+n)%n]
+		mx = max(mx, cnt)
 	}
-	mx := 0
-	for i := 0; i < (n << 1); i++ {
-		j := i + cnt - 1
-		if j < (n << 1) {
-			mx = max(mx, s[j+1]-s[i])
-		}
-	}
-	return cnt - mx
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return k - mx
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function minSwaps(nums: number[]): number {
+    const n = nums.length;
+    const k = nums.reduce((a, b) => a + b, 0);
+    let cnt = k - nums.slice(0, k).reduce((a, b) => a + b, 0);
+    let min = cnt;
+
+    for (let i = k; i < n + k; i++) {
+        cnt += nums[i - k] - nums[i % n];
+        min = Math.min(min, cnt);
+    }
+
+    return min;
+}
 ```
 
+#### JavaScript
+
+```js
+function minSwaps(nums) {
+    const n = nums.length;
+    const k = nums.reduce((a, b) => a + b, 0);
+    let cnt = k - nums.slice(0, k).reduce((a, b) => a + b, 0);
+    let min = cnt;
+
+    for (let i = k; i < n + k; i++) {
+        cnt += nums[i - k] - nums[i % n];
+        min = Math.min(min, cnt);
+    }
+
+    return min;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_swaps(nums: Vec<i32>) -> i32 {
+        let k: i32 = nums.iter().sum();
+        let n: usize = nums.len();
+        let mut cnt: i32 = 0;
+        for i in 0..k {
+            cnt += nums[i as usize];
+        }
+        let mut mx: i32 = cnt;
+        for i in k..(n as i32) + k {
+            cnt += nums[(i % (n as i32)) as usize]
+                - nums[((i - k + (n as i32)) % (n as i32)) as usize];
+            mx = mx.max(cnt);
+        }
+        return k - mx;
+    }
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int MinSwaps(int[] nums) {
+        int k = nums.Sum();
+        int n = nums.Length;
+        int cnt = 0;
+        for (int i = 0; i < k; ++i) {
+            cnt += nums[i];
+        }
+        int mx = cnt;
+        for (int i = k; i < n + k; ++i) {
+            cnt += nums[i % n] - nums[(i - k + n) % n];
+            mx = Math.Max(mx, cnt);
+        }
+        return k - mx;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：前缀和
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function minSwaps(nums: number[]): number {
+    const n = nums.length;
+
+    const getMin = (x: 0 | 1) => {
+        const prefixSum = Array(n + 1).fill(0);
+        for (let i = 1; i <= n; i++) {
+            prefixSum[i] = prefixSum[i - 1] + (nums[i - 1] === x);
+        }
+
+        const length = prefixSum[n];
+        let ans = Number.POSITIVE_INFINITY;
+        for (let l = 0, r = length; r <= n; l++, r++) {
+            const min = length - (prefixSum[r] - prefixSum[l]);
+            ans = Math.min(ans, min);
+        }
+
+        return ans;
+    };
+
+    return Math.min(getMin(0), getMin(1));
+}
+```
+
+#### JavaScript
+
+```js
+function minSwaps(nums) {
+    const n = nums.length;
+
+    const getMin = x => {
+        const prefixSum = Array(n + 1).fill(0);
+        for (let i = 1; i <= n; i++) {
+            prefixSum[i] = prefixSum[i - 1] + (nums[i - 1] === x);
+        }
+
+        const length = prefixSum[n];
+        let ans = Number.POSITIVE_INFINITY;
+        for (let l = 0, r = length; r <= n; l++, r++) {
+            const min = length - (prefixSum[r] - prefixSum[l]);
+            ans = Math.min(ans, min);
+        }
+
+        return ans;
+    };
+
+    return Math.min(getMin(0), getMin(1));
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

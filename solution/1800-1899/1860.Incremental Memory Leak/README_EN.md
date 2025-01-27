@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1860.Incremental%20Memory%20Leak/README_EN.md
+rating: 1387
+source: Biweekly Contest 52 Q2
+tags:
+    - Math
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1860. Incremental Memory Leak](https://leetcode.com/problems/incremental-memory-leak)
 
 [中文文档](/solution/1800-1899/1860.Incremental%20Memory%20Leak/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two integers <code>memory1</code> and <code>memory2</code> representing the available memory in bits on two memory sticks. There is currently a faulty program running that consumes an increasing amount of memory every second.</p>
 
@@ -43,11 +58,27 @@
 	<li><code>0 &lt;= memory1, memory2 &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We directly simulate the allocation of memory.
+
+Assume $t$ is the moment of unexpected exit, then the two memory sticks can definitely accommodate the memory consumed at the moment $t-1$ and before, so we have:
+
+$$
+\sum_{i=1}^{t-1} i = \frac{t\times (t-1)}{2}  \leq (m_1+m_2)
+$$
+
+The time complexity is $O(\sqrt{m_1+m_2})$, where $m_1$ and $m_2$ are the sizes of the two memory sticks respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +93,7 @@ class Solution:
         return [i, memory1, memory2]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +111,58 @@ class Solution {
 }
 ```
 
-### **JavaScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> memLeak(int memory1, int memory2) {
+        int i = 1;
+        for (; i <= max(memory1, memory2); ++i) {
+            if (memory1 >= memory2) {
+                memory1 -= i;
+            } else {
+                memory2 -= i;
+            }
+        }
+        return {i, memory1, memory2};
+    }
+};
+```
+
+#### Go
+
+```go
+func memLeak(memory1 int, memory2 int) []int {
+	i := 1
+	for ; i <= memory1 || i <= memory2; i++ {
+		if memory1 >= memory2 {
+			memory1 -= i
+		} else {
+			memory2 -= i
+		}
+	}
+	return []int{i, memory1, memory2}
+}
+```
+
+#### TypeScript
+
+```ts
+function memLeak(memory1: number, memory2: number): number[] {
+    let i = 1;
+    for (; i <= Math.max(memory1, memory2); ++i) {
+        if (memory1 >= memory2) {
+            memory1 -= i;
+        } else {
+            memory2 -= i;
+        }
+    }
+    return [i, memory1, memory2];
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -101,61 +183,8 @@ var memLeak = function (memory1, memory2) {
 };
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<int> memLeak(int memory1, int memory2) {
-        int i = 1;
-        for (; i <= max(memory1, memory2); ++i) {
-            if (memory1 >= memory2) {
-                memory1 -= i;
-            } else {
-                memory2 -= i;
-            }
-        }
-        return {i, memory1, memory2};
-    }
-};
-```
-
-### **Go**
-
-```go
-func memLeak(memory1 int, memory2 int) []int {
-	i := 1
-	for ; i <= memory1 || i <= memory2; i++ {
-		if memory1 >= memory2 {
-			memory1 -= i
-		} else {
-			memory2 -= i
-		}
-	}
-	return []int{i, memory1, memory2}
-}
-```
-
-### **TypeScript**
-
-```ts
-function memLeak(memory1: number, memory2: number): number[] {
-    let i = 1;
-    for (; i <= Math.max(memory1, memory2); ++i) {
-        if (memory1 >= memory2) {
-            memory1 -= i;
-        } else {
-            memory2 -= i;
-        }
-    }
-    return [i, memory1, memory2];
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

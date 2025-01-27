@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0275.H-Index%20II/README_EN.md
+tags:
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [275. H-Index II](https://leetcode.com/problems/h-index-ii)
 
 [中文文档](/solution/0200-0299/0275.H-Index%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of integers <code>citations</code> where <code>citations[i]</code> is the number of citations a researcher received for their <code>i<sup>th</sup></code> paper and <code>citations</code> is sorted in <strong>ascending order</strong>, return <em>the researcher&#39;s h-index</em>.</p>
 
@@ -37,13 +50,23 @@ Since the researcher has 3 papers with at least 3 citations each and the remaini
 	<li><code>citations</code> is sorted in <strong>ascending order</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Binary search.
+<!-- solution:start -->
+
+### Solution 1: Binary Search
+
+We notice that if there are at least $x$ papers with citation counts greater than or equal to $x$, then for any $y \lt x$, its citation count must also be greater than or equal to $y$. This exhibits monotonicity.
+
+Therefore, we use binary search to enumerate $h$ and obtain the maximum $h$ that satisfies the condition. Since we need to satisfy that $h$ papers are cited at least $h$ times, we have $citations[n - mid] \ge mid$.
+
+The time complexity is $O(\log n)$, where $n$ is the length of the array $citations$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +82,7 @@ class Solution:
         return left
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -67,19 +90,19 @@ class Solution {
         int n = citations.length;
         int left = 0, right = n;
         while (left < right) {
-            int mid = (left + right + 1) >> 1;
-            if (citations[n - mid] >= mid) {
-                left = mid;
+            int mid = (left + right) >>> 1;
+            if (citations[mid] >= n - mid) {
+                right = mid;
             } else {
-                right = mid - 1;
+                left = mid + 1;
             }
         }
-        return left;
+        return n - left;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -99,7 +122,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func hIndex(citations []int) int {
@@ -117,7 +140,7 @@ func hIndex(citations []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function hIndex(citations: number[]): number {
@@ -136,10 +159,48 @@ function hIndex(citations: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
+```rust
+impl Solution {
+    pub fn h_index(citations: Vec<i32>) -> i32 {
+        let n = citations.len();
+        let (mut left, mut right) = (0, n);
+        while left < right {
+            let mid = ((left + right + 1) >> 1) as usize;
+            if citations[n - mid] >= (mid as i32) {
+                left = mid;
+            } else {
+                right = mid - 1;
+            }
+        }
+        left as i32
+    }
+}
 ```
 
+#### C#
+
+```cs
+public class Solution {
+    public int HIndex(int[] citations) {
+        int n = citations.Length;
+        int left = 0, right = n;
+        while (left < right) {
+            int mid = (left + right + 1) >> 1;
+            if (citations[n - mid] >= mid) {
+                left = mid;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

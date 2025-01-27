@@ -1,10 +1,23 @@
-# [425. 单词方块](https://leetcode.cn/problems/word-squares)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0425.Word%20Squares/README.md
+tags:
+    - 字典树
+    - 数组
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
+# [425. 单词方块 🔒](https://leetcode.cn/problems/word-squares)
 
 [English Version](/solution/0400-0499/0425.Word%20Squares/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个单词集合&nbsp;<code>words</code> <strong>（没有重复）</strong>，找出并返回其中所有的 <a href="https://en.wikipedia.org/wiki/Word_square">单词方块</a><strong>&nbsp;</strong>。&nbsp;<code>words</code>&nbsp;中的同一个单词可以被 <strong>多次</strong> 使用。你可以按 <strong>任意顺序</strong> 返回答案。</p>
 
@@ -48,11 +61,13 @@
 	<li><code>words[i]</code>&nbsp;都 <strong>各不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀树 + DFS**
+### 方法一：前缀树 + DFS
 
 根据已添加单词确定下一个单词的前缀，继续进行搜索。
 
@@ -60,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Trie:
@@ -112,9 +125,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Trie {
@@ -186,7 +197,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -253,10 +264,8 @@ func wordSquares(words []string) [][]string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2196.Create%20Binary%20Tree%20From%20Descriptions/README.md
+rating: 1643
+source: 第 283 场周赛 Q3
+tags:
+    - 树
+    - 数组
+    - 哈希表
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [2196. 根据描述创建二叉树](https://leetcode.cn/problems/create-binary-tree-from-descriptions)
 
 [English Version](/solution/2100-2199/2196.Create%20Binary%20Tree%20From%20Descriptions/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二维整数数组 <code>descriptions</code> ，其中 <code>descriptions[i] = [parent<sub>i</sub>, child<sub>i</sub>, isLeft<sub>i</sub>]</code> 表示 <code>parent<sub>i</sub></code> 是 <code>child<sub>i</sub></code> 在 <strong>二叉树</strong> 中的 <strong>父节点</strong>，二叉树中各节点的值 <strong>互不相同</strong> 。此外：</p>
 
@@ -52,15 +67,27 @@
 	<li><code>descriptions</code> 所描述的二叉树是一棵有效二叉树</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：哈希表
+
+我们可以用一个哈希表 $\textit{nodes}$ 来存储所有节点，其中键为节点的值，值为节点本身，用一个集合 $\textit{children}$ 来存储所有的子节点。
+
+遍历 $\textit{descriptions}$，对于每个描述 $[\textit{parent}, \textit{child}, \textit{isLeft}]$，如果 $\textit{parent}$ 不在 $\textit{nodes}$ 中，我们就将 $\textit{parent}$ 加入 $\textit{nodes}$，并初始化一个值为 $\textit{parent}$ 的节点。如果 $\textit{child}$ 不在 $\textit{nodes}$ 中，我们就将 $\textit{child}$ 加入 $\textit{nodes}$，并初始化一个值为 $\textit{child}$ 的节点。然后我们将 $\textit{child}$ 加入 $\textit{children}$。
+
+如果 $\textit{isLeft}$ 为真，我们就将 $\textit{child}$ 作为 $\textit{parent}$ 的左子节点，否则我们就将 $\textit{child}$ 作为 $\textit{parent}$ 的右子节点。
+
+最后，我们遍历 $\textit{nodes}$，如果某个节点的值不在 $\textit{children}$ 中，那么这个节点就是根节点，我们返回这个节点。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是 $\textit{descriptions}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -71,26 +98,23 @@
 #         self.right = right
 class Solution:
     def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
-        g = defaultdict(TreeNode)
-        vis = set()
-        for p, c, left in descriptions:
-            if p not in g:
-                g[p] = TreeNode(p)
-            if c not in g:
-                g[c] = TreeNode(c)
-            if left:
-                g[p].left = g[c]
+        nodes = defaultdict(TreeNode)
+        children = set()
+        for parent, child, isLeft in descriptions:
+            if parent not in nodes:
+                nodes[parent] = TreeNode(parent)
+            if child not in nodes:
+                nodes[child] = TreeNode(child)
+            children.add(child)
+            if isLeft:
+                nodes[parent].left = nodes[child]
             else:
-                g[p].right = g[c]
-            vis.add(c)
-        for v, node in g.items():
-            if v not in vis:
-                return node
+                nodes[parent].right = nodes[child]
+        root = (set(nodes.keys()) - children).pop()
+        return nodes[root]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -110,26 +134,26 @@ class Solution:
  */
 class Solution {
     public TreeNode createBinaryTree(int[][] descriptions) {
-        Map<Integer, TreeNode> m = new HashMap<>();
-        Set<Integer> vis = new HashSet<>();
-        for (int[] d : descriptions) {
-            int p = d[0], c = d[1], isLeft = d[2];
-            if (!m.containsKey(p)) {
-                m.put(p, new TreeNode(p));
+        Map<Integer, TreeNode> nodes = new HashMap<>();
+        Set<Integer> children = new HashSet<>();
+        for (var d : descriptions) {
+            int parent = d[0], child = d[1], isLeft = d[2];
+            if (!nodes.containsKey(parent)) {
+                nodes.put(parent, new TreeNode(parent));
             }
-            if (!m.containsKey(c)) {
-                m.put(c, new TreeNode(c));
+            if (!nodes.containsKey(child)) {
+                nodes.put(child, new TreeNode(child));
             }
             if (isLeft == 1) {
-                m.get(p).left = m.get(c);
+                nodes.get(parent).left = nodes.get(child);
             } else {
-                m.get(p).right = m.get(c);
+                nodes.get(parent).right = nodes.get(child);
             }
-            vis.add(c);
+            children.add(child);
         }
-        for (Map.Entry<Integer, TreeNode> entry : m.entrySet()) {
-            if (!vis.contains(entry.getKey())) {
-                return entry.getValue();
+        for (var e : nodes.entrySet()) {
+            if (!children.contains(e.getKey())) {
+                return e.getValue();
             }
         }
         return null;
@@ -137,7 +161,89 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        unordered_map<int, TreeNode*> nodes;
+        unordered_set<int> children;
+        for (const auto& d : descriptions) {
+            int parent = d[0], child = d[1], isLeft = d[2];
+            if (!nodes.contains(parent)) {
+                nodes[parent] = new TreeNode(parent);
+            }
+            if (!nodes.contains(child)) {
+                nodes[child] = new TreeNode(child);
+            }
+            if (isLeft) {
+                nodes[parent]->left = nodes[child];
+            } else {
+                nodes[parent]->right = nodes[child];
+            }
+            children.insert(child);
+        }
+        for (const auto& [k, v] : nodes) {
+            if (!children.contains(k)) {
+                return v;
+            }
+        }
+        return nullptr;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func createBinaryTree(descriptions [][]int) *TreeNode {
+	nodes := map[int]*TreeNode{}
+	children := map[int]bool{}
+	for _, d := range descriptions {
+		parent, child, isLeft := d[0], d[1], d[2]
+		if _, ok := nodes[parent]; !ok {
+			nodes[parent] = &TreeNode{Val: parent}
+		}
+		if _, ok := nodes[child]; !ok {
+			nodes[child] = &TreeNode{Val: child}
+		}
+		if isLeft == 1 {
+			nodes[parent].Left = nodes[child]
+		} else {
+			nodes[parent].Right = nodes[child]
+		}
+		children[child] = true
+	}
+	for k, v := range nodes {
+		if _, ok := children[k]; !ok {
+			return v
+		}
+	}
+	return nil
+}
+```
+
+#### TypeScript
 
 ```ts
 /**
@@ -155,38 +261,31 @@ class Solution {
  */
 
 function createBinaryTree(descriptions: number[][]): TreeNode | null {
-    const map = new Map<number, [number, number]>();
-    const isRoot = new Map<number, boolean>();
+    const nodes: Record<number, TreeNode> = {};
+    const children = new Set<number>();
     for (const [parent, child, isLeft] of descriptions) {
-        let [left, right] = map.get(parent) ?? [0, 0];
+        if (!nodes[parent]) {
+            nodes[parent] = new TreeNode(parent);
+        }
+        if (!nodes[child]) {
+            nodes[child] = new TreeNode(child);
+        }
         if (isLeft) {
-            left = child;
+            nodes[parent].left = nodes[child];
         } else {
-            right = child;
+            nodes[parent].right = nodes[child];
         }
-        if (!isRoot.has(parent)) {
-            isRoot.set(parent, true);
-        }
-        isRoot.set(child, false);
-        map.set(parent, [left, right]);
+        children.add(child);
     }
-    const dfs = (val: number) => {
-        if (val === 0) {
-            return null;
-        }
-        const [left, right] = map.get(val) ?? [0, 0];
-        return new TreeNode(val, dfs(left), dfs(right));
-    };
-    for (const [key, val] of isRoot.entries()) {
-        if (val) {
-            return dfs(key);
+    for (const [k, v] of Object.entries(nodes)) {
+        if (!children.has(+k)) {
+            return v;
         }
     }
-    return null;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -207,130 +306,90 @@ function createBinaryTree(descriptions: number[][]): TreeNode | null {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
+use std::rc::Rc;
 impl Solution {
-    fn dfs(val: i32, map: &HashMap<i32, [i32; 2]>) -> Option<Rc<RefCell<TreeNode>>> {
-        if val == 0 {
-            return None;
-        }
-        let mut left = None;
-        let mut right = None;
-        if let Some(&[l_val, r_val]) = map.get(&val) {
-            left = Self::dfs(l_val, map);
-            right = Self::dfs(r_val, map);
-        }
-        Some(Rc::new(RefCell::new(TreeNode { val, left, right })))
-    }
-
     pub fn create_binary_tree(descriptions: Vec<Vec<i32>>) -> Option<Rc<RefCell<TreeNode>>> {
-        let mut map = HashMap::new();
-        let mut is_root = HashMap::new();
-        for description in descriptions.iter() {
-            let (parent, child, is_left) = (description[0], description[1], description[2] == 1);
-            let [mut left, mut right] = map.get(&parent).unwrap_or(&[0, 0]);
-            if is_left {
-                left = child;
+        let mut nodes = HashMap::new();
+        let mut children = HashSet::new();
+
+        for d in descriptions {
+            let parent = d[0];
+            let child = d[1];
+            let is_left = d[2];
+
+            nodes
+                .entry(parent)
+                .or_insert_with(|| Rc::new(RefCell::new(TreeNode::new(parent))));
+            nodes
+                .entry(child)
+                .or_insert_with(|| Rc::new(RefCell::new(TreeNode::new(child))));
+
+            if is_left == 1 {
+                nodes.get(&parent).unwrap().borrow_mut().left =
+                    Some(Rc::clone(nodes.get(&child).unwrap()));
             } else {
-                right = child;
+                nodes.get(&parent).unwrap().borrow_mut().right =
+                    Some(Rc::clone(nodes.get(&child).unwrap()));
             }
-            if !is_root.contains_key(&parent) {
-                is_root.insert(parent, true);
-            }
-            is_root.insert(child, false);
-            map.insert(parent, [left, right]);
+
+            children.insert(child);
         }
-        for key in is_root.keys() {
-            if *is_root.get(key).unwrap() {
-                return Self::dfs(*key, &map);
+
+        for (key, node) in &nodes {
+            if !children.contains(key) {
+                return Some(Rc::clone(node));
             }
         }
+
         None
     }
 }
 ```
 
-### **C++**
+#### JavaScript
 
-```cpp
+```js
 /**
  * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
  */
-class Solution {
-public:
-    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
-        unordered_map<int, TreeNode*> m;
-        unordered_set<int> vis;
-        for (auto& d : descriptions) {
-            int p = d[0], c = d[1], left = d[2];
-            if (!m.count(p)) m[p] = new TreeNode(p);
-            if (!m.count(c)) m[c] = new TreeNode(c);
-            if (left)
-                m[p]->left = m[c];
-            else
-                m[p]->right = m[c];
-            vis.insert(c);
+/**
+ * @param {number[][]} descriptions
+ * @return {TreeNode}
+ */
+var createBinaryTree = function (descriptions) {
+    const nodes = {};
+    const children = new Set();
+    for (const [parent, child, isLeft] of descriptions) {
+        if (!nodes[parent]) {
+            nodes[parent] = new TreeNode(parent);
         }
-        for (auto& [v, node] : m) {
-            if (!vis.count(v)) return node;
+        if (!nodes[child]) {
+            nodes[child] = new TreeNode(child);
         }
-        return nullptr;
+        if (isLeft) {
+            nodes[parent].left = nodes[child];
+        } else {
+            nodes[parent].right = nodes[child];
+        }
+        children.add(child);
+    }
+    for (const [k, v] of Object.entries(nodes)) {
+        if (!children.has(+k)) {
+            return v;
+        }
     }
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func createBinaryTree(descriptions [][]int) *TreeNode {
-	m := make(map[int]*TreeNode)
-	vis := make(map[int]bool)
-	for _, d := range descriptions {
-		p, c, left := d[0], d[1], d[2]
-		if m[p] == nil {
-			m[p] = &TreeNode{Val: p}
-		}
-		if m[c] == nil {
-			m[c] = &TreeNode{Val: c}
-		}
-		if left == 1 {
-			m[p].Left = m[c]
-		} else {
-			m[p].Right = m[c]
-		}
-		vis[c] = true
-	}
-
-	for v, node := range m {
-		if !vis[v] {
-			return node
-		}
-	}
-	return nil
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

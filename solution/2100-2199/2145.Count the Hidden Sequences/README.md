@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2145.Count%20the%20Hidden%20Sequences/README.md
+rating: 1614
+source: 第 70 场双周赛 Q2
+tags:
+    - 数组
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2145. 统计隐藏数组数目](https://leetcode.cn/problems/count-the-hidden-sequences)
 
 [English Version](/solution/2100-2199/2145.Count%20the%20Hidden%20Sequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始且长度为 <code>n</code>&nbsp;的整数数组&nbsp;<code>differences</code>&nbsp;，它表示一个长度为&nbsp;<code>n + 1</code>&nbsp;的&nbsp;<strong>隐藏</strong>&nbsp;数组&nbsp;<strong>相邻</strong>&nbsp;元素之间的&nbsp;<strong>差值</strong>&nbsp;。更正式的表述为：我们将隐藏数组记作&nbsp;<code>hidden</code>&nbsp;，那么&nbsp;<code>differences[i] = hidden[i + 1] - hidden[i]</code>&nbsp;。</p>
 
@@ -66,102 +79,98 @@
 	<li><code>-10<sup>5</sup> &lt;= lower &lt;= upper &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：前缀和
+
+由于数组 $\textit{differences}$ 已经确定，那么数组 $\textit{hidden}$ 的元素最大值与最小值之差也是固定的，我们只要确保差值不超过 $\textit{upper} - \textit{lower}$ 即可。
+
+我们不妨假设数组 $\textit{hidden}$ 的第一个元素为 $0$，那么 $\textit{hidden}[i] = \textit{hidden}[i - 1] + \textit{differences}[i - 1]$，其中 $1 \leq i \leq n$。记数组 $\textit{hidden}$ 的最大值为 $mx$，最小值为 $mi$，如果 $mx - mi \leq \textit{upper} - \textit{lower}$，那么我们就可以构造出一个合法的 $\textit{hidden}$ 数组，可以构造的个数为 $\textit{upper} - \textit{lower} - (mx - mi) + 1$。否则，无法构造出合法的 $\textit{hidden}$ 数组，返回 $0$。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组 $\textit{differences}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def numberOfArrays(self, differences: List[int], lower: int, upper: int) -> int:
-        num = mi = mx = 0
+        x = mi = mx = 0
         for d in differences:
-            num += d
-            mi = min(mi, num)
-            mx = max(mx, num)
-        return max(0, upper - lower - (mx - mi) + 1)
+            x += d
+            mi = min(mi, x)
+            mx = max(mx, x)
+        return max(upper - lower - (mx - mi) + 1, 0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int numberOfArrays(int[] differences, int lower, int upper) {
-        long num = 0, mi = 0, mx = 0;
+        long x = 0, mi = 0, mx = 0;
         for (int d : differences) {
-            num += d;
-            mi = Math.min(mi, num);
-            mx = Math.max(mx, num);
+            x += d;
+            mi = Math.min(mi, x);
+            mx = Math.max(mx, x);
         }
-        return Math.max(0, (int) (upper - lower - (mx - mi) + 1));
+        return (int) Math.max(upper - lower - (mx - mi) + 1, 0);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int numberOfArrays(vector<int>& differences, int lower, int upper) {
-        long long num = 0, mi = 0, mx = 0;
-        for (int& d : differences) {
-            num += d;
-            mi = min(mi, num);
-            mx = max(mx, num);
+        long long x = 0, mi = 0, mx = 0;
+        for (int d : differences) {
+            x += d;
+            mi = min(mi, x);
+            mx = max(mx, x);
         }
-        return max(0, (int)(upper - lower - (mx - mi) + 1));
+        return max(upper - lower - (mx - mi) + 1, 0LL);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfArrays(differences []int, lower int, upper int) int {
-	num, mi, mx := 0, 0, 0
+	x, mi, mx := 0, 0, 0
 	for _, d := range differences {
-		num += d
-		mi = min(mi, num)
-		mx = max(mx, num)
+		x += d
+		mi = min(mi, x)
+		mx = max(mx, x)
 	}
 	return max(0, upper-lower-(mx-mi)+1)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function numberOfArrays(differences: number[], lower: number, upper: number): number {
+    let [x, mi, mx] = [0, 0, 0];
+    for (const d of differences) {
+        x += d;
+        mi = Math.min(mi, x);
+        mx = Math.max(mx, x);
+    }
+    return Math.max(0, upper - lower - (mx - mi) + 1);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

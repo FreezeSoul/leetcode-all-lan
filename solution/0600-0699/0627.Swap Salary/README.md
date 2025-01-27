@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0627.Swap%20Salary/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [627. 变更性别](https://leetcode.cn/problems/swap-salary)
 
 [English Version](/solution/0600-0699/0627.Swap%20Salary/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <div class="original__bRMd">
 <div>
@@ -19,18 +29,18 @@
 | sex         | ENUM     |
 | salary      | int      |
 +-------------+----------+
-id 是这个表的主键。
+id 是这个表的主键（具有唯一值的列）。
 sex 这一列的值是 ENUM 类型，只能从 ('m', 'f') 中取。
 本表包含公司雇员的信息。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>请你编写一个 SQL 查询来交换所有的 <code>'f'</code> 和 <code>'m'</code> （即，将所有 <code>'f'</code> 变为 <code>'m'</code> ，反之亦然），仅使用 <strong>单个 update 语句</strong> ，且不产生中间临时表。</p>
+<p>请你编写一个解决方案来交换所有的 <code>'f'</code> 和 <code>'m'</code> （即，将所有 <code>'f'</code> 变为 <code>'m'</code> ，反之亦然），仅使用 <strong>单个 update 语句</strong> ，且不产生中间临时表。</p>
 
 <p>注意，你必须仅使用一条 update 语句，且 <strong>不能</strong> 使用 select 语句。</p>
 
-<p>查询结果如下例所示。</p>
+<p>结果如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -62,21 +72,46 @@ Salary 表：
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 UPDATE salary
-SET
-    sex = CASE sex
-        WHEN 'm' THEN 'f'
-        ELSE 'm'
-    END;
+SET sex = CASE sex
+    WHEN 'm' THEN 'f'
+    ELSE 'm'
+END;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+UPDATE Salary
+SET sex = IF(sex = 'f', 'm', 'f');
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

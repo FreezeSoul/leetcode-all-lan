@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2220.Minimum%20Bit%20Flips%20to%20Convert%20Number/README_EN.md
+rating: 1282
+source: Biweekly Contest 75 Q1
+tags:
+    - Bit Manipulation
+---
+
+<!-- problem:start -->
+
 # [2220. Minimum Bit Flips to Convert Number](https://leetcode.com/problems/minimum-bit-flips-to-convert-number)
 
 [中文文档](/solution/2200-2299/2220.Minimum%20Bit%20Flips%20to%20Convert%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>bit flip</strong> of a number <code>x</code> is choosing a bit in the binary representation of <code>x</code> and <strong>flipping</strong> it from either <code>0</code> to <code>1</code> or <code>1</code> to <code>0</code>.</p>
 
@@ -43,118 +57,125 @@ It can be shown we cannot convert 3 to 4 in less than 3 steps. Hence, we return 
 	<li><code>0 &lt;= start, goal &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<p>&nbsp;</p>
+<p><strong>Note:</strong> This question is the same as <a href="https://leetcode.com/problems/hamming-distance/description/" target="_blank">461: Hamming Distance.</a></p>
+
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Bit Manipulation
+
+According to the problem description, we only need to count the number of 1s in the binary representation of $\textit{start} \oplus \textit{goal}$.
+
+The time complexity is $O(\log n)$, where $n$ is the size of the integers in the problem. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minBitFlips(self, start: int, goal: int) -> int:
-        t = start ^ goal
-        ans = 0
-        while t:
-            ans += t & 1
-            t >>= 1
-        return ans
+        return (start ^ goal).bit_count()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int minBitFlips(int start, int goal) {
-        int t = start ^ goal;
-        int ans = 0;
-        while (t != 0) {
-            ans += t & 1;
-            t >>= 1;
-        }
-        return ans;
+        return Integer.bitCount(start ^ goal);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minBitFlips(int start, int goal) {
-        int t = start ^ goal;
-        int ans = 0;
-        while (t) {
-            ans += t & 1;
-            t >>= 1;
-        }
-        return ans;
+        return __builtin_popcount(start ^ goal);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minBitFlips(start int, goal int) int {
-	t := start ^ goal
-	ans := 0
-	for t != 0 {
-		ans += t & 1
-		t >>= 1
-	}
-	return ans
+	return bits.OnesCount(uint(start ^ goal))
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minBitFlips(start: number, goal: number): number {
-    let tmp = start ^ goal;
-    let ans = 0;
-    while (tmp !== 0) {
-        ans += tmp & 1;
-        tmp >>= 1;
-    }
-    return ans;
+    return bitCount(start ^ goal);
+}
+
+function bitCount(i: number): number {
+    i = i - ((i >>> 1) & 0x55555555);
+    i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
+    i = (i + (i >>> 4)) & 0x0f0f0f0f;
+    i = i + (i >>> 8);
+    i = i + (i >>> 16);
+    return i & 0x3f;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn min_bit_flips(start: i32, goal: i32) -> i32 {
-        let mut tmp = start ^ goal;
-        let mut ans = 0;
-        while tmp != 0 {
-            ans += tmp & 1;
-            tmp >>= 1;
-        }
-        ans
+        (start ^ goal).count_ones() as i32
     }
 }
 ```
 
-### **C**
+#### JavaScript
+
+```js
+/**
+ * @param {number} start
+ * @param {number} goal
+ * @return {number}
+ */
+var minBitFlips = function (start, goal) {
+    return bitCount(start ^ goal);
+};
+
+function bitCount(i) {
+    i = i - ((i >>> 1) & 0x55555555);
+    i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
+    i = (i + (i >>> 4)) & 0x0f0f0f0f;
+    i = i + (i >>> 8);
+    i = i + (i >>> 16);
+    return i & 0x3f;
+}
+```
+
+#### C
 
 ```c
 int minBitFlips(int start, int goal) {
-    int tmp = start ^ goal;
+    int x = start ^ goal;
     int ans = 0;
-    while (tmp) {
-        ans += tmp & 1;
-        tmp >>= 1;
+    while (x) {
+        ans += (x & 1);
+        x >>= 1;
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

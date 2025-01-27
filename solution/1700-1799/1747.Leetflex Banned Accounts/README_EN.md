@@ -1,8 +1,20 @@
-# [1747. Leetflex Banned Accounts](https://leetcode.com/problems/leetflex-banned-accounts)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1747.Leetflex%20Banned%20Accounts/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1747. Leetflex Banned Accounts 🔒](https://leetcode.com/problems/leetflex-banned-accounts)
 
 [中文文档](/solution/1700-1799/1747.Leetflex%20Banned%20Accounts/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>LogInfo</code></p>
 
@@ -15,18 +27,18 @@
 | login       | datetime |
 | logout      | datetime |
 +-------------+----------+
-There is no primary key for this table, and it may contain duplicates.
+This table may contain duplicate rows.
 The table contains information about the login and logout dates of Leetflex accounts. It also contains the IP address from which the account was logged in and out.
 It is guaranteed that the logout time is after the login time.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find the <code>account_id</code> of the accounts that should be banned from Leetflex. An account should be banned if it was logged in at some moment from two different IP addresses.</p>
+<p>Write a solution&nbsp;to find the <code>account_id</code> of the accounts that should be banned from Leetflex. An account should be banned if it was logged in at some moment from two different IP addresses.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -60,22 +72,38 @@ Account ID 3 --&gt; The account was active from two different addresses (9, 13) 
 Account ID 4 --&gt; The account was active from &quot;2021-02-01 17:00:00&quot; to &quot;2021-02-01 17:00:00&quot; with two different IP addresses (10 and 11). It should be banned.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Self-Join
+
+We can use a self-join to find out the cases where each account logs in from different IP addresses on the same day. The conditions for joining are:
+
+-   The account numbers are the same.
+-   The IP addresses are different.
+-   The login time of one record is within the login-logout time range of another record.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    distinct a.account_id
-from
-    LogInfo a
-    join LogInfo b on a.account_id = b.account_id
-    and a.ip_address != b.ip_address
-    and a.login between b.login
-    and b.logout;
+SELECT DISTINCT
+    a.account_id
+FROM
+    LogInfo AS a
+    JOIN LogInfo AS b
+        ON a.account_id = b.account_id
+        AND a.ip_address != b.ip_address
+        AND a.login BETWEEN b.login AND b.logout;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

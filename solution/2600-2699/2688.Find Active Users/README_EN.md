@@ -1,8 +1,20 @@
-# [2688. Find Active Users](https://leetcode.com/problems/find-active-users)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2688.Find%20Active%20Users/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2688. Find Active Users 🔒](https://leetcode.com/problems/find-active-users)
 
 [中文文档](/solution/2600-2699/2688.Find%20Active%20Users/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table:<font face="monospace">&nbsp;<code>Users</code></font></p>
 
@@ -15,17 +27,17 @@
 | created_at  | datetime |
 | amount      | int      |
 +-------------+----------+
-There is no primary key in this table. The table may contain duplicate records. 
+This table may contain duplicate records. 
 Each row includes the user ID, the purchased item, the date of purchase, and the purchase amount.
 </pre>
 
-<p>Write an SQL query that&#39;ll identify active users. An active user is a user that has made a second purchase <strong>within 7&nbsp;days&nbsp;</strong>of any other of their purchases.</p>
+<p>Write a solution to identify active users. An active user is a user that has made a second purchase <strong>within 7&nbsp;days&nbsp;</strong>of any other of their purchases.</p>
 
 <p>For example, if the ending date is May 31, 2023.&nbsp;So any date between May 31, 2023, and June 7, 2023 (inclusive) would be considered &quot;within 7 days&quot; of May 31, 2023.</p>
 
-<p>Return&nbsp;<em>a list of&nbsp;</em><code>user_id</code>&nbsp;<em>which denotes the list of active users&nbsp;in <strong>any order</strong>.</em></p>
+<p>Return&nbsp;a list of&nbsp;<code>user_id</code>&nbsp;which denotes the list of active users&nbsp;in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -56,18 +68,23 @@ Each row includes the user ID, the purchased item, the date of purchase, and the
 - User with user_id 4 has two transaction his first transaction was on 2021-09-02 and second transation was on 2021-09-13. The distance between the first and second transactions date is &gt; 7 days. So he is not an active user. 
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement
-SELECT
-    DISTINCT user_id
-FROM
-    Users
+SELECT DISTINCT
+    user_id
+FROM Users
 WHERE
     user_id IN (
         SELECT
@@ -77,17 +94,18 @@ WHERE
                 SELECT
                     user_id,
                     created_at,
-                    lag(created_at, 1) over (
-                        partition by user_id
-                        ORDER BY
-                            created_at
+                    LAG(created_at, 1) OVER (
+                        PARTITION BY user_id
+                        ORDER BY created_at
                     ) AS prev_created_at
-                FROM
-                    Users
+                FROM Users
             ) AS t
-        WHERE
-            DATEDIFF(created_at, prev_created_at) <= 7
-    )
+        WHERE DATEDIFF(created_at, prev_created_at) <= 7
+    );
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

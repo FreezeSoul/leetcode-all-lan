@@ -1,8 +1,20 @@
-# [2159. Order Two Columns Independently](https://leetcode.com/problems/order-two-columns-independently)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2159.Order%20Two%20Columns%20Independently/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2159. Order Two Columns Independently 🔒](https://leetcode.com/problems/order-two-columns-independently)
 
 [中文文档](/solution/2100-2199/2159.Order%20Two%20Columns%20Independently/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Data</code></p>
 
@@ -13,19 +25,19 @@
 | first_col   | int  |
 | second_col  | int  |
 +-------------+------+
-There is no primary key for this table and it may contain duplicates.
+This table may contain duplicate rows.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to independently:</p>
+<p>Write a solution to independently:</p>
 
 <ul>
 	<li>order <code>first_col</code> in <strong>ascending order</strong>.</li>
 	<li>order <code>second_col</code> in <strong>descending order</strong>.</li>
 </ul>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -52,14 +64,41 @@ Data table:
 +-----------+------------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT
+            first_col,
+            ROW_NUMBER() OVER (ORDER BY first_col) AS rk
+        FROM Data
+    ),
+    T AS (
+        SELECT
+            second_col,
+            ROW_NUMBER() OVER (ORDER BY second_col DESC) AS rk
+        FROM Data
+    )
+SELECT first_col, second_col
+FROM
+    S
+    JOIN T USING (rk);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

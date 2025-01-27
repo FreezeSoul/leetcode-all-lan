@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20109.%20%E5%BC%80%E5%AF%86%E7%A0%81%E9%94%81/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 109. 开密码锁](https://leetcode.cn/problems/zlDJc7)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个密码锁由 4&nbsp;个环形拨轮组成，每个拨轮都有 10 个数字： <code>&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;</code> 。每个拨轮可以自由旋转：例如把 <code>&#39;9&#39;</code> 变为&nbsp;<code>&#39;0&#39;</code>，<code>&#39;0&#39;</code> 变为 <code>&#39;9&#39;</code> 。每次旋转都只能旋转一个拨轮的一位数字。</p>
 
@@ -65,15 +72,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 752&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/open-the-lock/">https://leetcode.cn/problems/open-the-lock/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -116,9 +125,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -177,7 +184,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -207,11 +214,11 @@ public:
     }
 
     char prev(char c) {
-        return c == '0' ? '9' : (char)(c - 1);
+        return c == '0' ? '9' : (char) (c - 1);
     }
 
     char next(char c) {
-        return c == '9' ? '0' : (char)(c + 1);
+        return c == '9' ? '0' : (char) (c + 1);
     }
 
     vector<string> get(string& t) {
@@ -229,10 +236,111 @@ public:
 };
 ```
 
-### **...**
+#### Go
 
+```go
+func openLock(deadends []string, target string) int {
+	dead := map[string]bool{}
+	for _, s := range deadends {
+		dead[s] = true
+	}
+	if dead["0000"] {
+		return -1
+	}
+	if target == "0000" {
+		return 0
+	}
+	q := []string{"0000"}
+	visited := map[string]bool{"0000": true}
+	step := 0
+	for len(q) > 0 {
+		step++
+		size := len(q)
+		for i := 0; i < size; i++ {
+			cur := q[0]
+			q = q[1:]
+			for j := 0; j < 4; j++ {
+				for k := -1; k <= 1; k += 2 {
+					next := cur[:j] + string((cur[j]-'0'+byte(k)+10)%10+'0') + cur[j+1:]
+					if next == target {
+						return step
+					}
+					if !dead[next] && !visited[next] {
+						q = append(q, next)
+						visited[next] = true
+					}
+				}
+			}
+		}
+	}
+	return -1
+}
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    func openLock(_ deadends: [String], _ target: String) -> Int {
+        let deadSet = Set(deadends)
+        if deadSet.contains(target) || deadSet.contains("0000") {
+            return -1
+        }
+        if target == "0000" {
+            return 0
+        }
+
+        var visited = Set<String>()
+        var queue = ["0000"]
+        visited.insert("0000")
+        var step = 0
+
+        while !queue.isEmpty {
+            step += 1
+            for _ in 0..<queue.count {
+                let status = queue.removeFirst()
+                for neighbor in getNeighbors(status) {
+                    if visited.contains(neighbor) || deadSet.contains(neighbor) {
+                        continue
+                    }
+                    if neighbor == target {
+                        return step
+                    }
+                    queue.append(neighbor)
+                    visited.insert(neighbor)
+                }
+            }
+        }
+
+        return -1
+    }
+
+    private func getNeighbors(_ lock: String) -> [String] {
+        var neighbors = [String]()
+        var chars = Array(lock)
+        for i in 0..<4 {
+            let original = chars[i]
+            chars[i] = prevChar(original)
+            neighbors.append(String(chars))
+            chars[i] = nextChar(original)
+            neighbors.append(String(chars))
+            chars[i] = original
+        }
+        return neighbors
+    }
+
+    private func prevChar(_ c: Character) -> Character {
+        return c == "0" ? "9" : Character(UnicodeScalar(c.asciiValue! - 1))
+    }
+
+    private func nextChar(_ c: Character) -> Character {
+        return c == "9" ? "0" : Character(UnicodeScalar(c.asciiValue! + 1))
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

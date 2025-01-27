@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2434.Using%20a%20Robot%20to%20Print%20the%20Lexicographically%20Smallest%20String/README.md
+rating: 1953
+source: 第 314 场周赛 Q3
+tags:
+    - 栈
+    - 贪心
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2434. 使用机器人打印字典序最小的字符串](https://leetcode.cn/problems/using-a-robot-to-print-the-lexicographically-smallest-string)
 
 [English Version](/solution/2400-2499/2434.Using%20a%20Robot%20to%20Print%20the%20Lexicographically%20Smallest%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串&nbsp;<code>s</code>&nbsp;和一个机器人，机器人当前有一个空字符串&nbsp;<code>t</code>&nbsp;。执行以下操作之一，直到&nbsp;<code>s</code> 和&nbsp;<code>t</code>&nbsp;<strong>都变成空字符串：</strong></p>
 
@@ -57,11 +72,13 @@
 	<li><code>s</code>&nbsp;只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 栈**
+### 方法一：贪心 + 栈
 
 题目可以转化为，给定一个字符串序列，在借助一个辅助栈的情况下，将其转化为字典序最小的字符串序列。
 
@@ -75,9 +92,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -96,25 +111,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-```python
-class Solution:
-    def robotWithString(self, s: str) -> str:
-        n = len(s)
-        right = [chr(ord('z') + 1)] * (n + 1)
-        for i in range(n - 1, -1, -1):
-            right[i] = min(s[i], right[i + 1])
-        ans = []
-        stk = []
-        for i, c in enumerate(s):
-            stk.append(c)
-            while stk and stk[-1] <= right[i + 1]:
-                ans.append(stk.pop())
-        return ''.join(ans)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -141,30 +138,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public String robotWithString(String s) {
-        int n = s.length();
-        int[] right = new int[n];
-        right[n - 1] = n - 1;
-        for (int i = n - 2; i >= 0; --i) {
-            right[i] = s.charAt(i) < s.charAt(right[i + 1]) ? i : right[i + 1];
-        }
-        StringBuilder ans = new StringBuilder();
-        Deque<Character> stk = new ArrayDeque<>();
-        for (int i = 0; i < n; ++i) {
-            stk.push(s.charAt(i));
-            while (
-                !stk.isEmpty() && (stk.peek() <= (i > n - 2 ? 'z' + 1 : s.charAt(right[i + 1])))) {
-                ans.append(stk.pop());
-            }
-        }
-        return ans.toString();
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -189,30 +163,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    string robotWithString(string s) {
-        int n = s.size();
-        vector<int> right(n, n - 1);
-        for (int i = n - 2; i >= 0; --i) {
-            right[i] = s[i] < s[right[i + 1]] ? i : right[i + 1];
-        }
-        string ans;
-        string stk;
-        for (int i = 0; i < n; ++i) {
-            stk += s[i];
-            while (!stk.empty() && (stk.back() <= (i > n - 2 ? 'z' + 1 : s[right[i + 1]]))) {
-                ans += stk.back();
-                stk.pop_back();
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func robotWithString(s string) string {
@@ -238,7 +189,7 @@ func robotWithString(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function robotWithString(s: string): string {
@@ -253,10 +204,7 @@ function robotWithString(s: string): string {
             min_index += 1;
         }
         stack.push(c);
-        while (
-            stack.length > 0 &&
-            stack[stack.length - 1].charCodeAt(0) <= min_index
-        ) {
+        while (stack.length > 0 && stack[stack.length - 1].charCodeAt(0) <= min_index) {
             ans.push(stack.pop());
         }
     }
@@ -264,10 +212,86 @@ function robotWithString(s: string): string {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def robotWithString(self, s: str) -> str:
+        n = len(s)
+        right = [chr(ord('z') + 1)] * (n + 1)
+        for i in range(n - 1, -1, -1):
+            right[i] = min(s[i], right[i + 1])
+        ans = []
+        stk = []
+        for i, c in enumerate(s):
+            stk.append(c)
+            while stk and stk[-1] <= right[i + 1]:
+                ans.append(stk.pop())
+        return ''.join(ans)
 ```
 
+#### Java
+
+```java
+class Solution {
+    public String robotWithString(String s) {
+        int n = s.length();
+        int[] right = new int[n];
+        right[n - 1] = n - 1;
+        for (int i = n - 2; i >= 0; --i) {
+            right[i] = s.charAt(i) < s.charAt(right[i + 1]) ? i : right[i + 1];
+        }
+        StringBuilder ans = new StringBuilder();
+        Deque<Character> stk = new ArrayDeque<>();
+        for (int i = 0; i < n; ++i) {
+            stk.push(s.charAt(i));
+            while (
+                !stk.isEmpty() && (stk.peek() <= (i > n - 2 ? 'z' + 1 : s.charAt(right[i + 1])))) {
+                ans.append(stk.pop());
+            }
+        }
+        return ans.toString();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    string robotWithString(string s) {
+        int n = s.size();
+        vector<int> right(n, n - 1);
+        for (int i = n - 2; i >= 0; --i) {
+            right[i] = s[i] < s[right[i + 1]] ? i : right[i + 1];
+        }
+        string ans;
+        string stk;
+        for (int i = 0; i < n; ++i) {
+            stk += s[i];
+            while (!stk.empty() && (stk.back() <= (i > n - 2 ? 'z' + 1 : s[right[i + 1]]))) {
+                ans += stk.back();
+                stk.pop_back();
+            }
+        }
+        return ans;
+    }
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

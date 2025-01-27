@@ -1,8 +1,20 @@
-# [1555. Bank Account Summary](https://leetcode.com/problems/bank-account-summary)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1555.Bank%20Account%20Summary/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1555. Bank Account Summary 🔒](https://leetcode.com/problems/bank-account-summary)
 
 [中文文档](/solution/1500-1599/1555.Bank%20Account%20Summary/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Users</code></p>
 
@@ -14,7 +26,7 @@
 | user_name    | varchar |
 | credit       | int     |
 +--------------+---------+
-user_id is the primary key for this table.
+user_id is the primary key (column with unique values) for this table.
 Each row of this table contains the current credit information for each user.
 </pre>
 
@@ -32,7 +44,7 @@ Each row of this table contains the current credit information for each user.
 | amount        | int     |
 | transacted_on | date    |
 +---------------+---------+
-trans_id is the primary key for this table.
+trans_id is the primary key (column with unique values) for this table.
 Each row of this table contains information about the transaction in the bank.
 User with id (paid_by) transfer money to user with id (paid_to).
 </pre>
@@ -41,7 +53,7 @@ User with id (paid_by) transfer money to user with id (paid_to).
 
 <p>Leetcode Bank (LCB) helps its coders in making virtual payments. Our bank records all transactions in the table <em>Transaction</em>, we want to find out the current balance of all users and check whether they have breached their credit limit (If their current credit is less than <code>0</code>).</p>
 
-<p>Write an SQL query to report.</p>
+<p>Write a solution&nbsp;to report.</p>
 
 <ul>
 	<li><code>user_id</code>,</li>
@@ -52,7 +64,7 @@ User with id (paid_by) transfer money to user with id (paid_to).
 
 <p>Return the result table in <strong>any</strong> order.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -92,26 +104,39 @@ Winston received $400 on &quot;2020-08-01&quot; and paid $500 on &quot;2020-08-0
 Luis did not received any transfer, credit = $800
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### MySQL
 
-```python
-
-```
-
-### **Java**
-
-```java
-
-```
-
-### **...**
-
-```
-
+```sql
+# Write your MySQL query statement below
+SELECT
+    t.user_id,
+    user_name,
+    SUM(t.credit) AS credit,
+    IF(SUM(t.credit) < 0, 'Yes', 'No') AS credit_limit_breached
+FROM
+    (
+        SELECT paid_by AS user_id, -amount AS credit FROM Transactions
+        UNION ALL
+        SELECT paid_to AS user_id, amount AS credit FROM Transactions
+        UNION ALL
+        SELECT user_id, credit FROM Users
+    ) AS t
+    JOIN Users AS u ON t.user_id = u.user_id
+GROUP BY t.user_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

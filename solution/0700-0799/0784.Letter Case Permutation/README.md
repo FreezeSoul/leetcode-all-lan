@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0784.Letter%20Case%20Permutation/README.md
+tags:
+    - 位运算
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [784. 字母大小写全排列](https://leetcode.cn/problems/letter-case-permutation)
 
 [English Version](/solution/0700-0799/0784.Letter%20Case%20Permutation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串&nbsp;<code>s</code>&nbsp;，通过将字符串&nbsp;<code>s</code>&nbsp;中的每个字母转变大小写，我们可以获得一个新的字符串。</p>
 
@@ -35,11 +47,13 @@
 	<li><code>s</code>&nbsp;由小写英文字母、大写英文字母和数字组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 由于 $s$ 中的每个字母都可以转换为大写或小写，因此可以使用 DFS 深度优先搜索的方法，枚举所有可能的情况。
 
@@ -49,21 +63,9 @@
 
 时间复杂度 $O(n\times 2^n)$，其中 $n$ 是字符串 $s$ 的长度。对于每个字母，我们可以选择将其转换为大写或小写，因此一共有 $2^n$ 种转换方案。对于每种转换方案，我们需要 $O(n)$ 的时间生成一个新的字符串。
 
-**方法二：二进制枚举**
-
-对于一个字母，我们可以将其转换为大写或小写，因此对于每个字母，我们可以使用一个二进制位表示其转换的方案，其中 $1$ 表示小写，而 $0$ 表示大写。
-
-我们先统计字符串 $s$ 中字母的个数，记为 $n$，那么一共有 $2^n$ 种转换方案，我们可以使用二进制数的每一位表示每个字母的转换方案，从 $0$ 到 $2^n-1$ 进行枚举。
-
-具体地，我们可以使用一个变量 $i$ 表示当前枚举到的二进制数，其中 $i$ 的第 $j$ 位表示第 $j$ 个字母的转换方案。即 $i$ 的第 $j$ 位为 $1$ 表示第 $j$ 个字母转换为小写，而 $i$ 的第 $j$ 位为 $0$ 表示第 $j$ 个字母转换为大写。
-
-时间复杂度 $O(n\times 2^n)$，其中 $n$ 是字符串 $s$ 的长度。对于每个字母，我们可以选择将其转换为大写或小写，因此一共有 $2^n$ 种转换方案。对于每种转换方案，我们需要 $O(n)$ 的时间生成一个新的字符串。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,25 +85,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def letterCasePermutation(self, s: str) -> List[str]:
-        ans = []
-        n = sum(c.isalpha() for c in s)
-        for i in range(1 << n):
-            j, t = 0, []
-            for c in s:
-                if c.isalpha():
-                    c = c.lower() if (i >> j) & 1 else c.upper()
-                    j += 1
-                t.append(c)
-            ans.append(''.join(t))
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -127,6 +111,139 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<string> letterCasePermutation(string s) {
+        vector<string> ans;
+        function<void(int)> dfs = [&](int i) {
+            if (i >= s.size()) {
+                ans.emplace_back(s);
+                return;
+            }
+            dfs(i + 1);
+            if (s[i] >= 'A') {
+                s[i] ^= 32;
+                dfs(i + 1);
+            }
+        };
+        dfs(0);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func letterCasePermutation(s string) (ans []string) {
+	t := []byte(s)
+	var dfs func(int)
+	dfs = func(i int) {
+		if i >= len(t) {
+			ans = append(ans, string(t))
+			return
+		}
+		dfs(i + 1)
+		if t[i] >= 'A' {
+			t[i] ^= 32
+			dfs(i + 1)
+		}
+	}
+
+	dfs(0)
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function letterCasePermutation(s: string): string[] {
+    const n = s.length;
+    const cs = [...s];
+    const res = [];
+    const dfs = (i: number) => {
+        if (i === n) {
+            res.push(cs.join(''));
+            return;
+        }
+        dfs(i + 1);
+        if (cs[i] >= 'A') {
+            cs[i] = String.fromCharCode(cs[i].charCodeAt(0) ^ 32);
+            dfs(i + 1);
+        }
+    };
+    dfs(0);
+    return res;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    fn dfs(i: usize, cs: &mut Vec<char>, res: &mut Vec<String>) {
+        if i == cs.len() {
+            res.push(cs.iter().collect());
+            return;
+        }
+        Self::dfs(i + 1, cs, res);
+        if cs[i] >= 'A' {
+            cs[i] = char::from((cs[i] as u8) ^ 32);
+            Self::dfs(i + 1, cs, res);
+        }
+    }
+
+    pub fn letter_case_permutation(s: String) -> Vec<String> {
+        let mut res = Vec::new();
+        let mut cs = s.chars().collect::<Vec<char>>();
+        Self::dfs(0, &mut cs, &mut res);
+        res
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：二进制枚举
+
+对于一个字母，我们可以将其转换为大写或小写，因此对于每个字母，我们可以使用一个二进制位表示其转换的方案，其中 $1$ 表示小写，而 $0$ 表示大写。
+
+我们先统计字符串 $s$ 中字母的个数，记为 $n$，那么一共有 $2^n$ 种转换方案，我们可以使用二进制数的每一位表示每个字母的转换方案，从 $0$ 到 $2^n-1$ 进行枚举。
+
+具体地，我们可以使用一个变量 $i$ 表示当前枚举到的二进制数，其中 $i$ 的第 $j$ 位表示第 $j$ 个字母的转换方案。即 $i$ 的第 $j$ 位为 $1$ 表示第 $j$ 个字母转换为小写，而 $i$ 的第 $j$ 位为 $0$ 表示第 $j$ 个字母转换为大写。
+
+时间复杂度 $O(n\times 2^n)$，其中 $n$ 是字符串 $s$ 的长度。对于每个字母，我们可以选择将其转换为大写或小写，因此一共有 $2^n$ 种转换方案。对于每种转换方案，我们需要 $O(n)$ 的时间生成一个新的字符串。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def letterCasePermutation(self, s: str) -> List[str]:
+        ans = []
+        n = sum(c.isalpha() for c in s)
+        for i in range(1 << n):
+            j, t = 0, []
+            for c in s:
+                if c.isalpha():
+                    c = c.lower() if (i >> j) & 1 else c.upper()
+                    j += 1
+                t.append(c)
+            ans.append(''.join(t))
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -156,36 +273,15 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<string> letterCasePermutation(string s) {
-        vector<string> ans;
-        function<void(int)> dfs = [&](int i) {
-            if (i >= s.size()) {
-                ans.emplace_back(s);
-                return;
-            }
-            dfs(i + 1);
-            if (s[i] >= 'A') {
-                s[i] ^= 32;
-                dfs(i + 1);
-            }
-        };
-        dfs(0);
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> letterCasePermutation(string s) {
         int n = 0;
-        for (char c : s) if (isalpha(c)) ++n;
+        for (char c : s)
+            if (isalpha(c)) ++n;
         vector<string> ans;
         for (int i = 0; i < 1 << n; ++i) {
             int j = 0;
@@ -204,28 +300,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func letterCasePermutation(s string) (ans []string) {
-	t := []byte(s)
-	var dfs func(int)
-	dfs = func(i int) {
-		if i >= len(t) {
-			ans = append(ans, string(t))
-			return
-		}
-		dfs(i + 1)
-		if t[i] >= 'A' {
-			t[i] ^= 32
-			dfs(i + 1)
-		}
-	}
-
-	dfs(0)
-	return ans
-}
-```
+#### Go
 
 ```go
 func letterCasePermutation(s string) (ans []string) {
@@ -255,58 +330,8 @@ func letterCasePermutation(s string) (ans []string) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function letterCasePermutation(s: string): string[] {
-    const n = s.length;
-    const cs = [...s];
-    const res = [];
-    const dfs = (i: number) => {
-        if (i === n) {
-            res.push(cs.join(''));
-            return;
-        }
-        dfs(i + 1);
-        if (cs[i] >= 'A') {
-            cs[i] = String.fromCharCode(cs[i].charCodeAt(0) ^ 32);
-            dfs(i + 1);
-        }
-    };
-    dfs(0);
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    fn dfs(i: usize, cs: &mut Vec<char>, res: &mut Vec<String>) {
-        if i == cs.len() {
-            res.push(cs.iter().collect());
-            return;
-        }
-        Self::dfs(i + 1, cs, res);
-        if cs[i] >= 'A' {
-            cs[i] = char::from((cs[i] as u8) ^ 32);
-            Self::dfs(i + 1, cs, res);
-        }
-    }
-
-    pub fn letter_case_permutation(s: String) -> Vec<String> {
-        let mut res = Vec::new();
-        let mut cs = s.chars().collect::<Vec<char>>();
-        Self::dfs(0, &mut cs, &mut res);
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

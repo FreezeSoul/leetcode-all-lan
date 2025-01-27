@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0178.Rank%20Scores/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [178. Rank Scores](https://leetcode.com/problems/rank-scores)
 
 [中文文档](/solution/0100-0199/0178.Rank%20Scores/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Scores</code></p>
 
@@ -13,13 +25,13 @@
 | id          | int     |
 | score       | decimal |
 +-------------+---------+
-id is the primary key for this table.
+id is the primary key (column with unique values) for this table.
 Each row of this table contains the score of a game. Score is a floating point value with two decimal places.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to rank the scores. The ranking should be calculated according to the following rules:</p>
+<p>Write a solution to find the rank of the scores. The ranking should be calculated according to the following rules:</p>
 
 <ul>
 	<li>The scores should be ranked from the highest to the lowest.</li>
@@ -29,7 +41,7 @@ Each row of this table contains the score of a game. Score is a floating point v
 
 <p>Return the result table ordered by <code>score</code> in descending order.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -60,38 +72,53 @@ Scores table:
 +-------+------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **MySQL8**
+#### Python3
 
-Use `DENSE_RANK()` to solve this problem.
+```python
+import pandas as pd
 
-```sql
-DENSE_RANK() OVER (
-    PARTITION BY <expression>[{,<expression>...}]
-    ORDER BY <expression> [ASC|DESC], [{,<expression>...}]
-)
+
+def order_scores(scores: pd.DataFrame) -> pd.DataFrame:
+    # Use the rank method to assign ranks to the scores in descending order with no gaps
+    scores["rank"] = scores["score"].rank(method="dense", ascending=False)
+
+    # Drop id column & Sort the DataFrame by score in descending order
+    result_df = scores.drop("id", axis=1).sort_values(by="score", ascending=False)
+
+    return result_df
 ```
 
-Solution:
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
 SELECT
-    Score,
-    DENSE_RANK() OVER (
-        ORDER BY
-            Score DESC
-    ) 'Rank'
-FROM
-    Scores;
+    score,
+    DENSE_RANK() OVER (ORDER BY score DESC) AS 'rank'
+FROM Scores;
 ```
 
-### **MySQL5**
+<!-- tabs:end -->
 
-MySQL only provides [window function](https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html) after version 8. In previous versions, variables can be used to achieve similar functions:
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
 
 ```sql
 SELECT
@@ -116,3 +143,7 @@ FROM
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

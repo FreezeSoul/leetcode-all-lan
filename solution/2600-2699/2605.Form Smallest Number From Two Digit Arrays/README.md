@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2605.Form%20Smallest%20Number%20From%20Two%20Digit%20Arrays/README.md
+rating: 1241
+source: 第 101 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [2605. 从两个数字数组里生成最小数字](https://leetcode.cn/problems/form-smallest-number-from-two-digit-arrays)
 
 [English Version](/solution/2600-2699/2605.Form%20Smallest%20Number%20From%20Two%20Digit%20Arrays/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 给你两个只包含 1 到 9 之间数字的数组&nbsp;<code>nums1</code> 和&nbsp;<code>nums2</code>&nbsp;，每个数组中的元素 <strong>互不相同</strong>&nbsp;，请你返回 <strong>最小</strong> 的数字，两个数组都 <strong>至少</strong> 包含这个数字的某个数位。
 
@@ -34,37 +48,21 @@
 	<li>每个数组中，元素 <strong>互不相同</strong>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 我们观察发现，如果数组 $nums1$ 和 $nums2$ 中有相同的数字，那么相同数字中的最小值一定是最小的数字。否则我们取 $nums1$ 中的数字 $a$ 和 $nums2$ 中的数字 $b$，将 $a$ 和 $b$ 拼接成两个数字，取其中较小的数字即可。
 
 时间复杂度 $O(m \times n)$，空间复杂度 $O(1)$。其中 $m$ 和 $n$ 分别是数组 $nums1$ 和 $nums2$ 的长度。
 
-**方法二：哈希表或数组 + 枚举**
-
-我们可以用哈希表或数组记录数组 $nums1$ 和 $nums2$ 中的数字，然后枚举 $1 \sim 9$，如果 $i$ 在两个数组中都出现了，那么 $i$ 就是最小的数字。否则我们取 $nums1$ 中的数字 $a$ 和 $nums2$ 中的数字 $b$，将 $a$ 和 $b$ 拼接成两个数字，取其中较小的数字即可。
-
-时间复杂度 $(m + n)$，空间复杂度 $O(C)$。其中 $m$ 和 $n$ 分别是数组 $nums1$ 和 $nums2$ 的长度；而 $C$ 是数组 $nums1$ 和 $nums2$ 中数字的范围，本题中 $C = 10$。
-
-**方法三：位运算**
-
-由于数字的范围是 $1 \sim 9$，我们可以用一个长度为 $10$ 的二进制数来表示数组 $nums1$ 和 $nums2$ 中的数字。我们用 $mask1$ 表示数组 $nums1$ 中的数字，用 $mask2$ 表示数组 $nums2$ 中的数字。
-
-如果 $mask1$ 和 $mask2$ 进行按位与得到的数字 $mask$ 不等于 $0$，那么我们提取 $mask$ 中最后一位 $1$ 所在的位置，即为最小的数字。
-
-否则，我们分别提取 $mask1$ 和 $mask2$ 中最后一位 $1$ 所在的位置，分别记为 $a$ 和 $b$，那么最小的数字就是 $min(a \times 10 + b, b \times 10 + a)$。
-
-时间复杂度 $O(m + n)$，空间复杂度 $O(1)$。其中 $m$ 和 $n$ 分别是数组 $nums1$ 和 $nums2$ 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,35 +77,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def minNumber(self, nums1: List[int], nums2: List[int]) -> int:
-        s = set(nums1) & set(nums2)
-        if s:
-            return min(s)
-        a, b = min(nums1), min(nums2)
-        return min(a * 10 + b, b * 10 + a)
-```
-
-```python
-class Solution:
-    def minNumber(self, nums1: List[int], nums2: List[int]) -> int:
-        mask1 = mask2 = 0
-        for x in nums1:
-            mask1 |= 1 << x
-        for x in nums2:
-            mask2 |= 1 << x
-        mask = mask1 & mask2
-        if mask:
-            return (mask & -mask).bit_length() - 1
-        a = (mask1 & -mask1).bit_length() - 1
-        b = (mask2 & -mask2).bit_length() - 1
-        return min(a * 10 + b, b * 10 + a)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -126,6 +96,113 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minNumber(vector<int>& nums1, vector<int>& nums2) {
+        int ans = 100;
+        for (int a : nums1) {
+            for (int b : nums2) {
+                if (a == b) {
+                    ans = min(ans, a);
+                } else {
+                    ans = min({ans, a * 10 + b, b * 10 + a});
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minNumber(nums1 []int, nums2 []int) int {
+	ans := 100
+	for _, a := range nums1 {
+		for _, b := range nums2 {
+			if a == b {
+				ans = min(ans, a)
+			} else {
+				ans = min(ans, min(a*10+b, b*10+a))
+			}
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function minNumber(nums1: number[], nums2: number[]): number {
+    let ans = 100;
+    for (const a of nums1) {
+        for (const b of nums2) {
+            if (a === b) {
+                ans = Math.min(ans, a);
+            } else {
+                ans = Math.min(ans, a * 10 + b, b * 10 + a);
+            }
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_number(nums1: Vec<i32>, nums2: Vec<i32>) -> i32 {
+        let mut ans = 100;
+
+        for &a in &nums1 {
+            for &b in &nums2 {
+                if a == b {
+                    ans = std::cmp::min(ans, a);
+                } else {
+                    ans = std::cmp::min(ans, std::cmp::min(a * 10 + b, b * 10 + a));
+                }
+            }
+        }
+
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：哈希表或数组 + 枚举
+
+我们可以用哈希表或数组记录数组 $nums1$ 和 $nums2$ 中的数字，然后枚举 $1 \sim 9$，如果 $i$ 在两个数组中都出现了，那么 $i$ 就是最小的数字。否则我们取 $nums1$ 中的数字 $a$ 和 $nums2$ 中的数字 $b$，将 $a$ 和 $b$ 拼接成两个数字，取其中较小的数字即可。
+
+时间复杂度 $(m + n)$，空间复杂度 $O(C)$。其中 $m$ 和 $n$ 分别是数组 $nums1$ 和 $nums2$ 的长度；而 $C$ 是数组 $nums1$ 和 $nums2$ 中数字的范围，本题中 $C = 10$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minNumber(self, nums1: List[int], nums2: List[int]) -> int:
+        s = set(nums1) & set(nums2)
+        if s:
+            return min(s)
+        a, b = min(nums1), min(nums2)
+        return min(a * 10 + b, b * 10 + a)
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -155,47 +232,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int minNumber(int[] nums1, int[] nums2) {
-        int mask1 = 0, mask2 = 0;
-        for (int x : nums1) {
-            mask1 |= 1 << x;
-        }
-        for (int x : nums2) {
-            mask2 |= 1 << x;
-        }
-        int mask = mask1 & mask2;
-        if (mask != 0) {
-            return Integer.numberOfTrailingZeros(mask);
-        }
-        int a = Integer.numberOfTrailingZeros(mask1);
-        int b = Integer.numberOfTrailingZeros(mask2);
-        return Math.min(a * 10 + b, b * 10 + a);
-    }
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minNumber(vector<int>& nums1, vector<int>& nums2) {
-        int ans = 100;
-        for (int a : nums1) {
-            for (int b : nums2) {
-                if (a == b) {
-                    ans = min(ans, a);
-                } else {
-                    ans = min({ans, a * 10 + b, b * 10 + a});
-                }
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -226,52 +263,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int minNumber(vector<int>& nums1, vector<int>& nums2) {
-        int mask1 = 0, mask2 = 0;
-        for (int x : nums1) {
-            mask1 |= 1 << x;
-        }
-        for (int x : nums2) {
-            mask2 |= 1 << x;
-        }
-        int mask = mask1 & mask2;
-        if (mask) {
-            return __builtin_ctz(mask);
-        }
-        int a = __builtin_ctz(mask1);
-        int b = __builtin_ctz(mask2);
-        return min(a * 10 + b, b * 10 + a);
-    }
-};
-```
-
-### **Go**
-
-```go
-func minNumber(nums1 []int, nums2 []int) int {
-	ans := 100
-	for _, a := range nums1 {
-		for _, b := range nums2 {
-			if a == b {
-				ans = min(ans, a)
-			} else {
-				ans = min(ans, min(a*10+b, b*10+a))
-			}
-		}
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func minNumber(nums1 []int, nums2 []int) int {
@@ -297,56 +289,9 @@ func minNumber(nums1 []int, nums2 []int) int {
 	}
 	return min(a*10+b, b*10+a)
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-```go
-func minNumber(nums1 []int, nums2 []int) int {
-	var mask1, mask2 uint
-	for _, x := range nums1 {
-		mask1 |= 1 << x
-	}
-	for _, x := range nums2 {
-		mask2 |= 1 << x
-	}
-	if mask := mask1 & mask2; mask != 0 {
-		return bits.TrailingZeros(mask)
-	}
-	a, b := bits.TrailingZeros(mask1), bits.TrailingZeros(mask2)
-	return min(a*10+b, b*10+a)
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function minNumber(nums1: number[], nums2: number[]): number {
-    let ans = 100;
-    for (const a of nums1) {
-        for (const b of nums2) {
-            if (a == b) {
-                ans = Math.min(ans, a);
-            } else {
-                ans = Math.min(ans, a * 10 + b, b * 10 + a);
-            }
-        }
-    }
-    return ans;
-}
-```
+#### TypeScript
 
 ```ts
 function minNumber(nums1: number[], nums2: number[]): number {
@@ -364,16 +309,159 @@ function minNumber(nums1: number[], nums2: number[]): number {
         if (s1[i] && s2[i]) {
             return i;
         }
-        if (a == 0 && s1[i]) {
+        if (a === 0 && s1[i]) {
             a = i;
         }
-        if (b == 0 && s2[i]) {
+        if (b === 0 && s2[i]) {
             b = i;
         }
     }
     return Math.min(a * 10 + b, b * 10 + a);
 }
 ```
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn min_number(nums1: Vec<i32>, nums2: Vec<i32>) -> i32 {
+        let mut h1: HashMap<i32, bool> = HashMap::new();
+
+        for &n in &nums1 {
+            h1.insert(n, true);
+        }
+
+        let mut h2: HashMap<i32, bool> = HashMap::new();
+        for &n in &nums2 {
+            h2.insert(n, true);
+        }
+
+        let mut a = 0;
+        let mut b = 0;
+        for i in 1..10 {
+            if h1.contains_key(&i) && h2.contains_key(&i) {
+                return i;
+            }
+
+            if a == 0 && h1.contains_key(&i) {
+                a = i;
+            }
+
+            if b == 0 && h2.contains_key(&i) {
+                b = i;
+            }
+        }
+
+        std::cmp::min(a * 10 + b, b * 10 + a)
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三：位运算
+
+由于数字的范围是 $1 \sim 9$，我们可以用一个长度为 $10$ 的二进制数来表示数组 $nums1$ 和 $nums2$ 中的数字。我们用 $mask1$ 表示数组 $nums1$ 中的数字，用 $mask2$ 表示数组 $nums2$ 中的数字。
+
+如果 $mask1$ 和 $mask2$ 进行按位与得到的数字 $mask$ 不等于 $0$，那么我们提取 $mask$ 中最后一位 $1$ 所在的位置，即为最小的数字。
+
+否则，我们分别提取 $mask1$ 和 $mask2$ 中最后一位 $1$ 所在的位置，分别记为 $a$ 和 $b$，那么最小的数字就是 $min(a \times 10 + b, b \times 10 + a)$。
+
+时间复杂度 $O(m + n)$，空间复杂度 $O(1)$。其中 $m$ 和 $n$ 分别是数组 $nums1$ 和 $nums2$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minNumber(self, nums1: List[int], nums2: List[int]) -> int:
+        mask1 = mask2 = 0
+        for x in nums1:
+            mask1 |= 1 << x
+        for x in nums2:
+            mask2 |= 1 << x
+        mask = mask1 & mask2
+        if mask:
+            return (mask & -mask).bit_length() - 1
+        a = (mask1 & -mask1).bit_length() - 1
+        b = (mask2 & -mask2).bit_length() - 1
+        return min(a * 10 + b, b * 10 + a)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int minNumber(int[] nums1, int[] nums2) {
+        int mask1 = 0, mask2 = 0;
+        for (int x : nums1) {
+            mask1 |= 1 << x;
+        }
+        for (int x : nums2) {
+            mask2 |= 1 << x;
+        }
+        int mask = mask1 & mask2;
+        if (mask != 0) {
+            return Integer.numberOfTrailingZeros(mask);
+        }
+        int a = Integer.numberOfTrailingZeros(mask1);
+        int b = Integer.numberOfTrailingZeros(mask2);
+        return Math.min(a * 10 + b, b * 10 + a);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minNumber(vector<int>& nums1, vector<int>& nums2) {
+        int mask1 = 0, mask2 = 0;
+        for (int x : nums1) {
+            mask1 |= 1 << x;
+        }
+        for (int x : nums2) {
+            mask2 |= 1 << x;
+        }
+        int mask = mask1 & mask2;
+        if (mask) {
+            return __builtin_ctz(mask);
+        }
+        int a = __builtin_ctz(mask1);
+        int b = __builtin_ctz(mask2);
+        return min(a * 10 + b, b * 10 + a);
+    }
+};
+```
+
+#### Go
+
+```go
+func minNumber(nums1 []int, nums2 []int) int {
+	var mask1, mask2 uint
+	for _, x := range nums1 {
+		mask1 |= 1 << x
+	}
+	for _, x := range nums2 {
+		mask2 |= 1 << x
+	}
+	if mask := mask1 & mask2; mask != 0 {
+		return bits.TrailingZeros(mask)
+	}
+	a, b := bits.TrailingZeros(mask1), bits.TrailingZeros(mask2)
+	return min(a*10+b, b*10+a)
+}
+```
+
+#### TypeScript
 
 ```ts
 function minNumber(nums1: number[], nums2: number[]): number {
@@ -424,10 +512,8 @@ function numberOfTrailingZeros(i: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2222.Number%20of%20Ways%20to%20Select%20Buildings/README.md
+rating: 1656
+source: 第 75 场双周赛 Q3
+tags:
+    - 字符串
+    - 动态规划
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2222. 选择建筑的方案数](https://leetcode.cn/problems/number-of-ways-to-select-buildings)
 
 [English Version](/solution/2200-2299/2222.Number%20of%20Ways%20to%20Select%20Buildings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的二进制字符串&nbsp;<code>s</code>&nbsp;，它表示一条街沿途的建筑类型，其中：</p>
 
@@ -54,129 +68,123 @@
 	<li><code>s[i]</code>&nbsp;要么是&nbsp;<code>'0'</code>&nbsp;，要么是&nbsp;<code>'1'</code>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：统计 010 和 101 的出现次数**
+### 方法一：计数 + 枚举
 
-有效方案只有两种情况：$010$ 和 $101$。枚举中间数字，累计方案数。
+根据题目描述，我们需要选择 $3$ 栋建筑，且相邻的两栋不能是同一类型。
 
-时间复杂度 $O(n)$，其中 $n$ 表示 $s$ 的长度。
+我们可以枚举中间的建筑，假设为 $x$，那么左右两边的建筑类型只能是 $x \oplus 1$，其中 $\oplus$ 表示异或运算。因此，我们可以使用两个数组 $l$ 和 $r$ 分别记录左右两边的建筑类型的数量，然后枚举中间的建筑，计算答案即可。
+
+时间复杂度 $O(n)$，其中 $n$ 是字符串 $s$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def numberOfWays(self, s: str) -> int:
-        n = len(s)
-        cnt0 = s.count("0")
-        cnt1 = n - cnt0
-        c0 = c1 = 0
+        l = [0, 0]
+        r = [s.count("0"), s.count("1")]
         ans = 0
-        for c in s:
-            if c == "0":
-                ans += c1 * (cnt1 - c1)
-                c0 += 1
-            else:
-                ans += c0 * (cnt0 - c0)
-                c1 += 1
+        for x in map(int, s):
+            r[x] -= 1
+            ans += l[x ^ 1] * r[x ^ 1]
+            l[x] += 1
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public long numberOfWays(String s) {
         int n = s.length();
-        int cnt0 = 0;
-        for (char c : s.toCharArray()) {
-            if (c == '0') {
-                ++cnt0;
-            }
+        int[] l = new int[2];
+        int[] r = new int[2];
+        for (int i = 0; i < n; ++i) {
+            r[s.charAt(i) - '0']++;
         }
-        int cnt1 = n - cnt0;
         long ans = 0;
-        int c0 = 0, c1 = 0;
-        for (char c : s.toCharArray()) {
-            if (c == '0') {
-                ans += c1 * (cnt1 - c1);
-                ++c0;
-            } else {
-                ans += c0 * (cnt0 - c0);
-                ++c1;
-            }
+        for (int i = 0; i < n; ++i) {
+            int x = s.charAt(i) - '0';
+            r[x]--;
+            ans += 1L * l[x ^ 1] * r[x ^ 1];
+            l[x]++;
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long numberOfWays(string s) {
         int n = s.size();
-        int cnt0 = 0;
-        for (char& c : s) cnt0 += c == '0';
-        int cnt1 = n - cnt0;
-        int c0 = 0, c1 = 0;
+        int l[2]{};
+        int r[2]{};
+        r[0] = ranges::count(s, '0');
+        r[1] = n - r[0];
         long long ans = 0;
-        for (char& c : s) {
-            if (c == '0') {
-                ans += c1 * (cnt1 - c1);
-                ++c0;
-            } else {
-                ans += c0 * (cnt0 - c0);
-                ++c1;
-            }
+        for (int i = 0; i < n; ++i) {
+            int x = s[i] - '0';
+            r[x]--;
+            ans += 1LL * l[x ^ 1] * r[x ^ 1];
+            l[x]++;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func numberOfWays(s string) int64 {
+func numberOfWays(s string) (ans int64) {
 	n := len(s)
-	cnt0 := strings.Count(s, "0")
-	cnt1 := n - cnt0
-	c0, c1 := 0, 0
-	ans := 0
+	l := [2]int{}
+	r := [2]int{}
+	r[0] = strings.Count(s, "0")
+	r[1] = n - r[0]
 	for _, c := range s {
-		if c == '0' {
-			ans += c1 * (cnt1 - c1)
-			c0++
-		} else {
-			ans += c0 * (cnt0 - c0)
-			c1++
-		}
+		x := int(c - '0')
+		r[x]--
+		ans += int64(l[x^1] * r[x^1])
+		l[x]++
 	}
-	return int64(ans)
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function numberOfWays(s: string): number {
+    const n = s.length;
+    const l: number[] = [0, 0];
+    const r: number[] = [s.split('').filter(c => c === '0').length, 0];
+    r[1] = n - r[0];
+    let ans: number = 0;
+    for (const c of s) {
+        const x = c === '0' ? 0 : 1;
+        r[x]--;
+        ans += l[x ^ 1] * r[x ^ 1];
+        l[x]++;
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

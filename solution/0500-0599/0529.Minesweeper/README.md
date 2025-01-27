@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0529.Minesweeper/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [529. 扫雷游戏](https://leetcode.cn/problems/minesweeper)
 
 [English Version](/solution/0500-0599/0529.Minesweeper/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>让我们一起来玩扫雷游戏！</p>
 
@@ -32,14 +45,14 @@
 <p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
-<img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0500-0599/0529.Minesweeper/images/minesweeper_example_1.png" style="width: 500px; max-width: 400px; height: 269px;" />
+<img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0500-0599/0529.Minesweeper/images/untitled.jpeg" style="width: 500px; max-width: 400px; height: 269px;" />
 <pre>
 <strong>输入：</strong>board = [["E","E","E","E","E"],["E","E","M","E","E"],["E","E","E","E","E"],["E","E","E","E","E"]], click = [3,0]
 <strong>输出：</strong>[["B","1","E","1","B"],["B","1","M","1","B"],["B","1","1","1","B"],["B","B","B","B","B"]]
 </pre>
 
 <p><strong>示例 2：</strong></p>
-<img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0500-0599/0529.Minesweeper/images/minesweeper_example_2.png" style="width: 500px; max-width: 400px; height: 275px;" />
+<img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0500-0599/0529.Minesweeper/images/untitled-2.jpeg" style="width: 500px; max-width: 400px; height: 275px;" />
 <pre>
 <strong>输入：</strong>board = [["B","1","E","1","B"],["B","1","M","1","B"],["B","1","1","1","B"],["B","B","B","B","B"]], click = [1,2]
 <strong>输出：</strong>[["B","1","E","1","B"],["B","1","X","1","B"],["B","1","1","1","B"],["B","B","B","B","B"]]
@@ -60,32 +73,219 @@
 	<li><code>board[click<sub>r</sub>][click<sub>c</sub>]</code> 为 <code>'M'</code> 或 <code>'E'</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：DFS
+
+我们记 $click = (i, j)$，如果 $board[i][j]$ 等于 `'M'`，那么直接将 $board[i][j]$ 的值改为 `'X'` 即可。否则，我们需要统计 $board[i][j]$ 周围的地雷数量 $cnt$，如果 $cnt$ 不为 $0$，那么将 $board[i][j]$ 的值改为 $cnt$ 的字符串形式。否则，将 $board[i][j]$ 的值改为 `'B'`，并且递归地搜索处理 $board[i][j]$ 周围的未挖出的方块。
+
+时间复杂度 $O(m \times n)$，空间复杂度 $O(m \times n)$。其中 $m$ 和 $n$ 分别是二维数组 $board$ 的行数和列数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
+class Solution:
+    def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
+        def dfs(i: int, j: int):
+            cnt = 0
+            for x in range(i - 1, i + 2):
+                for y in range(j - 1, j + 2):
+                    if 0 <= x < m and 0 <= y < n and board[x][y] == "M":
+                        cnt += 1
+            if cnt:
+                board[i][j] = str(cnt)
+            else:
+                board[i][j] = "B"
+                for x in range(i - 1, i + 2):
+                    for y in range(j - 1, j + 2):
+                        if 0 <= x < m and 0 <= y < n and board[x][y] == "E":
+                            dfs(x, y)
 
+        m, n = len(board), len(board[0])
+        i, j = click
+        if board[i][j] == "M":
+            board[i][j] = "X"
+        else:
+            dfs(i, j)
+        return board
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
+class Solution {
+    private char[][] board;
+    private int m;
+    private int n;
 
+    public char[][] updateBoard(char[][] board, int[] click) {
+        m = board.length;
+        n = board[0].length;
+        this.board = board;
+        int i = click[0], j = click[1];
+        if (board[i][j] == 'M') {
+            board[i][j] = 'X';
+        } else {
+            dfs(i, j);
+        }
+        return board;
+    }
+
+    private void dfs(int i, int j) {
+        int cnt = 0;
+        for (int x = i - 1; x <= i + 1; ++x) {
+            for (int y = j - 1; y <= j + 1; ++y) {
+                if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'M') {
+                    ++cnt;
+                }
+            }
+        }
+        if (cnt > 0) {
+            board[i][j] = (char) (cnt + '0');
+        } else {
+            board[i][j] = 'B';
+            for (int x = i - 1; x <= i + 1; ++x) {
+                for (int y = j - 1; y <= j + 1; ++y) {
+                    if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'E') {
+                        dfs(x, y);
+                    }
+                }
+            }
+        }
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+        int m = board.size(), n = board[0].size();
+        int i = click[0], j = click[1];
+
+        function<void(int, int)> dfs = [&](int i, int j) {
+            int cnt = 0;
+            for (int x = i - 1; x <= i + 1; ++x) {
+                for (int y = j - 1; y <= j + 1; ++y) {
+                    if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'M') {
+                        ++cnt;
+                    }
+                }
+            }
+            if (cnt) {
+                board[i][j] = cnt + '0';
+            } else {
+                board[i][j] = 'B';
+                for (int x = i - 1; x <= i + 1; ++x) {
+                    for (int y = j - 1; y <= j + 1; ++y) {
+                        if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'E') {
+                            dfs(x, y);
+                        }
+                    }
+                }
+            }
+        };
+
+        if (board[i][j] == 'M') {
+            board[i][j] = 'X';
+        } else {
+            dfs(i, j);
+        }
+        return board;
+    }
+};
 ```
 
+#### Go
+
+```go
+func updateBoard(board [][]byte, click []int) [][]byte {
+	m, n := len(board), len(board[0])
+	i, j := click[0], click[1]
+
+	var dfs func(i, j int)
+	dfs = func(i, j int) {
+		cnt := 0
+		for x := i - 1; x <= i+1; x++ {
+			for y := j - 1; y <= j+1; y++ {
+				if x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'M' {
+					cnt++
+				}
+			}
+		}
+		if cnt > 0 {
+			board[i][j] = byte(cnt + '0')
+			return
+		}
+		board[i][j] = 'B'
+		for x := i - 1; x <= i+1; x++ {
+			for y := j - 1; y <= j+1; y++ {
+				if x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'E' {
+					dfs(x, y)
+				}
+			}
+		}
+	}
+
+	if board[i][j] == 'M' {
+		board[i][j] = 'X'
+	} else {
+		dfs(i, j)
+	}
+	return board
+}
+```
+
+#### TypeScript
+
+```ts
+function updateBoard(board: string[][], click: number[]): string[][] {
+    const m = board.length;
+    const n = board[0].length;
+    const [i, j] = click;
+
+    const dfs = (i: number, j: number) => {
+        let cnt = 0;
+        for (let x = i - 1; x <= i + 1; ++x) {
+            for (let y = j - 1; y <= j + 1; ++y) {
+                if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] === 'M') {
+                    ++cnt;
+                }
+            }
+        }
+        if (cnt > 0) {
+            board[i][j] = cnt.toString();
+            return;
+        }
+        board[i][j] = 'B';
+        for (let x = i - 1; x <= i + 1; ++x) {
+            for (let y = j - 1; y <= j + 1; ++y) {
+                if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] === 'E') {
+                    dfs(x, y);
+                }
+            }
+        }
+    };
+
+    if (board[i][j] === 'M') {
+        board[i][j] = 'X';
+    } else {
+        dfs(i, j);
+    }
+    return board;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

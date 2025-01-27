@@ -1,43 +1,56 @@
-# [1645. 1645.Hopper 公司查询 II](https://leetcode.cn/problems/hopper-company-queries-ii)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1645.Hopper%20Company%20Queries%20II/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1645. Hopper 公司查询 II 🔒](https://leetcode.cn/problems/hopper-company-queries-ii)
 
 [English Version](/solution/1600-1699/1645.Hopper%20Company%20Queries%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Drivers</code></p>
 
-<pre>+-------------+---------+
+<pre>
++-------------+---------+
 | Column Name | Type &nbsp; &nbsp;|
 +-------------+---------+
 | driver_id &nbsp; | int &nbsp; &nbsp; |
 | join_date &nbsp; | date &nbsp; &nbsp;|
 +-------------+---------+
-driver_id是该表的主键。
-该表的每一行均包含驾驶员的ID以及他们加入Hopper公司的日期。
+driver_id 是该表具有唯一值的列。
+该表的每一行均包含驾驶员的ID以及他们加入 Hopper 公司的日期。
 </pre>
 
 <p>&nbsp;</p>
 
 <p>表: <code>Rides</code></p>
 
-<pre>+--------------+---------+
+<pre>
++--------------+---------+
 | Column Name &nbsp;| Type &nbsp; &nbsp;|
 +--------------+---------+
 | ride_id &nbsp; &nbsp; &nbsp;| int &nbsp; &nbsp; |
 | user_id &nbsp; &nbsp; &nbsp;| int &nbsp; &nbsp; |
 | requested_at | date &nbsp; &nbsp;|
 +--------------+---------+
-ride_id是该表的主键。
-该表的每一行均包含行程ID(ride_id)，用户ID(user_id)以及该行程的日期(requested_at)。
+ride_id 是该表具有唯一值的列。
+该表的每一行均包含行程 ID(ride_id)，用户 ID(user_id) 以及该行程的日期 (requested_at)。
 该表中可能有一些不被接受的乘车请求。</pre>
 
 <p>&nbsp;</p>
 
 <p>表: <code>AcceptedRides</code></p>
 
-<pre>+---------------+---------+
+<pre>
++---------------+---------+
 | Column Name &nbsp; | Type &nbsp; &nbsp;|
 +---------------+---------+
 | ride_id &nbsp; &nbsp; &nbsp; | int &nbsp; &nbsp; |
@@ -45,26 +58,30 @@ ride_id是该表的主键。
 | ride_distance | int &nbsp; &nbsp; |
 | ride_duration | int &nbsp; &nbsp; |
 +---------------+---------+
-ride_id是该表的主键。
+ride_id 是该表具有唯一值的列。
 该表的每一行都包含已接受的行程信息。
-表中的行程信息都在“Rides”表中存在。
+表中的行程信息都在 "Rides" 表中存在。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写SQL查询以报告2020年每个月的工作驱动因素<strong>百分比</strong>（<code>working_percentage</code>），其中：</p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1600-1699/1645.Hopper%20Company%20Queries%20II/images/codecogseqn.png" style="width: 800px; height: 36px;">
+<p>编写解决方案以报告 <strong>2020</strong> 年每个月的工作驱动因素&nbsp;<strong>百分比</strong>（<code>working_percentage</code>），其中：</p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1600-1699/1645.Hopper%20Company%20Queries%20II/images/codecogseqn.png" style="width: 800px; height: 36px;" />
 <p>&nbsp;</p>
 
-<p><strong>注意：如果一个月内可用驾驶员的数量为零，我们认为</strong><code>working_percentage</code><strong>为<code>0</code>。</strong></p>
+<p><strong>注意：</strong>如果一个月内可用驾驶员的数量为零，我们认为&nbsp;<code>working_percentage</code>&nbsp;为&nbsp;<code>0</code><strong>。</strong></p>
 
-<p>返回按<code>month</code><strong>升序</strong>排列的结果表，其中<code>month</code>是月份的编号（一月是<code>1</code>，二月是<code>2</code>，等等）。将<code>working_percentage</code>四舍五入至<strong>小数点后两位</strong>。</p>
+<p>返回按&nbsp;<code>month</code>&nbsp;<strong>升序&nbsp;</strong>排列的结果表，其中&nbsp;<code>month</code>&nbsp;是月份的编号（一月是&nbsp;<code>1</code>，二月是&nbsp;<code>2</code>，等等）。将&nbsp;<code>working_percentage</code>&nbsp;四舍五入至&nbsp;<strong>小数点后两位</strong>。</p>
 
-<p>查询结果格式如下例所示。</p>
+<p>结果格式如下例所示。</p>
 
-<p><strong>案例 1:</strong></p>
+<p>&nbsp;</p>
 
-<pre>表 Drivers:
+<p><strong>示例 1:</strong></p>
+
+<pre>
+<strong>输入：</strong>
+表 Drivers:
 +-----------+------------+
 | driver_id | join_date &nbsp;|
 +-----------+------------+
@@ -114,8 +131,7 @@ ride_id是该表的主键。
 | 12 &nbsp; &nbsp; &nbsp;| 8 &nbsp; &nbsp; &nbsp; &nbsp; | 38 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 34 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | 14 &nbsp; &nbsp; &nbsp;| 1 &nbsp; &nbsp; &nbsp; &nbsp; | 90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 74 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 +---------+-----------+---------------+---------------+
-
-结果表:
+<strong>输出：</strong>
 +-------+--------------------+
 | month | working_percentage |
 +-------+--------------------+
@@ -132,33 +148,83 @@ ride_id是该表的主键。
 | 11 &nbsp; &nbsp;| 33.33 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | 12 &nbsp; &nbsp;| 16.67 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 +-------+--------------------+
-
-截至1月底 --&gt; 2个活跃的驾驶员 (10, 8)，无被接受的行程。百分比是0%。
-截至2月底 --&gt; 3个活跃的驾驶员 (10, 8, 5)，无被接受的行程。百分比是0%。
-截至3月底 --&gt; 4个活跃的驾驶员 (10, 8, 5, 7)，1个被接受的行程 (10)。百分比是 (1 / 4) * 100 = 25%。
-截至4月底 --&gt; 4个活跃的驾驶员 (10, 8, 5, 7)，无被接受的行程。百分比是 0%。
-截至5月底 --&gt; 5个活跃的驾驶员 (10, 8, 5, 7, 4)，无被接受的行程。百分比是 0%。
-截至6月底 --&gt; 5个活跃的驾驶员 (10, 8, 5, 7, 4)，1个被接受的行程 (10)。 百分比是 (1 / 5) * 100 = 20%。
-截至7月底 --&gt; 5个活跃的驾驶员 (10, 8, 5, 7, 4)，1个被接受的行程 (8)。百分比是 (1 / 5) * 100 = 20%。
-截至8月底 --&gt; 5个活跃的驾驶员 (10, 8, 5, 7, 4)，1个被接受的行程 (7)。百分比是 (1 / 5) * 100 = 20%。
-截至9月底 --&gt; 5个活跃的驾驶员 (10, 8, 5, 7, 4)，无被接受的行程。百分比是 0%。
-截至10月底 --&gt; 6个活跃的驾驶员 (10, 8, 5, 7, 4, 1) 无被接受的行程。百分比是 0%。
-截至11月底 --&gt; 6个活跃的驾驶员 (10, 8, 5, 7, 4, 1)，2个被接受的行程 (1, 7)。百分比是 (2 / 6) * 100 = 33.33%。
-截至12月底 --&gt; 6个活跃的驾驶员 (10, 8, 5, 7, 4, 1)，1个被接受的行程 (4)。百分比是 (1 / 6) * 100 = 16.67%。
+<strong>解释：</strong>
+截至 1 月底 --&gt; 2 个活跃的驾驶员 (10, 8)，无被接受的行程。百分比是0%。
+截至 2 月底 --&gt; 3 个活跃的驾驶员 (10, 8, 5)，无被接受的行程。百分比是0%。
+截至 3 月底 --&gt; 4 个活跃的驾驶员 (10, 8, 5, 7)，1 个被接受的行程 (10)。百分比是 (1 / 4) * 100 = 25%。
+截至 4 月底 --&gt; 4 个活跃的驾驶员 (10, 8, 5, 7)，无被接受的行程。百分比是 0%。
+截至 5 月底 --&gt; 5 个活跃的驾驶员 (10, 8, 5, 7, 4)，无被接受的行程。百分比是 0%。
+截至 6 月底 --&gt; 5 个活跃的驾驶员 (10, 8, 5, 7, 4)，1 个被接受的行程 (10)。 百分比是 (1 / 5) * 100 = 20%。
+截至 7 月底 --&gt; 5 个活跃的驾驶员 (10, 8, 5, 7, 4)，1 个被接受的行程 (8)。百分比是 (1 / 5) * 100 = 20%。
+截至 8 月底 --&gt; 5 个活跃的驾驶员 (10, 8, 5, 7, 4)，1 个被接受的行程 (7)。百分比是 (1 / 5) * 100 = 20%。
+截至 9 月底 --&gt; 5 个活跃的驾驶员 (10, 8, 5, 7, 4)，无被接受的行程。百分比是 0%。
+截至 10 月底 --&gt; 6 个活跃的驾驶员 (10, 8, 5, 7, 4, 1) 无被接受的行程。百分比是 0%。
+截至 11 月底 --&gt; 6 个活跃的驾驶员 (10, 8, 5, 7, 4, 1)，2 个被接受的行程 (1, 7)。百分比是 (2 / 6) * 100 = 33.33%。
+截至 12 月底 --&gt; 6 个活跃的驾驶员 (10, 8, 5, 7, 4, 1)，1 个被接受的行程 (4)。百分比是 (1 / 6) * 100 = 16.67%。
 </pre>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：递归 + 左连接 + 分组
+
+我们可以使用递归的方法生成 $1 \sim 12$ 月的数据，记录在 `Month` 表中。
+
+接下来，我们用 `Month` 表与 `Drivers` 表进行左连接，连接的条件是 `year(d.join_date) < 2020 or (year(d.join_date) = 2020 and month(d.join_date) <= month)`，这样就可以得到每个月的活跃司机数。
+
+然后，我们再用 `Rides` 表与 `AcceptedRides` 表进行内连接，连接的条件是 `ride_id` 相等，并且我们只查出 `year(requested_at) = 2020` 的数据，这样就可以得到 $2020$ 年被接受的所有行程。
+
+最后，我们将上面两个表进行左连接，连接的条件是 `month` 相等、`driver_id` 相等，并且 `join_date` 小于等于 `requested_at`，这样就可以得到每个月被接受的行程数，按月份进行分组，就可以得到每个月的活跃司机数和被接受的行程数，从而计算出每个月的接单率。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH RECURSIVE
+    Month AS (
+        SELECT 1 AS month
+        UNION
+        SELECT month + 1
+        FROM Month
+        WHERE month < 12
+    ),
+    S AS (
+        SELECT month, driver_id, join_date
+        FROM
+            Month AS m
+            LEFT JOIN Drivers AS d
+                ON YEAR(d.join_date) < 2020
+                OR (YEAR(d.join_date) = 2020 AND MONTH(d.join_date) <= month)
+    ),
+    T AS (
+        SELECT driver_id, requested_at
+        FROM
+            Rides
+            JOIN AcceptedRides USING (ride_id)
+        WHERE YEAR(requested_at) = 2020
+    )
+SELECT
+    month,
+    IFNULL(
+        ROUND(COUNT(DISTINCT t.driver_id) * 100 / COUNT(DISTINCT s.driver_id), 2),
+        0
+    ) AS working_percentage
+FROM
+    S AS s
+    LEFT JOIN T AS t
+        ON s.driver_id = t.driver_id
+        AND s.join_date <= t.requested_at
+        AND s.month = MONTH(t.requested_at)
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

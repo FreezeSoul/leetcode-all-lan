@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9865.%20%E4%B8%8D%E7%94%A8%E5%8A%A0%E5%87%8F%E4%B9%98%E9%99%A4%E5%81%9A%E5%8A%A0%E6%B3%95/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 65. 不用加减乘除做加法](https://leetcode.cn/problems/bu-yong-jia-jian-cheng-chu-zuo-jia-fa-lcof/)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>写一个函数，求两个整数之和，要求在函数体内不得使用 &ldquo;+&rdquo;、&ldquo;-&rdquo;、&ldquo;*&rdquo;、&ldquo;/&rdquo; 四则运算符号。</p>
 
@@ -22,11 +30,13 @@
 	<li>结果不会溢出 32 位整数</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 两数字 $a$, $b$ 求和。
 
@@ -50,11 +60,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-由于 Python `int` 是无限长整型，左移不会自动溢出，因此需要特殊处理。
+#### Python3
 
 ```python
 class Solution:
@@ -66,9 +72,7 @@ class Solution:
         return a if a < 0x80000000 else ~(a ^ 0xFFFFFFFF)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -83,25 +87,14 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int add(int a, int b) {
-        if (b == 0) {
-            return a;
-        }
-        return add(a ^ b, (a & b) << 1);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int add(int a, int b) {
         while (b) {
-            unsigned int c = (unsigned int)(a & b) << 1;
+            unsigned int c = (unsigned int) (a & b) << 1;
             a = a ^ b;
             b = c;
         }
@@ -110,7 +103,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func add(a int, b int) int {
@@ -121,7 +114,20 @@ func add(a int, b int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function add(a: number, b: number): number {
+    while (b) {
+        const c = (a & b) << 1;
+        a ^= b;
+        b = c;
+    }
+    return a;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -137,7 +143,7 @@ var add = function (a, b) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -153,23 +159,48 @@ public class Solution {
 }
 ```
 
-### **TypeScript**
+#### Swift
 
-```ts
-function add(a: number, b: number): number {
-    while (b) {
-        const c = (a & b) << 1;
-        a ^= b;
-        b = c;
+```swift
+class Solution {
+    func add(_ a: Int, _ b: Int) -> Int {
+        var a = a
+        var b = b
+        while b != 0 {
+            let c = (a & b) << 1
+            a ^= b
+            b = c
+        }
+        return a
     }
-    return a;
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start-->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public int add(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        return add(a ^ b, (a & b) << 1);
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

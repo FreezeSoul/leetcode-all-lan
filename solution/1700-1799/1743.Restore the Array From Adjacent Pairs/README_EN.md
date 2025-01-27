@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1743.Restore%20the%20Array%20From%20Adjacent%20Pairs/README_EN.md
+rating: 1579
+source: Weekly Contest 226 Q2
+tags:
+    - Depth-First Search
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [1743. Restore the Array From Adjacent Pairs](https://leetcode.com/problems/restore-the-array-from-adjacent-pairs)
 
 [中文文档](/solution/1700-1799/1743.Restore%20the%20Array%20From%20Adjacent%20Pairs/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an integer array <code>nums</code> that consists of <code>n</code> <strong>unique </strong>elements, but you have forgotten it. However, you do remember every pair of adjacent elements in <code>nums</code>.</p>
 
@@ -50,13 +66,17 @@ Another solution is [-3,1,4,-2], which would also be accepted.
 	<li>There exists some <code>nums</code> that has <code>adjacentPairs</code> as its pairs.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Traverse the graph from the point where the degree is one.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -78,26 +98,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def restoreArray(self, adjacentPairs: List[List[int]]) -> List[int]:
-        def dfs(i, fa):
-            ans.append(i)
-            for j in g[i]:
-                if j != fa:
-                    dfs(j, i)
-
-        g = defaultdict(list)
-        for a, b in adjacentPairs:
-            g[a].append(b)
-            g[b].append(a)
-        i = next(i for i, v in g.items() if len(v) == 1)
-        ans = []
-        dfs(i, 1e6)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -125,6 +126,139 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+        int n = adjacentPairs.size() + 1;
+        unordered_map<int, vector<int>> g;
+        for (auto& e : adjacentPairs) {
+            int a = e[0], b = e[1];
+            g[a].push_back(b);
+            g[b].push_back(a);
+        }
+        vector<int> ans(n);
+        for (auto& [k, v] : g) {
+            if (v.size() == 1) {
+                ans[0] = k;
+                ans[1] = v[0];
+                break;
+            }
+        }
+        for (int i = 2; i < n; ++i) {
+            auto v = g[ans[i - 1]];
+            ans[i] = v[0] == ans[i - 2] ? v[1] : v[0];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func restoreArray(adjacentPairs [][]int) []int {
+	n := len(adjacentPairs) + 1
+	g := map[int][]int{}
+	for _, e := range adjacentPairs {
+		a, b := e[0], e[1]
+		g[a] = append(g[a], b)
+		g[b] = append(g[b], a)
+	}
+	ans := make([]int, n)
+	for k, v := range g {
+		if len(v) == 1 {
+			ans[0] = k
+			ans[1] = v[0]
+			break
+		}
+	}
+	for i := 2; i < n; i++ {
+		v := g[ans[i-1]]
+		ans[i] = v[0]
+		if v[0] == ans[i-2] {
+			ans[i] = v[1]
+		}
+	}
+	return ans
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int[] RestoreArray(int[][] adjacentPairs) {
+        int n = adjacentPairs.Length + 1;
+        Dictionary<int, List<int>> g = new Dictionary<int, List<int>>();
+
+        foreach (int[] e in adjacentPairs) {
+            int a = e[0], b = e[1];
+            if (!g.ContainsKey(a)) {
+                g[a] = new List<int>();
+            }
+            if (!g.ContainsKey(b)) {
+                g[b] = new List<int>();
+            }
+            g[a].Add(b);
+            g[b].Add(a);
+        }
+
+        int[] ans = new int[n];
+
+        foreach (var entry in g) {
+            if (entry.Value.Count == 1) {
+                ans[0] = entry.Key;
+                ans[1] = entry.Value[0];
+                break;
+            }
+        }
+
+        for (int i = 2; i < n; ++i) {
+            List<int> v = g[ans[i - 1]];
+            ans[i] = v[1] == ans[i - 2] ? v[0] : v[1];
+        }
+
+        return ans;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def restoreArray(self, adjacentPairs: List[List[int]]) -> List[int]:
+        def dfs(i, fa):
+            ans.append(i)
+            for j in g[i]:
+                if j != fa:
+                    dfs(j, i)
+
+        g = defaultdict(list)
+        for a, b in adjacentPairs:
+            g[a].append(b)
+            g[b].append(a)
+        i = next(i for i, v in g.items() if len(v) == 1)
+        ans = []
+        dfs(i, 1e6)
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -159,35 +293,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
-        int n = adjacentPairs.size() + 1;
-        unordered_map<int, vector<int>> g;
-        for (auto& e : adjacentPairs) {
-            int a = e[0], b = e[1];
-            g[a].push_back(b);
-            g[b].push_back(a);
-        }
-        vector<int> ans(n);
-        for (auto& [k, v] : g) {
-            if (v.size() == 1) {
-                ans[0] = k;
-                ans[1] = v[0];
-                break;
-            }
-        }
-        for (int i = 2; i < n; ++i) {
-            auto v = g[ans[i - 1]];
-            ans[i] = v[0] == ans[i - 2] ? v[1] : v[0];
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -220,35 +326,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func restoreArray(adjacentPairs [][]int) []int {
-	n := len(adjacentPairs) + 1
-	g := map[int][]int{}
-	for _, e := range adjacentPairs {
-		a, b := e[0], e[1]
-		g[a] = append(g[a], b)
-		g[b] = append(g[b], a)
-	}
-	ans := make([]int, n)
-	for k, v := range g {
-		if len(v) == 1 {
-			ans[0] = k
-			ans[1] = v[0]
-			break
-		}
-	}
-	for i := 2; i < n; i++ {
-		v := g[ans[i-1]]
-		ans[i] = v[0]
-		if v[0] == ans[i-2] {
-			ans[i] = v[1]
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func restoreArray(adjacentPairs [][]int) []int {
@@ -278,10 +356,8 @@ func restoreArray(adjacentPairs [][]int) []int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

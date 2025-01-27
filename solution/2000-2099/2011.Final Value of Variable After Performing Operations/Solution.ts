@@ -1,3 +1,3 @@
 function finalValueAfterOperations(operations: string[]): number {
-    return operations.reduce((r, v) => r + (v[1] === '+' ? 1 : -1), 0);
+    return operations.reduce((acc, op) => acc + (op[1] === '+' ? 1 : -1), 0);
 }

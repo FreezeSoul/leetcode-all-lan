@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20008.%20%E5%92%8C%E5%A4%A7%E4%BA%8E%E7%AD%89%E4%BA%8E%20target%20%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 008. 和大于等于 target 的最短子数组](https://leetcode.cn/problems/2VG8Kg)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个含有&nbsp;<code>n</code><strong>&nbsp;</strong>个正整数的数组和一个正整数 <code>target</code><strong> 。</strong></p>
 
@@ -54,114 +61,147 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 209&nbsp;题相同：<a href="https://leetcode.cn/problems/minimum-size-subarray-sum/">https://leetcode.cn/problems/minimum-size-subarray-sum/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：双指针
+
+我们使用双指针维护一个和小于 $target$ 的连续子数组。每次右边界 $j$ 向右移动一位，如果和大于等于 $target$，则更新答案的最小值，同时左边界 $i$ 向右移动，直到和小于 $target$。
+
+最后，如果答案没有被更新过，返回 $0$，否则返回答案。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minSubArrayLen(self, target: int, nums: List[int]) -> int:
-        n = len(nums)
         ans = inf
-        sum = 0
-        left, right = 0, 0
-        while right < n:
-            sum += nums[right]
-            right += 1
-            while sum >= target:
-                ans = min(ans, right - left)
-                sum -= nums[left]
-                left += 1
+        s = i = 0
+        for j, x in enumerate(nums):
+            s += x
+            while s >= target:
+                ans = min(ans, j - i + 1)
+                s -= nums[i]
+                i += 1
         return 0 if ans == inf else ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int minSubArrayLen(int target, int[] nums) {
-        int n = nums.length;
-        int ans = Integer.MAX_VALUE;
-        int sum = 0;
-        int left = 0, right = 0;
-        while (right < n) {
-            sum += nums[right++];
-            while (sum >= target) {
-                ans = Math.min(ans, right - left);
-                sum -= nums[left++];
+        final int inf = 1 << 30;
+        int ans = inf;
+        int s = 0;
+        for (int i = 0, j = 0; j < nums.length; ++j) {
+            s += nums[j];
+            while (s >= target) {
+                ans = Math.min(ans, j - i + 1);
+                s -= nums[i++];
             }
         }
-        return ans == Integer.MAX_VALUE ? 0 : ans;
+        return ans == inf ? 0 : ans;
     }
 }
 ```
 
-### **Go**
-
-```go
-func minSubArrayLen(target int, nums []int) int {
-	n := len(nums)
-	ans := math.MaxInt32
-	sum := 0
-	left, right := 0, 0
-	for right < n {
-		sum += nums[right]
-		right++
-		for sum >= target {
-			ans = min(ans, right-left)
-			sum -= nums[left]
-			left++
-		}
-	}
-	if ans == math.MaxInt32 {
-		return 0
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int left = 0, right;
-        int sum = 0;
-        int minlen = INT_MAX;
-
-        for (right = 0; right < nums.size(); right++) {
-            sum += nums[right];
-            while (left <= right && sum >= target) {
-                minlen = min(minlen, right - left + 1);
-                sum -= nums[left++];
+        const int inf = 1 << 30;
+        int ans = inf;
+        int n = nums.size();
+        int s = 0;
+        for (int i = 0, j = 0; j < n; ++j) {
+            s += nums[j];
+            while (s >= target) {
+                ans = min(ans, j - i + 1);
+                s -= nums[i++];
             }
         }
-
-        return minlen == INT_MAX ? 0 : minlen;
+        return ans == inf ? 0 : ans;
     }
 };
 ```
 
-### **...**
+#### Go
 
+```go
+func minSubArrayLen(target int, nums []int) int {
+	const inf = 1 << 30
+	ans := inf
+	s, i := 0, 0
+	for j, x := range nums {
+		s += x
+		for s >= target {
+			ans = min(ans, j-i+1)
+			s -= nums[i]
+			i++
+		}
+	}
+	if ans == inf {
+		return 0
+	}
+	return ans
+}
 ```
 
+#### TypeScript
+
+```ts
+function minSubArrayLen(target: number, nums: number[]): number {
+    const n = nums.length;
+    const inf = 1 << 30;
+    let ans = inf;
+    let s = 0;
+    for (let i = 0, j = 0; j < n; ++j) {
+        s += nums[j];
+        while (s >= target) {
+            ans = Math.min(ans, j - i + 1);
+            s -= nums[i++];
+        }
+    }
+    return ans === inf ? 0 : ans;
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {
+        let inf = Int.max
+        var ans = inf
+        var sum = 0
+        var i = 0
+
+        for j in 0..<nums.count {
+            sum += nums[j]
+            while sum >= target {
+                ans = min(ans, j - i + 1)
+                sum -= nums[i]
+                i += 1
+            }
+        }
+
+        return ans == inf ? 0 : ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

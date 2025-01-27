@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9817.%20%E6%89%93%E5%8D%B0%E4%BB%8E1%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 17. 打印从 1 到最大的 n 位数](https://leetcode.cn/problems/da-yin-cong-1dao-zui-da-de-nwei-shu-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>输入数字 <code>n</code>，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。</p>
 
@@ -19,9 +29,13 @@
 	<li>n 为正整数</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：模拟**
+<!-- solution:start -->
+
+### 方法一：模拟
 
 直接根据题意模拟即可。
 
@@ -31,7 +45,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +71,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func printNumbers(n int) []int {
@@ -167,7 +181,7 @@ func print(n int) []string {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -183,7 +197,7 @@ var printNumbers = function (n) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -198,10 +212,50 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func printNumbers(_ n: Int) -> [Int] {
+        let maxNumber = maxNumberForDigits(n)
+        return Array(1...maxNumber)
+    }
 
+    private func maxNumberForDigits(_ n: Int) -> Int {
+        var maxNumber = 1
+        for _ in 0..<n {
+            maxNumber *= 10
+        }
+        return maxNumber - 1
+    }
+
+    private var s = String()
+    private var ans = [String]()
+
+    func print(_ n: Int) -> [String] {
+        for i in 1...n {
+            dfs(0, i)
+        }
+        return ans
+    }
+
+    private func dfs(_ i: Int, _ j: Int) {
+        if i == j {
+            ans.append(s)
+            return
+        }
+        let start = i > 0 ? 0 : 1
+        for k in start..<10 {
+            s.append("\(k)")
+            dfs(i + 1, j)
+            s.removeLast()
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1760.Minimum%20Limit%20of%20Balls%20in%20a%20Bag/README.md
+rating: 1939
+source: 第 228 场周赛 Q3
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [1760. 袋子里最少数目的球](https://leetcode.cn/problems/minimum-limit-of-balls-in-a-bag)
 
 [English Version](/solution/1700-1799/1760.Minimum%20Limit%20of%20Balls%20in%20a%20Bag/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，其中 <code>nums[i]</code> 表示第 <code>i</code> 个袋子里球的数目。同时给你一个整数 <code>maxOperations</code> 。</p>
 
@@ -12,10 +25,12 @@
 
 <ul>
 	<li>选择任意一个袋子，并将袋子里的球分到 2 个新的袋子中，每个袋子里都有 <strong>正整数</strong> 个球。
+
     <ul>
     	<li>比方说，一个袋子里有 <code>5</code> 个球，你可以把它们分到两个新袋子里，分别有 <code>1</code> 个和 <code>4</code> 个球，或者分别有 <code>2</code> 个和 <code>3</code> 个球。</li>
     </ul>
     </li>
+
 </ul>
 
 <p>你的开销是单个袋子里球数目的 <strong>最大值</strong> ，你想要 <strong>最小化</strong> 开销。</p>
@@ -64,11 +79,13 @@
 	<li><code>1 <= maxOperations, nums[i] <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
 我们可以将题目可以转换为：对某个开销值，看它能不能在 maxOperations 次操作内得到。因此，二分枚举开销值，找到最小的且满足条件的开销值即可。
 
@@ -76,9 +93,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +104,7 @@ class Solution:
         return bisect_left(range(1, max(nums)), True, key=check) + 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +130,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -141,14 +154,11 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumSize(nums []int, maxOperations int) int {
-	r := 0
-	for _, x := range nums {
-		r = max(r, x)
-	}
+	r := slices.Max(nums)
 	return 1 + sort.Search(r, func(mx int) bool {
 		mx++
 		cnt := 0
@@ -158,16 +168,31 @@ func minimumSize(nums []int, maxOperations int) int {
 		return cnt <= maxOperations
 	})
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minimumSize(nums: number[], maxOperations: number): number {
+    let left = 1;
+    let right = Math.max(...nums);
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        let cnt = 0;
+        for (const x of nums) {
+            cnt += ~~((x - 1) / mid);
+        }
+        if (cnt <= maxOperations) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -194,32 +219,8 @@ var minimumSize = function (nums, maxOperations) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function minimumSize(nums: number[], maxOperations: number): number {
-    let left = 1;
-    let right = Math.max(...nums);
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        let cnt = 0;
-        for (const x of nums) {
-            cnt += ~~((x - 1) / mid);
-        }
-        if (cnt <= maxOperations) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    return left;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

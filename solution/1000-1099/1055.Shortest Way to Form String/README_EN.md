@@ -1,8 +1,23 @@
-# [1055. Shortest Way to Form String](https://leetcode.com/problems/shortest-way-to-form-string)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1055.Shortest%20Way%20to%20Form%20String/README_EN.md
+tags:
+    - Greedy
+    - Two Pointers
+    - String
+    - Binary Search
+---
+
+<!-- problem:start -->
+
+# [1055. Shortest Way to Form String 🔒](https://leetcode.com/problems/shortest-way-to-form-string)
 
 [中文文档](/solution/1000-1099/1055.Shortest%20Way%20to%20Form%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>subsequence</strong> of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., <code>&quot;ace&quot;</code> is a subsequence of <code>&quot;<u>a</u>b<u>c</u>d<u>e</u>&quot;</code> while <code>&quot;aec&quot;</code> is not).</p>
 
@@ -41,11 +56,23 @@
 	<li><code>source</code> and <code>target</code> consist of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
+
+We can use the two pointers method, where pointer $j$ points to the target string `target`. Then we traverse the source string `source` with pointer $i$ pointing to the source string `source`. If $source[i] = target[j]$, then both $i$ and $j$ move one step forward, otherwise only pointer $i$ moves. When both pointers $i$ and $j$ reach the end of the string, if no equal character is found, return $-1$, otherwise the subsequence count increases by one, and then set pointer $i$ to $0$ and continue to traverse.
+
+After the traversal ends, return the subsequence count.
+
+The time complexity is $O(m \times n)$, where $m$ and $n$ are the lengths of the strings `source` and `target` respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +95,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +150,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestWay(source string, target string) int {
@@ -146,10 +173,8 @@ func shortestWay(source string, target string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

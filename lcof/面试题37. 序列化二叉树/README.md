@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9837.%20%E5%BA%8F%E5%88%97%E5%8C%96%E4%BA%8C%E5%8F%89%E6%A0%91/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 37. 序列化二叉树](https://leetcode.cn/problems/xu-lie-hua-er-cha-shu-lcof/)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请实现两个函数，分别用来序列化和反序列化二叉树。</p>
 
@@ -23,11 +31,13 @@
 
 <p>注意：本题与主站 297 题相同：<a href="https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/">https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：层序遍历**
+### 方法一：层序遍历
 
 我们可以采用层序遍历的方式对二叉树进行序列化，即从根节点开始，依次将二叉树的节点按照从上到下、从左到右的顺序加入队列中，然后将队列中的节点依次出队。如果节点不为空，则将其值加入序列化字符串中，否则加入特殊字符 `#`。最后将序列化字符串返回即可。
 
@@ -35,25 +45,9 @@
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
 
-**方法二：前序遍历**
-
-当二叉树的前中后序列不包含叶子节点时需要前中、前后、中后三种组合方式之一才能确定一颗二叉树，但当前序和后序遍历序列中包含叶子节点时，可以仅通过前序或后序遍历序列构建一颗二叉树。
-
-在前序遍历序列化时，我们以任意特殊字符表示叶子节点，返回序列化后的字符串；反序列化时对序列化字符串根据分隔符进行切分后使用列表的第一个元素作为二叉树的根节点，然后利用列表的其他元素递归生成左右子树即可。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
-
-**方法三：后序遍历**
-
-在后序遍历序列化时，我们以任意特殊字符表示叶子节点，返回序列化后的字符串；反序列化时对序列化字符串根据分隔符进行切分后使用列表的最后一个元素作为二叉树的根节点，然后利用列表的其他元素递归生成左右子树即可。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -115,9 +109,7 @@ class Codec:
 # codec.deserialize(codec.serialize(root))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -184,7 +176,7 @@ public class Codec {
 // codec.deserialize(codec.serialize(root));
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -198,7 +190,6 @@ public class Codec {
  */
 class Codec {
 public:
-
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
         if (!root) {
@@ -254,115 +245,7 @@ public:
 // codec.deserialize(codec.serialize(root));
 ```
 
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Codec {
-public:
-    string empty = "#";
-    string sep = ",";
-    // Encodes a tree to a single string.
-    string serialize(TreeNode* root) {
-        if (!root) return empty + sep;
-        string res = to_string(root->val) + sep;
-        res += serialize(root->left);
-        res += serialize(root->right);
-        return res;
-    }
-
-    // Decodes your encoded data to tree.
-    TreeNode* deserialize(string data) {
-        list<string> nodes;
-        size_t pos = 0;
-        string node;
-        while ((pos = data.find(sep)) != string::npos) {
-            node = data.substr(0, pos);
-            nodes.push_back(node);
-            data.erase(0, pos + sep.length());
-        }
-        return deserialize(nodes);
-    }
-
-    TreeNode* deserialize(list<string>& data) {
-        if (data.empty()) return nullptr;
-        string first = data.front();
-        data.pop_front();
-        if (first == empty) return nullptr;
-        TreeNode* root = new TreeNode(stoi(first));
-        root->left = deserialize(data);
-        root->right = deserialize(data);
-        return root;
-    }
-};
-
-// Your Codec object will be instantiated and called as such:
-// Codec codec;
-// codec.deserialize(codec.serialize(root));
-```
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Codec {
-public:
-    string empty = "#";
-    string sep = ",";
-    // Encodes a tree to a single string.
-    string serialize(TreeNode* root) {
-        if (!root) return empty + sep;
-        string res = "";
-        res += serialize(root->left);
-        res += serialize(root->right);
-        res += to_string(root->val) + sep;
-        return res;
-    }
-
-    // Decodes your encoded data to tree.
-    TreeNode* deserialize(string data) {
-        vector<string> nodes;
-        size_t pos = 0;
-        string node;
-        while ((pos = data.find(sep)) != string::npos) {
-            node = data.substr(0, pos);
-            nodes.push_back(node);
-            data.erase(0, pos + sep.length());
-        }
-        return deserialize(nodes);
-    }
-
-    TreeNode* deserialize(vector<string>& nodes) {
-        if (nodes.empty()) return nullptr;
-        string front = nodes.back();
-        nodes.pop_back();
-        if (front == empty) return nullptr;
-        TreeNode* root = new TreeNode(stoi(front));
-        // 先构造右子树，后构造左子树
-        root->right = deserialize(nodes);
-        root->left = deserialize(nodes);
-        return root;
-    }
-};
-
-// Your Codec object will be instantiated and called as such:
-// Codec codec;
-// codec.deserialize(codec.serialize(root));
-```
-
-### **Go**
+#### Go
 
 ```go
 /**
@@ -438,7 +321,7 @@ func (this *Codec) deserialize(data string) *TreeNode {
  */
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -456,20 +339,23 @@ func (this *Codec) deserialize(data string) *TreeNode {
  * @return {string}
  */
 var serialize = function (root) {
-    if (!root) return '[]';
-    let queue = [root];
-    let res = '';
-    while (queue.length) {
-        let node = queue.shift();
-        if (node) {
-            res += node.val + ',';
-            queue.push(node.left);
-            queue.push(node.right);
+    if (root === null) {
+        return null;
+    }
+    const ans = [];
+    const q = [root];
+    let index = 0;
+    while (index < q.length) {
+        const node = q[index++];
+        if (node !== null) {
+            ans.push(node.val.toString());
+            q.push(node.left);
+            q.push(node.right);
         } else {
-            res += 'null' + ',';
+            ans.push('#');
         }
     }
-    return `[${res.substring(0, res.length - 1)}]`;
+    return ans.join(',');
 };
 
 /**
@@ -479,22 +365,26 @@ var serialize = function (root) {
  * @return {TreeNode}
  */
 var deserialize = function (data) {
-    if (!data || data.length <= 2) return null;
-    let arr = data.substring(1, data.length - 1).split(',');
-    let root = new TreeNode(arr.shift());
-    let queue = [root];
-    while (queue.length) {
-        let node = queue.shift();
-        let leftVal = arr.shift();
-        if (leftVal !== 'null') {
-            node.left = new TreeNode(leftVal);
-            queue.push(node.left);
+    if (data === null) {
+        return null;
+    }
+    const vals = data.split(',');
+    let i = 0;
+    const root = new TreeNode(parseInt(vals[i++]));
+    const q = [root];
+    let index = 0;
+    while (index < q.length) {
+        const node = q[index++];
+        if (vals[i] !== '#') {
+            node.left = new TreeNode(+vals[i]);
+            q.push(node.left);
         }
-        let rightVal = arr.shift();
-        if (rightVal !== 'null') {
-            node.right = new TreeNode(rightVal);
-            queue.push(node.right);
+        i++;
+        if (vals[i] !== '#') {
+            node.right = new TreeNode(+vals[i]);
+            q.push(node.right);
         }
+        i++;
     }
     return root;
 };
@@ -505,58 +395,7 @@ var deserialize = function (data) {
  */
 ```
 
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-
-/**
- * Encodes a tree to a single string.
- *
- * @param {TreeNode} root
- * @return {string}
- */
-var serialize = function (root) {
-    if (root == null) {
-        return '#';
-    }
-    const { val, left, right } = root;
-    return `${val},${serialize(left)},${serialize(right)}`;
-};
-
-/**
- * Decodes your encoded data to tree.
- *
- * @param {string} data
- * @return {TreeNode}
- */
-var deserialize = function (data) {
-    const vals = data.split(',');
-    let index = 0;
-    const dfs = () => {
-        if (vals[index] == '#') {
-            index++;
-            return null;
-        }
-        const res = new TreeNode(vals[index++]);
-        res.left = dfs();
-        res.right = dfs();
-        return res;
-    };
-    return dfs();
-};
-
-/**
- * Your functions will be called as such:
- * deserialize(serialize(root));
- */
-```
-
-### **C#**
+#### C#
 
 ```cs
 /**
@@ -569,38 +408,51 @@ var deserialize = function (data) {
  * }
  */
 public class Codec {
+
+    // Encodes a tree to a single string.
     public string serialize(TreeNode root) {
-        return rserialize(root, "");
-    }
-
-    public TreeNode deserialize(string data) {
-        string[] dataArray = data.Split(",");
-        LinkedList<string> dataList = new LinkedList<string>(dataArray.ToList());
-        return rdeserialize(dataList);
-    }
-
-    public string rserialize(TreeNode root, string str) {
         if (root == null) {
-            str += "None,";
-        } else {
-            str += root.val.ToString() + ",";
-            str = rserialize(root.left, str);
-            str = rserialize(root.right, str);
-        }
-        return str;
-    }
-
-    public TreeNode rdeserialize(LinkedList<string> dataList) {
-        if (dataList.First.Value.Equals("None")) {
-            dataList.RemoveFirst();
             return null;
         }
+        List<string> ans = new List<string>();
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        q.Enqueue(root);
+        while (q.Count > 0) {
+            TreeNode node = q.Dequeue();
+            if (node != null) {
+                ans.Add(node.val.ToString());
+                q.Enqueue(node.left);
+                q.Enqueue(node.right);
+            } else {
+                ans.Add("#");
+            }
+        }
+        return string.Join(",", ans);
+    }
 
-        TreeNode root = new TreeNode(int.Parse(dataList.First.Value));
-        dataList.RemoveFirst();
-        root.left = rdeserialize(dataList);
-        root.right = rdeserialize(dataList);
-
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(string data) {
+        if (data == null) {
+            return null;
+        }
+        string[] vals = data.Split(',');
+        int i = 0;
+        TreeNode root = new TreeNode(int.Parse(vals[i++]));
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        q.Enqueue(root);
+        while (q.Count > 0) {
+            TreeNode node = q.Dequeue();
+            if (vals[i] != "#") {
+                node.left = new TreeNode(int.Parse(vals[i]));
+                q.Enqueue(node.left);
+            }
+            i++;
+            if (vals[i] != "#") {
+                node.right = new TreeNode(int.Parse(vals[i]));
+                q.Enqueue(node.right);
+            }
+            i++;
+        }
         return root;
     }
 }
@@ -610,10 +462,77 @@ public class Codec {
 // codec.deserialize(codec.serialize(root));
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
 
+/* public class TreeNode {
+*     var val: Int
+*     var left: TreeNode?
+*     var right: TreeNode?
+*     init(_ val: Int) {
+*         self.val = val
+*         self.left = nil
+*         self.right = nil
+*     }
+* }
+*/
+
+public class Codec {
+    func serialize(_ root: TreeNode?) -> String {
+        guard let root = root else {
+            return "null"
+        }
+        var result = [String]()
+        var queue = [TreeNode?]()
+        queue.append(root)
+        while !queue.isEmpty {
+            let node = queue.removeFirst()
+            if let node = node {
+                result.append("\(node.val)")
+                queue.append(node.left)
+                queue.append(node.right)
+            } else {
+                result.append("#")
+            }
+        }
+        return result.joined(separator: ",")
+    }
+
+    func deserialize(_ data: String) -> TreeNode? {
+        if data == "null" {
+            return nil
+        }
+        let vals = data.split(separator: ",").map { String($0) }
+        var i = 0
+        let root = TreeNode(Int(vals[i])!)
+        var queue = [TreeNode]()
+        queue.append(root)
+        i += 1
+        while !queue.isEmpty {
+            let node = queue.removeFirst()
+            if vals[i] != "#" {
+                node.left = TreeNode(Int(vals[i])!)
+                queue.append(node.left!)
+            }
+            i += 1
+            if vals[i] != "#" {
+                node.right = TreeNode(Int(vals[i])!)
+                queue.append(node.right!)
+            }
+            i += 1
+        }
+        return root
+    }
+}
+// Your Codec object will be instantiated and called as such:
+// let codec = Codec()
+// let serializedData = codec.serialize(root)
+// let deserializedTree = codec.deserialize(serializedData)
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

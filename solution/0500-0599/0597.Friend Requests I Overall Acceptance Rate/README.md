@@ -1,10 +1,20 @@
-# [597. 好友申请 I：总体通过率](https://leetcode.cn/problems/friend-requests-i-overall-acceptance-rate)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0597.Friend%20Requests%20I%20Overall%20Acceptance%20Rate/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [597. 好友申请 I：总体通过率 🔒](https://leetcode.cn/problems/friend-requests-i-overall-acceptance-rate)
 
 [English Version](/solution/0500-0599/0597.Friend%20Requests%20I%20Overall%20Acceptance%20Rate/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>FriendRequest</code></p>
 
@@ -16,7 +26,7 @@
 | send_to_id     | int     |
 | request_date   | date    |
 +----------------+---------+
-此表没有主键，它可能包含重复项。
+该表可能包含重复项（换句话说，在SQL中，该表没有主键）。
 该表包含发送请求的用户的 ID ，接受请求的用户的 ID 以及请求的日期。
 </pre>
 
@@ -32,12 +42,12 @@
 | accepter_id    | int     |
 | accept_date    | date    |
 +----------------+---------+
-此表没有主键，它可能包含重复项。
+该表可能包含重复项（换句话说，在SQL中，该表没有主键）。
 该表包含发送请求的用户的 ID ，接受请求的用户的 ID 以及请求通过的日期。</pre>
 
 <p>&nbsp;</p>
 
-<p>写一个查询语句，求出好友申请的通过率，用 2 位小数表示。通过率由接受好友申请的数目除以申请总数。</p>
+<p>求出好友申请的通过率，用 2 位小数表示。通过率由接受好友申请的数目除以申请总数。</p>
 
 <p><strong>提示：</strong></p>
 
@@ -47,7 +57,7 @@
 	<li>如果一个好友申请都没有，你应该返回&nbsp;<code>accept_rate</code>&nbsp;为 0.00 。</li>
 </ul>
 
-<p>查询结果应该如下例所示。</p>
+<p>返回结果应该如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -93,22 +103,35 @@ RequestAccepted 表：
 	<li>你能求出每一天的累计通过率吗？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT IFNULL(ROUND((
-		SELECT COUNT(DISTINCT requester_id, accepter_id)
-		FROM RequestAccepted
-	) / (
-		SELECT COUNT(DISTINCT sender_id, send_to_id)
-		FROM FriendRequest
-	), 2), 0.00) AS accept_rate;
+# Write your MySQL query statement below
+SELECT
+    ROUND(
+        IFNULL(
+            (
+                SELECT COUNT(DISTINCT requester_id, accepter_id)
+                FROM RequestAccepted
+            ) / (SELECT COUNT(DISTINCT sender_id, send_to_id) FROM FriendRequest),
+            0
+        ),
+        2
+    ) AS accept_rate;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,34 +1,65 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0290.Word%20Pattern/README_EN.md
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [290. Word Pattern](https://leetcode.com/problems/word-pattern)
 
 [中文文档](/solution/0200-0299/0290.Word%20Pattern/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>Given a <code>pattern</code> and a string <code>s</code>, find if <code>s</code>&nbsp;follows the same pattern.</p>
 
-<p>Here <b>follow</b> means a full match, such that there is a bijection between a letter in <code>pattern</code> and a <b>non-empty</b> word in <code>s</code>.</p>
+<p>Here <b>follow</b> means a full match, such that there is a bijection between a letter in <code>pattern</code> and a <b>non-empty</b> word in <code>s</code>. Specifically:</p>
+
+<ul>
+	<li>Each letter in <code>pattern</code> maps to <strong>exactly</strong> one unique word in <code>s</code>.</li>
+	<li>Each unique word in <code>s</code> maps to <strong>exactly</strong> one letter in <code>pattern</code>.</li>
+	<li>No two letters map to the same word, and no two words map to the same letter.</li>
+</ul>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre>
-<strong>Input:</strong> pattern = &quot;abba&quot;, s = &quot;dog cat cat dog&quot;
-<strong>Output:</strong> true
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">pattern = &quot;abba&quot;, s = &quot;dog cat cat dog&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">true</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p>The bijection can be established as:</p>
+
+<ul>
+	<li><code>&#39;a&#39;</code> maps to <code>&quot;dog&quot;</code>.</li>
+	<li><code>&#39;b&#39;</code> maps to <code>&quot;cat&quot;</code>.</li>
+</ul>
+</div>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre>
-<strong>Input:</strong> pattern = &quot;abba&quot;, s = &quot;dog cat cat fish&quot;
-<strong>Output:</strong> false
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">pattern = &quot;abba&quot;, s = &quot;dog cat cat fish&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">false</span></p>
+</div>
 
 <p><strong class="example">Example 3:</strong></p>
 
-<pre>
-<strong>Input:</strong> pattern = &quot;aaaa&quot;, s = &quot;dog cat cat dog&quot;
-<strong>Output:</strong> false
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">pattern = &quot;aaaa&quot;, s = &quot;dog cat cat dog&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">false</span></p>
+</div>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
@@ -42,9 +73,13 @@
 	<li>All the words in <code>s</code> are separated by a <strong>single space</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Hash Table**
+<!-- solution:start -->
+
+### Solution 1: Hash Table
 
 First, we split the string $s$ into a word array $ws$ with spaces. If the length of $pattern$ and $ws$ is not equal, return `false` directly. Otherwise, we use two hash tables $d_1$ and $d_2$ to record the correspondence between each character and word in $pattern$ and $ws$.
 
@@ -56,7 +91,7 @@ The time complexity is $O(m + n)$ and the space complexity is $O(m + n)$. Here $
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -74,7 +109,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +164,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func wordPattern(pattern string, s string) bool {
@@ -154,7 +189,7 @@ func wordPattern(pattern string, s string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function wordPattern(pattern: string, s: string): boolean {
@@ -180,7 +215,40 @@ function wordPattern(pattern: string, s: string): boolean {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn word_pattern(pattern: String, s: String) -> bool {
+        let cs1: Vec<char> = pattern.chars().collect();
+        let cs2: Vec<&str> = s.split_whitespace().collect();
+        let n = cs1.len();
+        if n != cs2.len() {
+            return false;
+        }
+        let mut map1 = HashMap::new();
+        let mut map2 = HashMap::new();
+        for i in 0..n {
+            let c = cs1[i];
+            let s = cs2[i];
+            if !map1.contains_key(&c) {
+                map1.insert(c, i);
+            }
+            if !map2.contains_key(&s) {
+                map2.insert(s, i);
+            }
+            if map1.get(&c) != map2.get(&s) {
+                return false;
+            }
+        }
+        true
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -208,43 +276,40 @@ public class Solution {
 }
 ```
 
-### **Rust**
+<!-- tabs:end -->
 
-```rust
-use std::collections::HashMap;
+<!-- solution:end -->
 
-impl Solution {
-    pub fn word_pattern(pattern: String, s: String) -> bool {
-        let cs1: Vec<char> = pattern.chars().collect();
-        let cs2: Vec<&str> = s.split_whitespace().collect();
-        let n = cs1.len();
-        if n != cs2.len() {
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function wordPattern(pattern: string, s: string): boolean {
+    const hash: Record<string, string> = Object.create(null);
+    const arr = s.split(/\s+/);
+
+    if (pattern.length !== arr.length || new Set(pattern).size !== new Set(arr).size) {
+        return false;
+    }
+
+    for (let i = 0; i < pattern.length; i++) {
+        hash[pattern[i]] ??= arr[i];
+        if (hash[pattern[i]] !== arr[i]) {
             return false;
         }
-        let mut map1 = HashMap::new();
-        let mut map2 = HashMap::new();
-        for i in 0..n {
-            let c = cs1[i];
-            let s = cs2[i];
-            if !map1.contains_key(&c) {
-                map1.insert(c, i);
-            }
-            if !map2.contains_key(&s) {
-                map2.insert(s, i);
-            }
-            if map1.get(&c) != map2.get(&s) {
-                return false
-            }
-        }
-        true
     }
+
+    return true;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

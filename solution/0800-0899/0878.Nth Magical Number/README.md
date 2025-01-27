@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0878.Nth%20Magical%20Number/README.md
+tags:
+    - 数学
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [878. 第 N 个神奇数字](https://leetcode.cn/problems/nth-magical-number)
 
 [English Version](/solution/0800-0899/0878.Nth%20Magical%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个正整数如果能被 <code>a</code> 或 <code>b</code> 整除，那么它是神奇的。</p>
 
@@ -40,11 +51,13 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学 + 二分查找**
+### 方法一：数学 + 二分查找
 
 根据题目描述，神奇数字是能被 $a$ 或 $b$ 整除的正整数。
 
@@ -72,9 +85,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -85,9 +96,7 @@ class Solution:
         return bisect_left(range(r), x=n, key=lambda x: x // a + x // b - x // c) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 using ll = long long;
@@ -127,15 +136,17 @@ public:
         ll l = 0, r = 1ll * (a + b) * n;
         while (l < r) {
             ll mid = l + r >> 1;
-            if (mid / a + mid / b - mid / c >= n) r = mid;
-            else l = mid + 1;
+            if (mid / a + mid / b - mid / c >= n)
+                r = mid;
+            else
+                l = mid + 1;
         }
         return l % mod;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func nthMagicalNumber(n int, a int, b int) int {
@@ -153,10 +164,8 @@ func gcd(a, b int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

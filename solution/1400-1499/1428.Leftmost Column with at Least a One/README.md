@@ -1,16 +1,27 @@
-# [1428. 至少有一个 1 的最左端列](https://leetcode.cn/problems/leftmost-column-with-at-least-a-one)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1428.Leftmost%20Column%20with%20at%20Least%20a%20One/README.md
+tags:
+    - 数组
+    - 二分查找
+    - 交互
+    - 矩阵
+---
+
+<!-- problem:start -->
+
+# [1428. 至少有一个 1 的最左端列 🔒](https://leetcode.cn/problems/leftmost-column-with-at-least-a-one)
 
 [English Version](/solution/1400-1499/1428.Leftmost%20Column%20with%20at%20Least%20a%20One/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p><em>（这是一个<strong>交互题</strong>）</em></p>
+<p><strong>行排序二进制矩阵</strong>&nbsp;表示所有元素都是 <code>0</code> 或 <code>1</code>，并且矩阵的每一行都以非递减排序。</p>
 
-<p>我们称只包含元素&nbsp;<code>0</code>&nbsp;或&nbsp;<code>1</code>&nbsp;的矩阵为二进制矩阵。矩阵中每个<strong>单独</strong>的行都按非递减顺序排序。</p>
-
-<p>给定一个这样的二进制矩阵，返回至少包含一个&nbsp;<code>1</code>&nbsp;的最左端列的索引（从 0 开始）。如果这样的列不存在，返回&nbsp;<code>-1</code>。</p>
+<p>给定一个 <strong>行排序二进制矩阵&nbsp;</strong><code>binaryMatrix</code>，返回至少包含一个&nbsp;<code>1</code>&nbsp;的 <strong>最左端列&nbsp;</strong>的索引（从 0 开始）。如果这样的列不存在，返回&nbsp;<code>-1</code>。</p>
 
 <p><strong>您不能直接访问该二进制矩阵。</strong>你只可以通过&nbsp;<code>BinaryMatrix</code>&nbsp;接口来访问。</p>
 
@@ -49,15 +60,7 @@
 
 <pre>
 <strong>输入:</strong> mat = [[0,0],[0,0]]
-<strong>输出:</strong> -1</pre>
-
-<p><strong>示例 4:</strong></p>
-
-<p><strong><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1400-1499/1428.Leftmost%20Column%20with%20at%20Least%20a%20One/images/untitled-diagram-6.jpg" style="height:121px; width:161px" /></strong></p>
-
-<pre>
-<strong>输入:</strong> mat = [[0,0,0,1],[0,0,1,1],[0,1,1,1]]
-<strong>输出:</strong> 1
+<strong>输出:</strong> -1
 </pre>
 
 <p>&nbsp;</p>
@@ -72,17 +75,21 @@
 	<li><code>mat[i]</code>&nbsp;已按非递减顺序排序。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-二分查找。
+### 方法一：二分查找
+
+我们先调用 `BinaryMatrix.dimensions()` 得到矩阵的行数 $m$ 和列数 $n$，然后对于每一行，我们使用二分查找来找到最左边的 $1$ 所在的列数 $j$，找出所有行中最小的满足 $j$ 的值即为答案。如果不存在这样的列，则返回 $-1$。
+
+时间复杂度 $O(m \times \log n)$，其中 $m$ 和 $n$ 分别是矩阵的行数和列数。需要遍历每一行，每一行内使用二分查找，时间复杂度为 $O(\log n)$。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # """
@@ -95,28 +102,16 @@
 
 
 class Solution:
-    def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
-        rows, cols = binaryMatrix.dimensions()
-        res = -1
-        for row in range(rows):
-            left, right = 0, cols - 1
-            while left < right:
-                mid = (left + right) >> 1
-                if binaryMatrix.get(row, mid) == 1:
-                    right = mid
-                else:
-                    left = mid + 1
-            if binaryMatrix.get(row, left) == 1:
-                if res == -1:
-                    res = left
-                else:
-                    res = min(res, left)
-        return res
+    def leftMostColumnWithOne(self, binaryMatrix: "BinaryMatrix") -> int:
+        m, n = binaryMatrix.dimensions()
+        ans = n
+        for i in range(m):
+            j = bisect_left(range(n), 1, key=lambda k: binaryMatrix.get(i, k))
+            ans = min(ans, j)
+        return -1 if ans >= n else ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -130,33 +125,27 @@ class Solution:
 
 class Solution {
     public int leftMostColumnWithOne(BinaryMatrix binaryMatrix) {
-        List<Integer> scale = binaryMatrix.dimensions();
-        int rows = scale.get(0), cols = scale.get(1);
-        int res = -1;
-        for (int row = 0; row < rows; ++row) {
-            int left = 0, right = cols - 1;
-            while (left < right) {
-                int mid = (left + right) >> 1;
-                if (binaryMatrix.get(row, mid) == 1) {
-                    right = mid;
+        List<Integer> e = binaryMatrix.dimensions();
+        int m = e.get(0), n = e.get(1);
+        int ans = n;
+        for (int i = 0; i < m; ++i) {
+            int l = 0, r = n;
+            while (l < r) {
+                int mid = (l + r) >> 1;
+                if (binaryMatrix.get(i, mid) == 1) {
+                    r = mid;
                 } else {
-                    left = mid + 1;
+                    l = mid + 1;
                 }
             }
-            if (binaryMatrix.get(row, left) == 1) {
-                if (res == -1) {
-                    res = left;
-                } else {
-                    res = Math.min(res, left);
-                }
-            }
+            ans = Math.min(ans, l);
         }
-        return res;
+        return ans >= n ? -1 : ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -172,33 +161,27 @@ class Solution {
 class Solution {
 public:
     int leftMostColumnWithOne(BinaryMatrix& binaryMatrix) {
-        vector<int> scale = binaryMatrix.dimensions();
-        int rows = scale[0], cols = scale[1];
-        int res = -1;
-        for (int row = 0; row < rows; ++row) {
-            int left = 0, right = cols - 1;
-            while (left < right) {
-                int mid = left + right >> 1;
-                if (binaryMatrix.get(row, mid) == 1) {
-                    right = mid;
+        auto e = binaryMatrix.dimensions();
+        int m = e[0], n = e[1];
+        int ans = n;
+        for (int i = 0; i < m; ++i) {
+            int l = 0, r = n;
+            while (l < r) {
+                int mid = (l + r) >> 1;
+                if (binaryMatrix.get(i, mid)) {
+                    r = mid;
                 } else {
-                    left = mid + 1;
+                    l = mid + 1;
                 }
             }
-            if (binaryMatrix.get(row, left) == 1) {
-                if (res == -1) {
-                    res = left;
-                } else {
-                    res = min(res, left);
-                }
-            }
+            ans = min(ans, l);
         }
-        return res;
+        return ans >= n ? -1 : ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -211,42 +194,138 @@ public:
  */
 
 func leftMostColumnWithOne(binaryMatrix BinaryMatrix) int {
-	scale := binaryMatrix.Dimensions()
-	rows, cols := scale[0], scale[1]
-	res := -1
-	for row := 0; row < rows; row++ {
-		left, right := 0, cols-1
-		for left < right {
-			mid := (left + right) >> 1
-			if binaryMatrix.Get(row, mid) == 1 {
-				right = mid
+	e := binaryMatrix.Dimensions()
+	m, n := e[0], e[1]
+	ans := n
+	for i := 0; i < m; i++ {
+		l, r := 0, n
+		for l < r {
+			mid := (l + r) >> 1
+			if binaryMatrix.Get(i, mid) == 1 {
+				r = mid
 			} else {
-				left = mid + 1
+				l = mid + 1
 			}
 		}
-		if binaryMatrix.Get(row, left) == 1 {
-			if res == -1 {
-				res = left
-			} else {
-				res = min(res, left)
-			}
-		}
+		ans = min(ans, l)
 	}
-	return res
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
+	if ans >= n {
+		return -1
 	}
-	return b
+	return ans
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+/**
+ * // This is the BinaryMatrix's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class BinaryMatrix {
+ *      get(row: number, col: number): number {}
+ *
+ *      dimensions(): number[] {}
+ * }
+ */
+
+function leftMostColumnWithOne(binaryMatrix: BinaryMatrix) {
+    const [m, n] = binaryMatrix.dimensions();
+    let ans = n;
+    for (let i = 0; i < m; ++i) {
+        let [l, r] = [0, n];
+        while (l < r) {
+            const mid = (l + r) >> 1;
+            if (binaryMatrix.get(i, mid) === 1) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        ans = Math.min(ans, l);
+    }
+    return ans >= n ? -1 : ans;
+}
 ```
 
+#### Rust
+
+```rust
+/**
+ * // This is the BinaryMatrix's API interface.
+ * // You should not implement it, or speculate about its implementation
+ *  struct BinaryMatrix;
+ *  impl BinaryMatrix {
+ *     fn get(row: i32, col: i32) -> i32;
+ *     fn dimensions() -> Vec<i32>;
+ * };
+ */
+
+impl Solution {
+    pub fn left_most_column_with_one(binaryMatrix: &BinaryMatrix) -> i32 {
+        let e = binaryMatrix.dimensions();
+        let m = e[0] as usize;
+        let n = e[1] as usize;
+        let mut ans = n;
+
+        for i in 0..m {
+            let (mut l, mut r) = (0, n);
+            while l < r {
+                let mid = (l + r) / 2;
+                if binaryMatrix.get(i as i32, mid as i32) == 1 {
+                    r = mid;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            ans = ans.min(l);
+        }
+
+        if ans >= n {
+            -1
+        } else {
+            ans as i32
+        }
+    }
+}
+```
+
+#### C#
+
+```cs
+/**
+ * // This is BinaryMatrix's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class BinaryMatrix {
+ *     public int Get(int row, int col) {}
+ *     public IList<int> Dimensions() {}
+ * }
+ */
+
+class Solution {
+    public int LeftMostColumnWithOne(BinaryMatrix binaryMatrix) {
+        var e = binaryMatrix.Dimensions();
+        int m = e[0], n = e[1];
+        int ans = n;
+        for (int i = 0; i < m; ++i) {
+            int l = 0, r = n;
+            while (l < r) {
+                int mid = (l + r) >> 1;
+                if (binaryMatrix.Get(i, mid) == 1) {
+                    r = mid;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            ans = Math.Min(ans, l);
+        }
+        return ans >= n ? -1 : ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

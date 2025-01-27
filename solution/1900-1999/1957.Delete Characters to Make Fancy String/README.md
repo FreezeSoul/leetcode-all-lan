@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1957.Delete%20Characters%20to%20Make%20Fancy%20String/README.md
+rating: 1357
+source: 第 58 场双周赛 Q1
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1957. 删除字符使字符串变好](https://leetcode.cn/problems/delete-characters-to-make-fancy-string)
 
 [English Version](/solution/1900-1999/1957.Delete%20Characters%20to%20Make%20Fancy%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个字符串如果没有 <strong>三个连续</strong>&nbsp;相同字符，那么它就是一个 <strong>好字符串</strong>&nbsp;。</p>
 
@@ -52,30 +64,35 @@
 	<li><code>s</code>&nbsp;只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：模拟
+
+我们可以遍历字符串 $s$，并使用一个数组 $\textit{ans}$ 记录当前的答案。对于每一个字符 $c$，如果 $\textit{ans}$ 的长度小于 $2$ 或者 $\textit{ans}$ 的最后两个字符不等于 $c$，我们就将 $c$ 添加到 $\textit{ans}$ 中。
+
+最后，我们将 $\textit{ans}$ 中的字符连接起来，就得到了答案。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串 $s$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def makeFancyString(self, s: str) -> str:
         ans = []
         for c in s:
-            if len(ans) > 1 and ans[-1] == ans[-2] == c:
-                continue
-            ans.append(c)
-        return ''.join(ans)
+            if len(ans) < 2 or ans[-1] != c or ans[-2] != c:
+                ans.append(c)
+        return "".join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -83,17 +100,16 @@ class Solution {
         StringBuilder ans = new StringBuilder();
         for (char c : s.toCharArray()) {
             int n = ans.length();
-            if (n > 1 && ans.charAt(n - 1) == c && ans.charAt(n - 2) == c) {
-                continue;
+            if (n < 2 || c != ans.charAt(n - 1) || c != ans.charAt(n - 2)) {
+                ans.append(c);
             }
-            ans.append(c);
         }
         return ans.toString();
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -102,31 +118,58 @@ public:
         string ans = "";
         for (char& c : s) {
             int n = ans.size();
-            if (n > 1 && ans[n - 1] == c && ans[n - 2] == c) continue;
-            ans.push_back(c);
+            if (n < 2 || ans[n - 1] != c || ans[n - 2] != c) {
+                ans += c;
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeFancyString(s string) string {
 	ans := []rune{}
 	for _, c := range s {
-		n := len(ans)
-		if n > 1 && ans[n-1] == c && ans[n-2] == c {
-			continue
+		if n := len(ans); n < 2 || c != ans[n-1] || c != ans[n-2] {
+			ans = append(ans, c)
 		}
-		ans = append(ans, c)
 	}
 	return string(ans)
 }
 ```
 
-### **PHP**
+#### TypeScript
+
+```ts
+function makeFancyString(s: string): string {
+    let [n, ans] = [s.length, ''];
+    for (let i = 0; i < n; i++) {
+        if (s[i] !== s[i - 1] || s[i] !== s[i - 2]) {
+            ans += s[i];
+        }
+    }
+    return ans;
+}
+```
+
+#### JavaScript
+
+```js
+function makeFancyString(s) {
+    let [n, ans] = [s.length, ''];
+    for (let i = 0; i < n; i++) {
+        if (s[i] !== s[i - 1] || s[i] !== s[i - 2]) {
+            ans += s[i];
+        }
+    }
+    return ans;
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -135,20 +178,23 @@ class Solution {
      * @return String
      */
     function makeFancyString($s) {
-        $rs = "";
-        for ($i = 0; $i < strlen($s); $i++) {
-            if ($s[$i] == $s[$i + 1] && $s[$i] == $s[$i + 2]) continue;
-            else $rs .= $s[$i];
+        $ans = [];
+        $length = strlen($s);
+
+        for ($i = 0; $i < $length; $i++) {
+            $n = count($ans);
+            if ($n < 2 || $s[$i] !== $ans[$n - 1] || $s[$i] !== $ans[$n - 2]) {
+                $ans[] = $s[$i];
+            }
         }
-        return $rs;
+
+        return implode('', $ans);
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

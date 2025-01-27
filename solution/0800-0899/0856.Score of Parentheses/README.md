@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0856.Score%20of%20Parentheses/README.md
+tags:
+    - 栈
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [856. 括号的分数](https://leetcode.cn/problems/score-of-parentheses)
 
 [English Version](/solution/0800-0899/0856.Score%20of%20Parentheses/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个平衡括号字符串&nbsp;<code>S</code>，按下述规则计算该字符串的分数：</p>
 
@@ -49,11 +60,13 @@
 	<li><code>2 &lt;= S.length &lt;= 50</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 我们通过观察发现，`()` 是唯一贡献分数的结构，外括号只是为该结构添加了一些乘数。所以我们只需要关心 `()`。
 
@@ -73,18 +86,16 @@
 
 括号相关类型题：
 
--   [678. 有效的括号字符串](https://github.com/doocs/leetcode/tree/main/solution/0600-0699/0678.Valid%20Parenthesis%20String/README.md)
--   [1021. 删除最外层的括号](https://github.com/doocs/leetcode/tree/main/solution/1000-1099/1021.Remove%20Outermost%20Parentheses/README.md)
--   [1096. 花括号展开 II](https://github.com/doocs/leetcode/tree/main/solution/1000-1099/1096.Brace%20Expansion%20II/README.md)
--   [1249. 移除无效的括号](https://github.com/doocs/leetcode/tree/main/solution/1200-1299/1249.Minimum%20Remove%20to%20Make%20Valid%20Parentheses/README.md)
--   [1541. 平衡括号字符串的最少插入次数](https://github.com/doocs/leetcode/tree/main/solution/1500-1599/1541.Minimum%20Insertions%20to%20Balance%20a%20Parentheses%20String/README.md)
--   [2116. 判断一个括号字符串是否有效](https://github.com/doocs/leetcode/tree/main/solution/2100-2199/2116.Check%20if%20a%20Parentheses%20String%20Can%20Be%20Valid/README.md)
+-   [678. 有效的括号字符串](https://github.com/doocs/leetcode/blob/main/solution/0600-0699/0678.Valid%20Parenthesis%20String/README.md)
+-   [1021. 删除最外层的括号](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1021.Remove%20Outermost%20Parentheses/README.md)
+-   [1096. 花括号展开 II](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1096.Brace%20Expansion%20II/README.md)
+-   [1249. 移除无效的括号](https://github.com/doocs/leetcode/blob/main/solution/1200-1299/1249.Minimum%20Remove%20to%20Make%20Valid%20Parentheses/README.md)
+-   [1541. 平衡括号字符串的最少插入次数](https://github.com/doocs/leetcode/blob/main/solution/1500-1599/1541.Minimum%20Insertions%20to%20Balance%20a%20Parentheses%20String/README.md)
+-   [2116. 判断一个括号字符串是否有效](https://github.com/doocs/leetcode/blob/main/solution/2100-2199/2116.Check%20if%20a%20Parentheses%20String%20Can%20Be%20Valid/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -100,9 +111,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -123,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func scoreOfParentheses(s string) int {
@@ -164,10 +173,8 @@ func scoreOfParentheses(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

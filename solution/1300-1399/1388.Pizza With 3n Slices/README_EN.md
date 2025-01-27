@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1388.Pizza%20With%203n%20Slices/README_EN.md
+rating: 2409
+source: Biweekly Contest 22 Q4
+tags:
+    - Greedy
+    - Array
+    - Dynamic Programming
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1388. Pizza With 3n Slices](https://leetcode.com/problems/pizza-with-3n-slices)
 
 [中文文档](/solution/1300-1399/1388.Pizza%20With%203n%20Slices/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a pizza with <code>3n</code> slices of varying size, you and your friends will take slices of pizza as follows:</p>
 
@@ -41,11 +58,44 @@
 	<li><code>1 &lt;= slices[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We can transform this problem into: In a circular array of length $3n$, select $n$ non-adjacent numbers so that the sum of these $n$ numbers is maximized.
+
+The proof is as follows:
+
+-   When $n = 1$, we can choose any number in the array.
+-   When $n > 1$, there must exist a number such that there are two consecutive numbers on one side of it that have not been selected, and at least one number on the other side has not been selected. Therefore, we can remove this number and the numbers on both sides of it from the array, and then the remaining $3(n - 1)$ numbers form a new circular array. The problem scale is reduced to selecting $n - 1$ non-adjacent numbers in a circular array of length $3(n - 1)$, so that the sum of these $n - 1$ numbers is maximized.
+
+Therefore, the problem we need to solve can be transformed into: In a circular array of length $3n$, select $n$ non-adjacent numbers so that the sum of these $n$ numbers is maximized.
+
+In a circular array, if the first number is selected, the last number cannot be selected. If the last number is selected, the first number cannot be selected. Therefore, we can split the circular array into two arrays, one is without the first number, and the other is without the last number. Then solve the maximum value of these two arrays separately, and finally take the larger of the two maximum values.
+
+We use a function $g(nums)$, which represents the maximum sum of selecting $n$ non-adjacent numbers in the array $nums$. Then our goal is to find the larger value between $g(slices)$ and $g(slices[1:])$.
+
+The solution method of function $g(nums)$ is as follows:
+
+We denote the length of array $nums$ as $m$, and define $f[i][j]$ as the maximum sum of selecting $j$ non-adjacent numbers in the first $i$ numbers of array $nums$.
+
+Consider $f[i][j]$, if we do not select the $i$-th number, then $f[i][j] = f[i - 1][j]$. If we select the $i$-th number, then $f[i][j] = f[i - 2][j - 1] + nums[i - 1]$. Therefore, we can get the state transition equation:
+
+$$
+f[i][j] = \max(f[i - 1][j], f[i - 2][j - 1] + nums[i - 1])
+$$
+
+Finally, return $f[m][n]$.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Where $n$ is the length of the array $slices$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,8 +105,9 @@ class Solution:
             f = [[0] * (n + 1) for _ in range(m + 1)]
             for i in range(1, m + 1):
                 for j in range(1, n + 1):
-                    f[i][j] = max(f[i - 1][j], (f[i - 2][j - 1]
-                                  if i >= 2 else 0) + nums[i - 1])
+                    f[i][j] = max(
+                        f[i - 1][j], (f[i - 2][j - 1] if i >= 2 else 0) + nums[i - 1]
+                    )
             return f[m][n]
 
         n = len(slices) // 3
@@ -64,7 +115,7 @@ class Solution:
         return max(a, b)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +144,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSizeSlices(slices []int) int {
@@ -144,16 +195,9 @@ func maxSizeSlices(slices []int) int {
 	a, b := g(slices[:len(slices)-1]), g(slices[1:])
 	return max(a, b)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxSizeSlices(slices: number[]): number {
@@ -165,10 +209,7 @@ function maxSizeSlices(slices: number[]): number {
             .map(() => Array(n + 1).fill(0));
         for (let i = 1; i <= m; ++i) {
             for (let j = 1; j <= n; ++j) {
-                f[i][j] = Math.max(
-                    f[i - 1][j],
-                    (i > 1 ? f[i - 2][j - 1] : 0) + nums[i - 1],
-                );
+                f[i][j] = Math.max(f[i - 1][j], (i > 1 ? f[i - 2][j - 1] : 0) + nums[i - 1]);
             }
         }
         return f[m][n];
@@ -179,10 +220,8 @@ function maxSizeSlices(slices: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

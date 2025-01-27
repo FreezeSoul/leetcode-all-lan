@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1408.String%20Matching%20in%20an%20Array/README.md
+rating: 1223
+source: 第 184 场周赛 Q1
+tags:
+    - 数组
+    - 字符串
+    - 字符串匹配
+---
+
+<!-- problem:start -->
+
 # [1408. 数组中的字符串匹配](https://leetcode.cn/problems/string-matching-in-an-array)
 
 [English Version](/solution/1400-1499/1408.String%20Matching%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>words</code> ，数组中的每个字符串都可以看作是一个单词。请你按 <strong>任意</strong> 顺序返回 <code>words</code> 中是其他单词的子字符串的所有单词。</p>
 
@@ -47,33 +61,33 @@
 	<li>题目数据 <strong>保证</strong> 每个 <code>words[i]</code> 都是独一无二的。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：暴力枚举
+
+我们直接枚举所有的字符串 $words[i]$，判断其是否为其他字符串的子串，如果是，将其加入答案。
+
+时间复杂度 $O(n^3)$，空间复杂度 $O(n)$。其中 $n$ 为字符串数组的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def stringMatching(self, words: List[str]) -> List[str]:
         ans = []
-        for i, w1 in enumerate(words):
-            for j, w2 in enumerate(words):
-                if i != j and w1 in w2:
-                    ans.append(w1)
-                    break
+        for i, s in enumerate(words):
+            if any(i != j and s in t for j, t in enumerate(words)):
+                ans.append(s)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func stringMatching(words []string) []string {
@@ -131,46 +145,46 @@ func stringMatching(words []string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function stringMatching(words: string[]): string[] {
-    const res: string[] = [];
-    for (const target of words) {
-        for (const word of words) {
-            if (word !== target && word.includes(target)) {
-                res.push(target);
+    const ans: string[] = [];
+    const n = words.length;
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < n; ++j) {
+            if (words[j].includes(words[i]) && i !== j) {
+                ans.push(words[i]);
                 break;
             }
         }
     }
-    return res;
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn string_matching(words: Vec<String>) -> Vec<String> {
-        let mut res = Vec::new();
-        for target in words.iter() {
-            for word in words.iter() {
-                if word != target && word.contains(target) {
-                    res.push(target.clone());
+        let mut ans = Vec::new();
+        let n = words.len();
+        for i in 0..n {
+            for j in 0..n {
+                if i != j && words[j].contains(&words[i]) {
+                    ans.push(words[i].clone());
                     break;
                 }
             }
         }
-        res
+        ans
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

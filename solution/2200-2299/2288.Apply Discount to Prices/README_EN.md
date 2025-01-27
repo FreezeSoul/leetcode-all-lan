@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2288.Apply%20Discount%20to%20Prices/README_EN.md
+rating: 1577
+source: Weekly Contest 295 Q2
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2288. Apply Discount to Prices](https://leetcode.com/problems/apply-discount-to-prices)
 
 [中文文档](/solution/2200-2299/2288.Apply%20Discount%20to%20Prices/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>sentence</strong> is a string of single-space separated words where each word can contain digits, lowercase letters, and the dollar sign <code>&#39;$&#39;</code>. A word represents a <strong>price</strong> if it is a sequence of digits preceded by a dollar sign.</p>
 
@@ -52,11 +66,21 @@ Each of them is replaced by &quot;$0.00&quot;.
 	<li><code>0 &lt;= discount &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can split the sentence into an array of words by spaces, then iterate through the array of words. For each word, if it represents a price, we update it to the price after applying the discount. Finally, we concatenate the updated array of words into a space-separated string.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string `sentence`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +93,7 @@ class Solution:
         return ' '.join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func discountPrices(sentence string, discount int) string {
@@ -151,26 +175,24 @@ func discountPrices(sentence string, discount int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function discountPrices(sentence: string, discount: number): string {
     const sell = (100 - discount) / 100;
-    let reg = new RegExp(/^(\$)(([1-9]\d*\.?\d*)|(0\.\d*))$/g);
-    let arr = sentence.split(' ').map(d => {
+    const reg = new RegExp(/^(\$)(([1-9]\d*\.?\d*)|(0\.\d*))$/g);
+    const words = sentence.split(' ').map(d => {
         if (!reg.test(d)) return d;
         return d.replace(reg, (s, $1, $2) => {
             return `$${(sell * $2).toFixed(2)}`;
         });
     });
-    return arr.join(' ');
+    return words.join(' ');
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

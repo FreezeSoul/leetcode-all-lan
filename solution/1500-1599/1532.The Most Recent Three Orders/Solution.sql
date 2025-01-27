@@ -1,27 +1,17 @@
 # Write your MySQL query statement below
-select
-    name as customer_name,
-    o.customer_id,
-    order_id,
-    order_date
-from
-    Customers c
-    join (
-        select
-            customer_id,
-            order_date,
-            order_id,
-            rank() over(
-                partition by customer_id
-                order by
-                    order_date desc
-            ) rk
-        from
-            orders
-    ) o on c.customer_id = o.customer_id
-where
-    rk <= 3
-order by
-    name,
-    o.customer_id,
-    order_date desc;
+WITH
+    T AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY customer_id
+                ORDER BY order_date DESC
+            ) AS rk
+        FROM
+            Orders
+            JOIN Customers USING (customer_id)
+    )
+SELECT name AS customer_name, customer_id, order_id, order_date
+FROM T
+WHERE rk <= 3
+ORDER BY 1, 2, 4 DESC;

@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1027.Longest%20Arithmetic%20Subsequence/README_EN.md
+rating: 1758
+source: Weekly Contest 132 Q3
+tags:
+    - Array
+    - Hash Table
+    - Binary Search
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1027. Longest Arithmetic Subsequence](https://leetcode.com/problems/longest-arithmetic-subsequence)
 
 [中文文档](/solution/1000-1099/1027.Longest%20Arithmetic%20Subsequence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array <code>nums</code> of integers, return <em>the length of the longest arithmetic subsequence in</em> <code>nums</code>.</p>
 
@@ -46,11 +63,29 @@
 	<li><code>0 &lt;= nums[i] &lt;= 500</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i][j]$ as the maximum length of the arithmetic sequence ending with $nums[i]$ and having a common difference of $j$. Initially, $f[i][j]=1$, that is, each element itself is an arithmetic sequence of length $1$.
+
+> Since the common difference may be negative, and the maximum difference is $500$, we can uniformly add $500$ to the common difference, so the range of the common difference becomes $[0, 1000]$.
+
+Considering $f[i]$, we can enumerate the previous element $nums[k]$ of $nums[i]$, then the common difference $j=nums[i]-nums[k]+500$, at this time $f[i][j]=\max(f[i][j], f[k][j]+1)$, then we update the answer $ans=\max(ans, f[i][j])$.
+
+Finally, return the answer.
+
+> If initially $f[i][j]=0$, then we need to add $1$ to the answer when returning the answer.
+
+The time complexity is $O(n \times (d + n))$, and the space complexity is $O(n \times d)$. Where $n$ and $d$ are the length of the array $nums$ and the difference between the maximum and minimum values in the array $nums$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,7 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestArithSeqLength(nums []int) int {
@@ -127,24 +162,15 @@ func longestArithSeqLength(nums []int) int {
 	}
 	return ans + 1
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestArithSeqLength(nums: number[]): number {
     const n = nums.length;
     let ans = 0;
-    const f: number[][] = Array.from({ length: n }, () =>
-        new Array(1001).fill(0),
-    );
+    const f: number[][] = Array.from({ length: n }, () => new Array(1001).fill(0));
     for (let i = 1; i < n; ++i) {
         for (let k = 0; k < i; ++k) {
             const j = nums[i] - nums[k] + 500;
@@ -156,10 +182,8 @@ function longestArithSeqLength(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2217.Find%20Palindrome%20With%20Fixed%20Length/README.md
+rating: 1822
+source: 第 286 场周赛 Q3
+tags:
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2217. 找到指定长度的回文数](https://leetcode.cn/problems/find-palindrome-with-fixed-length)
 
 [English Version](/solution/2200-2299/2217.Find%20Palindrome%20With%20Fixed%20Length/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>queries</code>&nbsp;和一个 <strong>正</strong>&nbsp;整数&nbsp;<code>intLength</code>&nbsp;，请你返回一个数组&nbsp;<code>answer</code>&nbsp;，其中&nbsp;<code>answer[i]</code> 是长度为&nbsp;<code>intLength</code>&nbsp;的&nbsp;<strong>正回文数</strong> 中第<em>&nbsp;</em><code>queries[i]</code>&nbsp;小的数字，如果不存在这样的回文数，则为 <code>-1</code>&nbsp;。</p>
 
@@ -43,15 +56,17 @@
 	<li><code>1 &lt;= intLength&nbsp;&lt;= 15</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,9 +85,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func kthPalindrome(queries []int, intLength int) []int64 {
@@ -150,7 +163,7 @@ func kthPalindrome(queries []int, intLength int) []int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function kthPalindrome(queries: number[], intLength: number): number[] {
@@ -174,13 +187,13 @@ function kthPalindrome(queries: number[], intLength: number): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn kth_palindrome(queries: Vec<i32>, int_length: i32) -> Vec<i64> {
-        let is_odd = int_length & 1 == 1;
-        let best_num = i32::pow(10, (int_length / 2 + if is_odd { 0 } else { -1 }) as u32);
+        let is_odd = (int_length & 1) == 1;
+        let best_num = i32::pow(10, (int_length / 2 + (if is_odd { 0 } else { -1 })) as u32);
         let max = best_num * 9;
         queries
             .iter()
@@ -206,10 +219,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

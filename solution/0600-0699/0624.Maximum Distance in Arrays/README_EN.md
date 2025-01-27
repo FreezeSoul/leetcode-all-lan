@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0624.Maximum%20Distance%20in%20Arrays/README_EN.md
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
 # [624. Maximum Distance in Arrays](https://leetcode.com/problems/maximum-distance-in-arrays)
 
 [中文文档](/solution/0600-0699/0624.Maximum%20Distance%20in%20Arrays/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given <code>m</code> <code>arrays</code>, where each array is sorted in <strong>ascending order</strong>.</p>
 
@@ -38,11 +51,17 @@
 	<li>There will be at most <code>10<sup>5</sup></code> integers in all the arrays.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +76,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +97,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +117,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxDistance(arrays [][]int) (ans int) {
@@ -118,26 +137,94 @@ func abs(x int) int {
 	}
 	return x
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
+#### TypeScript
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+```ts
+function maxDistance(arrays: number[][]): number {
+    const n = arrays.length;
+    let res = 0;
+    let [min, max] = [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY];
+
+    for (let i = 0; i < n; i++) {
+        const a = arrays[i];
+        res = Math.max(Math.max(a.at(-1)! - min, max - a[0]), res);
+        min = Math.min(min, a[0]);
+        max = Math.max(max, a.at(-1)!);
+    }
+
+    return res;
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {number[][]} arrays
+ * @return {number}
+ */
+var maxDistance = function (arrays) {
+    const n = arrays.length;
+    let res = 0;
+    let [min, max] = [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY];
 
+    for (let i = 0; i < n; i++) {
+        const a = arrays[i];
+        res = Math.max(Math.max(a.at(-1) - min, max - a[0]), res);
+        min = Math.min(min, a[0]);
+        max = Math.max(max, a.at(-1));
+    }
+
+    return res;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: One-line solution
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+const maxDistance = (arrays: number[][]): number =>
+    arrays.reduce(
+        ([res, min, max], a) => [
+            Math.max(Math.max(a.at(-1)! - min, max - a[0]), res),
+            Math.min(min, a[0]),
+            Math.max(max, a.at(-1)!),
+        ],
+        [0, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
+    )[0];
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[][]} arrays
+ * @return {number}
+ */
+var maxDistance = arrays =>
+    arrays.reduce(
+        ([res, min, max], a) => [
+            Math.max(Math.max(a.at(-1) - min, max - a[0]), res),
+            Math.min(min, a[0]),
+            Math.max(max, a.at(-1)),
+        ],
+        [0, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
+    )[0];
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

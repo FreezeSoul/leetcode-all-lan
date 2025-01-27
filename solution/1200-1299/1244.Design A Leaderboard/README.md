@@ -1,10 +1,24 @@
-# [1244. 力扣排行榜](https://leetcode.cn/problems/design-a-leaderboard)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1244.Design%20A%20Leaderboard/README.md
+rating: 1354
+source: 第 12 场双周赛 Q1
+tags:
+    - 设计
+    - 哈希表
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [1244. 力扣排行榜 🔒](https://leetcode.cn/problems/design-a-leaderboard)
 
 [English Version](/solution/1200-1299/1244.Design%20A%20Leaderboard/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>新一轮的「力扣杯」编程大赛即将启动，为了动态显示参赛者的得分数据，需要设计一个排行榜 Leaderboard。</p>
 
@@ -12,6 +26,7 @@
 
 <ol>
 	<li><code>addScore(playerId, score)</code>：
+
     <ul>
     	<li>假如参赛者已经在排行榜上，就给他的当前得分增加 <code>score</code> 点分值并更新排行。</li>
     	<li>假如该参赛者不在排行榜上，就把他添加到榜单上，并且将分数设置为 <code>score</code>。</li>
@@ -19,6 +34,7 @@
     </li>
     <li><code>top(K)</code>：返回前 <code>K</code> 名参赛者的 <strong>得分总和</strong>。</li>
     <li><code>reset(playerId)</code>：将指定参赛者的成绩清零（换句话说，将其从排行榜中删除）。题目保证在调用此函数前，该参赛者已有成绩，并且在榜单上。</li>
+
 </ol>
 
 <p>请注意，在初始状态下，排行榜是空的。</p>
@@ -59,11 +75,13 @@ leaderboard.top(3);           // returns 141 = 51 + 51 + 39;
 	<li>最多进行 <code>1000</code> 次函数调用</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 有序列表**
+### 方法一：哈希表 + 有序列表
 
 我们用哈希表 $d$ 记录每个参赛者的分数，用有序列表 $rank$ 记录所有参赛者的分数。
 
@@ -77,14 +95,9 @@ leaderboard.top(3);           // returns 141 = 51 + 51 + 39;
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class Leaderboard:
     def __init__(self):
         self.d = defaultdict(int)
@@ -113,9 +126,7 @@ class Leaderboard:
 # obj.reset(playerId)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Leaderboard {
@@ -165,13 +176,12 @@ class Leaderboard {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Leaderboard {
 public:
     Leaderboard() {
-
     }
 
     void addScore(int playerId, int score) {
@@ -214,10 +224,66 @@ private:
  */
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::BTreeMap;
 
+#[allow(dead_code)]
+struct Leaderboard {
+    /// This also keeps track of the top K players since it's implicitly sorted
+    record_map: BTreeMap<i32, i32>,
+}
+
+impl Leaderboard {
+    #[allow(dead_code)]
+    fn new() -> Self {
+        Self {
+            record_map: BTreeMap::new(),
+        }
+    }
+
+    #[allow(dead_code)]
+    fn add_score(&mut self, player_id: i32, score: i32) {
+        if self.record_map.contains_key(&player_id) {
+            // The player exists, just add the score
+            self.record_map
+                .insert(player_id, self.record_map.get(&player_id).unwrap() + score);
+        } else {
+            // Add the new player to the map
+            self.record_map.insert(player_id, score);
+        }
+    }
+
+    #[allow(dead_code)]
+    fn top(&self, k: i32) -> i32 {
+        let mut cur_vec: Vec<(i32, i32)> = self.record_map.iter().map(|(k, v)| (*k, *v)).collect();
+        cur_vec.sort_by(|lhs, rhs| rhs.1.cmp(&lhs.1));
+        // Iterate reversely for K
+        let mut sum = 0;
+        let mut i = 0;
+        for (_, value) in &cur_vec {
+            if i == k {
+                break;
+            }
+            sum += value;
+            i += 1;
+        }
+
+        sum
+    }
+
+    #[allow(dead_code)]
+    fn reset(&mut self, player_id: i32) {
+        // The player is ensured to exist in the board
+        // Just set the score to 0
+        self.record_map.insert(player_id, 0);
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

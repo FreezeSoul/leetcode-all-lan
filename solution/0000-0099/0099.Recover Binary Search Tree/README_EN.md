@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0099.Recover%20Binary%20Search%20Tree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Search Tree
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [99. Recover Binary Search Tree](https://leetcode.com/problems/recover-binary-search-tree)
 
 [中文文档](/solution/0000-0099/0099.Recover%20Binary%20Search%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the <code>root</code> of a binary search tree (BST), where the values of <strong>exactly</strong> two nodes of the tree were swapped by mistake. <em>Recover the tree without changing its structure</em>.</p>
 
@@ -34,11 +49,21 @@
 <p>&nbsp;</p>
 <strong>Follow up:</strong> A solution using <code>O(n)</code> space is pretty straight-forward. Could you devise a constant <code>O(1)</code> space solution?
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: In-order Traversal
+
+In-order traversal of a binary search tree results in an increasing sequence. If two nodes' values are mistakenly swapped, there will definitely be two reverse pairs in the sequence obtained from the in-order traversal. We use `first` and `second` to record the smaller and larger values of these two reverse pairs, respectively. Finally, swapping the values of these two nodes will correct the mistake.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes in the binary search tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -52,6 +77,7 @@ class Solution:
         """
         Do not return anything, modify root in-place instead.
         """
+
         def dfs(root):
             if root is None:
                 return
@@ -69,7 +95,7 @@ class Solution:
         first.val, second.val = second.val, first.val
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -116,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -136,7 +162,7 @@ public:
         TreeNode* prev = nullptr;
         TreeNode* first = nullptr;
         TreeNode* second = nullptr;
-        function<void(TreeNode* root)> dfs = [&](TreeNode* root) {
+        function<void(TreeNode * root)> dfs = [&](TreeNode* root) {
             if (!root) return;
             dfs(root->left);
             if (prev && prev->val > root->val) {
@@ -152,7 +178,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -185,7 +211,47 @@ func recoverTree(root *TreeNode) {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {void} Do not return anything, modify root in-place instead.
+ */
+var recoverTree = function (root) {
+    let prev = null;
+    let first = null;
+    let second = null;
+    function dfs(root) {
+        if (!root) {
+            return;
+        }
+        dfs(root.left);
+        if (prev && prev.val > root.val) {
+            if (!first) {
+                first = prev;
+            }
+            second = root;
+        }
+        prev = root;
+        dfs(root.right);
+    }
+    dfs(root);
+    const t = first.val;
+    first.val = second.val;
+    second.val = t;
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -228,50 +294,8 @@ public class Solution {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {void} Do not return anything, modify root in-place instead.
- */
-var recoverTree = function (root) {
-    let prev = null;
-    let first = null;
-    let second = null;
-    function dfs(root) {
-        if (!root) {
-            return;
-        }
-        dfs(root.left);
-        if (prev && prev.val > root.val) {
-            if (!first) {
-                first = prev;
-            }
-            second = root;
-        }
-        prev = root;
-        dfs(root.right);
-    }
-    dfs(root);
-    const t = first.val;
-    first.val = second.val;
-    second.val = t;
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

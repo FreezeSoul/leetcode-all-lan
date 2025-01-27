@@ -5,7 +5,7 @@ impl Solution {
         cs.iter()
             .enumerate()
             .map(|(i, c)| {
-                if (i + 1) % 3 == 0 && i < n - 2 || n % 3 == 1 && i == n - 3 {
+                if ((i + 1) % 3 == 0 && i < n - 2) || (n % 3 == 1 && i == n - 3) {
                     return c.to_string() + &"-";
                 }
                 c.to_string()

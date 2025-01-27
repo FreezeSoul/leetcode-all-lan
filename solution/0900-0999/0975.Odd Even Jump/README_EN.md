@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0975.Odd%20Even%20Jump/README_EN.md
+tags:
+    - Stack
+    - Array
+    - Dynamic Programming
+    - Ordered Set
+    - Monotonic Stack
+---
+
+<!-- problem:start -->
+
 # [975. Odd Even Jump](https://leetcode.com/problems/odd-even-jump)
 
 [中文文档](/solution/0900-0999/0975.Odd%20Even%20Jump/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>arr</code>. From some starting index, you can make a series of jumps. The (1<sup>st</sup>, 3<sup>rd</sup>, 5<sup>th</sup>, ...) jumps in the series are called <strong>odd-numbered jumps</strong>, and the (2<sup>nd</sup>, 4<sup>th</sup>, 6<sup>th</sup>, ...) jumps in the series are called <strong>even-numbered jumps</strong>. Note that the <strong>jumps</strong> are numbered, not the indices.</p>
 
@@ -69,16 +85,19 @@ number of jumps.
 	<li><code>0 &lt;= arr[i] &lt; 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedDict
-
-
 class Solution:
     def oddEvenJumps(self, arr: List[int]) -> int:
         @cache
@@ -101,7 +120,7 @@ class Solution:
         return sum(dfs(i, 1) for i in range(n))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -143,7 +162,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -182,7 +201,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func oddEvenJumps(arr []int) (ans int) {
@@ -226,10 +245,8 @@ func oddEvenJumps(arr []int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

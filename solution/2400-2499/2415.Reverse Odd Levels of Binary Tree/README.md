@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2415.Reverse%20Odd%20Levels%20of%20Binary%20Tree/README.md
+rating: 1431
+source: 第 311 场周赛 Q3
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [2415. 反转二叉树的奇数层](https://leetcode.cn/problems/reverse-odd-levels-of-binary-tree)
 
 [English Version](/solution/2400-2499/2415.Reverse%20Odd%20Levels%20of%20Binary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵 <strong>完美</strong> 二叉树的根节点 <code>root</code> ，请你反转这棵树中每个 <strong>奇数</strong> 层的节点值。</p>
 
@@ -59,21 +74,21 @@
 	<li><code>root</code> 是一棵 <strong>完美</strong> 二叉树</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
-BFS 遍历二叉树，遍历到奇数层时，反转该层节点的值。
+我们可以使用广度优先搜索的方法，用一个队列 $q$ 来存储每一层的节点，用一个变量 $i$ 记录当前层数。若 $i$ 为奇数，则将当前层的节点值反转。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -87,27 +102,21 @@ class Solution:
         q = deque([root])
         i = 0
         while q:
-            t = []
+            if i & 1:
+                l, r = 0, len(q) - 1
+                while l < r:
+                    q[l].val, q[r].val = q[r].val, q[l].val
+                    l, r = l + 1, r - 1
             for _ in range(len(q)):
                 node = q.popleft()
-                if i & 1:
-                    t.append(node)
                 if node.left:
                     q.append(node.left)
-                if node.right:
                     q.append(node.right)
-            if t:
-                j, k = 0, len(t) - 1
-                while j < k:
-                    t[j].val, t[k].val = t[k].val, t[j].val
-                    j, k = j + 1, k - 1
             i += 1
         return root
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -129,37 +138,30 @@ class Solution {
     public TreeNode reverseOddLevels(TreeNode root) {
         Deque<TreeNode> q = new ArrayDeque<>();
         q.offer(root);
-        int i = 0;
-        while (!q.isEmpty()) {
+        for (int i = 0; !q.isEmpty(); ++i) {
             List<TreeNode> t = new ArrayList<>();
-            for (int n = q.size(); n > 0; --n) {
-                TreeNode node = q.pollFirst();
+            for (int k = q.size(); k > 0; --k) {
+                var node = q.poll();
                 if (i % 2 == 1) {
                     t.add(node);
                 }
                 if (node.left != null) {
                     q.offer(node.left);
-                }
-                if (node.right != null) {
                     q.offer(node.right);
                 }
             }
-            if (!t.isEmpty()) {
-                int j = 0, k = t.size() - 1;
-                for (; j < k; ++j, --k) {
-                    int v = t.get(j).val;
-                    t.get(j).val = t.get(k).val;
-                    t.get(k).val = v;
-                }
+            for (int l = 0, r = t.size() - 1; l < r; ++l, --r) {
+                var x = t.get(l).val;
+                t.get(l).val = t.get(r).val;
+                t.get(r).val = x;
             }
-            ++i;
         }
         return root;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -177,11 +179,9 @@ class Solution {
 public:
     TreeNode* reverseOddLevels(TreeNode* root) {
         queue<TreeNode*> q{{root}};
-        int i = 0;
-        vector<TreeNode*> t;
-        while (!q.empty()) {
-            t.clear();
-            for (int n = q.size(); n; --n) {
+        for (int i = 0; q.size(); ++i) {
+            vector<TreeNode*> t;
+            for (int k = q.size(); k; --k) {
                 TreeNode* node = q.front();
                 q.pop();
                 if (i & 1) {
@@ -189,27 +189,19 @@ public:
                 }
                 if (node->left) {
                     q.push(node->left);
-                }
-                if (node->right) {
                     q.push(node->right);
                 }
             }
-            if (t.size()) {
-                int j = 0, k = t.size() - 1;
-                for (; j < k; ++j, --k) {
-                    int v = t[j]->val;
-                    t[j]->val = t[k]->val;
-                    t[k]->val = v;
-                }
+            for (int l = 0, r = t.size() - 1; l < r; ++l, --r) {
+                swap(t[l]->val, t[r]->val);
             }
-            ++i;
         }
         return root;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -222,10 +214,9 @@ public:
  */
 func reverseOddLevels(root *TreeNode) *TreeNode {
 	q := []*TreeNode{root}
-	i := 0
-	for len(q) > 0 {
+	for i := 0; len(q) > 0; i++ {
 		t := []*TreeNode{}
-		for n := len(q); n > 0; n-- {
+		for k := len(q); k > 0; k-- {
 			node := q[0]
 			q = q[1:]
 			if i%2 == 1 {
@@ -233,26 +224,18 @@ func reverseOddLevels(root *TreeNode) *TreeNode {
 			}
 			if node.Left != nil {
 				q = append(q, node.Left)
-			}
-			if node.Right != nil {
 				q = append(q, node.Right)
 			}
 		}
-		if len(t) > 0 {
-			j, k := 0, len(t)-1
-			for ; j < k; j, k = j+1, k-1 {
-				v := t[j].Val
-				t[j].Val = t[k].Val
-				t[k].Val = v
-			}
+		for l, r := 0, len(t)-1; l < r; l, r = l+1, r-1 {
+			t[l].Val, t[r].Val = t[r].Val, t[l].Val
 		}
-		i++
 	}
 	return root
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -270,30 +253,27 @@ func reverseOddLevels(root *TreeNode) *TreeNode {
  */
 
 function reverseOddLevels(root: TreeNode | null): TreeNode | null {
-    const queue = [root];
-    let d = 0;
-    while (queue.length !== 0) {
-        const n = queue.length;
-        const t: TreeNode[] = [];
-        for (let i = 0; i < n; i++) {
-            const node = queue.shift();
-            if (d % 2 == 1) {
-                t.push(node);
+    const q: TreeNode[] = [root];
+    for (let i = 0; q.length > 0; ++i) {
+        if (i % 2) {
+            for (let l = 0, r = q.length - 1; l < r; ++l, --r) {
+                [q[l].val, q[r].val] = [q[r].val, q[l].val];
             }
-            node.left && queue.push(node.left);
-            node.right && queue.push(node.right);
         }
-        const m = t.length;
-        for (let i = 0; i < m >> 1; i++) {
-            [t[i].val, t[m - 1 - i].val] = [t[m - 1 - i].val, t[i].val];
+        const nq: TreeNode[] = [];
+        for (const { left, right } of q) {
+            if (left) {
+                nq.push(left);
+                nq.push(right);
+            }
         }
-        d++;
+        q.splice(0, q.length, ...nq);
     }
     return root;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -314,9 +294,9 @@ function reverseOddLevels(root: TreeNode | null): TreeNode | null {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::VecDeque;
+use std::rc::Rc;
 impl Solution {
     fn create_tree(vals: &Vec<Vec<i32>>, i: usize, j: usize) -> Option<Rc<RefCell<TreeNode>>> {
         if i == vals.len() {
@@ -360,10 +340,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

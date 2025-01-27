@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1881.Maximum%20Value%20after%20Insertion/README_EN.md
+rating: 1381
+source: Weekly Contest 243 Q2
+tags:
+    - Greedy
+    - String
+---
+
+<!-- problem:start -->
+
 # [1881. Maximum Value after Insertion](https://leetcode.com/problems/maximum-value-after-insertion)
 
 [中文文档](/solution/1800-1899/1881.Maximum%20Value%20after%20Insertion/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a very large integer <code>n</code>, represented as a string,​​​​​​ and an integer digit <code>x</code>. The digits in <code>n</code> and the digit <code>x</code> are in the <strong>inclusive</strong> range <code>[1, 9]</code>, and <code>n</code> may represent a <b>negative</b> number.</p>
 
@@ -43,11 +58,17 @@
 	<li>In the case of a negative <code>n</code>,​​​​​​ it will begin with <code>&#39;-&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +85,7 @@ class Solution:
             return n + str(x)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxValue(n string, x int) string {
@@ -117,7 +138,7 @@ func maxValue(n string, x int) string {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -141,10 +162,8 @@ var maxValue = function (n, x) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

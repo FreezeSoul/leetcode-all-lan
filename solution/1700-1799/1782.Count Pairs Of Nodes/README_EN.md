@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1782.Count%20Pairs%20Of%20Nodes/README_EN.md
+rating: 2457
+source: Biweekly Contest 47 Q4
+tags:
+    - Graph
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1782. Count Pairs Of Nodes](https://leetcode.com/problems/count-pairs-of-nodes)
 
 [中文文档](/solution/1700-1799/1782.Count%20Pairs%20Of%20Nodes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an undirected graph defined by an integer <code>n</code>, the number of nodes, and a 2D integer array <code>edges</code>, the edges in the graph, where <code>edges[i] = [u<sub>i</sub>, v<sub>i</sub>]</code> indicates that there is an <strong>undirected</strong> edge between <code>u<sub>i</sub></code> and <code>v<sub>i</sub></code>. You are also given an integer array <code>queries</code>.</p>
 
@@ -50,30 +68,45 @@ The answers for each of the queries are as follows:
 	<li><code>0 &lt;= queries[j] &lt; edges.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Sorting + Binary Search
+
+From the problem, we know that the number of edges connected to the point pair $(a, b)$ is equal to the "number of edges connected to $a$" plus the "number of edges connected to $b$", minus the number of edges connected to both $a$ and $b$.
+
+Therefore, we can first use the array $cnt$ to count the number of edges connected to each point, and use the hash table $g$ to count the number of each point pair.
+
+Then, for each query $q$, we can enumerate $a$. For each $a$, we can find the first $b$ that satisfies $cnt[a] + cnt[b] > q$ through binary search, add the number to the current query answer, and then subtract some duplicate edges.
+
+The time complexity is $O(q \times (n \times \log n + m))$, and the space complexity is $O(n + m)$. Where $n$ and $m$ are the number of points and edges respectively, and $q$ is the number of queries.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def countPairs(self, n: int, edges: List[List[int]], queries: List[int]) -> List[int]:
+    def countPairs(
+        self, n: int, edges: List[List[int]], queries: List[int]
+    ) -> List[int]:
         cnt = [0] * n
         g = defaultdict(int)
         for a, b in edges:
             a, b = a - 1, b - 1
+            a, b = min(a, b), max(a, b)
             cnt[a] += 1
             cnt[b] += 1
-            if a > b:
-                a, b = b, a
             g[(a, b)] += 1
 
         s = sorted(cnt)
         ans = [0] * len(queries)
         for i, t in enumerate(queries):
             for j, x in enumerate(s):
-                k = bisect_right(s, t - x, lo=j+1)
+                k = bisect_right(s, t - x, lo=j + 1)
                 ans[i] += n - k
             for (a, b), v in g.items():
                 if cnt[a] + cnt[b] > t and cnt[a] + cnt[b] - v <= t:
@@ -81,7 +114,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +126,7 @@ class Solution {
             ++cnt[a];
             ++cnt[b];
             int k = Math.min(a, b) * n + Math.max(a, b);
-            g.put(k, g.getOrDefault(k, 0) + 1);
+            g.merge(k, 1, Integer::sum);
         }
         int[] s = cnt.clone();
         Arrays.sort(s);
@@ -131,7 +164,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,7 +201,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPairs(n int, edges [][]int, queries []int) []int {
@@ -203,10 +236,53 @@ func countPairs(n int, edges [][]int, queries []int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function countPairs(n: number, edges: number[][], queries: number[]): number[] {
+    const cnt: number[] = new Array(n).fill(0);
+    const g: Map<number, number> = new Map();
+    for (const [a, b] of edges) {
+        ++cnt[a - 1];
+        ++cnt[b - 1];
+        const k = Math.min(a - 1, b - 1) * n + Math.max(a - 1, b - 1);
+        g.set(k, (g.get(k) || 0) + 1);
+    }
+    const s = cnt.slice().sort((a, b) => a - b);
+    const search = (nums: number[], x: number, l: number): number => {
+        let r = nums.length;
+        while (l < r) {
+            const mid = (l + r) >> 1;
+            if (nums[mid] > x) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    };
+    const ans: number[] = [];
+    for (const t of queries) {
+        let res = 0;
+        for (let j = 0; j < s.length; ++j) {
+            const k = search(s, t - s[j], j + 1);
+            res += n - k;
+        }
+        for (const [k, v] of g) {
+            const a = Math.floor(k / n);
+            const b = k % n;
+            if (cnt[a] + cnt[b] > t && cnt[a] + cnt[b] - v <= t) {
+                --res;
+            }
+        }
+        ans.push(res);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

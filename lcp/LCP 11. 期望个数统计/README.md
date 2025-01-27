@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2011.%20%E6%9C%9F%E6%9C%9B%E4%B8%AA%E6%95%B0%E7%BB%9F%E8%AE%A1/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 11. 期望个数统计](https://leetcode.cn/problems/qi-wang-ge-shu-tong-ji)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>某互联网公司一年一度的春招开始了，一共有 <code>n</code> 名面试者入选。每名面试者都会提交一份简历，公司会根据提供的简历资料产生一个预估的能力值，数值越大代表越有可能通过面试。</p>
 
@@ -45,11 +52,13 @@
 	<li><code>0 &lt;= scores[i] &lt;= 10^6</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 根据题目描述，我们可以得到如下结论：
 
@@ -61,9 +70,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +78,7 @@ class Solution:
         return len(set(scores))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -87,7 +92,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -99,7 +104,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func expectNumber(scores []int) int {
@@ -111,10 +116,28 @@ func expectNumber(scores []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function expectNumber(scores: number[]): number {
+    const s: Set<number> = new Set<number>(scores);
+    return s.size;
+}
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    func expectNumber(_ scores: [Int]) -> Int {
+        let uniqueScores = Set(scores)
+        return uniqueScores.count
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

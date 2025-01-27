@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0997.Find%20the%20Town%20Judge/README_EN.md
+tags:
+    - Graph
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [997. Find the Town Judge](https://leetcode.com/problems/find-the-town-judge)
 
 [中文文档](/solution/0900-0999/0997.Find%20the%20Town%20Judge/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>In a town, there are <code>n</code> people labeled from <code>1</code> to <code>n</code>. There is a rumor that one of these people is secretly the town judge.</p>
 
@@ -52,11 +66,25 @@
 	<li><code>1 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We create two arrays $cnt1$ and $cnt2$ of length $n + 1$, representing the number of people each person trusts and the number of people who trust each person, respectively.
+
+Next, we traverse the array $trust$, for each item $[a_i, b_i]$, we increment $cnt1[a_i]$ and $cnt2[b_i]$ by $1$.
+
+Finally, we enumerate each person $i$ in the range $[1,..n]$. If $cnt1[i] = 0$ and $cnt2[i] = n - 1$, it means that $i$ is the town judge, and we return $i$. Otherwise, if no such person is found after the traversal, we return $-1$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $trust$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +100,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findJudge(n int, trust [][]int) int {
@@ -137,7 +165,7 @@ func findJudge(n int, trust [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findJudge(n: number, trust: number[][]): number {
@@ -156,10 +184,34 @@ function findJudge(n: number, trust: number[][]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn find_judge(n: i32, trust: Vec<Vec<i32>>) -> i32 {
+        let mut cnt1 = vec![0; (n + 1) as usize];
+        let mut cnt2 = vec![0; (n + 1) as usize];
 
+        for t in trust.iter() {
+            let a = t[0] as usize;
+            let b = t[1] as usize;
+            cnt1[a] += 1;
+            cnt2[b] += 1;
+        }
+
+        for i in 1..=n as usize {
+            if cnt1[i] == 0 && cnt2[i] == (n as usize) - 1 {
+                return i as i32;
+            }
+        }
+
+        -1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

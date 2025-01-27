@@ -1,12 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1179.Reformat%20Department%20Table/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1179. 重新格式化部门表](https://leetcode.cn/problems/reformat-department-table)
 
 [English Version](/solution/1100-1199/1179.Reformat%20Department%20Table/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>部门表&nbsp;<code>Department</code>：</p>
+<p>表&nbsp;<code>Department</code>：</p>
 
 <pre>
 +---------------+---------+
@@ -16,19 +26,26 @@
 | revenue       | int     |
 | month         | varchar |
 +---------------+---------+
-(id, month) 是表的联合主键。
+在 SQL 中，(id, month) 是表的联合主键。
 这个表格有关于每个部门每月收入的信息。
-月份（month）可以取下列值 [&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;]。
+月份（month）可以取下列值 ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一个 SQL 查询来重新格式化表，使得新的表中有一个部门 id 列和一些对应&nbsp;<strong>每个月 </strong>的收入（revenue）列。</p>
+<p>重新格式化表格，使得&nbsp;<strong>每个月&nbsp;</strong>都有一个部门 id 列和一个收入列。</p>
 
-<p>查询结果格式如下面的示例所示：</p>
+<p>以 <strong>任意顺序</strong> 返回结果表。</p>
+
+<p>结果格式如以下示例所示。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例 1：</strong></p>
 
 <pre>
-Department 表：
+<b>输入：</b>
+Department table:
 +------+---------+-------+
 | id   | revenue | month |
 +------+---------+-------+
@@ -38,8 +55,7 @@ Department 表：
 | 1    | 7000    | Feb   |
 | 1    | 6000    | Mar   |
 +------+---------+-------+
-
-查询得到的结果表：
+<b>输出：</b>
 +------+-------------+-------------+-------------+-----+-------------+
 | id   | Jan_Revenue | Feb_Revenue | Mar_Revenue | ... | Dec_Revenue |
 +------+-------------+-------------+-------------+-----+-------------+
@@ -47,98 +63,91 @@ Department 表：
 | 2    | 9000        | null        | null        | ... | null        |
 | 3    | null        | 10000       | null        | ... | null        |
 +------+-------------+-------------+-------------+-----+-------------+
+<b>解释：</b>四月到十二月的收入为空。 
+请注意，结果表共有 13 列（1 列用于部门 ID，其余 12 列用于各个月份）。</pre>
 
-注意，结果表有 13 列 (1个部门 id 列 + 12个月份的收入列)。
-</pre>
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
+SELECT
     id,
-    sum(
-        case
-            month
-            when 'Jan' then revenue
-        end
-    ) as Jan_Revenue,
-    sum(
-        case
-            month
-            when 'Feb' then revenue
-        end
-    ) as Feb_Revenue,
-    sum(
-        case
-            month
-            when 'Mar' then revenue
-        end
-    ) as Mar_Revenue,
-    sum(
-        case
-            month
-            when 'Apr' then revenue
-        end
-    ) as Apr_Revenue,
-    sum(
-        case
-            month
-            when 'May' then revenue
-        end
-    ) as May_Revenue,
-    sum(
-        case
-            month
-            when 'Jun' then revenue
-        end
-    ) as Jun_Revenue,
-    sum(
-        case
-            month
-            when 'Jul' then revenue
-        end
-    ) as Jul_Revenue,
-    sum(
-        case
-            month
-            when 'Aug' then revenue
-        end
-    ) as Aug_Revenue,
-    sum(
-        case
-            month
-            when 'Sep' then revenue
-        end
-    ) as Sep_Revenue,
-    sum(
-        case
-            month
-            when 'Oct' then revenue
-        end
-    ) as Oct_Revenue,
-    sum(
-        case
-            month
-            when 'Nov' then revenue
-        end
-    ) as Nov_Revenue,
-    sum(
-        case
-            month
-            when 'Dec' then revenue
-        end
-    ) as Dec_Revenue
-from
-    Department
-group by
-    id
+    SUM(
+        CASE month
+            WHEN 'Jan' THEN revenue
+        END
+    ) AS Jan_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Feb' THEN revenue
+        END
+    ) AS Feb_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Mar' THEN revenue
+        END
+    ) AS Mar_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Apr' THEN revenue
+        END
+    ) AS Apr_Revenue,
+    SUM(
+        CASE month
+            WHEN 'May' THEN revenue
+        END
+    ) AS May_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Jun' THEN revenue
+        END
+    ) AS Jun_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Jul' THEN revenue
+        END
+    ) AS Jul_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Aug' THEN revenue
+        END
+    ) AS Aug_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Sep' THEN revenue
+        END
+    ) AS Sep_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Oct' THEN revenue
+        END
+    ) AS Oct_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Nov' THEN revenue
+        END
+    ) AS Nov_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Dec' THEN revenue
+        END
+    ) AS Dec_Revenue
+FROM Department
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

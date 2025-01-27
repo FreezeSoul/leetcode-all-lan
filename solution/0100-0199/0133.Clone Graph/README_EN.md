@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0133.Clone%20Graph/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [133. Clone Graph](https://leetcode.com/problems/clone-graph)
 
 [中文文档](/solution/0100-0199/0133.Clone%20Graph/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a reference of a node in a <strong><a href="https://en.wikipedia.org/wiki/Connectivity_(graph_theory)#Connected_graph" target="_blank">connected</a></strong> undirected graph.</p>
 
@@ -67,11 +82,17 @@ class Node {
 	<li>The Graph is connected and all nodes can be visited starting from the given node.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 """
@@ -101,7 +122,7 @@ class Solution:
         return clone(node)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /*
@@ -144,44 +165,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for Node.
- * class Node {
- *     val: number
- *     neighbors: Node[]
- *     constructor(val?: number, neighbors?: Node[]) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.neighbors = (neighbors===undefined ? [] : neighbors)
- *     }
- * }
- */
-
-function cloneGraph(node: Node | null): Node | null {
-    if (node == null) return null;
-
-    const visited = new Map();
-    visited.set(node, new Node(node.val));
-    const queue = [node];
-    while (queue.length) {
-        const cur = queue.shift();
-        for (let neighbor of cur.neighbors || []) {
-            if (!visited.has(neighbor)) {
-                queue.push(neighbor);
-                const newNeighbor = new Node(neighbor.val, []);
-                visited.set(neighbor, newNeighbor);
-            }
-            const newNode = visited.get(cur);
-            newNode.neighbors.push(visited.get(neighbor));
-        }
-    }
-    return visited.get(node);
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -221,7 +205,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -254,10 +238,84 @@ func cloneGraph(node *Node) *Node {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+/**
+ * Definition for Node.
+ * class Node {
+ *     val: number
+ *     neighbors: Node[]
+ *     constructor(val?: number, neighbors?: Node[]) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.neighbors = (neighbors===undefined ? [] : neighbors)
+ *     }
+ * }
+ */
+
+function cloneGraph(node: Node | null): Node | null {
+    if (node == null) return null;
+
+    const visited = new Map();
+    visited.set(node, new Node(node.val));
+    const queue = [node];
+    while (queue.length) {
+        const cur = queue.shift();
+        for (let neighbor of cur.neighbors || []) {
+            if (!visited.has(neighbor)) {
+                queue.push(neighbor);
+                const newNeighbor = new Node(neighbor.val, []);
+                visited.set(neighbor, newNeighbor);
+            }
+            const newNode = visited.get(cur);
+            newNode.neighbors.push(visited.get(neighbor));
+        }
+    }
+    return visited.get(node);
+}
 ```
 
+#### C#
+
+```cs
+using System.Collections.Generic;
+
+public class Solution {
+    public Node CloneGraph(Node node) {
+        if (node == null) return null;
+        var dict = new Dictionary<int, Node>();
+        var queue = new Queue<Node>();
+        queue.Enqueue(CloneVal(node));
+        dict.Add(node.val, queue.Peek());
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+            var newNeighbors = new List<Node>(current.neighbors.Count);
+            foreach (var oldNeighbor in current.neighbors)
+            {
+                Node newNeighbor;
+                if (!dict.TryGetValue(oldNeighbor.val, out newNeighbor))
+                {
+                    newNeighbor = CloneVal(oldNeighbor);
+                    queue.Enqueue(newNeighbor);
+                    dict.Add(newNeighbor.val, newNeighbor);
+                }
+                newNeighbors.Add(newNeighbor);
+            }
+            current.neighbors = newNeighbors;
+        }
+        return dict[node.val];
+    }
+
+    private Node CloneVal(Node node)
+    {
+        return new Node(node.val, new List<Node>(node.neighbors));
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

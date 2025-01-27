@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1138.Alphabet%20Board%20Path/README_EN.md
+rating: 1410
+source: Weekly Contest 147 Q2
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [1138. Alphabet Board Path](https://leetcode.com/problems/alphabet-board-path)
 
 [中文文档](/solution/1100-1199/1138.Alphabet%20Board%20Path/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>On an alphabet board, we start at position <code>(0, 0)</code>, corresponding to character&nbsp;<code>board[0][0]</code>.</p>
 
@@ -13,11 +28,17 @@
 <p>We may make the following moves:</p>
 
 <ul>
-	<li><code>&#39;U&#39;</code> moves our position up one row, if the position exists on the board;</li>
-	<li><code>&#39;D&#39;</code> moves our position down one row, if the position exists on the board;</li>
-	<li><code>&#39;L&#39;</code> moves our position left one column, if the position exists on the board;</li>
-	<li><code>&#39;R&#39;</code> moves our position right one column, if the position exists on the board;</li>
-	<li><code>&#39;!&#39;</code>&nbsp;adds the character <code>board[r][c]</code> at our current position <code>(r, c)</code>&nbsp;to the&nbsp;answer.</li>
+
+    <li><code>&#39;U&#39;</code> moves our position up one row, if the position exists on the board;</li>
+
+    <li><code>&#39;D&#39;</code> moves our position down one row, if the position exists on the board;</li>
+
+    <li><code>&#39;L&#39;</code> moves our position left one column, if the position exists on the board;</li>
+
+    <li><code>&#39;R&#39;</code> moves our position right one column, if the position exists on the board;</li>
+
+    <li><code>&#39;!&#39;</code>&nbsp;adds the character <code>board[r][c]</code> at our current position <code>(r, c)</code>&nbsp;to the&nbsp;answer.</li>
+
 </ul>
 
 <p>(Here, the only positions that exist on the board are positions with letters on them.)</p>
@@ -25,26 +46,48 @@
 <p>Return a sequence of moves that makes our answer equal to <code>target</code>&nbsp;in the minimum number of moves.&nbsp; You may return any path that does so.</p>
 
 <p>&nbsp;</p>
+
 <p><strong class="example">Example 1:</strong></p>
+
 <pre><strong>Input:</strong> target = "leet"
+
 <strong>Output:</strong> "DDR!UURRR!!DDD!"
+
 </pre><p><strong class="example">Example 2:</strong></p>
+
 <pre><strong>Input:</strong> target = "code"
+
 <strong>Output:</strong> "RR!DDRR!UUL!R!"
+
 </pre>
+
 <p>&nbsp;</p>
+
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>1 &lt;= target.length &lt;= 100</code></li>
-	<li><code>target</code> consists only of English lowercase letters.</li>
+
+    <li><code>1 &lt;= target.length &lt;= 100</code></li>
+
+    <li><code>target</code> consists only of English lowercase letters.</li>
+
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+Starting from the origin point $(0, 0)$, simulate each step of the movement, appending the result of each step to the answer. Note that the direction of movement follows the order "left, up, right, down".
+
+The time complexity is $O(n)$, where $n$ is the length of the string target, as each character in the string target needs to be traversed. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +113,7 @@ class Solution:
         return "".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +146,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -137,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func alphabetBoardPath(target string) string {
@@ -168,10 +211,8 @@ func alphabetBoardPath(target string) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

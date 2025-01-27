@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1711.Count%20Good%20Meals/README.md
+rating: 1797
+source: 第 222 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+---
+
+<!-- problem:start -->
+
 # [1711. 大餐计数](https://leetcode.cn/problems/count-good-meals)
 
 [English Version](/solution/1700-1799/1711.Count%20Good%20Meals/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>大餐</strong> 是指 <strong>恰好包含两道不同餐品</strong> 的一餐，其美味程度之和等于 2 的幂。</p>
 
@@ -41,9 +54,13 @@
 	<li><code>0 <= deliciousness[i] <= 2<sup>20</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：哈希表 + 枚举二的幂**
+<!-- solution:start -->
+
+### 方法一：哈希表 + 枚举二的幂
 
 根据题意，我们需要统计数组中两个数的和为 $2$ 的幂的组合数。直接暴力枚举所有的组合数，时间复杂度为 $O(n^2)$ ，肯定会超时。
 
@@ -63,13 +80,9 @@
 
 时间复杂度与上面的方法相同。
 
-<!-- 这里可写通用的实现逻辑 -->
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,23 +100,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def countPairs(self, deliciousness: List[int]) -> int:
-        mod = 10**9 + 7
-        cnt = Counter(deliciousness)
-        ans = 0
-        for i in range(22):
-            s = 1 << i
-            for a, m in cnt.items():
-                if (b := s - a) in cnt:
-                    ans += m * (m - 1) if a == b else m * cnt[b]
-        return (ans >> 1) % mod
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -123,6 +120,73 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    const int mod = 1e9 + 7;
+
+    int countPairs(vector<int>& deliciousness) {
+        int mx = *max_element(deliciousness.begin(), deliciousness.end()) << 1;
+        unordered_map<int, int> cnt;
+        int ans = 0;
+        for (auto& d : deliciousness) {
+            for (int s = 1; s <= mx; s <<= 1) {
+                ans = (ans + cnt[s - d]) % mod;
+            }
+            ++cnt[d];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countPairs(deliciousness []int) (ans int) {
+	mx := slices.Max(deliciousness) << 1
+	const mod int = 1e9 + 7
+	cnt := map[int]int{}
+	for _, d := range deliciousness {
+		for s := 1; s <= mx; s <<= 1 {
+			ans = (ans + cnt[s-d]) % mod
+		}
+		cnt[d]++
+	}
+	return
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countPairs(self, deliciousness: List[int]) -> int:
+        mod = 10**9 + 7
+        cnt = Counter(deliciousness)
+        ans = 0
+        for i in range(22):
+            s = 1 << i
+            for a, m in cnt.items():
+                if (b := s - a) in cnt:
+                    ans += m * (m - 1) if a == b else m * cnt[b]
+        return (ans >> 1) % mod
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -151,27 +215,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    const int mod = 1e9 + 7;
-
-    int countPairs(vector<int>& deliciousness) {
-        int mx = *max_element(deliciousness.begin(), deliciousness.end()) << 1;
-        unordered_map<int, int> cnt;
-        int ans = 0;
-        for (auto& d : deliciousness) {
-            for (int s = 1; s <= mx; s <<= 1) {
-                ans = (ans + cnt[s - d]) % mod;
-            }
-            ++cnt[d];
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -196,63 +240,35 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPairs(deliciousness []int) (ans int) {
-	mx := 0
-	for _, d := range deliciousness {
-		mx = max(mx, d)
-	}
-	mx <<= 1
-	const mod int = 1e9 + 7
 	cnt := map[int]int{}
 	for _, d := range deliciousness {
-		for s := 1; s <= mx; s <<= 1 {
-			ans = (ans + cnt[s-d]) % mod
-		}
 		cnt[d]++
 	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
+	const mod int = 1e9 + 7
+	for i := 0; i < 22; i++ {
+		s := 1 << i
+		for a, m := range cnt {
+			b := s - a
+			if n, ok := cnt[b]; ok {
+				if a == b {
+					ans += m * (m - 1)
+				} else {
+					ans += m * n
+				}
+			}
+		}
 	}
-	return b
+	ans >>= 1
+	return ans % mod
 }
-```
-
-```go
-func countPairs(deliciousness []int) (ans int) {
-    cnt := map[int]int{}
-    for _, d := range deliciousness {
-        cnt[d]++
-    }
-    const mod int = 1e9 + 7
-    for i := 0; i < 22; i++ {
-        s := 1 << i
-        for a, m := range cnt {
-            b := s - a
-            if n, ok := cnt[b]; ok {
-                if a == b {
-                    ans += m * (m - 1)
-                } else {
-                    ans += m * n
-                }
-            }
-        }
-    }
-    ans >>= 1
-    return ans % mod
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

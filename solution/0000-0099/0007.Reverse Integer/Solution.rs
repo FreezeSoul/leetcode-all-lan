@@ -9,7 +9,7 @@ impl Solution {
             .collect::<String>()
             .parse::<i32>()
         {
-            Ok(x) => x * if is_minus { -1 } else { 1 },
+            Ok(x) => x * (if is_minus { -1 } else { 1 }),
             Err(_) => 0,
         }
     }

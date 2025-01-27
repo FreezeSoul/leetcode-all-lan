@@ -1,10 +1,24 @@
-# [2539. 好子序列的个数](https://leetcode.cn/problems/count-the-number-of-good-subsequences)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2539.Count%20the%20Number%20of%20Good%20Subsequences/README.md
+tags:
+    - 哈希表
+    - 数学
+    - 字符串
+    - 组合数学
+    - 计数
+---
+
+<!-- problem:start -->
+
+# [2539. 好子序列的个数 🔒](https://leetcode.cn/problems/count-the-number-of-good-subsequences)
 
 [English Version](/solution/2500-2599/2539.Count%20the%20Number%20of%20Good%20Subsequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果字符串的某个 <strong>子序列</strong> 不为空，且其中每一个字符出现的频率都相同，就认为该子序列是一个好子序列。</p>
 
@@ -46,13 +60,15 @@
 	<li><code>s</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举 + 组合计数**
+### 方法一：枚举 + 组合计数
 
-由于题目说的是子序列中字母出现的次数，因此，我们可以先用一个数组 `cnt` 统计字符串 $s$ 中每个字母出现的次数，记最大的次数为 $mx$。
+由于题目说的是子序列中字母出现的次数，因此，我们可以先用一个数组 $cnt$ 统计字符串 $s$ 中每个字母出现的次数，记最大的次数为 $mx$。
 
 接下来，我们在 $[1,2..mx]$ 范围内枚举子序列中字母出现的次数 $i$，然后枚举所有出现过的字母，如果该字母 $c$ 的出现次数 $cnt[c]$ 大于等于 $i$，那么我们可以从这 $cnt[c]$ 个相同字母中选择其中 $i$ 个，也可以一个都不选，那么当前字母的可选方案数就是 $comb(cnt[c], i) + 1$，将所有可选方案数相乘，可以得到当前次数的所有子序列次数，将次数减去 $1$ 累加到答案中。
 
@@ -62,9 +78,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 N = 10001
@@ -93,9 +107,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -150,7 +162,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 int N = 10001;
@@ -207,7 +219,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 const n = 1e4 + 1
@@ -258,19 +270,10 @@ func countGoodSubsequences(s string) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

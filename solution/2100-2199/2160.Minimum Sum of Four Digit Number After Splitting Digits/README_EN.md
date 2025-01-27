@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2160.Minimum%20Sum%20of%20Four%20Digit%20Number%20After%20Splitting%20Digits/README_EN.md
+rating: 1314
+source: Biweekly Contest 71 Q1
+tags:
+    - Greedy
+    - Math
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2160. Minimum Sum of Four Digit Number After Splitting Digits](https://leetcode.com/problems/minimum-sum-of-four-digit-number-after-splitting-digits)
 
 [中文文档](/solution/2100-2199/2160.Minimum%20Sum%20of%20Four%20Digit%20Number%20After%20Splitting%20Digits/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>positive</strong> integer <code>num</code> consisting of exactly four digits. Split <code>num</code> into two new integers <code>new1</code> and <code>new2</code> by using the <strong>digits</strong> found in <code>num</code>. <strong>Leading zeros</strong> are allowed in <code>new1</code> and <code>new2</code>, and <strong>all</strong> the digits found in <code>num</code> must be used.</p>
 
@@ -38,11 +54,17 @@ The minimum sum can be obtained by the pair [4, 9]: 4 + 9 = 13.
 	<li><code>1000 &lt;= num &lt;= 9999</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +77,7 @@ class Solution:
         return 10 * (nums[0] + nums[1]) + nums[2] + nums[3]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -71,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -88,7 +110,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumSum(num int) int {
@@ -102,7 +124,7 @@ func minimumSum(num int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumSum(num: number): number {
@@ -116,7 +138,7 @@ function minimumSum(num: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -132,11 +154,11 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int cmp(const void *a, const void *b) {
-    return *(int *) a - *(int *) b;
+int cmp(const void* a, const void* b) {
+    return *(int*) a - *(int*) b;
 }
 
 int minimumSum(int num) {
@@ -146,14 +168,12 @@ int minimumSum(int num) {
         num /= 10;
     }
     qsort(nums, 4, sizeof(int), cmp);
-    return 10 * (nums[0] + nums[1])  + nums[2] + nums[3];
+    return 10 * (nums[0] + nums[1]) + nums[2] + nums[3];
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

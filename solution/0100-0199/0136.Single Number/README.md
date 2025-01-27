@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0136.Single%20Number/README.md
+tags:
+    - 位运算
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [136. 只出现一次的数字](https://leetcode.cn/problems/single-number)
 
 [English Version](/solution/0100-0199/0136.Single%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>非空</strong> 整数数组 <code>nums</code> ，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。</p>
 
@@ -16,24 +27,27 @@
 
 <p><strong class="example">示例 1 ：</strong></p>
 
-<pre>
-<strong>输入：</strong>nums = [2,2,1]
-<strong>输出：</strong>1
-</pre>
+<div class="example-block">
+<p><strong>输入：</strong>nums = [2,2,1]</p>
+
+<p><strong>输出：</strong>1</p>
+</div>
 
 <p><strong class="example">示例 2 ：</strong></p>
 
-<pre>
-<strong>输入：</strong>nums = [4,1,2,1,2]
-<strong>输出：</strong>4
-</pre>
+<div class="example-block">
+<p><strong>输入：</strong>nums = [4,1,2,1,2]</p>
+
+<p><strong>输出：</strong>4</p>
+</div>
 
 <p><strong class="example">示例 3 ：</strong></p>
 
-<pre>
-<strong>输入：</strong>nums = [1]
-<strong>输出：</strong>1
-</pre>
+<div class="example-block">
+<p><strong>输入：</strong>nums = [1]</p>
+
+<p><strong>输出：</strong>1</p>
+</div>
 
 <p>&nbsp;</p>
 
@@ -47,11 +61,13 @@
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 异或运算的性质：
 
@@ -60,13 +76,11 @@
 
 我们对该数组所有元素进行异或运算，结果就是那个只出现一次的数字。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 是数组 `nums` 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 是数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +88,7 @@ class Solution:
         return reduce(xor, nums)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -90,28 +102,22 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int singleNumber(int[] nums) {
-        return Arrays.stream(nums).reduce(0, (a, b) -> a ^ b);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
         int ans = 0;
-        for (int v : nums) ans ^= v;
+        for (int v : nums) {
+            ans ^= v;
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func singleNumber(nums []int) (ans int) {
@@ -122,23 +128,7 @@ func singleNumber(nums []int) (ans int) {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var singleNumber = function (nums) {
-    let ans = 0;
-    for (const v of nums) {
-        ans ^= v;
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function singleNumber(nums: number[]): number {
@@ -146,7 +136,7 @@ function singleNumber(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -156,10 +146,32 @@ impl Solution {
 }
 ```
 
-### **C**
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var singleNumber = function (nums) {
+    return nums.reduce((a, b) => a ^ b);
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int SingleNumber(int[] nums) {
+        return nums.Aggregate(0, (a, b) => a ^ b);
+    }
+}
+```
+
+#### C
 
 ```c
-int singleNumber(int *nums, int numsSize) {
+int singleNumber(int* nums, int numsSize) {
     int ans = 0;
     for (int i = 0; i < numsSize; i++) {
         ans ^= nums[i];
@@ -168,27 +180,38 @@ int singleNumber(int *nums, int numsSize) {
 }
 ```
 
-### **Swift**
+#### Swift
 
 ```swift
 class Solution {
     func singleNumber(_ nums: [Int]) -> Int {
-        var a = nums.sorted()
-        var n = a.count
-        for i in stride(from: 0, through: n - 2, by: 2) {
-            if a[i] != a[i + 1] {
-                return a[i]
-            }
-        }
-        return a[n - 1]
+        return nums.reduce(0, ^)
     }
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        return Arrays.stream(nums).reduce(0, (a, b) -> a ^ b);
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

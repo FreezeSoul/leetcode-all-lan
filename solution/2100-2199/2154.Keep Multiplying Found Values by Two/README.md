@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2154.Keep%20Multiplying%20Found%20Values%20by%20Two/README.md
+rating: 1235
+source: 第 278 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 排序
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2154. 将找到的值乘以 2](https://leetcode.cn/problems/keep-multiplying-found-values-by-two)
 
 [English Version](/solution/2100-2199/2154.Keep%20Multiplying%20Found%20Values%20by%20Two/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，另给你一个整数 <code>original</code> ，这是需要在 <code>nums</code> 中搜索的第一个数字。</p>
 
@@ -50,15 +65,23 @@
 	<li><code>1 &lt;= nums[i], original &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：哈希表
+
+我们用一个哈希表 $\textit{s}$ 记录数组 $\textit{nums}$ 中的所有数字。
+
+接下来，我们从 $\textit{original}$ 开始，如果 $\textit{original}$ 在 $\textit{s}$ 中，我们将 $\textit{original}$ 乘以 $2$，直到 $\textit{original}$ 不在 $\textit{s}$ 中，返回 $\textit{original}$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{nums}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -69,9 +92,7 @@ class Solution:
         return original
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -89,39 +110,28 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function findFinalValue(nums: number[], original: number): number {
-    let set: Set<number> = new Set(nums);
-    while (set.has(original)) {
-        original *= 2;
-    }
-    return original;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findFinalValue(vector<int>& nums, int original) {
-        unordered_set<int> s;
-        for (int num : nums) s.insert(num);
-        while (s.count(original)) original <<= 1;
+        unordered_set<int> s(nums.begin(), nums.end());
+        while (s.contains(original)) {
+            original <<= 1;
+        }
         return original;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findFinalValue(nums []int, original int) int {
-	s := make(map[int]bool)
-	for _, num := range nums {
-		s[num] = true
+	s := map[int]bool{}
+	for _, x := range nums {
+		s[x] = true
 	}
 	for s[original] {
 		original <<= 1
@@ -130,10 +140,20 @@ func findFinalValue(nums []int, original int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function findFinalValue(nums: number[], original: number): number {
+    const s: Set<number> = new Set([...nums]);
+    while (s.has(original)) {
+        original <<= 1;
+    }
+    return original;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0910.Smallest%20Range%20II/README.md
+tags:
+    - 贪心
+    - 数组
+    - 数学
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [910. 最小差值 II](https://leetcode.cn/problems/smallest-range-ii)
 
 [English Version](/solution/0900-0999/0910.Smallest%20Range%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code>，和一个整数&nbsp;<code>k</code> 。</p>
 
@@ -53,11 +66,13 @@
 	<li><code>0 &lt;= k &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 枚举**
+### 方法一：贪心 + 枚举
 
 根据题目要求，我们需要求数组中的元素最大值与最小值差值的最小值。每个元素可以加上或者减去 $k$，因此我们可以将数组中的元素分为两部分，一部分加上 $k$，一部分减去 $k$。那么，我们应该将数组中的较大值减去 $k$，较小值加上 $k$，这样才能保证最大值与最小值的差值最小。
 
@@ -67,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +133,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestRangeII(nums []int, k int) int {
@@ -136,26 +147,25 @@ func smallestRangeII(nums []int, k int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function smallestRangeII(nums: number[], k: number): number {
+    nums.sort((a, b) => a - b);
+    let ans = nums.at(-1)! - nums[0];
+    for (let i = 1; i < nums.length; ++i) {
+        const mi = Math.min(nums[0] + k, nums[i] - k);
+        const mx = Math.max(nums.at(-1)! - k, nums[i - 1] + k);
+        ans = Math.min(ans, mx - mi);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

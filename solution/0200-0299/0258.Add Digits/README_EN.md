@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0258.Add%20Digits/README_EN.md
+tags:
+    - Math
+    - Number Theory
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [258. Add Digits](https://leetcode.com/problems/add-digits)
 
 [中文文档](/solution/0200-0299/0258.Add%20Digits/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>num</code>, repeatedly add all its digits until the result has only one digit, and return it.</p>
 
@@ -35,11 +49,17 @@ Since 2 has only one digit, return it.
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you do it without any loop/recursion in <code>O(1)</code> runtime?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -47,7 +67,7 @@ class Solution:
         return 0 if num == 0 else (num - 1) % 9 + 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -57,7 +77,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -68,7 +88,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func addDigits(num int) int {
@@ -79,36 +99,18 @@ func addDigits(num int) int {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn add_digits(num: i32) -> i32 {
-        if num < 10 {
-            return num;
-        }
-        Self::add_digits(
-            num.to_string()
-                .chars()
-                .map(|c| c.to_string().parse::<i32>().unwrap())
-                .sum::<i32>(),
-        )
-    }
-}
-```
+#### Rust
 
 ```rust
 impl Solution {
     pub fn add_digits(mut num: i32) -> i32 {
-        (num - 1) % 9 + 1
+        ((num - 1) % 9) + 1
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

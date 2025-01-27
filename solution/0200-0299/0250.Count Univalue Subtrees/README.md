@@ -1,18 +1,31 @@
-# [250. 统计同值子树](https://leetcode.cn/problems/count-univalue-subtrees)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0250.Count%20Univalue%20Subtrees/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
+# [250. 统计同值子树 🔒](https://leetcode.cn/problems/count-univalue-subtrees)
 
 [English Version](/solution/0200-0299/0250.Count%20Univalue%20Subtrees/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给定一个二叉树，统计该二叉树数值相同的子树个数。</p>
+<p>给定一个二叉树，统计该二叉树数值相同的<span data-keyword="subtree">子树</span>个数。</p>
 
 <p>同值子树是指该子树的所有节点都拥有相同的数值。</p>
 
 <p><strong>示例：</strong></p>
 
-<pre><strong>输入: </strong>root = [5,1,5,5,5,null,5]
+<pre>
+<strong>输入: </strong>root = [5,1,5,5,5,null,5]
 
               5
              / \
@@ -23,11 +36,13 @@
 <strong>输出:</strong> 4
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 我们设计一个递归函数 $dfs(root)$，该函数返回以 $root$ 为根的子树中所有节点的值是否相同。
 
@@ -42,9 +57,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -74,9 +87,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -122,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -163,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -198,47 +209,7 @@ func countUnivalSubtrees(root *TreeNode) (ans int) {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {number}
- */
-var countUnivalSubtrees = function (root) {
-    let ans = 0;
-    const dfs = root => {
-        if (!root) {
-            return true;
-        }
-        const l = dfs(root.left);
-        const r = dfs(root.right);
-        if (!l || !r) {
-            return false;
-        }
-        if (root.left && root.left.val !== root.val) {
-            return false;
-        }
-        if (root.right && root.right.val !== root.val) {
-            return false;
-        }
-        ++ans;
-        return true;
-    };
-    dfs(root);
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -280,10 +251,48 @@ function countUnivalSubtrees(root: TreeNode | null): number {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var countUnivalSubtrees = function (root) {
+    let ans = 0;
+    const dfs = root => {
+        if (!root) {
+            return true;
+        }
+        const l = dfs(root.left);
+        const r = dfs(root.right);
+        if (!l || !r) {
+            return false;
+        }
+        if (root.left && root.left.val !== root.val) {
+            return false;
+        }
+        if (root.right && root.right.val !== root.val) {
+            return false;
+        }
+        ++ans;
+        return true;
+    };
+    dfs(root);
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

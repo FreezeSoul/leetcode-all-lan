@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1106.Parsing%20A%20Boolean%20Expression/README.md
+rating: 1880
+source: 第 143 场周赛 Q4
+tags:
+    - 栈
+    - 递归
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1106. 解析布尔表达式](https://leetcode.cn/problems/parsing-a-boolean-expression)
 
 [English Version](/solution/1100-1199/1106.Parsing%20A%20Boolean%20Expression/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>布尔表达式</strong> 是计算结果不是 <code>true</code> 就是 <code>false</code> 的表达式。有效的表达式需遵循以下约定：</p>
 
@@ -60,11 +74,13 @@
 	<li><code>expression[i]</code> 为 <code>'('</code>、<code>')'</code>、<code>'&amp;'</code>、<code>'|'</code>、<code>'!'</code>、<code>'t'</code>、<code>'f'</code> 和 <code>','</code> 之一</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：栈**
+### 方法一：栈
 
 对于这种表达式解析问题，我们可以使用栈来辅助解决。
 
@@ -75,13 +91,11 @@
 
 遍历完表达式 `expression` 后，栈中只剩下一个字符，如果是 `'t'`，返回 `true`，否则返回 `false`。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是表达式 `expression` 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +121,7 @@ class Solution:
         return stk[0] == 't'
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -138,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -146,7 +158,8 @@ public:
     bool parseBoolExpr(string expression) {
         stack<char> stk;
         for (char c : expression) {
-            if (c != '(' && c != ')' && c != ',') stk.push(c);
+            if (c != '(' && c != ')' && c != ',')
+                stk.push(c);
             else if (c == ')') {
                 int t = 0, f = 0;
                 while (stk.top() == 't' || stk.top() == 'f') {
@@ -167,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func parseBoolExpr(expression string) bool {
@@ -198,7 +211,7 @@ func parseBoolExpr(expression string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function parseBoolExpr(expression: string): boolean {
@@ -231,7 +244,7 @@ function parseBoolExpr(expression: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -274,10 +287,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

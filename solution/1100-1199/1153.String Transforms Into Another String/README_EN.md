@@ -1,8 +1,23 @@
-# [1153. String Transforms Into Another String](https://leetcode.com/problems/string-transforms-into-another-string)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1153.String%20Transforms%20Into%20Another%20String/README_EN.md
+rating: 1949
+source: Biweekly Contest 6 Q4
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
+# [1153. String Transforms Into Another String 🔒](https://leetcode.com/problems/string-transforms-into-another-string)
 
 [中文文档](/solution/1100-1199/1153.String%20Transforms%20Into%20Another%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>str1</code> and <code>str2</code> of the same length, determine whether you can transform <code>str1</code> into <code>str2</code> by doing <strong>zero or more</strong> <em>conversions</em>.</p>
 
@@ -35,11 +50,27 @@
 	<li><code>str1</code> and <code>str2</code> contain only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+First, we can check if `str1` and `str2` are equal. If they are, return `true` directly.
+
+Then we count the occurrence of each letter in `str2`. If the occurrence equals $26$, it means `str2` contains all lowercase letters. In this case, no matter how `str1` is transformed, it cannot become `str2`, so return `false` directly.
+
+Otherwise, we use an array or hash table `d` to record the letter each letter in `str1` is transformed to. We traverse the strings `str1` and `str2`. If a letter in `str1` has been transformed, the transformed letter must be the same as the corresponding letter in `str2`, otherwise return `false`.
+
+After the traversal, return `true`.
+
+The time complexity is $O(n)$, and the space complexity is $O(C)$. Here, $n$ is the length of the string `str1`, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +88,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,7 +156,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canConvert(str1 string, str2 string) bool {
@@ -152,7 +183,7 @@ func canConvert(str1 string, str2 string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canConvert(str1: string, str2: string): boolean {
@@ -174,10 +205,8 @@ function canConvert(str1: string, str2: string): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

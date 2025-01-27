@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0868.Binary%20Gap/README_EN.md
+tags:
+    - Bit Manipulation
+---
+
+<!-- problem:start -->
+
 # [868. Binary Gap](https://leetcode.com/problems/binary-gap)
 
 [中文文档](/solution/0800-0899/0868.Binary%20Gap/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a positive integer <code>n</code>, find and return <em>the <strong>longest distance</strong> between any two <strong>adjacent</strong> </em><code>1</code><em>&#39;s in the binary representation of </em><code>n</code><em>. If there are no two adjacent </em><code>1</code><em>&#39;s, return </em><code>0</code><em>.</em></p>
 
@@ -45,125 +57,127 @@ There are not any adjacent pairs of 1&#39;s in the binary representation of 8, s
 	<li><code>1 &lt;= n &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Bit Manipulation
+
+We use two pointers $\textit{pre}$ and $\textit{cur}$ to represent the positions of the previous and current $1$ bits, respectively. Initially, $\textit{pre} = 100$ and $\textit{cur} = 0$. Then, we traverse the binary representation of $n$. When we encounter a $1$, we calculate the distance between the current position and the previous $1$ position and update the answer.
+
+The time complexity is $O(\log n)$, where $n$ is the given integer. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def binaryGap(self, n: int) -> int:
-        ans, j = 0, -1
-        for i in range(32):
+        ans = 0
+        pre, cur = inf, 0
+        while n:
             if n & 1:
-                if j != -1:
-                    ans = max(ans, i - j)
-                j = i
+                ans = max(ans, cur - pre)
+                pre = cur
+            cur += 1
             n >>= 1
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int binaryGap(int n) {
         int ans = 0;
-        for (int i = 0, j = -1; n != 0; ++i, n >>= 1) {
-            if ((n & 1) == 1) {
-                if (j != -1) {
-                    ans = Math.max(ans, i - j);
-                }
-                j = i;
+        for (int pre = 100, cur = 0; n != 0; n >>= 1) {
+            if (n % 2 == 1) {
+                ans = Math.max(ans, cur - pre);
+                pre = cur;
             }
+            ++cur;
         }
         return ans;
     }
 }
 ```
 
-### **TypeScript**
-
-```ts
-function binaryGap(n: number): number {
-    let res = 0;
-    let j = -1;
-    for (let i = 0; n !== 0; i++) {
-        if (n & 1) {
-            if (j !== -1) {
-                res = Math.max(res, i - j);
-            }
-            j = i;
-        }
-        n >>= 1;
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn binary_gap(mut n: i32) -> i32 {
-        let mut res = 0;
-        let mut i = 0;
-        let mut j = -1;
-        while n != 0 {
-            if n & 1 == 1 {
-                if j != -1 {
-                    res = res.max(i - j);
-                }
-                j = i;
-            }
-            n >>= 1;
-            i += 1;
-        }
-        res
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int binaryGap(int n) {
         int ans = 0;
-        for (int i = 0, j = -1; n; ++i, n >>= 1) {
+        for (int pre = 100, cur = 0; n != 0; n >>= 1) {
             if (n & 1) {
-                if (j != -1) ans = max(ans, i - j);
-                j = i;
+                ans = max(ans, cur - pre);
+                pre = cur;
             }
+            ++cur;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func binaryGap(n int) int {
-	ans := 0
-	for i, j := 0, -1; n != 0; i, n = i+1, n>>1 {
-		if (n & 1) == 1 {
-			if j != -1 && ans < i-j {
-				ans = i - j
-			}
-			j = i
+func binaryGap(n int) (ans int) {
+	for pre, cur := 100, 0; n != 0; n >>= 1 {
+		if n&1 == 1 {
+			ans = max(ans, cur-pre)
+			pre = cur
 		}
+		cur++
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function binaryGap(n: number): number {
+    let ans = 0;
+    for (let pre = 100, cur = 0; n; n >>= 1) {
+        if (n & 1) {
+            ans = Math.max(ans, cur - pre);
+            pre = cur;
+        }
+        ++cur;
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn binary_gap(mut n: i32) -> i32 {
+        let mut ans = 0;
+        let mut pre = 100;
+        let mut cur = 0;
+        while n != 0 {
+            if n % 2 == 1 {
+                ans = ans.max(cur - pre);
+                pre = cur;
+            }
+            cur += 1;
+            n >>= 1;
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

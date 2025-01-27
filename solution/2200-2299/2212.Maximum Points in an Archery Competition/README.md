@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2212.Maximum%20Points%20in%20an%20Archery%20Competition/README.md
+rating: 1868
+source: 第 285 场周赛 Q3
+tags:
+    - 位运算
+    - 数组
+    - 回溯
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [2212. 射箭比赛中的最大得分](https://leetcode.cn/problems/maximum-points-in-an-archery-competition)
 
 [English Version](/solution/2200-2299/2212.Maximum%20Points%20in%20an%20Archery%20Competition/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>Alice 和 Bob 是一场射箭比赛中的对手。比赛规则如下：</p>
 
@@ -68,19 +83,19 @@ Bob 获得总分 8 + 9 + 10 = 27 。
 	<li><code>sum(aliceArrows[i]) == numArrows</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二进制枚举**
+### 方法一：二进制枚举
 
 枚举 bob 射箭的最终状态，寻找满足题意的、且使得 bob 得分最大的状态。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -106,9 +121,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -142,7 +155,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -176,7 +189,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumBobPoints(numArrows int, aliceArrows []int) []int {
@@ -207,7 +220,7 @@ func maximumBobPoints(numArrows int, aliceArrows []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumBobPoints(numArrows: number, aliceArrows: number[]): number[] {
@@ -233,7 +246,7 @@ function maximumBobPoints(numArrows: number, aliceArrows: number[]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -268,10 +281,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

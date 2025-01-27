@@ -1,14 +1,59 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0608.Tree%20Node/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [608. 树节点](https://leetcode.cn/problems/tree-node)
 
 [English Version](/solution/0600-0699/0608.Tree%20Node/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给定一个表&nbsp;<code>tree</code>，<strong>id</strong> 是树节点的编号，&nbsp;<strong>p_id</strong>&nbsp;是它父节点的&nbsp;<strong>id 。</strong></p>
+<p>表：<code>Tree</code></p>
 
-<pre>+----+------+
+<pre>
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| p_id        | int  |
++-------------+------+
+id 是该表中具有唯一值的列。
+该表的每行包含树中节点的 id 及其父节点的 id 信息。
+给定的结构总是一个有效的树。
+</pre>
+
+<p>&nbsp;</p>
+
+<p>树中的每个节点可以是以下三种类型之一：</p>
+
+<ul>
+	<li><strong>"Leaf"</strong>：节点是叶子节点。</li>
+	<li><strong>"Root"</strong>：节点是树的根节点。</li>
+	<li><strong>"lnner"</strong>：节点既不是叶子节点也不是根节点。</li>
+</ul>
+
+<p>编写一个解决方案来报告树中每个节点的类型。</p>
+
+<p>以 <strong>任意顺序</strong> 返回结果表。</p>
+
+<p>结果格式如下所示。</p>
+
+<p>&nbsp;</p>
+
+<p><strong class="example">示例 1：</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0600-0699/0608.Tree%20Node/images/tree1.jpg" style="width: 304px; height: 224px;" />
+<pre>
+<b>输入：</b>
+Tree table:
++----+------+
 | id | p_id |
 +----+------+
 | 1  | null |
@@ -16,100 +61,78 @@
 | 3  | 1    |
 | 4  | 2    |
 | 5  | 2    |
-+----+------+</pre>
-
-<p>树中每个节点属于以下三种类型之一：</p>
-
-<ul>
-	<li>叶子：如果这个节点没有任何孩子节点。</li>
-	<li>根：如果这个节点是整棵树的根，即没有父节点。</li>
-	<li>内部节点：如果这个节点既不是叶子节点也不是根节点。</li>
-</ul>
-
-<p>&nbsp;</p>
-
-<p>写一个查询语句，输出所有节点的编号和节点的类型，并将结果按照节点编号排序。上面样例的结果为：</p>
-
-<p>&nbsp;</p>
-
-<pre>+----+------+
-| id | Type |
 +----+------+
-| 1  | Root |
-| 2  | Inner|
-| 3  | Leaf |
-| 4  | Leaf |
-| 5  | Leaf |
+<b>输出：</b>
++----+-------+
+| id | type  |
++----+-------+
+| 1  | Root  |
+| 2  | Inner |
+| 3  | Leaf  |
+| 4  | Leaf  |
+| 5  | Leaf  |
++----+-------+
+<b>解释：</b>
+节点 1 是根节点，因为它的父节点为空，并且它有子节点 2 和 3。
+节点 2 是一个内部节点，因为它有父节点 1 和子节点 4 和 5。
+节点 3、4 和 5 是叶子节点，因为它们有父节点而没有子节点。
+</pre>
+
+<p><strong class="example">示例 2：</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0600-0699/0608.Tree%20Node/images/tree2.jpg" style="width: 64px; height: 65px;" />
+<pre>
+<b>输入：</b>
+Tree table:
 +----+------+
+| id | p_id |
++----+------+
+| 1  | null |
++----+------+
+<b>输出：</b>
++----+-------+
+| id | type  |
++----+-------+
+| 1  | Root  |
++----+-------+
+<b>解释：</b>如果树中只有一个节点，则只需要输出其根属性。
 </pre>
 
 <p>&nbsp;</p>
 
-<p><strong>解释</strong></p>
+<p><strong>注意：</strong>本题与 <a href="https://leetcode.cn/problems/binary-tree-nodes/">3054. 二叉树节点</a> 一致。</p>
 
-<ul>
-	<li>节点 &#39;1&#39; 是根节点，因为它的父节点是 NULL ，同时它有孩子节点 &#39;2&#39; 和 &#39;3&#39; 。</li>
-	<li>节点 &#39;2&#39; 是内部节点，因为它有父节点 &#39;1&#39; ，也有孩子节点 &#39;4&#39; 和 &#39;5&#39; 。</li>
-	<li>节点 &#39;3&#39;, &#39;4&#39; 和 &#39;5&#39; 都是叶子节点，因为它们都有父节点同时没有孩子节点。</li>
-	<li>样例中树的形态如下：
-	<p>&nbsp;</p>
-
-    <pre>			  1
-    		/   \
-                      2       3
-                    /   \
-                  4       5
-
-</pre>
-
-    <p>&nbsp;</p>
-    </li>
-
-</ul>
-
-<p><strong>注意</strong></p>
-
-<p>如果树中只有一个节点，你只需要输出它的根属性。</p>
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：条件判断 + 子查询
+
+我们可以使用 `CASE WHEN` 条件判断语句来判断每个节点的类型，具体地：
+
+-   如果一个节点的 `p_id` 为 `NULL`，则该节点为根节点；
+-   否则，如果一个节点是另一个节点的父节点（这里我们使用子查询来判断），则该节点为内部节点；
+-   否则，该节点为叶子节点。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-```sql
-SELECT id,
-    (
-        CASE
-            WHEN p_id IS NULL THEN 'Root'
-            WHEN id IN (
-                SELECT p_id
-                FROM tree
-            ) THEN 'Inner'
-            ELSE 'Leaf'
-        END
-    ) AS type
-FROM tree;
-```
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
+SELECT
     id,
-    case
-        when p_id is null then 'Root'
-        when id in (
-            select
-                p_id
-            from
-                tree
-        ) then 'Inner'
-        else 'Leaf'
-    end Type
-from
-    tree;
+    CASE
+        WHEN p_id IS NULL THEN 'Root'
+        WHEN id IN (SELECT p_id FROM Tree) THEN 'Inner'
+        ELSE 'Leaf'
+    END AS type
+FROM Tree;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1104.Path%20In%20Zigzag%20Labelled%20Binary%20Tree/README.md
+rating: 1544
+source: 第 143 场周赛 Q2
+tags:
+    - 树
+    - 数学
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1104. 二叉树寻路](https://leetcode.cn/problems/path-in-zigzag-labelled-binary-tree)
 
 [English Version](/solution/1100-1199/1104.Path%20In%20Zigzag%20Labelled%20Binary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一棵无限的二叉树上，每个节点都有两个子节点，树中的节点 <strong>逐行</strong> 依次按&nbsp;&ldquo;之&rdquo; 字形进行标记。</p>
 
@@ -38,11 +52,13 @@
 	<li><code>1 &lt;= label &lt;= 10^6</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 对于一棵完全二叉树，第 $i$ 行的节点个数为 $2^{i-1}$，第 $i$ 行的节点编号范围为 $[2^{i-1}, 2^i - 1]$。而题目中对于奇数行，按从左到右的顺序进行标记，对于偶数行，按从右到左的顺序进行标记。所以对于第 $i$ 行的节点 $label$，它的互补节点编号为 $2^{i-1} + 2^i - 1 - label$。所以节点 $label$ 的实际父节点编号为 $(2^{i-1} + 2^i - 1 - label) / 2$。我们可以通过不断地求互补节点编号和父节点编号，直到到达根节点，即可得到从根节点到节点 $label$ 的路径。
 
@@ -52,9 +68,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +85,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pathInZigZagTree(label int) (ans []int) {
@@ -136,10 +148,8 @@ func pathInZigZagTree(label int) (ans []int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

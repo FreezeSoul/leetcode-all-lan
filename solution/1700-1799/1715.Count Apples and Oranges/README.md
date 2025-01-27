@@ -1,10 +1,20 @@
-# [1715. 苹果和橘子的个数](https://leetcode.cn/problems/count-apples-and-oranges)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1715.Count%20Apples%20and%20Oranges/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1715. 苹果和橘子的个数 🔒](https://leetcode.cn/problems/count-apples-and-oranges)
 
 [English Version](/solution/1700-1799/1715.Count%20Apples%20and%20Oranges/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：&nbsp;<code>Boxes</code></p>
 
@@ -89,15 +99,19 @@ Chests 表：
 苹果的总个数 = 6 + 24 + 27 + 27 + 17 + 14 + 36 = 151
 橘子的总个数 = 15 + 25 + 8 + 28 + 15 + 15 + 17 = 123</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-“`LEFT JOIN` + `IFNULL`”实现。
+### 方法一：左连接 + 求和
+
+我们可以将 `Boxes` 表和 `Chests` 表按照 `chest_id` 进行左连接，然后分别求出苹果和橘子的总个数。注意，如果某个箱子中没有小盒子，那么对应的 `chest_id` 为 `null`，此时我们需要认为该箱子中的小盒子中苹果和橘子的个数为 0。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
@@ -105,11 +119,33 @@ SELECT
     SUM(IFNULL(b.apple_count, 0) + IFNULL(c.apple_count, 0)) AS apple_count,
     SUM(IFNULL(b.orange_count, 0) + IFNULL(c.orange_count, 0)) AS orange_count
 FROM
-    Boxes b
-LEFT JOIN
-    Chests c
-ON
-    b.chest_id = c.chest_id;
+    Boxes AS b
+    LEFT JOIN Chests AS c USING (chest_id);
+```
+
+#### Pandas
+
+```python
+import pandas as pd
+
+
+def count_apples_and_oranges(boxes: pd.DataFrame, chests: pd.DataFrame) -> pd.DataFrame:
+    merged_df = boxes.merge(
+        chests, on="chest_id", how="left", suffixes=("_box", "_chest")
+    )
+    apple_count = (
+        merged_df["apple_count_box"].fillna(0)
+        + merged_df["apple_count_chest"].fillna(0)
+    ).sum()
+    orange_count = (
+        merged_df["orange_count_box"].fillna(0)
+        + merged_df["orange_count_chest"].fillna(0)
+    ).sum()
+    return pd.DataFrame({"apple_count": [apple_count], "orange_count": [orange_count]})
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

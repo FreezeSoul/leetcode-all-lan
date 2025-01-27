@@ -1,10 +1,22 @@
-# [2393. 严格递增的子数组个数](https://leetcode.cn/problems/count-strictly-increasing-subarrays)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2393.Count%20Strictly%20Increasing%20Subarrays/README.md
+tags:
+    - 数组
+    - 数学
+    - 动态规划
+---
+
+<!-- problem:start -->
+
+# [2393. 严格递增的子数组个数 🔒](https://leetcode.cn/problems/count-strictly-increasing-subarrays)
 
 [English Version](/solution/2300-2399/2393.Count%20Strictly%20Increasing%20Subarrays/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个由&nbsp;<strong>正整数&nbsp;</strong>组成的数组 <code>nums</code> 。</p>
 
@@ -43,91 +55,51 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：枚举
 
-利用双指针，找到每一段连续递增子数组的长度，我们记为 `cnt`，每次将 $(1+cnt)\times cnt / 2$ 累加到答案中。
+我们可以枚举以每个元素结尾的严格递增子数组的个数，然后将它们累加起来即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$，其中 $n$ 是数组的长度。
+我们用一个变量 $\textit{cnt}$ 来记录以当前元素结尾的严格递增子数组的个数，初始时 $\textit{cnt} = 1$。然后我们从第二个元素开始遍历数组，如果当前元素大于前一个元素，那么 $\textit{cnt}$ 就可以加 $1$，否则 $\textit{cnt}$ 重置为 $1$。此时，以当前元素结尾的严格递增子数组的个数就是 $\textit{cnt}$，我们将其累加到答案中即可。
 
-**方法二：枚举**
+遍历结束后，返回答案即可。
 
-我们可以枚举数组中的每一个元素，找到以该元素为结尾的严格递增子数组的个数，然后将这些个数累加到答案中。
-
-时间复杂度 $O(n)$，空间复杂度 $O(1)$，其中 $n$ 是数组的长度。
+时间复杂度 $O(n)$，其中 $n$ 为数组的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def countSubarrays(self, nums: List[int]) -> int:
-        ans = i = 0
-        while i < len(nums):
-            j = i + 1
-            while j < len(nums) and nums[j] > nums[j - 1]:
-                j += 1
-            cnt = j - i
-            ans += (1 + cnt) * cnt // 2
-            i = j
-        return ans
-```
-
-```python
-class Solution:
-    def countSubarrays(self, nums: List[int]) -> int:
-        ans = pre = cnt = 0
-        for x in nums:
-            if pre < x:
+        ans = cnt = 1
+        for x, y in pairwise(nums):
+            if x < y:
                 cnt += 1
             else:
                 cnt = 1
-            pre = x
             ans += cnt
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public long countSubarrays(int[] nums) {
-        long ans = 0;
-        int i = 0, n = nums.length;
-        while (i < n) {
-            int j = i + 1;
-            while (j < n && nums[j] > nums[j - 1]) {
-                ++j;
-            }
-            long cnt = j - i;
-            ans += (1 + cnt) * cnt / 2;
-            i = j;
-        }
-        return ans;
-    }
-}
-```
-
-```java
-class Solution {
-    public long countSubarrays(int[] nums) {
-        long ans = 0;
-        int pre = 0, cnt = 0;
-        for (int x : nums) {
-            if (pre < x) {
+        long ans = 1, cnt = 1;
+        for (int i = 1; i < nums.length; ++i) {
+            if (nums[i - 1] < nums[i]) {
                 ++cnt;
             } else {
                 cnt = 1;
             }
-            pre = x;
             ans += cnt;
         }
         return ans;
@@ -135,126 +107,62 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long countSubarrays(vector<int>& nums) {
-        long long ans = 0;
-        int i = 0, n = nums.size();
-        while (i < n) {
-            int j = i + 1;
-            while (j < n && nums[j] > nums[j - 1]) {
-                ++j;
-            }
-            int cnt = j - i;
-            ans += 1ll * (1 + cnt) * cnt / 2;
-            i = j;
-        }
-        return ans;
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    long long countSubarrays(vector<int>& nums) {
-        long long ans = 0;
-        int pre = 0, cnt = 0;
-        for (int x : nums) {
-            if (pre < x) {
+        long long ans = 1, cnt = 1;
+        for (int i = 1; i < nums.size(); ++i) {
+            if (nums[i - 1] < nums[i]) {
                 ++cnt;
             } else {
                 cnt = 1;
             }
             ans += cnt;
-            pre = x;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countSubarrays(nums []int) int64 {
-	ans := 0
-	i, n := 0, len(nums)
-	for i < n {
-		j := i + 1
-		for j < n && nums[j] > nums[j-1] {
-			j++
+	ans, cnt := 1, 1
+	for i, x := range nums[1:] {
+		if nums[i] < x {
+			cnt++
+		} else {
+			cnt = 1
 		}
-		cnt := j - i
-		ans += (1 + cnt) * cnt / 2
-		i = j
+		ans += cnt
 	}
 	return int64(ans)
 }
 ```
 
-```go
-func countSubarrays(nums []int) (ans int64) {
-	pre, cnt := 0, 0
-	for _, x := range nums {
-		if pre < x {
-			cnt++
-		} else {
-			cnt = 1
-		}
-		ans += int64(cnt)
-		pre = x
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countSubarrays(nums: number[]): number {
-    let ans = 0;
-    let i = 0;
-    const n = nums.length;
-    while (i < n) {
-        let j = i + 1;
-        while (j < n && nums[j] > nums[j - 1]) {
-            ++j;
-        }
-        const cnt = j - i;
-        ans += ((1 + cnt) * cnt) / 2;
-        i = j;
-    }
-    return ans;
-}
-```
-
-```ts
-function countSubarrays(nums: number[]): number {
-    let ans = 0;
-    let pre = 0;
-    let cnt = 0;
-    for (const x of nums) {
-        if (pre < x) {
+    let [ans, cnt] = [1, 1];
+    for (let i = 1; i < nums.length; ++i) {
+        if (nums[i - 1] < nums[i]) {
             ++cnt;
         } else {
             cnt = 1;
         }
         ans += cnt;
-        pre = x;
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

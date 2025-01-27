@@ -1,8 +1,22 @@
-# [1730. Shortest Path to Get Food](https://leetcode.com/problems/shortest-path-to-get-food)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1730.Shortest%20Path%20to%20Get%20Food/README_EN.md
+tags:
+    - Breadth-First Search
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
+# [1730. Shortest Path to Get Food 🔒](https://leetcode.com/problems/shortest-path-to-get-food)
 
 [中文文档](/solution/1700-1799/1730.Shortest%20Path%20to%20Get%20Food/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are starving and you want to eat food as quickly as possible. You want to find the shortest path to arrive at any food cell.</p>
 
@@ -54,20 +68,31 @@
 	<li>The <code>grid</code> contains <strong>exactly one</strong> <code>&#39;*&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-BFS.
+<!-- solution:start -->
+
+### Solution 1: BFS (Breadth-First Search)
+
+According to the problem, we need to start from `*`, find the nearest `#`, and return the shortest path length.
+
+First, we traverse the entire two-dimensional array to find the position of `*`, which will be the starting point for BFS, and put it into the queue.
+
+Then, we start BFS, traversing the elements in the queue. Each time we traverse an element, we add the elements in the four directions (up, down, left, and right) of it into the queue, until we encounter `#`, and return the current layer number.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(1)$. Here, $m$ and $n$ are the number of rows and columns of the two-dimensional array, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def getFood(self, grid: List[List[str]]) -> int:
         m, n = len(grid), len(grid[0])
-        i, j = next((i, j) for i in range(m)
-                    for j in range(n) if grid[i][j] == '*')
+        i, j = next((i, j) for i in range(m) for j in range(n) if grid[i][j] == '*')
         q = deque([(i, j)])
         dirs = (-1, 0, 1, 0, -1)
         ans = 0
@@ -86,7 +111,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -129,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -171,7 +196,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getFood(grid [][]byte) (ans int) {
@@ -211,7 +236,7 @@ func getFood(grid [][]byte) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -256,10 +281,8 @@ var getFood = function (grid) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

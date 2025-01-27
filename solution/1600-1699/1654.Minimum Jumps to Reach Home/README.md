@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1654.Minimum%20Jumps%20to%20Reach%20Home/README.md
+rating: 2124
+source: 第 39 场双周赛 Q3
+tags:
+    - 广度优先搜索
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1654. 到家的最少跳跃次数](https://leetcode.cn/problems/minimum-jumps-to-reach-home)
 
 [English Version](/solution/1600-1699/1654.Minimum%20Jumps%20to%20Reach%20Home/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一只跳蚤的家在数轴上的位置 <code>x</code> 处。请你帮助它从位置 <code>0</code> 出发，到达它的家。</p>
 
@@ -58,11 +72,13 @@
 	<li>位置 <code>x</code> 不在 <code>forbidden</code> 中。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 我们可以将跳蚤的位置和跳跃方向作为状态，使用 BFS 搜索最短路径。本题比较关键的地方在于确定右边界，即跳蚤最远能跳到哪里。
 
@@ -85,9 +101,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -112,9 +126,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -128,8 +140,7 @@ class Solution {
         final int n = 6000;
         boolean[][] vis = new boolean[n][2];
         vis[0][1] = true;
-        int ans = 0;
-        while (!q.isEmpty()) {
+        for (int ans = 0; !q.isEmpty(); ++ans) {
             for (int t = q.size(); t > 0; --t) {
                 var p = q.poll();
                 int i = p[0], k = p[1];
@@ -150,14 +161,13 @@ class Solution {
                     }
                 }
             }
-            ++ans;
         }
         return -1;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -170,8 +180,7 @@ public:
         bool vis[n][2];
         memset(vis, false, sizeof(vis));
         vis[0][1] = true;
-        int ans = 0;
-        while (!q.empty()) {
+        for (int ans = 0; q.size(); ++ans) {
             for (int t = q.size(); t; --t) {
                 auto [i, k] = q.front();
                 q.pop();
@@ -189,14 +198,13 @@ public:
                     }
                 }
             }
-            ++ans;
         }
         return -1;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumJumps(forbidden []int, a int, b int, x int) (ans int) {
@@ -208,7 +216,7 @@ func minimumJumps(forbidden []int, a int, b int, x int) (ans int) {
 	const n = 6000
 	vis := make([][2]bool, n)
 	vis[0][1] = true
-	for len(q) > 0 {
+	for ; len(q) > 0; ans++ {
 		for t := len(q); t > 0; t-- {
 			p := q[0]
 			q = q[1:]
@@ -228,16 +236,44 @@ func minimumJumps(forbidden []int, a int, b int, x int) (ans int) {
 				}
 			}
 		}
-		ans++
 	}
 	return -1
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minimumJumps(forbidden: number[], a: number, b: number, x: number): number {
+    const s: Set<number> = new Set(forbidden);
+    const q: [number, number][] = [[0, 1]];
+    const n = 6000;
+    const vis: boolean[][] = Array.from({ length: n }, () => [false, false]);
+    vis[0][1] = true;
+    for (let ans = 0; q.length; ++ans) {
+        for (let t = q.length; t; --t) {
+            const [i, k] = q.shift()!;
+            if (i === x) {
+                return ans;
+            }
+            const nxt: [number, number][] = [[i + a, 1]];
+            if (k & 1) {
+                nxt.push([i - b, 0]);
+            }
+            for (const [j, k] of nxt) {
+                if (j >= 0 && j < n && !s.has(j) && !vis[j][k]) {
+                    vis[j][k] = true;
+                    q.push([j, k]);
+                }
+            }
+        }
+    }
+    return -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

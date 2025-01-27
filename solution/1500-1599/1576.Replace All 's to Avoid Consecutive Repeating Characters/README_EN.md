@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1576.Replace%20All%20%27s%20to%20Avoid%20Consecutive%20Repeating%20Characters/README_EN.md
+rating: 1368
+source: Weekly Contest 205 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [1576. Replace All 's to Avoid Consecutive Repeating Characters](https://leetcode.com/problems/replace-all-s-to-avoid-consecutive-repeating-characters)
 
 [中文文档](/solution/1500-1599/1576.Replace%20All%20%27s%20to%20Avoid%20Consecutive%20Repeating%20Characters/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> containing only lowercase English letters and the <code>&#39;?&#39;</code> character, convert <strong>all </strong>the <code>&#39;?&#39;</code> characters into lowercase letters such that the final string does not contain any <strong>consecutive repeating </strong>characters. You <strong>cannot </strong>modify the non <code>&#39;?&#39;</code> characters.</p>
 
@@ -35,11 +49,17 @@
 	<li><code>s</code> consist of lowercase English letters and <code>&#39;?&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +76,7 @@ class Solution:
         return "".join(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -79,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -102,7 +122,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func modifyString(s string) string {
@@ -123,7 +143,7 @@ func modifyString(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function modifyString(s: string): string {
@@ -132,10 +152,7 @@ function modifyString(s: string): string {
     for (let i = 0; i < n; ++i) {
         if (cs[i] === '?') {
             for (const c of 'abc') {
-                if (
-                    (i > 0 && cs[i - 1] === c) ||
-                    (i + 1 < n && cs[i + 1] === c)
-                ) {
+                if ((i > 0 && cs[i - 1] === c) || (i + 1 < n && cs[i + 1] === c)) {
                     continue;
                 }
                 cs[i] = c;
@@ -147,10 +164,8 @@ function modifyString(s: string): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

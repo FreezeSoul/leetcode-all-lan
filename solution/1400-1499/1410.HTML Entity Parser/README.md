@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1410.HTML%20Entity%20Parser/README.md
+rating: 1405
+source: 第 184 场周赛 Q3
+tags:
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1410. HTML 实体解析器](https://leetcode.cn/problems/html-entity-parser)
 
 [English Version](/solution/1400-1499/1410.HTML%20Entity%20Parser/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>「HTML&nbsp;实体解析器」 是一种特殊的解析器，它将 HTML 代码作为输入，并用字符本身替换掉所有这些特殊的字符实体。</p>
 
@@ -68,17 +81,21 @@
 	<li>字符串可能包含 256 个ASCII 字符中的任意字符。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表 + 模拟
+
+我们可以使用哈希表来存储每个字符实体对应的字符，然后遍历字符串，当遇到字符实体时，我们就将其替换为对应的字符。
+
+时间复杂度 $O(n \times l)$，空间复杂度 $O(l)$。其中 $n$ 是字符串的长度，而 $l$ 是字符实体的总长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -106,9 +123,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -124,7 +139,7 @@ class Solution {
         int i = 0;
         int n = text.length();
         while (i < n) {
-            boolean find = false;
+            boolean found = false;
             for (int l = 1; l < 8; ++l) {
                 int j = i + l;
                 if (j <= n) {
@@ -132,12 +147,12 @@ class Solution {
                     if (d.containsKey(t)) {
                         ans.append(d.get(t));
                         i = j;
-                        find = true;
+                        found = true;
                         break;
                     }
                 }
             }
-            if (!find) {
+            if (!found) {
                 ans.append(text.charAt(i++));
             }
         }
@@ -146,23 +161,24 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string entityParser(string text) {
-        unordered_map<string, string> d;
-        d["&quot;"] = "\"";
-        d["&apos;"] = "'";
-        d["&amp;"] = "&";
-        d["&gt;"] = ">";
-        d["&lt;"] = "<";
-        d["&frasl;"] = "/";
+        unordered_map<string, string> d = {
+            {"&quot;", "\""},
+            {"&apos;", "'"},
+            {"&amp;", "&"},
+            {"&gt;", ">"},
+            {"&lt;", "<"},
+            {"&frasl;", "/"},
+        };
         string ans = "";
         int i = 0, n = text.size();
         while (i < n) {
-            bool find = false;
+            bool found = false;
             for (int l = 1; l < 8; ++l) {
                 int j = i + l;
                 if (j <= n) {
@@ -170,22 +186,128 @@ public:
                     if (d.count(t)) {
                         ans += d[t];
                         i = j;
-                        find = true;
+                        found = true;
                         break;
                     }
                 }
             }
-            if (!find) ans += text[i++];
+            if (!found) ans += text[i++];
         }
         return ans;
     }
 };
 ```
 
-### **...**
+#### Go
 
+```go
+func entityParser(text string) string {
+	d := map[string]string{
+		"&quot;":  "\"",
+		"&apos;":  "'",
+		"&amp;":   "&",
+		"&gt;":    ">",
+		"&lt;":    "<",
+		"&frasl;": "/",
+	}
+	var ans strings.Builder
+	i, n := 0, len(text)
+
+	for i < n {
+		found := false
+		for l := 1; l < 8; l++ {
+			j := i + l
+			if j <= n {
+				t := text[i:j]
+				if val, ok := d[t]; ok {
+					ans.WriteString(val)
+					i = j
+					found = true
+					break
+				}
+			}
+		}
+		if !found {
+			ans.WriteByte(text[i])
+			i++
+		}
+	}
+
+	return ans.String()
+}
 ```
 
+#### TypeScript
+
+```ts
+function entityParser(text: string): string {
+    const d: Record<string, string> = {
+        '&quot;': '"',
+        '&apos;': "'",
+        '&amp;': '&',
+        '&gt;': '>',
+        '&lt;': '<',
+        '&frasl;': '/',
+    };
+
+    let ans: string = '';
+    let i: number = 0;
+    const n: number = text.length;
+
+    while (i < n) {
+        let found: boolean = false;
+        for (let l: number = 1; l < 8; ++l) {
+            const j: number = i + l;
+            if (j <= n) {
+                const t: string = text.substring(i, j);
+                if (d.hasOwnProperty(t)) {
+                    ans += d[t];
+                    i = j;
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        if (!found) {
+            ans += text[i++];
+        }
+    }
+
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function entityParser(text: string): string {
+    const d: { [key: string]: string } = {
+        '&quot;': '"',
+        '&apos;': "'",
+        '&amp;': '&',
+        '&gt;': '>',
+        '&lt;': '<',
+        '&frasl;': '/',
+    };
+
+    const pattern = new RegExp(Object.keys(d).join('|'), 'g');
+    return text.replace(pattern, match => d[match]);
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

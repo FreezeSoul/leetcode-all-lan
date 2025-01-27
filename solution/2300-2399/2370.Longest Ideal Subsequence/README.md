@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2370.Longest%20Ideal%20Subsequence/README.md
+rating: 1834
+source: 第 305 场周赛 Q4
+tags:
+    - 哈希表
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2370. 最长理想子序列](https://leetcode.cn/problems/longest-ideal-subsequence)
 
 [English Version](/solution/2300-2399/2370.Longest%20Ideal%20Subsequence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由小写字母组成的字符串 <code>s</code> ，和一个整数 <code>k</code> 。如果满足下述条件，则可以将字符串 <code>t</code> 视作是 <strong>理想字符串</strong> ：</p>
 
@@ -47,11 +61,13 @@
 	<li><code>s</code> 由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 设 $dp[i]$ 表示以字符 $s[i]$ 结尾的最长理想子序列的长度，利用哈希表 $d$ 记录每个字符最新出现的位置。初始时 $dp[0]=1$, $d[s[0]]=0$。
 
@@ -63,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -85,9 +99,7 @@ class Solution:
         return max(dp)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -116,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -141,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestIdealString(s string, k int) int {
@@ -167,16 +179,9 @@ func longestIdealString(s string, k int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestIdealString(s: string, k: number): number {
@@ -196,10 +201,8 @@ function longestIdealString(s: string, k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

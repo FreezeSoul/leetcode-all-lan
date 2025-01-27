@@ -1,10 +1,20 @@
-# [2362. 生成发票](https://leetcode.cn/problems/generate-the-invoice)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2362.Generate%20the%20Invoice/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2362. 生成发票 🔒](https://leetcode.cn/problems/generate-the-invoice)
 
 [English Version](/solution/2300-2399/2362.Generate%20the%20Invoice/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Products</code></p>
 
@@ -15,7 +25,7 @@
 | product_id  | int  |
 | price       | int  |
 +-------------+------+
-product_id 是该表的主键。
+product_id 包含唯一值。
 该表中的每一行显示了一个产品的 ID 和一个单位的价格。
 </pre>
 
@@ -31,17 +41,17 @@ product_id 是该表的主键。
 | product_id  | int  |
 | quantity    | int  |
 +-------------+------+
-(invoice_id, product_id) 是该表的主键
+(invoice_id, product_id) 是该表的主键（具有唯一值的列的组合）
 该表中的每一行都显示了从发票中的一种产品订购的数量。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一个 SQL 查询来显示价格最高的发票的详细信息。如果两个或多个发票具有相同的价格，则返回 <code>invoice_id</code> 最小的发票的详细信息。</p>
+<p>编写解决方案，展示价格最高的发票的详细信息。如果两个或多个发票具有相同的价格，则返回 <code>invoice_id</code> 最小的发票的详细信息。</p>
 
 <p data-group="1-1">以 <strong>任意顺序</strong> 返回结果表。</p>
 
-<p>查询结果格式示例如下。</p>
+<p>结果格式示例如下。</p>
 
 <p>&nbsp;</p>
 
@@ -81,18 +91,42 @@ Purchases 表:
 
 最高价格是 1000 美元，最高价格的发票是 2 和 4。我们返回 ID 最小的发票 2 的详细信息。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    P AS (
+        SELECT *
+        FROM
+            Purchases
+            JOIN Products USING (product_id)
+    ),
+    T AS (
+        SELECT invoice_id, SUM(price * quantity) AS amount
+        FROM P
+        GROUP BY invoice_id
+        ORDER BY 2 DESC, 1
+        LIMIT 1
+    )
+SELECT product_id, quantity, (quantity * price) AS price
+FROM
+    P
+    JOIN T USING (invoice_id);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

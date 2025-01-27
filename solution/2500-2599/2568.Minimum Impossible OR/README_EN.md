@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2568.Minimum%20Impossible%20OR/README_EN.md
+rating: 1754
+source: Biweekly Contest 98 Q3
+tags:
+    - Bit Manipulation
+    - Brainteaser
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2568. Minimum Impossible OR](https://leetcode.com/problems/minimum-impossible-or)
 
 [中文文档](/solution/2500-2599/2568.Minimum%20Impossible%20OR/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong>&nbsp;integer array <code>nums</code>.</p>
 
@@ -35,11 +51,23 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumerate Powers of 2
+
+We start from the integer $1$. If $1$ is expressible, it must appear in the array `nums`. If $2$ is expressible, it must also appear in the array `nums`. If both $1$ and $2$ are expressible, then their bitwise OR operation $3$ is also expressible, and so on.
+
+Therefore, we can enumerate the powers of $2$. If the currently enumerated $2^i$ is not in the array `nums`, then $2^i$ is the smallest unexpressible integer.
+
+The time complexity is $O(n + \log M)$, and the space complexity is $O(n)$. Here, $n$ and $M$ are the length of the array `nums` and the maximum value in the array `nums`, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -48,7 +76,7 @@ class Solution:
         return next(1 << i for i in range(32) if 1 << i not in s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -66,7 +94,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -82,7 +110,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minImpossibleOR(nums []int) int {
@@ -98,7 +126,7 @@ func minImpossibleOR(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minImpossibleOR(nums: number[]): number {
@@ -114,10 +142,8 @@ function minImpossibleOR(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

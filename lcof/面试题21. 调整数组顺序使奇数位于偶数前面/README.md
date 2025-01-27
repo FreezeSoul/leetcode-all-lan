@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9821.%20%E8%B0%83%E6%95%B4%E6%95%B0%E7%BB%84%E9%A1%BA%E5%BA%8F%E4%BD%BF%E5%A5%87%E6%95%B0%E4%BD%8D%E4%BA%8E%E5%81%B6%E6%95%B0%E5%89%8D%E9%9D%A2/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 21. 调整数组顺序使奇数位于偶数前面](https://leetcode.cn/problems/diao-zheng-shu-zu-shun-xu-shi-qi-shu-wei-yu-ou-shu-qian-mian-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分。</p>
 
@@ -22,9 +32,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 10000</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：双指针**
+<!-- solution:start -->
+
+### 方法一：双指针
 
 我们定义两个指针 $i$ 和 $j$，其中指针 $i$ 指向当前元素，指针 $j$ 指向当前最后一个奇数的下一个位置。
 
@@ -34,7 +48,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -47,7 +61,7 @@ class Solution:
         return nums
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -65,7 +79,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -82,7 +96,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func exchange(nums []int) []int {
@@ -97,7 +111,40 @@ func exchange(nums []int) []int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function exchange(nums: number[]): number[] {
+    let j = 0;
+    for (let i = 0; i < nums.length; ++i) {
+        if (nums[i] & 1) {
+            const t = nums[i];
+            nums[i] = nums[j];
+            nums[j++] = t;
+        }
+    }
+    return nums;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn exchange(mut nums: Vec<i32>) -> Vec<i32> {
+        let mut j = 0;
+        for i in 0..nums.len() {
+            if nums[i] % 2 == 1 {
+                nums.swap(i, j);
+                j += 1;
+            }
+        }
+        nums
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -117,40 +164,7 @@ var exchange = function (nums) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function exchange(nums: number[]): number[] {
-    let j = 0;
-    for (let i = 0; i < nums.length; ++i) {
-        if (nums[i] & 1) {
-            const t = nums[i];
-            nums[i] = nums[j];
-            nums[j++] = t;
-        }
-    }
-    return nums;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn exchange(mut nums: Vec<i32>) -> Vec<i32> {
-        let mut j = 0;
-        for i in 0..nums.len() {
-            if nums[i] % 2 == 1 {
-                nums.swap(i, j);
-                j += 1;
-            }
-        }
-        nums
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -168,10 +182,30 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func exchange(_ nums: [Int]) -> [Int] {
+        var nums = nums
+        var j = 0
 
+        for i in 0..<nums.count {
+            if nums[i] % 2 == 1 {
+                let temp = nums[i]
+                nums[i] = nums[j]
+                nums[j] = temp
+                j += 1
+            }
+        }
+
+        return nums
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

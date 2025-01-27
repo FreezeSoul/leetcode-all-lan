@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2563.Count%20the%20Number%20of%20Fair%20Pairs/README_EN.md
+rating: 1720
+source: Weekly Contest 332 Q2
+tags:
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2563. Count the Number of Fair Pairs](https://leetcode.com/problems/count-the-number-of-fair-pairs)
 
 [中文文档](/solution/2500-2599/2563.Count%20the%20Number%20of%20Fair%20Pairs/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a <strong>0-indexed</strong> integer array <code>nums</code> of size <code>n</code> and two integers <code>lower</code> and <code>upper</code>, return <em>the number of fair pairs</em>.</p>
 
@@ -40,11 +57,21 @@
 	<li><code><font face="monospace">-10<sup>9</sup>&nbsp;&lt;= lower &lt;= upper &lt;= 10<sup>9</sup></font></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Binary Search
+
+First, we sort the array `nums` in ascending order. Then, for each `nums[i]`, we use binary search to find the lower bound `j` of `nums[j]`, i.e., the first index that satisfies `nums[j] >= lower - nums[i]`. Then, we use binary search again to find the lower bound `k` of `nums[k]`, i.e., the first index that satisfies `nums[k] >= upper - nums[i] + 1`. Therefore, `[j, k)` is the index range for `nums[j]` that satisfies `lower <= nums[i] + nums[j] <= upper`. The count of these indices corresponding to `nums[j]` is `k - j`, and we can add this to the answer. Note that $j > i$.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Where $n$ is the length of the array `nums`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,13 +79,13 @@ class Solution:
         nums.sort()
         ans = 0
         for i, x in enumerate(nums):
-            j = bisect_left(nums, lower-x, lo=i + 1)
-            k = bisect_left(nums, upper-x+1, lo=i + 1)
+            j = bisect_left(nums, lower - x, lo=i + 1)
+            k = bisect_left(nums, upper - x + 1, lo=i + 1)
             ans += k - j
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -107,7 +134,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countFairPairs(nums []int, lower int, upper int) (ans int64) {
@@ -121,10 +148,36 @@ func countFairPairs(nums []int, lower int, upper int) (ans int64) {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function countFairPairs(nums: number[], lower: number, upper: number): number {
+    const search = (x: number, l: number): number => {
+        let r = nums.length;
+        while (l < r) {
+            const mid = (l + r) >> 1;
+            if (nums[mid] >= x) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    };
 
+    nums.sort((a, b) => a - b);
+    let ans = 0;
+    for (let i = 0; i < nums.length; ++i) {
+        const j = search(lower - nums[i], i + 1);
+        const k = search(upper - nums[i] + 1, i + 1);
+        ans += k - j;
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

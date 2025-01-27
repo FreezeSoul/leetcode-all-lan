@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2537.Count%20the%20Number%20of%20Good%20Subarrays/README.md
+rating: 1891
+source: 第 328 场周赛 Q3
+tags:
+    - 数组
+    - 哈希表
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [2537. 统计好子数组的数目](https://leetcode.cn/problems/count-the-number-of-good-subarrays)
 
 [English Version](/solution/2500-2599/2537.Count%20the%20Number%20of%20Good%20Subarrays/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code>&nbsp;和一个整数 <code>k</code>&nbsp;，请你返回 <code>nums</code>&nbsp;中 <strong>好</strong>&nbsp;子数组的数目。</p>
 
@@ -41,27 +55,27 @@
 	<li><code>1 &lt;= nums[i], k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 双指针**
+### 方法一：哈希表 + 双指针
 
 如果一个子数组中包含 $k$ 对相同的元素，那么包含这个子数组的数组一定至少包含 $k$ 对相同的元素。
 
-我们用一个哈希表 `cnt` 统计窗口内数组元素出现的次数，用 `cur` 统计窗口内相同元素的对数，用 $i$ 维护窗口的左端点。
+我们用一个哈希表 $cnt$ 统计窗口内数组元素出现的次数，用 $cur$ 统计窗口内相同元素的对数，用 $i$ 维护窗口的左端点。
 
-遍历数组 `nums`，我们将当前元素 $x$ 作为右端点，那么窗口内相同元素的对数将增加 $cnt[x]$，同时将 $x$ 的出现次数加一，即 $cnt[x] \leftarrow cnt[x] + 1$。接下来，我们循环判断移出左端点后窗口内相同元素的对数是否大于等于 $k$，如果大于等于 $k$，那么我们将左端点元素的出现次数减一，即 $cnt[nums[i]] \leftarrow cnt[nums[i]] - 1$，同时将窗口内相同元素的对数减去 $cnt[nums[i]]$，即 $cur \leftarrow cur - cnt[nums[i]]$，同时将左端点右移，即 $i \leftarrow i + 1$。此时窗口左端点以及左侧的所有元素都可以作为当前右端点的左端点，因此答案加上 $i + 1$。
+遍历数组 $nums$，我们将当前元素 $x$ 作为右端点，那么窗口内相同元素的对数将增加 $cnt[x]$，同时将 $x$ 的出现次数加一，即 $cnt[x] \leftarrow cnt[x] + 1$。接下来，我们循环判断移出左端点后窗口内相同元素的对数是否大于等于 $k$，如果大于等于 $k$，那么我们将左端点元素的出现次数减一，即 $cnt[nums[i]] \leftarrow cnt[nums[i]] - 1$，同时将窗口内相同元素的对数减去 $cnt[nums[i]]$，即 $cur \leftarrow cur - cnt[nums[i]]$，同时将左端点右移，即 $i \leftarrow i + 1$。此时窗口左端点以及左侧的所有元素都可以作为当前右端点的左端点，因此答案加上 $i + 1$。
 
 最后，我们返回答案即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,9 +95,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countGood(nums []int, k int) int64 {
@@ -153,10 +165,8 @@ func countGood(nums []int, k int) int64 {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

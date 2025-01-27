@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1365.How%20Many%20Numbers%20Are%20Smaller%20Than%20the%20Current%20Number/README_EN.md
+rating: 1152
+source: Weekly Contest 178 Q1
+tags:
+    - Array
+    - Hash Table
+    - Counting
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1365. How Many Numbers Are Smaller Than the Current Number](https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number)
 
 [中文文档](/solution/1300-1399/1365.How%20Many%20Numbers%20Are%20Smaller%20Than%20the%20Current%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the array <code>nums</code>, for each <code>nums[i]</code> find out how many numbers in the array are smaller than it. That is, for each <code>nums[i]</code> you have to count the number of valid <code>j&#39;s</code>&nbsp;such that&nbsp;<code>j != i</code> <strong>and</strong> <code>nums[j] &lt; nums[i]</code>.</p>
 
@@ -44,11 +61,23 @@ For nums[4]=3 there exist three smaller numbers than it (1, 2 and 2).
 	<li><code>0 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Binary Search
+
+We can make a copy of the array $nums$, denoted as $arr$, and then sort $arr$ in ascending order.
+
+Next, for each element $x$ in $nums$, we can use binary search to find the index $j$ of the first element that is greater than or equal to $x$. Then $j$ is the number of elements that are smaller than $x$. We can store $j$ in the answer array.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$. Where $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,17 +86,7 @@ class Solution:
         return [bisect_left(arr, x) for x in nums]
 ```
 
-```python
-class Solution:
-    def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
-        cnt = [0] * 102
-        for x in nums:
-            cnt[x + 1] += 1
-        s = list(accumulate(cnt))
-        return [s[x] for x in nums]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,27 +114,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int[] smallerNumbersThanCurrent(int[] nums) {
-        int[] cnt = new int[102];
-        for (int x : nums) {
-            ++cnt[x + 1];
-        }
-        for (int i = 1; i < cnt.length; ++i) {
-            cnt[i] += cnt[i - 1];
-        }
-        int n = nums.length;
-        int[] ans = new int[n];
-        for (int i = 0; i < n; ++i) {
-            ans[i] = cnt[nums[i]];
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,27 +130,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
-        int cnt[102]{};
-        for (int& x : nums) {
-            ++cnt[x + 1];
-        }
-        for (int i = 1; i < 102; ++i) {
-            cnt[i] += cnt[i - 1];
-        }
-        vector<int> ans;
-        for (int& x : nums) {
-            ans.push_back(cnt[x]);
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func smallerNumbersThanCurrent(nums []int) (ans []int) {
@@ -165,23 +144,7 @@ func smallerNumbersThanCurrent(nums []int) (ans []int) {
 }
 ```
 
-```go
-func smallerNumbersThanCurrent(nums []int) (ans []int) {
-	cnt := [102]int{}
-	for _, x := range nums {
-		cnt[x+1]++
-	}
-	for i := 1; i < len(cnt); i++ {
-		cnt[i] += cnt[i-1]
-	}
-	for _, x := range nums {
-		ans = append(ans, cnt[x])
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallerNumbersThanCurrent(nums: number[]): number[] {
@@ -206,6 +169,96 @@ function smallerNumbersThanCurrent(nums: number[]): number[] {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Counting Sort + Prefix Sum
+
+We notice that the range of elements in the array $nums$ is $[0, 100]$. Therefore, we can use the counting sort method to first count the number of each element in the array $nums$. Then we calculate the prefix sum of the counting array. Finally, we traverse the array $nums$. For each element $x$, we directly add the value of the element at index $x$ in the counting array to the answer array.
+
+The time complexity is $O(n + M)$, and the space complexity is $O(M)$. Where $n$ and $M$ are the length and the maximum value of the array $nums$, respectively.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
+        cnt = [0] * 102
+        for x in nums:
+            cnt[x + 1] += 1
+        s = list(accumulate(cnt))
+        return [s[x] for x in nums]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[] smallerNumbersThanCurrent(int[] nums) {
+        int[] cnt = new int[102];
+        for (int x : nums) {
+            ++cnt[x + 1];
+        }
+        for (int i = 1; i < cnt.length; ++i) {
+            cnt[i] += cnt[i - 1];
+        }
+        int n = nums.length;
+        int[] ans = new int[n];
+        for (int i = 0; i < n; ++i) {
+            ans[i] = cnt[nums[i]];
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
+        int cnt[102]{};
+        for (int& x : nums) {
+            ++cnt[x + 1];
+        }
+        for (int i = 1; i < 102; ++i) {
+            cnt[i] += cnt[i - 1];
+        }
+        vector<int> ans;
+        for (int& x : nums) {
+            ans.push_back(cnt[x]);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func smallerNumbersThanCurrent(nums []int) (ans []int) {
+	cnt := [102]int{}
+	for _, x := range nums {
+		cnt[x+1]++
+	}
+	for i := 1; i < len(cnt); i++ {
+		cnt[i] += cnt[i-1]
+	}
+	for _, x := range nums {
+		ans = append(ans, cnt[x])
+	}
+	return
+}
+```
+
+#### TypeScript
+
 ```ts
 function smallerNumbersThanCurrent(nums: number[]): number[] {
     const cnt: number[] = new Array(102).fill(0);
@@ -224,10 +277,8 @@ function smallerNumbersThanCurrent(nums: number[]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

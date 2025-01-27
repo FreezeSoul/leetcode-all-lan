@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1096.Brace%20Expansion%20II/README.md
+rating: 2348
+source: 第 142 场周赛 Q4
+tags:
+    - 栈
+    - 广度优先搜索
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [1096. 花括号展开 II](https://leetcode.cn/problems/brace-expansion-ii)
 
 [English Version](/solution/1000-1099/1096.Brace%20Expansion%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果你熟悉 Shell 编程，那么一定了解过花括号展开，它可以用来生成任意字符串。</p>
 
@@ -12,6 +27,7 @@
 
 <ul>
 	<li>如果只给出单一的元素&nbsp;<code>x</code>，那么表达式表示的字符串就只有&nbsp;<code>"x"</code>。<code>R(x) = {x}</code>
+
     <ul>
     	<li>例如，表达式 <code>"a"</code> 表示字符串 <code>"a"</code>。</li>
     	<li>而表达式 <code>"w"</code> 就表示字符串 <code>"w"</code>。</li>
@@ -67,11 +83,13 @@
 	<li>给出的表达式&nbsp;<code>expression</code>&nbsp;用以表示一组基于题目描述中语法构造的字符串</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 我们设计一个递归函数 $dfs(exp)$，用于处理表达式 $exp$，并将结果存入集合 $s$ 中。
 
@@ -85,9 +103,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,8 +114,8 @@ class Solution:
                 s.add(exp)
                 return
             i = exp.rfind('{', 0, j - 1)
-            a, c = exp[:i], exp[j + 1:]
-            for b in exp[i + 1: j].split(','):
+            a, c = exp[:i], exp[j + 1 :]
+            for b in exp[i + 1 : j].split(','):
                 dfs(a + b + c)
 
         s = set()
@@ -107,9 +123,7 @@ class Solution:
         return sorted(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -136,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -167,7 +181,7 @@ private:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func braceExpansionII(expression string) []string {
@@ -195,7 +209,7 @@ func braceExpansionII(expression string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function braceExpansionII(expression: string): string[] {
@@ -218,10 +232,8 @@ function braceExpansionII(expression: string): string[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

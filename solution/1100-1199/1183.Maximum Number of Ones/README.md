@@ -1,10 +1,23 @@
-# [1183. 矩阵中 1 的最大数量](https://leetcode.cn/problems/maximum-number-of-ones)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1183.Maximum%20Number%20of%20Ones/README.md
+rating: 2366
+source: 第 8 场双周赛 Q4
+tags:
+    - 贪心
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
+# [1183. 矩阵中 1 的最大数量 🔒](https://leetcode.cn/problems/maximum-number-of-ones)
 
 [English Version](/solution/1100-1199/1183.Maximum%20Number%20of%20Ones/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现在有一个尺寸为 <code>width * height</code>&nbsp;的矩阵&nbsp;<code>M</code>，矩阵中的每个单元格的值不是&nbsp;<code>0</code>&nbsp;就是&nbsp;<code>1</code>。</p>
 
@@ -46,23 +59,23 @@
 	<li><code>0 &lt;= maxOnes &lt;= sideLength * sideLength</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：统计等效位置**
+### 方法一：统计等效位置
 
-为了方便说明，我们不妨令 `x = sideLength`。
+为了方便说明，我们不妨令 $x = sideLength$。
 
-考虑一个 $x\times x$ 的正方形，我们需要在正方形里面取最多 `maxOnes` 个点，将其置为 1。注意到当坐标 $(i, j)$ 处的点被选取后，所有坐标为 $(i\pm k_1 \times x, j\pm k_2 \times x)$ 的点都可以等效地置为 1。因此，我们算出坐标 $(i, j)$ 在矩阵中的等效位置的数量，取数量最多的前 `maxOnes` 个即可。
+考虑一个 $x\times x$ 的正方形，我们需要在正方形里面取最多 $maxOnes$ 个点，将其置为 1。注意到当坐标 $(i, j)$ 处的点被选取后，所有坐标为 $(i\pm k_1 \times x, j\pm k_2 \times x)$ 的点都可以等效地置为 1。因此，我们算出坐标 $(i, j)$ 在矩阵中的等效位置的数量，取数量最多的前 $maxOnes$ 个即可。
 
-时间复杂度 $O(m\times n)$。其中 $m$, $n$ 分别是矩阵的行数和列数。
+时间复杂度 $O(m \times n)$。其中 $m$ 和 $n$ 分别是矩阵的行数和列数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +92,7 @@ class Solution:
         return sum(cnt[:maxOnes])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumNumberOfOnes(width int, height int, sideLength int, maxOnes int) int {
@@ -149,7 +160,7 @@ func maximumNumberOfOnes(width int, height int, sideLength int, maxOnes int) int
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -173,10 +184,8 @@ var maximumNumberOfOnes = function (width, height, sideLength, maxOnes) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

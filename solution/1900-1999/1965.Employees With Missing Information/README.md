@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1965.Employees%20With%20Missing%20Information/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1965. 丢失信息的雇员](https://leetcode.cn/problems/employees-with-missing-information)
 
 [English Version](/solution/1900-1999/1965.Employees%20With%20Missing%20Information/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Employees</code></p>
 
@@ -15,8 +25,8 @@
 | employee_id | int     |
 | name        | varchar |
 +-------------+---------+
-employee_id 是这个表的主键。
-每一行表示雇员的id 和他的姓名。
+employee_id 是该表中具有唯一值的列。
+每一行表示雇员的 id 和他的姓名。
 </pre>
 
 <p>表: <code>Salaries</code></p>
@@ -28,20 +38,20 @@ employee_id 是这个表的主键。
 | employee_id | int     |
 | salary      | int     |
 +-------------+---------+
-employee_id is 这个表的主键。
-每一行表示雇员的id 和他的薪水。
+employee_id 是该表中具有唯一值的列。
+每一行表示雇员的 id 和他的薪水。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写出一个查询语句，找到所有 <strong>丢失信息</strong> 的雇员id。当满足下面一个条件时，就被认为是雇员的信息丢失：</p>
+<p>编写解决方案，找到所有 <strong>丢失信息</strong> 的雇员 id。当满足下面一个条件时，就被认为是雇员的信息丢失：</p>
 
 <ul>
 	<li>雇员的 <strong>姓名</strong> 丢失了，或者</li>
-	<li>雇员的 <strong>薪水信息</strong> 丢失了，或者</li>
+	<li>雇员的 <strong>薪水信息</strong> 丢失了</li>
 </ul>
 
-<p>返回这些雇员的id &nbsp;<code>employee_id</code>&nbsp;，&nbsp;<strong>从小到大排序&nbsp;</strong>。</p>
+<p>返回这些雇员的 id &nbsp;<code>employee_id</code>&nbsp;，&nbsp;<strong>从小到大排序&nbsp;</strong>。</p>
 
 <p>查询结果格式如下面的例子所示。</p>
 
@@ -75,35 +85,38 @@ Salaries table:
 | 2           |
 +-------------+
 <strong>解释：</strong>
-雇员1，2，4，5 都工作在这个公司。
-1号雇员的姓名丢失了。
-2号雇员的薪水信息丢失了。</pre>
+雇员 1，2，4，5 都在这个公司工作。
+1 号雇员的姓名丢失了。
+2 号雇员的薪水信息丢失了。</pre>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：子查询 + 合并
+
+我们可以先从 `Employees` 表中找出所有不在 `Salaries` 表中的 `employee_id`，再从 `Salaries` 表中找出所有不在 `Employees` 表中的 `employee_id`，最后将两个结果合并，然后按照 `employee_id` 排序即可。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
+# Write your MySQL query statement below
 SELECT employee_id
-FROM Employees AS e
-WHERE e.employee_id NOT IN (
-        SELECT employee_id
-        FROM Salaries
-    )
+FROM Employees
+WHERE employee_id NOT IN (SELECT employee_id FROM Salaries)
 UNION
 SELECT employee_id
-FROM Salaries AS s
-WHERE s.employee_id NOT IN (
-        SELECT employee_id
-        FROM Employees
-    )
-ORDER BY employee_id;
+FROM Salaries
+WHERE employee_id NOT IN (SELECT employee_id FROM Employees)
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

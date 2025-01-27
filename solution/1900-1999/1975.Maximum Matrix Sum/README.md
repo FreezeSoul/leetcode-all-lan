@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1975.Maximum%20Matrix%20Sum/README.md
+rating: 1648
+source: 第 59 场双周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1975. 最大方阵和](https://leetcode.cn/problems/maximum-matrix-sum)
 
 [English Version](/solution/1900-1999/1975.Maximum%20Matrix%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个&nbsp;<code>n x n</code>&nbsp;的整数方阵&nbsp;<code>matrix</code>&nbsp;。你可以执行以下操作&nbsp;<strong>任意次</strong>&nbsp;：</p>
 
@@ -45,125 +59,147 @@
 	<li><code>-10<sup>5</sup> &lt;= matrix[i][j] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 如果矩阵中存在零，或者矩阵中负数的个数为偶数，那么最大和就是矩阵中所有元素的绝对值之和。
 
 否则，说明矩阵中有奇数个负数，最终一定会剩下一个负数，我们选择绝对值最小的数，将其变为负数，这样可以使得最终的和最大。
 
-时间复杂度 $O(m\times n)$，其中 $m$ 和 $n$ 分别是矩阵的行数和列数。
+时间复杂度 $O(m \times n)$，其中 $m$ 和 $n$ 分别是矩阵的行数和列数。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxMatrixSum(self, matrix: List[List[int]]) -> int:
-        s = cnt = 0
         mi = inf
+        s = cnt = 0
         for row in matrix:
-            for v in row:
-                s += abs(v)
-                mi = min(mi, abs(v))
-                if v < 0:
-                    cnt += 1
-        if cnt % 2 == 0 or mi == 0:
-            return s
-        return s - mi * 2
+            for x in row:
+                cnt += x < 0
+                y = abs(x)
+                mi = min(mi, y)
+                s += y
+        return s if cnt % 2 == 0 else s - mi * 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public long maxMatrixSum(int[][] matrix) {
         long s = 0;
-        int cnt = 0;
-        int mi = Integer.MAX_VALUE;
+        int mi = 1 << 30, cnt = 0;
         for (var row : matrix) {
-            for (var v : row) {
-                s += Math.abs(v);
-                mi = Math.min(mi, Math.abs(v));
-                if (v < 0) {
-                    ++cnt;
-                }
+            for (int x : row) {
+                cnt += x < 0 ? 1 : 0;
+                int y = Math.abs(x);
+                mi = Math.min(mi, y);
+                s += y;
             }
         }
-        if (cnt % 2 == 0 || mi == 0) {
-            return s;
-        }
-        return s - mi * 2;
+        return cnt % 2 == 0 ? s : s - mi * 2;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long maxMatrixSum(vector<vector<int>>& matrix) {
         long long s = 0;
-        int cnt = 0, mi = INT_MAX;
-        for (auto& row : matrix) {
-            for (int& v : row) {
-                s += abs(v);
-                mi = min(mi, abs(v));
-                cnt += v < 0;
+        int mi = 1 << 30, cnt = 0;
+        for (const auto& row : matrix) {
+            for (int x : row) {
+                cnt += x < 0 ? 1 : 0;
+                int y = abs(x);
+                mi = min(mi, y);
+                s += y;
             }
         }
-        if (cnt % 2 == 0 || mi == 0) return s;
-        return s - mi * 2;
+        return cnt % 2 == 0 ? s : s - mi * 2;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxMatrixSum(matrix [][]int) int64 {
-	s := 0
-	cnt, mi := 0, math.MaxInt32
+	var s int64
+	mi, cnt := 1<<30, 0
 	for _, row := range matrix {
-		for _, v := range row {
-			s += abs(v)
-			mi = min(mi, abs(v))
-			if v < 0 {
+		for _, x := range row {
+			if x < 0 {
 				cnt++
+				x = -x
 			}
+			mi = min(mi, x)
+			s += int64(x)
 		}
 	}
-	if cnt%2 == 1 {
-		s -= mi * 2
+	if cnt%2 == 0 {
+		return s
 	}
-	return int64(s)
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
+	return s - int64(mi*2)
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function maxMatrixSum(matrix: number[][]): number {
+    let [s, cnt, mi] = [0, 0, Infinity];
+    for (const row of matrix) {
+        for (const x of row) {
+            if (x < 0) {
+                ++cnt;
+            }
+            const y = Math.abs(x);
+            s += y;
+            mi = Math.min(mi, y);
+        }
+    }
+    return cnt % 2 === 0 ? s : s - 2 * mi;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_matrix_sum(matrix: Vec<Vec<i32>>) -> i64 {
+        let mut s = 0;
+        let mut mi = i32::MAX;
+        let mut cnt = 0;
+        for row in matrix {
+            for &x in row.iter() {
+                cnt += if x < 0 { 1 } else { 0 };
+                let y = x.abs();
+                mi = mi.min(y);
+                s += y as i64;
+            }
+        }
+        if cnt % 2 == 0 {
+            s
+        } else {
+            s - (mi as i64 * 2)
+        }
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -171,27 +207,23 @@ func abs(x int) int {
  * @return {number}
  */
 var maxMatrixSum = function (matrix) {
-    let cnt = 0;
-    let s = 0;
-    let mi = Infinity;
+    let [s, cnt, mi] = [0, 0, Infinity];
     for (const row of matrix) {
-        for (const v of row) {
-            s += Math.abs(v);
-            mi = Math.min(mi, Math.abs(v));
-            cnt += v < 0;
+        for (const x of row) {
+            if (x < 0) {
+                ++cnt;
+            }
+            const y = Math.abs(x);
+            s += y;
+            mi = Math.min(mi, y);
         }
     }
-    if (cnt % 2 == 0) {
-        return s;
-    }
-    return s - mi * 2;
+    return cnt % 2 === 0 ? s : s - 2 * mi;
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

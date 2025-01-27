@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2315.Count%20Asterisks/README_EN.md
+rating: 1250
+source: Biweekly Contest 81 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2315. Count Asterisks](https://leetcode.com/problems/count-asterisks)
 
 [中文文档](/solution/2300-2399/2315.Count%20Asterisks/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code>, where every <strong>two</strong> consecutive vertical bars <code>&#39;|&#39;</code> are grouped into a <strong>pair</strong>. In other words, the 1<sup>st</sup> and 2<sup>nd</sup> <code>&#39;|&#39;</code> make a pair, the 3<sup>rd</sup> and 4<sup>th</sup> <code>&#39;|&#39;</code> make a pair, and so forth.</p>
 
@@ -45,11 +59,17 @@ There are 2 asterisks considered. Therefore, we return 2.</pre>
 	<li><code>s</code> contains an <strong>even</strong> number of vertical bars <code>&#39;|&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +83,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -101,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countAsterisks(s string) (ans int) {
@@ -117,7 +137,7 @@ func countAsterisks(s string) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countAsterisks(s: string): number {
@@ -134,7 +154,7 @@ function countAsterisks(s: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -143,9 +163,9 @@ impl Solution {
         let mut ok = 1;
         for &c in s.as_bytes() {
             if c == b'*' {
-                ans += ok
+                ans += ok;
             } else if c == b'|' {
-                ok ^= 1
+                ok ^= 1;
             }
         }
         ans
@@ -153,24 +173,7 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-int countAsterisks(char * s){
-    int ans = 0;
-    int ok = 1;
-    for (int i = 0; s[i]; i++) {
-        if (s[i] == '*') {
-            ans += ok;
-        } else if (s[i] == '|') {
-            ok ^= 1;
-        }
-    }
-    return ans;
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -188,10 +191,25 @@ public class Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+int countAsterisks(char* s) {
+    int ans = 0;
+    int ok = 1;
+    for (int i = 0; s[i]; i++) {
+        if (s[i] == '*') {
+            ans += ok;
+        } else if (s[i] == '|') {
+            ok ^= 1;
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

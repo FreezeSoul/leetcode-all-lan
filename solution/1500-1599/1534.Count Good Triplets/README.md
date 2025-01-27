@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1534.Count%20Good%20Triplets/README.md
+rating: 1279
+source: 第 200 场周赛 Q1
+tags:
+    - 数组
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [1534. 统计好三元组](https://leetcode.cn/problems/count-good-triplets)
 
 [English Version](/solution/1500-1599/1534.Count%20Good%20Triplets/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>arr</code> ，以及 <code>a</code>、<code>b</code> 、<code>c</code> 三个整数。请你统计其中好三元组的数量。</p>
 
@@ -47,11 +60,13 @@
 	<li><code>0 &lt;= a, b, c &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 我们可以枚举所有的 $i$, $j$ 和 $k$，其中 $i \lt j \lt k$，判断是否同时满足 $|arr[i] - arr[j]| \le a$，$|arr[j] - arr[k]| \le b$ 和 $|arr[i] - arr[k]| \le c$，如果满足则将答案加一。
 
@@ -61,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,15 +85,15 @@ class Solution:
         for i in range(n):
             for j in range(i + 1, n):
                 for k in range(j + 1, n):
-                    ans += abs(arr[i] - arr[j]) <= a \
-                        and abs(arr[j] - arr[k]) <= b and abs(arr[i] - arr[k]) <= c
+                    ans += (
+                        abs(arr[i] - arr[j]) <= a
+                        and abs(arr[j] - arr[k]) <= b
+                        and abs(arr[i] - arr[k]) <= c
+                    )
         return ans
-
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +135,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countGoodTriplets(arr []int, a int, b int, c int) (ans int) {
@@ -147,10 +160,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

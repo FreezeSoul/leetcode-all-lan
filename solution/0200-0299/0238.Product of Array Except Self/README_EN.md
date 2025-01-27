@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0238.Product%20of%20Array%20Except%20Self/README_EN.md
+tags:
+    - Array
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [238. Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self)
 
 [中文文档](/solution/0200-0299/0238.Product%20of%20Array%20Except%20Self/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return <em>an array</em> <code>answer</code> <em>such that</em> <code>answer[i]</code> <em>is equal to the product of all the elements of</em> <code>nums</code> <em>except</em> <code>nums[i]</code>.</p>
 
@@ -24,29 +37,33 @@
 <ul>
 	<li><code>2 &lt;= nums.length &lt;= 10<sup>5</sup></code></li>
 	<li><code>-30 &lt;= nums[i] &lt;= 30</code></li>
-	<li>The product of any prefix or suffix of <code>nums</code> is <strong>guaranteed</strong> to fit in a <strong>32-bit</strong> integer.</li>
+	<li>The input is generated such that <code>answer[i]</code> is <strong>guaranteed</strong> to fit in a <strong>32-bit</strong> integer.</li>
 </ul>
 
 <p>&nbsp;</p>
-<p><strong>Follow up:</strong>&nbsp;Can you solve the problem in <code>O(1)&nbsp;</code>extra&nbsp;space complexity? (The output array <strong>does not</strong> count as extra space for space complexity analysis.)</p>
+<p><strong>Follow up:</strong>&nbsp;Can you solve the problem in <code>O(1)</code>&nbsp;extra&nbsp;space complexity? (The output array <strong>does not</strong> count as extra space for space complexity analysis.)</p>
+
+<!-- description:end -->
 
 ## Solutions
 
-**Approach 1: Two Passes**
+<!-- solution:start -->
 
-We define two variables $left$ and $right$, which represent the product of all elements to the left and right of the current element respectively. Initially, $left=1$, $right=1$. Define an answer array $ans$ of length $n$.
+### Solution 1: Two Passes
 
-We first traverse the array from left to right, for the $i$th element we update $ans[i]$ with $left$, then $left$ multiplied by $nums[i]$.
+We define two variables $\textit{left}$ and $\textit{right}$ to represent the product of all elements to the left and right of the current element, respectively. Initially, $\textit{left} = 1$ and $\textit{right} = 1$. We define an answer array $\textit{ans}$ of length $n$.
 
-Then, we traverse the array from right to left, for the $i$th element, we update $ans[i]$ to $ans[i] \times right$, then $right$ multiplied by $nums[i]$.
+First, we traverse the array from left to right. For the $i$-th element, we update $\textit{ans}[i]$ with $\textit{left}$, then multiply $\textit{left}$ by $\textit{nums}[i]$.
 
-After the traversal, the array `ans` is the answer.
+Next, we traverse the array from right to left. For the $i$-th element, we update $\textit{ans}[i]$ to $\textit{ans}[i] \times \textit{right}$, then multiply $\textit{right}$ by $\textit{nums}[i]$.
 
-The time complexity is $O(n)$, where $n$ is the length of the array `nums`. Ignore the space consumption of the answer array, the space complexity is $O(1)$.
+After the traversal, we return the answer array $\textit{ans}$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{nums}$. Ignoring the space consumption of the answer array, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +80,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func productExceptSelf(nums []int) []int {
@@ -123,7 +140,45 @@ func productExceptSelf(nums []int) []int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function productExceptSelf(nums: number[]): number[] {
+    const n = nums.length;
+    const ans: number[] = new Array(n);
+    for (let i = 0, left = 1; i < n; ++i) {
+        ans[i] = left;
+        left *= nums[i];
+    }
+    for (let i = n - 1, right = 1; i >= 0; --i) {
+        ans[i] *= right;
+        right *= nums[i];
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len();
+        let mut ans = vec![1; n];
+        for i in 1..n {
+            ans[i] = ans[i - 1] * nums[i - 1];
+        }
+        let mut r = 1;
+        for i in (0..n).rev() {
+            ans[i] *= r;
+            r *= nums[i];
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -145,53 +200,7 @@ var productExceptSelf = function (nums) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function productExceptSelf(nums: number[]): number[] {
-    const n = nums.length;
-    const ans: number[] = new Array(n);
-    for (let i = 0, left = 1; i < n; ++i) {
-        ans[i] = left;
-        left *= nums[i];
-    }
-    for (let i = n - 1, right = 1; i >= 0; --i) {
-        ans[i] *= right;
-        right *= nums[i];
-    }
-    return ans;
-}
-```
-
-```ts
-function productExceptSelf(nums: number[]): number[] {
-    return nums.map((_, i) =>
-        nums.reduce((pre, val, j) => pre * (i === j ? 1 : val), 1),
-    );
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
-        let n = nums.len();
-        let mut ans = vec![1; n];
-        for i in 1..n {
-            ans[i] = ans[i - 1] * nums[i - 1];
-        }
-        let mut r = 1;
-        for i in (0..n).rev() {
-            ans[i] *= r;
-            r *= nums[i];
-        }
-        ans
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -211,10 +220,32 @@ public class Solution {
 }
 ```
 
-### **...**
+#### PHP
 
-```
-
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer[]
+     */
+    function productExceptSelf($nums) {
+        $n = count($nums);
+        $ans = [];
+        for ($i = 0, $left = 1; $i < $n; ++$i) {
+            $ans[$i] = $left;
+            $left *= $nums[$i];
+        }
+        for ($i = $n - 1, $right = 1; $i >= 0; --$i) {
+            $ans[$i] *= $right;
+            $right *= $nums[$i];
+        }
+        return $ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

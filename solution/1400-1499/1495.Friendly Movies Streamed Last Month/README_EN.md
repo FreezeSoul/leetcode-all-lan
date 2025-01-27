@@ -1,8 +1,20 @@
-# [1495. Friendly Movies Streamed Last Month](https://leetcode.com/problems/friendly-movies-streamed-last-month)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1495.Friendly%20Movies%20Streamed%20Last%20Month/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1495. Friendly Movies Streamed Last Month 🔒](https://leetcode.com/problems/friendly-movies-streamed-last-month)
 
 [中文文档](/solution/1400-1499/1495.Friendly%20Movies%20Streamed%20Last%20Month/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>TVProgram</code></p>
 
@@ -14,7 +26,7 @@
 | content_id    | int     |
 | channel       | varchar |
 +---------------+---------+
-(program_date, content_id) is the primary key for this table.
+(program_date, content_id) is the primary key (combination of columns with unique values) for this table.
 This table contains information of the programs on the TV.
 content_id is the id of the program in some channel on the TV.</pre>
 
@@ -31,19 +43,19 @@ content_id is the id of the program in some channel on the TV.</pre>
 | Kids_content     | enum    |
 | content_type     | varchar |
 +------------------+---------+
-content_id is the primary key for this table.
-Kids_content is an enum that takes one of the values (&#39;Y&#39;, &#39;N&#39;) where: 
+content_id is the primary key (column with unique values) for this table.
+Kids_content is an ENUM (category) of types (&#39;Y&#39;, &#39;N&#39;) where: 
 &#39;Y&#39; means is content for kids otherwise &#39;N&#39; is not content for kids.
 content_type is the category of the content as movies, series, etc.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the distinct titles of the kid-friendly movies streamed in <strong>June 2020</strong>.</p>
+<p>Write a solution to report the distinct titles of the kid-friendly movies streamed in <strong>June 2020</strong>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -85,33 +97,34 @@ Content table:
 &quot;Cinderella&quot; was not streamed in June 2020.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Equi-Join + Conditional Filtering
+
+We can first use an equi-join to join the two tables based on the `content_id` field, and then use conditional filtering to select the child-friendly movies that were played in June 2020.
 
 <!-- tabs:start -->
 
-```sql
-SELECT DISTINCT
-    title
-FROM
-    Content
-        INNER JOIN
-    TVProgram ON Content.content_id = TVProgram.content_id
-WHERE
-    content_type = 'Movies'
-        AND kids_content = 'Y'
-        AND program_date BETWEEN '2020-06-01' AND '2020-06-30';
-```
+#### MySQL
 
 ```sql
-SELECT DISTINCT
-    title
+# Write your MySQL query statement below
+SELECT DISTINCT title
 FROM
-    Content
-        INNER JOIN
-    TVProgram ON Content.content_id = TVProgram.content_id
+    TVProgram
+    JOIN Content USING (content_id)
 WHERE
-    kids_content = 'Y'
-        AND (MONTH(program_date) , YEAR(program_date)) = (6 , 2020);
+    DATE_FORMAT(program_date, '%Y%m') = '202006'
+    AND kids_content = 'Y'
+    AND content_type = 'Movies';
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

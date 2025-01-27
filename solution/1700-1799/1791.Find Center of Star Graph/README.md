@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1791.Find%20Center%20of%20Star%20Graph/README.md
+rating: 1286
+source: 第 232 场周赛 Q2
+tags:
+    - 图
+---
+
+<!-- problem:start -->
+
 # [1791. 找出星型图的中心节点](https://leetcode.cn/problems/find-center-of-star-graph)
 
 [English Version](/solution/1700-1799/1791.Find%20Center%20of%20Star%20Graph/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个无向的 <strong>星型</strong> 图，由 <code>n</code> 个编号从 <code>1</code> 到 <code>n</code> 的节点组成。星型图有一个 <strong>中心</strong> 节点，并且恰有 <code>n - 1</code> 条边将中心节点与其他每个节点连接起来。</p>
 
@@ -40,21 +52,21 @@
 	<li>题目数据给出的 <code>edges</code> 表示一个有效的星型图</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：直接比较前两条边的点**
+### 方法一：直接比较前两条边的点
 
 中心点的特点是，它与其他所有点都相连，因此只要比较前两条边的点，如果有相同的点，那么这个点就是中心点。
 
-时间复杂度 $O(1)$。
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -62,9 +74,7 @@ class Solution:
         return edges[0][0] if edges[0][0] in edges[1] else edges[0][1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -76,19 +86,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function findCenter(edges: number[][]): number {
-    for (let num of edges[0]) {
-        if (edges[1].includes(num)) {
-            return num;
-        }
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -101,7 +99,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findCenter(edges [][]int) int {
@@ -114,7 +112,19 @@ func findCenter(edges [][]int) int {
 }
 ```
 
-### **Rust**
+#### TypeScript
+
+```ts
+function findCenter(edges: number[][]): number {
+    for (let num of edges[0]) {
+        if (edges[1].includes(num)) {
+            return num;
+        }
+    }
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
@@ -127,7 +137,7 @@ impl Solution {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -141,10 +151,8 @@ var findCenter = function (edges) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

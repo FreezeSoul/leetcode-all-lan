@@ -1,13 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0818.Race%20Car/README_EN.md
+tags:
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [818. Race Car](https://leetcode.com/problems/race-car)
 
 [中文文档](/solution/0800-0899/0818.Race%20Car/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>Your car starts at position <code>0</code> and speed <code>+1</code> on an infinite number line. Your car can go into negative positions. Your car drives automatically according to a sequence of instructions <code>&#39;A&#39;</code> (accelerate) and <code>&#39;R&#39;</code> (reverse):</p>
 
 <ul>
 	<li>When you get an instruction <code>&#39;A&#39;</code>, your car does the following:
+
     <ul>
     	<li><code>position += speed</code></li>
     	<li><code>speed *= 2</code></li>
@@ -19,6 +32,7 @@
     	<li>otherwise <code>speed = 1</code></li>
     </ul>
     Your position stays the same.</li>
+
 </ul>
 
 <p>For example, after commands <code>&quot;AAR&quot;</code>, your car goes to positions <code>0 --&gt; 1 --&gt; 3 --&gt; 3</code>, and your speed goes to <code>1 --&gt; 2 --&gt; 4 --&gt; -1</code>.</p>
@@ -53,11 +67,17 @@ Your position goes from 0 --&gt; 1 --&gt; 3 --&gt; 7 --&gt; 7 --&gt; 6.
 	<li><code>1 &lt;= target &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -74,7 +94,7 @@ class Solution:
         return dp[target]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -119,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func racecar(target int) int {
@@ -137,19 +157,10 @@ func racecar(target int) int {
 	}
 	return dp[target]
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

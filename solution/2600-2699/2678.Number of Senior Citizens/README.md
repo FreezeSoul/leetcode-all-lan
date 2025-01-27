@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2678.Number%20of%20Senior%20Citizens/README.md
+rating: 1198
+source: 第 104 场双周赛 Q1
+tags:
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2678. 老人的数目](https://leetcode.cn/problems/number-of-senior-citizens)
 
 [English Version](/solution/2600-2699/2678.Number%20of%20Senior%20Citizens/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的字符串&nbsp;<code>details</code>&nbsp;。<code>details</code>&nbsp;中每个元素都是一位乘客的信息，信息用长度为 <code>15</code>&nbsp;的字符串表示，表示方式如下：</p>
 
@@ -47,23 +60,23 @@
 	<li>所有乘客的手机号码和座位号互不相同。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：遍历计数**
+### 方法一：遍历计数
 
 我们可以遍历 `details` 中的每个字符串 $x$，并将 $x$ 的第 $12$ 和第 $13$ 个字符（下标为 $11$, $12$）转换为整数，判断是否大于 $60$，如果是则将答案加一。
 
 遍历结束后，返回答案即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 是 `details` 的长度。
+时间复杂度 $O(n)$，其中 $n$ 是 `details` 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +84,7 @@ class Solution:
         return sum(int(x[11:13]) > 60 for x in details)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -90,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +117,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countSeniors(details []string) (ans int) {
@@ -120,10 +131,30 @@ func countSeniors(details []string) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function countSeniors(details: string[]): number {
+    return details.filter(x => +x.slice(11, 13) > 60).length;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn count_seniors(details: Vec<String>) -> i32 {
+        details
+            .iter()
+            .filter_map(|s| s[11..13].parse::<i32>().ok())
+            .filter(|&age| age > 60)
+            .count() as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

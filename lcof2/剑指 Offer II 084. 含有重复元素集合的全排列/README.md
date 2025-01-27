@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20084.%20%E5%90%AB%E6%9C%89%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%E9%9B%86%E5%90%88%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 084. 含有重复元素集合的全排列](https://leetcode.cn/problems/7p8L0Z)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个可包含重复数字的整数集合&nbsp;<code>nums</code> ，<strong>按任意顺序</strong> 返回它所有不重复的全排列。</p>
 
@@ -38,17 +45,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 47&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/permutations-ii/">https://leetcode.cn/problems/permutations-ii/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-排序 + 深度优先搜索。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +82,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,7 +147,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func permuteUnique(nums []int) [][]int {
@@ -174,10 +179,85 @@ func dfs(u, n int, nums []int, used []bool, path []int, res *[][]int) {
 }
 ```
 
-### **...**
+#### C#
 
+```cs
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public IList<IList<int>> PermuteUnique(int[] nums) {
+        var results = new List<IList<int>>();
+        var temp = new List<int>();
+        var count = nums.GroupBy(n => n).ToDictionary(g => g.Key, g => g.Count());
+        Search(count, temp, results);
+        return results;
+    }
+
+    private void Search(Dictionary<int, int> count, IList<int> temp, IList<IList<int>> results)
+    {
+        if (!count.Any() && temp.Any())
+        {
+            results.Add(new List<int>(temp));
+            return;
+        }
+        var keys = count.Keys.ToList();
+        foreach (var key in keys)
+        {
+            temp.Add(key);
+            --count[key];
+            if (count[key] == 0) count.Remove(key);
+            Search(count, temp, results);
+            temp.RemoveAt(temp.Count - 1);
+            if (count.ContainsKey(key))
+            {
+                ++count[key];
+            }
+            else
+            {
+                count[key] = 1;
+            }
+        }
+    }
+}
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    func permuteUnique(_ nums: [Int]) -> [[Int]] {
+        var res = [[Int]]()
+        var path = [Int]()
+        var used = [Bool](repeating: false, count: nums.count)
+        let sortedNums = nums.sorted()
+        dfs(0, sortedNums.count, sortedNums, &used, &path, &res)
+        return res
+    }
+
+    private func dfs(
+        _ u: Int, _ n: Int, _ nums: [Int], _ used: inout [Bool], _ path: inout [Int], _ res: inout [[Int]]
+    ) {
+        if u == n {
+            res.append(path)
+            return
+        }
+        for i in 0..<n {
+            if used[i] || (i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) {
+                continue
+            }
+            path.append(nums[i])
+            used[i] = true
+            dfs(u + 1, n, nums, &used, &path, &res)
+            used[i] = false
+            path.removeLast()
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

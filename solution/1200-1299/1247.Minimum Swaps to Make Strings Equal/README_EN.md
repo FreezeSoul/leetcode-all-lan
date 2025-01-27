@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1247.Minimum%20Swaps%20to%20Make%20Strings%20Equal/README_EN.md
+rating: 1597
+source: Weekly Contest 161 Q1
+tags:
+    - Greedy
+    - Math
+    - String
+---
+
+<!-- problem:start -->
+
 # [1247. Minimum Swaps to Make Strings Equal](https://leetcode.com/problems/minimum-swaps-to-make-strings-equal)
 
 [中文文档](/solution/1200-1299/1247.Minimum%20Swaps%20to%20Make%20Strings%20Equal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two strings <code>s1</code> and <code>s2</code> of equal length consisting of letters <code>&quot;x&quot;</code> and <code>&quot;y&quot;</code> <strong>only</strong>. Your task is to make these two strings equal to each other. You can swap any two characters that belong to <strong>different</strong> strings, which means: swap <code>s1[i]</code> and <code>s2[j]</code>.</p>
 
@@ -43,11 +59,25 @@ Note that you cannot swap s1[0] and s1[1] to make s1 equal to &quot;yx&quot;, ca
 	<li><code>s1, s2</code> only contain <code>&#39;x&#39;</code> or <code>&#39;y&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+According to the problem description, both strings $s_1$ and $s_2$ contain only the characters $x$ and $y$, and they have the same length. Therefore, we can match the characters in $s_1$ and $s_2$ one by one, i.e., $s_1[i]$ and $s_2[i]$.
+
+If $s_1[i] = s_2[i]$, no swap is needed, and we can skip to the next character. If $s_1[i] \neq s_2[i]$, a swap is needed. We count the combinations of $s_1[i]$ and $s_2[i]$: if $s_1[i] = x$ and $s_2[i] = y$, we denote it as $xy$; if $s_1[i] = y$ and $s_2[i] = x$, we denote it as $yx$.
+
+If $xy + yx$ is odd, it is impossible to complete the swaps, and we return $-1$. If $xy + yx$ is even, the number of swaps needed is $\left \lfloor \frac{xy}{2} \right \rfloor + \left \lfloor \frac{yx}{2} \right \rfloor + xy \bmod{2} + yx \bmod{2}$.
+
+The time complexity is $O(n)$, where $n$ is the length of the strings $s_1$ and $s_2$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +91,7 @@ class Solution:
         return xy // 2 + yx // 2 + xy % 2 + yx % 2
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +134,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumSwap(s1 string, s2 string) int {
@@ -124,7 +154,29 @@ func minimumSwap(s1 string, s2 string) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function minimumSwap(s1: string, s2: string): number {
+    let xy = 0,
+        yx = 0;
+
+    for (let i = 0; i < s1.length; ++i) {
+        const a = s1[i],
+            b = s2[i];
+        xy += a < b ? 1 : 0;
+        yx += a > b ? 1 : 0;
+    }
+
+    if ((xy + yx) % 2 !== 0) {
+        return -1;
+    }
+
+    return Math.floor(xy / 2) + Math.floor(yx / 2) + (xy % 2) + (yx % 2);
+}
+```
+
+#### JavaScript
 
 ```js
 var minimumSwap = function (s1, s2) {
@@ -147,10 +199,8 @@ var minimumSwap = function (s1, s2) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

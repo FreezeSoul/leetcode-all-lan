@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2108.Find%20First%20Palindromic%20String%20in%20the%20Array/README.md
+rating: 1215
+source: 第 272 场周赛 Q1
+tags:
+    - 数组
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2108. 找出数组中的第一个回文字符串](https://leetcode.cn/problems/find-first-palindromic-string-in-the-array)
 
 [English Version](/solution/2100-2199/2108.Find%20First%20Palindromic%20String%20in%20the%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>words</code> ，找出并返回数组中的 <strong>第一个回文字符串</strong> 。如果不存在满足要求的字符串，返回一个 <strong>空字符串</strong><em> </em><code>""</code> 。</p>
 
@@ -44,23 +58,23 @@
 	<li><code>words[i]</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-遍历数组 `words`，对于每个字符串 `w`，判断其是否为回文字符串，如果是，则返回 `w`，否则继续遍历。
+我们遍历数组 `words`，对于每个字符串 `w`，判断其是否为回文字符串，如果是，则返回 `w`，否则继续遍历。
 
 判断一个字符串是否为回文字符串，可以使用双指针，分别指向字符串的首尾，向中间移动，判断对应的字符是否相等。如果遍历完整个字符串，都没有发现不相等的字符，则该字符串为回文字符串。
 
-时间复杂度 $O(L)$，空间复杂度 $O(1)$，其中 $L$ 为数组 `words` 中所有字符串的长度之和。
+时间复杂度 $O(L)$，其中 $L$ 为数组 `words` 中所有字符串的长度之和。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -68,9 +82,7 @@ class Solution:
         return next((w for w in words if w == w[::-1]), "")
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +125,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func firstPalindrome(words []string) string {
@@ -132,46 +144,22 @@ func firstPalindrome(words []string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function firstPalindrome(words: string[]): string {
-    for (const word of words) {
-        let left = 0;
-        let right = word.length - 1;
-        while (left < right) {
-            if (word[left] !== word[right]) {
-                break;
-            }
-            left++;
-            right--;
-        }
-        if (left >= right) {
-            return word;
-        }
-    }
-    return '';
+    return words.find(w => w === w.split('').reverse().join('')) || '';
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn first_palindrome(words: Vec<String>) -> String {
-        for word in words.iter() {
-            let s = word.as_bytes();
-            let mut left = 0;
-            let mut right = s.len() - 1;
-            while (left < right) {
-                if (s[left] != s[right]) {
-                    break;
-                }
-                left += 1;
-                right -= 1;
-            }
-            if left >= right {
-                return word.clone();
+        for w in words {
+            if w == w.chars().rev().collect::<String>() {
+                return w;
             }
         }
         String::new()
@@ -179,32 +167,29 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-char *firstPalindrome(char **words, int wordsSize) {
-    for (int i = 0; i < wordsSize; i++) {
-        int left = 0;
-        int right = strlen(words[i]) - 1;
-        while (left < right) {
-            if (words[i][left] != words[i][right]) {
-                break;
+char* firstPalindrome(char** words, int wordsSize) {
+    for (int i = 0; i < wordsSize; ++i) {
+        char* w = words[i];
+        int len = strlen(w);
+        bool ok = true;
+        for (int j = 0, k = len - 1; j < k && ok; ++j, --k) {
+            if (w[j] != w[k]) {
+                ok = false;
             }
-            left++;
-            right--;
         }
-        if (left >= right) {
-            return words[i];
+        if (ok) {
+            return w;
         }
     }
     return "";
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

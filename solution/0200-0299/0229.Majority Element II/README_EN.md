@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0229.Majority%20Element%20II/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Counting
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [229. Majority Element II](https://leetcode.com/problems/majority-element-ii)
 
 [中文文档](/solution/0200-0299/0229.Majority%20Element%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array of size <code>n</code>, find all elements that appear more than <code>&lfloor; n/3 &rfloor;</code> times.</p>
 
@@ -39,11 +54,17 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you solve the problem in linear time and in <code>O(1)</code> space?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +85,7 @@ class Solution:
         return [m for m in [m1, m2] if nums.count(m) > len(nums) // 3]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +129,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -140,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func majorityElement(nums []int) []int {
@@ -178,7 +199,7 @@ func majorityElement(nums []int) []int {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -219,7 +240,7 @@ public class Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -232,18 +253,17 @@ class Solution {
         $n = count($nums);
         for ($i = 0; $i < $n; $i++) {
             $hashmap[$nums[$i]] += 1;
-            if ($hashmap[$nums[$i]] > $n / 3)
+            if ($hashmap[$nums[$i]] > $n / 3) {
                 array_push($rs, $nums[$i]);
+            }
         }
         return array_unique($rs);
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

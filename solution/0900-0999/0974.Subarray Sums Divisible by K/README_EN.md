@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0974.Subarray%20Sums%20Divisible%20by%20K/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [974. Subarray Sums Divisible by K](https://leetcode.com/problems/subarray-sums-divisible-by-k)
 
 [中文文档](/solution/0900-0999/0974.Subarray%20Sums%20Divisible%20by%20K/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <em>the number of non-empty <strong>subarrays</strong> that have a sum divisible by </em><code>k</code>.</p>
 
@@ -34,11 +48,41 @@
 	<li><code>2 &lt;= k &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Prefix Sum
+
+1. **Key Insight**:
+
+    - If there exist indices $i$ and $j$ such that $i \leq j$, and the sum of the subarray $nums[i, ..., j]$ is divisible by $k$, then $(s_j - s_i) \bmod k = 0$, this implies: $s_j \bmod k = s_i \bmod k$
+    - We can use a hash table to count the occurrences of prefix sums modulo $k$ to efficiently check for subarrays satisfying the condition.
+
+2. **Prefix Sum Modulo**:
+
+    - Use a hash table $cnt$ to count occurrences of each prefix sum modulo $k$.
+    - $cnt[i]$ represents the number of prefix sums with modulo $k$ equal to $i$.
+    - Initialize $cnt[0] = 1$ to account for subarrays directly divisible by $k$.
+
+3. **Algorithm**:
+    - Let a variable $s$ represent the running prefix sum, starting with $s = 0$.
+    - Traverse the array $nums$ from left to right.
+        - For each element $x$:
+            - Compute $s = (s + x) \bmod k$.
+            - Update the result: $ans += cnt[s]$.
+            - Increment $cnt[s]$ by $1$.
+    - Return the result $ans$.
+
+> Note: if $s$ is negative, adjust it to be non-negative by adding $k$ and taking modulo $k$ again.
+
+The time complexity is $O(n)$ and space complexity is $O(n)$ where $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,7 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -70,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -87,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func subarraysDivByK(nums []int, k int) (ans int) {
@@ -102,7 +146,7 @@ func subarraysDivByK(nums []int, k int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function subarraysDivByK(nums: number[], k: number): number {
@@ -120,10 +164,8 @@ function subarraysDivByK(nums: number[], k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

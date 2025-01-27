@@ -1,10 +1,20 @@
-# [2474. 购买量严格增加的客户](https://leetcode.cn/problems/customers-with-strictly-increasing-purchases)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2474.Customers%20With%20Strictly%20Increasing%20Purchases/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2474. 购买量严格增加的客户 🔒](https://leetcode.cn/problems/customers-with-strictly-increasing-purchases)
 
 [English Version](/solution/2400-2499/2474.Customers%20With%20Strictly%20Increasing%20Purchases/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Orders</code></p>
 
@@ -79,41 +89,41 @@ Orders 表:
   - 2017: 900
   - 2018: 900</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
+SELECT
     customer_id
-from
+FROM
     (
-        select
+        SELECT
             customer_id,
-            year(order_date),
-            sum(price) as total,
-            year(order_date) - rank() over(
-                partition by customer_id
-                order by
-                    sum(price)
-            ) as rk
-        from
-            Orders
-        group by
-            customer_id,
-            year(order_date)
-    ) t
-group by
-    customer_id
-having
-    count(distinct rk) = 1;
+            YEAR(order_date),
+            SUM(price) AS total,
+            YEAR(order_date) - RANK() OVER (
+                PARTITION BY customer_id
+                ORDER BY SUM(price)
+            ) AS rk
+        FROM Orders
+        GROUP BY customer_id, YEAR(order_date)
+    ) AS t
+GROUP BY customer_id
+HAVING COUNT(DISTINCT rk) = 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

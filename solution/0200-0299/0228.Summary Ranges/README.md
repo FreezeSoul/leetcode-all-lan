@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0228.Summary%20Ranges/README.md
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [228. 汇总区间](https://leetcode.cn/problems/summary-ranges)
 
 [English Version](/solution/0200-0299/0228.Summary%20Ranges/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个 &nbsp;<strong>无重复元素</strong> 的&nbsp;<strong>有序</strong> 整数数组 <code>nums</code> 。</p>
 
@@ -19,7 +29,7 @@
 
 <p>&nbsp;</p>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
 <pre>
 <strong>输入：</strong>nums = [0,1,2,4,5,7]
@@ -30,7 +40,7 @@
 [7,7] --&gt; "7"
 </pre>
 
-<p><strong>示例 2：</strong></p>
+<p><strong class="example">示例 2：</strong></p>
 
 <pre>
 <strong>输入：</strong>nums = [0,2,3,4,6,8,9]
@@ -53,23 +63,23 @@
 	<li><code>nums</code> 按升序排列</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们可以用双指针 $i$ 和 $j$ 找出每个区间的左右端点。
 
-遍历数组，当 $j + 1 < n$ 且 $nums[j + 1] = nums[j] + 1$ 时，$j$ 向右移动，否则区间 $[i, j]$ 已经找到，将其加入答案，然后将 $i$ 移动到 $j + 1$ 的位置，继续寻找下一个区间。
+遍历数组，当 $j + 1 < n$ 且 $nums[j + 1] = nums[j] + 1$ 时，指针 $j$ 向右移动，否则区间 $[i, j]$ 已经找到，将其加入答案，然后将指针 $i$ 移动到 $j + 1$ 的位置，继续寻找下一个区间。
 
 时间复杂度 $O(n)$，其中 $n$ 为数组长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +99,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func summaryRanges(nums []int) (ans []string) {
@@ -156,7 +164,7 @@ func summaryRanges(nums []int) (ans []string) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function summaryRanges(nums: number[]): string[] {
@@ -176,7 +184,49 @@ function summaryRanges(nums: number[]): string[] {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn summary_ranges(nums: Vec<i32>) -> Vec<String> {
+        if nums.is_empty() {
+            return vec![];
+        }
+
+        let mut ret = Vec::new();
+        let mut start = nums[0];
+        let mut prev = nums[0];
+        let mut current = 0;
+        let n = nums.len();
+
+        for i in 1..n {
+            current = nums[i];
+            if current != prev + 1 {
+                if start == prev {
+                    ret.push(start.to_string());
+                } else {
+                    ret.push(start.to_string() + "->" + &prev.to_string());
+                }
+                start = current;
+                prev = current;
+            } else {
+                prev = current;
+            }
+        }
+
+        if start == prev {
+            ret.push(start.to_string());
+        } else {
+            ret.push(start.to_string() + "->" + &prev.to_string());
+        }
+
+        ret
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -198,10 +248,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

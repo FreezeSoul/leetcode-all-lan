@@ -1,10 +1,23 @@
-# [1506. 找到 N 叉树的根节点](https://leetcode.cn/problems/find-root-of-n-ary-tree)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1506.Find%20Root%20of%20N-Ary%20Tree/README.md
+tags:
+    - 位运算
+    - 树
+    - 深度优先搜索
+    - 哈希表
+---
+
+<!-- problem:start -->
+
+# [1506. 找到 N 叉树的根节点 🔒](https://leetcode.cn/problems/find-root-of-n-ary-tree)
 
 [English Version](/solution/1500-1599/1506.Find%20Root%20of%20N-Ary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一棵&nbsp;<a href="https://leetcode.cn/explore/learn/card/n-ary-tree/" target="_blank">N 叉树</a>&nbsp;的所有节点在一个数组&nbsp;&nbsp;<code>Node[] tree</code>&nbsp;中，树中每个节点都有 <strong>唯一的值</strong> 。</p>
 
@@ -70,11 +83,13 @@ findRoot 函数应该返回根 Node(1) ，驱动程序代码将序列化它并�
 	<li>你可以使用 O(1) 额外内存空间且 O(n) 时间复杂度的算法来找到该树的根节点吗？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 对于一棵 N 叉树的节点，如果该节点是根节点，那么该节点只会出现一次在数组 `tree` 中；而如果该节点不是根节点，那么该节点会出现两次，一次在数组 `tree` 中，一次在该节点的父节点的 `children` 数组中。
 
@@ -86,9 +101,7 @@ findRoot 函数应该返回根 Node(1) ，驱动程序代码将序列化它并�
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 """
@@ -110,9 +123,7 @@ class Solution:
         return next(node for node in tree if node.val == x)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /*
@@ -156,7 +167,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -198,7 +209,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -225,7 +236,7 @@ func findRoot(tree []*Node) *Node {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -252,10 +263,8 @@ function findRoot(tree: Node[]): Node | null {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

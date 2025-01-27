@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0862.Shortest%20Subarray%20with%20Sum%20at%20Least%20K/README_EN.md
+tags:
+    - Queue
+    - Array
+    - Binary Search
+    - Prefix Sum
+    - Sliding Window
+    - Monotonic Queue
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [862. Shortest Subarray with Sum at Least K](https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k)
 
 [中文文档](/solution/0800-0899/0862.Shortest%20Subarray%20with%20Sum%20at%20Least%20K/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <em>the length of the shortest non-empty <strong>subarray</strong> of </em><code>nums</code><em> with a sum of at least </em><code>k</code>. If there is no such <strong>subarray</strong>, return <code>-1</code>.</p>
 
@@ -28,11 +46,17 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -49,7 +73,7 @@ class Solution:
         return -1 if ans == inf else ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -75,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -99,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestSubarray(nums []int, k int) int {
@@ -125,19 +149,68 @@ func shortestSubarray(nums []int, k int) int {
 	}
 	return ans
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function shortestSubarray(nums: number[], k: number): number {
+    const [n, MAX] = [nums.length, Number.POSITIVE_INFINITY];
+    const s = Array(n + 1).fill(0);
+    const q: number[] = [];
+    let ans = MAX;
+
+    for (let i = 0; i < n; i++) {
+        s[i + 1] = s[i] + nums[i];
+    }
+
+    for (let i = 0; i < n + 1; i++) {
+        while (q.length && s[i] - s[q[0]] >= k) {
+            ans = Math.min(ans, i - q.shift()!);
+        }
+
+        while (q.length && s[i] <= s[q.at(-1)!]) {
+            q.pop();
+        }
+
+        q.push(i);
+    }
+
+    return ans === MAX ? -1 : ans;
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+function shortestSubarray(nums, k) {
+    const [n, MAX] = [nums.length, Number.POSITIVE_INFINITY];
+    const s = Array(n + 1).fill(0);
+    const q = [];
+    let ans = MAX;
 
+    for (let i = 0; i < n; i++) {
+        s[i + 1] = s[i] + nums[i];
+    }
+
+    for (let i = 0; i < n + 1; i++) {
+        while (q.length && s[i] - s[q[0]] >= k) {
+            ans = Math.min(ans, i - q.shift());
+        }
+
+        while (q.length && s[i] <= s[q.at(-1)]) {
+            q.pop();
+        }
+
+        q.push(i);
+    }
+
+    return ans === MAX ? -1 : ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

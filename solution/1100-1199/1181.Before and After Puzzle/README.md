@@ -1,10 +1,25 @@
-# [1181. 前后拼接](https://leetcode.cn/problems/before-and-after-puzzle)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1181.Before%20and%20After%20Puzzle/README.md
+rating: 1558
+source: 第 8 场双周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [1181. 前后拼接 🔒](https://leetcode.cn/problems/before-and-after-puzzle)
 
 [English Version](/solution/1100-1199/1181.Before%20and%20After%20Puzzle/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个「短语」列表&nbsp;<code>phrases</code>，请你帮忙按规则生成拼接后的「新短语」列表。</p>
 
@@ -59,11 +74,13 @@
 	<li><code>1 &lt;= phrases[i].length &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 排序**
+### 方法一：哈希表 + 排序
 
 我们先遍历列表 `phrases`，将每个短语的首尾单词存储数组 $ps$ 中，其中 $ps[i][0]$ 和 $ps[i][1]$ 分别表示第 $i$ 个短语的首尾单词。
 
@@ -75,9 +92,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,13 +106,11 @@ class Solution:
         for i in range(n):
             for j in range(n):
                 if i != j and ps[i][1] == ps[j][0]:
-                    ans.append(phrases[i] + phrases[j][len(ps[j][0]):])
+                    ans.append(phrases[i] + phrases[j][len(ps[j][0]) :])
         return sorted(set(ans))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +119,7 @@ class Solution {
         var ps = new String[n][];
         for (int i = 0; i < n; ++i) {
             var ws = phrases[i].split(" ");
-            ps[i] = new String[]{ws[0], ws[ws.length - 1]};
+            ps[i] = new String[] {ws[0], ws[ws.length - 1]};
         }
         Set<String> s = new HashSet<>();
         for (int i = 0; i < n; ++i) {
@@ -123,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -155,7 +168,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func beforeAndAfterPuzzles(phrases []string) []string {
@@ -182,7 +195,7 @@ func beforeAndAfterPuzzles(phrases []string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function beforeAndAfterPuzzles(phrases: string[]): string[] {
@@ -204,10 +217,8 @@ function beforeAndAfterPuzzles(phrases: string[]): string[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

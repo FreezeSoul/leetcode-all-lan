@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1381.Design%20a%20Stack%20With%20Increment%20Operation/README_EN.md
+rating: 1285
+source: Weekly Contest 180 Q2
+tags:
+    - Stack
+    - Design
+    - Array
+---
+
+<!-- problem:start -->
+
 # [1381. Design a Stack With Increment Operation](https://leetcode.com/problems/design-a-stack-with-increment-operation)
 
 [中文文档](/solution/1300-1399/1381.Design%20a%20Stack%20With%20Increment%20Operation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a stack that supports increment operations on its elements.</p>
 
@@ -49,11 +65,27 @@ stk.pop();                            // return -1 --&gt; Stack is empty return 
 	<li>At most <code>1000</code> calls will be made to each method of <code>increment</code>, <code>push</code> and <code>pop</code> each separately.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Array Simulation
+
+We can use an array $stk$ to simulate the stack, and an integer $i$ to represent the position of the next element to be pushed into the stack. In addition, we need another array $add$ to record the cumulative increment value at each position.
+
+When calling $push(x)$, if $i < maxSize$, we put $x$ into $stk[i]$ and increment $i$ by one.
+
+When calling $pop()$, if $i \leq 0$, it means the stack is empty, so we return $-1$. Otherwise, we decrement $i$ by one, and the answer is $stk[i] + add[i]$. Then we add $add[i]$ to $add[i - 1]$, and set $add[i]$ to zero. Finally, we return the answer.
+
+When calling $increment(k, val)$, if $i > 0$, we add $val$ to $add[\min(i, k) - 1]$.
+
+The time complexity is $O(1)$, and the space complexity is $O(n)$. Where $n$ is the maximum capacity of the stack.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class CustomStack:
@@ -90,7 +122,7 @@ class CustomStack:
 # obj.increment(k,val)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class CustomStack {
@@ -137,7 +169,7 @@ class CustomStack {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class CustomStack {
@@ -187,7 +219,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type CustomStack struct {
@@ -226,13 +258,6 @@ func (this *CustomStack) Increment(k int, val int) {
 	}
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 /**
  * Your CustomStack object will be instantiated and called as such:
  * obj := Constructor(maxSize);
@@ -242,7 +267,7 @@ func min(a, b int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class CustomStack {
@@ -290,10 +315,8 @@ class CustomStack {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

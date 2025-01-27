@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1869.Longer%20Contiguous%20Segments%20of%20Ones%20than%20Zeros/README.md
+rating: 1204
+source: 第 242 场周赛 Q1
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1869. 哪种连续子字符串更长](https://leetcode.cn/problems/longer-contiguous-segments-of-ones-than-zeros)
 
 [English Version](/solution/1800-1899/1869.Longer%20Contiguous%20Segments%20of%20Ones%20than%20Zeros/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二进制字符串 <code>s</code> 。如果字符串中由 <code>1</code> 组成的 <strong>最长</strong> 连续子字符串 <strong>严格长于</strong> 由 <code>0</code> 组成的 <strong>最长</strong> 连续子字符串，返回 <code>true</code> ；否则，返回 <code>false</code><em> </em>。</p>
 
@@ -58,63 +70,122 @@
 	<li><code>s[i]</code> 不是 <code>'0'</code> 就是 <code>'1'</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-直接遍历字符串，获取“0 子串”和“1 子串”的最大长度 `len0`、`len1`。
+### 方法一：两次遍历
 
-遍历结束后，若 `len1 > len0`，返回 true，否则返回 false。
+我们设计一个函数 $f(x)$，表示字符串 $s$ 中由 $x$ 组成的最长连续子字符串的长度。如果 $f(1) \gt f(0)$，那么返回 `true`，否则返回 `false`。
+
+时间复杂度 $O(n)$，其中 $n$ 是字符串 $s$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def checkZeroOnes(self, s: str) -> bool:
-        n0 = n1 = 0
-        t0 = t1 = 0
-        for c in s:
-            if c == '0':
-                t0 += 1
-                t1 = 0
-            else:
-                t0 = 0
-                t1 += 1
-            n0 = max(n0, t0)
-            n1 = max(n1, t1)
-        return n1 > n0
+        def f(x: str) -> int:
+            cnt = mx = 0
+            for c in s:
+                if c == x:
+                    cnt += 1
+                    mx = max(mx, cnt)
+                else:
+                    cnt = 0
+            return mx
+
+        return f("1") > f("0")
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public boolean checkZeroOnes(String s) {
-        int n0 = 0, n1 = 0;
-        int t0 = 0, t1 = 0;
+        return f(s, '1') > f(s, '0');
+    }
+
+    private int f(String s, char x) {
+        int cnt = 0, mx = 0;
         for (int i = 0; i < s.length(); ++i) {
-            if (s.charAt(i) == '0') {
-                ++t0;
-                t1 = 0;
+            if (s.charAt(i) == x) {
+                mx = Math.max(mx, ++cnt);
             } else {
-                ++t1;
-                t0 = 0;
+                cnt = 0;
             }
-            n0 = Math.max(n0, t0);
-            n1 = Math.max(n1, t1);
         }
-        return n1 > n0;
+        return mx;
     }
 }
 ```
 
-### **JavaScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool checkZeroOnes(string s) {
+        auto f = [&](char x) {
+            int cnt = 0, mx = 0;
+            for (char& c : s) {
+                if (c == x) {
+                    mx = max(mx, ++cnt);
+                } else {
+                    cnt = 0;
+                }
+            }
+            return mx;
+        };
+        return f('1') > f('0');
+    }
+};
+```
+
+#### Go
+
+```go
+func checkZeroOnes(s string) bool {
+	f := func(x rune) int {
+		cnt, mx := 0, 0
+		for _, c := range s {
+			if c == x {
+				cnt++
+				mx = max(mx, cnt)
+			} else {
+				cnt = 0
+			}
+		}
+		return mx
+	}
+	return f('1') > f('0')
+}
+```
+
+#### TypeScript
+
+```ts
+function checkZeroOnes(s: string): boolean {
+    const f = (x: string): number => {
+        let [mx, cnt] = [0, 0];
+        for (const c of s) {
+            if (c === x) {
+                mx = Math.max(mx, ++cnt);
+            } else {
+                cnt = 0;
+            }
+        }
+        return mx;
+    };
+    return f('1') > f('0');
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -122,81 +193,23 @@ class Solution {
  * @return {boolean}
  */
 var checkZeroOnes = function (s) {
-    let max0 = 0,
-        max1 = 0;
-    let t0 = 0,
-        t1 = 0;
-    for (let char of s) {
-        if (char == '0') {
-            t0++;
-            t1 = 0;
-        } else {
-            t1++;
-            t0 = 0;
-        }
-        max0 = Math.max(max0, t0);
-        max1 = Math.max(max1, t1);
-    }
-    return max1 > max0;
-};
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool checkZeroOnes(string s) {
-        int n0 = 0, n1 = 0;
-        int t0 = 0, t1 = 0;
-        for (auto c : s) {
-            if (c == '0') {
-                ++t0;
-                t1 = 0;
+    const f = x => {
+        let [mx, cnt] = [0, 0];
+        for (const c of s) {
+            if (c === x) {
+                mx = Math.max(mx, ++cnt);
             } else {
-                ++t1;
-                t0 = 0;
+                cnt = 0;
             }
-            n0 = max(n0, t0);
-            n1 = max(n1, t1);
         }
-        return n1 > n0;
-    }
+        return mx;
+    };
+    return f('1') > f('0');
 };
-```
-
-### **Go**
-
-```go
-func checkZeroOnes(s string) bool {
-	n0, n1 := 0, 0
-	t0, t1 := 0, 0
-	for _, c := range s {
-		if c == '0' {
-			t0++
-			t1 = 0
-		} else {
-			t1++
-			t0 = 0
-		}
-		n0 = max(n0, t0)
-		n1 = max(n1, t1)
-	}
-	return n1 > n0
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2491.Divide%20Players%20Into%20Teams%20of%20Equal%20Skill/README.md
+rating: 1323
+source: 第 322 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2491. 划分技能点相等的团队](https://leetcode.cn/problems/divide-players-into-teams-of-equal-skill)
 
 [English Version](/solution/2400-2499/2491.Divide%20Players%20Into%20Teams%20of%20Equal%20Skill/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>skill</code> ，数组长度为 <strong>偶数</strong> <code>n</code> ，其中 <code>skill[i]</code> 表示第 <code>i</code> 个玩家的技能点。将所有玩家分成 <code>n / 2</code> 个 <code>2</code> 人团队，使每一个团队的技能点之和 <strong>相等</strong> 。</p>
 
@@ -53,11 +68,13 @@
 	<li><code>1 &lt;= skill[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 要使得所有 $2$ 人团队的技能点相等，最小值一定需要跟最大值匹配。因此，我们将数组 `skill` 排序，然后用双指针 $i$ 和 $j$ 分别指向数组的首位，两两匹配，判断其和是否均为同一个数。
 
@@ -67,15 +84,9 @@
 
 时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 是数组 `skill` 的长度。
 
-**方法二：计数**
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `skill` 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,6 +102,133 @@ class Solution:
             i, j = i + 1, j - 1
         return ans
 ```
+
+#### Java
+
+```java
+class Solution {
+    public long dividePlayers(int[] skill) {
+        Arrays.sort(skill);
+        int n = skill.length;
+        int t = skill[0] + skill[n - 1];
+        long ans = 0;
+        for (int i = 0, j = n - 1; i < j; ++i, --j) {
+            if (skill[i] + skill[j] != t) {
+                return -1;
+            }
+            ans += (long) skill[i] * skill[j];
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    long long dividePlayers(vector<int>& skill) {
+        sort(skill.begin(), skill.end());
+        int n = skill.size();
+        int t = skill[0] + skill[n - 1];
+        long long ans = 0;
+        for (int i = 0, j = n - 1; i < j; ++i, --j) {
+            if (skill[i] + skill[j] != t) return -1;
+            ans += 1ll * skill[i] * skill[j];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func dividePlayers(skill []int) (ans int64) {
+	sort.Ints(skill)
+	n := len(skill)
+	t := skill[0] + skill[n-1]
+	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
+		if skill[i]+skill[j] != t {
+			return -1
+		}
+		ans += int64(skill[i] * skill[j])
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function dividePlayers(skill: number[]): number {
+    const n = skill.length;
+    skill.sort((a, b) => a - b);
+    const target = skill[0] + skill[n - 1];
+    let ans = 0;
+    for (let i = 0; i < n >> 1; i++) {
+        if (target !== skill[i] + skill[n - 1 - i]) {
+            return -1;
+        }
+        ans += skill[i] * skill[n - 1 - i];
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn divide_players(mut skill: Vec<i32>) -> i64 {
+        let n = skill.len();
+        skill.sort();
+        let target = skill[0] + skill[n - 1];
+        let mut ans = 0;
+        for i in 0..n >> 1 {
+            if skill[i] + skill[n - 1 - i] != target {
+                return -1;
+            }
+            ans += (skill[i] * skill[n - 1 - i]) as i64;
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
+
+```js
+var dividePlayers = function (skill) {
+    const n = skill.length,
+        m = n / 2;
+    skill.sort((a, b) => a - b);
+    const sum = skill[0] + skill[n - 1];
+    let ans = 0;
+    for (let i = 0; i < m; i++) {
+        const x = skill[i],
+            y = skill[n - 1 - i];
+        if (x + y != sum) return -1;
+        ans += x * y;
+    }
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：计数
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `skill` 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -112,27 +250,7 @@ class Solution:
         return -1 if m else ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public long dividePlayers(int[] skill) {
-        Arrays.sort(skill);
-        int n = skill.length;
-        int t = skill[0] + skill[n - 1];
-        long ans = 0;
-        for (int i = 0, j = n - 1; i < j; ++i, --j) {
-            if (skill[i] + skill[j] != t) {
-                return -1;
-            }
-            ans += (long) skill[i] * skill[j];
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -159,24 +277,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    long long dividePlayers(vector<int>& skill) {
-        sort(skill.begin(), skill.end());
-        int n = skill.size();
-        int t = skill[0] + skill[n - 1];
-        long long ans = 0;
-        for (int i = 0, j = n - 1; i < j; ++i, --j) {
-            if (skill[i] + skill[j] != t) return -1;
-            ans += 1ll * skill[i] * skill[j];
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -202,22 +303,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func dividePlayers(skill []int) (ans int64) {
-	sort.Ints(skill)
-	n := len(skill)
-	t := skill[0] + skill[n-1]
-	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
-		if skill[i]+skill[j] != t {
-			return -1
-		}
-		ans += int64(skill[i] * skill[j])
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func dividePlayers(skill []int) int64 {
@@ -248,67 +334,60 @@ func dividePlayers(skill []int) int64 {
 }
 ```
 
-### **JavaScript**
-
-```js
-var dividePlayers = function (skill) {
-    const n = skill.length,
-        m = n / 2;
-    skill.sort((a, b) => a - b);
-    const sum = skill[0] + skill[n - 1];
-    let ans = 0;
-    for (let i = 0; i < m; i++) {
-        const x = skill[i],
-            y = skill[n - 1 - i];
-        if (x + y != sum) return -1;
-        ans += x * y;
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function dividePlayers(skill: number[]): number {
-    const n = skill.length;
-    skill.sort((a, b) => a - b);
-    const target = skill[0] + skill[n - 1];
-    let ans = 0;
-    for (let i = 0; i < n >> 1; i++) {
-        if (target !== skill[i] + skill[n - 1 - i]) {
-            return -1;
-        }
-        ans += skill[i] * skill[n - 1 - i];
+    let [sum, res, map] = [0, 0, new Map<number, number>()];
+
+    for (const x of skill) {
+        sum += x;
+        map.set(x, (map.get(x) || 0) + 1);
     }
-    return ans;
+    sum /= skill.length / 2;
+
+    for (let [x, c] of map) {
+        const complement = sum - x;
+        if ((map.get(complement) ?? 0) !== c) return -1;
+        if (x === complement) c /= 2;
+
+        res += x * complement * c;
+        map.delete(x);
+        map.delete(complement);
+    }
+
+    return res;
 }
 ```
 
-### **Rust**
+#### JavaScript
 
-```rust
-impl Solution {
-    pub fn divide_players(mut skill: Vec<i32>) -> i64 {
-        let n = skill.len();
-        skill.sort();
-        let target = skill[0] + skill[n - 1];
-        let mut ans = 0;
-        for i in 0..n >> 1 {
-            if skill[i] + skill[n - 1 - i] != target {
-                return -1;
-            }
-            ans += (skill[i] * skill[n - 1 - i]) as i64;
-        }
-        ans
+```js
+function dividePlayers(skill) {
+    let [sum, res, map] = [0, 0, new Map()];
+
+    for (const x of skill) {
+        sum += x;
+        map.set(x, (map.get(x) || 0) + 1);
     }
+    sum /= skill.length / 2;
+
+    for (let [x, c] of map) {
+        const complement = sum - x;
+        if ((map.get(complement) ?? 0) !== c) return -1;
+        if (x === complement) c /= 2;
+
+        res += x * complement * c;
+        map.delete(x);
+        map.delete(complement);
+    }
+
+    return res;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

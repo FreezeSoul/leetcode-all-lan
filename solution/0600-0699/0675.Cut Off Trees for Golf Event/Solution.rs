@@ -22,7 +22,7 @@ impl Solution {
                     }
                     for k in 0..4 {
                         let x = state / col + DIRS[k][0];
-                        let y = state % col + DIRS[k][1];
+                        let y = (state % col) + DIRS[k][1];
                         let nxt = x * col + y;
                         if x >= 0
                             && x < row

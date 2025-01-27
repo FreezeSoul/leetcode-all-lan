@@ -1,8 +1,20 @@
-# [1645. Hopper Company Queries II](https://leetcode.com/problems/hopper-company-queries-ii)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1645.Hopper%20Company%20Queries%20II/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1645. Hopper Company Queries II 🔒](https://leetcode.com/problems/hopper-company-queries-ii)
 
 [中文文档](/solution/1600-1699/1645.Hopper%20Company%20Queries%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Drivers</code></p>
 
@@ -13,7 +25,7 @@
 | driver_id   | int     |
 | join_date   | date    |
 +-------------+---------+
-driver_id is the primary key for this table.
+driver_id is the column with unique values for this table.
 Each row of this table contains the driver&#39;s ID and the date they joined the Hopper company.
 </pre>
 
@@ -29,7 +41,7 @@ Each row of this table contains the driver&#39;s ID and the date they joined the
 | user_id      | int     |
 | requested_at | date    |
 +--------------+---------+
-ride_id is the primary key for this table.
+ride_id is the column with unique values for this table.
 Each row of this table contains the ID of a ride, the user&#39;s ID that requested it, and the day they requested it.
 There may be some ride requests in this table that were not accepted.
 </pre>
@@ -47,20 +59,20 @@ There may be some ride requests in this table that were not accepted.
 | ride_distance | int     |
 | ride_duration | int     |
 +---------------+---------+
-ride_id is the primary key for this table.
+ride_id is the column with unique values for this table.
 Each row of this table contains some information about an accepted ride.
 It is guaranteed that each accepted ride exists in the Rides table.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the <strong>percentage</strong> of working drivers (<code>working_percentage</code>) for each month of <strong>2020</strong> where:</p>
+<p>Write a solution to report the <strong>percentage</strong> of working drivers (<code>working_percentage</code>) for each month of <strong>2020</strong> where:</p>
 <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1600-1699/1645.Hopper%20Company%20Queries%20II/images/codecogseqn.png" style="width: 800px; height: 36px;" />
 <p><strong>Note</strong> that if the number of available drivers during a month is zero, we consider the <code>working_percentage</code> to be <code>0</code>.</p>
 
 <p>Return the result table ordered by <code>month</code> in <strong>ascending</strong> order, where <code>month</code> is the month&#39;s number (January is <code>1</code>, February is <code>2</code>, etc.). Round <code>working_percentage</code> to the nearest <strong>2 decimal places</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -147,14 +159,60 @@ By the end of November --&gt; six active drivers (10, 8, 5, 7, 4, 1) and two acc
 By the end of December --&gt; six active drivers (10, 8, 5, 7, 4, 1) and one accepted ride by driver (4). The percentage is (1 / 6) * 100 = 16.67%.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH RECURSIVE
+    Month AS (
+        SELECT 1 AS month
+        UNION
+        SELECT month + 1
+        FROM Month
+        WHERE month < 12
+    ),
+    S AS (
+        SELECT month, driver_id, join_date
+        FROM
+            Month AS m
+            LEFT JOIN Drivers AS d
+                ON YEAR(d.join_date) < 2020
+                OR (YEAR(d.join_date) = 2020 AND MONTH(d.join_date) <= month)
+    ),
+    T AS (
+        SELECT driver_id, requested_at
+        FROM
+            Rides
+            JOIN AcceptedRides USING (ride_id)
+        WHERE YEAR(requested_at) = 2020
+    )
+SELECT
+    month,
+    IFNULL(
+        ROUND(COUNT(DISTINCT t.driver_id) * 100 / COUNT(DISTINCT s.driver_id), 2),
+        0
+    ) AS working_percentage
+FROM
+    S AS s
+    LEFT JOIN T AS t
+        ON s.driver_id = t.driver_id
+        AND s.join_date <= t.requested_at
+        AND s.month = MONTH(t.requested_at)
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

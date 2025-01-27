@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2492.Minimum%20Score%20of%20a%20Path%20Between%20Two%20Cities/README_EN.md
+rating: 1679
+source: Weekly Contest 322 Q3
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Union Find
+    - Graph
+---
+
+<!-- problem:start -->
+
 # [2492. Minimum Score of a Path Between Two Cities](https://leetcode.com/problems/minimum-score-of-a-path-between-two-cities)
 
 [中文文档](/solution/2400-2499/2492.Minimum%20Score%20of%20a%20Path%20Between%20Two%20Cities/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a positive integer <code>n</code> representing <code>n</code> cities numbered from <code>1</code> to <code>n</code>. You are also given a <strong>2D</strong> array <code>roads</code> where <code>roads[i] = [a<sub>i</sub>, b<sub>i</sub>, distance<sub>i</sub>]</code> indicates that there is a <strong>bidirectional </strong>road between cities <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code> with a distance equal to <code>distance<sub>i</sub></code>. The cities graph is not necessarily connected.</p>
 
@@ -50,11 +67,21 @@ It can be shown that no other path has less score.
 	<li>There is at least one path between <code>1</code> and <code>n</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+According to the problem description, each edge can be passed multiple times, and it is guaranteed that node $1$ and node $n$ are in the same connected component. Therefore, the problem is actually looking for the smallest edge in the connected component where node $1$ is located. We can use DFS, start searching from node $1$, and find the smallest edge.
+
+The time complexity is $O(n + m)$, where $n$ and $m$ are the number of nodes and edges, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,29 +104,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def minScore(self, n: int, roads: List[List[int]]) -> int:
-        g = defaultdict(list)
-        for a, b, d in roads:
-            g[a].append((b, d))
-            g[b].append((a, d))
-        vis = [False] * (n + 1)
-        vis[1] = True
-        ans = inf
-        q = deque([1])
-        while q:
-            for _ in range(len(q)):
-                i = q.popleft()
-                for j, d in g[i]:
-                    ans = min(ans, d)
-                    if not vis[j]:
-                        vis[j] = True
-                        q.append(j)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -132,6 +137,189 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minScore(int n, vector<vector<int>>& roads) {
+        vector<vector<pair<int, int>>> g(n);
+        bool vis[n];
+        memset(vis, 0, sizeof vis);
+        for (auto& e : roads) {
+            int a = e[0] - 1, b = e[1] - 1, d = e[2];
+            g[a].emplace_back(b, d);
+            g[b].emplace_back(a, d);
+        }
+        int ans = INT_MAX;
+        function<void(int)> dfs = [&](int i) {
+            for (auto [j, d] : g[i]) {
+                ans = min(ans, d);
+                if (!vis[j]) {
+                    vis[j] = true;
+                    dfs(j);
+                }
+            }
+        };
+        dfs(0);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minScore(n int, roads [][]int) int {
+	type pair struct{ i, v int }
+	g := make([][]pair, n)
+	for _, e := range roads {
+		a, b, d := e[0]-1, e[1]-1, e[2]
+		g[a] = append(g[a], pair{b, d})
+		g[b] = append(g[b], pair{a, d})
+	}
+	vis := make([]bool, n)
+	ans := 1 << 30
+	var dfs func(int)
+	dfs = func(i int) {
+		for _, nxt := range g[i] {
+			j, d := nxt.i, nxt.v
+			ans = min(ans, d)
+			if !vis[j] {
+				vis[j] = true
+				dfs(j)
+			}
+		}
+	}
+	dfs(0)
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function minScore(n: number, roads: number[][]): number {
+    const vis = new Array(n + 1).fill(false);
+    const g = Array.from({ length: n + 1 }, () => []);
+    for (const [a, b, v] of roads) {
+        g[a].push([b, v]);
+        g[b].push([a, v]);
+    }
+    let ans = Infinity;
+    const dfs = (i: number) => {
+        if (vis[i]) {
+            return;
+        }
+        vis[i] = true;
+        for (const [j, v] of g[i]) {
+            ans = Math.min(ans, v);
+            dfs(j);
+        }
+    };
+    dfs(1);
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    fn dfs(i: usize, mut ans: i32, g: &Vec<Vec<(usize, i32)>>, vis: &mut Vec<bool>) -> i32 {
+        if vis[i] {
+            return ans;
+        }
+        vis[i] = true;
+        for (j, v) in g[i].iter() {
+            ans = ans.min(*v.min(&Self::dfs(*j, ans, g, vis)));
+        }
+        ans
+    }
+
+    pub fn min_score(n: i32, roads: Vec<Vec<i32>>) -> i32 {
+        let n = n as usize;
+        let mut vis = vec![false; n + 1];
+        let mut g = vec![Vec::new(); n + 1];
+        for road in roads.iter() {
+            let a = road[0] as usize;
+            let b = road[1] as usize;
+            let v = road[2];
+            g[a].push((b, v));
+            g[b].push((a, v));
+        }
+        Self::dfs(1, i32::MAX, &g, &mut vis)
+    }
+}
+```
+
+#### JavaScript
+
+```js
+var minScore = function (n, roads) {
+    // 构建点到点的映射表
+    const graph = Array.from({ length: n + 1 }, () => new Map());
+    for (let [u, v, w] of roads) {
+        graph[u].set(v, w);
+        graph[v].set(u, w);
+    }
+
+    // DFS
+    const vis = new Array(n).fill(false);
+    let ans = Infinity;
+    var dfs = function (u) {
+        vis[u] = true;
+        for (const [v, w] of graph[u]) {
+            ans = Math.min(ans, w);
+            if (!vis[v]) dfs(v);
+        }
+    };
+    dfs(1);
+
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: BFS
+
+We can also use BFS to solve this problem.
+
+The time complexity is $O(n + m)$, where $n$ and $m$ are the number of nodes and edges, respectively.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minScore(self, n: int, roads: List[List[int]]) -> int:
+        g = defaultdict(list)
+        for a, b, d in roads:
+            g[a].append((b, d))
+            g[b].append((a, d))
+        vis = [False] * (n + 1)
+        vis[1] = True
+        ans = inf
+        q = deque([1])
+        while q:
+            for _ in range(len(q)):
+                i = q.popleft()
+                for j, d in g[i]:
+                    ans = min(ans, d)
+                    if not vis[j]:
+                        vis[j] = True
+                        q.append(j)
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -166,35 +354,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minScore(int n, vector<vector<int>>& roads) {
-        vector<vector<pair<int, int>>> g(n);
-        bool vis[n];
-        memset(vis, 0, sizeof vis);
-        for (auto& e : roads) {
-            int a = e[0] - 1, b = e[1] - 1, d = e[2];
-            g[a].emplace_back(b, d);
-            g[b].emplace_back(a, d);
-        }
-        int ans = INT_MAX;
-        function<void(int)> dfs = [&](int i) {
-            for (auto [j, d] : g[i]) {
-                ans = min(ans, d);
-                if (!vis[j]) {
-                    vis[j] = true;
-                    dfs(j);
-                }
-            }
-        };
-        dfs(0);
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -229,41 +389,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func minScore(n int, roads [][]int) int {
-	type pair struct{ i, v int }
-	g := make([][]pair, n)
-	for _, e := range roads {
-		a, b, d := e[0]-1, e[1]-1, e[2]
-		g[a] = append(g[a], pair{b, d})
-		g[b] = append(g[b], pair{a, d})
-	}
-	vis := make([]bool, n)
-	ans := 1 << 30
-	var dfs func(int)
-	dfs = func(i int) {
-		for _, nxt := range g[i] {
-			j, d := nxt.i, nxt.v
-			ans = min(ans, d)
-			if !vis[j] {
-				vis[j] = true
-				dfs(j)
-			}
-		}
-	}
-	dfs(0)
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func minScore(n int, roads [][]int) int {
@@ -294,103 +420,10 @@ func minScore(n int, roads [][]int) int {
 	}
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **JavaScript**
-
-```js
-var minScore = function (n, roads) {
-    // 构建点到点的映射表
-    const graph = Array.from({ length: n + 1 }, () => new Map());
-    for (let [u, v, w] of roads) {
-        graph[u].set(v, w);
-        graph[v].set(u, w);
-    }
-
-    // DFS
-    const vis = new Array(n).fill(false);
-    let ans = Infinity;
-    var dfs = function (u) {
-        vis[u] = true;
-        for (const [v, w] of graph[u]) {
-            ans = Math.min(ans, w);
-            if (!vis[v]) dfs(v);
-        }
-    };
-    dfs(1);
-
-    return ans;
-};
-```
-
-### **TypeScript**
-
-```ts
-function minScore(n: number, roads: number[][]): number {
-    const vis = new Array(n + 1).fill(false);
-    const g = Array.from({ length: n + 1 }, () => []);
-    for (const [a, b, v] of roads) {
-        g[a].push([b, v]);
-        g[b].push([a, v]);
-    }
-    let ans = Infinity;
-    const dfs = (i: number) => {
-        if (vis[i]) {
-            return;
-        }
-        vis[i] = true;
-        for (const [j, v] of g[i]) {
-            ans = Math.min(ans, v);
-            dfs(j);
-        }
-    };
-    dfs(1);
-    return ans;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    fn dfs(i: usize, mut ans: i32, g: &Vec<Vec<(usize, i32)>>, vis: &mut Vec<bool>) -> i32 {
-        if vis[i] {
-            return ans;
-        }
-        vis[i] = true;
-        for (j, v) in g[i].iter() {
-            ans = ans.min(*v.min(&Self::dfs(*j, ans, g, vis)));
-        }
-        ans
-    }
-
-    pub fn min_score(n: i32, roads: Vec<Vec<i32>>) -> i32 {
-        let n = n as usize;
-        let mut vis = vec![false; n + 1];
-        let mut g = vec![Vec::new(); n + 1];
-        for road in roads.iter() {
-            let a = road[0] as usize;
-            let b = road[1] as usize;
-            let v = road[2];
-            g[a].push((b, v));
-            g[b].push((a, v));
-        }
-        Self::dfs(1, i32::MAX, &g, &mut vis)
-    }
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

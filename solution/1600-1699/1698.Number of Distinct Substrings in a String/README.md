@@ -1,10 +1,24 @@
-# [1698. 字符串的不同子字符串个数](https://leetcode.cn/problems/number-of-distinct-substrings-in-a-string)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1698.Number%20of%20Distinct%20Substrings%20in%20a%20String/README.md
+tags:
+    - 字典树
+    - 字符串
+    - 后缀数组
+    - 哈希函数
+    - 滚动哈希
+---
+
+<!-- problem:start -->
+
+# [1698. 字符串的不同子字符串个数 🔒](https://leetcode.cn/problems/number-of-distinct-substrings-in-a-string)
 
 [English Version](/solution/1600-1699/1698.Number%20of%20Distinct%20Substrings%20in%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串 <code>s</code>，返回 <code>s</code> 的不同子字符串的个数。</p>
 
@@ -38,17 +52,87 @@
 
 <p><b>进阶：</b>你可以以 <code>O(n)</code> 时间复杂度解决此问题吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：暴力枚举
 
 枚举所有子串，使用哈希表记录不同子串的个数。
 
 时间复杂度 $O(n^3)$，空间复杂度 $O(n^2)$。其中 $n$ 为字符串长度。
 
-**方法二：字符串哈希**
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countDistinct(self, s: str) -> int:
+        n = len(s)
+        return len({s[i:j] for i in range(n) for j in range(i + 1, n + 1)})
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countDistinct(String s) {
+        Set<String> ss = new HashSet<>();
+        int n = s.length();
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j <= n; ++j) {
+                ss.add(s.substring(i, j));
+            }
+        }
+        return ss.size();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countDistinct(string s) {
+        unordered_set<string_view> ss;
+        int n = s.size();
+        string_view t, v = s;
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j <= n; ++j) {
+                t = v.substr(i, j - i);
+                ss.insert(t);
+            }
+        }
+        return ss.size();
+    }
+};
+```
+
+#### Go
+
+```go
+func countDistinct(s string) int {
+	ss := map[string]struct{}{}
+	for i := range s {
+		for j := i + 1; j <= len(s); j++ {
+			ss[s[i:j]] = struct{}{}
+		}
+	}
+	return len(ss)
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：字符串哈希
 
 **字符串哈希**是把一个任意长度的字符串映射成一个非负整数，并且其冲突的概率几乎为 0。字符串哈希用于计算字符串哈希值，快速判断两个字符串是否相等。
 
@@ -62,16 +146,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def countDistinct(self, s: str) -> int:
-        n = len(s)
-        return len({s[i:j] for i in range(n) for j in range(i + 1, n + 1)})
-```
+#### Python3
 
 ```python
 class Solution:
@@ -92,24 +167,7 @@ class Solution:
         return len(ss)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int countDistinct(String s) {
-        Set<String> ss = new HashSet<>();
-        int n = s.length();
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j <= n; ++j) {
-                ss.add(s.substring(i, j));
-            }
-        }
-        return ss.size();
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -135,25 +193,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int countDistinct(string s) {
-        unordered_set<string_view> ss;
-        int n = s.size();
-        string_view t, v = s;
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j <= n; ++j) {
-                t = v.substr(i, j - i);
-                ss.insert(t);
-            }
-        }
-        return ss.size();
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -180,19 +220,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func countDistinct(s string) int {
-	ss := map[string]struct{}{}
-	for i := range s {
-		for j := i + 1; j <= len(s); j++ {
-			ss[s[i:j]] = struct{}{}
-		}
-	}
-	return len(ss)
-}
-```
+#### Go
 
 ```go
 func countDistinct(s string) int {
@@ -215,10 +243,8 @@ func countDistinct(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

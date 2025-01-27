@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0831.Masking%20Personal%20Information/README.md
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [831. 隐藏个人信息](https://leetcode.cn/problems/masking-personal-information)
 
 [English Version](/solution/0800-0899/0831.Masking%20Personal%20Information/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一条个人信息字符串 <code>s</code> ，可能表示一个 <strong>邮箱地址</strong> ，也可能表示一串 <strong>电话号码</strong> 。返回按如下规则 <strong>隐藏</strong> 个人信息后的结果：</p>
 
@@ -107,11 +117,13 @@
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 根据题目描述，我们可以先判断字符串 $s$ 是电子邮件还是电话号码，然后分别处理。
 
@@ -119,25 +131,21 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maskPII(self, s: str) -> str:
         if s[0].isalpha():
             s = s.lower()
-            return s[0] + '*****' + s[s.find('@') - 1:]
+            return s[0] + '*****' + s[s.find('@') - 1 :]
         s = ''.join(c for c in s if c.isdigit())
         cnt = len(s) - 10
         suf = '***-***-' + s[-4:]
         return suf if cnt == 0 else f'+{"*" * cnt}-{suf}'
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -163,7 +171,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -192,7 +200,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maskPII(s string) string {
@@ -217,7 +225,7 @@ func maskPII(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maskPII(s: string): string {
@@ -241,10 +249,8 @@ function maskPII(s: string): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

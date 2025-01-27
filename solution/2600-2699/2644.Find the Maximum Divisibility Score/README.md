@@ -1,12 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2644.Find%20the%20Maximum%20Divisibility%20Score/README.md
+rating: 1257
+source: 第 341 场周赛 Q2
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2644. 找出可整除性得分最大的整数](https://leetcode.cn/problems/find-the-maximum-divisibility-score)
 
 [English Version](/solution/2600-2699/2644.Find%20the%20Maximum%20Divisibility%20Score/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你两个下标从 <strong>0</strong> 开始的整数数组 <code>nums</code> 和 <code>divisors</code> 。</p>
+<p>给你两个整数数组 <code>nums</code> 和 <code>divisors</code> 。</p>
 
 <p><code>divisors[i]</code> 的 <strong>可整除性得分</strong> 等于满足 <code>nums[j]</code> 能被 <code>divisors[i]</code> 整除的下标 <code>j</code> 的数量。</p>
 
@@ -14,40 +26,59 @@
 
 <p>&nbsp;</p>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
-<pre>
-<strong>输入：</strong>nums = [4,7,9,3,9], divisors = [5,2,3]
-<strong>输出：</strong>3
-<strong>解释：</strong>divisors 中每个元素的可整除性得分为：
-divisors[0] 的可整除性得分为 0 ，因为 nums 中没有任何数字能被 5 整除。
-divisors[1] 的可整除性得分为 1 ，因为 nums[0] 能被 2 整除。 
-divisors[2] 的可整除性得分为 3 ，因为 nums[2]、nums[3] 和 nums[4] 都能被 3 整除。 
-因此，返回 divisors[2] ，它的可整除性得分最大。
-</pre>
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">nums = [2,9,15,50], divisors = [5,3,7,2]</span></p>
 
-<p><strong>示例 2：</strong></p>
+<p><strong>输出：</strong><span class="example-io">2</span></p>
 
-<pre>
-<strong>输入：</strong>nums = [20,14,21,10], divisors = [5,7,5]
-<strong>输出：</strong>5
-<strong>解释：</strong>divisors 中每个元素的可整除性得分为：
-divisors[0] 的可整除性得分为 2 ，因为 nums[0] 和 nums[3] 都能被 5 整除。
-divisors[1] 的可整除性得分为 2 ，因为 nums[1] 和 nums[2] 都能被 7 整除。
-divisors[2] 的可整除性得分为 2 ，因为 nums[0] 和 nums[3] 都能被5整除。 
-由于 divisors[0]、divisors[1] 和 divisors[2] 的可整除性得分都是最大的，因此，我们返回数值最小的一个，即 divisors[2] 。
-</pre>
+<p><strong>解释：</strong></p>
 
-<p><strong>示例 3：</strong></p>
+<p><code>divisors[0]</code>&nbsp;的可整除性分数为 2 因为&nbsp;<code>nums[2]</code> 和&nbsp;<code>nums[3]</code>&nbsp;能被 5 整除。</p>
 
-<pre>
-<strong>输入：</strong>nums = [12], divisors = [10,16]
-<strong>输出：</strong>10
-<strong>解释：</strong>divisors 中每个元素的可整除性得分为：
-divisors[0] 的可整除性得分为 0 ，因为 nums 中没有任何数字能被 10 整除。
-divisors[1] 的可整除性得分为 0 ，因为 nums 中没有任何数字能被 16 整除。 
-由于 divisors[0] 和 divisors[1] 的可整除性得分都是最大的，因此，我们返回数值最小的一个，即 divisors[0] 。
-</pre>
+<p><code>divisors[1]</code> 的可整除性分数为 2 因为&nbsp;<code>nums[1]</code>&nbsp;和&nbsp;<code>nums[2]</code>&nbsp;能被 3 整除。</p>
+
+<p><code>divisors[2]</code> 的可整除性分数为 0 因为&nbsp;<code>nums</code>&nbsp;中没有数字能被 7 整除。</p>
+
+<p><code>divisors[3]</code> 的可整除性分数为 2 因为 <code>nums[0]</code> 和&nbsp;<code>nums[3]</code>&nbsp;能够被 2 整除。</p>
+
+<p>因为&nbsp;<code>divisors[0]</code>&nbsp;、<code>divisor[1]</code> 和&nbsp;<code>divisors[3]</code>&nbsp;有相同的可整除性分数，我们返回更小的那个&nbsp;<code>divisors[3]</code>。</p>
+</div>
+
+<p><strong class="example">示例 2：</strong></p>
+
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">nums = [4,7,9,3,9], divisors = [5,2,3]</span></p>
+
+<p><strong>输出：</strong><span class="example-io">3</span></p>
+
+<p><strong>解释：</strong></p>
+
+<p><code>divisors[0]</code> 的可整除性分数为 0&nbsp;因为&nbsp;<code>nums</code>&nbsp;中没有数字能被 5 整除。</p>
+
+<p><code>divisors[1]</code> 的可整除性分数为 1 因为只有 <code>nums[0]</code>&nbsp;能被 2 整除。</p>
+
+<p><code>divisors[2]</code> 的可整除性分数为 3 因为&nbsp;<code>nums[2]</code>&nbsp;，<code>nums[3]</code>&nbsp;和&nbsp;<code>nums[4]</code>&nbsp;能被 3 整除。</p>
+</div>
+
+<p><strong class="example">示例 3：</strong></p>
+
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">nums = [20,14,21,10], divisors = [10,16,20]</span></p>
+
+<p><strong>输出：</strong><span class="example-io">10</span></p>
+
+<p><strong>解释：</strong></p>
+
+<p><code>divisors[0]</code> 的可整除性分数为 2 因为&nbsp;<code>nums[0]</code>&nbsp;和&nbsp;<code>nums[3]</code> 能被 10 整除。</p>
+
+<p><code>divisors[1]</code> 的可整除性分数为 0 因为&nbsp;<code>nums</code>&nbsp;中没有数字能被 16&nbsp;整除。</p>
+
+<p><code>divisors[2]</code> 的可整除性分数为 1 因为&nbsp;<code>nums[0]</code>&nbsp;能被 20&nbsp;整除。</p>
+
+<p>因为&nbsp;<code>divisors[0]</code>&nbsp;的可整除性分数最大，我们返回&nbsp;<code>divisors[0]</code>。</p>
+</div>
 
 <p>&nbsp;</p>
 
@@ -58,11 +89,13 @@ divisors[1] 的可整除性得分为 0 ，因为 nums 中没有任何数字能�
 	<li><code>1 &lt;= nums[i], divisors[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 我们可以枚举 $divisors$ 中的每个元素 $div$，计算 $nums$ 中有多少个元素能被 $div$ 整除，记为 $cnt$。
 
@@ -75,9 +108,7 @@ divisors[1] 的可整除性得分为 0 ，因为 nums 中没有任何数字能�
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +123,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +149,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxDivScore(nums []int, divisors []int) int {
@@ -167,7 +196,7 @@ func maxDivScore(nums []int, divisors []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxDivScore(nums: number[], divisors: number[]): number {
@@ -186,10 +215,36 @@ function maxDivScore(nums: number[], divisors: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn max_div_score(nums: Vec<i32>, divisors: Vec<i32>) -> i32 {
+        let mut ans = divisors[0];
+        let mut mx = 0;
 
+        for &div in &divisors {
+            let mut cnt = 0;
+
+            for &n in &nums {
+                if n % div == 0 {
+                    cnt += 1;
+                }
+            }
+
+            if cnt > mx || (cnt >= mx && div < ans) {
+                mx = cnt;
+                ans = div;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

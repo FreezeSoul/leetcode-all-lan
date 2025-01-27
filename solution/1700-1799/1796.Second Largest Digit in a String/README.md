@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1796.Second%20Largest%20Digit%20in%20a%20String/README.md
+rating: 1341
+source: 第 48 场双周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1796. 字符串中第二大的数字](https://leetcode.cn/problems/second-largest-digit-in-a-string)
 
 [English Version](/solution/1700-1799/1796.Second%20Largest%20Digit%20in%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个混合字符串 <code>s</code> ，请你返回 <code>s</code> 中 <strong>第二大 </strong>的数字，如果不存在第二大的数字，请你返回 <code>-1</code> 。</p>
 
@@ -37,11 +50,13 @@
 	<li><code>s</code> 只包含小写英文字母和（或）数字。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 我们定义 $a$ 和 $b$ 分别表示字符串中出现的最大数字和第二大数字，初始时 $a = b = -1$。
 
@@ -49,23 +64,11 @@
 
 遍历结束，返回 $b$ 即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
-
-**方法二：位运算**
-
-我们可以用一个整数 $mask$ 来标识字符串中出现的数字，其中 $mask$ 的第 $i$ 位表示数字 $i$ 是否出现过。
-
-遍历字符串 $s$，如果当前字符是数字，我们将其转换为数字 $v$，将 $mask$ 的第 $v$ 个二进制位的值置为 $1$。
-
-最后，我们从高位向低位遍历 $mask$，找到第二个为 $1$ 的二进制位，其对应的数字即为第二大数字。如果不存在第二大数字，返回 $-1$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为字符串 $s$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,22 +84,7 @@ class Solution:
         return b
 ```
 
-```python
-class Solution:
-    def secondHighest(self, s: str) -> int:
-        mask = reduce(or_, (1 << int(c) for c in s if c.isdigit()), 0)
-        cnt = 0
-        for i in range(9, -1, -1):
-            if (mask >> i) & 1:
-                cnt += 1
-            if cnt == 2:
-                return i
-        return -1
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,27 +107,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int secondHighest(String s) {
-        int mask = 0;
-        for (int i = 0; i < s.length(); ++i) {
-            char c = s.charAt(i);
-            if (Character.isDigit(c)) {
-                mask |= 1 << (c - '0');
-            }
-        }
-        for (int i = 9, cnt = 0; i >= 0; --i) {
-            if (((mask >> i) & 1) == 1 && ++cnt == 2) {
-                return i;
-            }
-        }
-        return -1;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,19 +129,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int secondHighest(string s) {
-        int mask = 0;
-        for (char& c : s) if (isdigit(c)) mask |= 1 << c - '0';
-        for (int i = 9, cnt = 0; ~i; --i) if (mask >> i & 1 && ++cnt == 2) return i;
-        return -1;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func secondHighest(s string) int {
@@ -192,27 +148,7 @@ func secondHighest(s string) int {
 }
 ```
 
-```go
-func secondHighest(s string) int {
-	mask := 0
-	for _, c := range s {
-		if c >= '0' && c <= '9' {
-			mask |= 1 << int(c-'0')
-		}
-	}
-	for i, cnt := 9, 0; i >= 0; i-- {
-		if mask>>i&1 == 1 {
-			cnt++
-			if cnt == 2 {
-				return i
-			}
-		}
-	}
-	return -1
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function secondHighest(s: string): number {
@@ -232,7 +168,7 @@ function secondHighest(s: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -255,10 +191,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int secondHighest(char *s) {
+int secondHighest(char* s) {
     int first = -1;
     int second = -1;
     for (int i = 0; s[i]; i++) {
@@ -276,10 +212,101 @@ int secondHighest(char *s) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：位运算
+
+我们可以用一个整数 $mask$ 来标识字符串中出现的数字，其中 $mask$ 的第 $i$ 位表示数字 $i$ 是否出现过。
+
+遍历字符串 $s$，如果当前字符是数字，我们将其转换为数字 $v$，将 $mask$ 的第 $v$ 个二进制位的值置为 $1$。
+
+最后，我们从高位向低位遍历 $mask$，找到第二个为 $1$ 的二进制位，其对应的数字即为第二大数字。如果不存在第二大数字，返回 $-1$。
+
+时间复杂度 $O(n)$，其中 $n$ 为字符串 $s$ 的长度。空间复杂度 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def secondHighest(self, s: str) -> int:
+        mask = reduce(or_, (1 << int(c) for c in s if c.isdigit()), 0)
+        cnt = 0
+        for i in range(9, -1, -1):
+            if (mask >> i) & 1:
+                cnt += 1
+            if cnt == 2:
+                return i
+        return -1
 ```
 
+#### Java
+
+```java
+class Solution {
+    public int secondHighest(String s) {
+        int mask = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (Character.isDigit(c)) {
+                mask |= 1 << (c - '0');
+            }
+        }
+        for (int i = 9, cnt = 0; i >= 0; --i) {
+            if (((mask >> i) & 1) == 1 && ++cnt == 2) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int secondHighest(string s) {
+        int mask = 0;
+        for (char& c : s)
+            if (isdigit(c)) mask |= 1 << c - '0';
+        for (int i = 9, cnt = 0; ~i; --i)
+            if (mask >> i & 1 && ++cnt == 2) return i;
+        return -1;
+    }
+};
+```
+
+#### Go
+
+```go
+func secondHighest(s string) int {
+	mask := 0
+	for _, c := range s {
+		if c >= '0' && c <= '9' {
+			mask |= 1 << int(c-'0')
+		}
+	}
+	for i, cnt := 9, 0; i >= 0; i-- {
+		if mask>>i&1 == 1 {
+			cnt++
+			if cnt == 2 {
+				return i
+			}
+		}
+	}
+	return -1
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0784.Letter%20Case%20Permutation/README_EN.md
+tags:
+    - Bit Manipulation
+    - String
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [784. Letter Case Permutation](https://leetcode.com/problems/letter-case-permutation)
 
 [中文文档](/solution/0700-0799/0784.Letter%20Case%20Permutation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, you&nbsp;can transform every letter individually to be lowercase or uppercase to create another string.</p>
 
@@ -31,13 +45,17 @@
 	<li><code>s</code> consists of lowercase English letters, uppercase English letters, and digits.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,23 +75,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def letterCasePermutation(self, s: str) -> List[str]:
-        ans = []
-        n = sum(c.isalpha() for c in s)
-        for i in range(1 << n):
-            j, t = 0, []
-            for c in s:
-                if c.isalpha():
-                    c = c.lower() if (i >> j) & 1 else c.upper()
-                    j += 1
-                t.append(c)
-            ans.append(''.join(t))
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,6 +101,131 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<string> letterCasePermutation(string s) {
+        vector<string> ans;
+        function<void(int)> dfs = [&](int i) {
+            if (i >= s.size()) {
+                ans.emplace_back(s);
+                return;
+            }
+            dfs(i + 1);
+            if (s[i] >= 'A') {
+                s[i] ^= 32;
+                dfs(i + 1);
+            }
+        };
+        dfs(0);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func letterCasePermutation(s string) (ans []string) {
+	t := []byte(s)
+	var dfs func(int)
+	dfs = func(i int) {
+		if i >= len(t) {
+			ans = append(ans, string(t))
+			return
+		}
+		dfs(i + 1)
+		if t[i] >= 'A' {
+			t[i] ^= 32
+			dfs(i + 1)
+		}
+	}
+
+	dfs(0)
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function letterCasePermutation(s: string): string[] {
+    const n = s.length;
+    const cs = [...s];
+    const res = [];
+    const dfs = (i: number) => {
+        if (i === n) {
+            res.push(cs.join(''));
+            return;
+        }
+        dfs(i + 1);
+        if (cs[i] >= 'A') {
+            cs[i] = String.fromCharCode(cs[i].charCodeAt(0) ^ 32);
+            dfs(i + 1);
+        }
+    };
+    dfs(0);
+    return res;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    fn dfs(i: usize, cs: &mut Vec<char>, res: &mut Vec<String>) {
+        if i == cs.len() {
+            res.push(cs.iter().collect());
+            return;
+        }
+        Self::dfs(i + 1, cs, res);
+        if cs[i] >= 'A' {
+            cs[i] = char::from((cs[i] as u8) ^ 32);
+            Self::dfs(i + 1, cs, res);
+        }
+    }
+
+    pub fn letter_case_permutation(s: String) -> Vec<String> {
+        let mut res = Vec::new();
+        let mut cs = s.chars().collect::<Vec<char>>();
+        Self::dfs(0, &mut cs, &mut res);
+        res
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def letterCasePermutation(self, s: str) -> List[str]:
+        ans = []
+        n = sum(c.isalpha() for c in s)
+        for i in range(1 << n):
+            j, t = 0, []
+            for c in s:
+                if c.isalpha():
+                    c = c.lower() if (i >> j) & 1 else c.upper()
+                    j += 1
+                t.append(c)
+            ans.append(''.join(t))
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -128,36 +255,15 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<string> letterCasePermutation(string s) {
-        vector<string> ans;
-        function<void(int)> dfs = [&](int i) {
-            if (i >= s.size()) {
-                ans.emplace_back(s);
-                return;
-            }
-            dfs(i + 1);
-            if (s[i] >= 'A') {
-                s[i] ^= 32;
-                dfs(i + 1);
-            }
-        };
-        dfs(0);
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> letterCasePermutation(string s) {
         int n = 0;
-        for (char c : s) if (isalpha(c)) ++n;
+        for (char c : s)
+            if (isalpha(c)) ++n;
         vector<string> ans;
         for (int i = 0; i < 1 << n; ++i) {
             int j = 0;
@@ -176,28 +282,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func letterCasePermutation(s string) (ans []string) {
-	t := []byte(s)
-	var dfs func(int)
-	dfs = func(i int) {
-		if i >= len(t) {
-			ans = append(ans, string(t))
-			return
-		}
-		dfs(i + 1)
-		if t[i] >= 'A' {
-			t[i] ^= 32
-			dfs(i + 1)
-		}
-	}
-
-	dfs(0)
-	return ans
-}
-```
+#### Go
 
 ```go
 func letterCasePermutation(s string) (ans []string) {
@@ -227,58 +312,8 @@ func letterCasePermutation(s string) (ans []string) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function letterCasePermutation(s: string): string[] {
-    const n = s.length;
-    const cs = [...s];
-    const res = [];
-    const dfs = (i: number) => {
-        if (i === n) {
-            res.push(cs.join(''));
-            return;
-        }
-        dfs(i + 1);
-        if (cs[i] >= 'A') {
-            cs[i] = String.fromCharCode(cs[i].charCodeAt(0) ^ 32);
-            dfs(i + 1);
-        }
-    };
-    dfs(0);
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    fn dfs(i: usize, cs: &mut Vec<char>, res: &mut Vec<String>) {
-        if i == cs.len() {
-            res.push(cs.iter().collect());
-            return;
-        }
-        Self::dfs(i + 1, cs, res);
-        if cs[i] >= 'A' {
-            cs[i] = char::from((cs[i] as u8) ^ 32);
-            Self::dfs(i + 1, cs, res);
-        }
-    }
-
-    pub fn letter_case_permutation(s: String) -> Vec<String> {
-        let mut res = Vec::new();
-        let mut cs = s.chars().collect::<Vec<char>>();
-        Self::dfs(0, &mut cs, &mut res);
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

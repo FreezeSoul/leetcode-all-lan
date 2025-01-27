@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0201.Bitwise%20AND%20of%20Numbers%20Range/README.md
+tags:
+    - 位运算
+---
+
+<!-- problem:start -->
+
 # [201. 数字范围按位与](https://leetcode.cn/problems/bitwise-and-of-numbers-range)
 
 [English Version](/solution/0200-0299/0201.Bitwise%20AND%20of%20Numbers%20Range/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个整数 <code>left</code> 和 <code>right</code> ，表示区间 <code>[left, right]</code> ，返回此区间内所有数字 <strong>按位与</strong> 的结果（包含 <code>left</code> 、<code>right</code> 端点）。</p>
 
@@ -39,11 +49,13 @@
 	<li><code>0 <= left <= right <= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 题目可以转换为求数字的公共二进制前缀。
 
@@ -53,9 +65,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -65,9 +75,7 @@ class Solution:
         return right
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +88,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -94,7 +102,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rangeBitwiseAnd(left int, right int) int {
@@ -105,20 +113,7 @@ func rangeBitwiseAnd(left int, right int) int {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int RangeBitwiseAnd(int left, int right) {
-        while (left < right) {
-            right &= (right - 1);
-        }
-        return right;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -134,10 +129,21 @@ var rangeBitwiseAnd = function (left, right) {
 };
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public int RangeBitwiseAnd(int left, int right) {
+        while (left < right) {
+            right &= (right - 1);
+        }
+        return right;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

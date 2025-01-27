@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0646.Maximum%20Length%20of%20Pair%20Chain/README.md
+tags:
+    - 贪心
+    - 数组
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [646. 最长数对链](https://leetcode.cn/problems/maximum-length-of-pair-chain)
 
 [English Version](/solution/0600-0699/0646.Maximum%20Length%20of%20Pair%20Chain/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由&nbsp;<code>n</code>&nbsp;个数对组成的数对数组&nbsp;<code>pairs</code>&nbsp;，其中&nbsp;<code>pairs[i] = [left<sub>i</sub>, right<sub>i</sub>]</code>&nbsp;且&nbsp;<code>left<sub>i</sub>&nbsp;&lt; right<sub>i</sub></code><sub> 。</sub></p>
 
@@ -41,88 +54,49 @@
 	<li><code>-1000 &lt;= left<sub>i</sub>&nbsp;&lt; right<sub>i</sub>&nbsp;&lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：排序 + 贪心
 
-先将 pairs 按照第一个数字升序排列，然后转换为最长上升子序列问题。
+我们将所有数对按照第二个数的升序排序，用一个变量 $\textit{pre}$ 维护已经选择的数对的第二个数的最大值。
 
-朴素做法，时间复杂度 $O(n^2)$。
+遍历排序后的数对，如果当前数对的第一个数大于 $\textit{pre}$，那么我们可以贪心地选择当前数对，答案加一，并将 $\textit{pre}$ 更新为当前数对的第二个数。
 
-**方法二：贪心**
+遍历结束后，返回答案即可。
 
-在所有可作为下一个数对的集合中，选择第二个数最小的数对添加到数对链。因此可以按照第二个数升序排列的顺序遍历所有数对，如果当前数能加入链，则加入。
-
-时间复杂度 $O(n\log n)$。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为数对的数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findLongestChain(self, pairs: List[List[int]]) -> int:
-        pairs.sort()
-        dp = [1] * len(pairs)
-        for i, (c, _) in enumerate(pairs):
-            for j, (_, b) in enumerate(pairs[:i]):
-                if b < c:
-                    dp[i] = max(dp[i], dp[j] + 1)
-        return max(dp)
-```
-
-```python
-class Solution:
-    def findLongestChain(self, pairs: List[List[int]]) -> int:
-        ans, cur = 0, -inf
-        for a, b in sorted(pairs, key=lambda x: x[1]):
-            if cur < a:
-                cur = b
+        pairs.sort(key=lambda x: x[1])
+        ans, pre = 0, -inf
+        for a, b in pairs:
+            if pre < a:
                 ans += 1
+                pre = b
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int findLongestChain(int[][] pairs) {
-        Arrays.sort(pairs, Comparator.comparingInt(a -> a[0]));
-        int n = pairs.length;
-        int[] dp = new int[n];
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            dp[i] = 1;
-            int c = pairs[i][0];
-            for (int j = 0; j < i; ++j) {
-                int b = pairs[j][1];
-                if (b < c) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
-            }
-            ans = Math.max(ans, dp[i]);
-        }
-        return ans;
-    }
-}
-```
-
-```java
-class Solution {
-    public int findLongestChain(int[][] pairs) {
-        Arrays.sort(pairs, Comparator.comparingInt(a -> a[1]));
-        int ans = 0;
-        int cur = Integer.MIN_VALUE;
-        for (int[] p : pairs) {
-            if (cur < p[0]) {
-                cur = p[1];
+        Arrays.sort(pairs, (a, b) -> Integer.compare(a[1], b[1]));
+        int ans = 0, pre = Integer.MIN_VALUE;
+        for (var p : pairs) {
+            if (pre < p[0]) {
                 ++ans;
+                pre = p[1];
             }
         }
         return ans;
@@ -130,40 +104,17 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findLongestChain(vector<vector<int>>& pairs) {
-        sort(pairs.begin(), pairs.end());
-        int n = pairs.size();
-        vector<int> dp(n, 1);
-        for (int i = 0; i < n; ++i) {
-            int c = pairs[i][0];
-            for (int j = 0; j < i; ++j) {
-                int b = pairs[j][1];
-                if (b < c) dp[i] = max(dp[i], dp[j] + 1);
-            }
-        }
-        return *max_element(dp.begin(), dp.end());
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    int findLongestChain(vector<vector<int>>& pairs) {
-        sort(pairs.begin(), pairs.end(), [](vector<int> &a, vector<int>b) {
-            return a[1] < b[1];
-        });
-        int ans = 0, cur = INT_MIN;
-        for (auto& p : pairs)
-        {
-            if (cur < p[0])
-            {
-                cur = p[1];
+        ranges::sort(pairs, {}, [](const auto& p) { return p[1]; });
+        int ans = 0, pre = INT_MIN;
+        for (const auto& p : pairs) {
+            if (pre < p[0]) {
+                pre = p[1];
                 ++ans;
             }
         }
@@ -172,130 +123,60 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func findLongestChain(pairs [][]int) int {
-	sort.Slice(pairs, func(i, j int) bool {
-		return pairs[i][0] < pairs[j][0]
-	})
-	n := len(pairs)
-	dp := make([]int, n)
-	ans := 0
-	for i := range pairs {
-		dp[i] = 1
-		c := pairs[i][0]
-		for j := range pairs[:i] {
-			b := pairs[j][1]
-			if b < c {
-				dp[i] = max(dp[i], dp[j]+1)
-			}
-		}
-		ans = max(ans, dp[i])
-	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-```go
-func findLongestChain(pairs [][]int) int {
-	sort.Slice(pairs, func(i, j int) bool {
-		return pairs[i][1] < pairs[j][1]
-	})
-	ans, cur := 0, math.MinInt32
+func findLongestChain(pairs [][]int) (ans int) {
+	sort.Slice(pairs, func(i, j int) bool { return pairs[i][1] < pairs[j][1] })
+	pre := math.MinInt
 	for _, p := range pairs {
-		if cur < p[0] {
-			cur = p[1]
+		if pre < p[0] {
 			ans++
+			pre = p[1]
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
-
-```ts
-function findLongestChain(pairs: number[][]): number {
-    pairs.sort((a, b) => a[0] - b[0]);
-    const n = pairs.length;
-    const dp = new Array(n).fill(1);
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < i; j++) {
-            if (pairs[i][0] > pairs[j][1]) {
-                dp[i] = Math.max(dp[i], dp[j] + 1);
-            }
-        }
-    }
-    return dp[n - 1];
-}
-```
+#### TypeScript
 
 ```ts
 function findLongestChain(pairs: number[][]): number {
     pairs.sort((a, b) => a[1] - b[1]);
-    let res = 0;
-    let pre = -Infinity;
+    let [ans, pre] = [0, -Infinity];
     for (const [a, b] of pairs) {
         if (pre < a) {
+            ++ans;
             pre = b;
-            res++;
         }
     }
-    return res;
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn find_longest_chain(mut pairs: Vec<Vec<i32>>) -> i32 {
-        pairs.sort_by(|a, b| a[0].cmp(&b[0]));
-        let n = pairs.len();
-        let mut dp = vec![1; n];
-        for i in 0..n {
-            for j in 0..i {
-                if pairs[i][0] > pairs[j][1] {
-                    dp[i] = dp[i].max(dp[j] + 1);
-                }
-            }
-        }
-        dp[n - 1]
-    }
-}
-```
-
-```rust
-impl Solution {
-    pub fn find_longest_chain(mut pairs: Vec<Vec<i32>>) -> i32 {
-        pairs.sort_by(|a, b| a[1].cmp(&b[1]));
-        let mut res = 0;
+        pairs.sort_by_key(|pair| pair[1]);
+        let mut ans = 0;
         let mut pre = i32::MIN;
-        for pair in pairs.iter() {
-            let a = pair[0];
-            let b = pair[1];
+        for pair in pairs {
+            let (a, b) = (pair[0], pair[1]);
             if pre < a {
+                ans += 1;
                 pre = b;
-                res += 1;
             }
         }
-        res
+        ans
     }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

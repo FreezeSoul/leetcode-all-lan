@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1866.Number%20of%20Ways%20to%20Rearrange%20Sticks%20With%20K%20Sticks%20Visible/README.md
+rating: 2333
+source: 第 241 场周赛 Q4
+tags:
+    - 数学
+    - 动态规划
+    - 组合数学
+---
+
+<!-- problem:start -->
+
 # [1866. 恰有 K 根木棍可以看到的排列数目](https://leetcode.cn/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible)
 
 [English Version](/solution/1800-1899/1866.Number%20of%20Ways%20to%20Rearrange%20Sticks%20With%20K%20Sticks%20Visible/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有 <code>n</code> 根长度互不相同的木棍，长度为从 <code>1</code> 到 <code>n</code> 的整数。请你将这些木棍排成一排，并满足从左侧 <strong>可以看到</strong> <strong>恰好</strong> <code>k</code> 根木棍。从左侧 <strong>可以看到</strong> 木棍的前提是这个木棍的 <strong>左侧</strong> 不存在比它 <strong>更长的</strong> 木棍。</p>
 
@@ -48,11 +62,13 @@
 	<li><code>1 &lt;= k &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示长度为 $i$ 的排列中，恰有 $j$ 根木棍可以看到的排列数目。初始时 $f[0][0]=1$，其余 $f[i][j]=0$。答案为 $f[n][k]$。
 
@@ -72,9 +88,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,21 +102,7 @@ class Solution:
         return f[n][k]
 ```
 
-```python
-class Solution:
-    def rearrangeSticks(self, n: int, k: int) -> int:
-        mod = 10**9 + 7
-        f = [1] + [0] * k
-        for i in range(1, n + 1):
-            for j in range(k, 0, -1):
-                f[j] = (f[j] * (i - 1) + f[j - 1]) % mod
-            f[0] = 0
-        return f[k]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -120,24 +120,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int rearrangeSticks(int n, int k) {
-        final int mod = (int) 1e9 + 7;
-        int[] f = new int[k + 1];
-        f[0] = 1;
-        for (int i = 1; i <= n; ++i) {
-            for (int j = k; j > 0; --j) {
-                f[j] = (int) ((f[j] * (i - 1L) + f[j - 1]) % mod);
-            }
-            f[0] = 0;
-        }
-        return f[k];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,6 +139,88 @@ public:
     }
 };
 ```
+
+#### Go
+
+```go
+func rearrangeSticks(n int, k int) int {
+	const mod = 1e9 + 7
+	f := make([][]int, n+1)
+	for i := range f {
+		f[i] = make([]int, k+1)
+	}
+	f[0][0] = 1
+	for i := 1; i <= n; i++ {
+		for j := 1; j <= k; j++ {
+			f[i][j] = (f[i-1][j-1] + (i-1)*f[i-1][j]) % mod
+		}
+	}
+	return f[n][k]
+}
+```
+
+#### TypeScript
+
+```ts
+function rearrangeSticks(n: number, k: number): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[][] = Array.from({ length: n + 1 }, () =>
+        Array.from({ length: k + 1 }, () => 0),
+    );
+    f[0][0] = 1;
+    for (let i = 1; i <= n; ++i) {
+        for (let j = 1; j <= k; ++j) {
+            f[i][j] = (f[i - 1][j - 1] + (i - 1) * f[i - 1][j]) % mod;
+        }
+    }
+    return f[n][k];
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def rearrangeSticks(self, n: int, k: int) -> int:
+        mod = 10**9 + 7
+        f = [1] + [0] * k
+        for i in range(1, n + 1):
+            for j in range(k, 0, -1):
+                f[j] = (f[j] * (i - 1) + f[j - 1]) % mod
+            f[0] = 0
+        return f[k]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int rearrangeSticks(int n, int k) {
+        final int mod = (int) 1e9 + 7;
+        int[] f = new int[k + 1];
+        f[0] = 1;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = k; j > 0; --j) {
+                f[j] = (int) ((f[j] * (i - 1L) + f[j - 1]) % mod);
+            }
+            f[0] = 0;
+        }
+        return f[k];
+    }
+}
+```
+
+#### C++
 
 ```cpp
 class Solution {
@@ -176,24 +241,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func rearrangeSticks(n int, k int) int {
-	const mod = 1e9 + 7
-	f := make([][]int, n+1)
-	for i := range f {
-		f[i] = make([]int, k+1)
-	}
-	f[0][0] = 1
-	for i := 1; i <= n; i++ {
-		for j := 1; j <= k; j++ {
-			f[i][j] = (f[i-1][j-1] + (i-1)*f[i-1][j]) % mod
-		}
-	}
-	return f[n][k]
-}
-```
+#### Go
 
 ```go
 func rearrangeSticks(n int, k int) int {
@@ -210,10 +258,25 @@ func rearrangeSticks(n int, k int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function rearrangeSticks(n: number, k: number): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[] = Array(n + 1).fill(0);
+    f[0] = 1;
+    for (let i = 1; i <= n; ++i) {
+        for (let j = k; j; --j) {
+            f[j] = (f[j] * (i - 1) + f[j - 1]) % mod;
+        }
+        f[0] = 0;
+    }
+    return f[k];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

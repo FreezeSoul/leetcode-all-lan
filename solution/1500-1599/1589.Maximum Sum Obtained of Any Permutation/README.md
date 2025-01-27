@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1589.Maximum%20Sum%20Obtained%20of%20Any%20Permutation/README.md
+rating: 1871
+source: 第 35 场双周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 前缀和
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1589. 所有排列中的最大和](https://leetcode.cn/problems/maximum-sum-obtained-of-any-permutation)
 
 [English Version](/solution/1500-1599/1589.Maximum%20Sum%20Obtained%20of%20Any%20Permutation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个整数数组&nbsp;<code>nums</code>&nbsp;，和一个查询数组&nbsp;<code>requests</code>&nbsp;，其中&nbsp;<code>requests[i] = [start<sub>i</sub>, end<sub>i</sub>]</code>&nbsp;。第&nbsp;<code>i</code>&nbsp;个查询求&nbsp;<code>nums[start<sub>i</sub>] + nums[start<sub>i</sub> + 1] + ... + nums[end<sub>i</sub> - 1] + nums[end<sub>i</sub>]</code>&nbsp;的结果&nbsp;，<code>start<sub>i</sub></code> 和&nbsp;<code>end<sub>i</sub></code>&nbsp;数组索引都是 <strong>从 0 开始</strong> 的。</p>
 
@@ -53,23 +68,23 @@ requests[1] -&gt; nums[0] + nums[1] = 3 + 5  = 8
 	<li><code>0 &lt;= start<sub>i</sub>&nbsp;&lt;= end<sub>i</sub>&nbsp;&lt;&nbsp;n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：差分数组 + 排序 + 贪心**
+### 方法一：差分数组 + 排序 + 贪心
 
 我们观察发现，对于一次查询操作，会返回该查询区间 $[l, r]$ 中的所有元素之和。而题目要求的是所有查询操作的结果之和的最大值，也即是说，我们要累计所有查询操作的结果，使得这些结果之和最大。因此，如果一个下标 $i$ 在查询操作中出现的次数越多，那么我们就应该赋给下标 $i$ 一个较大的值，这样才能使得所有查询操作的结果之和最大。
 
-因此，我们可以用差分数组的思想，统计每个下标在查询操作中出现的次数，然后对这些次数从小到大进行排序，然后对数组 $nums$ 也从小到大进行排序，这样就能保证每个下标 $i$ 在查询操作中出现的次数越多，该下标对应的值 $nums[i]$ 就越大。接下来，我们只需要将这些下标对应的值 $nums[i]$ 与其在查询操作中出现的次数相乘，然后累加起来，就是所有查询操作的结果之和的最大值。
+因此，我们可以用差分数组的思想，统计每个下标在查询操作中出现的次数，然后对这些次数从小到大进行排序，然后对数组 $\textit{nums}$ 也从小到大进行排序，这样就能保证每个下标 $i$ 在查询操作中出现的次数越多，该下标对应的值 $\textit{nums}[i]$ 就越大。接下来，我们只需要将这些下标对应的值 $\textit{nums}[i]$ 与其在查询操作中出现的次数相乘，然后累加起来，就是所有查询操作的结果之和的最大值。
 
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $nums$ 的长度。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{nums}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,9 +103,7 @@ class Solution:
         return sum(a * b for a, b in zip(nums, d)) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -150,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSumRangeQuery(nums []int, requests [][]int) (ans int) {
@@ -176,7 +189,7 @@ func maxSumRangeQuery(nums []int, requests [][]int) (ans int) {
 	return
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxSumRangeQuery(nums: number[], requests: number[][]): number {
@@ -202,10 +215,8 @@ function maxSumRangeQuery(nums: number[], requests: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

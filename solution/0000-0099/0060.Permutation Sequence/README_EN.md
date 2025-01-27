@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0060.Permutation%20Sequence/README_EN.md
+tags:
+    - Recursion
+    - Math
+---
+
+<!-- problem:start -->
+
 # [60. Permutation Sequence](https://leetcode.com/problems/permutation-sequence)
 
 [中文文档](/solution/0000-0099/0060.Permutation%20Sequence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>The set <code>[1, 2, 3, ...,&nbsp;n]</code> contains a total of <code>n!</code> unique permutations.</p>
 
@@ -38,11 +51,25 @@
 	<li><code>1 &lt;= k &lt;= n!</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+We know that the set $[1,2,..n]$ has a total of $n!$ permutations. If we determine the first digit, the number of permutations that the remaining digits can form is $(n-1)!$.
+
+Therefore, we enumerate each digit $i$. If $k$ is greater than the number of permutations after the current position is determined, then we can directly subtract this number; otherwise, it means that we have found the number at the current position.
+
+For each digit $i$, where $0 \leq i < n$, the number of permutations that the remaining digits can form is $(n-i-1)!$, which we denote as $fact$. The numbers used in the process are recorded in `vis`.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +91,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +133,8 @@ public:
             for (int j = 1; j < n - i; ++j) fact *= j;
             for (int j = 1; j <= n; ++j) {
                 if (vis[j]) continue;
-                if (k > fact) k -= fact;
+                if (k > fact)
+                    k -= fact;
                 else {
                     ans += to_string(j);
                     vis[j] = 1;
@@ -119,7 +147,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getPermutation(n int, k int) string {
@@ -146,7 +174,41 @@ func getPermutation(n int, k int) string {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn get_permutation(n: i32, k: i32) -> String {
+        let mut k = k;
+        let mut ans = String::new();
+        let mut fact = vec![1; n as usize];
+        for i in 1..n as usize {
+            fact[i] = fact[i - 1] * (i as i32);
+        }
+        let mut vis = vec![false; n as usize + 1];
+
+        for i in 0..n as usize {
+            let cnt = fact[(n as usize) - i - 1];
+            for j in 1..=n {
+                if vis[j as usize] {
+                    continue;
+                }
+                if k > cnt {
+                    k -= cnt;
+                } else {
+                    ans.push_str(&j.to_string());
+                    vis[j as usize] = true;
+                    break;
+                }
+            }
+        }
+
+        ans
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -175,10 +237,35 @@ public class Solution {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function getPermutation(n: number, k: number): string {
+    let ans = '';
+    const vis = Array.from({ length: n + 1 }, () => false);
+    for (let i = 0; i < n; i++) {
+        let fact = 1;
+        for (let j = 1; j < n - i; j++) {
+            fact *= j;
+        }
+        for (let j = 1; j <= n; j++) {
+            if (!vis[j]) {
+                if (k > fact) {
+                    k -= fact;
+                } else {
+                    ans += j;
+                    vis[j] = true;
+                    break;
+                }
+            }
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

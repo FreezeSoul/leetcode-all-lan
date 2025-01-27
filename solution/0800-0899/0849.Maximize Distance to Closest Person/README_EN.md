@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0849.Maximize%20Distance%20to%20Closest%20Person/README_EN.md
+tags:
+    - Array
+---
+
+<!-- problem:start -->
+
 # [849. Maximize Distance to Closest Person](https://leetcode.com/problems/maximize-distance-to-closest-person)
 
 [中文文档](/solution/0800-0899/0849.Maximize%20Distance%20to%20Closest%20Person/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array representing a row of <code>seats</code> where <code>seats[i] = 1</code> represents a person sitting in the <code>i<sup>th</sup></code> seat, and <code>seats[i] = 0</code> represents that the <code>i<sup>th</sup></code> seat is empty <strong>(0-indexed)</strong>.</p>
 
@@ -51,11 +63,25 @@ This is the maximum distance possible, so the answer is 3.
 	<li>At least one seat is <strong>occupied</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Single Traversal
+
+We define two variables $\textit{first}$ and $\textit{last}$ to represent the positions of the first and last person, respectively. We use the variable $d$ to represent the maximum distance between two people.
+
+Then, we traverse the array $\textit{seats}$. If the current position is occupied, and if $\textit{last}$ has been updated before, it means there was someone before, so we update $d = \max(d, i - \textit{last})$. If $\textit{first}$ has not been updated before, it means there was no one before, so we update $\textit{first} = i$. Next, we update $\textit{last} = i$.
+
+Finally, we return $\max(\textit{first}, n - \textit{last} - 1, d / 2)$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{seats}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +98,7 @@ class Solution:
         return max(first, len(seats) - last - 1, d // 2)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -119,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxDistToClosest(seats []int) int {
@@ -138,19 +164,33 @@ func maxDistToClosest(seats []int) int {
 	}
 	return max(d/2, max(first, len(seats)-last-1))
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maxDistToClosest(seats: number[]): number {
+    let first = -1,
+        last = -1;
+    let d = 0,
+        n = seats.length;
+    for (let i = 0; i < n; ++i) {
+        if (seats[i] === 1) {
+            if (last !== -1) {
+                d = Math.max(d, i - last);
+            }
+            if (first === -1) {
+                first = i;
+            }
+            last = i;
+        }
+    }
+    return Math.max(first, n - last - 1, d >> 1);
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

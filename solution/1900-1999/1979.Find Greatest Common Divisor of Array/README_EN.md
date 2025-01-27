@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1979.Find%20Greatest%20Common%20Divisor%20of%20Array/README_EN.md
+rating: 1184
+source: Weekly Contest 255 Q1
+tags:
+    - Array
+    - Math
+    - Number Theory
+---
+
+<!-- problem:start -->
+
 # [1979. Find Greatest Common Divisor of Array](https://leetcode.com/problems/find-greatest-common-divisor-of-array)
 
 [中文文档](/solution/1900-1999/1979.Find%20Greatest%20Common%20Divisor%20of%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return<strong> </strong><em>the <strong>greatest common divisor</strong> of the smallest number and largest number in </em><code>nums</code>.</p>
 
@@ -50,11 +66,21 @@ The greatest common divisor of 3 and 3 is 3.
 	<li><code>1 &lt;= nums[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can simulate according to the problem description. First, find the maximum and minimum values in the array $\textit{nums}$, then find the greatest common divisor of the maximum and minimum values.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{nums}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +88,7 @@ class Solution:
         return gcd(max(nums), min(nums))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -81,32 +107,23 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findGCD(vector<int>& nums) {
-        int a = *max_element(nums.begin(), nums.end());
-        int b = *min_element(nums.begin(), nums.end());
-        return gcd(a, b);
+        auto [min, max] = ranges::minmax_element(nums);
+        return gcd(*min, *max);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findGCD(nums []int) int {
-	a, b := 1, 1000
-	for _, x := range nums {
-		if a < x {
-			a = x
-		}
-		if b > x {
-			b = x
-		}
-	}
+	a, b := slices.Max(nums), slices.Min(nums)
 	return gcd(a, b)
 }
 
@@ -118,17 +135,13 @@ func gcd(a, b int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findGCD(nums: number[]): number {
-    let a = 1;
-    let b = 1000;
-    for (const x of nums) {
-        a = Math.max(a, x);
-        b = Math.min(b, x);
-    }
-    return gcd(a, b);
+    const min = Math.min(...nums);
+    const max = Math.max(...nums);
+    return gcd(min, max);
 }
 
 function gcd(a: number, b: number): number {
@@ -139,10 +152,29 @@ function gcd(a: number, b: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn find_gcd(nums: Vec<i32>) -> i32 {
+        let min_val = *nums.iter().min().unwrap();
+        let max_val = *nums.iter().max().unwrap();
+        gcd(min_val, max_val)
+    }
+}
 
+fn gcd(mut a: i32, mut b: i32) -> i32 {
+    while b != 0 {
+        let temp = b;
+        b = a % b;
+        a = temp;
+    }
+    a
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

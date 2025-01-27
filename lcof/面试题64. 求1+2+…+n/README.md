@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9864.%20%E6%B1%821%2B2%2B%E2%80%A6%2Bn/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 64. 求 1+2+…+n](https://leetcode.cn/problems/qiu-12n-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>求 <code>1+2+...+n</code> ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。</p>
 
@@ -26,13 +36,17 @@
 	<li><code>1 &lt;= n&nbsp;&lt;= 10000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-递归，结合**逻辑与**短路运算符求解。
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -40,7 +54,7 @@ class Solution:
         return n and (n + self.sumNums(n - 1))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -52,7 +66,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -64,19 +78,7 @@ public:
 };
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number} n
- * @return {number}
- */
-var sumNums = function (n) {
-    return (n ** 2 + n) >> 1;
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func sumNums(n int) int {
@@ -91,7 +93,7 @@ func sumNums(n int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 var sumNums = function (n: number): number {
@@ -99,18 +101,37 @@ var sumNums = function (n: number): number {
 };
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn sum_nums(mut n: i32) -> i32 {
-        n != 0 && (n += Solution::sum_nums(n - 1), true).1;
+        n != 0
+            && (
+                {
+                    n += Solution::sum_nums(n - 1);
+                },
+                true,
+            )
+                .1;
         n
     }
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var sumNums = function (n) {
+    return (n ** 2 + n) >> 1;
+};
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -125,13 +146,22 @@ public class Solution {
         return n == 0 || helper(n - 1);
     }
 }
-
 ```
 
-### **...**
+#### Swift
 
-```
-
+```swift
+class Solution {
+    func sumNums(_ n: Int) -> Int {
+        var s = n
+        let _ = n > 0 && { s += sumNums(n - 1); return true }()
+        return s
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9863.%20%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E5%A4%A7%E5%88%A9%E6%B6%A6/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 63. 股票的最大利润](https://leetcode.cn/problems/gu-piao-de-zui-da-li-run-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>假设把某股票的价格按照时间先后顺序存储在数组中，请问买卖该股票一次可能获得的最大利润是多少？</p>
 
@@ -30,9 +40,13 @@
 
 <p><strong>注意：</strong>本题与主站 121 题相同：<a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/">https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：动态规划**
+<!-- solution:start -->
+
+### 方法一：动态规划
 
 我们可以枚举当前的股票价格作为卖出价格，那么买入价格就是在它之前的最低股票价格，此时的利润就是卖出价格减去买入价格。我们可以用一个变量 `mi` 记录之前的最低股票价格，用一个变量 `ans` 记录最大利润，找出最大利润即可。
 
@@ -40,7 +54,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,7 +66,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -67,7 +81,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -83,7 +97,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxProfit(prices []int) (ans int) {
@@ -94,23 +108,39 @@ func maxProfit(prices []int) (ans int) {
 	}
 	return
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
+#### TypeScript
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+```ts
+function maxProfit(prices: number[]): number {
+    let res = 0;
+    let min = Infinity;
+    for (const price of prices) {
+        res = Math.max(res, price - min);
+        min = Math.min(min, price);
+    }
+    return res;
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_profit(prices: Vec<i32>) -> i32 {
+        let mut res = 0;
+        let mut min = i32::MAX;
+        for price in prices {
+            res = res.max(price - min);
+            min = min.min(price);
+        }
+        res
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -128,37 +158,7 @@ var maxProfit = function (prices) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function maxProfit(prices: number[]): number {
-    let res = 0;
-    let min = Infinity;
-    for (const price of prices) {
-        res = Math.max(res, price - min);
-        min = Math.min(min, price);
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn max_profit(prices: Vec<i32>) -> i32 {
-        let mut res = 0;
-        let mut min = i32::MAX;
-        for price in prices {
-            res = res.max(price - min);
-            min = min.min(price);
-        }
-        res
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -174,10 +174,26 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func maxProfit(_ prices: [Int]) -> Int {
+        var mi = Int.max
+        var ans = 0
 
+        for x in prices {
+            ans = max(ans, x - mi)
+            mi = min(mi, x)
+        }
+
+        return ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0978.Longest%20Turbulent%20Subarray/README.md
+tags:
+    - 数组
+    - 动态规划
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [978. 最长湍流子数组](https://leetcode.cn/problems/longest-turbulent-subarray)
 
 [English Version](/solution/0900-0999/0978.Longest%20Turbulent%20Subarray/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数数组 <code>arr</code>&nbsp;，返回 <code>arr</code>&nbsp;的&nbsp;<em>最大湍流子数组的<strong>长度</strong></em><strong>&nbsp;</strong>。</p>
 
@@ -14,6 +26,7 @@
 
 <ul>
 	<li>若&nbsp;<code>i &lt;= k &lt; j</code>&nbsp;：
+
     <ul>
     	<li>当 <code>k</code>&nbsp;为奇数时，&nbsp;<code>A[k] &gt; A[k+1]</code>，且</li>
     	<li>当 <code>k</code> 为偶数时，<code>A[k] &lt; A[k+1]</code>；</li>
@@ -25,6 +38,7 @@
     	<li>当 <code>k</code>&nbsp;为奇数时，&nbsp;<code>A[k] &lt; A[k+1]</code>。</li>
     </ul>
     </li>
+
 </ul>
 
 <p>&nbsp;</p>
@@ -59,25 +73,25 @@
 	<li><code>0 &lt;= arr[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-我们定义 $f[i]$ 表示以 $nums[i]$ 结尾且结尾处于上升状态的最长湍流子数组的长度，定义 $g[i]$ 表示以 $nums[i]$ 结尾且结尾处于下降状态的最长湍流子数组的长度。初始时 $f[0] = 1$, $g[0] = 1$。答案为 $max(f[i], g[i])$。
+我们定义 $f[i]$ 表示以 $\textit{nums}[i]$ 结尾且结尾处于上升状态的最长湍流子数组的长度，定义 $g[i]$ 表示以 $\textit{nums}[i]$ 结尾且结尾处于下降状态的最长湍流子数组的长度。初始时 $f[0] = 1$, $g[0] = 1$。答案为 $\max(f[i], g[i])$。
 
-对于 $i \gt 0$，若 $nums[i] \gt nums[i - 1]$，则 $f[i] = g[i - 1] + 1$，否则 $f[i] = 1$；若 $nums[i] \lt nums[i - 1]$，则 $g[i] = f[i - 1] + 1$，否则 $g[i] = 1$。
+对于 $i \gt 0$，若 $\textit{nums}[i] \gt \textit{nums}[i - 1]$，则 $f[i] = g[i - 1] + 1$，否则 $f[i] = 1$；若 $\textit{nums}[i] \lt \textit{nums}[i - 1]$，则 $g[i] = f[i - 1] + 1$，否则 $g[i] = 1$。
 
 由于 $f[i]$ 和 $g[i]$ 只与 $f[i - 1]$ 和 $g[i - 1]$ 有关，因此可以使用两个变量代替数组。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组长度。
+时间复杂度 $O(n)$，其中 $n$ 为数组长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +105,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxTurbulenceSize(arr []int) int {
@@ -148,16 +160,9 @@ func maxTurbulenceSize(arr []int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxTurbulenceSize(arr: number[]): number {
@@ -175,10 +180,30 @@ function maxTurbulenceSize(arr: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn max_turbulence_size(arr: Vec<i32>) -> i32 {
+        let mut ans = 1;
+        let mut f = 1;
+        let mut g = 1;
 
+        for i in 1..arr.len() {
+            let ff = if arr[i - 1] < arr[i] { g + 1 } else { 1 };
+            let gg = if arr[i - 1] > arr[i] { f + 1 } else { 1 };
+            f = ff;
+            g = gg;
+            ans = ans.max(f.max(g));
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

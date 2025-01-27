@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2520.Count%20the%20Digits%20That%20Divide%20a%20Number/README_EN.md
+rating: 1260
+source: Weekly Contest 326 Q1
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2520. Count the Digits That Divide a Number](https://leetcode.com/problems/count-the-digits-that-divide-a-number)
 
 [中文文档](/solution/2500-2599/2520.Count%20the%20Digits%20That%20Divide%20a%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>num</code>, return <em>the number of digits in <code>num</code> that divide </em><code>num</code>.</p>
 
@@ -41,11 +55,23 @@
 	<li><code>num</code> does not contain <code>0</code> as one of its digits.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+We directly enumerate each digit $val$ of the integer $num$, and if $val$ can divide $num$, we add one to the answer.
+
+After the enumeration, we return the answer.
+
+The time complexity is $O(\log num)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +83,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -73,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -90,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countDigits(num int) (ans int) {
@@ -103,23 +129,21 @@ func countDigits(num int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countDigits(num: number): number {
     let ans = 0;
-    let cur = num;
-    while (cur !== 0) {
-        if (num % (cur % 10) === 0) {
-            ans++;
+    for (let x = num; x; x = (x / 10) | 0) {
+        if (num % (x % 10) === 0) {
+            ++ans;
         }
-        cur = Math.floor(cur / 10);
     }
     return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -137,7 +161,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 int countDigits(int num) {
@@ -153,10 +177,46 @@ int countDigits(int num) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function countDigits(num: number): number {
+    let ans = 0;
+    for (const s of num.toString()) {
+        if (num % Number(s) === 0) {
+            ans++;
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn count_digits(num: i32) -> i32 {
+        num.to_string()
+            .chars()
+            .filter(|&c| c != '0')
+            .filter(|&c| num % (c.to_digit(10).unwrap() as i32) == 0)
+            .count() as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

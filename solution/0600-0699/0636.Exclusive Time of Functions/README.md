@@ -1,12 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0636.Exclusive%20Time%20of%20Functions/README.md
+tags:
+    - 栈
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [636. 函数的独占时间](https://leetcode.cn/problems/exclusive-time-of-functions)
 
 [English Version](/solution/0600-0699/0636.Exclusive%20Time%20of%20Functions/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>有一个 <strong>单线程</strong> CPU 正在运行一个含有 <code>n</code> 道函数的程序。每道函数都有一个位于  <code>0</code> 和 <code>n-1</code> 之间的唯一标识符。</p>
+<p>有一个 <strong>单线程</strong> CPU 正在运行一个含有 <code>n</code> 道函数的程序。每道函数都有一个位于&nbsp; <code>0</code> 和 <code>n-1</code> 之间的唯一标识符。</p>
 
 <p>函数调用 <strong>存储在一个 <a href="https://baike.baidu.com/item/%E8%B0%83%E7%94%A8%E6%A0%88/22718047?fr=aladdin" target="_blank">调用栈</a> 上</strong> ：当一个函数调用开始时，它的标识符将会推入栈中。而当一个函数调用结束时，它的标识符将会从栈中弹出。标识符位于栈顶的函数是 <strong>当前正在执行的函数</strong> 。每当一个函数开始或者结束时，将会记录一条日志，包括函数标识符、是开始还是结束、以及相应的时间戳。</p>
 
@@ -15,7 +26,7 @@
 <p>函数的 <strong>独占时间</strong> 定义是在这个函数在程序所有函数调用中执行时间的总和，调用其他函数花费的时间不算该函数的独占时间。例如，如果一个函数被调用两次，一次调用执行 <code>2</code> 单位时间，另一次调用执行 <code>1</code> 单位时间，那么该函数的 <strong>独占时间</strong> 为 <code>2 + 1 = 3</code> 。</p>
 
 <p>以数组形式返回每个函数的 <strong>独占时间</strong> ，其中第 <code>i</code> 个下标对应的值表示标识符 <code>i</code> 的函数的独占时间。</p>
- 
+&nbsp;
 
 <p><strong>示例 1：</strong></p>
 <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0600-0699/0636.Exclusive%20Time%20of%20Functions/images/diag1b.png" style="width: 550px; height: 239px;" />
@@ -56,94 +67,83 @@
 函数 0（初始调用）在时间戳 7 的起始恢复执行，执行 1 个单位时间，于时间戳 7 的末尾结束执行。
 所以函数 0 总共执行 2 + 4 + 1 = 7 个单位时间，函数 1 总共执行 1 个单位时间。 </pre>
 
-<p><strong>示例 4：</strong></p>
-
-<pre>
-<strong>输入：</strong>n = 2, logs = ["0:start:0","0:start:2","0:end:5","1:start:7","1:end:7","0:end:8"]
-<strong>输出：</strong>[8,1]
-</pre>
-
-<p><strong>示例 5：</strong></p>
-
-<pre>
-<strong>输入：</strong>n = 1, logs = ["0:start:0","0:end:0"]
-<strong>输出：</strong>[1]
-</pre>
-
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 <= n <= 100</code></li>
-	<li><code>1 <= logs.length <= 500</code></li>
-	<li><code>0 <= function_id < n</code></li>
-	<li><code>0 <= timestamp <= 10<sup>9</sup></code></li>
+	<li><code>1 &lt;= n &lt;= 100</code></li>
+	<li><code>1 &lt;= logs.length &lt;= 500</code></li>
+	<li><code>0 &lt;= function_id &lt; n</code></li>
+	<li><code>0 &lt;= timestamp &lt;= 10<sup>9</sup></code></li>
 	<li>两个开始事件不会在同一时间戳发生</li>
 	<li>两个结束事件不会在同一时间戳发生</li>
-	<li>每道函数都有一个对应 <code>"start"</code> 日志的 <code>"end"</code> 日志</li>
+	<li>每道函数都有一个对应&nbsp;<code>"start"</code> 日志的 <code>"end"</code> 日志</li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：栈模拟**
+### 方法一：栈 + 模拟
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。
+我们定义一个栈 $\textit{stk}$，用于存储当前正在执行的函数的标识符。同时，我们定义一个数组 $\textit{ans}$，用于存储每个函数的独占时间，初始时每个函数的独占时间都为 $0$。用一个变量 $\textit{pre}$ 记录上一个时间戳。
+
+遍历日志数组，对于每一条日志，我们首先将其按照冒号分隔，得到函数标识符 $\textit{i}$，操作类型 $\textit{op}$ 和时间戳 $\textit{t}$。
+
+如果 $\textit{op}$ 为 $\text{start}$，则表示函数 $\textit{i}$ 开始执行，我们需要判断栈是否为空，如果不为空，则将栈顶函数的独占时间增加 $\textit{cur} - \textit{pre}$，然后将 $\textit{i}$ 入栈，更新 $\textit{pre}$ 为 $\textit{cur}$；如果 $\textit{op}$ 为 $\text{end}$，则表示函数 $\textit{i}$ 结束执行，我们将栈顶函数的独占时间增加 $\textit{cur} - \textit{pre} + 1$，然后将栈顶元素出栈，更新 $\textit{pre}$ 为 $\textit{cur} + 1$。
+
+最后返回数组 $\textit{ans}$ 即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为日志数组的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def exclusiveTime(self, n: int, logs: List[str]) -> List[int]:
-        ans = [0] * n
         stk = []
-        curr = -1
+        ans = [0] * n
+        pre = 0
         for log in logs:
-            t = log.split(':')
-            fid = int(t[0])
-            ts = int(t[2])
-            if t[1] == 'start':
+            i, op, t = log.split(":")
+            i, cur = int(i), int(t)
+            if op[0] == "s":
                 if stk:
-                    ans[stk[-1]] += ts - curr
-                stk.append(fid)
-                curr = ts
+                    ans[stk[-1]] += cur - pre
+                stk.append(i)
+                pre = cur
             else:
-                fid = stk.pop()
-                ans[fid] += ts - curr + 1
-                curr = ts + 1
+                ans[stk.pop()] += cur - pre + 1
+                pre = cur + 1
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int[] exclusiveTime(int n, List<String> logs) {
         int[] ans = new int[n];
         Deque<Integer> stk = new ArrayDeque<>();
-        int curr = -1;
-        for (String log : logs) {
-            String[] t = log.split(":");
-            int fid = Integer.parseInt(t[0]);
-            int ts = Integer.parseInt(t[2]);
-            if ("start".equals(t[1])) {
+        int pre = 0;
+        for (var log : logs) {
+            var parts = log.split(":");
+            int i = Integer.parseInt(parts[0]);
+            int cur = Integer.parseInt(parts[2]);
+            if (parts[1].charAt(0) == 's') {
                 if (!stk.isEmpty()) {
-                    ans[stk.peek()] += ts - curr;
+                    ans[stk.peek()] += cur - pre;
                 }
-                stk.push(fid);
-                curr = ts;
+                stk.push(i);
+                pre = cur;
             } else {
-                fid = stk.pop();
-                ans[fid] += ts - curr + 1;
-                curr = ts + 1;
+                ans[stk.pop()] += cur - pre + 1;
+                pre = cur + 1;
             }
         }
         return ans;
@@ -151,37 +151,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function exclusiveTime(n: number, logs: string[]): number[] {
-    const res = new Array(n).fill(0);
-    const stack: [number, number][] = [];
-
-    for (const log of logs) {
-        const t = log.split(':');
-        const [id, state, time] = [Number(t[0]), t[1], Number(t[2])];
-
-        if (state === 'start') {
-            if (stack.length !== 0) {
-                const pre = stack[stack.length - 1];
-                res[pre[0]] += time - pre[1];
-            }
-            stack.push([id, time]);
-        } else {
-            const pre = stack.pop();
-            res[pre[0]] += time - pre[1] + 1;
-            if (stack.length !== 0) {
-                stack[stack.length - 1][1] = time + 1;
-            }
-        }
-    }
-
-    return res;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -189,20 +159,21 @@ public:
     vector<int> exclusiveTime(int n, vector<string>& logs) {
         vector<int> ans(n);
         stack<int> stk;
-        int curr = -1;
-        for (auto& log : logs) {
-            char type[10];
-            int fid, ts;
-            sscanf(log.c_str(), "%d:%[^:]:%d", &fid, type, &ts);
-            if (type[0] == 's') {
-                if (!stk.empty()) ans[stk.top()] += ts - curr;
-                curr = ts;
-                stk.push(fid);
+        int pre = 0;
+        for (const auto& log : logs) {
+            int i, cur;
+            char c[10];
+            sscanf(log.c_str(), "%d:%[^:]:%d", &i, c, &cur);
+            if (c[0] == 's') {
+                if (stk.size()) {
+                    ans[stk.top()] += cur - pre;
+                }
+                stk.push(i);
+                pre = cur;
             } else {
-                fid = stk.top();
+                ans[stk.top()] += cur - pre + 1;
                 stk.pop();
-                ans[fid] += ts - curr + 1;
-                curr = ts + 1;
+                pre = cur + 1;
             }
         }
         return ans;
@@ -210,38 +181,59 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func exclusiveTime(n int, logs []string) []int {
 	ans := make([]int, n)
 	stk := []int{}
-	curr := 1
+	pre := 0
 	for _, log := range logs {
-		t := strings.Split(log, ":")
-		fid, _ := strconv.Atoi(t[0])
-		ts, _ := strconv.Atoi(t[2])
-		if t[1][0] == 's' {
+		parts := strings.Split(log, ":")
+		i, _ := strconv.Atoi(parts[0])
+		cur, _ := strconv.Atoi(parts[2])
+		if parts[1][0] == 's' {
 			if len(stk) > 0 {
-				ans[stk[len(stk)-1]] += ts - curr
+				ans[stk[len(stk)-1]] += cur - pre
 			}
-			stk = append(stk, fid)
-			curr = ts
+			stk = append(stk, i)
+			pre = cur
 		} else {
-			fid := stk[len(stk)-1]
+			ans[stk[len(stk)-1]] += cur - pre + 1
 			stk = stk[:len(stk)-1]
-			ans[fid] += ts - curr + 1
-			curr = ts + 1
+			pre = cur + 1
 		}
 	}
 	return ans
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function exclusiveTime(n: number, logs: string[]): number[] {
+    const ans: number[] = Array(n).fill(0);
+    let pre = 0;
+    const stk: number[] = [];
+    for (const log of logs) {
+        const [i, op, cur] = log.split(':');
+        if (op[0] === 's') {
+            if (stk.length) {
+                ans[stk.at(-1)!] += +cur - pre;
+            }
+            stk.push(+i);
+            pre = +cur;
+        } else {
+            ans[stk.pop()!] += +cur - pre + 1;
+            pre = +cur + 1;
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

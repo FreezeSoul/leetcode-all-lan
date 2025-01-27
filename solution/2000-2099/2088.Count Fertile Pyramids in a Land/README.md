@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2088.Count%20Fertile%20Pyramids%20in%20a%20Land/README.md
+rating: 2104
+source: 第 66 场双周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2088. 统计农场中肥沃金字塔的数目](https://leetcode.cn/problems/count-fertile-pyramids-in-a-land)
 
 [English Version](/solution/2000-2099/2088.Count%20Fertile%20Pyramids%20in%20a%20Land/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个 <strong>矩形网格</strong>&nbsp;状的农场，划分为&nbsp;<code>m</code>&nbsp;行&nbsp;<code>n</code>&nbsp;列的单元格。每个格子要么是 <strong>肥沃的</strong>&nbsp;（用 <code>1</code>&nbsp;表示），要么是 <strong>贫瘠</strong>&nbsp;的（用 <code>0</code>&nbsp;表示）。网格图以外的所有与格子都视为贫瘠的。</p>
 
@@ -87,16 +101,18 @@
 	<li><code>grid[i][j]</code>&nbsp;要么是&nbsp;<code>0</code>&nbsp;，要么是&nbsp;<code>1</code> 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示以 $(i, j)$ 为顶点的金字塔的最大高度，那么有如下状态转移方程：
 
 $$
-f[i][j] = \begin{cases} 0 & \text{grid}[i][j] = 0 \\ \min(f[i + 1][j - 1], f[i + 1][j], f[i + 1][j + 1]) + 1 & \text{grid}[i][j] = 1 \end{cases}
+f[i][j] = \begin{cases} 0 & \textit{grid}[i][j] = 0 \\ \min(f[i + 1][j - 1], f[i + 1][j], f[i + 1][j + 1]) + 1 & \textit{grid}[i][j] = 1 \end{cases}
 $$
 
 因此，我们可以从下往上、从左往右遍历网格，计算出所有的 $f[i][j]$，并累加所有的 $f[i][j]$ 即可得到正金字塔的个数。
@@ -104,7 +120,7 @@ $$
 接下来，我们考虑倒金字塔的个数。与金字塔类似，我们定义 $g[i][j]$ 表示以 $(i, j)$ 为顶点的倒金字塔的最大高度，那么有如下状态转移方程：
 
 $$
-g[i][j] = \begin{cases} 0 & \text{grid}[i][j] = 0 \\ \min(g[i - 1][j - 1], g[i - 1][j], g[i - 1][j + 1]) + 1 & \text{grid}[i][j] = 1 \end{cases}
+g[i][j] = \begin{cases} 0 & \textit{grid}[i][j] = 0 \\ \min(g[i - 1][j - 1], g[i - 1][j], g[i - 1][j + 1]) + 1 & \textit{grid}[i][j] = 1 \end{cases}
 $$
 
 因此，我们可以从上往下、从左往右遍历网格，计算出所有的 $g[i][j]$，并累加所有的 $g[i][j]$ 即可得到倒金字塔的个数。
@@ -115,9 +131,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -130,8 +144,7 @@ class Solution:
                 if grid[i][j] == 0:
                     f[i][j] = -1
                 elif not (i == m - 1 or j == 0 or j == n - 1):
-                    f[i][j] = min(f[i + 1][j - 1], f[i + 1]
-                                  [j], f[i + 1][j + 1]) + 1
+                    f[i][j] = min(f[i + 1][j - 1], f[i + 1][j], f[i + 1][j + 1]) + 1
                     ans += f[i][j]
         for i in range(m):
             for j in range(n):
@@ -140,15 +153,12 @@ class Solution:
                 elif i == 0 or j == 0 or j == n - 1:
                     f[i][j] = 0
                 else:
-                    f[i][j] = min(f[i - 1][j - 1], f[i - 1]
-                                  [j], f[i - 1][j + 1]) + 1
+                    f[i][j] = min(f[i - 1][j - 1], f[i - 1][j], f[i - 1][j + 1]) + 1
                     ans += f[i][j]
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -185,7 +195,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -223,7 +233,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPyramids(grid [][]int) (ans int) {
@@ -258,19 +268,10 @@ func countPyramids(grid [][]int) (ans int) {
 	}
 	return
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

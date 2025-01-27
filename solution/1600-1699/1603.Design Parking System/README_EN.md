@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1603.Design%20Parking%20System/README_EN.md
+rating: 1324
+source: Biweekly Contest 36 Q1
+tags:
+    - Design
+    - Counting
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1603. Design Parking System](https://leetcode.com/problems/design-parking-system)
 
 [中文文档](/solution/1600-1699/1603.Design%20Parking%20System/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a parking system for a parking lot. The parking lot has three kinds of parking spaces: big, medium, and small, with a fixed number of slots for each size.</p>
 
@@ -40,15 +56,20 @@ parkingSystem.addCar(1); // return false because there is no available slot for 
 	<li>At most <code>1000</code> calls will be made to <code>addCar</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class ParkingSystem:
-
     def __init__(self, big: int, medium: int, small: int):
         self.cnt = [0, big, medium, small]
 
@@ -64,7 +85,7 @@ class ParkingSystem:
 # param_1 = obj.addCar(carType)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class ParkingSystem {
@@ -90,22 +111,25 @@ class ParkingSystem {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class ParkingSystem {
 public:
-    vector<int> cnt;
-
     ParkingSystem(int big, int medium, int small) {
         cnt = {0, big, medium, small};
     }
 
     bool addCar(int carType) {
-        if (cnt[carType] == 0) return false;
+        if (cnt[carType] == 0) {
+            return false;
+        }
         --cnt[carType];
         return true;
     }
+
+private:
+    vector<int> cnt;
 };
 
 /**
@@ -115,7 +139,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type ParkingSystem struct {
@@ -141,7 +165,7 @@ func (this *ParkingSystem) AddCar(carType int) bool {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class ParkingSystem {
@@ -167,23 +191,21 @@ class ParkingSystem {
  */
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 struct ParkingSystem {
     count: [i32; 3],
 }
 
-
 /**
  * `&self` means the method takes an immutable reference.
  * If you need a mutable reference, change it to `&mut self` instead.
  */
 impl ParkingSystem {
-
     fn new(big: i32, medium: i32, small: i32) -> Self {
         Self {
-            count: [big, medium, small]
+            count: [big, medium, small],
         }
     }
 
@@ -196,24 +218,44 @@ impl ParkingSystem {
         true
     }
 }
+```
+
+#### C#
+
+```cs
+public class ParkingSystem {
+
+    private List<int> cnt;
+
+    public ParkingSystem(int big, int medium, int small) {
+        cnt = new List<int>() {0 , big, medium, small};
+    }
+
+    public bool AddCar(int carType) {
+        if (cnt[carType] == 0) {
+            return false;
+        }
+        --cnt[carType];
+        return true;
+    }
+}
 
 /**
  * Your ParkingSystem object will be instantiated and called as such:
- * let obj = ParkingSystem::new(big, medium, small);
- * let ret_1: bool = obj.add_car(carType);
+ * ParkingSystem obj = new ParkingSystem(big, medium, small);
+ * bool param_1 = obj.AddCar(carType);
  */
 ```
 
-### **C**
+#### C
 
 ```c
 typedef struct {
-    int *count;
+    int* count;
 } ParkingSystem;
 
-
-ParkingSystem *parkingSystemCreate(int big, int medium, int small) {
-    ParkingSystem *res = malloc(sizeof(ParkingSystem));
+ParkingSystem* parkingSystemCreate(int big, int medium, int small) {
+    ParkingSystem* res = malloc(sizeof(ParkingSystem));
     res->count = malloc(sizeof(int) * 3);
     res->count[0] = big;
     res->count[1] = medium;
@@ -221,7 +263,7 @@ ParkingSystem *parkingSystemCreate(int big, int medium, int small) {
     return res;
 }
 
-bool parkingSystemAddCar(ParkingSystem *obj, int carType) {
+bool parkingSystemAddCar(ParkingSystem* obj, int carType) {
     int i = carType - 1;
     if (!obj->count[i]) {
         return 0;
@@ -230,7 +272,7 @@ bool parkingSystemAddCar(ParkingSystem *obj, int carType) {
     return 1;
 }
 
-void parkingSystemFree(ParkingSystem *obj) {
+void parkingSystemFree(ParkingSystem* obj) {
     free(obj);
 }
 
@@ -243,10 +285,8 @@ void parkingSystemFree(ParkingSystem *obj) {
 */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

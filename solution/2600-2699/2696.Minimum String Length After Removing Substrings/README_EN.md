@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2696.Minimum%20String%20Length%20After%20Removing%20Substrings/README_EN.md
+rating: 1282
+source: Weekly Contest 346 Q1
+tags:
+    - Stack
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2696. Minimum String Length After Removing Substrings](https://leetcode.com/problems/minimum-string-length-after-removing-substrings)
 
 [中文文档](/solution/2600-2699/2696.Minimum%20String%20Length%20After%20Removing%20Substrings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> consisting only of <strong>uppercase</strong> English letters.</p>
 
@@ -41,11 +57,25 @@ It can be shown that it is the minimum length that we can obtain.</pre>
 	<li><code>s</code>&nbsp;consists only of uppercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Stack
+
+We traverse the string $s$. For the current character $c$ we are traversing, if the stack is not empty and the top element of the stack $top$ can form $AB$ or $CD$ with $c$, then we pop the top element of the stack, otherwise we push $c$ into the stack.
+
+The number of remaining elements in the stack is the length of the final string.
+
+> In implementation, we can pre-place an empty character in the stack, so there is no need to judge whether the stack is empty when traversing the string. Finally, we can return the size of the stack minus one.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +89,7 @@ class Solution:
         return len(stk) - 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -97,7 +127,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minLength(s string) int {
@@ -113,28 +143,90 @@ func minLength(s string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minLength(s: string): number {
-    const stk: string[] = [''];
+    const stk: string[] = [];
     for (const c of s) {
-        if (c === 'B' && stk[stk.length - 1] === 'A') {
-            stk.pop();
-        } else if (c == 'D' && stk[stk.length - 1] === 'C') {
+        if ((stk.at(-1) === 'A' && c === 'B') || (stk.at(-1) === 'C' && c === 'D')) {
             stk.pop();
         } else {
             stk.push(c);
         }
     }
-    return stk.length - 1;
+    return stk.length;
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+function minLength(s) {
+    const stk = [];
+    for (const c of s) {
+        if ((stk.at(-1) === 'A' && c === 'B') || (stk.at(-1) === 'C' && c === 'D')) {
+            stk.pop();
+        } else {
+            stk.push(c);
+        }
+    }
+    return stk.length;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_length(s: String) -> i32 {
+        let mut ans: Vec<u8> = Vec::new();
+
+        for c in s.bytes() {
+            if let Some(last) = ans.last() {
+                if *last == b'A' && c == b'B' {
+                    ans.pop();
+                } else if *last == b'C' && c == b'D' {
+                    ans.pop();
+                } else {
+                    ans.push(c);
+                }
+            } else {
+                ans.push(c);
+            }
+        }
+
+        ans.len() as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: One-liner
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+const minLength = (s: string, n = s.length): number =>
+    ((s = s.replace(/AB|CD/g, '')), s.length === n) ? n : minLength(s);
+```
+
+#### JavaScript
+
+```js
+const minLength = (s, n = s.length) =>
+    ((s = s.replace(/AB|CD/g, '')), s.length === n) ? n : minLength(s);
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1351.Count%20Negative%20Numbers%20in%20a%20Sorted%20Matrix/README_EN.md
+rating: 1139
+source: Weekly Contest 176 Q1
+tags:
+    - Array
+    - Binary Search
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1351. Count Negative Numbers in a Sorted Matrix](https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix)
 
 [中文文档](/solution/1300-1399/1351.Count%20Negative%20Numbers%20in%20a%20Sorted%20Matrix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a <code>m x n</code> matrix <code>grid</code> which is sorted in non-increasing order both row-wise and column-wise, return <em>the number of <strong>negative</strong> numbers in</em> <code>grid</code>.</p>
 
@@ -35,11 +51,25 @@
 <p>&nbsp;</p>
 <strong>Follow up:</strong> Could you find an <code>O(n + m)</code> solution?
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Start Traversing from the Bottom Left or Top Right
+
+According to the characteristic that **both rows and columns are arranged in non-increasing order**, we can start traversing from the **bottom left corner** towards the **top right direction**.
+
+When encountering a negative number, it indicates that all elements to the right of the current position in this row are negative. We add the number of remaining elements in this row to the answer, that is, $n - j$, and move up a row, that is, $i \leftarrow i - 1$. Otherwise, move to the right column, that is, $j \leftarrow j + 1$.
+
+After the traversal is over, return the answer.
+
+The time complexity is $O(m + n)$, where $m$ and $n$ are the number of rows and columns of the matrix, respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,13 +86,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def countNegatives(self, grid: List[List[int]]) -> int:
-        return sum(bisect_left(row[::-1], 0) for row in grid)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,29 +106,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countNegatives(int[][] grid) {
-        int ans = 0;
-        int n = grid[0].length;
-        for (int[] row : grid) {
-            int left = 0, right = n;
-            while (left < right) {
-                int mid = (left + right) >> 1;
-                if (row[mid] < 0) {
-                    right = mid;
-                } else {
-                    left = mid + 1;
-                }
-            }
-            ans += n - left;
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,20 +126,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int countNegatives(vector<vector<int>>& grid) {
-        int ans = 0;
-        for (auto& row : grid) {
-            ans += lower_bound(row.rbegin(), row.rend(), 0) - row.rbegin();
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countNegatives(grid [][]int) int {
@@ -155,26 +144,7 @@ func countNegatives(grid [][]int) int {
 }
 ```
 
-```go
-func countNegatives(grid [][]int) int {
-	ans, n := 0, len(grid[0])
-	for _, row := range grid {
-		left, right := 0, n
-		for left < right {
-			mid := (left + right) >> 1
-			if row[mid] < 0 {
-				right = mid
-			} else {
-				left = mid + 1
-			}
-		}
-		ans += n - left
-	}
-	return ans
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countNegatives(grid: number[][]): number {
@@ -193,76 +163,7 @@ function countNegatives(grid: number[][]): number {
 }
 ```
 
-```ts
-function countNegatives(grid: number[][]): number {
-    const n = grid[0].length;
-    let ans = 0;
-    for (let row of grid) {
-        let left = 0,
-            right = n;
-        while (left < right) {
-            const mid = (left + right) >> 1;
-            if (row[mid] < 0) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        ans += n - left;
-    }
-    return ans;
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {number[][]} grid
- * @return {number}
- */
-var countNegatives = function (grid) {
-    const m = grid.length,
-        n = grid[0].length;
-    let ans = 0;
-    for (let i = m - 1, j = 0; i >= 0 && j < n; ) {
-        if (grid[i][j] < 0) {
-            ans += n - j;
-            --i;
-        } else {
-            ++j;
-        }
-    }
-    return ans;
-};
-```
-
-```js
-/**
- * @param {number[][]} grid
- * @return {number}
- */
-var countNegatives = function (grid) {
-    const n = grid[0].length;
-    let ans = 0;
-    for (let row of grid) {
-        let left = 0,
-            right = n;
-        while (left < right) {
-            const mid = (left + right) >> 1;
-            if (row[mid] < 0) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        ans += n - left;
-    }
-    return ans;
-};
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -287,6 +188,138 @@ impl Solution {
 }
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var countNegatives = function (grid) {
+    const m = grid.length,
+        n = grid[0].length;
+    let ans = 0;
+    for (let i = m - 1, j = 0; i >= 0 && j < n; ) {
+        if (grid[i][j] < 0) {
+            ans += n - j;
+            --i;
+        } else {
+            ++j;
+        }
+    }
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Binary Search
+
+Traverse each row, use binary search to find the first position less than $0$ in each row. All elements to the right of this position are negative, and add the number of negative numbers to the answer.
+
+After the traversal is over, return the answer.
+
+The time complexity is $O(m \times \log n)$, where $m$ and $n$ are the number of rows and columns of the matrix, respectively. The space complexity is $O(1)$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countNegatives(self, grid: List[List[int]]) -> int:
+        return sum(bisect_left(row[::-1], 0) for row in grid)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countNegatives(int[][] grid) {
+        int ans = 0;
+        int n = grid[0].length;
+        for (int[] row : grid) {
+            int left = 0, right = n;
+            while (left < right) {
+                int mid = (left + right) >> 1;
+                if (row[mid] < 0) {
+                    right = mid;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            ans += n - left;
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countNegatives(vector<vector<int>>& grid) {
+        int ans = 0;
+        for (auto& row : grid) {
+            ans += lower_bound(row.rbegin(), row.rend(), 0) - row.rbegin();
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countNegatives(grid [][]int) int {
+	ans, n := 0, len(grid[0])
+	for _, row := range grid {
+		left, right := 0, n
+		for left < right {
+			mid := (left + right) >> 1
+			if row[mid] < 0 {
+				right = mid
+			} else {
+				left = mid + 1
+			}
+		}
+		ans += n - left
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function countNegatives(grid: number[][]): number {
+    const n = grid[0].length;
+    let ans = 0;
+    for (let row of grid) {
+        let left = 0,
+            right = n;
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (row[mid] < 0) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        ans += n - left;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
 ```rust
 impl Solution {
     pub fn count_negatives(grid: Vec<Vec<i32>>) -> i32 {
@@ -308,10 +341,35 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var countNegatives = function (grid) {
+    const n = grid[0].length;
+    let ans = 0;
+    for (let row of grid) {
+        let left = 0,
+            right = n;
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (row[mid] < 0) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        ans += n - left;
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

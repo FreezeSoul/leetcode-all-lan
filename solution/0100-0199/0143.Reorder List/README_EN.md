@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0143.Reorder%20List/README_EN.md
+tags:
+    - Stack
+    - Recursion
+    - Linked List
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [143. Reorder List](https://leetcode.com/problems/reorder-list)
 
 [中文文档](/solution/0100-0199/0143.Reorder%20List/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the head of a singly linked-list. The list can be represented as:</p>
 
@@ -41,11 +56,21 @@ L<sub>0</sub> &rarr; L<sub>n</sub> &rarr; L<sub>1</sub> &rarr; L<sub>n - 1</sub>
 	<li><code>1 &lt;= Node.val &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Fast and Slow Pointers + Reverse List + Merge Lists
+
+We first use fast and slow pointers to find the midpoint of the linked list, then reverse the second half of the list, and finally merge the two halves.
+
+The time complexity is $O(n)$, where $n$ is the length of the linked list. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -54,16 +79,11 @@ L<sub>0</sub> &rarr; L<sub>n</sub> &rarr; L<sub>1</sub> &rarr; L<sub>n - 1</sub>
 #         self.val = val
 #         self.next = next
 class Solution:
-    def reorderList(self, head: ListNode) -> None:
-        """
-        Do not return anything, modify head in-place instead.
-        """
-        if head is None or head.next is None:
-            return
-
-        slow, fast = head, head.next
-        while fast and fast.next:
-            slow, fast = slow.next, fast.next.next
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        fast = slow = head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
 
         cur = slow.next
         slow.next = None
@@ -82,7 +102,7 @@ class Solution:
             cur, pre = pre.next, t
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -97,12 +117,8 @@ class Solution:
  */
 class Solution {
     public void reorderList(ListNode head) {
-        if (head == null || head.next == null) {
-            return;
-        }
-        ListNode slow = head;
-        ListNode fast = head.next;
-        while (fast != null && fast.next != null) {
+        ListNode fast = head, slow = head;
+        while (fast.next != null && fast.next.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
@@ -130,60 +146,53 @@ class Solution {
 }
 ```
 
-### **C#**
+#### C++
 
-```cs
+```cpp
 /**
  * Definition for singly-linked list.
- * public class ListNode {
- *     public int val;
- *     public ListNode next;
- *     public ListNode(int val=0, ListNode next=null) {
- *         this.val = val;
- *         this.next = next;
- *     }
- * }
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
  */
-public class Solution {
-    public void ReorderList(ListNode head) {
-        if (head == null || head.next == null)
-        {
-            return;
-        }
-        ListNode slow = head;
-        ListNode fast = head.next;
-        while (fast != null && fast.next != null)
-        {
-            slow = slow.next;
-            fast = fast.next.next;
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while (fast->next && fast->next->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
 
-        ListNode cur = slow.next;
-        slow.next = null;
+        ListNode* cur = slow->next;
+        slow->next = nullptr;
 
-        ListNode pre = null;
-        while (cur != null)
-        {
-            ListNode t = cur.next;
-            cur.next = pre;
+        ListNode* pre = nullptr;
+        while (cur) {
+            ListNode* t = cur->next;
+            cur->next = pre;
             pre = cur;
             cur = t;
         }
         cur = head;
 
-        while (pre != null)
-        {
-            ListNode t = pre.next;
-            pre.next = cur.next;
-            cur.next = pre;
-            cur = pre.next;
+        while (pre) {
+            ListNode* t = pre->next;
+            pre->next = cur->next;
+            cur->next = pre;
+            cur = pre->next;
             pre = t;
         }
     }
-}
+};
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -193,118 +202,33 @@ public class Solution {
  *     Next *ListNode
  * }
  */
- func reorderList(head *ListNode)  {
-    if head == nil || head.Next == nil {
-        return
-    }
-    slow, fast := head, head.Next
-    for fast != nil && fast.Next != nil {
-        slow, fast = slow.Next, fast.Next.Next
-    }
+func reorderList(head *ListNode) {
+	fast, slow := head, head
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow, fast = slow.Next, fast.Next.Next
+	}
 
-    cur := slow.Next
-    slow.Next = nil
+	cur := slow.Next
+	slow.Next = nil
 
-    var pre *ListNode
-    for cur != nil {
-        t := cur.Next
-        cur.Next = pre
-        pre, cur = cur, t
-    }
-    cur = head
+	var pre *ListNode
+	for cur != nil {
+		t := cur.Next
+		cur.Next = pre
+		pre, cur = cur, t
+	}
+	cur = head
 
-    for pre != nil {
-        t := pre.Next
-        pre.Next = cur.Next
-        cur.Next = pre
-        cur, pre = pre.Next, t
-    }
+	for pre != nil {
+		t := pre.Next
+		pre.Next = cur.Next
+		cur.Next = pre
+		cur, pre = pre.Next, t
+	}
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
- * }
- */
-/**
- * @param {ListNode} head
- * @return {void} Do not return anything, modify head in-place instead.
- */
-var reorderList = function (head) {
-    if (!head || !head.next) {
-        return;
-    }
-    let slow = head;
-    let fast = head.next;
-    while (fast && fast.next) {
-        slow = slow.next;
-        fast = fast.next.next;
-    }
-
-    let cur = slow.next;
-    slow.next = null;
-
-    let pre = null;
-    while (cur) {
-        const t = cur.next;
-        cur.next = pre;
-        pre = cur;
-        cur = t;
-    }
-    cur = head;
-
-    while (pre) {
-        const t = pre.next;
-        pre.next = cur.next;
-        cur.next = pre;
-        cur = pre.next;
-        pre = t;
-    }
-};
-```
-
-### **TypeScript**
-
-```ts
-/**
- * Definition for singly-linked list.
- * class ListNode {
- *     val: number
- *     next: ListNode | null
- *     constructor(val?: number, next?: ListNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
- */
-
-/**
- Do not return anything, modify head in-place instead.
- */
-function reorderList(head: ListNode | null): void {
-    const arr = [];
-    let node = head;
-    while (node.next != null) {
-        arr.push(node);
-        node = node.next;
-    }
-    let l = 0;
-    let r = arr.length - 1;
-    while (l < r) {
-        const start = arr[l];
-        const end = arr[r];
-        [end.next.next, start.next, end.next] = [start.next, end.next, null];
-        l++;
-        r--;
-    }
-}
-```
+#### TypeScript
 
 ```ts
 /**
@@ -325,21 +249,20 @@ function reorderList(head: ListNode | null): void {
 function reorderList(head: ListNode | null): void {
     let slow = head;
     let fast = head;
-
-    while (fast != null && fast.next != null) {
+    while (fast && fast.next) {
         slow = slow.next;
         fast = fast.next.next;
     }
 
     let next = slow.next;
     slow.next = null;
-    while (next != null) {
+    while (next) {
         [next.next, slow, next] = [slow, next, next.next];
     }
 
     let left = head;
     let right = slow;
-    while (right.next != null) {
+    while (right.next) {
         const next = left.next;
         left.next = right;
         right = right.next;
@@ -349,7 +272,7 @@ function reorderList(head: ListNode | null): void {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -393,10 +316,98 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {void} Do not return anything, modify head in-place instead.
+ */
+var reorderList = function (head) {
+    let slow = head;
+    let fast = head;
+    while (fast.next && fast.next.next) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    let cur = slow.next;
+    slow.next = null;
+
+    let pre = null;
+    while (cur) {
+        const t = cur.next;
+        cur.next = pre;
+        pre = cur;
+        cur = t;
+    }
+    cur = head;
+
+    while (pre) {
+        const t = pre.next;
+        pre.next = cur.next;
+        cur.next = pre;
+        cur = pre.next;
+        pre = t;
+    }
+};
 ```
 
+#### C#
+
+```cs
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public void ReorderList(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode cur = slow.next;
+        slow.next = null;
+
+        ListNode pre = null;
+        while (cur != null) {
+            ListNode t = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = t;
+        }
+        cur = head;
+
+        while (pre != null) {
+            ListNode t = pre.next;
+            pre.next = cur.next;
+            cur.next = pre;
+            cur = pre.next;
+            pre = t;
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

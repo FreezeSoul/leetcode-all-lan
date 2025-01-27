@@ -1,10 +1,22 @@
-# [2664. 巡逻的骑士](https://leetcode.cn/problems/the-knights-tour)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2664.The%20Knight%E2%80%99s%20Tour/README.md
+tags:
+    - 数组
+    - 回溯
+    - 矩阵
+---
+
+<!-- problem:start -->
+
+# [2664. 巡逻的骑士 🔒](https://leetcode.cn/problems/the-knights-tour)
 
 [English Version](/solution/2600-2699/2664.The%20Knight%E2%80%99s%20Tour/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个正整数 <code>m</code> 和 <code>n</code>&nbsp;，它们是一个 <strong>下标从 0 开始</strong> 的二维数组 <code>board</code> 的高度和宽度。还有一对正整数 <code>(r, c)</code> ，它们是骑士在棋盘上的起始位置。</p>
 
@@ -43,11 +55,13 @@
 	<li>输入的数据保证在给定条件下至少存在一种访问所有单元格的移动顺序。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯**
+### 方法一：回溯
 
 我们创建一个二维数组 $g$，用于记录骑士的移动顺序，初始时 $g[r][c] = -1$，其余位置均为 $-1$。另外，我们还需要一个变量 $ok$，用于记录是否找到了一种方案。
 
@@ -59,9 +73,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +99,7 @@ class Solution:
         return g
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -131,7 +141,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -164,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func tourOfKnight(m int, n int, r int, c int) [][]int {
@@ -201,11 +211,11 @@ func tourOfKnight(m int, n int, r int, c int) [][]int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function tourOfKnight(m: number, n: number, r: number, c: number): number[][] {
-    const g: number[][] = new Array(m).fill(0).map(() => new Array(n).fill(-1));
+    const g: number[][] = Array.from({ length: m }, () => Array(n).fill(-1));
     const dirs = [-2, -1, 2, 1, -2, 1, 2, -1, -2];
     let ok = false;
     const dfs = (i: number, j: number) => {
@@ -231,10 +241,51 @@ function tourOfKnight(m: number, n: number, r: number, c: number): number[][] {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn tour_of_knight(m: i32, n: i32, r: i32, c: i32) -> Vec<Vec<i32>> {
+        let mut g: Vec<Vec<i32>> = vec![vec![-1; n as usize]; m as usize];
+        g[r as usize][c as usize] = 0;
+        let dirs: [i32; 9] = [-2, -1, 2, 1, -2, 1, 2, -1, -2];
+        let mut ok = false;
 
+        fn dfs(
+            i: usize,
+            j: usize,
+            g: &mut Vec<Vec<i32>>,
+            m: i32,
+            n: i32,
+            dirs: &[i32; 9],
+            ok: &mut bool,
+        ) {
+            if g[i][j] == m * n - 1 {
+                *ok = true;
+                return;
+            }
+            for k in 0..8 {
+                let x = ((i as i32) + dirs[k]) as usize;
+                let y = ((j as i32) + dirs[k + 1]) as usize;
+                if x < (m as usize) && y < (n as usize) && g[x][y] == -1 {
+                    g[x][y] = g[i][j] + 1;
+                    dfs(x, y, g, m, n, dirs, ok);
+                    if *ok {
+                        return;
+                    }
+                    g[x][y] = -1;
+                }
+            }
+        }
+
+        dfs(r as usize, c as usize, &mut g, m, n, &dirs, &mut ok);
+        g
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

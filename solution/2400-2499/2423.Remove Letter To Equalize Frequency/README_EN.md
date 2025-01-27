@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2423.Remove%20Letter%20To%20Equalize%20Frequency/README_EN.md
+rating: 1648
+source: Biweekly Contest 88 Q1
+tags:
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2423. Remove Letter To Equalize Frequency](https://leetcode.com/problems/remove-letter-to-equalize-frequency)
 
 [中文文档](/solution/2400-2499/2423.Remove%20Letter%20To%20Equalize%20Frequency/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> string <code>word</code>, consisting of lowercase English letters. You need to select <strong>one</strong> index and <strong>remove</strong> the letter at that index from <code>word</code> so that the <strong>frequency</strong> of every letter present in <code>word</code> is equal.</p>
 
@@ -12,7 +28,7 @@
 
 <ul>
 	<li>The <b>frequency</b> of a letter <code>x</code> is the number of times it occurs in the string.</li>
-	<li>You <strong>must</strong> remove exactly one letter and cannot chose to do nothing.</li>
+	<li>You <strong>must</strong> remove exactly one letter and cannot choose to do nothing.</li>
 </ul>
 
 <p>&nbsp;</p>
@@ -40,11 +56,25 @@
 	<li><code>word</code> consists of lowercase English letters only.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting + Enumeration
+
+First, we use a hash table or an array of length $26$ named $cnt$ to count the number of occurrences of each letter in the string.
+
+Next, we enumerate the $26$ letters. If letter $c$ appears in the string, we decrement its count by one, then check whether the counts of the remaining letters are the same. If they are, return `true`. Otherwise, increment the count of $c$ by one and continue to enumerate the next letter.
+
+If the enumeration ends, it means that it is impossible to make the counts of the remaining letters the same by deleting one letter, so return `false`.
+
+The time complexity is $O(n + C^2)$, and the space complexity is $O(C)$. Here, $n$ is the length of the string $word$, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +88,7 @@ class Solution:
         return False
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func equalFrequency(word string) bool {
@@ -162,7 +192,7 @@ func equalFrequency(word string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function equalFrequency(word: string): boolean {
@@ -195,10 +225,8 @@ function equalFrequency(word: string): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

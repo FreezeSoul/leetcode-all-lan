@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1801.Number%20of%20Orders%20in%20the%20Backlog/README.md
+rating: 1711
+source: 第 233 场周赛 Q2
+tags:
+    - 数组
+    - 模拟
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1801. 积压订单中的订单总数](https://leetcode.cn/problems/number-of-orders-in-the-backlog)
 
 [English Version](/solution/1800-1899/1801.Number%20of%20Orders%20in%20the%20Backlog/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二维整数数组 <code>orders</code> ，其中每个 <code>orders[i] = [price<sub>i</sub>, amount<sub>i</sub>, orderType<sub>i</sub>]</code> 表示有 <code>amount<sub>i</sub></code><sub> </sub>笔类型为 <code>orderType<sub>i</sub></code> 、价格为 <code>price<sub>i</sub></code> 的订单。</p>
 
@@ -64,11 +78,13 @@
 	<li><code>orderType<sub>i</sub></code> 为 <code>0</code> 或 <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（大小根堆） + 模拟**
+### 方法一：优先队列（大小根堆） + 模拟
 
 我们可以使用优先队列（大小根堆）维护当前的积压订单，其中大根堆 `buy` 维护积压的采购订单，小根堆 `sell` 维护积压的销售订单。堆中每个元素是一个二元组 $(price, amount)$，表示价格为 `price` 的订单数量为 `amount`。
 
@@ -80,9 +96,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -113,9 +127,7 @@ class Solution:
         return sum(v[1] for v in buy + sell) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -167,7 +179,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -223,7 +235,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getNumberOfBacklogOrders(orders [][]int) (ans int) {
@@ -274,17 +286,15 @@ func getNumberOfBacklogOrders(orders [][]int) (ans int) {
 type pair struct{ p, a int }
 type hp []pair
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].p < h[j].p }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **...**
-
-```
-
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].p < h[j].p }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

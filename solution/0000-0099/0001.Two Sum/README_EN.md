@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0001.Two%20Sum/README_EN.md
+tags:
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [1. Two Sum](https://leetcode.com/problems/two-sum)
 
 [中文文档](/solution/0000-0099/0001.Two%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of integers <code>nums</code>&nbsp;and an integer <code>target</code>, return <em>indices of the two numbers such that they add up to <code>target</code></em>.</p>
 
@@ -44,107 +57,126 @@
 </ul>
 
 <p>&nbsp;</p>
-<strong>Follow-up:&nbsp;</strong>Can you come up with an algorithm that is less than&nbsp;<code>O(n<sup>2</sup>)&nbsp;</code>time complexity?
+<strong>Follow-up:&nbsp;</strong>Can you come up with an algorithm that is less than <code>O(n<sup>2</sup>)</code><font face="monospace">&nbsp;</font>time complexity?
+
+<!-- description:end -->
 
 ## Solutions
 
-**Approach 1: Hash Table**
+<!-- solution:start -->
 
-We can use the hash table $m$ to store the array value and the corresponding subscript.
+### Solution 1: Hash Table
 
-Traverse the array `nums`, when you find `target - nums[i]` in the hash table, it means that the target value is found, and the index of `target - nums[i]` and $i$ are returned.
+We can use a hash table $\textit{d}$ to store each element and its corresponding index.
 
-The time complexity is $O(n)$ and the space complexity is $O(n)$. Where $n$ is the length of the array `nums`.
+Traverse the array $\textit{nums}$, for the current element $\textit{nums}[i]$, we first check if $\textit{target} - \textit{nums}[i]$ is in the hash table $\textit{d}$. If it is in $\textit{d}$, it means the $\textit{target}$ value has been found, and we return the indices of $\textit{target} - \textit{nums}[i]$ and $i$.
+
+Time complexity is $O(n)$, and space complexity is $O(n)$, where $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
-        m = {}
+        d = {}
         for i, x in enumerate(nums):
-            y = target - x
-            if y in m:
-                return [m[y], i]
-            m[x] = i
+            if (y := target - x) in d:
+                return [d[y], i]
+            d[x] = i
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> m = new HashMap<>();
+        Map<Integer, Integer> d = new HashMap<>();
         for (int i = 0;; ++i) {
             int x = nums[i];
             int y = target - x;
-            if (m.containsKey(y)) {
-                return new int[] {m.get(y), i};
+            if (d.containsKey(y)) {
+                return new int[] {d.get(y), i};
             }
-            m.put(x, i);
+            d.put(x, i);
         }
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int, int> m;
-        for (int i = 0; ; ++i) {
+        unordered_map<int, int> d;
+        for (int i = 0;; ++i) {
             int x = nums[i];
             int y = target - x;
-            if (m.count(y)) {
-                return {m[y], i};
+            if (d.contains(y)) {
+                return {d[y], i};
             }
-            m[x] = i;
+            d[x] = i;
         }
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func twoSum(nums []int, target int) []int {
-	m := map[int]int{}
+	d := map[int]int{}
 	for i := 0; ; i++ {
 		x := nums[i]
 		y := target - x
-		if j, ok := m[y]; ok {
+		if j, ok := d[y]; ok {
 			return []int{j, i}
 		}
-		m[x] = i
+		d[x] = i
 	}
 }
 ```
 
-### **C#**
+#### TypeScript
 
-```cs
-public class Solution {
-    public int[] TwoSum(int[] nums, int target) {
-        var m = new Dictionary<int, int>();
-        for (int i = 0, j; ; ++i) {
-            int x = nums[i];
-            int y = target - x;
-            if (m.TryGetValue(y, out j)) {
-                return new [] {j, i};
-            }
-            if (!m.ContainsKey(x)) {
-                m.Add(x, i);
-            }
+```ts
+function twoSum(nums: number[], target: number): number[] {
+    const d = new Map<number, number>();
+    for (let i = 0; ; ++i) {
+        const x = nums[i];
+        const y = target - x;
+        if (d.has(y)) {
+            return [d.get(y)!, i];
         }
+        d.set(x, i);
     }
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+        let mut d = HashMap::new();
+        for (i, &x) in nums.iter().enumerate() {
+            let y = target - x;
+            if let Some(&j) = d.get(&y) {
+                return vec![j as i32, i as i32];
+            }
+            d.insert(x, i);
+        }
+        vec![]
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -153,103 +185,173 @@ public class Solution {
  * @return {number[]}
  */
 var twoSum = function (nums, target) {
-    const m = new Map();
+    const d = new Map();
     for (let i = 0; ; ++i) {
         const x = nums[i];
         const y = target - x;
-        if (m.has(y)) {
-            return [m.get(y), i];
+        if (d.has(y)) {
+            return [d.get(y), i];
         }
-        m.set(x, i);
+        d.set(x, i);
     }
 };
 ```
 
-### **Swift**
+#### C#
 
-```swift
-class Solution {
-    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
-        var m = [Int: Int]()
-        var i = 0
-        while true {
-            let x = nums[i]
-            let y = target - nums[i]
-            if let j = m[target - nums[i]] {
-                return [j, i]
+```cs
+public class Solution {
+    public int[] TwoSum(int[] nums, int target) {
+        var d = new Dictionary<int, int>();
+        for (int i = 0, j; ; ++i) {
+            int x = nums[i];
+            int y = target - x;
+            if (d.TryGetValue(y, out j)) {
+                return new [] {j, i};
             }
-            m[nums[i]] = i
-            i += 1
+            if (!d.ContainsKey(x)) {
+                d.Add(x, i);
+            }
         }
     }
 }
 ```
 
-### **Rust**
-
-```rust
-use std::collections::HashMap;
-
-impl Solution {
-    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
-        let mut map = HashMap::new();
-        for (i, item) in nums.iter().enumerate() {
-            if map.contains_key(item) {
-                return vec![i as i32, map[item]];
-            } else {
-                let x = target - nums[i];
-                map.insert(x, i as i32);
-            }
-        }
-        unreachable!()
-    }
-}
-```
-
-### **Nim**
-
-```nim
-import std/enumerate
-
-proc twoSum(nums: seq[int], target: int): seq[int] =
-    var
-        bal: int
-        tdx: int
-    for idx, val in enumerate(nums):
-        bal = target - val
-        if bal in nums:
-            tdx = nums.find(bal)
-            if idx != tdx:
-                return @[idx, tdx]
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
-
     /**
      * @param Integer[] $nums
      * @param Integer $target
      * @return Integer[]
      */
     function twoSum($nums, $target) {
-        $len = count($nums);
-        for ($i = 0; $i < $len; $i++) {
-            for ($j = 1 + $i; $j < $len; $j++) {
-                if ($nums[$i] + $nums[$j] == $target) {
-                    return [$i, $j];
-                }
+        $d = [];
+        foreach ($nums as $i => $x) {
+            $y = $target - $x;
+            if (isset($d[$y])) {
+                return [$d[$y], $i];
             }
+            $d[$x] = $i;
         }
     }
 }
 ```
 
-### **...**
+#### Scala
 
+```scala
+import scala.collection.mutable
+
+object Solution {
+    def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+        val d = mutable.Map[Int, Int]()
+        var ans: Array[Int] = Array()
+        for (i <- nums.indices if ans.isEmpty) {
+            val x = nums(i)
+            val y = target - x
+            if (d.contains(y)) {
+                ans = Array(d(y), i)
+            } else {
+                d(x) = i
+            }
+        }
+        ans
+    }
+}
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        var d = [Int: Int]()
+        for (i, x) in nums.enumerated() {
+            let y = target - x
+            if let j = d[y] {
+                return [j, i]
+            }
+            d[x] = i
+        }
+        return []
+    }
+}
+```
+
+#### Ruby
+
+```rb
+# @param {Integer[]} nums
+# @param {Integer} target
+# @return {Integer[]}
+def two_sum(nums, target)
+    d = {}
+    nums.each_with_index do |x, i|
+      y = target - x
+      if d.key?(y)
+        return [d[y], i]
+      end
+      d[x] = i
+    end
+end
+```
+
+#### Kotlin
+
+```kotlin
+class Solution {
+    fun twoSum(nums: IntArray, target: Int): IntArray {
+        val m = mutableMapOf<Int, Int>()
+        nums.forEachIndexed { i, x ->
+            val y = target - x
+            val j = m.get(y)
+            if (j != null) {
+                return intArrayOf(j, i)
+            }
+            m[x] = i
+        }
+        return intArrayOf()
+    }
+}
+```
+
+#### Nim
+
+```nim
+import std/enumerate
+import std/tables
+
+proc twoSum(nums: seq[int], target: int): seq[int] =
+  var d = initTable[int, int]()
+  for i, x in nums.pairs():
+    let y = target - x
+    if d.hasKey(y):
+      return @[d[y], i]
+    d[x] = i
+  return @[]
+```
+
+#### Cangjie
+
+```cj
+class Solution {
+    func twoSum(nums: Array<Int64>, target: Int64): Array<Int64> {
+        let d = HashMap<Int64, Int64>()
+        for (i in 0..nums.size) {
+            if (d.contains(target - nums[i])) {
+                return [d[target - nums[i]], i]
+            }
+            d[nums[i]] = i
+        }
+        []
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

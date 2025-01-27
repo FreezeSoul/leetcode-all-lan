@@ -1,12 +1,11 @@
 function findLongestChain(pairs: number[][]): number {
     pairs.sort((a, b) => a[1] - b[1]);
-    let res = 0;
-    let pre = -Infinity;
+    let [ans, pre] = [0, -Infinity];
     for (const [a, b] of pairs) {
         if (pre < a) {
+            ++ans;
             pre = b;
-            res++;
         }
     }
-    return res;
+    return ans;
 }

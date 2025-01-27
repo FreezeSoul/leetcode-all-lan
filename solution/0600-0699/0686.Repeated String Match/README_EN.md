@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0686.Repeated%20String%20Match/README_EN.md
+tags:
+    - String
+    - String Matching
+---
+
+<!-- problem:start -->
+
 # [686. Repeated String Match](https://leetcode.com/problems/repeated-string-match)
 
 [中文文档](/solution/0600-0699/0686.Repeated%20String%20Match/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>a</code> and <code>b</code>, return <em>the minimum number of times you should repeat string </em><code>a</code><em> so that string</em> <code>b</code> <em>is a substring of it</em>. If it is impossible for <code>b</code>​​​​​​ to be a substring of <code>a</code> after repeating it, return <code>-1</code>.</p>
 
@@ -32,11 +45,17 @@
 	<li><code>a</code> and <code>b</code> consist of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,7 +71,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +91,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -92,7 +111,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func repeatedStringMatch(a string, b string) int {
@@ -110,10 +129,29 @@ func repeatedStringMatch(a string, b string) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function repeatedStringMatch(a: string, b: string): number {
+    const m: number = a.length,
+        n: number = b.length;
+    let ans: number = Math.ceil(n / m);
+    let t: string = a.repeat(ans);
 
+    for (let i = 0; i < 3; i++) {
+        if (t.includes(b)) {
+            return ans;
+        }
+        ans++;
+        t += a;
+    }
+
+    return -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

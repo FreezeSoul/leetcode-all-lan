@@ -1,10 +1,24 @@
-# [711. 不同岛屿的数量 II](https://leetcode.cn/problems/number-of-distinct-islands-ii)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0711.Number%20of%20Distinct%20Islands%20II/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 并查集
+    - 哈希表
+    - 哈希函数
+---
+
+<!-- problem:start -->
+
+# [711. 不同岛屿的数量 II 🔒](https://leetcode.cn/problems/number-of-distinct-islands-ii)
 
 [English Version](/solution/0700-0799/0711.Number%20of%20Distinct%20Islands%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个&nbsp;<code>m x n</code>&nbsp;二进制数组表示的网格&nbsp;<code>grid</code> ，一个岛屿由 <strong>四连通</strong> （上、下、左、右四个方向）的 <code>1</code> 组成（代表陆地）。你可以认为网格的四周被海水包围。</p>
 
@@ -44,30 +58,17 @@
 	<li><code>grid[i][j]</code>&nbsp;不是&nbsp;<code>0</code>&nbsp;就是&nbsp;<code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-先利用 DFS 找出每个岛屿，随后对岛屿进行翻转、旋转等操作，得到以下 8 种不同的情况，并对这些情况进行标准化 `normalize` 处理，得到该岛屿的特征值，放到哈希表中。最后返回哈希表的元素数量即可。
-
-```
-原坐标: (i, j)
-上下翻转: (i, -j)
-左右翻转: (-i, j)
-90°旋转: (j, -i)
-180°旋转: (-i, -j)
-270°旋转: (-j, -i)
-90°旋转+左右翻转: (-j, -i)
-90°旋转+上下翻转: (j, i)
-```
-
-标准化 `normalize` 的思路是：对于岛屿的每一种情况，先按照横、纵坐标升序排列坐标点，得到的第一个点 `(a, b)` 是最小的点，将其化为 `(0, 0)`，对于其他点 `(x, y)`，则化为 `(x - a, y - b)`。然后排序这 8 种情况，获取最小的一种，作为该岛屿的标准化值。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -110,9 +111,7 @@ class Solution:
         return len(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -210,7 +209,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 typedef pair<int, int> PII;
@@ -268,10 +267,8 @@ public:
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

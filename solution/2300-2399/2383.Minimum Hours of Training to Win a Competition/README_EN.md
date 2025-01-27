@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2383.Minimum%20Hours%20of%20Training%20to%20Win%20a%20Competition/README_EN.md
+rating: 1413
+source: Weekly Contest 307 Q1
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2383. Minimum Hours of Training to Win a Competition](https://leetcode.com/problems/minimum-hours-of-training-to-win-a-competition)
 
 [中文文档](/solution/2300-2399/2383.Minimum%20Hours%20of%20Training%20to%20Win%20a%20Competition/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are entering a competition, and are given two <strong>positive</strong> integers <code>initialEnergy</code> and <code>initialExperience</code> denoting your initial energy and initial experience respectively.</p>
 
@@ -53,309 +68,194 @@ It can be proven that no smaller answer exists.
 	<li><code>1 &lt;= initialEnergy, initialExperience, energy[i], experience[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Simulation
+
+Let's denote the current energy as $x$ and the current experience as $y$.
+
+Next, we traverse each opponent. For the $i$-th opponent, let their energy be $dx$ and their experience be $dy$.
+
+-   If $x \leq dx$, then we need to train for $dx + 1 - x$ hours to increase our energy to $dx + 1$.
+-   If $y \leq dy$, then we need to train for $dy + 1 - y$ hours to increase our experience to $dy + 1$.
+-   Then, we subtract $dx$ from our energy and add $dy$ to our experience.
+
+Finally, return the answer.
+
+The time complexity is $O(n)$, where $n$ is the number of opponents. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minNumberOfHours(
-        self,
-        initialEnergy: int,
-        initialExperience: int,
-        energy: List[int],
-        experience: List[int],
+        self, x: int, y: int, energy: List[int], experience: List[int]
     ) -> int:
         ans = 0
-        for a, b in zip(energy, experience):
-            if initialEnergy <= a:
-                ans += a - initialEnergy + 1
-                initialEnergy = a + 1
-            if initialExperience <= b:
-                ans += b - initialExperience + 1
-                initialExperience = b + 1
-            initialEnergy -= a
-            initialExperience += b
+        for dx, dy in zip(energy, experience):
+            if x <= dx:
+                ans += dx + 1 - x
+                x = dx + 1
+            if y <= dy:
+                ans += dy + 1 - y
+                y = dy + 1
+            x -= dx
+            y += dy
         return ans
 ```
 
-```python
-class Solution:
-    def minNumberOfHours(self, initialEnergy: int, initialExperience: int, energy: List[int], experience: List[int]) -> int:
-        ans = max(0, sum(energy) - initialEnergy + 1)
-        for x in experience:
-            if initialExperience <= x:
-                ans += x - initialExperience + 1
-                initialExperience = x + 1
-            initialExperience += x
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
-    public int minNumberOfHours(
-        int initialEnergy, int initialExperience, int[] energy, int[] experience) {
+    public int minNumberOfHours(int x, int y, int[] energy, int[] experience) {
         int ans = 0;
         for (int i = 0; i < energy.length; ++i) {
-            int a = energy[i], b = experience[i];
-            if (initialEnergy <= a) {
-                ans += a - initialEnergy + 1;
-                initialEnergy = a + 1;
+            int dx = energy[i], dy = experience[i];
+            if (x <= dx) {
+                ans += dx + 1 - x;
+                x = dx + 1;
             }
-            if (initialExperience <= b) {
-                ans += b - initialExperience + 1;
-                initialExperience = b + 1;
+            if (y <= dy) {
+                ans += dy + 1 - y;
+                y = dy + 1;
             }
-            initialEnergy -= a;
-            initialExperience += b;
+            x -= dx;
+            y += dy;
         }
         return ans;
     }
 }
 ```
 
-```java
-class Solution {
-    public int minNumberOfHours(
-        int initialEnergy, int initialExperience, int[] energy, int[] experience) {
-        int s = 0;
-        for (int x : energy) {
-            s += x;
-        }
-        int ans = Math.max(0, s - initialEnergy + 1);
-        for (int x : experience) {
-            if (initialExperience <= x) {
-                ans += x - initialExperience + 1;
-                initialExperience = x + 1;
-            }
-            initialExperience += x;
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
-    int minNumberOfHours(int initialEnergy, int initialExperience, vector<int>& energy, vector<int>& experience) {
+    int minNumberOfHours(int x, int y, vector<int>& energy, vector<int>& experience) {
         int ans = 0;
         for (int i = 0; i < energy.size(); ++i) {
-            int a = energy[i], b = experience[i];
-            if (initialEnergy <= a) {
-                ans += a - initialEnergy + 1;
-                initialEnergy = a + 1;
+            int dx = energy[i], dy = experience[i];
+            if (x <= dx) {
+                ans += dx + 1 - x;
+                x = dx + 1;
             }
-            if (initialExperience <= b) {
-                ans += b - initialExperience + 1;
-                initialExperience = b + 1;
+            if (y <= dy) {
+                ans += dy + 1 - y;
+                y = dy + 1;
             }
-            initialEnergy -= a;
-            initialExperience += b;
+            x -= dx;
+            y += dy;
         }
         return ans;
     }
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int minNumberOfHours(int initialEnergy, int initialExperience, vector<int>& energy, vector<int>& experience) {
-        int s = accumulate(energy.begin(), energy.end(), 0);
-        int ans = max(0, s - initialEnergy + 1);
-        for (int x : experience) {
-            if (initialExperience <= x) {
-                ans += x - initialExperience + 1;
-                initialExperience = x + 1;
-            }
-            initialExperience += x;
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
-func minNumberOfHours(initialEnergy int, initialExperience int, energy []int, experience []int) int {
-	ans := 0
-	for i, a := range energy {
-		b := experience[i]
-		if initialEnergy <= a {
-			ans += a - initialEnergy + 1
-			initialEnergy = a + 1
+func minNumberOfHours(x int, y int, energy []int, experience []int) (ans int) {
+	for i, dx := range energy {
+		dy := experience[i]
+		if x <= dx {
+			ans += dx + 1 - x
+			x = dx + 1
 		}
-		if initialExperience <= b {
-			ans += b - initialExperience + 1
-			initialExperience = b + 1
+		if y <= dy {
+			ans += dy + 1 - y
+			y = dy + 1
 		}
-		initialEnergy -= a
-		initialExperience += b
-	}
-	return ans
-}
-```
-
-```go
-func minNumberOfHours(initialEnergy int, initialExperience int, energy []int, experience []int) (ans int) {
-	s := 0
-	for _, x := range energy {
-		s += x
-	}
-	if y := s - initialEnergy + 1; y > 0 {
-		ans = y
-	}
-	for _, x := range experience {
-		if initialExperience <= x {
-			ans += x - initialExperience + 1
-			initialExperience = x + 1
-		}
-		initialExperience += x
+		x -= dx
+		y += dy
 	}
 	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function minNumberOfHours(
-    initialEnergy: number,
-    initialExperience: number,
-    energy: number[],
-    experience: number[],
-): number {
-    const n = energy.length;
+function minNumberOfHours(x: number, y: number, energy: number[], experience: number[]): number {
     let ans = 0;
-    for (let i = 0; i < n; i++) {
-        const minEnergy = energy[i];
-        const minExperience = experience[i];
-        if (initialEnergy <= minEnergy) {
-            const need = minEnergy - initialEnergy + 1;
-            ans += need;
-            initialEnergy += need;
+    for (let i = 0; i < energy.length; ++i) {
+        const [dx, dy] = [energy[i], experience[i]];
+        if (x <= dx) {
+            ans += dx + 1 - x;
+            x = dx + 1;
         }
-        if (initialExperience <= minExperience) {
-            const need = minExperience - initialExperience + 1;
-            ans += need;
-            initialExperience += need;
+        if (y <= dy) {
+            ans += dy + 1 - y;
+            y = dy + 1;
         }
-        initialEnergy -= minEnergy;
-        initialExperience += minExperience;
+        x -= dx;
+        y += dy;
     }
     return ans;
 }
 ```
 
-```ts
-function minNumberOfHours(
-    initialEnergy: number,
-    initialExperience: number,
-    energy: number[],
-    experience: number[],
-): number {
-    let res = 0;
-    for (const v of experience) {
-        if (initialExperience <= v) {
-            res += v - initialExperience + 1;
-            initialExperience = v + 1;
-        }
-        initialExperience += v;
-    }
-    for (const v of energy) {
-        if (initialEnergy <= v) {
-            res += v - initialEnergy + 1;
-            initialEnergy = v + 1;
-        }
-        initialEnergy -= v;
-    }
-    return res;
-}
-```
-
-```ts
-function minNumberOfHours(
-    initialEnergy: number,
-    initialExperience: number,
-    energy: number[],
-    experience: number[],
-): number {
-    const s = energy.reduce((a, b) => a + b, 0);
-    let ans = Math.max(0, s - initialEnergy + 1);
-    for (const x of experience) {
-        if (initialExperience <= x) {
-            ans += x - initialExperience + 1;
-            initialExperience = x + 1;
-        }
-        initialExperience += x;
-    }
-    return ans;
-}
-```
-
-### **C**
-
-```c
-int minNumberOfHours(int initialEnergy, int initialExperience, int* energy, int energySize, int* experience, int experienceSize) {
-    int res = 0;
-    for (int i = 0; i < energySize; i++) {
-        if (initialEnergy <= energy[i]) {
-            res += energy[i] - initialEnergy + 1;
-            initialEnergy = energy[i] + 1;
-        }
-        if (initialExperience <= experience[i]) {
-            res += experience[i] - initialExperience + 1;
-            initialExperience = experience[i] + 1;
-        }
-        initialEnergy -= energy[i];
-        initialExperience += experience[i];
-    }
-    return res;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn min_number_of_hours(
-        mut initial_energy: i32,
-        mut initial_experience: i32,
+        mut x: i32,
+        mut y: i32,
         energy: Vec<i32>,
         experience: Vec<i32>,
     ) -> i32 {
-        let n = energy.len();
-        let mut res = 0;
-        for i in 0..n {
-            if initial_energy <= energy[i] {
-                res += energy[i] - initial_energy + 1;
-                initial_energy = energy[i] + 1;
+        let mut ans = 0;
+
+        for (&dx, &dy) in energy.iter().zip(experience.iter()) {
+            if x <= dx {
+                ans += dx + 1 - x;
+                x = dx + 1;
             }
-            if initial_experience <= experience[i] {
-                res += experience[i] - initial_experience + 1;
-                initial_experience = experience[i] + 1;
+            if y <= dy {
+                ans += dy + 1 - y;
+                y = dy + 1;
             }
-            initial_energy -= energy[i];
-            initial_experience += experience[i];
+            x -= dx;
+            y += dy;
         }
-        res
+
+        ans
     }
 }
 ```
 
-### **...**
+#### C
 
-```
-
-
+```c
+int minNumberOfHours(int x, int y, int* energy, int energySize, int* experience, int experienceSize) {
+    int ans = 0;
+    for (int i = 0; i < energySize; ++i) {
+        int dx = energy[i], dy = experience[i];
+        if (x <= dx) {
+            ans += dx + 1 - x;
+            x = dx + 1;
+        }
+        if (y <= dy) {
+            ans += dy + 1 - y;
+            y = dy + 1;
+        }
+        x -= dx;
+        y += dy;
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1328.Break%20a%20Palindrome/README_EN.md
+rating: 1473
+source: Biweekly Contest 18 Q2
+tags:
+    - Greedy
+    - String
+---
+
+<!-- problem:start -->
+
 # [1328. Break a Palindrome](https://leetcode.com/problems/break-a-palindrome)
 
 [中文文档](/solution/1300-1399/1328.Break%20a%20Palindrome/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a palindromic string of lowercase English letters <code>palindrome</code>, replace <strong>exactly one</strong> character with any lowercase English letter so that the resulting string is <strong>not</strong> a palindrome and that it is the <strong>lexicographically smallest</strong> one possible.</p>
 
@@ -36,26 +51,135 @@ Of all the ways, &quot;aaccba&quot; is the lexicographically smallest.
 	<li><code>palindrome</code> consists of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+First, we check if the length of the string is $1$. If it is, we directly return an empty string.
+
+Otherwise, we traverse the first half of the string from left to right, find the first character that is not `'a'`, and change it to `'a'`. If no such character exists, we change the last character to `'b'`.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-
+class Solution:
+    def breakPalindrome(self, palindrome: str) -> str:
+        n = len(palindrome)
+        if n == 1:
+            return ""
+        s = list(palindrome)
+        i = 0
+        while i < n // 2 and s[i] == "a":
+            i += 1
+        if i == n // 2:
+            s[-1] = "b"
+        else:
+            s[i] = "a"
+        return "".join(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
-
+class Solution {
+    public String breakPalindrome(String palindrome) {
+        int n = palindrome.length();
+        if (n == 1) {
+            return "";
+        }
+        char[] cs = palindrome.toCharArray();
+        int i = 0;
+        while (i < n / 2 && cs[i] == 'a') {
+            ++i;
+        }
+        if (i == n / 2) {
+            cs[n - 1] = 'b';
+        } else {
+            cs[i] = 'a';
+        }
+        return String.valueOf(cs);
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    string breakPalindrome(string palindrome) {
+        int n = palindrome.size();
+        if (n == 1) {
+            return "";
+        }
+        int i = 0;
+        while (i < n / 2 && palindrome[i] == 'a') {
+            ++i;
+        }
+        if (i == n / 2) {
+            palindrome[n - 1] = 'b';
+        } else {
+            palindrome[i] = 'a';
+        }
+        return palindrome;
+    }
+};
 ```
 
+#### Go
+
+```go
+func breakPalindrome(palindrome string) string {
+	n := len(palindrome)
+	if n == 1 {
+		return ""
+	}
+	i := 0
+	s := []byte(palindrome)
+	for i < n/2 && s[i] == 'a' {
+		i++
+	}
+	if i == n/2 {
+		s[n-1] = 'b'
+	} else {
+		s[i] = 'a'
+	}
+	return string(s)
+}
+```
+
+#### TypeScript
+
+```ts
+function breakPalindrome(palindrome: string): string {
+    const n = palindrome.length;
+    if (n === 1) {
+        return '';
+    }
+    const s = palindrome.split('');
+    let i = 0;
+    while (i < n >> 1 && s[i] === 'a') {
+        i++;
+    }
+    if (i == n >> 1) {
+        s[n - 1] = 'b';
+    } else {
+        s[i] = 'a';
+    }
+    return s.join('');
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

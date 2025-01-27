@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2317.Maximum%20XOR%20After%20Operations/README.md
+rating: 1678
+source: 第 81 场双周赛 Q3
+tags:
+    - 位运算
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2317. 操作后的最大异或和](https://leetcode.cn/problems/maximum-xor-after-operations)
 
 [English Version](/solution/2300-2399/2317.Maximum%20XOR%20After%20Operations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code>&nbsp;。一次操作中，选择 <strong>任意</strong>&nbsp;非负整数&nbsp;<code>x</code>&nbsp;和一个下标&nbsp;<code>i</code>&nbsp;，<strong>更新</strong>&nbsp;<code>nums[i]</code>&nbsp;为&nbsp;<code>nums[i] AND (nums[i] XOR x)</code>&nbsp;。</p>
 
@@ -40,11 +54,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 在一次操作中，我们可以把 `nums[i]` 更新为 `nums[i] AND (nums[i] XOR x)`。由于 $x$ 是任意非负整数，因此 $nums[i] \oplus x$ 的结果是一个任意值，再与 `nums[i]` 逐位与运算，可以把 `nums[i]` 的二进制表示中的若干位 $1$ 变为 $0$。
 
@@ -54,9 +70,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -64,9 +78,7 @@ class Solution:
         return reduce(or_, nums)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +92,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,7 +107,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumXOR(nums []int) (ans int) {
@@ -106,7 +118,7 @@ func maximumXOR(nums []int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumXOR(nums: number[]): number {
@@ -118,10 +130,8 @@ function maximumXOR(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

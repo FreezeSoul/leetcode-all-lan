@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0823.Binary%20Trees%20With%20Factors/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [823. 带因子的二叉树](https://leetcode.cn/problems/binary-trees-with-factors)
 
 [English Version](/solution/0800-0899/0823.Binary%20Trees%20With%20Factors/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给出一个含有不重复整数元素的数组 <code>arr</code> ，每个整数 <code>arr[i]</code> 均大于 1。</p>
 
@@ -38,23 +51,23 @@
 	<li><code>arr</code> 中的所有值 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-我们可以枚举 `arr` 中的每一个数 $a$ 作为二叉树的根节点（根节点一定最大），然后枚举枚举左子树的值 $b$，若 $a$ 能被 $b$ 整除，则右子树的值为 $a / b$，若 $a / b$ 也在 `arr` 中，则可以构成一棵二叉树。此时，以 $a$ 为根节点的二叉树的个数为 $f(a) = f(b) \times f(a / b)$，其中 $f(b)$ 和 $f(a / b)$ 分别为左子树和右子树的二叉树个数。
+我们可以枚举 $arr$ 中的每一个数 $a$ 作为二叉树的根节点（根节点一定最大），然后枚举枚举左子树的值 $b$，若 $a$ 能被 $b$ 整除，则右子树的值为 $a / b$，若 $a / b$ 也在 $arr$ 中，则可以构成一棵二叉树。此时，以 $a$ 为根节点的二叉树的个数为 $f(a) = f(b) \times f(a / b)$，其中 $f(b)$ 和 $f(a / b)$ 分别为左子树和右子树的二叉树个数。
 
-因此，我们先将 `arr` 排序，然后用 $f[i]$ 表示以 $arr[i]$ 为根节点的二叉树的个数，最终答案即为 $f[0] + f[1] + \cdots + f[n - 1]$。
+因此，我们先将 $arr$ 排序，然后用 $f[i]$ 表示以 $arr[i]$ 为根节点的二叉树的个数，最终答案即为 $f[0] + f[1] + \cdots + f[n - 1]$。注意答案可能很大，需要对 $10^9 + 7$ 取模。
 
-时间复杂度为 $O(n^2)$，空间复杂度为 $O(n)$。其中 $n$ 为 `arr` 的长度。
+时间复杂度为 $O(n^2)$，空间复杂度为 $O(n)$。其中 $n$ 为 $arr$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,15 +85,12 @@ class Solution:
         return sum(f) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-    private static final int MOD = (int) 1e9 + 7;
-
     public int numFactoredBinaryTrees(int[] arr) {
+        final int mod = (int) 1e9 + 7;
         Arrays.sort(arr);
         int n = arr.length;
         long[] f = new long[n];
@@ -97,28 +107,27 @@ class Solution {
                     int c = a / b;
                     if (idx.containsKey(c)) {
                         int k = idx.get(c);
-                        f[i] = (f[i] + f[j] * f[k]) % MOD;
+                        f[i] = (f[i] + f[j] * f[k]) % mod;
                     }
                 }
             }
         }
         long ans = 0;
         for (long v : f) {
-            ans = (ans + v) % MOD;
+            ans = (ans + v) % mod;
         }
         return (int) ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
-    const int mod = 1e9 + 7;
-
     int numFactoredBinaryTrees(vector<int>& arr) {
+        const int mod = 1e9 + 7;
         sort(arr.begin(), arr.end());
         unordered_map<int, int> idx;
         int n = arr.size();
@@ -148,25 +157,22 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numFactoredBinaryTrees(arr []int) int {
 	const mod int = 1e9 + 7
 	sort.Ints(arr)
 	f := make([]int, len(arr))
-	for i := range f {
-		f[i] = 1
-	}
 	idx := map[int]int{}
 	for i, v := range arr {
+		f[i] = 1
 		idx[v] = i
 	}
 	for i, a := range arr {
 		for j := 0; j < i; j++ {
 			b := arr[j]
-			if a%b == 0 {
-				c := a / b
+			if c := a / b; a%b == 0 {
 				if k, ok := idx[c]; ok {
 					f[i] = (f[i] + f[j]*f[k]) % mod
 				}
@@ -181,10 +187,37 @@ func numFactoredBinaryTrees(arr []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function numFactoredBinaryTrees(arr: number[]): number {
+    const mod = 10 ** 9 + 7;
+    arr.sort((a, b) => a - b);
+    const idx: Map<number, number> = new Map();
+    const n = arr.length;
+    for (let i = 0; i < n; ++i) {
+        idx.set(arr[i], i);
+    }
+    const f: number[] = new Array(n).fill(1);
+    for (let i = 0; i < n; ++i) {
+        const a = arr[i];
+        for (let j = 0; j < i; ++j) {
+            const b = arr[j];
+            if (a % b === 0) {
+                const c = a / b;
+                if (idx.has(c)) {
+                    const k = idx.get(c)!;
+                    f[i] = (f[i] + f[j] * f[k]) % mod;
+                }
+            }
+        }
+    }
+    return f.reduce((a, b) => a + b) % mod;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

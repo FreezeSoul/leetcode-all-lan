@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1845.Seat%20Reservation%20Manager/README_EN.md
+rating: 1428
+source: Biweekly Contest 51 Q2
+tags:
+    - Design
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1845. Seat Reservation Manager](https://leetcode.com/problems/seat-reservation-manager)
 
 [中文文档](/solution/1800-1899/1845.Seat%20Reservation%20Manager/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a system that manages the reservation state of <code>n</code> seats that are numbered from <code>1</code> to <code>n</code>.</p>
 
@@ -47,18 +62,30 @@ seatManager.unreserve(5); // Unreserve seat 5, so now the available seats are [5
 	<li>At most <code>10<sup>5</sup></code> calls <strong>in total</strong> will be made to <code>reserve</code> and <code>unreserve</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Priority Queue (Min-Heap)
+
+We define a priority queue (min-heap) $\textit{q}$ to store all the available seat numbers. Initially, we add all seat numbers from $1$ to $n$ into $\textit{q}$.
+
+When calling the `reserve` method, we pop the top element from $\textit{q}$, which is the smallest available seat number.
+
+When calling the `unreserve` method, we add the seat number back into $\textit{q}$.
+
+In terms of time complexity, the initialization time complexity is $O(n)$ or $O(n \times \log n)$, and the time complexity of the `reserve` and `unreserve` methods is both $O(\log n)$. The space complexity is $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class SeatManager:
-
     def __init__(self, n: int):
         self.q = list(range(1, n + 1))
-        heapify(self.q)
 
     def reserve(self) -> int:
         return heappop(self.q)
@@ -73,7 +100,7 @@ class SeatManager:
 # obj.unreserve(seatNumber)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class SeatManager {
@@ -102,7 +129,7 @@ class SeatManager {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class SeatManager {
@@ -135,7 +162,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type SeatManager struct {
@@ -160,9 +187,9 @@ func (this *SeatManager) Unreserve(seatNumber int) {
 
 type hp struct{ sort.IntSlice }
 
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] < h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] < h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -177,10 +204,66 @@ func (h *hp) Pop() interface{} {
  */
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+class SeatManager {
+    private q: typeof MinPriorityQueue;
+    constructor(n: number) {
+        this.q = new MinPriorityQueue();
+        for (let i = 1; i <= n; i++) {
+            this.q.enqueue(i);
+        }
+    }
+
+    reserve(): number {
+        return this.q.dequeue().element;
+    }
+
+    unreserve(seatNumber: number): void {
+        this.q.enqueue(seatNumber);
+    }
+}
+
+/**
+ * Your SeatManager object will be instantiated and called as such:
+ * var obj = new SeatManager(n)
+ * var param_1 = obj.reserve()
+ * obj.unreserve(seatNumber)
+ */
 ```
 
+#### C#
+
+```cs
+public class SeatManager {
+    private PriorityQueue<int, int> q = new PriorityQueue<int, int>();
+
+    public SeatManager(int n) {
+        for (int i = 1; i <= n; ++i) {
+            q.Enqueue(i, i);
+        }
+    }
+
+    public int Reserve() {
+        return q.Dequeue();
+    }
+
+    public void Unreserve(int seatNumber) {
+        q.Enqueue(seatNumber, seatNumber);
+    }
+}
+
+/**
+ * Your SeatManager object will be instantiated and called as such:
+ * SeatManager obj = new SeatManager(n);
+ * int param_1 = obj.Reserve();
+ * obj.Unreserve(seatNumber);
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0717.1-bit%20and%202-bit%20Characters/README_EN.md
+tags:
+    - Array
+---
+
+<!-- problem:start -->
+
 # [717. 1-bit and 2-bit Characters](https://leetcode.com/problems/1-bit-and-2-bit-characters)
 
 [中文文档](/solution/0700-0799/0717.1-bit%20and%202-bit%20Characters/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>We have two special characters:</p>
 
@@ -40,11 +52,17 @@ So the last character is not one-bit character.
 	<li><code>bits[i]</code> is either <code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +73,7 @@ class Solution:
         return i == n - 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -69,7 +87,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -82,7 +100,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isOneBitCharacter(bits []int) bool {
@@ -94,7 +112,7 @@ func isOneBitCharacter(bits []int) bool {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -111,10 +129,8 @@ var isOneBitCharacter = function (bits) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20029.%20%E6%8E%92%E5%BA%8F%E7%9A%84%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 029. 排序的循环链表](https://leetcode.cn/problems/4ueAj6)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定循环升序列表中的一个点，写一个函数向这个列表中插入一个新元素&nbsp;<code>insertVal</code> ，使这个列表仍然是循环升序的。</p>
 
@@ -56,20 +63,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 708&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/insert-into-a-sorted-circular-linked-list/">https://leetcode.cn/problems/insert-into-a-sorted-circular-linked-list/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-1. 头节点如果为空，直接返回 `node`
-2. 如果 `insertVal` 在链表的最小值和最大值之间，找到合适的位置插入
-3. 如果 `insertVal` 小于链表的最小值或大于链表的最大值，则在头节点和尾节点之间插入
-4. 链表的所有值和 `insertVal` 都相等，任意位置插入
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 """
@@ -96,7 +100,6 @@ class Solution:
                 and (insertVal <= p.next.val or insertVal >= p.val)
                 or p.next == head
             ):
-
                 node.next = p.next
                 p.next = node
                 break
@@ -105,9 +108,7 @@ class Solution:
         return head
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /*
@@ -152,7 +153,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -197,7 +198,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -227,7 +228,7 @@ func insert(head *Node, x int) *Node {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -273,10 +274,53 @@ function insert(head: Node | null, insertVal: number): Node | null {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* class Node {
+*     var val: Int
+*     var next: Node?
 
+*     init(_ val: Int) {
+*         self.val = val
+*         self.next = nil
+*     }
+* }
+*/
+
+class Solution {
+    func insert(_ head: Node?, _ insertVal: Int) -> Node? {
+        let newNode = Node(insertVal)
+        if head == nil {
+            newNode.next = newNode
+            return newNode
+        }
+
+        var current = head
+        repeat {
+            if current!.val <= insertVal && insertVal <= current!.next!.val {
+                break
+            }
+
+            if current!.val > current!.next!.val && (insertVal >= current!.val || insertVal <= current!.next!.val) {
+                break
+            }
+
+            if current!.next === head {
+                break
+            }
+            current = current!.next
+        } while current !== head
+
+        newNode.next = current!.next
+        current!.next = newNode
+        return head
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

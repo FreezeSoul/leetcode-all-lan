@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1288.Remove%20Covered%20Intervals/README.md
+rating: 1375
+source: 第 15 场双周赛 Q2
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1288. 删除被覆盖区间](https://leetcode.cn/problems/remove-covered-intervals)
 
 [English Version](/solution/1200-1299/1288.Remove%20Covered%20Intervals/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个区间列表，请你删除列表中被其他区间所覆盖的区间。</p>
 
@@ -32,23 +45,17 @@
 	<li>对于所有的&nbsp;<code>i != j</code>：<code>intervals[i] != intervals[j]</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-对起点按升序排列，若起点相同，则对终点按降序排列。
-
-设 cnt 表示没有被覆盖的区间数，初始化为 1，pre 表示前一个未被覆盖的区间，初始化为 `intervals[0]`。
-
-从下标 1 开始遍历区间列表，若 `pre[1] < intervals[i][1]`，说明当前区间不被前一个区间覆盖，`cnt++`，并且更新 pre 为 `intervals[i]`。否则表示当前区间被前一个区间覆盖，不做任何操作。
-
-最后返回 cnt 即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -62,9 +69,7 @@ class Solution:
         return cnt
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +88,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +108,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeCoveredIntervals(intervals [][]int) int {
@@ -125,10 +130,8 @@ func removeCoveredIntervals(intervals [][]int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

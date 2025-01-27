@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1541.Minimum%20Insertions%20to%20Balance%20a%20Parentheses%20String/README_EN.md
+rating: 1759
+source: Biweekly Contest 32 Q3
+tags:
+    - Stack
+    - Greedy
+    - String
+---
+
+<!-- problem:start -->
+
 # [1541. Minimum Insertions to Balance a Parentheses String](https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string)
 
 [中文文档](/solution/1500-1599/1541.Minimum%20Insertions%20to%20Balance%20a%20Parentheses%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a parentheses string <code>s</code> containing only the characters <code>&#39;(&#39;</code> and <code>&#39;)&#39;</code>. A parentheses string is <strong>balanced</strong> if:</p>
 
@@ -54,11 +70,17 @@
 	<li><code>s</code> consists of <code>&#39;(&#39;</code> and <code>&#39;)&#39;</code> only.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,22 +89,28 @@ class Solution:
         i, n = 0, len(s)
         while i < n:
             if s[i] == '(':
+                # 待匹配的左括号加 1
                 x += 1
             else:
                 if i < n - 1 and s[i + 1] == ')':
+                    # 有连续两个右括号，i 往后移动
                     i += 1
                 else:
+                    # 只有一个右括号，插入一个
                     ans += 1
                 if x == 0:
+                    # 无待匹配的左括号，插入一个
                     ans += 1
                 else:
+                    # 待匹配的左括号减 1
                     x -= 1
             i += 1
+        # 遍历结束，仍有待匹配的左括号，说明右括号不足，插入 x << 1 个
         ans += x << 1
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -141,7 +169,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minInsertions(s string) int {
@@ -167,10 +195,8 @@ func minInsertions(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

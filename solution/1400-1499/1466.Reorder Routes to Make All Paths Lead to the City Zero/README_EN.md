@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1466.Reorder%20Routes%20to%20Make%20All%20Paths%20Lead%20to%20the%20City%20Zero/README_EN.md
+rating: 1633
+source: Weekly Contest 191 Q3
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+---
+
+<!-- problem:start -->
+
 # [1466. Reorder Routes to Make All Paths Lead to the City Zero](https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero)
 
 [中文文档](/solution/1400-1499/1466.Reorder%20Routes%20to%20Make%20All%20Paths%20Lead%20to%20the%20City%20Zero/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> cities numbered from <code>0</code> to <code>n - 1</code> and <code>n - 1</code> roads such that there is only one way to travel between two different cities (this network form a tree). Last year, The ministry of transport decided to orient the roads in one direction because they are too narrow.</p>
 
@@ -49,65 +65,62 @@
 	<li><code>a<sub>i</sub> != b<sub>i</sub></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS.
+<!-- solution:start -->
 
-Treat the graph as undirected. Start a dfs from the root, if you come across an edge in the forward direction, you need to reverse the edge.
+### Solution 1: DFS
+
+The route map given in the problem has $n$ nodes and $n-1$ edges. If we ignore the direction of the edges, then these $n$ nodes form a tree. The problem requires us to change the direction of some edges so that each node can reach node $0$.
+
+We might as well consider starting from node $0$ and reaching all other nodes. The direction is opposite to the problem description, which means that when we build the graph, for the directed edge $[a, b]$, we should regard it as the directed edge $[b, a]$. That is to say, if it is from $a$ to $b$, we need to change the direction once; if it is from $b$ to $a$, no direction change is needed.
+
+Next, we only need to start from node $0$, search all other nodes, and during the process, if we encounter an edge that needs to change direction, we accumulate the number of direction changes once.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes in the problem.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minReorder(self, n: int, connections: List[List[int]]) -> int:
-        def dfs(u):
-            vis[u] = True
-            ans = 0
-            for v in g[u]:
-                if not vis[v]:
-                    if (u, v) in s:
-                        ans += 1
-                    ans += dfs(v)
-            return ans
+        def dfs(a: int, fa: int) -> int:
+            return sum(c + dfs(b, a) for b, c in g[a] if b != fa)
 
-        g = defaultdict(list)
-        s = set()
+        g = [[] for _ in range(n)]
         for a, b in connections:
-            g[a].append(b)
-            g[b].append(a)
-            s.add((a, b))
-        vis = [False] * n
-        return dfs(0)
+            g[a].append((b, 1))
+            g[b].append((a, 0))
+        return dfs(0, -1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
+    private List<int[]>[] g;
+
     public int minReorder(int n, int[][] connections) {
-        Map<Integer, List<Pair<Integer, Boolean>>> g = new HashMap<>();
-        for (int[] e : connections) {
-            int u = e[0], v = e[1];
-            g.computeIfAbsent(u, k -> new ArrayList<>()).add(new Pair<>(v, true));
-            g.computeIfAbsent(v, k -> new ArrayList<>()).add(new Pair<>(u, false));
+        g = new List[n];
+        Arrays.setAll(g, k -> new ArrayList<>());
+        for (var e : connections) {
+            int a = e[0], b = e[1];
+            g[a].add(new int[] {b, 1});
+            g[b].add(new int[] {a, 0});
         }
-        boolean[] vis = new boolean[n];
-        return dfs(0, g, vis);
+        return dfs(0, -1);
     }
 
-    private int dfs(int u, Map<Integer, List<Pair<Integer, Boolean>>> g, boolean[] vis) {
-        vis[u] = true;
+    private int dfs(int a, int fa) {
         int ans = 0;
-        for (Pair<Integer, Boolean> e : g.getOrDefault(u, Collections.emptyList())) {
-            int v = e.getKey();
-            boolean exist = e.getValue();
-            if (!vis[v]) {
-                if (exist) {
-                    ++ans;
-                }
-                ans += dfs(v, g, vis);
+        for (var e : g[a]) {
+            int b = e[0], c = e[1];
+            if (b != fa) {
+                ans += c + dfs(b, a);
             }
         }
         return ans;
@@ -115,31 +128,193 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minReorder(int n, vector<vector<int>>& connections) {
-        unordered_map<int, vector<pair<int, bool>>> g;
+        vector<pair<int, int>> g[n];
         for (auto& e : connections) {
-            int u = e[0], v = e[1];
-            g[u].push_back({v, true});
-            g[v].push_back({u, false});
+            int a = e[0], b = e[1];
+            g[a].emplace_back(b, 1);
+            g[b].emplace_back(a, 0);
         }
-        vector<bool> vis(n);
-        return dfs(0, g, vis);
+        function<int(int, int)> dfs = [&](int a, int fa) {
+            int ans = 0;
+            for (auto& [b, c] : g[a]) {
+                if (b != fa) {
+                    ans += c + dfs(b, a);
+                }
+            }
+            return ans;
+        };
+        return dfs(0, -1);
     }
+};
+```
 
-    int dfs(int u, unordered_map<int, vector<pair<int, bool>>>& g, vector<bool>& vis) {
-        vis[u] = true;
+#### Go
+
+```go
+func minReorder(n int, connections [][]int) int {
+	g := make([][][2]int, n)
+	for _, e := range connections {
+		a, b := e[0], e[1]
+		g[a] = append(g[a], [2]int{b, 1})
+		g[b] = append(g[b], [2]int{a, 0})
+	}
+	var dfs func(int, int) int
+	dfs = func(a, fa int) (ans int) {
+		for _, e := range g[a] {
+			if b, c := e[0], e[1]; b != fa {
+				ans += c + dfs(b, a)
+			}
+		}
+		return
+	}
+	return dfs(0, -1)
+}
+```
+
+#### TypeScript
+
+```ts
+function minReorder(n: number, connections: number[][]): number {
+    const g: [number, number][][] = Array.from({ length: n }, () => []);
+    for (const [a, b] of connections) {
+        g[a].push([b, 1]);
+        g[b].push([a, 0]);
+    }
+    const dfs = (a: number, fa: number): number => {
+        let ans = 0;
+        for (const [b, c] of g[a]) {
+            if (b !== fa) {
+                ans += c + dfs(b, a);
+            }
+        }
+        return ans;
+    };
+    return dfs(0, -1);
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
+        let mut g: Vec<Vec<(i32, i32)>> = vec![vec![]; n as usize];
+        for e in connections.iter() {
+            let a = e[0] as usize;
+            let b = e[1] as usize;
+            g[a].push((b as i32, 1));
+            g[b].push((a as i32, 0));
+        }
+        fn dfs(a: usize, fa: i32, g: &Vec<Vec<(i32, i32)>>) -> i32 {
+            let mut ans = 0;
+            for &(b, c) in g[a].iter() {
+                if b != fa {
+                    ans += c + dfs(b as usize, a as i32, g);
+                }
+            }
+            ans
+        }
+        dfs(0, -1, &g)
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: BFS
+
+We can use the Breadth-First Search (BFS) method, starting from node $0$, to search all other nodes. During the process, if we encounter an edge that requires a change of direction, we increment the count of direction changes.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the problem.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+        g = [[] for _ in range(n)]
+        for a, b in connections:
+            g[a].append((b, 1))
+            g[b].append((a, 0))
+        q = deque([0])
+        vis = {0}
+        ans = 0
+        while q:
+            a = q.popleft()
+            for b, c in g[a]:
+                if b not in vis:
+                    vis.add(b)
+                    q.append(b)
+                    ans += c
+        return ans
+```
+
+```java
+class Solution {
+    public int minReorder(int n, int[][] connections) {
+        List<int[]>[] g = new List[n];
+        Arrays.setAll(g, k -> new ArrayList<>());
+        for (var e : connections) {
+            int a = e[0], b = e[1];
+            g[a].add(new int[] {b, 1});
+            g[b].add(new int[] {a, 0});
+        }
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(0);
+        boolean[] vis = new boolean[n];
+        vis[0] = true;
         int ans = 0;
-        for (auto& p : g[u]) {
-            int v = p.first;
-            bool exist = p.second;
-            if (!vis[v]) {
-                if (exist) ++ans;
-                ans += dfs(v, g, vis);
+        while (!q.isEmpty()) {
+            int a = q.poll();
+            for (var e : g[a]) {
+                int b = e[0], c = e[1];
+                if (!vis[b]) {
+                    vis[b] = true;
+                    q.offer(b);
+                    ans += c;
+                }
+            }
+        }
+        return ans;
+    }
+}
+```
+
+```cpp
+class Solution {
+public:
+    int minReorder(int n, vector<vector<int>>& connections) {
+        vector<pair<int, int>> g[n];
+        for (auto& e : connections) {
+            int a = e[0], b = e[1];
+            g[a].emplace_back(b, 1);
+            g[b].emplace_back(a, 0);
+        }
+        queue<int> q{{0}};
+        vector<bool> vis(n);
+        vis[0] = true;
+        int ans = 0;
+        while (q.size()) {
+            int a = q.front();
+            q.pop();
+            for (auto& [b, c] : g[a]) {
+                if (!vis[b]) {
+                    vis[b] = true;
+                    q.push(b);
+                    ans += c;
+                }
             }
         }
         return ans;
@@ -147,44 +322,62 @@ public:
 };
 ```
 
-### **Go**
-
 ```go
-func minReorder(n int, connections [][]int) int {
-	type pib struct {
-		v int
-		b bool
-	}
-	g := map[int][]pib{}
+func minReorder(n int, connections [][]int) (ans int) {
+	g := make([][][2]int, n)
 	for _, e := range connections {
-		u, v := e[0], e[1]
-		g[u] = append(g[u], pib{v, true})
-		g[v] = append(g[v], pib{u, false})
+		a, b := e[0], e[1]
+		g[a] = append(g[a], [2]int{b, 1})
+		g[b] = append(g[b], [2]int{a, 0})
 	}
+	q := []int{0}
 	vis := make([]bool, n)
-	var dfs func(int) int
-	dfs = func(u int) int {
-		ans := 0
-		vis[u] = true
-		for _, p := range g[u] {
-			v, exist := p.v, p.b
-			if !vis[v] {
-				if exist {
-					ans++
-				}
-				ans += dfs(v)
+	vis[0] = true
+	for len(q) > 0 {
+		a := q[0]
+		q = q[1:]
+		for _, e := range g[a] {
+			b, c := e[0], e[1]
+			if !vis[b] {
+				vis[b] = true
+				q = append(q, b)
+				ans += c
 			}
 		}
-		return ans
 	}
-	return dfs(0)
+	return
 }
 ```
 
-### **...**
+```ts
+function minReorder(n: number, connections: number[][]): number {
+    const g: [number, number][][] = Array.from({ length: n }, () => []);
+    for (const [a, b] of connections) {
+        g[a].push([b, 1]);
+        g[b].push([a, 0]);
+    }
 
-```
+    const q: number[] = [0];
+    const vis = new Set<number>();
+    vis.add(0);
 
+    let ans = 0;
+    while (q.length) {
+        const a = q.pop()!;
+        for (const [b, c] of g[a]) {
+            if (!vis.has(b)) {
+                vis.add(b);
+                q.push(b);
+                ans += c;
+            }
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

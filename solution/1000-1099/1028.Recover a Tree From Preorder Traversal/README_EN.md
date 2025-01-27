@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/README_EN.md
+rating: 1797
+source: Weekly Contest 132 Q4
+tags:
+    - Tree
+    - Depth-First Search
+    - String
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [1028. Recover a Tree From Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal)
 
 [中文文档](/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>We run a&nbsp;preorder&nbsp;depth-first search (DFS) on the <code>root</code> of a binary tree.</p>
 
@@ -14,21 +31,21 @@
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/images/recover-a-tree-from-preorder-traversal.png" style="width: 320px; height: 200px;" />
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/images/recover_tree_ex1.png" style="width: 423px; height: 200px;" />
 <pre>
 <strong>Input:</strong> traversal = &quot;1-2--3--4-5--6--7&quot;
 <strong>Output:</strong> [1,2,5,3,4,6,7]
 </pre>
 
 <p><strong class="example">Example 2:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/images/screen-shot-2019-04-10-at-114101-pm.png" style="width: 256px; height: 250px;" />
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/images/recover_tree_ex2.png" style="width: 432px; height: 250px;" />
 <pre>
 <strong>Input:</strong> traversal = &quot;1-2--3---4-5--6---7&quot;
 <strong>Output:</strong> [1,2,5,3,null,6,null,4,null,7]
 </pre>
 
 <p><strong class="example">Example 3:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/images/screen-shot-2019-04-10-at-114955-pm.png" style="width: 276px; height: 250px;" />
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/images/recover_tree_ex3.png" style="width: 305px; height: 250px;" />
 <pre>
 <strong>Input:</strong> traversal = &quot;1-401--349---90--88&quot;
 <strong>Output:</strong> [1,401,null,349,88,90]
@@ -42,26 +59,69 @@
 	<li><code>1 &lt;= Node.val &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### C++
 
-```python
-
-```
-
-### **Java**
-
-```java
-
-```
-
-### **...**
-
-```
-
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* recoverFromPreorder(string S) {
+        stack<TreeNode*> st;
+        int depth = 0;
+        int num = 0;
+        for (int i = 0; i < S.length(); ++i) {
+            if (S[i] == '-') {
+                depth++;
+            } else {
+                num = 10 * num + S[i] - '0';
+            }
+            if (i + 1 >= S.length() || (isdigit(S[i]) && S[i + 1] == '-')) {
+                TreeNode* newNode = new TreeNode(num);
+                while (st.size() > depth) {
+                    st.pop();
+                }
+                if (!st.empty()) {
+                    if (st.top()->left == nullptr) {
+                        st.top()->left = newNode;
+                    } else {
+                        st.top()->right = newNode;
+                    }
+                }
+                st.push(newNode);
+                depth = 0;
+                num = 0;
+            }
+        }
+        TreeNode* res;
+        while (!st.empty()) {
+            res = st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

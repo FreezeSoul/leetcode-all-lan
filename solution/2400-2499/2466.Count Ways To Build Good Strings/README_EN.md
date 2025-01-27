@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2466.Count%20Ways%20To%20Build%20Good%20Strings/README_EN.md
+rating: 1694
+source: Biweekly Contest 91 Q2
+tags:
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [2466. Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings)
 
 [中文文档](/solution/2400-2499/2466.Count%20Ways%20To%20Build%20Good%20Strings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the integers <code>zero</code>, <code>one</code>, <code>low</code>, and <code>high</code>, we can construct a string by starting with an empty string, and then at each step perform either of the following:</p>
 
@@ -45,11 +59,28 @@ All binary strings from &quot;000&quot; to &quot;111&quot; are good strings in t
 	<li><code>1 &lt;= zero, one &lt;= low</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Memoization Search
+
+We design a function $dfs(i)$ to represent the number of good strings constructed starting from the $i$-th position. The answer is $dfs(0)$.
+
+The computation process of the function $dfs(i)$ is as follows:
+
+-   If $i > high$, return $0$;
+-   If $low \leq i \leq high$, increment the answer by $1$, then after $i$, we can add either `zero` number of $0$s or `one` number of $1$s. Therefore, the answer is incremented by $dfs(i + zero) + dfs(i + one)$.
+
+During the process, we need to take the modulus of the answer, and we can use memoization search to reduce redundant computations.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n = high$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +99,7 @@ class Solution:
         return dfs(0)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,7 +162,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countGoodStrings(low int, high int, zero int, one int) int {
@@ -161,16 +192,65 @@ func countGoodStrings(low int, high int, zero int, one int) int {
 }
 ```
 
-### **TypeScript**
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Dynamic programming
+
+<!-- tabs:start -->
+
+#### TypeScript
 
 ```ts
+function countGoodStrings(low: number, high: number, zero: number, one: number): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[] = new Array(high + 1).fill(0);
+    f[0] = 1;
 
+    for (let i = 1; i <= high; i++) {
+        if (i >= zero) f[i] += f[i - zero];
+        if (i >= one) f[i] += f[i - one];
+        f[i] %= mod;
+    }
+
+    const ans = f.slice(low, high + 1).reduce((acc, cur) => acc + cur, 0);
+
+    return ans % mod;
+}
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {number} low
+ * @param {number} high
+ * @param {number} zero
+ * @param {number} one
+ * @return {number}
+ */
+function countGoodStrings(low, high, zero, one) {
+    const mod = 10 ** 9 + 7;
+    const f = Array(high + 1).fill(0);
+    f[0] = 1;
 
+    for (let i = 1; i <= high; i++) {
+        if (i >= zero) f[i] += f[i - zero];
+        if (i >= one) f[i] += f[i - one];
+        f[i] %= mod;
+    }
+
+    const ans = f.slice(low, high + 1).reduce((acc, cur) => acc + cur, 0);
+
+    return ans % mod;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

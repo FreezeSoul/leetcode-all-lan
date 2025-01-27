@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9836.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 36. 二叉搜索树与双向链表](https://leetcode.cn/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。要求不能创建任何新的节点，只能调整树中节点指针的指向。</p>
 
@@ -34,11 +42,13 @@
 
 <p><strong>注意：</strong>此题对比原题有改动。</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：中序遍历**
+### 方法一：中序遍历
 
 二叉搜索树的中序遍历是有序序列，因此可以通过中序遍历得到有序序列，过程中构建双向链表。
 
@@ -48,9 +58,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 """
@@ -87,9 +95,7 @@ class Solution:
         return head
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /*
@@ -143,7 +149,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -200,7 +206,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -239,7 +245,7 @@ func treeToDoublyList(root *Node) *Node {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -281,7 +287,7 @@ var treeToDoublyList = function (root) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 /*
@@ -338,10 +344,68 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* Definition for a Node.
+* public class Node {
+*     public var val: Int
+*     public var left: Node?
+*     public var right: Node?
 
+*     public init() {
+*         self.val = 0
+*         self.left = nil
+*         self.right = nil
+*     }
+
+*     public init(_ val: Int) {
+*         self.val = val
+*         self.left = nil
+*         self.right = nil
+*     }
+
+*     public init(_ val: Int, _ left: Node?, _ right: Node?) {
+*         self.val = val
+*         self.left = left
+*         self.right = right
+*     }
+* }
+*/
+
+class Solution {
+    private var head: Node?
+    private var pre: Node?
+
+    func treeToDoublyList(_ root: Node?) -> Node? {
+        if root == nil {
+            return nil
+        }
+        dfs(root)
+        head?.left = pre
+        pre?.right = head
+        return head
+    }
+
+    private func dfs(_ root: Node?) {
+        guard let root = root else {
+            return
+        }
+        dfs(root.left)
+        if let preNode = pre {
+            preNode.right = root
+        } else {
+            head = root
+        }
+        root.left = pre
+        pre = root
+        dfs(root.right)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

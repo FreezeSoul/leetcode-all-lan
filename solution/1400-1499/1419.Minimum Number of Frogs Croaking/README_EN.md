@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1419.Minimum%20Number%20of%20Frogs%20Croaking/README_EN.md
+rating: 1689
+source: Weekly Contest 185 Q3
+tags:
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [1419. Minimum Number of Frogs Croaking](https://leetcode.com/problems/minimum-number-of-frogs-croaking)
 
 [中文文档](/solution/1400-1499/1419.Minimum%20Number%20of%20Frogs%20Croaking/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the string <code>croakOfFrogs</code>, which represents a combination of the string <code>&quot;croak&quot;</code> from different frogs, that is, multiple frogs can croak at the same time, so multiple <code>&quot;croak&quot;</code> are mixed.</p>
 
@@ -45,11 +60,30 @@ The second frog could yell later &quot;cr<strong>c</strong>oak<strong>roak</stro
 	<li><code>croakOfFrogs</code> is either <code>&#39;c&#39;</code>, <code>&#39;r&#39;</code>, <code>&#39;o&#39;</code>, <code>&#39;a&#39;</code>, or <code>&#39;k&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting + Simulation
+
+We note that if the string `croakOfFrogs` is composed of several valid `"croak"` characters mixed together, its length must be a multiple of $5$. Therefore, if the length of the string is not a multiple of $5$, we can directly return $-1$.
+
+Next, we map the letters `'c'`, `'r'`, `'o'`, `'a'`, `'k'` to indices $0$ to $4$, respectively, and use an array $cnt$ of length $5$ to record the number of occurrences of each letter in the string `croakOfFrogs`, where $cnt[i]$ represents the number of occurrences of the letter at index $i$. Additionally, we define an integer variable $x$ to represent the number of frogs that have not completed their croak, and the minimum number of frogs needed $ans$ is the maximum value of $x$.
+
+We traverse each letter $c$ in the string `croakOfFrogs`, find the index $i$ corresponding to $c$, and then increment $cnt[i]$ by $1$. Next, depending on the value of $i$, we perform the following operations:
+
+-   If $i=0$, then a new frog starts croaking, so we increment $x$ by $1$, and then update $ans = \max(ans, x)$;
+-   Otherwise, if $cnt[i-1]=0$, it means that there is no frog that can make the sound $c$, and the croak cannot be completed, so we return $-1$. Otherwise, we decrement $cnt[i-1]$ by $1$. If $i=4$, it means that a frog has completed a croak, so we decrement $x$ by $1$.
+
+After traversing, if $x=0$, it means that all frogs have completed their croaks, and we return $ans$. Otherwise, we return $-1$.
+
+The time complexity is $O(n)$, and the space complexity is $O(C)$. Where $n$ is the length of the string `croakOfFrogs`, and $C$ is the size of the character set, in this problem $C=26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +107,7 @@ class Solution:
         return -1 if x else ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -144,7 +178,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minNumberOfFrogs(croakOfFrogs string) int {
@@ -179,16 +213,9 @@ func minNumberOfFrogs(croakOfFrogs string) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minNumberOfFrogs(croakOfFrogs: string): number {
@@ -218,10 +245,8 @@ function minNumberOfFrogs(croakOfFrogs: string): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

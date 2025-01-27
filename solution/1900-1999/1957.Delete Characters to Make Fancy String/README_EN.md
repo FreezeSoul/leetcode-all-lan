@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1957.Delete%20Characters%20to%20Make%20Fancy%20String/README_EN.md
+rating: 1357
+source: Biweekly Contest 58 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [1957. Delete Characters to Make Fancy String](https://leetcode.com/problems/delete-characters-to-make-fancy-string)
 
 [中文文档](/solution/1900-1999/1957.Delete%20Characters%20to%20Make%20Fancy%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>fancy string</strong> is a string where no <strong>three</strong> <strong>consecutive</strong> characters are equal.</p>
 
@@ -48,24 +62,35 @@ No three consecutive characters are equal, so return &quot;aabaa&quot;.
 	<li><code>s</code> consists only of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can traverse the string $s$ and use an array $\textit{ans}$ to record the current answer. For each character $c$, if the length of $\textit{ans}$ is less than $2$ or the last two characters of $\textit{ans}$ are not equal to $c$, we add $c$ to $\textit{ans}$.
+
+Finally, we concatenate the characters in $\textit{ans}$ to get the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def makeFancyString(self, s: str) -> str:
         ans = []
         for c in s:
-            if len(ans) > 1 and ans[-1] == ans[-2] == c:
-                continue
-            ans.append(c)
-        return ''.join(ans)
+            if len(ans) < 2 or ans[-1] != c or ans[-2] != c:
+                ans.append(c)
+        return "".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -73,17 +98,16 @@ class Solution {
         StringBuilder ans = new StringBuilder();
         for (char c : s.toCharArray()) {
             int n = ans.length();
-            if (n > 1 && ans.charAt(n - 1) == c && ans.charAt(n - 2) == c) {
-                continue;
+            if (n < 2 || c != ans.charAt(n - 1) || c != ans.charAt(n - 2)) {
+                ans.append(c);
             }
-            ans.append(c);
         }
         return ans.toString();
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -92,31 +116,58 @@ public:
         string ans = "";
         for (char& c : s) {
             int n = ans.size();
-            if (n > 1 && ans[n - 1] == c && ans[n - 2] == c) continue;
-            ans.push_back(c);
+            if (n < 2 || ans[n - 1] != c || ans[n - 2] != c) {
+                ans += c;
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeFancyString(s string) string {
 	ans := []rune{}
 	for _, c := range s {
-		n := len(ans)
-		if n > 1 && ans[n-1] == c && ans[n-2] == c {
-			continue
+		if n := len(ans); n < 2 || c != ans[n-1] || c != ans[n-2] {
+			ans = append(ans, c)
 		}
-		ans = append(ans, c)
 	}
 	return string(ans)
 }
 ```
 
-### **PHP**
+#### TypeScript
+
+```ts
+function makeFancyString(s: string): string {
+    let [n, ans] = [s.length, ''];
+    for (let i = 0; i < n; i++) {
+        if (s[i] !== s[i - 1] || s[i] !== s[i - 2]) {
+            ans += s[i];
+        }
+    }
+    return ans;
+}
+```
+
+#### JavaScript
+
+```js
+function makeFancyString(s) {
+    let [n, ans] = [s.length, ''];
+    for (let i = 0; i < n; i++) {
+        if (s[i] !== s[i - 1] || s[i] !== s[i - 2]) {
+            ans += s[i];
+        }
+    }
+    return ans;
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -125,20 +176,23 @@ class Solution {
      * @return String
      */
     function makeFancyString($s) {
-        $rs = "";
-        for ($i = 0; $i < strlen($s); $i++) {
-            if ($s[$i] == $s[$i + 1] && $s[$i] == $s[$i + 2]) continue;
-            else $rs .= $s[$i];
+        $ans = [];
+        $length = strlen($s);
+
+        for ($i = 0; $i < $length; $i++) {
+            $n = count($ans);
+            if ($n < 2 || $s[$i] !== $ans[$n - 1] || $s[$i] !== $ans[$n - 2]) {
+                $ans[] = $s[$i];
+            }
         }
-        return $rs;
+
+        return implode('', $ans);
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

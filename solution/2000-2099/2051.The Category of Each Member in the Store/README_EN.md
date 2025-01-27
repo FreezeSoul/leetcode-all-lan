@@ -1,8 +1,20 @@
-# [2051. The Category of Each Member in the Store](https://leetcode.com/problems/the-category-of-each-member-in-the-store)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2051.The%20Category%20of%20Each%20Member%20in%20the%20Store/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2051. The Category of Each Member in the Store 🔒](https://leetcode.com/problems/the-category-of-each-member-in-the-store)
 
 [中文文档](/solution/2000-2099/2051.The%20Category%20of%20Each%20Member%20in%20the%20Store/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Members</code></p>
 
@@ -13,7 +25,7 @@
 | member_id   | int     |
 | name        | varchar |
 +-------------+---------+
-member_id is the primary key column for this table.
+member_id is the column with unique values for this table.
 Each row of this table indicates the name and the ID of a member.
 </pre>
 
@@ -29,8 +41,8 @@ Each row of this table indicates the name and the ID of a member.
 | member_id   | int  |
 | visit_date  | date |
 +-------------+------+
-visit_id is the primary key column for this table.
-member_id is a foreign key to member_id from the Members table.
+visit_id is the column with unique values for this table.
+member_id is a foreign key (reference column) to member_id from the Members table.
 Each row of this table contains information about the date of a visit to the store and the member who visited it.
 </pre>
 
@@ -45,8 +57,8 @@ Each row of this table contains information about the date of a visit to the sto
 | visit_id       | int  |
 | charged_amount | int  |
 +----------------+------+
-visit_id is the primary key column for this table.
-visit_id is a foreign key to visit_id from the Visits table.
+visit_id is the column with unique values for this table.
+visit_id is a foreign key (reference column) to visit_id from the Visits table.
 Each row of this table contains information about the amount charged in a visit to the store.
 </pre>
 
@@ -63,11 +75,11 @@ Each row of this table contains information about the amount charged in a visit 
 
 <p>The <strong>conversion rate</strong> of a member is <code>(100 * total number of purchases for the member) / total number of visits for the member</code>.</p>
 
-<p>Write an SQL query to report the id, the name, and the category of each member.</p>
+<p>Write a solution to report the id, the name, and the category of each member.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -122,14 +134,38 @@ Purchases table:
 - User Bob with id = 11 visited the store three times and purchased one time. The conversion rate = (100 * 1) / 3 = 33.33. He gets a Silver category.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    m.member_id,
+    name,
+    CASE
+        WHEN COUNT(v.visit_id) = 0 THEN 'Bronze'
+        WHEN 100 * COUNT(charged_amount) / COUNT(v.visit_id) >= 80 THEN 'Diamond'
+        WHEN 100 * COUNT(charged_amount) / COUNT(v.visit_id) >= 50 THEN 'Gold'
+        ELSE 'Silver'
+    END AS category
+FROM
+    Members AS m
+    LEFT JOIN Visits AS v ON m.member_id = v.member_id
+    LEFT JOIN Purchases AS p ON v.visit_id = p.visit_id
+GROUP BY member_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

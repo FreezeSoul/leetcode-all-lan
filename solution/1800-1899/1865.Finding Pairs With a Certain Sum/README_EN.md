@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1865.Finding%20Pairs%20With%20a%20Certain%20Sum/README_EN.md
+rating: 1680
+source: Weekly Contest 241 Q3
+tags:
+    - Design
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [1865. Finding Pairs With a Certain Sum](https://leetcode.com/problems/finding-pairs-with-a-certain-sum)
 
 [中文文档](/solution/1800-1899/1865.Finding%20Pairs%20With%20a%20Certain%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two integer arrays <code>nums1</code> and <code>nums2</code>. You are tasked to implement a data structure that supports queries of two types:</p>
 
@@ -54,15 +70,20 @@ findSumPairs.count(7);  // return 11; pairs (2,1), (2,2), (2,4), (3,1), (3,2), (
 	<li>At most <code>1000</code> calls are made to <code>add</code> and <code>count</code> <strong>each</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class FindSumPairs:
-
     def __init__(self, nums1: List[int], nums2: List[int]):
         self.nums1 = nums1
         self.nums2 = nums2
@@ -84,7 +105,7 @@ class FindSumPairs:
 # param_2 = obj.count(tot)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class FindSumPairs {
@@ -124,7 +145,7 @@ class FindSumPairs {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class FindSumPairs {
@@ -166,7 +187,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type FindSumPairs struct {
@@ -205,10 +226,8 @@ func (this *FindSumPairs) Count(tot int) (ans int) {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

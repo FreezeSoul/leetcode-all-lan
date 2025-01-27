@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2067.%20%E8%A3%85%E9%A5%B0%E6%A0%91/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 67. 装饰树](https://leetcode.cn/problems/KnLfVT)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 力扣嘉年华上的 DIY 手工展位准备了一棵缩小版的 **二叉** 装饰树 `root` 和灯饰，你需要将灯饰逐一插入装饰树中，要求如下：
 
@@ -20,7 +28,7 @@
 > 输出：`[7,-1,-1,5,null,null,6]`
 >
 > 解释：如下图所示，
-> <br><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2067.%20%E8%A3%85%E9%A5%B0%E6%A0%91/images/1663575757-yRLGaq-image.png" style="width: 400px;" />
+> ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2067.%20%E8%A3%85%E9%A5%B0%E6%A0%91/images/1663575757-yRLGaq-image.png){:width=400px}
 
 **示例 2：**
 
@@ -30,17 +38,19 @@
 > 输出：`[3,-1,-1,1,null,null,7,-1,-1,null,-1,3,null,null,8,null,4]`
 >
 > 解释：如下图所示
-> <br><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2067.%20%E8%A3%85%E9%A5%B0%E6%A0%91/images/1663577920-sjrAYH-image.png" style="width: 400px;" />
+> ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2067.%20%E8%A3%85%E9%A5%B0%E6%A0%91/images/1663577920-sjrAYH-image.png){:width=500px}
 
 **提示：**
 
 > `0 <= root.Val <= 1000` >`root` 节点数量范围为 `[1, 10^5]`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 我们设计一个函数 $dfs(root)$，表示将灯饰插入以 $root$ 为根节点的树中，返回插入灯饰后的树的根节点。那么答案就是 $dfs(root)$。
 
@@ -57,9 +67,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -83,9 +91,7 @@ class Solution:
         return dfs(root)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -125,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -161,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -191,10 +197,8 @@ func expandBinaryTree(root *TreeNode) *TreeNode {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

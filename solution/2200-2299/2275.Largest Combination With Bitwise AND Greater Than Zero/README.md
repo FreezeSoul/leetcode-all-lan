@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2275.Largest%20Combination%20With%20Bitwise%20AND%20Greater%20Than%20Zero/README.md
+rating: 1642
+source: 第 293 场周赛 Q3
+tags:
+    - 位运算
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2275. 按位与结果大于零的最长组合](https://leetcode.cn/problems/largest-combination-with-bitwise-and-greater-than-zero)
 
 [English Version](/solution/2200-2299/2275.Largest%20Combination%20With%20Bitwise%20AND%20Greater%20Than%20Zero/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>对数组&nbsp;<code>nums</code> 执行 <strong>按位与</strong> 相当于对数组&nbsp;<code>nums</code> 中的所有整数执行 <strong>按位与</strong> 。</p>
 
@@ -13,7 +28,7 @@
 	<li>同样，对 <code>nums = [7]</code> 而言，按位与等于 <code>7</code> 。</li>
 </ul>
 
-<p>给你一个正整数数组 <code>candidates</code> 。计算 <code>candidates</code> 中的数字每种组合下 <strong>按位与</strong> 的结果。 <code>candidates</code> 中的每个数字在每种组合中只能使用 <strong>一次</strong> 。</p>
+<p>给你一个正整数数组 <code>candidates</code> 。计算 <code>candidates</code> 中的数字每种组合下 <strong>按位与</strong> 的结果。</p>
 
 <p>返回按位与结果大于 <code>0</code> 的 <strong>最长</strong> 组合的长度<em>。</em></p>
 
@@ -49,73 +64,109 @@
 	<li><code>1 &lt;= candidates[i] &lt;= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
-大于 0，实际上就是要求存在某个二进制位（0-31），满足所有数字的这一位均为 1。
+题目需要找到按位与结果大于 $0$ 的数字组合的最大长度，那么说明一定存在某个二进制位，所有数字在这个二进制位上都是 $1$。因此，我们可以枚举每个二进制位，统计所有数字在这个二进制位上的 $1$ 的个数，最后取最大值即可。
+
+时间复杂度 $O(n \times \log M)$，其中 $n$ 和 $M$ 分别是数组 $\textit{candidates}$ 的长度和数组中的最大值。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def largestCombination(self, candidates: List[int]) -> int:
         ans = 0
-        for i in range(32):
-            t = 0
-            for x in candidates:
-                t += (x >> i) & 1
-            ans = max(ans, t)
+        for i in range(max(candidates).bit_length()):
+            ans = max(ans, sum(x >> i & 1 for x in candidates))
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int largestCombination(int[] candidates) {
+        int mx = Arrays.stream(candidates).max().getAsInt();
+        int m = Integer.SIZE - Integer.numberOfLeadingZeros(mx);
         int ans = 0;
-        for (int i = 0; i < 32; ++i) {
-            int t = 0;
+        for (int i = 0; i < m; ++i) {
+            int cnt = 0;
             for (int x : candidates) {
-                t += (x >> i) & 1;
+                cnt += x >> i & 1;
             }
-            ans = Math.max(ans, t);
+            ans = Math.max(ans, cnt);
         }
         return ans;
     }
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int largestCombination(vector<int>& candidates) {
+        int mx = *max_element(candidates.begin(), candidates.end());
+        int m = 32 - __builtin_clz(mx);
+        int ans = 0;
+        for (int i = 0; i < m; ++i) {
+            int cnt = 0;
+            for (int x : candidates) {
+                cnt += x >> i & 1;
+            }
+            ans = max(ans, cnt);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func largestCombination(candidates []int) (ans int) {
+	mx := slices.Max(candidates)
+	m := bits.Len(uint(mx))
+	for i := 0; i < m; i++ {
+		cnt := 0
+		for _, x := range candidates {
+			cnt += (x >> i) & 1
+		}
+		ans = max(ans, cnt)
+	}
+	return
+}
+```
+
+#### TypeScript
 
 ```ts
 function largestCombination(candidates: number[]): number {
-    const n = 24;
+    const mx = Math.max(...candidates);
+    const m = mx.toString(2).length;
     let ans = 0;
-    for (let i = 0; i < n; i++) {
-        let count = 0;
-        for (let num of candidates) {
-            if ((num >> i) & 1) count++;
+    for (let i = 0; i < m; ++i) {
+        let cnt = 0;
+        for (const x of candidates) {
+            cnt += (x >> i) & 1;
         }
-        ans = Math.max(ans, count);
+        ans = Math.max(ans, cnt);
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

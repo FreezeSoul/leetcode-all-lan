@@ -1,16 +1,15 @@
 func subarrayBitwiseORs(arr []int) int {
+	ans := map[int]bool{}
 	s := map[int]bool{}
-	prev := 0
-	for i, v := range arr {
-		prev |= v
-		curr := 0
-		for j := i; j >= 0; j-- {
-			curr |= arr[j]
-			s[curr] = true
-			if curr == prev {
-				break
-			}
+	for _, x := range arr {
+		t := map[int]bool{x: true}
+		for y := range s {
+			t[x|y] = true
 		}
+		for y := range t {
+			ans[y] = true
+		}
+		s = t
 	}
-	return len(s)
+	return len(ans)
 }

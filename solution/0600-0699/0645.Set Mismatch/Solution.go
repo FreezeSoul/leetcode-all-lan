@@ -1,14 +1,14 @@
 func findErrorNums(nums []int) []int {
 	n := len(nums)
-	for i := 0; i < n; i++ {
-		for nums[i] != i+1 && nums[nums[i]-1] != nums[i] {
-			nums[i], nums[nums[i]-1] = nums[nums[i]-1], nums[i]
+	s1 := (1 + n) * n / 2
+	s2, s := 0, 0
+	set := map[int]bool{}
+	for _, x := range nums {
+		if !set[x] {
+			set[x] = true
+			s2 += x
 		}
+		s += x
 	}
-	for i := 0; i < n; i++ {
-		if nums[i] != i+1 {
-			return []int{nums[i], i + 1}
-		}
-	}
-	return []int{-1, -1}
+	return []int{s - s2, s1 - s2}
 }

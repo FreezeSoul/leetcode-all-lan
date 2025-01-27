@@ -1,17 +1,31 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2558.Take%20Gifts%20From%20the%20Richest%20Pile/README.md
+rating: 1276
+source: 第 331 场周赛 Q1
+tags:
+    - 数组
+    - 模拟
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2558. 从数量最多的堆取走礼物](https://leetcode.cn/problems/take-gifts-from-the-richest-pile)
 
 [English Version](/solution/2500-2599/2558.Take%20Gifts%20From%20the%20Richest%20Pile/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>gifts</code> ，表示各堆礼物的数量。每一秒，你需要执行以下操作：</p>
 
 <ul>
 	<li>选择礼物数量最多的那一堆。</li>
 	<li>如果不止一堆都符合礼物数量最多，从中选择任一堆即可。</li>
-	<li>选中的那一堆留下平方根数量的礼物（向下取整），取走其他的礼物。</li>
+	<li>将堆中的礼物数量减少到堆中原来礼物数量的平方根，向下取整。</li>
 </ul>
 
 <p>返回在 <code>k</code> 秒后剩下的礼物数量<em>。</em></p>
@@ -53,23 +67,23 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>3</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（大根堆）**
+### 方法一：优先队列（大根堆）
 
-我们将数组 `gifts` 转存到大根堆中，然后循环 $k$ 次，每次取出堆顶元素，将堆顶元素开根号的结果再放入堆中。
+我们将数组 $gifts$ 转存到大根堆中，然后循环 $k$ 次，每次取出堆顶元素，将堆顶元素开根号的结果再放入堆中。
 
 最后累加堆中所有元素之和作为答案。
 
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `gifts` 的长度。
+时间复杂度 $O(n + k \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 $gifts$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,9 +95,7 @@ class Solution:
         return -sum(h)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,7 +133,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pickGifts(gifts []int, k int) (ans int64) {
@@ -140,14 +152,55 @@ func pickGifts(gifts []int, k int) (ans int64) {
 type hp struct{ sort.IntSlice }
 
 func (h hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
-func (hp) Pop() (_ interface{}) { return }
-func (hp) Push(interface{})     {}
+func (hp) Pop() (_ any)         { return }
+func (hp) Push(any)             {}
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function pickGifts(gifts: number[], k: number): number {
+    const pq = new MaxPriorityQueue();
+    gifts.forEach(v => pq.enqueue(v));
+    while (k--) {
+        let v = pq.dequeue().element;
+        v = Math.floor(Math.sqrt(v));
+        pq.enqueue(v);
+    }
+    let ans = 0;
+    while (!pq.isEmpty()) {
+        ans += pq.dequeue().element;
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn pick_gifts(gifts: Vec<i32>, k: i32) -> i64 {
+        let mut h = std::collections::BinaryHeap::from(gifts);
+        let mut ans = 0;
+
+        for _ in 0..k {
+            if let Some(mut max_gift) = h.pop() {
+                max_gift = (max_gift as f64).sqrt().floor() as i32;
+                h.push(max_gift);
+            }
+        }
+
+        for x in h {
+            ans += x as i64;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

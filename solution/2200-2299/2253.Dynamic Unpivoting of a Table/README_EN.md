@@ -1,8 +1,20 @@
-# [2253. Dynamic Unpivoting of a Table](https://leetcode.com/problems/dynamic-unpivoting-of-a-table)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2253.Dynamic%20Unpivoting%20of%20a%20Table/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2253. Dynamic Unpivoting of a Table 🔒](https://leetcode.com/problems/dynamic-unpivoting-of-a-table)
 
 [中文文档](/solution/2200-2299/2253.Dynamic%20Unpivoting%20of%20a%20Table/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Products</code></p>
 
@@ -66,14 +78,50 @@ Product 2 is sold in Nozama and Souq with prices of 200 and 190.
 Product 3 is sold in Shop and Souq with prices of 1000 and 1900.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+CREATE PROCEDURE UnpivotProducts()
+BEGIN
+    # Write your MySQL query statement below.
+    SET group_concat_max_len = 5000;
+    WITH
+        t AS (
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE
+                table_schema = DATABASE()
+                AND table_name = 'Products'
+                AND column_name != 'product_id'
+        )
+    SELECT
+        GROUP_CONCAT(
+            'SELECT product_id, \'',
+            column_name,
+            '\' store, ',
+            column_name,
+            ' price FROM Products WHERE ',
+            column_name,
+            ' IS NOT NULL' SEPARATOR ' UNION '
+        ) INTO @sql from t;
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

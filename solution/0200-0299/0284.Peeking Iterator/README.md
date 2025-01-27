@@ -1,10 +1,22 @@
-# [284. 顶端迭代器](https://leetcode.cn/problems/peeking-iterator)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0284.Peeking%20Iterator/README.md
+tags:
+    - 设计
+    - 数组
+    - 迭代器
+---
+
+<!-- problem:start -->
+
+# [284. 窥视迭代器](https://leetcode.cn/problems/peeking-iterator)
 
 [English Version](/solution/0200-0299/0284.Peeking%20Iterator/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你在设计一个迭代器，在集成现有迭代器拥有的&nbsp;<code>hasNext</code> 和 <code>next</code> 操作的基础上，还额外支持 <code>peek</code> 操作。</p>
 
@@ -54,17 +66,17 @@ peekingIterator.hasNext(); // 返回 False
 
 <p><strong>进阶：</strong>你将如何拓展你的设计？使之变得通用化，从而适应所有的类型，而不只是整数型？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-定义一个变量 peekElement 专门用来保存下一个值，布尔变量 hasPeeked 标记是否保存了下一个元素。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Below is the interface for Iterator, which is already defined for you.
@@ -134,9 +146,7 @@ class PeekingIterator:
 #     iter.next()         # Should return the same value as [val].
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 // Java Iterator interface reference:
@@ -181,7 +191,7 @@ class PeekingIterator implements Iterator<Integer> {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -240,7 +250,7 @@ private:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /*   Below is the interface for Iterator, which is already defined for you.
@@ -289,10 +299,8 @@ func (this *PeekingIterator) peek() int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

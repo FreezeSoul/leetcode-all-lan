@@ -1,8 +1,24 @@
-# [616. Add Bold Tag in String](https://leetcode.com/problems/add-bold-tag-in-string)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0616.Add%20Bold%20Tag%20in%20String/README_EN.md
+tags:
+    - Trie
+    - Array
+    - Hash Table
+    - String
+    - String Matching
+---
+
+<!-- problem:start -->
+
+# [616. Add Bold Tag in String 🔒](https://leetcode.com/problems/add-bold-tag-in-string)
 
 [中文文档](/solution/0600-0699/0616.Add%20Bold%20Tag%20in%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> and an array of strings <code>words</code>.</p>
 
@@ -35,7 +51,7 @@ We add &lt;b&gt; before each substring and &lt;/b&gt; after each substring.
 &quot;b&quot; appears as a substring three times: &quot;aaa<u>b</u>bb&quot;, &quot;aaab<u>b</u>b&quot;, and &quot;aaabb<u>b</u>&quot;.
 We add &lt;b&gt; before each substring and &lt;/b&gt; after each substring: &quot;&lt;b&gt;a&lt;b&gt;a&lt;/b&gt;a&lt;/b&gt;&lt;b&gt;b&lt;/b&gt;&lt;b&gt;b&lt;/b&gt;&lt;b&gt;b&lt;/b&gt;&quot;.
 Since the first two &lt;b&gt;&#39;s overlap, we merge them: &quot;&lt;b&gt;aaa&lt;/b&gt;&lt;b&gt;b&lt;/b&gt;&lt;b&gt;b&lt;/b&gt;&lt;b&gt;b&lt;/b&gt;&quot;.
-Since now the four &lt;b&gt;&#39;s are consecuutive, we merge them: &quot;&lt;b&gt;aaabbb&lt;/b&gt;&quot;.
+Since now the four &lt;b&gt;&#39;s are consecutive, we merge them: &quot;&lt;b&gt;aaabbb&lt;/b&gt;&quot;.
 </pre>
 
 <p>&nbsp;</p>
@@ -50,13 +66,19 @@ Since now the four &lt;b&gt;&#39;s are consecuutive, we merge them: &quot;&lt;b&
 </ul>
 
 <p>&nbsp;</p>
-<p><strong>Note:</strong> This question is the same as 758: <a href="https://leetcode.com/problems/bold-words-in-string/" target="_blank">https://leetcode.com/problems/bold-words-in-string/</a></p>
+<p><strong>Note:</strong> This question is the same as <a href="https://leetcode.com/problems/bold-words-in-string/description/" target="_blank">758. Bold Words in String</a>.</p>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Trie:
@@ -120,7 +142,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Trie {
@@ -199,7 +221,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -270,7 +292,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -346,19 +368,10 @@ func addBoldTag(s string, words []string) string {
 	}
 	return ans.String()
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

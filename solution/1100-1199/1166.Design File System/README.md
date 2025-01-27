@@ -1,10 +1,25 @@
-# [1166. 设计文件系统](https://leetcode.cn/problems/design-file-system)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1166.Design%20File%20System/README.md
+rating: 1479
+source: 第 7 场双周赛 Q2
+tags:
+    - 设计
+    - 字典树
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [1166. 设计文件系统 🔒](https://leetcode.cn/problems/design-file-system)
 
 [English Version](/solution/1100-1199/1166.Design%20File%20System/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你需要设计一个文件系统，你可以创建新的路径并将它们与不同的值关联。</p>
 
@@ -62,11 +77,13 @@ fileSystem.get("/c"); // 返回 -1 因为该路径不存在。
 	<li><code>1 &lt;= value &lt;= 10<sup>9</sup></code>&nbsp;</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀树**
+### 方法一：前缀树
 
 我们可以使用前缀树来存储路径，每个节点存储一个值，表示该节点对应的路径的值。
 
@@ -84,9 +101,7 @@ fileSystem.get("/c"); // 返回 -1 因为该路径不存在。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Trie:
@@ -132,9 +147,7 @@ class FileSystem:
 # param_2 = obj.get(path)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Trie {
@@ -180,7 +193,6 @@ class FileSystem {
     private Trie trie = new Trie(-1);
 
     public FileSystem() {
-
     }
 
     public boolean createPath(String path, int value) {
@@ -200,7 +212,7 @@ class FileSystem {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -242,7 +254,6 @@ public:
         return node->v;
     }
 
-
 private:
     vector<string> split(string& s, char delim) {
         stringstream ss(s);
@@ -281,7 +292,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type trie struct {
@@ -345,7 +356,7 @@ func (this *FileSystem) Get(path string) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class Trie {
@@ -411,10 +422,8 @@ class FileSystem {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

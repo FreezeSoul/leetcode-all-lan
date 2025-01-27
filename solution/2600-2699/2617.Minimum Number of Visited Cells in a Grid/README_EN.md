@@ -1,8 +1,29 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2617.Minimum%20Number%20of%20Visited%20Cells%20in%20a%20Grid/README_EN.md
+rating: 2581
+source: Weekly Contest 340 Q4
+tags:
+    - Stack
+    - Breadth-First Search
+    - Union Find
+    - Array
+    - Dynamic Programming
+    - Matrix
+    - Monotonic Stack
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [2617. Minimum Number of Visited Cells in a Grid](https://leetcode.com/problems/minimum-number-of-visited-cells-in-a-grid)
 
 [中文文档](/solution/2600-2699/2617.Minimum%20Number%20of%20Visited%20Cells%20in%20a%20Grid/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> <code>m x n</code> integer matrix <code>grid</code>. Your initial position is at the <strong>top-left</strong> cell <code>(0, 0)</code>.</p>
 
@@ -52,9 +73,13 @@
 	<li><code>grid[m - 1][n - 1] == 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Priority Queue**
+<!-- solution:start -->
+
+### Solution 1: Priority Queue
 
 Let's denote the number of rows of the grid as $m$ and the number of columns as $n$. Define $dist[i][j]$ to be the shortest distance from the coordinate $(0, 0)$ to the coordinate $(i, j)$. Initially, $dist[0][0]=1$ and $dist[i][j]=-1$ for all other $i$ and $j$.
 
@@ -70,7 +95,7 @@ The time complexity is $O(m \times n \times \log (m \times n))$ and the space co
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -96,7 +121,7 @@ class Solution:
         return dist[-1][-1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -138,7 +163,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -175,7 +200,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumVisitedCells(grid [][]int) int {
@@ -225,14 +250,12 @@ func (a hp) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a hp) Less(i, j int) bool {
 	return a[i].first < a[j].first || (a[i].first == a[j].first && a[i].second < a[j].second)
 }
-func (a *hp) Push(x interface{}) { *a = append(*a, x.(pair)) }
-func (a *hp) Pop() interface{}   { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
-```
-
-### **...**
-
-```
-
+func (a *hp) Push(x any) { *a = append(*a, x.(pair)) }
+func (a *hp) Pop() any   { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

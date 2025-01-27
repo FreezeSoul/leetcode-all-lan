@@ -1,8 +1,20 @@
-# [1468. Calculate Salaries](https://leetcode.com/problems/calculate-salaries)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1468.Calculate%20Salaries/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1468. Calculate Salaries 🔒](https://leetcode.com/problems/calculate-salaries)
 
 [中文文档](/solution/1400-1499/1468.Calculate%20Salaries/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table <code>Salaries</code>:</p>
 
@@ -15,13 +27,13 @@
 | employee_name | varchar |
 | salary        | int     |
 +---------------+---------+
-(company_id, employee_id) is the primary key for this table.
+In SQL,(company_id, employee_id) is the primary key for this table.
 This table contains the company id, the id, the name, and the salary for an employee.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find the salaries of the employees after applying taxes. Round the salary to <strong>the nearest integer</strong>.</p>
+<p>Find the salaries of the employees after applying taxes. Round the salary to <strong>the nearest integer</strong>.</p>
 
 <p>The tax rate is calculated for each company based on the following criteria:</p>
 
@@ -33,7 +45,7 @@ This table contains the company id, the id, the name, and the salary for an empl
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -78,14 +90,44 @@ The salary after taxes = salary - (taxes percentage / 100) * salary
 For example, Salary for Morninngcat (3, 15) after taxes = 7777 - 7777 * (24 / 100) = 7777 - 1866.48 = 5910.52, which is rounded to 5911.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    s.company_id,
+    employee_id,
+    employee_name,
+    ROUND(
+        CASE
+            WHEN top < 1000 THEN salary
+            WHEN top >= 1000
+            AND top <= 10000 THEN salary * 0.76
+            ELSE salary * 0.51
+        END
+    ) AS salary
+FROM
+    Salaries AS s
+    JOIN (
+        SELECT company_id, MAX(salary) AS top
+        FROM Salaries
+        GROUP BY company_id
+    ) AS t
+        ON s.company_id = t.company_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1998.GCD%20Sort%20of%20an%20Array/README.md
+rating: 2429
+source: 第 257 场周赛 Q4
+tags:
+    - 并查集
+    - 数组
+    - 数学
+    - 数论
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1998. 数组的最大公因数排序](https://leetcode.cn/problems/gcd-sort-of-an-array)
 
 [English Version](/solution/1900-1999/1998.GCD%20Sort%20of%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，你可以在 <code>nums</code> 上执行下述操作 <strong>任意次</strong> ：</p>
 
@@ -18,29 +34,32 @@
 
 <p><strong>示例 1：</strong></p>
 
-<pre><strong>输入：</strong>nums = [7,21,3]
+<pre>
+<strong>输入：</strong>nums = [7,21,3]
 <strong>输出：</strong>true
 <strong>解释：</strong>可以执行下述操作完成对 [7,21,3] 的排序：
-- 交换 7 和 21 因为 gcd(7,21) = 7 。nums = [<em><strong>21</strong></em>,<em><strong>7</strong></em>,3]
-- 交换 21 和 3 因为 gcd(21,3) = 3 。nums = [<em><strong>3</strong></em>,7,<em><strong>21</strong></em>]
+- 交换 7 和 21 因为 gcd(7,21) = 7 。nums = [<u><strong>21</strong></u>,<u><strong>7</strong></u>,3]
+- 交换 21 和 3 因为 gcd(21,3) = 3 。nums = [<u><strong>3</strong></u>,7,<u><strong>21</strong></u>]
 </pre>
 
 <p><strong>示例 2：</strong></p>
 
-<pre><strong>输入：</strong>nums = [5,2,6,2]
+<pre>
+<strong>输入：</strong>nums = [5,2,6,2]
 <strong>输出：</strong>false
 <strong>解释：</strong>无法完成排序，因为 5 不能与其他元素交换。
 </pre>
 
 <p><strong>示例 3：</strong></p>
 
-<pre><strong>输入：</strong>nums = [10,5,9,3,15]
+<pre>
+<strong>输入：</strong>nums = [10,5,9,3,15]
 <strong>输出：</strong>true
 <strong>解释：</strong>
 可以执行下述操作完成对 [10,5,9,3,15] 的排序：
-- 交换 10 和 15 因为 gcd(10,15) = 5 。nums = [<em><strong>15</strong></em>,5,9,3,<em><strong>10</strong></em>]
-- 交换 15 和 3 因为 gcd(15,3) = 3 。nums = [<em><strong>3</strong></em>,5,9,<em><strong>15</strong></em>,10]
-- 交换 10 和 15 因为 gcd(10,15) = 5 。nums = [3,5,9,<em><strong>10</strong></em>,<em><strong>15</strong></em>]
+- 交换 10 和 15 因为 gcd(10,15) = 5 。nums = [<u><strong>15</strong></u>,5,9,3,<u><strong>10</strong></u>]
+- 交换 15 和 3 因为 gcd(15,3) = 3 。nums = [<u><strong>3</strong></u>,5,9,<u><strong>15</strong></u>,10]
+- 交换 10 和 15 因为 gcd(10,15) = 5 。nums = [3,5,9,<u><strong>10</strong></u>,<u><strong>15</strong></u>]
 </pre>
 
 <p>&nbsp;</p>
@@ -52,88 +71,22 @@
 	<li><code>2 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-并查集。
-
-并查集模板：
-
-模板 1——朴素并查集：
-
-```python
-# 初始化，p存储每个点的父节点
-p = list(range(n))
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-```
-
-模板 2——维护 size 的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，size只有当节点是祖宗节点时才有意义，表示祖宗节点所在集合中，点的数量
-p = list(range(n))
-size = [1] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-# 合并a和b所在的两个集合
-if find(a) != find(b):
-    size[find(b)] += size[find(a)]
-    p[find(a)] = find(b)
-```
-
-模板 3——维护到祖宗节点距离的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，d[x]存储x到p[x]的距离
-p = list(range(n))
-d = [0] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        t = find(p[x])
-        d[x] += d[p[x]]
-        p[x] = t
-    return p[x]
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-d[find(a)] = distance
-```
-
-对于本题，最大公因数大于 1 的两个数，可以进行交换，因此，只要一个集合中所有数都存在相同公因数，那么这个集合中任意数都能进行两两交换，因此可以用并查集，把同个集合中的所有数字进行合并。
-
-> 在这道题中，可以先预处理每个数的质因数，数字与质因数归属同一个集合。
-
-合并之后，将原数组复制一份，并进行升序排列，得到新数组 s。然后遍历原数组，若原数组对应元素与新数组对应元素不相同，并且两个元素也不在同一个集合中，说明不满足条件，直接返回 false，否则遍历结束返回 true。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def gcdSort(self, nums: List[int]) -> bool:
-        n = 10 ** 5 + 10
+        n = 10**5 + 10
         p = list(range(n))
         f = defaultdict(list)
         mx = max(nums)
@@ -159,9 +112,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -211,7 +162,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -247,7 +198,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 var p []int
@@ -295,19 +246,10 @@ func find(x int) int {
 	}
 	return p[x]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1385.Find%20the%20Distance%20Value%20Between%20Two%20Arrays/README.md
+rating: 1234
+source: 第 22 场双周赛 Q1
+tags:
+    - 数组
+    - 双指针
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1385. 两个数组间的距离值](https://leetcode.cn/problems/find-the-distance-value-between-two-arrays)
 
 [English Version](/solution/1300-1399/1385.Find%20the%20Distance%20Value%20Between%20Two%20Arrays/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个整数数组&nbsp;<code>arr1</code>&nbsp;，&nbsp;<code>arr2</code>&nbsp;和一个整数&nbsp;<code>d</code>&nbsp;，请你返回两个数组之间的&nbsp;<strong>距离值</strong>&nbsp;。</p>
 
@@ -62,93 +77,79 @@
 	<li><code>0 &lt;= d &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 二分查找**
+### 方法一：排序 + 二分查找
 
-我们可以先对数组 $arr2$ 排序，然后对于数组 $arr1$ 中的每个元素 $a$，使用二分查找，找到数组 $arr2$ 中第一个大于等于 $a-d$ 的元素，如果元素存在，且小于等于 $a+d$，则说明不符合距离要求，否则说明符合距离要求。我们将符合距离要求的元素个数累加，即为答案。
+我们可以先对数组 $\textit{arr2}$ 排序，然后对于数组 $\textit{arr1}$ 中的每个元素 $x$，使用二分查找，找到数组 $\textit{arr2}$ 中第一个大于等于 $x - d$ 的元素，如果元素存在，且小于等于 $x + d$，则说明不符合距离要求，否则说明符合距离要求。我们将符合距离要求的元素个数累加，即为答案。
 
-时间复杂度 $O((m + n) \times \log n)$，空间复杂度 $O(\log n)$。其中 $m$ 和 $n$ 分别是数组 $arr1$ 和 $arr2$ 的长度。
+时间复杂度 $O((m + n) \times \log n)$，空间复杂度 $O(\log n)$。其中 $m$ 和 $n$ 分别是数组 $\textit{arr1}$ 和 $\textit{arr2}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findTheDistanceValue(self, arr1: List[int], arr2: List[int], d: int) -> int:
-        def check(a: int) -> bool:
-            i = bisect_left(arr2, a - d)
-            return i == len(arr2) or arr2[i] > a + d
-
         arr2.sort()
-        return sum(check(a) for a in arr1)
+        ans = 0
+        for x in arr1:
+            i = bisect_left(arr2, x - d)
+            ans += i == len(arr2) or arr2[i] > x + d
+        return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int findTheDistanceValue(int[] arr1, int[] arr2, int d) {
         Arrays.sort(arr2);
         int ans = 0;
-        for (int a : arr1) {
-            if (check(arr2, a, d)) {
+        for (int x : arr1) {
+            int i = Arrays.binarySearch(arr2, x - d);
+            i = i < 0 ? -i - 1 : i;
+            if (i == arr2.length || arr2[i] > x + d) {
                 ++ans;
             }
         }
         return ans;
     }
-
-    private boolean check(int[] arr, int a, int d) {
-        int l = 0, r = arr.length;
-        while (l < r) {
-            int mid = (l + r) >> 1;
-            if (arr[mid] >= a - d) {
-                r = mid;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return l >= arr.length || arr[l] > a + d;
-    }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findTheDistanceValue(vector<int>& arr1, vector<int>& arr2, int d) {
-        auto check = [&](int a) -> bool {
-            auto it = lower_bound(arr2.begin(), arr2.end(), a - d);
-            return it == arr2.end() || *it > a + d;
-        };
-        sort(arr2.begin(), arr2.end());
+        ranges::sort(arr2);
         int ans = 0;
-        for (int& a : arr1) {
-            ans += check(a);
+        for (int x : arr1) {
+            auto it = ranges::lower_bound(arr2, x - d);
+            if (it == arr2.end() || *it > x + d) {
+                ++ans;
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findTheDistanceValue(arr1 []int, arr2 []int, d int) (ans int) {
 	sort.Ints(arr2)
-	for _, a := range arr1 {
-		i := sort.SearchInts(arr2, a-d)
-		if i == len(arr2) || arr2[i] > a+d {
+	for _, x := range arr1 {
+		i := sort.SearchInts(arr2, x-d)
+		if i == len(arr2) || arr2[i] > x+d {
 			ans++
 		}
 	}
@@ -156,31 +157,15 @@ func findTheDistanceValue(arr1 []int, arr2 []int, d int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function findTheDistanceValue(
-    arr1: number[],
-    arr2: number[],
-    d: number,
-): number {
-    const check = (a: number) => {
-        let l = 0;
-        let r = arr2.length;
-        while (l < r) {
-            const mid = (l + r) >> 1;
-            if (arr2[mid] >= a - d) {
-                r = mid;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return l === arr2.length || arr2[l] > a + d;
-    };
+function findTheDistanceValue(arr1: number[], arr2: number[], d: number): number {
     arr2.sort((a, b) => a - b);
-    let ans = 0;
-    for (const a of arr1) {
-        if (check(a)) {
+    let ans: number = 0;
+    for (const x of arr1) {
+        const i = _.sortedIndex(arr2, x - d);
+        if (i === arr2.length || arr2[i] > x + d) {
             ++ans;
         }
     }
@@ -188,39 +173,29 @@ function findTheDistanceValue(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn find_the_distance_value(arr1: Vec<i32>, mut arr2: Vec<i32>, d: i32) -> i32 {
         arr2.sort();
-        let n = arr2.len();
-        let mut res = 0;
-        for &num in arr1.iter() {
-            let mut left = 0;
-            let mut right = n - 1;
-            while left < right {
-                let mid = left + (right - left) / 2;
-                if arr2[mid] <= num {
-                    left = mid + 1;
-                } else {
-                    right = mid;
-                }
+        let mut ans = 0;
+        for &x in &arr1 {
+            let i = match arr2.binary_search(&(x - d)) {
+                Ok(j) => j,
+                Err(j) => j,
+            };
+            if i == arr2.len() || arr2[i] > x + d {
+                ans += 1;
             }
-            if i32::abs(num - arr2[left]) <= d || (left != 0 && i32::abs(num - arr2[left - 1]) <= d) {
-                continue;
-            }
-            res += 1;
         }
-        res
+        ans
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

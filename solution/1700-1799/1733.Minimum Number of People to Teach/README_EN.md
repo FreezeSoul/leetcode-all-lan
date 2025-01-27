@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1733.Minimum%20Number%20of%20People%20to%20Teach/README_EN.md
+rating: 1983
+source: Biweekly Contest 44 Q2
+tags:
+    - Greedy
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [1733. Minimum Number of People to Teach](https://leetcode.com/problems/minimum-number-of-people-to-teach)
 
 [中文文档](/solution/1700-1799/1733.Minimum%20Number%20of%20People%20to%20Teach/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>On a social network consisting of <code>m</code> users and some friendships between users, two users can communicate with each other if they know a common language.</p>
 
@@ -48,15 +64,29 @@ Note that friendships are not transitive, meaning if <code>x</code> is a friend 
 	<li><code>languages[i]</code> contains only unique values</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation + Statistics
+
+For each friendship, if the sets of languages known by the two people do not intersect, then a language needs to be taught so that the two people can communicate with each other. We put these people into a hash set $s$.
+
+Then in this set $s$, we count the number of people who know each language, and get the maximum number, which we denote as $mx$. So the answer is `len(s) - mx`.
+
+The time complexity is $O(m^2 \times k)$. Here, $m$ is the number of languages, and $k$ is the number of friendships.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def minimumTeachings(self, n: int, languages: List[List[int]], friendships: List[List[int]]) -> int:
+    def minimumTeachings(
+        self, n: int, languages: List[List[int]], friendships: List[List[int]]
+    ) -> int:
         def check(u, v):
             for x in languages[u - 1]:
                 for y in languages[v - 1]:
@@ -76,7 +106,7 @@ class Solution:
         return len(s) - max(cnt.values(), default=0)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -118,7 +148,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -157,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumTeachings(n int, languages [][]int, friendships [][]int) int {
@@ -187,25 +217,12 @@ func minimumTeachings(n int, languages [][]int, friendships [][]int) int {
 			cnt[l]++
 		}
 	}
-	mx := 0
-	for _, v := range cnt {
-		mx = max(mx, v)
-	}
-	return len(s) - mx
+	return len(s) - slices.Max(cnt)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

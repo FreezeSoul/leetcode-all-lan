@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2410.Maximum%20Matching%20of%20Players%20With%20Trainers/README.md
+rating: 1381
+source: 第 87 场双周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2410. 运动员和训练师的最大匹配数](https://leetcode.cn/problems/maximum-matching-of-players-with-trainers)
 
 [English Version](/solution/2400-2499/2410.Maximum%20Matching%20of%20Players%20With%20Trainers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>players</code>&nbsp;，其中&nbsp;<code>players[i]</code>&nbsp;表示第 <code>i</code>&nbsp;名运动员的 <strong>能力</strong>&nbsp;值，同时给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>trainers</code>&nbsp;，其中&nbsp;<code>trainers[j]</code>&nbsp;表示第 <code>j</code>&nbsp;名训练师的 <strong>训练能力值</strong>&nbsp;。</p>
 
@@ -43,116 +58,124 @@
 	<li><code>1 &lt;= players[i], trainers[j] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 双指针**
+### 方法一：贪心 + 双指针
 
-按运动员的能力值从小到大排序，选择大于等于运动员能力值的，且自身能力值最小的训练师。
+根据题目描述，每位运动员应该尽可能匹配能力值最接近的训练师，因此我们可以对运动员和训练师的能力值进行排序，然后使用双指针的方法进行匹配。
 
-时间复杂度 $O(n\log n + m\log m)$。其中 $n$, $m$ 分别为运动员和训练师的数量。
+我们用两个指针 $i$ 和 $j$ 分别指向运动员和训练师的数组，初始时都指向数组的起始位置。然后我们逐个遍历运动员的能力值，如果当前训练师的能力值小于当前运动员的能力值，我们就将训练师的指针向右移动一位，直到找到一个能力值大于等于当前运动员的训练师。如果找不到这样的训练师，说明当前运动员无法匹配任何训练师，此时我们返回当前运动员的下标即可。否则，，我们可以将当前运动员和训练师匹配，然后将两个指针都向右移动一位。继续这个过程直到遍历完所有的运动员。
+
+如果我们遍历完所有的运动员，说明所有的运动员都能匹配到训练师，此时我们返回运动员的数量即可。
+
+时间复杂度 $O(m \times \log m + n \times \log n)$，空间复杂度 $O(\max(\log m, \log n))$。其中 $m$ 和 $n$ 分别为运动员和训练师的数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def matchPlayersAndTrainers(self, players: List[int], trainers: List[int]) -> int:
         players.sort()
         trainers.sort()
-        ans = j = 0
-        for p in players:
-            while j < len(trainers) and trainers[j] < p:
+        j, n = 0, len(trainers)
+        for i, p in enumerate(players):
+            while j < n and trainers[j] < p:
                 j += 1
-            if j < len(trainers):
-                ans += 1
-                j += 1
-        return ans
+            if j == n:
+                return i
+            j += 1
+        return len(players)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int matchPlayersAndTrainers(int[] players, int[] trainers) {
         Arrays.sort(players);
         Arrays.sort(trainers);
-        int ans = 0;
-        int j = 0;
-        for (int p : players) {
-            while (j < trainers.length && trainers[j] < p) {
+        int m = players.length, n = trainers.length;
+        for (int i = 0, j = 0; i < m; ++i, ++j) {
+            while (j < n && trainers[j] < players[i]) {
                 ++j;
             }
-            if (j < trainers.length) {
-                ++ans;
-                ++j;
+            if (j == n) {
+                return i;
             }
         }
-        return ans;
+        return m;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
-        sort(players.begin(), players.end());
-        sort(trainers.begin(), trainers.end());
-        int ans = 0, j = 0;
-        for (int p : players) {
-            while (j < trainers.size() && trainers[j] < p) {
+        ranges::sort(players);
+        ranges::sort(trainers);
+        int m = players.size(), n = trainers.size();
+        for (int i = 0, j = 0; i < m; ++i, ++j) {
+            while (j < n && trainers[j] < players[i]) {
                 ++j;
             }
-            if (j < trainers.size()) {
-                ++ans;
-                ++j;
+            if (j == n) {
+                return i;
             }
         }
-        return ans;
+        return m;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func matchPlayersAndTrainers(players []int, trainers []int) int {
 	sort.Ints(players)
 	sort.Ints(trainers)
-	ans, j := 0, 0
-	for _, p := range players {
-		for j < len(trainers) && trainers[j] < p {
+	m, n := len(players), len(trainers)
+	for i, j := 0, 0; i < m; i, j = i+1, j+1 {
+		for j < n && trainers[j] < players[i] {
 			j++
 		}
-		if j < len(trainers) {
-			ans++
-			j++
+		if j == n {
+			return i
 		}
 	}
-	return ans
+	return m
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
-
+function matchPlayersAndTrainers(players: number[], trainers: number[]): number {
+    players.sort((a, b) => a - b);
+    trainers.sort((a, b) => a - b);
+    const [m, n] = [players.length, trainers.length];
+    for (let i = 0, j = 0; i < m; ++i, ++j) {
+        while (j < n && trainers[j] < players[i]) {
+            ++j;
+        }
+        if (j === n) {
+            return i;
+        }
+    }
+    return m;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

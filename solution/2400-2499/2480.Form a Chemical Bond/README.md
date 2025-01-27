@@ -1,10 +1,20 @@
-# [2480. 形成化学键](https://leetcode.cn/problems/form-a-chemical-bond)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2480.Form%20a%20Chemical%20Bond/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2480. 形成化学键 🔒](https://leetcode.cn/problems/form-a-chemical-bond)
 
 [English Version](/solution/2400-2499/2480.Form%20a%20Chemical%20Bond/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Elements</code></p>
 
@@ -16,7 +26,7 @@
 | type        | enum    |
 | electrons   | int     |
 +-------------+---------+
-symbol 是该表的主键。
+symbol 是该表的主键(具有唯一值的列)。
 该表的每一行包含一个元素的信息。
 type 是 ENUM&nbsp;类型，它的值是 ('Metal', 'Nonmetal', 'Noble') 之一
  - 如果 type 是 Noble, electrons 是 0。
@@ -28,7 +38,7 @@ type 是 ENUM&nbsp;类型，它的值是 ('Metal', 'Nonmetal', 'Noble') 之一
 
 <p>如果一个元素是&nbsp;<code>'Metal'</code>，另外一个元素是&nbsp;<code>'Nonmetal'</code>&nbsp;，那么它们可以形成键。</p>
 
-<p>编写一个 SQL 查询来查找所有可以形成键的元素对。</p>
+<p>编写一个解决方案找出所有可以形成键的元素对。</p>
 
 <p data-group="1-1">以&nbsp;<strong>任意顺序&nbsp;</strong>返回结果表。</p>
 
@@ -68,21 +78,32 @@ Elements 表:
 +-------+----------+
 <strong>解释:</strong> 
 Metal 元素包括 La, Ca, and Na.
-Nonmeal 元素包括 Cl, O, and N.
+Nonmetal 元素包括 Cl, O, and N.
 每个 Metal 元素与输出表中的 Nonmeal 元素配对。</pre>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT a.symbol AS metal, b.symbol AS nonmetal
+FROM
+    Elements AS a,
+    Elements AS b
+WHERE a.type = 'Metal' AND b.type = 'Nonmetal';
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

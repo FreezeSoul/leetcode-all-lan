@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20020.%20%E5%9B%9E%E6%96%87%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%AA%E6%95%B0/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 020. 回文子字符串的个数](https://leetcode.cn/problems/a7VOhD)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串 <code>s</code> ，请计算这个字符串中有多少个回文子字符串。</p>
 
@@ -38,27 +45,21 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 647 题相同：<a href="https://leetcode.cn/problems/palindromic-substrings/">https://leetcode.cn/problems/palindromic-substrings/</a>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：从中心向两侧扩展回文串**
+### 方法一：从中心向两侧扩展回文串
 
 我们可以枚举回文串的中间点，然后向左右两边扩展，统计回文串的数量。注意，回文串可能包含奇数个字符，也可能不包含。因此这两种情况都要考虑。
 
 时间复杂度 $O(n^2)$，其中 $n$ 是字符串 `s` 的长度。
 
-**方法二：Manacher 算法**
-
-在 Manacher 算法的计算过程中，用 $p[i]-1$ 表示以第 $i$ 位为中心的最大回文长度，以第 $i$ 位为中心的回文串数量为 $\left \lceil \frac{p[i]-1}{2}  \right \rceil$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是字符串 `s` 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,28 +77,7 @@ class Solution:
         return sum(f(i, i) + f(i, i + 1) for i in range(n))
 ```
 
-```python
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        t = '^#' + '#'.join(s) + '#$'
-        n = len(t)
-        p = [0 for _ in range(n)]
-        pos, maxRight = 0, 0
-        ans = 0
-        for i in range(1, n - 1):
-            p[i] = min(maxRight - i, p[2 * pos - i]) if maxRight > i else 1
-            while t[i - p[i]] == t[i + p[i]]:
-                p[i] += 1
-            if i + p[i] > maxRight:
-                maxRight = i + p[i]
-                pos = i
-            ans += p[i] // 2
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -122,6 +102,119 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countSubstrings(string s) {
+        int ans = 0;
+        int n = s.size();
+        auto f = [&](int i, int j) -> int {
+            int cnt = 0;
+            for (; i >= 0 && j < n && s[i] == s[j]; --i, ++j) {
+                ++cnt;
+            }
+            return cnt;
+        };
+        for (int i = 0; i < n; ++i) {
+            ans += f(i, i) + f(i, i + 1);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countSubstrings(s string) (ans int) {
+	n := len(s)
+	f := func(i, j int) (cnt int) {
+		for ; i >= 0 && j < n && s[i] == s[j]; i, j = i-1, j+1 {
+			cnt++
+		}
+		return
+	}
+	for i := range s {
+		ans += f(i, i)
+		ans += f(i, i+1)
+	}
+	return
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    private var s: String = ""
+
+    func countSubstrings(_ s: String) -> Int {
+        var ans = 0
+        self.s = s
+        let length = s.count
+        for i in 0..<length {
+            ans += countPalindromes(i, i)
+            ans += countPalindromes(i, i + 1)
+        }
+        return ans
+    }
+
+    private func countPalindromes(_ i: Int, _ j: Int) -> Int {
+        var cnt = 0
+        var i = i
+        var j = j
+        let chars = Array(s)
+
+        while i >= 0 && j < chars.count && chars[i] == chars[j] {
+            cnt += 1
+            i -= 1
+            j += 1
+        }
+
+        return cnt
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二：Manacher 算法
+
+在 Manacher 算法的计算过程中，用 $p[i]-1$ 表示以第 $i$ 位为中心的最大回文长度，以第 $i$ 位为中心的回文串数量为 $\left \lceil \frac{p[i]-1}{2}  \right \rceil$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是字符串 `s` 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        t = '^#' + '#'.join(s) + '#$'
+        n = len(t)
+        p = [0 for _ in range(n)]
+        pos, maxRight = 0, 0
+        ans = 0
+        for i in range(1, n - 1):
+            p[i] = min(maxRight - i, p[2 * pos - i]) if maxRight > i else 1
+            while t[i - p[i]] == t[i + p[i]]:
+                p[i] += 1
+            if i + p[i] > maxRight:
+                maxRight = i + p[i]
+                pos = i
+            ans += p[i] // 2
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -151,52 +244,8 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int countSubstrings(string s) {
-        int ans = 0;
-        int n = s.size();
-        auto f = [&](int i, int j) -> int {
-            int cnt = 0;
-            for (; i >= 0 && j < n && s[i] == s[j]; --i, ++j) {
-                ++cnt;
-            }
-            return cnt;
-        };
-        for (int i = 0; i < n; ++i) {
-            ans += f(i, i) + f(i, i + 1);
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-```go
-func countSubstrings(s string) (ans int) {
-	n := len(s)
-	f := func(i, j int) (cnt int) {
-		for ; i >= 0 && j < n && s[i] == s[j]; i, j = i-1, j+1 {
-			cnt++
-		}
-		return
-	}
-	for i := range s {
-		ans += f(i, i)
-		ans += f(i, i+1)
-	}
-	return
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

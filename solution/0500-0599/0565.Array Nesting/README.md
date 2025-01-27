@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0565.Array%20Nesting/README.md
+tags:
+    - 深度优先搜索
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [565. 数组嵌套](https://leetcode.cn/problems/array-nesting)
 
 [English Version](/solution/0500-0599/0565.Array%20Nesting/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>索引从<code>0</code>开始长度为<code>N</code>的数组<code>A</code>，包含<code>0</code>到<code>N - 1</code>的所有整数。找到最大的集合<code>S</code>并返回其大小，其中 <code>S[i] = {A[i], A[A[i]], A[A[A[i]]], ... }</code>且遵守以下的规则。</p>
 
@@ -34,27 +45,21 @@ S[0] = {A[0], A[5], A[6], A[2]} = {5, 6, 2, 0}
 	<li><code>A</code>中不含有重复的元素。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：图**
+### 方法一：图
 
 嵌套数组最终一定会形成一个环，在枚举 $nums[i]$ 的过程中，可以用 $vis$ 数组剪枝，避免重复枚举同一个环。
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。
 
-**方法二：原地标记**
-
-由于 $nums$ 元素均在 $[0..n-1]$ 之间，因此，对于访问过的元素，我们可以令 $nums[i]=n$，从而省略 $vis$ 数组。
-
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,24 +80,7 @@ class Solution:
         return res
 ```
 
-```python
-class Solution:
-    def arrayNesting(self, nums: List[int]) -> int:
-        ans, n = 0, len(nums)
-        for i in range(n):
-            cnt = 0
-            while nums[i] != n:
-                j = nums[i]
-                nums[i] = n
-                i = j
-                cnt += 1
-            ans = max(ans, cnt)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -118,27 +106,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int arrayNesting(int[] nums) {
-        int ans = 0, n = nums.length;
-        for (int i = 0; i < n; ++i) {
-            int cnt = 0;
-            int j = i;
-            while (nums[j] < n) {
-                int k = nums[j];
-                nums[j] = n;
-                j = k;
-                ++cnt;
-            }
-            ans = Math.max(ans, cnt);
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -163,30 +131,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int arrayNesting(vector<int>& nums) {
-        int ans = 0, n = nums.size();
-        for (int i = 0; i < n; ++i)
-        {
-            int cnt = 0;
-            int j = i;
-            while (nums[j] < n)
-            {
-                int k = nums[j];
-                nums[j] = n;
-                j = k;
-                ++cnt;
-            }
-            ans = max(ans, cnt);
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func arrayNesting(nums []int) int {
@@ -212,6 +157,84 @@ func arrayNesting(nums []int) int {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：原地标记
+
+由于 $nums$ 元素均在 $[0..n-1]$ 之间，因此，对于访问过的元素，我们可以令 $nums[i]=n$，从而省略 $vis$ 数组。
+
+时间复杂度 $O(n)$，空间复杂度 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def arrayNesting(self, nums: List[int]) -> int:
+        ans, n = 0, len(nums)
+        for i in range(n):
+            cnt = 0
+            while nums[i] != n:
+                j = nums[i]
+                nums[i] = n
+                i = j
+                cnt += 1
+            ans = max(ans, cnt)
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int arrayNesting(int[] nums) {
+        int ans = 0, n = nums.length;
+        for (int i = 0; i < n; ++i) {
+            int cnt = 0;
+            int j = i;
+            while (nums[j] < n) {
+                int k = nums[j];
+                nums[j] = n;
+                j = k;
+                ++cnt;
+            }
+            ans = Math.max(ans, cnt);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int arrayNesting(vector<int>& nums) {
+        int ans = 0, n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            int cnt = 0;
+            int j = i;
+            while (nums[j] < n) {
+                int k = nums[j];
+                nums[j] = n;
+                j = k;
+                ++cnt;
+            }
+            ans = max(ans, cnt);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
 ```go
 func arrayNesting(nums []int) int {
 	ans, n := 0, len(nums)
@@ -231,10 +254,8 @@ func arrayNesting(nums []int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

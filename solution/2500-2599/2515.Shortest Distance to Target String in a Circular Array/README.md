@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2515.Shortest%20Distance%20to%20Target%20String%20in%20a%20Circular%20Array/README.md
+rating: 1367
+source: 第 325 场周赛 Q1
+tags:
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2515. 到目标字符串的最短距离](https://leetcode.cn/problems/shortest-distance-to-target-string-in-a-circular-array)
 
 [English Version](/solution/2500-2599/2515.Shortest%20Distance%20to%20Target%20String%20in%20a%20Circular%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的 <strong>环形</strong> 字符串数组 <code>words</code> 和一个字符串 <code>target</code> 。<strong>环形数组</strong> 意味着数组首尾相连。</p>
 
@@ -57,11 +70,13 @@
 	<li><code>0 &lt;= startIndex &lt; words.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 遍历数组，找到与 target 相等的单词，计算其与 startIndex 的距离 $t$，则此时的最短距离为 $min(t, n - t)$，我们只需要不断更新最小值即可。
 
@@ -69,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -85,9 +98,7 @@ class Solution:
         return -1 if ans == n else ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,7 +137,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func closetTarget(words []string, target string, startIndex int) int {
@@ -150,29 +161,15 @@ func abs(x int) int {
 	}
 	return x
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function closetTarget(
-    words: string[],
-    target: string,
-    startIndex: number,
-): number {
+function closetTarget(words: string[], target: string, startIndex: number): number {
     const n = words.length;
     for (let i = 0; i <= n >> 1; i++) {
-        if (
-            words[(startIndex - i + n) % n] === target ||
-            words[(startIndex + i) % n] === target
-        ) {
+        if (words[(startIndex - i + n) % n] === target || words[(startIndex + i) % n] === target) {
             return i;
         }
     }
@@ -180,7 +177,7 @@ function closetTarget(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -198,13 +195,12 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int closetTarget(char **words, int wordsSize, char *target, int startIndex) {
+int closetTarget(char** words, int wordsSize, char* target, int startIndex) {
     for (int i = 0; i <= wordsSize >> 1; i++) {
-        if (strcmp(words[(startIndex - i + wordsSize) % wordsSize], target) == 0 ||
-            strcmp(words[(startIndex + i) % wordsSize], target) == 0) {
+        if (strcmp(words[(startIndex - i + wordsSize) % wordsSize], target) == 0 || strcmp(words[(startIndex + i) % wordsSize], target) == 0) {
             return i;
         }
     }
@@ -212,10 +208,43 @@ int closetTarget(char **words, int wordsSize, char *target, int startIndex) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+use std::cmp::min;
+
+impl Solution {
+    pub fn closet_target(words: Vec<String>, target: String, start_index: i32) -> i32 {
+        let mut ans = words.len();
+
+        for (i, w) in words.iter().enumerate() {
+            if *w == target {
+                let t = ((i as i32) - start_index).abs();
+                ans = min(ans, min(t as usize, words.len() - (t as usize)));
+            }
+        }
+
+        if ans == words.len() {
+            return -1;
+        }
+
+        ans as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

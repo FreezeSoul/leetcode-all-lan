@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2697.Lexicographically%20Smallest%20Palindrome/README_EN.md
+rating: 1303
+source: Weekly Contest 346 Q2
+tags:
+    - Greedy
+    - Two Pointers
+    - String
+---
+
+<!-- problem:start -->
+
 # [2697. Lexicographically Smallest Palindrome](https://leetcode.com/problems/lexicographically-smallest-palindrome)
 
 [中文文档](/solution/2600-2699/2697.Lexicographically%20Smallest%20Palindrome/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code node="[object Object]">s</code> consisting of <strong>lowercase English letters</strong>, and you are allowed to perform operations on it. In one operation, you can <strong>replace</strong> a character in <code node="[object Object]">s</code> with another lowercase English letter.</p>
 
@@ -45,92 +61,107 @@
 	<li><code>s</code>&nbsp;consists of only lowercase English letters<b>.</b></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Two Pointers
+
+We use two pointers $i$ and $j$ to point to the beginning and end of the string, initially $i = 0$, $j = n - 1$.
+
+Next, each time we greedily modify $s[i]$ and $s[j]$ to their smaller value to make them equal. Then we move $i$ one step forward and $j$ one step backward, and continue this process until $i \ge j$. At this point, we have obtained the smallest palindrome string.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def makeSmallestPalindrome(self, s: str) -> str:
-        i, j = 0, len(s) - 1
         cs = list(s)
+        i, j = 0, len(s) - 1
         while i < j:
-            if s[i] != s[j]:
-                cs[i] = cs[j] = min(s[i], s[j])
+            cs[i] = cs[j] = min(cs[i], cs[j])
             i, j = i + 1, j - 1
         return "".join(cs)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public String makeSmallestPalindrome(String s) {
         char[] cs = s.toCharArray();
         for (int i = 0, j = cs.length - 1; i < j; ++i, --j) {
-            if (cs[i] != cs[j]) {
-                cs[i] = cs[j] = cs[i] < cs[j] ? cs[i] : cs[j];
-            }
+            cs[i] = cs[j] = (char) Math.min(cs[i], cs[j]);
         }
-        return String.valueOf(cs);
+        return new String(cs);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string makeSmallestPalindrome(string s) {
         for (int i = 0, j = s.size() - 1; i < j; ++i, --j) {
-            if (s[i] != s[j]) {
-                s[i] = s[j] = s[i] < s[j] ? s[i] : s[j];
-            }
+            s[i] = s[j] = min(s[i], s[j]);
         }
         return s;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeSmallestPalindrome(s string) string {
 	cs := []byte(s)
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		if cs[i] != cs[j] {
-			if cs[i] < cs[j] {
-				cs[j] = cs[i]
-			} else {
-				cs[i] = cs[j]
-			}
-		}
+		cs[i] = min(cs[i], cs[j])
+		cs[j] = cs[i]
 	}
 	return string(cs)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makeSmallestPalindrome(s: string): string {
     const cs = s.split('');
     for (let i = 0, j = s.length - 1; i < j; ++i, --j) {
-        if (s[i] !== s[j]) {
-            cs[i] = cs[j] = s[i] < s[j] ? s[i] : s[j];
-        }
+        cs[i] = cs[j] = s[i] < s[j] ? s[i] : s[j];
     }
     return cs.join('');
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn make_smallest_palindrome(s: String) -> String {
+        let mut cs: Vec<char> = s.chars().collect();
+        let n = cs.len();
+        for i in 0..n / 2 {
+            let j = n - 1 - i;
+            cs[i] = std::cmp::min(cs[i], cs[j]);
+            cs[j] = cs[i];
+        }
+        cs.into_iter().collect()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

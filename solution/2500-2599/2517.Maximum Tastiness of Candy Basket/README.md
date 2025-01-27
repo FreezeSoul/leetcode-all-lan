@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2517.Maximum%20Tastiness%20of%20Candy%20Basket/README.md
+rating: 2020
+source: 第 325 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2517. 礼盒的最大甜蜜度](https://leetcode.cn/problems/maximum-tastiness-of-candy-basket)
 
 [English Version](/solution/2500-2599/2517.Maximum%20Tastiness%20of%20Candy%20Basket/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>price</code> ，其中 <code>price[i]</code> 表示第 <code>i</code> 类糖果的价格，另给你一个正整数 <code>k</code> 。</p>
 
@@ -47,16 +62,17 @@
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 &lt;= price.length &lt;= 10<sup>5</sup></code></li>
+	<li><code>2 &lt;= k &lt;= price.length &lt;= 10<sup>5</sup></code></li>
 	<li><code>1 &lt;= price[i] &lt;= 10<sup>9</sup></code></li>
-	<li><code>2 &lt;= k &lt;= price.length</code></li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 二分查找**
+### 方法一：贪心 + 二分查找
 
 我们注意到，如果一个甜蜜度为 $x$ 的礼盒是可行的，那么甜蜜度小于 $x$ 的礼盒也是可行的，这存在着单调性，因此我们可以使用二分查找的方法，找到最大的可行甜蜜度。
 
@@ -70,9 +86,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -96,9 +110,7 @@ class Solution:
         return l
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -129,7 +141,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -160,7 +172,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumTastiness(price []int, k int) int {
@@ -178,7 +190,7 @@ func maximumTastiness(price []int, k int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumTastiness(price: number[], k: number): number {
@@ -207,7 +219,7 @@ function maximumTastiness(price: number[], k: number): number {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -238,10 +250,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

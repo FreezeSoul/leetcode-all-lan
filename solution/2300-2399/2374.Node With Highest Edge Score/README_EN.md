@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2374.Node%20With%20Highest%20Edge%20Score/README_EN.md
+rating: 1418
+source: Weekly Contest 306 Q2
+tags:
+    - Graph
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [2374. Node With Highest Edge Score](https://leetcode.com/problems/node-with-highest-edge-score)
 
 [中文文档](/solution/2300-2399/2374.Node%20With%20Highest%20Edge%20Score/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a directed graph with <code>n</code> nodes labeled from <code>0</code> to <code>n - 1</code>, where each node has <strong>exactly one</strong> outgoing edge.</p>
 
@@ -47,39 +62,51 @@ Nodes 0 and 2 both have an edge score of 3. Since node 0 has a smaller index, we
 	<li><code>edges[i] != i</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Single Traversal
+
+We define an array $\textit{cnt}$ of length $n$, where $\textit{cnt}[i]$ represents the edge score of node $i$. Initially, all elements are $0$. We also define an answer variable $\textit{ans}$, initially set to $0$.
+
+Next, we traverse the array $\textit{edges}$. For each node $i$ and its outgoing edge node $j$, we update $\textit{cnt}[j]$ to $\textit{cnt}[j] + i$. If $\textit{cnt}[\textit{ans}] < \textit{cnt}[j]$ or $\textit{cnt}[\textit{ans}] = \textit{cnt}[j]$ and $j < \textit{ans}$, we update $\textit{ans}$ to $j$.
+
+Finally, return $\textit{ans}$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{edges}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def edgeScore(self, edges: List[int]) -> int:
-        cnt = Counter()
-        for i, v in enumerate(edges):
-            cnt[v] += i
         ans = 0
-        for i in range(len(edges)):
-            if cnt[ans] < cnt[i]:
-                ans = i
+        cnt = [0] * len(edges)
+        for i, j in enumerate(edges):
+            cnt[j] += i
+            if cnt[ans] < cnt[j] or (cnt[ans] == cnt[j] and j < ans):
+                ans = j
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int edgeScore(int[] edges) {
         int n = edges.length;
         long[] cnt = new long[n];
-        for (int i = 0; i < n; ++i) {
-            cnt[edges[i]] += i;
-        }
         int ans = 0;
         for (int i = 0; i < n; ++i) {
-            if (cnt[ans] < cnt[i]) {
-                ans = i;
+            int j = edges[i];
+            cnt[j] += i;
+            if (cnt[ans] < cnt[j] || (cnt[ans] == cnt[j] && j < ans)) {
+                ans = j;
             }
         }
         return ans;
@@ -87,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,13 +122,12 @@ public:
     int edgeScore(vector<int>& edges) {
         int n = edges.size();
         vector<long long> cnt(n);
-        for (int i = 0; i < n; ++i) {
-            cnt[edges[i]] += i;
-        }
         int ans = 0;
         for (int i = 0; i < n; ++i) {
-            if (cnt[ans] < cnt[i]) {
-                ans = i;
+            int j = edges[i];
+            cnt[j] += i;
+            if (cnt[ans] < cnt[j] || (cnt[ans] == cnt[j] && j < ans)) {
+                ans = j;
             }
         }
         return ans;
@@ -109,49 +135,63 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func edgeScore(edges []int) int {
-	n := len(edges)
-	cnt := make([]int, n)
-	for i, v := range edges {
-		cnt[v] += i
-	}
-	ans := 0
-	for i, v := range cnt {
-		if cnt[ans] < v {
-			ans = i
+func edgeScore(edges []int) (ans int) {
+	cnt := make([]int, len(edges))
+	for i, j := range edges {
+		cnt[j] += i
+		if cnt[ans] < cnt[j] || (cnt[ans] == cnt[j] && j < ans) {
+			ans = j
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function edgeScore(edges: number[]): number {
     const n = edges.length;
-    const sum = new Array(n).fill(0);
-    for (let i = 0; i < n; i++) {
-        sum[edges[i]] += i;
-    }
-    let res = 0;
-    for (let i = 0; i < n; i++) {
-        if (sum[res] < sum[i]) {
-            res = i;
+    const cnt: number[] = Array(n).fill(0);
+    let ans: number = 0;
+    for (let i = 0; i < n; ++i) {
+        const j = edges[i];
+        cnt[j] += i;
+        if (cnt[ans] < cnt[j] || (cnt[ans] === cnt[j] && j < ans)) {
+            ans = j;
         }
     }
-    return res;
+    return ans;
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn edge_score(edges: Vec<i32>) -> i32 {
+        let n = edges.len();
+        let mut cnt = vec![0_i64; n];
+        let mut ans = 0;
 
+        for (i, &j) in edges.iter().enumerate() {
+            let j = j as usize;
+            cnt[j] += i as i64;
+            if cnt[ans] < cnt[j] || (cnt[ans] == cnt[j] && j < ans) {
+                ans = j;
+            }
+        }
 
+        ans as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

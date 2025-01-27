@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0661.Image%20Smoother/README.md
+tags:
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [661. 图片平滑器](https://leetcode.cn/problems/image-smoother)
 
 [English Version](/solution/0600-0699/0661.Image%20Smoother/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>图像平滑器</strong> 是大小为&nbsp;<code>3 x 3</code> 的过滤器，用于对图像的每个单元格平滑处理，平滑处理后单元格的值为该单元格的平均灰度。</p>
 
@@ -53,15 +64,25 @@
 	<li><code>0 &lt;= img[i][j] &lt;= 255</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：直接遍历
+
+我们创建一个大小为 $m \times n$ 的二维数组 $\textit{ans}$，其中 $\textit{ans}[i][j]$ 表示图像中第 $i$ 行第 $j$ 列的单元格的平滑值。
+
+对于 $\textit{ans}[i][j]$，我们遍历 $\textit{img}$ 中第 $i$ 行第 $j$ 列的单元格及其周围的 $8$ 个单元格，计算它们的和 $s$ 以及个数 $cnt$，然后计算平均值 $s / cnt$ 并将其存入 $\textit{ans}[i][j]$ 中。
+
+遍历结束后，我们返回 $\textit{ans}$ 即可。
+
+时间复杂度 $O(m \times n)$，其中 $m$ 和 $n$ 分别是 $\textit{img}$ 的行数和列数。忽略答案数组的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -110,86 +129,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function imageSmoother(img: number[][]): number[][] {
-    const m = img.length;
-    const n = img[0].length;
-    const locations = [
-        [-1, -1],
-        [-1, 0],
-        [-1, 1],
-        [0, -1],
-        [0, 0],
-        [0, 1],
-        [1, -1],
-        [1, 0],
-        [1, 1],
-    ];
-
-    const res = [];
-    for (let i = 0; i < m; i++) {
-        res.push([]);
-        for (let j = 0; j < n; j++) {
-            let sum = 0;
-            let count = 0;
-            for (const [y, x] of locations) {
-                if ((img[i + y] || [])[j + x] != null) {
-                    sum += img[i + y][j + x];
-                    count++;
-                }
-            }
-            res[i].push(Math.floor(sum / count));
-        }
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn image_smoother(img: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
-        let m = img.len();
-        let n = img[0].len();
-        let locations = [
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [0, -1],
-            [0, 0],
-            [0, 1],
-            [1, -1],
-            [1, 0],
-            [1, 1],
-        ];
-
-        let mut res = vec![];
-        for i in 0..m {
-            res.push(vec![]);
-            for j in 0..n {
-                let mut sum = 0;
-                let mut count = 0;
-                for [y, x] in locations.iter() {
-                    let i = i as i32 + y;
-                    let j = j as i32 + x;
-                    if i < 0 || i == m as i32 || j < 0 || j == n as i32 {
-                        continue;
-                    }
-                    count += 1;
-                    sum += img[i as usize][j as usize];
-                }
-                res[i].push(sum / count);
-            }
-        }
-        res
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -202,7 +142,9 @@ public:
                 int s = 0, cnt = 0;
                 for (int x = i - 1; x <= i + 1; ++x) {
                     for (int y = j - 1; y <= j + 1; ++y) {
-                        if (x < 0 || x >= m || y < 0 || y >= n) continue;
+                        if (x < 0 || x >= m || y < 0 || y >= n) {
+                            continue;
+                        }
                         ++cnt;
                         s += img[x][y];
                     }
@@ -215,7 +157,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func imageSmoother(img [][]int) [][]int {
@@ -240,10 +182,60 @@ func imageSmoother(img [][]int) [][]int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function imageSmoother(img: number[][]): number[][] {
+    const m = img.length;
+    const n = img[0].length;
+    const ans: number[][] = Array.from({ length: m }, () => Array(n).fill(0));
+    for (let i = 0; i < m; ++i) {
+        for (let j = 0; j < n; ++j) {
+            let s = 0;
+            let cnt = 0;
+            for (let x = i - 1; x <= i + 1; ++x) {
+                for (let y = j - 1; y <= j + 1; ++y) {
+                    if (x >= 0 && x < m && y >= 0 && y < n) {
+                        ++cnt;
+                        s += img[x][y];
+                    }
+                }
+            }
+            ans[i][j] = Math.floor(s / cnt);
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn image_smoother(img: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        let m = img.len();
+        let n = img[0].len();
+        let mut ans = vec![vec![0; n]; m];
+        for i in 0..m {
+            for j in 0..n {
+                let mut s = 0;
+                let mut cnt = 0;
+                for x in i.saturating_sub(1)..=(i + 1).min(m - 1) {
+                    for y in j.saturating_sub(1)..=(j + 1).min(n - 1) {
+                        s += img[x][y];
+                        cnt += 1;
+                    }
+                }
+                ans[i][j] = s / cnt;
+            }
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0595.Big%20Countries/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [595. Big Countries](https://leetcode.com/problems/big-countries)
 
 [中文文档](/solution/0500-0599/0595.Big%20Countries/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>World</code></p>
 
@@ -16,7 +28,7 @@
 | population  | int     |
 | gdp         | bigint  |
 +-------------+---------+
-name is the primary key column for this table.
+name is the primary key (column with unique values) for this table.
 Each row of this table gives information about the name of a country, the continent to which it belongs, its area, the population, and its GDP value.
 </pre>
 
@@ -29,11 +41,11 @@ Each row of this table gives information about the name of a country, the contin
 	<li>it has a population of at least&nbsp;twenty-five million (i.e., <code>25000000</code>).</li>
 </ul>
 
-<p>Write an SQL query to report the name, population, and area of the <strong>big countries</strong>.</p>
+<p>Write a solution to find the name, population, and area of the <strong>big countries</strong>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -59,19 +71,50 @@ World table:
 +-------------+------------+---------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT name,
-        population,
-        area
-FROM world
-WHERE area > 3000000
-        OR population > 25000000;
+# Write your MySQL query statement below
+SELECT name, population, area
+FROM World
+WHERE area >= 3000000 OR population >= 25000000;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+SELECT name, population, area
+FROM World
+WHERE area >= 3000000
+UNION
+SELECT name, population, area
+FROM World
+WHERE population >= 25000000;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

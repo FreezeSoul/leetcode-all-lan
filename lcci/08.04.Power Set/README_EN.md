@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/08.04.Power%20Set/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [08.04. Power Set](https://leetcode.cn/problems/power-set-lcci)
 
 [中文文档](/lcci/08.04.Power%20Set/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write a method to return all subsets of a set. The elements in a set are&nbsp;pairwise distinct.</p>
 
@@ -38,13 +48,23 @@
 
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
 
-Backtracking
+<!-- solution:start -->
+
+### Solution 1: Recursive Enumeration
+
+We design a recursive function $dfs(u, t)$, where $u$ is the index of the current element being enumerated, and $t$ is the current subset.
+
+For the current element with index $u$, we can choose to add it to the subset $t$, or we can choose not to add it to the subset $t$. Recursively making these two choices will yield all subsets.
+
+The time complexity is $O(n \times 2^n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array. Each element in the array has two states, namely chosen or not chosen, for a total of $2^n$ states. Each state requires $O(n)$ time to construct the subset.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,20 +83,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def subsets(self, nums: List[int]) -> List[List[int]]:
-        ans = []
-        for mask in range(1 << len(nums)):
-            t = []
-            for i, v in enumerate(nums):
-                if (mask >> i) & 1:
-                    t.append(v)
-            ans.append(t)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,26 +109,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public List<List<Integer>> subsets(int[] nums) {
-        int n = nums.length;
-        List<List<Integer>> ans = new ArrayList<>();
-        for (int mask = 0; mask < 1 << n; ++mask) {
-            List<Integer> t = new ArrayList<>();
-            for (int i = 0; i < n; ++i) {
-                if (((mask >> i) & 1) == 1) {
-                    t.add(nums[i]);
-                }
-            }
-            ans.add(t);
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -146,31 +134,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
-        vector<int> t;
-        int n = nums.size();
-        for (int mask = 0; mask < 1 << n; ++mask)
-        {
-            t.clear();
-            for (int i = 0; i < n; ++i)
-            {
-                if ((mask >> i) & 1)
-                {
-                    t.push_back(nums[i]);
-                }
-            }
-            ans.push_back(t);
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func subsets(nums []int) [][]int {
@@ -192,6 +156,165 @@ func subsets(nums []int) [][]int {
 }
 ```
 
+#### TypeScript
+
+```ts
+function subsets(nums: number[]): number[][] {
+    const res = [[]];
+    nums.forEach(num => {
+        res.forEach(item => {
+            res.push(item.concat(num));
+        });
+    });
+    return res;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        let n = nums.len();
+        let mut res: Vec<Vec<i32>> = vec![vec![]];
+        for i in 0..n {
+            for j in 0..res.len() {
+                res.push(vec![..res[j].clone(), vec![nums[i]]].concat());
+            }
+        }
+        res
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsets = function (nums) {
+    let prev = [];
+    let res = [];
+    dfs(nums, 0, prev, res);
+    return res;
+};
+
+function dfs(nums, depth, prev, res) {
+    res.push(prev.slice());
+    for (let i = depth; i < nums.length; i++) {
+        prev.push(nums[i]);
+        depth++;
+        dfs(nums, depth, prev, res);
+        prev.pop();
+    }
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    private var ans = [[Int]]()
+    private var nums: [Int] = []
+
+    func subsets(_ nums: [Int]) -> [[Int]] {
+        self.nums = nums
+        dfs(0, [])
+        return ans.sorted { $0.count < $1.count }
+    }
+
+    private func dfs(_ u: Int, _ t: [Int]) {
+        if u == nums.count {
+            ans.append(t)
+            return
+        }
+        dfs(u + 1, t)
+        var tWithCurrent = t
+        tWithCurrent.append(nums[u])
+        dfs(u + 1, tWithCurrent)
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Binary Enumeration
+
+We can rewrite the recursive process in Method 1 into an iterative form, that is, using binary enumeration to enumerate all subsets.
+
+We can use $2^n$ binary numbers to represent all subsets of $n$ elements. If the $i$-th bit of a binary number `mask` is $1$, it means that the subset contains the $i$-th element $v$ of the array; if it is $0$, it means that the subset does not contain the $i$-th element $v$ of the array.
+
+The time complexity is $O(n \times 2^n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array. There are a total of $2^n$ subsets, and each subset requires $O(n)$ time to construct.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        ans = []
+        for mask in range(1 << len(nums)):
+            t = []
+            for i, v in enumerate(nums):
+                if (mask >> i) & 1:
+                    t.append(v)
+            ans.append(t)
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        int n = nums.length;
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int mask = 0; mask < 1 << n; ++mask) {
+            List<Integer> t = new ArrayList<>();
+            for (int i = 0; i < n; ++i) {
+                if (((mask >> i) & 1) == 1) {
+                    t.add(nums[i]);
+                }
+            }
+            ans.add(t);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> t;
+        int n = nums.size();
+        for (int mask = 0; mask < 1 << n; ++mask) {
+            t.clear();
+            for (int i = 0; i < n; ++i) {
+                if ((mask >> i) & 1) {
+                    t.push_back(nums[i]);
+                }
+            }
+            ans.push_back(t);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
 ```go
 func subsets(nums []int) [][]int {
 	var ans [][]int
@@ -209,19 +332,7 @@ func subsets(nums []int) [][]int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function subsets(nums: number[]): number[][] {
-    const res = [[]];
-    nums.forEach(num => {
-        res.forEach(item => {
-            res.push(item.concat(num));
-        });
-    });
-    return res;
-}
-```
+#### TypeScript
 
 ```ts
 function subsets(nums: number[]): number[][] {
@@ -243,22 +354,7 @@ function subsets(nums: number[]): number[][] {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
-        let n = nums.len();
-        let mut res: Vec<Vec<i32>> = vec![vec![]];
-        for i in 0..n {
-            for j in 0..res.len() {
-                res.push(vec![..res[j].clone(), vec![nums[i]]].concat());
-            }
-        }
-        res
-    }
-}
-```
+#### Rust
 
 ```rust
 impl Solution {
@@ -281,10 +377,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

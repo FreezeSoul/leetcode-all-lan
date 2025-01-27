@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2181.Merge%20Nodes%20in%20Between%20Zeros/README_EN.md
+rating: 1333
+source: Weekly Contest 281 Q2
+tags:
+    - Linked List
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2181. Merge Nodes in Between Zeros](https://leetcode.com/problems/merge-nodes-in-between-zeros)
 
 [中文文档](/solution/2100-2199/2181.Merge%20Nodes%20in%20Between%20Zeros/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the <code>head</code> of a linked list, which contains a series of integers <strong>separated</strong> by <code>0</code>&#39;s. The <strong>beginning</strong> and <strong>end</strong> of the linked list will have <code>Node.val == 0</code>.</p>
 
@@ -44,11 +59,25 @@ The above figure represents the given linked list. The modified list contains
 	<li>The <strong>beginning</strong> and <strong>end</strong> of the linked list have <code>Node.val == 0</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We define a dummy head node $\textit{dummy}$, a pointer $\textit{tail}$ pointing to the current node, and a variable $\textit{s}$ to record the sum of the values of the current nodes.
+
+Next, we traverse the linked list starting from the second node. If the value of the current node is not 0, we add it to $\textit{s}$. Otherwise, we add $\textit{s}$ to the node after $\textit{tail}$, set $\textit{s}$ to 0, and update $\textit{tail}$ to the next node.
+
+Finally, we return the node next to $\textit{dummy}$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the linked list.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -62,7 +91,7 @@ class Solution:
         s = 0
         cur = head.next
         while cur:
-            if cur.val != 0:
+            if cur.val:
                 s += cur.val
             else:
                 tail.next = ListNode(s)
@@ -72,7 +101,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -104,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -124,9 +153,9 @@ public:
         ListNode* tail = dummy;
         int s = 0;
         for (ListNode* cur = head->next; cur; cur = cur->next) {
-            if (cur->val)
+            if (cur->val) {
                 s += cur->val;
-            else {
+            } else {
                 tail->next = new ListNode(s);
                 tail = tail->next;
                 s = 0;
@@ -137,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -164,7 +193,7 @@ func mergeNodes(head *ListNode) *ListNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -181,22 +210,22 @@ func mergeNodes(head *ListNode) *ListNode {
 
 function mergeNodes(head: ListNode | null): ListNode | null {
     const dummy = new ListNode();
-    let cur = dummy;
-    let sum = 0;
-    while (head) {
-        if (head.val === 0 && sum !== 0) {
-            cur.next = new ListNode(sum);
-            cur = cur.next;
-            sum = 0;
+    let tail = dummy;
+    let s = 0;
+    for (let cur = head.next; cur; cur = cur.next) {
+        if (cur.val) {
+            s += cur.val;
+        } else {
+            tail.next = new ListNode(s);
+            tail = tail.next;
+            s = 0;
         }
-        sum += head.val;
-        head = head.next;
     }
     return dummy.next;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -216,25 +245,29 @@ function mergeNodes(head: ListNode | null): ListNode | null {
 //   }
 // }
 impl Solution {
-    pub fn merge_nodes(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut dummy = Box::new(ListNode::new(-1));
-        let mut cur = &mut dummy;
-        let mut sum = 0;
-        while let Some(node) = head {
-            if node.val == 0 && sum != 0 {
-                cur.next = Some(Box::new(ListNode::new(sum)));
-                cur = cur.as_mut().next.as_mut().unwrap();
-                sum = 0;
+    pub fn merge_nodes(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut dummy = Box::new(ListNode::new(0));
+        let mut tail = &mut dummy;
+        let mut s = 0;
+        let mut cur = head.unwrap().next;
+
+        while let Some(mut node) = cur {
+            if node.val != 0 {
+                s += node.val;
+            } else {
+                tail.next = Some(Box::new(ListNode::new(s)));
+                tail = tail.next.as_mut().unwrap();
+                s = 0;
             }
-            sum += node.val;
-            head = node.next;
+            cur = node.next.take();
         }
-        dummy.next.take()
+
+        dummy.next
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
@@ -245,10 +278,9 @@ impl Solution {
  * };
  */
 
-
-struct ListNode *mergeNodes(struct ListNode *head) {
+struct ListNode* mergeNodes(struct ListNode* head) {
     struct ListNode dummy;
-    struct ListNode *cur = &dummy;
+    struct ListNode* cur = &dummy;
     int sum = 0;
     while (head) {
         if (head->val == 0 && sum != 0) {
@@ -265,10 +297,8 @@ struct ListNode *mergeNodes(struct ListNode *head) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

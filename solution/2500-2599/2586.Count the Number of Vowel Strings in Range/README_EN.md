@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2586.Count%20the%20Number%20of%20Vowel%20Strings%20in%20Range/README_EN.md
+rating: 1178
+source: Weekly Contest 336 Q1
+tags:
+    - Array
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2586. Count the Number of Vowel Strings in Range](https://leetcode.com/problems/count-the-number-of-vowel-strings-in-range)
 
 [中文文档](/solution/2500-2599/2586.Count%20the%20Number%20of%20Vowel%20Strings%20in%20Range/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array of string <code>words</code> and two integers <code>left</code> and <code>right</code>.</p>
 
@@ -46,9 +62,13 @@ The number of vowel strings in the mentioned range is 3.
 	<li><code>0 &lt;= left &lt;= right &lt; words.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Simulation**
+<!-- solution:start -->
+
+### Solution 1: Simulation
 
 We just need to traverse the string in the interval $[left,.. right]$, and check if it starts and ends with a vowel. If so, the answer plus one.
 
@@ -58,15 +78,17 @@ The time complexity is $O(m)$, and the space complexity is $O(1)$. Where $m = ri
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def vowelStrings(self, words: List[str], left: int, right: int) -> int:
-        return sum(w[0] in 'aeiou' and w[-1] in 'aeiou' for w in words[left: right + 1])
+        return sum(
+            w[0] in 'aeiou' and w[-1] in 'aeiou' for w in words[left : right + 1]
+        )
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,7 +109,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func vowelStrings(words []string, left int, right int) (ans int) {
@@ -122,15 +144,15 @@ func vowelStrings(words []string, left int, right int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function vowelStrings(words: string[], left: number, right: number): number {
     let ans = 0;
     const check: string[] = ['a', 'e', 'i', 'o', 'u'];
     for (let i = left; i <= right; ++i) {
-        var w = words[i];
-        if (check.includes(w[0]) && check.includes(w[w.length - 1])) {
+        const w = words[i];
+        if (check.includes(w[0]) && check.includes(w.at(-1))) {
             ++ans;
         }
     }
@@ -138,10 +160,29 @@ function vowelStrings(words: string[], left: number, right: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn vowel_strings(words: Vec<String>, left: i32, right: i32) -> i32 {
+        let check =
+            |c: u8| -> bool { c == b'a' || c == b'e' || c == b'i' || c == b'o' || c == b'u' };
 
+        let mut ans = 0;
+        for i in left..=right {
+            let w = words[i as usize].as_bytes();
+            if check(w[0]) && check(w[w.len() - 1]) {
+                ans += 1;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1859.Sorting%20the%20Sentence/README_EN.md
+rating: 1290
+source: Biweekly Contest 52 Q1
+tags:
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1859. Sorting the Sentence](https://leetcode.com/problems/sorting-the-sentence)
 
 [中文文档](/solution/1800-1899/1859.Sorting%20the%20Sentence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>sentence</strong> is a list of words that are separated by a single space with no leading or trailing spaces. Each word consists of lowercase and uppercase English letters.</p>
 
@@ -42,56 +57,67 @@
 	<li><code>s</code> contains no leading or trailing spaces.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: String Splitting
+
+First, we split the string $s$ by spaces to get the array of strings $\textit{ws}$. Then, we iterate through the array $\textit{ws}$, subtracting the character '1' from the last character of each word to get the result as the index of the word. We take the prefix of the word as the content of the word. Finally, we concatenate the words in index order.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def sortSentence(self, s: str) -> str:
-        words = s.split()
-        ans = [None] * len(words)
-        for w in words:
-            i = int(w[-1]) - 1
-            ans[i] = w[:-1]
-        return ' '.join(ans)
+        ws = s.split()
+        ans = [None] * len(ws)
+        for w in ws:
+            ans[int(w[-1]) - 1] = w[:-1]
+        return " ".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public String sortSentence(String s) {
-        String[] words = s.split(" ");
-        String[] ans = new String[words.length];
-        for (String w : words) {
-            int i = w.charAt(w.length() - 1) - '1';
-            ans[i] = w.substring(0, w.length() - 1);
+        String[] ws = s.split(" ");
+        int n = ws.length;
+        String[] ans = new String[n];
+        for (int i = 0; i < n; ++i) {
+            String w = ws[i];
+            ans[w.charAt(w.length() - 1) - '1'] = w.substring(0, w.length() - 1);
         }
         return String.join(" ", ans);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string sortSentence(string s) {
-        istringstream is(s);
-        string t;
-        vector<string> words;
-        while (is >> t) words.push_back(t);
-        vector<string> res(words.size());
-        for (auto& w : words) {
-            int i = w[w.size() - 1] - '1';
-            res[i] = w.substr(0, w.size() - 1);
+        istringstream iss(s);
+        string w;
+        vector<string> ws;
+        while (iss >> w) {
+            ws.push_back(w);
+        }
+        vector<string> ss(ws.size());
+        for (auto& w : ws) {
+            ss[w.back() - '1'] = w.substr(0, w.size() - 1);
         }
         string ans;
-        for (auto& w : res) {
+        for (auto& w : ss) {
             ans += w + " ";
         }
         ans.pop_back();
@@ -100,21 +126,33 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortSentence(s string) string {
-	words := strings.Split(s, " ")
-	ans := make([]string, len(words))
-	for _, w := range words {
-		i := w[len(w)-1] - '1'
-		ans[i] = w[:len(w)-1]
+	ws := strings.Split(s, " ")
+	ans := make([]string, len(ws))
+	for _, w := range ws {
+		ans[w[len(w)-1]-'1'] = w[:len(w)-1]
 	}
 	return strings.Join(ans, " ")
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function sortSentence(s: string): string {
+    const ws = s.split(' ');
+    const ans = Array(ws.length);
+    for (const w of ws) {
+        ans[w.charCodeAt(w.length - 1) - '1'.charCodeAt(0)] = w.slice(0, -1);
+    }
+    return ans.join(' ');
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -122,34 +160,17 @@ func sortSentence(s string) string {
  * @return {string}
  */
 var sortSentence = function (s) {
-    const words = s.split(' ');
-    const ans = new Array(words.length);
-    for (const w of words) {
-        const i = w.charCodeAt(w.length - 1) - '1'.charCodeAt(0);
-        ans[i] = w.slice(0, w.length - 1);
+    const ws = s.split(' ');
+    const ans = Array(ws.length);
+    for (const w of ws) {
+        ans[w.charCodeAt(w.length - 1) - '1'.charCodeAt(0)] = w.slice(0, -1);
     }
     return ans.join(' ');
 };
 ```
 
-### **TypeScript**
-
-```ts
-function sortSentence(s: string): string {
-    const words = s.split(' ');
-    const ans = new Array(words.length);
-    for (const w of words) {
-        const i = w.charCodeAt(w.length - 1) - '1'.charCodeAt(0);
-        ans[i] = w.slice(0, w.length - 1);
-    }
-    return ans.join(' ');
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

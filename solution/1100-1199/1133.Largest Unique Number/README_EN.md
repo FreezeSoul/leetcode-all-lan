@@ -1,8 +1,24 @@
-# [1133. Largest Unique Number](https://leetcode.com/problems/largest-unique-number)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1133.Largest%20Unique%20Number/README_EN.md
+rating: 1226
+source: Biweekly Contest 5 Q1
+tags:
+    - Array
+    - Hash Table
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [1133. Largest Unique Number 🔒](https://leetcode.com/problems/largest-unique-number)
 
 [中文文档](/solution/1100-1199/1133.Largest%20Unique%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return <em>the largest integer that only occurs once</em>. If no integer occurs once, return <code>-1</code>.</p>
 
@@ -30,18 +46,21 @@
 	<li><code>0 &lt;= nums[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting + Reverse Traversal
+
+Given the data range in the problem, we can use an array of length $1001$ to count the occurrence of each number. Then, we traverse the array in reverse order to find the first number that appears only once. If no such number is found, we return $-1$.
+
+The time complexity is $O(n + M)$, and the space complexity is $O(M)$. Here, $n$ is the length of the array, and $M$ is the maximum number that appears in the array. In this problem, $M \leq 1000$.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-```python
-class Solution:
-    def largestUniqueNumber(self, nums: List[int]) -> int:
-        cnt = Counter(nums)
-        return next((x for x in range(1000, -1, -1) if cnt[x] == 1), -1)
-```
+#### Python3
 
 ```python
 class Solution:
@@ -50,7 +69,7 @@ class Solution:
         return max((x for x, v in cnt.items() if v == 1), default=-1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -69,7 +88,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -89,7 +108,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestUniqueNumber(nums []int) int {
@@ -106,37 +125,16 @@ func largestUniqueNumber(nums []int) int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var largestUniqueNumber = function (nums) {
-    const cnt = new Array(1001).fill(0);
-    for (const x of nums) {
-        ++cnt[x];
-    }
-    for (let x = 1000; x >= 0; --x) {
-        if (cnt[x] == 1) {
-            return x;
-        }
-    }
-    return -1;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function largestUniqueNumber(nums: number[]): number {
-    const cnt = new Array(1001).fill(0);
+    const cnt = Array(1001).fill(0);
     for (const x of nums) {
         ++cnt[x];
     }
     for (let x = 1000; x >= 0; --x) {
-        if (cnt[x] == 1) {
+        if (cnt[x] === 1) {
             return x;
         }
     }
@@ -144,10 +142,29 @@ function largestUniqueNumber(nums: number[]): number {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var largestUniqueNumber = function (nums) {
+    const cnt = Array(1001).fill(0);
+    for (const x of nums) {
+        ++cnt[x];
+    }
+    for (let x = 1000; x >= 0; --x) {
+        if (cnt[x] === 1) {
+            return x;
+        }
+    }
+    return -1;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2211.Count%20Collisions%20on%20a%20Road/README_EN.md
+rating: 1581
+source: Weekly Contest 285 Q2
+tags:
+    - Stack
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2211. Count Collisions on a Road](https://leetcode.com/problems/count-collisions-on-a-road)
 
 [中文文档](/solution/2200-2299/2211.Count%20Collisions%20on%20a%20Road/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> cars on an infinitely long road. The cars are numbered from <code>0</code> to <code>n - 1</code> from left to right and each car is present at a <strong>unique</strong> point.</p>
 
@@ -50,11 +66,17 @@ No cars will collide with each other. Thus, the total number of collisions that 
 	<li><code>directions[i]</code> is either <code>&#39;L&#39;</code>, <code>&#39;R&#39;</code>, or <code>&#39;S&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +85,7 @@ class Solution:
         return len(d) - d.count('S')
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +111,38 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countCollisions(string directions) {
+        int l = 0, r = directions.size() - 1, count = 0;
+        while (l <= r && directions[l] == 'L') {
+            l++;
+        }
+        while (l <= r && directions[r] == 'R') {
+            r--;
+        }
+        for (int i = l; i <= r; i++) {
+            count += directions[i] != 'S';
+        }
+        return count;
+    }
+};
+```
+
+#### Go
+
+```go
+func countCollisions(directions string) int {
+	d := strings.TrimLeft(directions, "L")
+	d = strings.TrimRight(d, "R")
+	return len(d) - strings.Count(d, "S")
+}
+```
+
+#### TypeScript
 
 ```ts
 function countCollisions(directions: string): number {
@@ -112,41 +165,8 @@ function countCollisions(directions: string): number {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int countCollisions(string directions) {
-        int l = 0, r = directions.size() - 1, count = 0;
-        while (l <= r && directions[l] == 'L') {
-            l++;
-        }
-        while (l <= r && directions[r] == 'R') {
-            r--;
-        }
-        for (int i = l; i <= r; i++) {
-            count += directions[i] != 'S';
-        }
-        return count;
-    }
-};
-```
-
-### **Go**
-
-```go
-func countCollisions(directions string) int {
-	d := strings.TrimLeft(directions, "L")
-	d = strings.TrimRight(d, "R")
-	return len(d) - strings.Count(d, "S")
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

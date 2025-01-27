@@ -1,12 +1,12 @@
 func partitionString(s string) int {
-	ans, v := 1, 0
+	ans, mask := 1, 0
 	for _, c := range s {
-		i := int(c - 'a')
-		if v>>i&1 == 1 {
-			v = 0
+		x := int(c - 'a')
+		if mask>>x&1 == 1 {
 			ans++
+			mask = 0
 		}
-		v |= 1 << i
+		mask |= 1 << x
 	}
 	return ans
 }

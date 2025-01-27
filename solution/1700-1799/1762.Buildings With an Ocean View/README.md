@@ -1,10 +1,22 @@
-# [1762. 能看到海景的建筑物](https://leetcode.cn/problems/buildings-with-an-ocean-view)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1762.Buildings%20With%20an%20Ocean%20View/README.md
+tags:
+    - 栈
+    - 数组
+    - 单调栈
+---
+
+<!-- problem:start -->
+
+# [1762. 能看到海景的建筑物 🔒](https://leetcode.cn/problems/buildings-with-an-ocean-view)
 
 [English Version](/solution/1700-1799/1762.Buildings%20With%20an%20Ocean%20View/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有 <code>n</code> 座建筑物。给你一个大小为 <code>n</code> 的整数数组 <code>heights</code> 表示每一个建筑物的高度。</p>
 
@@ -52,71 +64,68 @@
 	<li><code>1 <= heights[i] <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：逆序遍历求右侧最大值**
+### 方法一：逆序遍历求右侧最大值
 
-逆序遍历数组 $height$ 每个元素 $v$，判断 $v$ 与右侧最大元素 $mx$ 的大小关系，若 $mx \lt v$，说明右侧所有元素都比当前元素小，当前位置能看到海景，加入结果数组 $ans$。
+我们逆序遍历数组 $height$ 每个元素 $v$，判断 $v$ 与右侧最大元素 $mx$ 的大小关系，若 $mx \lt v$，说明右侧所有元素都比当前元素小，当前位置能看到海景，加入结果数组 $ans$。然后我们更新 $mx$ 为 $v$。
 
-最后逆序返回 $ans$。
+遍历结束后，逆序返回 $ans$ 即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。
+时间复杂度 $O(n)$，其中 $n$ 为数组长度。忽略答案数组的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findBuildings(self, heights: List[int]) -> List[int]:
-        mx = 0
         ans = []
+        mx = 0
         for i in range(len(heights) - 1, -1, -1):
-            v = heights[i]
-            if mx < v:
+            if heights[i] > mx:
                 ans.append(i)
-                mx = v
+                mx = heights[i]
         return ans[::-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int[] findBuildings(int[] heights) {
+        int n = heights.length;
+        List<Integer> ans = new ArrayList<>();
         int mx = 0;
-        LinkedList<Integer> ans = new LinkedList<>();
         for (int i = heights.length - 1; i >= 0; --i) {
-            int v = heights[i];
-            if (mx < v) {
-                ans.addFirst(i);
-                mx = v;
+            if (heights[i] > mx) {
+                ans.add(i);
+                mx = heights[i];
             }
         }
-        return ans.stream().mapToInt(i -> i).toArray();
+        Collections.reverse(ans);
+        return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> findBuildings(vector<int>& heights) {
-        int mx = 0;
         vector<int> ans;
+        int mx = 0;
         for (int i = heights.size() - 1; ~i; --i) {
-            int v = heights[i];
-            if (mx < v) {
+            if (heights[i] > mx) {
                 ans.push_back(i);
-                mx = v;
+                mx = heights[i];
             }
         }
         reverse(ans.begin(), ans.end());
@@ -125,15 +134,13 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func findBuildings(heights []int) []int {
+func findBuildings(heights []int) (ans []int) {
 	mx := 0
-	ans := []int{}
 	for i := len(heights) - 1; i >= 0; i-- {
-		v := heights[i]
-		if mx < v {
+		if v := heights[i]; v > mx {
 			ans = append(ans, i)
 			mx = v
 		}
@@ -141,11 +148,27 @@ func findBuildings(heights []int) []int {
 	for i, j := 0, len(ans)-1; i < j; i, j = i+1, j-1 {
 		ans[i], ans[j] = ans[j], ans[i]
 	}
-	return ans
+	return
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function findBuildings(heights: number[]): number[] {
+    const ans: number[] = [];
+    let mx = 0;
+    for (let i = heights.length - 1; ~i; --i) {
+        if (heights[i] > mx) {
+            ans.push(i);
+            mx = heights[i];
+        }
+    }
+    return ans.reverse();
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -153,23 +176,20 @@ func findBuildings(heights []int) []int {
  * @return {number[]}
  */
 var findBuildings = function (heights) {
+    const ans = [];
     let mx = 0;
-    let ans = [];
-    for (let i = heights.length - 1; i >= 0; --i) {
-        const v = heights[i];
-        if (mx < v) {
+    for (let i = heights.length - 1; ~i; --i) {
+        if (heights[i] > mx) {
             ans.push(i);
-            mx = v;
+            mx = heights[i];
         }
     }
     return ans.reverse();
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

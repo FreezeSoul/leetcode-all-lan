@@ -1,10 +1,20 @@
-# [2329. 产品销售分析 Ⅴ](https://leetcode.cn/problems/product-sales-analysis-v)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2329.Product%20Sales%20Analysis%20V/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2329. 产品销售分析Ⅴ 🔒](https://leetcode.cn/problems/product-sales-analysis-v)
 
 [English Version](/solution/2300-2399/2329.Product%20Sales%20Analysis%20V/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>Sales</code></p>
 
@@ -17,7 +27,7 @@
 | user_id     | int   |
 | quantity    | int   |
 +-------------+-------+
-sale_id 是这张表的主键。
+sale_id 包含唯一值。
 product_id 是 Product 表的外键。
 这个表中的每一行展示了产品的 ID 以及某个用户购买的数量。 
 </pre>
@@ -31,17 +41,17 @@ product_id 是 Product 表的外键。
 | product_id  | int  |
 | price       | int  |
 +-------------+------+
-product_id 是这张表的主键。
+product_id 包含唯一值。
 这张表中的每一行均表示了某个产品的价格。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一条 SQL 查询获取每个用户的消费额。</p>
+<p>编写解决方案，获取每个用户的消费额。</p>
 
 <p>按用户消费额 <code>spending</code> <strong>递减</strong>的顺序返回结果。在消费额相等的情况下，以 <code>user_id</code> 递增的顺序将其排序。</p>
 
-<p>查询结果的格式如下面例子所示：</p>
+<p>结果的格式如下面例子所示：</p>
 
 <p>&nbsp;</p>
 
@@ -82,18 +92,30 @@ Product 表：
 用户 101 排在最前，用户 102 与用户 103 的消费额相同，根据 ID 我们可以进一步确认排名，所以用户 102 排在 103 前面。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT user_id, SUM(quantity * price) AS spending
+FROM
+    Sales
+    JOIN Product USING (product_id)
+GROUP BY 1
+ORDER BY 2 DESC, 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1054.Distant%20Barcodes/README.md
+rating: 1701
+source: 第 138 场周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 哈希表
+    - 计数
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1054. 距离相等的条形码](https://leetcode.cn/problems/distant-barcodes)
 
 [English Version](/solution/1000-1099/1054.Distant%20Barcodes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一个仓库里，有一排条形码，其中第 <code>i</code> 个条形码为&nbsp;<code>barcodes[i]</code>。</p>
 
@@ -34,11 +51,13 @@
 	<li><code>1 &lt;= barcodes[i] &lt;= 10000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 排序**
+### 方法一：计数 + 排序
 
 我们先用哈希表或数组 $cnt$ 统计数组 $barcodes$ 中各个数出现的次数，然后将 $barcodes$ 中的数按照它们在 $cnt$ 中出现的次数从大到小排序，如果出现次数相同，那么就按照数的大小从小到大排序（确保相同的数相邻）。
 
@@ -48,9 +67,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -60,13 +77,11 @@ class Solution:
         n = len(barcodes)
         ans = [0] * len(barcodes)
         ans[::2] = barcodes[: (n + 1) // 2]
-        ans[1::2] = barcodes[(n + 1) // 2:]
+        ans[1::2] = barcodes[(n + 1) // 2 :]
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +109,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,14 +136,11 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rearrangeBarcodes(barcodes []int) []int {
-	mx := 0
-	for _, x := range barcodes {
-		mx = max(mx, x)
-	}
+	mx := slices.Max(barcodes)
 	cnt := make([]int, mx+1)
 	for _, x := range barcodes {
 		cnt[x]++
@@ -149,16 +161,9 @@ func rearrangeBarcodes(barcodes []int) []int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function rearrangeBarcodes(barcodes: number[]): number[] {
@@ -179,10 +184,8 @@ function rearrangeBarcodes(barcodes: number[]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

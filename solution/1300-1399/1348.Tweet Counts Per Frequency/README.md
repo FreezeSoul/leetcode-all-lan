@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1348.Tweet%20Counts%20Per%20Frequency/README.md
+rating: 2036
+source: 第 175 场周赛 Q3
+tags:
+    - 设计
+    - 哈希表
+    - 二分查找
+    - 有序集合
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1348. 推文计数](https://leetcode.cn/problems/tweet-counts-per-frequency)
 
 [English Version](/solution/1300-1399/1348.Tweet%20Counts%20Per%20Frequency/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一家社交媒体公司正试图通过分析特定时间段内出现的推文数量来监控其网站上的活动。这些时间段可以根据特定的频率（&nbsp;<strong>每分钟&nbsp;</strong>、<strong>每小时&nbsp;</strong>或 <strong>每一天</strong> ）划分为更小的 <strong>时间段</strong> 。</p>
 
@@ -67,11 +83,13 @@ tweetCounts.getTweetCountsPerFrequency("hour", "tweet3", 0, 210);  //&nbsp;返�
 	<li><code>recordTweet</code>&nbsp;和&nbsp;<code>getTweetCountsPerFrequency</code>，最多有<meta charset="UTF-8" />&nbsp;<code>10<sup>4</sup></code>&nbsp;次操作。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 有序列表**
+### 方法一：哈希表 + 有序列表
 
 我们用哈希表 `data` 记录每个用户的推文时间，用有序列表记录每个用户的所有推文时间。
 
@@ -83,16 +101,10 @@ tweetCounts.getTweetCountsPerFrequency("hour", "tweet3", 0, 210);  //&nbsp;返�
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class TweetCounts:
-
     def __init__(self):
         self.d = {"minute": 60, "hour": 3600, "day": 86400}
         self.data = defaultdict(SortedList)
@@ -100,7 +112,9 @@ class TweetCounts:
     def recordTweet(self, tweetName: str, time: int) -> None:
         self.data[tweetName].add(time)
 
-    def getTweetCountsPerFrequency(self, freq: str, tweetName: str, startTime: int, endTime: int) -> List[int]:
+    def getTweetCountsPerFrequency(
+        self, freq: str, tweetName: str, startTime: int, endTime: int
+    ) -> List[int]:
         f = self.d[freq]
         tweets = self.data[tweetName]
         t = startTime
@@ -119,9 +133,7 @@ class TweetCounts:
 # param_2 = obj.getTweetCountsPerFrequency(freq,tweetName,startTime,endTime)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class TweetCounts {
@@ -166,7 +178,7 @@ class TweetCounts {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class TweetCounts {
@@ -205,10 +217,8 @@ private:
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

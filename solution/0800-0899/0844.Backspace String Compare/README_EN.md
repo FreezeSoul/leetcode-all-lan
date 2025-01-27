@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0844.Backspace%20String%20Compare/README_EN.md
+tags:
+    - Stack
+    - Two Pointers
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [844. Backspace String Compare](https://leetcode.com/problems/backspace-string-compare)
 
 [中文文档](/solution/0800-0899/0844.Backspace%20String%20Compare/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>s</code> and <code>t</code>, return <code>true</code> <em>if they are equal when both are typed into empty text editors</em>. <code>&#39;#&#39;</code> means a backspace character.</p>
 
@@ -44,11 +59,17 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Can you solve it in <code>O(n)</code> time and <code>O(1)</code> space?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -82,7 +103,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -125,7 +146,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -164,7 +185,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func backspaceCompare(s string, t string) bool {
@@ -205,7 +226,7 @@ func backspaceCompare(s string, t string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function backspaceCompare(s: string, t: string): boolean {
@@ -244,7 +265,7 @@ function backspaceCompare(s: string, t: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -261,7 +282,7 @@ impl Solution {
                 } else {
                     break;
                 }
-                i -= 1
+                i -= 1;
             }
             skip = 0;
             while j != 0 {
@@ -272,7 +293,7 @@ impl Solution {
                 } else {
                     break;
                 }
-                j -= 1
+                j -= 1;
             }
             if i == 0 && j == 0 {
                 break;
@@ -291,10 +312,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0883.Projection%20Area%20of%203D%20Shapes/README.md
+tags:
+    - 几何
+    - 数组
+    - 数学
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [883. 三维形体投影面积](https://leetcode.cn/problems/projection-area-of-3d-shapes)
 
 [English Version](/solution/0800-0899/0883.Projection%20Area%20of%203D%20Shapes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在<meta charset="UTF-8" />&nbsp;<code>n x n</code>&nbsp;的网格<meta charset="UTF-8" />&nbsp;<code>grid</code>&nbsp;中，我们放置了一些与 x，y，z 三轴对齐的<meta charset="UTF-8" />&nbsp;<code>1 x 1 x 1</code>&nbsp;立方体。</p>
 
@@ -64,23 +77,27 @@
 	<li><code>0 &lt;= grid[i][j] &lt;= 50</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-根据题意：
+### 方法一：数学
 
--   xy 表示 grid 中大于 0 的元素个数
--   yz 表示 grid 每一行的最大值之和
--   zx 表示 grid 每一列的最大值之和
+我们可以分别计算三个投影的面积。
 
-遍历 grid，更新 xy, yz, zx。遍历结束返回 `xy + yz + zx`。
+-   xy 平面的投影面积：每个非零值都会投影到 xy 平面，所以 xy 的投影面积为非零值的个数。
+-   yz 平面的投影面积：每一行的最大值。
+-   zx 平面的投影面积：每一列的最大值。
+
+最后将三个面积相加即可。
+
+时间复杂度 $O(n^2)$，其中 $n$ 为网格 `grid` 的边长。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +108,7 @@ class Solution:
         return xy + yz + zx
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,54 +132,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function projectionArea(grid: number[][]): number {
-    const n = grid.length;
-    let res = grid.reduce(
-        (r, v) => r + v.reduce((r, v) => r + (v === 0 ? 0 : 1), 0),
-        0,
-    );
-    for (let i = 0; i < n; i++) {
-        let xMax = 0;
-        let yMax = 0;
-        for (let j = 0; j < n; j++) {
-            xMax = Math.max(xMax, grid[i][j]);
-            yMax = Math.max(yMax, grid[j][i]);
-        }
-        res += xMax + yMax;
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn projection_area(grid: Vec<Vec<i32>>) -> i32 {
-        let n = grid.len();
-        let mut res = 0;
-        let mut x_max = vec![0; n];
-        let mut y_max = vec![0; n];
-        for i in 0..n {
-            for j in 0..n {
-                let val = grid[i][j];
-                if val == 0 {
-                    continue;
-                }
-                res += 1;
-                x_max[i] = x_max[i].max(val);
-                y_max[j] = y_max[j].max(val);
-            }
-        }
-        res + y_max.iter().sum::<i32>() + x_max.iter().sum::<i32>()
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -186,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func projectionArea(grid [][]int) int {
@@ -205,19 +173,41 @@ func projectionArea(grid [][]int) int {
 	}
 	return xy + yz + zx
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function projectionArea(grid: number[][]): number {
+    const xy: number = grid.flat().filter(v => v > 0).length;
+    const yz: number = grid.reduce((acc, row) => acc + Math.max(...row), 0);
+    const zx: number = grid[0]
+        .map((_, i) => Math.max(...grid.map(row => row[i])))
+        .reduce((acc, val) => acc + val, 0);
+    return xy + yz + zx;
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn projection_area(grid: Vec<Vec<i32>>) -> i32 {
+        let xy: i32 = grid
+            .iter()
+            .map(|row| row.iter().filter(|&&v| v > 0).count() as i32)
+            .sum();
+        let yz: i32 = grid.iter().map(|row| *row.iter().max().unwrap_or(&0)).sum();
+        let zx: i32 = (0..grid[0].len())
+            .map(|i| grid.iter().map(|row| row[i]).max().unwrap_or(0))
+            .sum();
+        xy + yz + zx
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

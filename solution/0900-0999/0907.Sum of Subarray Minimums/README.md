@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README.md
+tags:
+    - 栈
+    - 数组
+    - 动态规划
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [907. 子数组的最小值之和](https://leetcode.cn/problems/sum-of-subarray-minimums)
 
 [English Version](/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数数组 <code>arr</code>，找到 <code>min(b)</code> 的总和，其中 <code>b</code> 的范围为 <code>arr</code> 的每个（连续）子数组。</p>
 
@@ -39,11 +52,13 @@
 
 <p> </p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈**
+### 方法一：单调栈
 
 题目要求的是每个子数组的最小值之和，实际上相当于，对于每个元素 $arr[i]$，求以 $arr[i]$ 为最小值的子数组的个数，然后乘以 $arr[i]$，最后求和。
 
@@ -73,13 +88,11 @@
 
 注意数据的溢出以及取模操作。
 
-时间复杂度 $O(n)$，其中 $n$ 表示数组 $arr$ 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $arr$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -106,9 +119,7 @@ class Solution:
         return sum((i - left[i]) * (right[i] - i) * v for i, v in enumerate(arr)) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -138,7 +149,7 @@ class Solution {
             }
             stk.push(i);
         }
-        int mod = (int) 1e9 + 7;
+        final int mod = (int) 1e9 + 7;
         long ans = 0;
         for (int i = 0; i < n; ++i) {
             ans += (long) (i - left[i]) * (right[i] - i) % mod * arr[i] % mod;
@@ -149,12 +160,9 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
-using ll = long long;
-const int mod = 1e9 + 7;
-
 class Solution {
 public:
     int sumSubarrayMins(vector<int>& arr) {
@@ -163,19 +171,28 @@ public:
         vector<int> right(n, n);
         stack<int> stk;
         for (int i = 0; i < n; ++i) {
-            while (!stk.empty() && arr[stk.top()] >= arr[i]) stk.pop();
-            if (!stk.empty()) left[i] = stk.top();
+            while (!stk.empty() && arr[stk.top()] >= arr[i]) {
+                stk.pop();
+            }
+            if (!stk.empty()) {
+                left[i] = stk.top();
+            }
             stk.push(i);
         }
         stk = stack<int>();
         for (int i = n - 1; i >= 0; --i) {
-            while (!stk.empty() && arr[stk.top()] > arr[i]) stk.pop();
-            if (!stk.empty()) right[i] = stk.top();
+            while (!stk.empty() && arr[stk.top()] > arr[i]) {
+                stk.pop();
+            }
+            if (!stk.empty()) {
+                right[i] = stk.top();
+            }
             stk.push(i);
         }
-        ll ans = 0;
+        long long ans = 0;
+        const int mod = 1e9 + 7;
         for (int i = 0; i < n; ++i) {
-            ans += (ll)(i - left[i]) * (right[i] - i) * arr[i] % mod;
+            ans += 1LL * (i - left[i]) * (right[i] - i) * arr[i] % mod;
             ans %= mod;
         }
         return ans;
@@ -183,11 +200,10 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func sumSubarrayMins(arr []int) int {
-	mod := int(1e9) + 7
+func sumSubarrayMins(arr []int) (ans int) {
 	n := len(arr)
 	left := make([]int, n)
 	right := make([]int, n)
@@ -215,42 +231,101 @@ func sumSubarrayMins(arr []int) int {
 		}
 		stk = append(stk, i)
 	}
-	ans := 0
+	const mod int = 1e9 + 7
 	for i, v := range arr {
 		ans += (i - left[i]) * (right[i] - i) * v % mod
 		ans %= mod
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sumSubarrayMins(arr: number[]): number {
-    const n = arr.length;
-    function getEle(i: number): number {
-        if (i == -1 || i == n) return Number.MIN_SAFE_INTEGER;
-        return arr[i];
-    }
-    let ans = 0;
-    const mod = 10 ** 9 + 7;
-    let stack = [];
-    for (let i = -1; i <= n; i++) {
-        while (stack.length && getEle(stack[0]) > getEle(i)) {
-            const idx = stack.shift();
-            ans = (ans + arr[idx] * (idx - stack[0]) * (i - idx)) % mod;
+    const n: number = arr.length;
+    const left: number[] = Array(n).fill(-1);
+    const right: number[] = Array(n).fill(n);
+    const stk: number[] = [];
+    for (let i = 0; i < n; ++i) {
+        while (stk.length > 0 && arr[stk.at(-1)] >= arr[i]) {
+            stk.pop();
         }
-        stack.unshift(i);
+        if (stk.length > 0) {
+            left[i] = stk.at(-1);
+        }
+        stk.push(i);
+    }
+
+    stk.length = 0;
+    for (let i = n - 1; ~i; --i) {
+        while (stk.length > 0 && arr[stk.at(-1)] > arr[i]) {
+            stk.pop();
+        }
+        if (stk.length > 0) {
+            right[i] = stk.at(-1);
+        }
+        stk.push(i);
+    }
+
+    const mod: number = 1e9 + 7;
+    let ans: number = 0;
+    for (let i = 0; i < n; ++i) {
+        ans += ((((i - left[i]) * (right[i] - i)) % mod) * arr[i]) % mod;
+        ans %= mod;
     }
     return ans;
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::VecDeque;
 
+impl Solution {
+    pub fn sum_subarray_mins(arr: Vec<i32>) -> i32 {
+        let n = arr.len();
+        let mut left = vec![-1; n];
+        let mut right = vec![n as i32; n];
+        let mut stk: VecDeque<usize> = VecDeque::new();
+
+        for i in 0..n {
+            while !stk.is_empty() && arr[*stk.back().unwrap()] >= arr[i] {
+                stk.pop_back();
+            }
+            if let Some(&top) = stk.back() {
+                left[i] = top as i32;
+            }
+            stk.push_back(i);
+        }
+
+        stk.clear();
+        for i in (0..n).rev() {
+            while !stk.is_empty() && arr[*stk.back().unwrap()] > arr[i] {
+                stk.pop_back();
+            }
+            if let Some(&top) = stk.back() {
+                right[i] = top as i32;
+            }
+            stk.push_back(i);
+        }
+
+        let MOD = 1_000_000_007;
+        let mut ans: i64 = 0;
+        for i in 0..n {
+            ans += ((((right[i] - (i as i32)) * ((i as i32) - left[i])) as i64) * (arr[i] as i64))
+                % MOD;
+            ans %= MOD;
+        }
+        ans as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

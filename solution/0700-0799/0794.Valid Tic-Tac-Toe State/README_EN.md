@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0794.Valid%20Tic-Tac-Toe%20State/README_EN.md
+tags:
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [794. Valid Tic-Tac-Toe State](https://leetcode.com/problems/valid-tic-tac-toe-state)
 
 [中文文档](/solution/0700-0799/0794.Valid%20Tic-Tac-Toe%20State/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a Tic-Tac-Toe board as a string array <code>board</code>, return <code>true</code> if and only if it is possible to reach this board position during the course of a valid tic-tac-toe game.</p>
 
@@ -52,11 +65,17 @@
 	<li><code>board[i][j]</code> is either <code>&#39;X&#39;</code>, <code>&#39;O&#39;</code>, or <code>&#39; &#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -80,7 +99,7 @@ class Solution:
         return not (win('O') and x != o)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -127,7 +146,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +154,8 @@ public:
     bool validTicTacToe(vector<string>& board) {
         auto count = [&](char x) {
             int ans = 0;
-            for (auto& row : board) for (auto& c : row) ans += c == x;
+            for (auto& row : board)
+                for (auto& c : row) ans += c == x;
             return ans;
         };
         auto win = [&](char x) {
@@ -154,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func validTicTacToe(board []string) bool {
@@ -192,7 +212,7 @@ func validTicTacToe(board []string) bool {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -234,10 +254,8 @@ var validTicTacToe = function (board) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

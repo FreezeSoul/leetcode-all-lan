@@ -1,12 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0629.K%20Inverse%20Pairs%20Array/README_EN.md
+tags:
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [629. K Inverse Pairs Array](https://leetcode.com/problems/k-inverse-pairs-array)
 
 [中文文档](/solution/0600-0699/0629.K%20Inverse%20Pairs%20Array/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>For an integer array <code>nums</code>, an <strong>inverse pair</strong> is a pair of integers <code>[i, j]</code> where <code>0 &lt;= i &lt; j &lt; nums.length</code> and <code>nums[i] &gt; nums[j]</code>.</p>
 
-<p>Given two integers n and k, return the number of different arrays consist of numbers from <code>1</code> to <code>n</code> such that there are exactly <code>k</code> <strong>inverse pairs</strong>. Since the answer can be huge, return it <strong>modulo</strong> <code>10<sup>9</sup> + 7</code>.</p>
+<p>Given two integers n and k, return the number of different arrays consisting of numbers from <code>1</code> to <code>n</code> such that there are exactly <code>k</code> <strong>inverse pairs</strong>. Since the answer can be huge, return it <strong>modulo</strong> <code>10<sup>9</sup> + 7</code>.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -33,11 +45,35 @@
 	<li><code>0 &lt;= k &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming + Prefix Sum
+
+We define $f[i][j]$ as the number of arrays of length $i$ with $j$ inverse pairs. Initially, $f[0][0] = 1$, and the rest $f[i][j] = 0$.
+
+Next, we consider how to obtain $f[i][j]$.
+
+Assume the first $i-1$ numbers are already determined, and now we need to insert the number $i$. We discuss the cases of inserting $i$ into each position:
+
+-   If $i$ is inserted into the 1st position, the number of inverse pairs increases by $i-1$, so $f[i][j] += f[i-1][j-(i-1)]$.
+-   If $i$ is inserted into the 2nd position, the number of inverse pairs increases by $i-2$, so $f[i][j] += f[i-1][j-(i-2)]$.
+-   ...
+-   If $i$ is inserted into the $(i-1)$th position, the number of inverse pairs increases by 1, so $f[i][j] += f[i-1][j-1]$.
+-   If $i$ is inserted into the $i$th position, the number of inverse pairs does not change, so $f[i][j] += f[i-1][j]$.
+
+Therefore, $f[i][j] = \sum_{k=1}^{i} f[i-1][j-(i-k)]$.
+
+We notice that the calculation of $f[i][j]$ actually involves prefix sums, so we can use prefix sums to optimize the calculation process. Moreover, since $f[i][j]$ only depends on $f[i-1][j]$, we can use a one-dimensional array to optimize the space complexity.
+
+The time complexity is $O(n \times k)$, and the space complexity is $O(k)$. Here, $n$ and $k$ are the array length and the number of inverse pairs, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -53,7 +89,7 @@ class Solution:
         return f[k]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -77,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func kInversePairs(n int, k int) int {
@@ -124,22 +160,15 @@ func kInversePairs(n int, k int) int {
 	}
 	return f[k]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function kInversePairs(n: number, k: number): number {
-    const f: number[] = new Array(k + 1).fill(0);
+    const f: number[] = Array(k + 1).fill(0);
     f[0] = 1;
-    const s: number[] = new Array(k + 2).fill(1);
+    const s: number[] = Array(k + 2).fill(1);
     s[0] = 0;
     const mod: number = 1e9 + 7;
     for (let i = 1; i <= n; ++i) {
@@ -154,10 +183,8 @@ function kInversePairs(n: number, k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,12 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0403.Frog%20Jump/README_EN.md
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [403. Frog Jump](https://leetcode.com/problems/frog-jump)
 
 [中文文档](/solution/0400-0499/0403.Frog%20Jump/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>A frog is crossing a river. The river is divided into some number of units, and at each unit, there may or may not exist a stone. The frog can jump on a stone, but it must not jump into the water.</p>
 
-<p>Given a list of <code>stones</code>&#39; positions (in units) in sorted <strong>ascending order</strong>, determine if the frog can cross the river by landing on the last stone. Initially, the frog is on the first stone and assumes the first jump must be <code>1</code> unit.</p>
+<p>Given a list of <code>stones</code>&nbsp;positions (in units) in sorted <strong>ascending order</strong>, determine if the frog can cross the river by landing on the last stone. Initially, the frog is on the first stone and assumes the first jump must be <code>1</code> unit.</p>
 
 <p>If the frog&#39;s last jump was <code>k</code> units, its next jump must be either <code>k - 1</code>, <code>k</code>, or <code>k + 1</code> units. The frog can only jump in the forward direction.</p>
 
@@ -37,9 +50,13 @@
 	<li><code>stones</code>&nbsp;is sorted in a strictly increasing order.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Hash Table + Memoization**
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Memoization
 
 We use a hash table $pos$ to record the index of each stone. Next, we design a function $dfs(i, k)$, which means that the frog jumps from the $i$-th stone and the last jump distance is $k$. If the frog can reach the end, the function returns `true`, otherwise it returns `false`.
 
@@ -55,19 +72,9 @@ In order to prevent repeated calculations in the function $dfs(i, k)$, we can us
 
 The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Where $n$ is the number of stones.
 
-**Solution 2: Dynamic Programming**
-
-We define $f[i][k]$ to be true if and only if it is possible to reach stone $i$ with last jump of size $k$. Initially $f[0][0] = true$, and all other elements of $f$ are false.
-
-We can determine the value of $f[i][k]$ for all $i$ and $k$ using a double loop. For each possible jump size $k$, we look at the stones we could have jumped from: $i-k$, $i-k+1$, $i-k+2$. If any of these stones exist and if we can reach them with a last jump of size $k-1$, $k$, or $k+1$, then we can reach stone $i$ with a last jump of size $k$.
-
-If we can reach the last stone, the answer is true. Otherwise, the answer is false.
-
-The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Where $n$ is the number of stones.
-
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -86,24 +93,7 @@ class Solution:
         return dfs(0, 0)
 ```
 
-```python
-class Solution:
-    def canCross(self, stones: List[int]) -> bool:
-        n = len(stones)
-        f = [[False] * n for _ in range(n)]
-        f[0][0] = True
-        for i in range(1, n):
-            for j in range(i - 1, -1, -1):
-                k = stones[i] - stones[j]
-                if k - 1 > j:
-                    break
-                f[i][k] = f[j][k - 1] or f[j][k] or f[j][k + 1]
-                if i == n - 1 and f[i][k]:
-                    return True
-        return False
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -142,30 +132,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean canCross(int[] stones) {
-        int n = stones.length;
-        boolean[][] f = new boolean[n][n];
-        f[0][0] = true;
-        for (int i = 1; i < n; ++i) {
-            for (int j = i - 1; j >= 0; --j) {
-                int k = stones[i] - stones[j];
-                if (k - 1 > j) {
-                    break;
-                }
-                f[i][k] = f[j][k - 1] || f[j][k] || f[j][k + 1];
-                if (i == n - 1 && f[i][k]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -197,32 +164,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool canCross(vector<int>& stones) {
-        int n = stones.size();
-        bool f[n][n];
-        memset(f, false, sizeof(f));
-        f[0][0] = true;
-        for (int i = 1; i < n; ++i) {
-            for (int j = i - 1; j >= 0; --j) {
-                int k = stones[i] - stones[j];
-                if (k - 1 > j) {
-                    break;
-                }
-                f[i][k] = f[j][k - 1] || f[j][k] || f[j][k + 1];
-                if (i == n - 1 && f[i][k]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func canCross(stones []int) bool {
@@ -261,31 +203,7 @@ func canCross(stones []int) bool {
 }
 ```
 
-```go
-func canCross(stones []int) bool {
-	n := len(stones)
-	f := make([][]bool, n)
-	for i := range f {
-		f[i] = make([]bool, n)
-	}
-	f[0][0] = true
-	for i := 1; i < n; i++ {
-		for j := i - 1; j >= 0; j-- {
-			k := stones[i] - stones[j]
-			if k-1 > j {
-				break
-			}
-			f[i][k] = f[j][k-1] || f[j][k] || f[j][k+1]
-			if i == n-1 && f[i][k] {
-				return true
-			}
-		}
-	}
-	return false
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canCross(stones: number[]): boolean {
@@ -317,12 +235,179 @@ function canCross(stones: number[]): boolean {
 }
 ```
 
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn can_cross(stones: Vec<i32>) -> bool {
+        let n = stones.len();
+        let mut record = vec![vec![-1; n]; n];
+        let mut pos = HashMap::new();
+        for (i, &s) in stones.iter().enumerate() {
+            pos.insert(s, i);
+        }
+
+        Self::dfs(&mut record, 0, 0, n, &pos, &stones)
+    }
+
+    #[allow(dead_code)]
+    fn dfs(
+        record: &mut Vec<Vec<i32>>,
+        i: usize,
+        k: usize,
+        n: usize,
+        pos: &HashMap<i32, usize>,
+        stones: &Vec<i32>,
+    ) -> bool {
+        if i == n - 1 {
+            return true;
+        }
+
+        if record[i][k] != -1 {
+            return record[i][k] == 1;
+        }
+
+        let k = k as i32;
+        for j in k - 1..=k + 1 {
+            if j > 0
+                && pos.contains_key(&(stones[i] + j))
+                && Self::dfs(record, pos[&(stones[i] + j)], j as usize, n, pos, stones)
+            {
+                record[i][k as usize] = 1;
+                return true;
+            }
+        }
+
+        record[i][k as usize] = 0;
+        false
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Dynamic Programming
+
+We define $f[i][k]$ to be true if and only if it is possible to reach stone $i$ with last jump of size $k$. Initially $f[0][0] = true$, and all other elements of $f$ are false.
+
+We can determine the value of $f[i][k]$ for all $i$ and $k$ using a double loop. For each possible jump size $k$, we look at the stones we could have jumped from: $i-k$, $i-k+1$, $i-k+2$. If any of these stones exist and if we can reach them with a last jump of size $k-1$, $k$, or $k+1$, then we can reach stone $i$ with a last jump of size $k$.
+
+If we can reach the last stone, the answer is true. Otherwise, the answer is false.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Where $n$ is the number of stones.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def canCross(self, stones: List[int]) -> bool:
+        n = len(stones)
+        f = [[False] * n for _ in range(n)]
+        f[0][0] = True
+        for i in range(1, n):
+            for j in range(i - 1, -1, -1):
+                k = stones[i] - stones[j]
+                if k - 1 > j:
+                    break
+                f[i][k] = f[j][k - 1] or f[j][k] or f[j][k + 1]
+                if i == n - 1 and f[i][k]:
+                    return True
+        return False
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean canCross(int[] stones) {
+        int n = stones.length;
+        boolean[][] f = new boolean[n][n];
+        f[0][0] = true;
+        for (int i = 1; i < n; ++i) {
+            for (int j = i - 1; j >= 0; --j) {
+                int k = stones[i] - stones[j];
+                if (k - 1 > j) {
+                    break;
+                }
+                f[i][k] = f[j][k - 1] || f[j][k] || f[j][k + 1];
+                if (i == n - 1 && f[i][k]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool canCross(vector<int>& stones) {
+        int n = stones.size();
+        bool f[n][n];
+        memset(f, false, sizeof(f));
+        f[0][0] = true;
+        for (int i = 1; i < n; ++i) {
+            for (int j = i - 1; j >= 0; --j) {
+                int k = stones[i] - stones[j];
+                if (k - 1 > j) {
+                    break;
+                }
+                f[i][k] = f[j][k - 1] || f[j][k] || f[j][k + 1];
+                if (i == n - 1 && f[i][k]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+```
+
+#### Go
+
+```go
+func canCross(stones []int) bool {
+	n := len(stones)
+	f := make([][]bool, n)
+	for i := range f {
+		f[i] = make([]bool, n)
+	}
+	f[0][0] = true
+	for i := 1; i < n; i++ {
+		for j := i - 1; j >= 0; j-- {
+			k := stones[i] - stones[j]
+			if k-1 > j {
+				break
+			}
+			f[i][k] = f[j][k-1] || f[j][k] || f[j][k+1]
+			if i == n-1 && f[i][k] {
+				return true
+			}
+		}
+	}
+	return false
+}
+```
+
+#### TypeScript
+
 ```ts
 function canCross(stones: number[]): boolean {
     const n = stones.length;
-    const f: boolean[][] = new Array(n)
-        .fill(0)
-        .map(() => new Array(n).fill(false));
+    const f: boolean[][] = new Array(n).fill(0).map(() => new Array(n).fill(false));
     f[0][0] = true;
     for (let i = 1; i < n; ++i) {
         for (let j = i - 1; j >= 0; --j) {
@@ -340,10 +425,39 @@ function canCross(stones: number[]): boolean {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn can_cross(stones: Vec<i32>) -> bool {
+        let n = stones.len();
+        let mut dp = vec![vec![false; n]; n];
 
+        // Initialize the dp vector
+        dp[0][0] = true;
+
+        // Begin the actual dp process
+        for i in 1..n {
+            for j in (0..=i - 1).rev() {
+                let k = (stones[i] - stones[j]) as usize;
+                if k - 1 > j {
+                    break;
+                }
+                dp[i][k] = dp[j][k - 1] || dp[j][k] || dp[j][k + 1];
+                if i == n - 1 && dp[i][k] {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0584.Find%20Customer%20Referee/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [584. Find Customer Referee](https://leetcode.com/problems/find-customer-referee)
 
 [中文文档](/solution/0500-0599/0584.Find%20Customer%20Referee/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Customer</code></p>
 
@@ -14,17 +26,17 @@
 | name        | varchar |
 | referee_id  | int     |
 +-------------+---------+
-id is the primary key column for this table.
+In SQL, id is the primary key column for this table.
 Each row of this table indicates the id of a customer, their name, and the id of the customer who referred them.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the names of the customer that are <strong>not referred by</strong> the customer with <code>id = 2</code>.</p>
+<p>Find the names of the customer that are <strong>not referred by</strong> the customer with <code>id = 2</code>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -53,30 +65,29 @@ Customer table:
 +------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Conditional Filtering
+
+We can directly filter out the customer names whose `referee_id` is not `2`. Note that the customers whose `referee_id` is `NULL` should also be filtered out.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT
-    name
-FROM
-    Customer
-WHERE
-    referee_id != 2 OR referee_id IS NULL;
-```
-
-MySQL can use `IFNULL()`:
-
-```sql
-SELECT
-    name
-FROM
-    customer
-WHERE
-    IFNULL(referee_id, 0) != 2;
+# Write your MySQL query statement below
+SELECT name
+FROM Customer
+WHERE IFNULL(referee_id, 0) != 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

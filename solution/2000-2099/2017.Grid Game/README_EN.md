@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2017.Grid%20Game/README_EN.md
+rating: 1718
+source: Weekly Contest 260 Q2
+tags:
+    - Array
+    - Matrix
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2017. Grid Game](https://leetcode.com/problems/grid-game)
 
 [中文文档](/solution/2000-2099/2017.Grid%20Game/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> 2D array <code>grid</code> of size <code>2 x n</code>, where <code>grid[r][c]</code> represents the number of points at position <code>(r, c)</code> on the matrix. Two robots are playing a game on this matrix.</p>
 
@@ -53,11 +69,27 @@ The second robot will collect 0 + 1 + 3 + 3 + 0 = 7 points.
 	<li><code>1 &lt;= grid[r][c] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Sum
+
+We notice that if we determine the position $j$ where the first robot turns down, then the optimal path of the second robot is also determined. The optimal path of the second robot is the prefix sum of the first row from $j+1$ to $n-1$, or the prefix sum of the second row from $0$ to $j-1$, taking the maximum of the two.
+
+First, we calculate the suffix sum of the points in the first row, denoted as $s_1$, and the prefix sum of the points in the second row, denoted as $s_2$. Initially, $s_1 = \sum_{j=0}^{n-1} grid[0][j]$, $s_2 = 0$.
+
+Then we enumerate the position $j$ where the first robot turns down. At this time, we update $s_1 = s_1 - grid[0][j]$. Then the sum of the optimal path of the second robot is $max(s_1, s_2)$. We take the minimum of $max(s_1, s_2)$ for all $j$. Then we update $s_2 = s_2 + grid[1][j]$.
+
+After the enumeration, we return the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the number of columns in the grid.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +103,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 using ll = long long;
@@ -114,7 +146,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func gridGame(grid [][]int) int64 {
@@ -130,23 +162,9 @@ func gridGame(grid [][]int) int64 {
 	}
 	return int64(ans)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function gridGame(grid: number[][]): number {
@@ -162,10 +180,8 @@ function gridGame(grid: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

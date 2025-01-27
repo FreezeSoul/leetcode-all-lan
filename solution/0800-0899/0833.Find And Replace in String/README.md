@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [833. 字符串中的查找与替换](https://leetcode.cn/problems/find-and-replace-in-string)
 
 [English Version](/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你会得到一个字符串 <code>s</code>&nbsp;(索引从 0 开始)，你必须对它执行 <code>k</code> 个替换操作。替换操作以三个长度均为 <code>k</code> 的并行数组给出：<code>indices</code>,&nbsp;<code>sources</code>,&nbsp;&nbsp;<code>targets</code>。</p>
 
@@ -32,20 +45,20 @@
 
 <p><strong>示例 1：</strong></p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/images/833-ex1.png" style="height: 251px; width: 411px;" /></p>
+<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/images/833-ex1.png" /></p>
 
 <pre>
-<strong>输入：</strong>s = "abcd", indexes = [0,2], sources = ["a","cd"], targets = ["eee","ffff"]
+<strong>输入：</strong>s = "abcd", indices = [0,2], sources = ["a","cd"], targets = ["eee","ffff"]
 <strong>输出：</strong>"eeebffff"
 <strong>解释：
 </strong>"a" 从 s 中的索引 0 开始，所以它被替换为 "eee"。
 "cd" 从 s 中的索引 2 开始，所以它被替换为 "ffff"。
 </pre>
 
-<p><strong>示例 2：</strong><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/images/833-ex2-1.png" style="height: 251px; width: 411px;" /></p>
+<p><strong>示例 2：</strong><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/images/833-ex2-1.png" /></p>
 
 <pre>
-<strong>输入：</strong>s = "abcd", indexes = [0,2], sources = ["ab","ec"], targets = ["eee","ffff"]
+<strong>输入：</strong>s = "abcd", indices = [0,2], sources = ["ab","ec"], targets = ["eee","ffff"]
 <strong>输出：</strong>"eeecd"
 <strong>解释：
 </strong>"ab" 从 s 中的索引 0 开始，所以它被替换为 "eee"。
@@ -60,68 +73,67 @@
 	<li><code>1 &lt;= s.length &lt;= 1000</code></li>
 	<li><code>k == indices.length == sources.length == targets.length</code></li>
 	<li><code>1 &lt;= k &lt;= 100</code></li>
-	<li><code>0 &lt;= indexes[i] &lt; s.length</code></li>
+	<li><code>0 &lt;= indices[i] &lt; s.length</code></li>
 	<li><code>1 &lt;= sources[i].length, targets[i].length &lt;= 50</code></li>
 	<li><code>s</code> 仅由小写英文字母组成</li>
 	<li><code>sources[i]</code> 和 <code>targets[i]</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-我们先遍历 `indices`，对于每个 $i$，如果 `s[indices[i]: indices[i] + len(sources[i])] == sources[i]`，则说明 $s$ 中从 `indices[i]` 开始的 `len(sources[i])` 个字符与 `sources[i]` 相等，我们记录下标 `indices[i]` 处需要替换的是 `targets[i]`，否则不需要替换。
+我们遍历每个替换操作，对于当前第 $k$ 个替换操作 $(i, \text{src})$，如果 $s[i..i+|\text{src}|-1]$ 与 $\text{src}$ 相等，此时我们记录下标 $i$ 处需要替换的是 $\text{targets}$ 的第 $k$ 个字符串，否则不需要替换。
 
-然后我们从左到右遍历 $s$，如果当前下标 $i$ 处需要替换，则将 `targets[d[i]]` 加入答案，并且 $i$ 跳过 `len(sources[d[i]])` 个字符，否则将 `s[i]` 加入答案，然后 $i$ 自增 $1$。
+接下来，我们只需要遍历原字符串 $s$，根据记录的信息进行替换即可。
 
-时间复杂度 $O(k + n)$，空间复杂度 $O(n)$。其中 $k$ 和 $n$ 分别是 `indices` 和 $s$ 的长度。
+时间复杂度 $O(L)$，空间复杂度 $O(n)$。其中 $L$ 是所有字符串的长度之和，而 $n$ 是字符串 $s$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def findReplaceString(self, s: str, indices: List[int], sources: List[str], targets: List[str]) -> str:
+    def findReplaceString(
+        self, s: str, indices: List[int], sources: List[str], targets: List[str]
+    ) -> str:
         n = len(s)
         d = [-1] * n
-        for i, (j, source) in enumerate(zip(indices, sources)):
-            if s[j: j + len(source)] == source:
-                d[j] = i
+        for k, (i, src) in enumerate(zip(indices, sources)):
+            if s.startswith(src, i):
+                d[i] = k
         ans = []
         i = 0
         while i < n:
-            if d[i] >= 0:
+            if ~d[i]:
                 ans.append(targets[d[i]])
                 i += len(sources[d[i]])
             else:
                 ans.append(s[i])
                 i += 1
-        return ''.join(ans)
+        return "".join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
         int n = s.length();
-        int[] d = new int[n];
+        var d = new int[n];
         Arrays.fill(d, -1);
-        for (int i = 0; i < indices.length; ++i) {
-            int j = indices[i];
-            String source = sources[i];
-            if (s.substring(j, Math.min(n, j + source.length())).equals(source)) {
-                d[j] = i;
+        for (int k = 0; k < indices.length; ++k) {
+            int i = indices[k];
+            if (s.startsWith(sources[k], i)) {
+                d[i] = k;
             }
         }
-        StringBuilder ans = new StringBuilder();
+        var ans = new StringBuilder();
         for (int i = 0; i < n;) {
             if (d[i] >= 0) {
                 ans.append(targets[d[i]]);
@@ -135,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -143,16 +155,15 @@ public:
     string findReplaceString(string s, vector<int>& indices, vector<string>& sources, vector<string>& targets) {
         int n = s.size();
         vector<int> d(n, -1);
-        for (int i = 0; i < indices.size(); ++i) {
-            int j = indices[i];
-            string source = sources[i];
-            if (s.substr(j, source.size()) == source) {
-                d[j] = i;
+        for (int k = 0; k < indices.size(); ++k) {
+            int i = indices[k];
+            if (s.compare(i, sources[k].size(), sources[k]) == 0) {
+                d[i] = k;
             }
         }
         string ans;
         for (int i = 0; i < n;) {
-            if (d[i] >= 0) {
+            if (~d[i]) {
                 ans += targets[d[i]];
                 i += sources[d[i]].size();
             } else {
@@ -164,16 +175,15 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findReplaceString(s string, indices []int, sources []string, targets []string) string {
 	n := len(s)
 	d := make([]int, n)
-	for i, j := range indices {
-		source := sources[i]
-		if s[j:min(j+len(source), n)] == source {
-			d[j] = i + 1
+	for k, i := range indices {
+		if strings.HasPrefix(s[i:], sources[k]) {
+			d[i] = k + 1
 		}
 	}
 	ans := &strings.Builder{}
@@ -188,19 +198,40 @@ func findReplaceString(s string, indices []int, sources []string, targets []stri
 	}
 	return ans.String()
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function findReplaceString(
+    s: string,
+    indices: number[],
+    sources: string[],
+    targets: string[],
+): string {
+    const n = s.length;
+    const d: number[] = Array(n).fill(-1);
+    for (let k = 0; k < indices.length; ++k) {
+        const [i, src] = [indices[k], sources[k]];
+        if (s.startsWith(src, i)) {
+            d[i] = k;
+        }
+    }
+    const ans: string[] = [];
+    for (let i = 0; i < n; ) {
+        if (d[i] >= 0) {
+            ans.push(targets[d[i]]);
+            i += sources[d[i]].length;
+        } else {
+            ans.push(s[i++]);
+        }
+    }
+    return ans.join('');
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

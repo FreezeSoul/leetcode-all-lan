@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1604.Alert%20Using%20Same%20Key-Card%20Three%20or%20More%20Times%20in%20a%20One%20Hour%20Period/README.md
+rating: 1606
+source: 第 36 场双周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1604. 警告一小时内使用相同员工卡大于等于三次的人](https://leetcode.cn/problems/alert-using-same-key-card-three-or-more-times-in-a-one-hour-period)
 
 [English Version](/solution/1600-1699/1604.Alert%20Using%20Same%20Key-Card%20Three%20or%20More%20Times%20in%20a%20One%20Hour%20Period/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>力扣公司的员工都使用员工卡来开办公室的门。每当一个员工使用一次他的员工卡，安保系统会记录下员工的名字和使用时间。如果一个员工在一小时时间内使用员工卡的次数大于等于三次，这个系统会自动发布一个 <strong>警告</strong>&nbsp;。</p>
 
@@ -47,11 +62,13 @@
 	<li><code>keyName[i]</code>&nbsp;只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 排序**
+### 方法一：哈希表 + 排序
 
 我们先用哈希表 $d$ 记录每个员工的所有打卡时间。
 
@@ -59,13 +76,11 @@
 
 最后，将答案数组按照字典序排序，即可得到答案。
 
-时间复杂度 $O(n \times \log n)$，其中 $n$ 是数组 $keyName$ 的长度。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是打卡记录的数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -121,7 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -155,7 +168,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func alertNames(keyName []string, keyTime []string) (ans []string) {
@@ -183,10 +196,42 @@ func alertNames(keyName []string, keyTime []string) (ans []string) {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function alertNames(keyName: string[], keyTime: string[]): string[] {
+    const d: { [name: string]: number[] } = {};
+    for (let i = 0; i < keyName.length; ++i) {
+        const name = keyName[i];
+        const t = keyTime[i];
+        const minutes = +t.slice(0, 2) * 60 + +t.slice(3);
+        if (d[name] === undefined) {
+            d[name] = [];
+        }
+        d[name].push(minutes);
+    }
+    const ans: string[] = [];
+    for (const name in d) {
+        if (d.hasOwnProperty(name)) {
+            const ts = d[name];
+            if (ts.length > 2) {
+                ts.sort((a, b) => a - b);
+                for (let i = 0; i < ts.length - 2; ++i) {
+                    if (ts[i + 2] - ts[i] <= 60) {
+                        ans.push(name);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    ans.sort();
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

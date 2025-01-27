@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0263.Ugly%20Number/README_EN.md
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [263. Ugly Number](https://leetcode.com/problems/ugly-number)
 
 [中文文档](/solution/0200-0299/0263.Ugly%20Number/README.md)
 
 ## Description
 
-<p>An <strong>ugly number</strong> is a positive integer whose prime factors are limited to <code>2</code>, <code>3</code>, and <code>5</code>.</p>
+<!-- description:start -->
+
+<p>An <strong>ugly number</strong> is a <em>positive</em> integer which does not have a prime factor other than 2, 3, and 5.</p>
 
 <p>Given an integer <code>n</code>, return <code>true</code> <em>if</em> <code>n</code> <em>is an <strong>ugly number</strong></em>.</p>
 
@@ -22,7 +34,7 @@
 <pre>
 <strong>Input:</strong> n = 1
 <strong>Output:</strong> true
-<strong>Explanation:</strong> 1 has no prime factors, therefore all of its prime factors are limited to 2, 3, and 5.
+<strong>Explanation:</strong> 1 has no prime factors.
 </pre>
 
 <p><strong class="example">Example 3:</strong></p>
@@ -40,11 +52,17 @@
 	<li><code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +75,7 @@ class Solution:
         return n == 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -77,7 +95,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +116,23 @@ public:
 };
 ```
 
-### **JavaScript**
+#### Go
+
+```go
+func isUgly(n int) bool {
+	if n < 1 {
+		return false
+	}
+	for _, x := range []int{2, 3, 5} {
+		for n%x == 0 {
+			n /= x
+		}
+	}
+	return n == 1
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -120,23 +154,7 @@ var isUgly = function (n) {
 };
 ```
 
-### **Go**
-
-```go
-func isUgly(n int) bool {
-	if n < 1 {
-		return false
-	}
-	for _, x := range []int{2, 3, 5} {
-		for n%x == 0 {
-			n /= x
-		}
-	}
-	return n == 1
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -146,20 +164,23 @@ class Solution {
      */
     function isUgly($n) {
         while ($n) {
-            if ($n % 2 == 0) $n = $n / 2;
-            else if ($n % 3 == 0) $n = $n / 3;
-            else if ($n % 5 == 0) $n = $n / 5;
-            else break;
+            if ($n % 2 == 0) {
+                $n = $n / 2;
+            } elseif ($n % 3 == 0) {
+                $n = $n / 3;
+            } elseif ($n % 5 == 0) {
+                $n = $n / 5;
+            } else {
+                break;
+            }
         }
         return $n == 1;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

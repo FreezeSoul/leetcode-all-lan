@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1148.Article%20Views%20I/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1148. Article Views I](https://leetcode.com/problems/article-views-i)
 
 [中文文档](/solution/1100-1199/1148.Article%20Views%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Views</code></p>
 
@@ -15,18 +27,18 @@
 | viewer_id     | int     |
 | view_date     | date    |
 +---------------+---------+
-There is no primary key for this table, it may have duplicate rows.
+There is no primary key (column with unique values) for this table, the table may have duplicate rows.
 Each row of this table indicates that some viewer viewed an article (written by some author) on some date. 
 Note that equal author_id and viewer_id indicate the same person.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find all the authors that viewed at least one of their own articles.</p>
+<p>Write a solution to find all the authors that viewed at least one of their own articles.</p>
 
 <p>Return the result table sorted by <code>id</code> in ascending order.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -54,17 +66,28 @@ Views table:
 +------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT DISTINCT(author_id) as id
+# Write your MySQL query statement below
+SELECT DISTINCT author_id AS id
 FROM Views
 WHERE author_id = viewer_id
-ORDER BY id;
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

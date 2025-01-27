@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2425.Bitwise%20XOR%20of%20All%20Pairings/README.md
+rating: 1622
+source: 第 88 场双周赛 Q3
+tags:
+    - 位运算
+    - 脑筋急转弯
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2425. 所有数对的异或和](https://leetcode.cn/problems/bitwise-xor-of-all-pairings)
 
 [English Version](/solution/2400-2499/2425.Bitwise%20XOR%20of%20All%20Pairings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个下标从 <strong>0</strong>&nbsp;开始的数组&nbsp;<code>nums1</code> 和&nbsp;<code>nums2</code>&nbsp;，两个数组都只包含非负整数。请你求出另外一个数组&nbsp;<code>nums3</code>&nbsp;，包含 <code>nums1</code>&nbsp;和 <code>nums2</code>&nbsp;中 <strong>所有数对</strong>&nbsp;的异或和（<code>nums1</code>&nbsp;中每个整数都跟 <code>nums2</code>&nbsp;中每个整数 <strong>恰好</strong>&nbsp;匹配一次）。</p>
 
@@ -40,13 +54,15 @@
 	<li><code>0 &lt;= nums1[i], nums2[j] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯 + 位运算**
+### 方法一：脑筋急转弯 + 位运算
 
-由于数组的每个元素都会与另一个数组的每个元素进行异或，我们知道，同一个数异或两次，结果不变，即 `a ^ a = 0`。因此，我们只需要统计数组的长度，就能知道每个元素与另一个数组的每个元素进行异或的次数。
+由于数组的每个元素都会与另一个数组的每个元素进行异或，我们知道，同一个数异或两次，结果不变，即 $a \oplus a = 0$。因此，我们只需要统计数组的长度，就能知道每个元素与另一个数组的每个元素进行异或的次数。
 
 如果 `nums2` 数组长度为奇数，那么相当于 `nums1` 中每个元素都与 `nums2` 中的每个元素进行了奇数次异或，因此 `nums1` 数组的最终异或结果即为 `nums1` 数组的所有元素异或的结果。如果为偶数，那么相当于 `nums1` 中每个元素都与 `nums2` 中的每个元素进行了偶数次异或，因此 `nums1` 数组的最终异或结果为 0。
 
@@ -58,9 +74,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +89,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func xorAllNums(nums1 []int, nums2 []int) int {
@@ -139,7 +151,7 @@ func xorAllNums(nums1 []int, nums2 []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function xorAllNums(nums1: number[], nums2: number[]): number {
@@ -154,10 +166,8 @@ function xorAllNums(nums1: number[], nums2: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

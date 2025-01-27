@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2227.Encrypt%20and%20Decrypt%20Strings/README_EN.md
+rating: 1944
+source: Weekly Contest 287 Q4
+tags:
+    - Design
+    - Trie
+    - Array
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [2227. Encrypt and Decrypt Strings](https://leetcode.com/problems/encrypt-and-decrypt-strings)
 
 [中文文档](/solution/2200-2299/2227.Encrypt%20and%20Decrypt%20Strings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a character array <code>keys</code> containing <strong>unique</strong> characters and a string array <code>values</code> containing strings of length 2. You are also given another string array <code>dictionary</code> that contains all permitted original strings after decryption. You should implement a data structure that can encrypt or decrypt a <strong>0-indexed</strong> string.</p>
 
@@ -60,18 +78,24 @@ encrypter.decrypt(&quot;eizfeiam&quot;); // return 2.
 	<li><code>1 &lt;= dictionary[i].length &lt;= 100</code></li>
 	<li>All <code>keys[i]</code> and <code>dictionary[i]</code> are <strong>unique</strong>.</li>
 	<li><code>1 &lt;= word1.length &lt;= 2000</code></li>
-	<li><code>1 &lt;= word2.length &lt;= 200</code></li>
+	<li><code>2 &lt;= word2.length &lt;= 200</code></li>
 	<li>All <code>word1[i]</code> appear in <code>keys</code>.</li>
 	<li><code>word2.length</code> is even.</li>
 	<li><code>keys</code>, <code>values[i]</code>, <code>dictionary[i]</code>, <code>word1</code>, and <code>word2</code> only contain lowercase English letters.</li>
 	<li>At most <code>200</code> calls will be made to <code>encrypt</code> and <code>decrypt</code> <strong>in total</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Encrypter:
@@ -97,7 +121,7 @@ class Encrypter:
 # param_2 = obj.decrypt(word2)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Encrypter {
@@ -138,7 +162,7 @@ class Encrypter {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Encrypter {
@@ -173,7 +197,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Encrypter struct {
@@ -218,16 +242,8 @@ func (this *Encrypter) Decrypt(word2 string) int {
  */
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

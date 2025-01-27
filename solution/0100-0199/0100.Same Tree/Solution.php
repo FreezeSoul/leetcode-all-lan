@@ -18,10 +18,10 @@ class Solution {
      * @return Boolean
      */
     function isSameTree($p, $q) {
-        if ($p == Null && $q == Null) {
+        if ($p == null && $q == null) {
             return true;
         }
-        if ($p == Null || $q == Null) {
+        if ($p == null || $q == null) {
             return false;
         }
         if ($p->val != $q->val) {

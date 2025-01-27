@@ -1,10 +1,23 @@
-# [1265. 逆序打印不可变链表](https://leetcode.cn/problems/print-immutable-linked-list-in-reverse)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1265.Print%20Immutable%20Linked%20List%20in%20Reverse/README.md
+tags:
+    - 栈
+    - 递归
+    - 链表
+    - 双指针
+---
+
+<!-- problem:start -->
+
+# [1265. 逆序打印不可变链表 🔒](https://leetcode.cn/problems/print-immutable-linked-list-in-reverse)
 
 [English Version](/solution/1200-1299/1265.Print%20Immutable%20Linked%20List%20in%20Reverse/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给您一个不可变的链表，使用下列接口逆序打印每个节点的值：</p>
 
@@ -67,15 +80,21 @@
 	<li>使用线性级时间复杂度和低于线性级空间复杂度解决问题？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：递归
+
+我们可以使用递归来实现链表的逆序打印。在函数中，我们判断当前节点是否为空，如果不为空，则获取下一个节点，然后递归调用函数本身，最后打印当前节点的值。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是链表的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # """
@@ -94,9 +113,7 @@ class Solution:
             head.printValue()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -118,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -142,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /*   Below is the interface for ImmutableListNode, which is already defined for you.
@@ -168,7 +185,7 @@ func printLinkedListInReverse(head ImmutableListNode) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -189,10 +206,30 @@ function printLinkedListInReverse(head: ImmutableListNode) {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+/**
+ * // This is the ImmutableListNode's API interface.
+ * // You should not implement it, or speculate about its implementation.
+ * class ImmutableListNode {
+ *     public void PrintValue(); // print the value of this node.
+ *     public ImmutableListNode GetNext(); // return the next node.
+ * }
+ */
 
+public class Solution {
+    public void PrintLinkedListInReverse(ImmutableListNode head) {
+        if (head != null) {
+            PrintLinkedListInReverse(head.GetNext());
+            head.PrintValue();
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2106.Maximum%20Fruits%20Harvested%20After%20at%20Most%20K%20Steps/README.md
+rating: 2062
+source: 第 271 场周赛 Q4
+tags:
+    - 数组
+    - 二分查找
+    - 前缀和
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [2106. 摘水果](https://leetcode.cn/problems/maximum-fruits-harvested-after-at-most-k-steps)
 
 [English Version](/solution/2100-2199/2106.Maximum%20Fruits%20Harvested%20After%20at%20Most%20K%20Steps/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一个无限的 x 坐标轴上，有许多水果分布在其中某些位置。给你一个二维整数数组 <code>fruits</code> ，其中 <code>fruits[i] = [position<sub>i</sub>, amount<sub>i</sub>]</code> 表示共有 <code>amount<sub>i</sub></code> 个水果放置在 <code>position<sub>i</sub></code> 上。<code>fruits</code> 已经按 <code>position<sub>i</sub></code> <strong>升序排列</strong> ，每个 <code>position<sub>i</sub></code> <strong>互不相同</strong> 。</p>
 
@@ -60,11 +75,13 @@
 	<li><code>0 &lt;= k &lt;= 2 * 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们不妨假设移动的位置区间为 $[l,r]$，开始位置为 $startPos$，来看看如何算出移动的最小步数。根据 $startPos$ 所处的位置，我们可以分为三种情况：
 
@@ -91,9 +108,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -101,16 +116,20 @@ class Solution:
         ans = i = s = 0
         for j, (pj, fj) in enumerate(fruits):
             s += fj
-            while i <= j and pj - fruits[i][0] + min(abs(startPos - fruits[i][0]), abs(startPos - fruits[j][0])) > k:
+            while (
+                i <= j
+                and pj
+                - fruits[i][0]
+                + min(abs(startPos - fruits[i][0]), abs(startPos - fruits[j][0]))
+                > k
+            ):
                 s -= fruits[i][1]
                 i += 1
             ans = max(ans, s)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -132,7 +151,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -152,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxTotalFruits(fruits [][]int, startPos int, k int) (ans int) {
@@ -168,20 +187,6 @@ func maxTotalFruits(fruits [][]int, startPos int, k int) (ans int) {
 	return
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -190,14 +195,10 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function maxTotalFruits(
-    fruits: number[][],
-    startPos: number,
-    k: number,
-): number {
+function maxTotalFruits(fruits: number[][], startPos: number, k: number): number {
     let ans = 0;
     let s = 0;
     for (let i = 0, j = 0; j < fruits.length; ++j) {
@@ -207,10 +208,7 @@ function maxTotalFruits(
             i <= j &&
             pj -
                 fruits[i][0] +
-                Math.min(
-                    Math.abs(startPos - fruits[i][0]),
-                    Math.abs(startPos - pj),
-                ) >
+                Math.min(Math.abs(startPos - fruits[i][0]), Math.abs(startPos - pj)) >
                 k
         ) {
             s -= fruits[i++][1];
@@ -221,10 +219,8 @@ function maxTotalFruits(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

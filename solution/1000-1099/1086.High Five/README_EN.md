@@ -1,8 +1,25 @@
-# [1086. High Five](https://leetcode.com/problems/high-five)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1086.High%20Five/README_EN.md
+rating: 1327
+source: Biweekly Contest 2 Q2
+tags:
+    - Array
+    - Hash Table
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
+# [1086. High Five 🔒](https://leetcode.com/problems/high-five)
 
 [中文文档](/solution/1000-1099/1086.High%20Five/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a list of the scores of different students, <code>items</code>, where <code>items[i] = [ID<sub>i</sub>, score<sub>i</sub>]</code> represents one score from a student with <code>ID<sub>i</sub></code>, calculate each student&#39;s <strong>top five average</strong>.</p>
 
@@ -39,11 +56,17 @@ The student with ID = 2 got scores 93, 97, 77, 100, and 76. Their top five avera
 	<li>For each <code>ID<sub>i</sub></code>, there will be <strong>at least</strong> five scores.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,37 +84,49 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int[][] highFive(int[][] items) {
-        List<Integer>[] d = new List[1001];
-        Arrays.setAll(d, k -> new ArrayList<>());
-        for (var item : items) {
-            int i = item[0], x = item[1];
-            d[i].add(x);
-        }
-        for (var xs : d) {
-            xs.sort((a, b) -> b - a);
-        }
-        List<int[]> ans = new ArrayList<>();
-        for (int i = 1; i <= 1000; ++i) {
-            var xs = d[i];
-            if (!xs.isEmpty()) {
-                int s = 0;
-                for (int j = 0; j < 5; ++j) {
-                    s += xs.get(j);
-                }
-                ans.add(new int[] {i, s / 5});
+        int size = 0;
+        PriorityQueue[] s = new PriorityQueue[101];
+        int n = 5;
+        for (int[] item : items) {
+            int i = item[0], score = item[1];
+            if (s[i] == null) {
+                ++size;
+                s[i] = new PriorityQueue<>(n);
+            }
+            s[i].offer(score);
+            if (s[i].size() > n) {
+                s[i].poll();
             }
         }
-        return ans.toArray(new int[0][]);
+        int[][] res = new int[size][2];
+        int j = 0;
+        for (int i = 0; i < 101; ++i) {
+            if (s[i] == null) {
+                continue;
+            }
+            int avg = sum(s[i]) / n;
+            res[j][0] = i;
+            res[j++][1] = avg;
+        }
+        return res;
+    }
+
+    private int sum(PriorityQueue<Integer> q) {
+        int s = 0;
+        while (!q.isEmpty()) {
+            s += q.poll();
+        }
+        return s;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func highFive(items [][]int) (ans [][]int) {
@@ -141,7 +176,7 @@ func highFive(items [][]int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function highFive(items: number[][]): number[][] {
@@ -163,10 +198,8 @@ function highFive(items: number[][]): number[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

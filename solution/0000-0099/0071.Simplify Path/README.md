@@ -1,16 +1,34 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0071.Simplify%20Path/README.md
+tags:
+    - 栈
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [71. 简化路径](https://leetcode.cn/problems/simplify-path)
 
 [English Version](/solution/0000-0099/0071.Simplify%20Path/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个字符串 <code>path</code> ，表示指向某一文件或目录的 Unix 风格 <strong>绝对路径 </strong>（以 <code>'/'</code> 开头），请你将其转化为更加简洁的规范路径。</p>
+<p>给你一个字符串 <code>path</code> ，表示指向某一文件或目录的&nbsp;Unix 风格 <strong>绝对路径 </strong>（以 <code>'/'</code> 开头），请你将其转化为 <strong>更加简洁的规范路径</strong>。</p>
 
-<p class="MachineTrans-lang-zh-CN">在 Unix 风格的文件系统中，一个点（<code>.</code>）表示当前目录本身；此外，两个点 （<code>..</code>） 表示将目录切换到上一级（指向父目录）；两者都可以是复杂相对路径的组成部分。任意多个连续的斜杠（即，<code>'//'</code>）都被视为单个斜杠 <code>'/'</code> 。 对于此问题，任何其他格式的点（例如，<code>'...'</code>）均被视为文件/目录名称。</p>
+<p class="MachineTrans-lang-zh-CN">在 Unix 风格的文件系统中规则如下：</p>
 
-<p>请注意，返回的 <strong>规范路径</strong> 必须遵循下述格式：</p>
+<ul>
+	<li class="MachineTrans-lang-zh-CN">一个点&nbsp;<code>'.'</code>&nbsp;表示当前目录本身。</li>
+	<li class="MachineTrans-lang-zh-CN">此外，两个点 <code>'..'</code>&nbsp;表示将目录切换到上一级（指向父目录）。</li>
+	<li class="MachineTrans-lang-zh-CN">任意多个连续的斜杠（即，<code>'//'</code>&nbsp;或 <code>'///'</code>）都被视为单个斜杠 <code>'/'</code>。</li>
+	<li class="MachineTrans-lang-zh-CN">任何其他格式的点（例如，<code>'...'</code>&nbsp;或 <code>'....'</code>）均被视为有效的文件/目录名称。</li>
+</ul>
+
+<p>返回的 <strong>简化路径</strong> 必须遵循下述格式：</p>
 
 <ul>
 	<li>始终以斜杠 <code>'/'</code> 开头。</li>
@@ -21,53 +39,85 @@
 
 <p>返回简化后得到的 <strong>规范路径</strong> 。</p>
 
-<p> </p>
+<p>&nbsp;</p>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
-<pre>
-<strong>输入：</strong>path = "/home/"
-<strong>输出：</strong>"/home"
-<strong>解释：</strong>注意，最后一个目录名后面没有斜杠。 </pre>
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">path = "/home/"</span></p>
 
-<p><strong>示例 2：</strong></p>
+<p><span class="example-io"><b>输出：</b>"/home"</span></p>
 
-<pre>
-<strong>输入：</strong>path = "/../"
-<strong>输出：</strong>"/"
-<strong>解释：</strong>从根目录向上一级是不可行的，因为根目录是你可以到达的最高级。
-</pre>
+<p><strong>解释：</strong></p>
 
-<p><strong>示例 3：</strong></p>
+<p>应删除尾随斜杠。</p>
+</div>
 
-<pre>
-<strong>输入：</strong>path = "/home//foo/"
-<strong>输出：</strong>"/home/foo"
-<strong>解释：</strong>在规范路径中，多个连续斜杠需要用一个斜杠替换。
-</pre>
+<p><strong class="example">示例 2：</strong></p>
 
-<p><strong>示例 4：</strong></p>
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b>path = "/home//foo/"</span></p>
 
-<pre>
-<strong>输入：</strong>path = "/a/./b/../../c/"
-<strong>输出：</strong>"/c"
-</pre>
+<p><span class="example-io"><b>输出：</b>"/home/foo"</span></p>
 
-<p> </p>
+<p><strong>解释：</strong></p>
+
+<p>多个连续的斜杠被单个斜杠替换。</p>
+</div>
+
+<p><strong class="example">示例 3：</strong></p>
+
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">path = "/home/user/Documents/../Pictures"</span></p>
+
+<p><span class="example-io"><b>输出：</b>"/home/user/Pictures"</span></p>
+
+<p><strong>解释：</strong></p>
+
+<p>两个点&nbsp;<code>".."</code>&nbsp;表示上一级目录（父目录）。</p>
+</div>
+
+<p><strong class="example">示例 4：</strong></p>
+
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b>path = "/../"</span></p>
+
+<p><span class="example-io"><b>输出：</b>"/"</span></p>
+
+<p><strong>解释：</strong></p>
+
+<p>不可能从根目录上升一级目录。</p>
+</div>
+
+<p><strong class="example">示例 5：</strong></p>
+
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b>path = "/.../a/../b/c/../d/./"</span></p>
+
+<p><span class="example-io"><b>输出：</b>"/.../b/d"</span></p>
+
+<p><strong>解释：</strong></p>
+
+<p><code>"..."</code>&nbsp;在这个问题中是一个合法的目录名。</p>
+</div>
+
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 <= path.length <= 3000</code></li>
+	<li><code>1 &lt;= path.length &lt;= 3000</code></li>
 	<li><code>path</code> 由英文字母，数字，<code>'.'</code>，<code>'/'</code> 或 <code>'_'</code> 组成。</li>
 	<li><code>path</code> 是一个有效的 Unix 风格绝对路径。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：栈**
+### 方法一：栈
 
 我们先将路径按照 `'/'` 分割成若干个子串，然后遍历每个子串，根据子串的内容进行如下操作：
 
@@ -81,9 +131,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -100,9 +148,7 @@ class Solution:
         return '/' + '/'.join(stk)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -123,7 +169,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,7 +202,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func simplifyPath(path string) string {
@@ -177,13 +223,7 @@ func simplifyPath(path string) string {
 }
 ```
 
-```go
-func simplifyPath(path string) string {
-    return filepath.Clean(path)
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function simplifyPath(path: string): string {
@@ -204,7 +244,39 @@ function simplifyPath(path: string): string {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn simplify_path(path: String) -> String {
+        let mut s: Vec<&str> = Vec::new();
+
+        // Split the path
+        let p_vec = path.split("/").collect::<Vec<&str>>();
+
+        // Traverse the path vector
+        for p in p_vec {
+            match p {
+                // Do nothing for "" or "."
+                "" | "." => {
+                    continue;
+                }
+                ".." => {
+                    if !s.is_empty() {
+                        s.pop();
+                    }
+                }
+                _ => s.push(p),
+            }
+        }
+
+        "/".to_string() + &s.join("/")
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -231,10 +303,26 @@ public class Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Go
+
+```go
+func simplifyPath(path string) string {
+	return filepath.Clean(path)
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

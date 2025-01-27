@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2546.Apply%20Bitwise%20Operations%20to%20Make%20Strings%20Equal/README_EN.md
+rating: 1604
+source: Weekly Contest 329 Q3
+tags:
+    - Bit Manipulation
+    - String
+---
+
+<!-- problem:start -->
+
 # [2546. Apply Bitwise Operations to Make Strings Equal](https://leetcode.com/problems/apply-bitwise-operations-to-make-strings-equal)
 
 [中文文档](/solution/2500-2599/2546.Apply%20Bitwise%20Operations%20to%20Make%20Strings%20Equal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two <strong>0-indexed binary</strong> strings <code>s</code> and <code>target</code> of the same length <code>n</code>. You can do the following operation on <code>s</code> <strong>any</strong> number of times:</p>
 
@@ -44,11 +59,21 @@ Since we can make s equal to target, we return true.
 	<li><code>s</code> and <code>target</code> consist of only the digits <code>0</code> and <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Lateral Thinking
+
+We notice that $1$ is actually a "tool" for number conversion. Therefore, as long as both strings either have $1$ or neither have $1$, we can make the two strings equal through operations.
+
+The time complexity is $O(n)$, where $n$ is the length of the string. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +81,7 @@ class Solution:
         return ("1" in s) == ("1" in target)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -66,7 +91,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -79,7 +104,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeStringsEqual(s string, target string) bool {
@@ -87,7 +112,7 @@ func makeStringsEqual(s string, target string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makeStringsEqual(s: string, target: string): boolean {
@@ -95,7 +120,7 @@ function makeStringsEqual(s: string, target: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -105,10 +130,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-bool makeStringsEqual(char *s, char *target) {
+bool makeStringsEqual(char* s, char* target) {
     int count = 0;
     for (int i = 0; s[i]; i++) {
         if (s[i] == '1') {
@@ -126,10 +151,8 @@ bool makeStringsEqual(char *s, char *target) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

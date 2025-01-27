@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0965.Univalued%20Binary%20Tree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [965. Univalued Binary Tree](https://leetcode.com/problems/univalued-binary-tree)
 
 [中文文档](/solution/0900-0999/0965.Univalued%20Binary%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A binary tree is <strong>uni-valued</strong> if every node in the tree has the same value.</p>
 
@@ -31,11 +46,25 @@
 	<li><code>0 &lt;= Node.val &lt; 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+We denote the value of the root node as $x$, and then design a function $\text{dfs}(\text{root})$, which indicates whether the current node's value is equal to $x$ and its left and right subtrees are also univalued binary trees.
+
+In the function $\text{dfs}(\text{root})$, if the current node is null, return $\text{true}$; otherwise, if the current node's value is equal to $x$ and its left and right subtrees are also univalued binary trees, return $\text{true}$; otherwise, return $\text{false}$.
+
+In the main function, we call $\text{dfs}(\text{root})$ and return the result.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the number of nodes in the tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -45,16 +74,17 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def isUnivalTree(self, root: TreeNode) -> bool:
-        def dfs(node):
-            if node is None:
+    def isUnivalTree(self, root: Optional[TreeNode]) -> bool:
+        def dfs(root: Optional[TreeNode]) -> bool:
+            if root is None:
                 return True
-            return node.val == root.val and dfs(node.left) and dfs(node.right)
+            return root.val == x and dfs(root.left) and dfs(root.right)
 
+        x = root.val
         return dfs(root)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -73,20 +103,23 @@ class Solution:
  * }
  */
 class Solution {
+    private int x;
+
     public boolean isUnivalTree(TreeNode root) {
-        return dfs(root, root.val);
+        x = root.val;
+        return dfs(root);
     }
 
-    private boolean dfs(TreeNode root, int val) {
+    private boolean dfs(TreeNode root) {
         if (root == null) {
             return true;
         }
-        return root.val == val && dfs(root.left, val) && dfs(root.right, val);
+        return root.val == x && dfs(root.left) && dfs(root.right);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -103,17 +136,19 @@ class Solution {
 class Solution {
 public:
     bool isUnivalTree(TreeNode* root) {
-        return dfs(root, root->val);
-    }
-
-    bool dfs(TreeNode* root, int val) {
-        if (!root) return true;
-        return root->val == val && dfs(root->left, val) && dfs(root->right, val);
+        int x = root->val;
+        auto dfs = [&](this auto&& dfs, TreeNode* root) -> bool {
+            if (!root) {
+                return true;
+            }
+            return root->val == x && dfs(root->left) && dfs(root->right);
+        };
+        return dfs(root);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -125,18 +160,19 @@ public:
  * }
  */
 func isUnivalTree(root *TreeNode) bool {
+	x := root.Val
 	var dfs func(*TreeNode) bool
-	dfs = func(node *TreeNode) bool {
-		if node == nil {
+	dfs = func(root *TreeNode) bool {
+		if root == nil {
 			return true
 		}
-		return node.Val == root.Val && dfs(node.Left) && dfs(node.Right)
+		return root.Val == x && dfs(root.Left) && dfs(root.Right)
 	}
 	return dfs(root)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -154,18 +190,18 @@ func isUnivalTree(root *TreeNode) bool {
  */
 
 function isUnivalTree(root: TreeNode | null): boolean {
-    const val = root.val;
-    const dfs = (root: TreeNode | null) => {
-        if (root == null) {
+    const x = root!.val;
+    const dfs = (root: TreeNode | null): boolean => {
+        if (!root) {
             return true;
         }
-        return root.val === val && dfs(root.left) && dfs(root.right);
+        return root.val === x && dfs(root.left) && dfs(root.right);
     };
-    return dfs(root.left) && dfs(root.right);
+    return dfs(root);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -186,27 +222,28 @@ function isUnivalTree(root: TreeNode | null): boolean {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
-    fn dfs(val: i32, root: &Option<Rc<RefCell<TreeNode>>>) -> bool {
-        if root.is_none() {
-            return true;
-        }
-        let root = root.as_ref().unwrap().borrow();
-        root.val == val && Self::dfs(val, &root.left) && Self::dfs(val, &root.right)
-    }
     pub fn is_unival_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        let root = root.as_ref().unwrap().borrow();
-        Self::dfs(root.val, &root.left) && Self::dfs(root.val, &root.right)
+        let x = root.as_ref().unwrap().borrow().val;
+
+        fn dfs(node: Option<Rc<RefCell<TreeNode>>>, x: i32) -> bool {
+            if let Some(n) = node {
+                let n = n.borrow();
+                n.val == x && dfs(n.left.clone(), x) && dfs(n.right.clone(), x)
+            } else {
+                true
+            }
+        }
+
+        dfs(root, x)
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

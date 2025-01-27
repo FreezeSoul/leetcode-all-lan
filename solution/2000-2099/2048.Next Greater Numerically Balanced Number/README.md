@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2048.Next%20Greater%20Numerically%20Balanced%20Number/README.md
+rating: 1734
+source: 第 264 场周赛 Q2
+tags:
+    - 数学
+    - 回溯
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [2048. 下一个更大的数值平衡数](https://leetcode.cn/problems/next-greater-numerically-balanced-number)
 
 [English Version](/solution/2000-2099/2048.Next%20Greater%20Numerically%20Balanced%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果整数&nbsp; <code>x</code> 满足：对于每个数位&nbsp;<code>d</code> ，这个数位&nbsp;<strong>恰好</strong> 在 <code>x</code> 中出现 <code>d</code> 次。那么整数 <code>x</code> 就是一个 <strong>数值平衡数</strong> 。</p>
 
@@ -55,146 +69,134 @@
 	<li><code>0 &lt;= n &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：枚举
+
+我们注意到，题目中 $n$ 的范围是 $[0, 10^6]$，而大于 $10^6$ 的其中一个数值平衡数是 $1224444$，因此我们直接枚举 $x \in [n + 1, ..]$，然后判断 $x$ 是否是数值平衡数即可。枚举的 $x$ 一定不会超过 $1224444$。
+
+时间复杂度 $O(M - n)$，其中 $M = 1224444$。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def nextBeautifulNumber(self, n: int) -> int:
-        def check(num):
-            counter = [0] * 10
-            for c in str(num):
-                counter[int(c)] += 1
-
-            for c in str(num):
-                if counter[int(c)] != int(c):
-                    return False
-            return True
-
-        for i in range(n + 1, 10**7):
-            if check(i):
-                return i
-        return -1
+        for x in count(n + 1):
+            y = x
+            cnt = [0] * 10
+            while y:
+                y, v = divmod(y, 10)
+                cnt[v] += 1
+            if all(v == 0 or i == v for i, v in enumerate(cnt)):
+                return x
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int nextBeautifulNumber(int n) {
-        for (int i = n + 1; i < 10000000; ++i) {
-            if (check(i)) {
-                return i;
+        for (int x = n + 1;; ++x) {
+            int[] cnt = new int[10];
+            for (int y = x; y > 0; y /= 10) {
+                ++cnt[y % 10];
+            }
+            boolean ok = true;
+            for (int y = x; y > 0; y /= 10) {
+                if (y % 10 != cnt[y % 10]) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) {
+                return x;
             }
         }
-        return -1;
-    }
-
-    private boolean check(int num) {
-        int[] counter = new int[10];
-        char[] chars = String.valueOf(num).toCharArray();
-        for (char c : chars) {
-            ++counter[c - '0'];
-        }
-        for (char c : chars) {
-            if (counter[c - '0'] != c - '0') {
-                return false;
-            }
-        }
-        return true;
     }
 }
 ```
 
-## **TypeScript**
-
-```ts
-function nextBeautifulNumber(n: number): number {
-    for (let ans = n + 1; ; ans++) {
-        if (isValid(ans)) {
-            return ans;
-        }
-    }
-}
-
-function isValid(n: number): boolean {
-    let record = new Array(10).fill(0);
-    while (n > 0) {
-        const idx = n % 10;
-        record[idx]++;
-        n = Math.floor(n / 10);
-    }
-    for (let i = 0; i < 10; i++) {
-        if (record[i] && record[i] != i) return false;
-    }
-    return true;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int nextBeautifulNumber(int n) {
-        for (int i = n + 1; i < 10000000; ++i) {
-            if (check(i)) return i;
+        for (int x = n + 1;; ++x) {
+            int cnt[10]{};
+            for (int y = x; y > 0; y /= 10) {
+                ++cnt[y % 10];
+            }
+            bool ok = true;
+            for (int y = x; y > 0; y /= 10) {
+                if (y % 10 != cnt[y % 10]) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) {
+                return x;
+            }
         }
-        return -1;
-    }
-
-    bool check(int num) {
-        string s = to_string(num);
-        vector<int> counter(10);
-        for (char c : s) ++counter[c - '0'];
-        for (char c : s) {
-            if (counter[c - '0'] != c - '0') return false;
-        }
-        return true;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func nextBeautifulNumber(n int) int {
-	check := func(num int) bool {
-		s := strconv.Itoa(num)
-		counter := make([]int, 10)
-		for _, c := range s {
-			counter[int(c-'0')]++
+	for x := n + 1; ; x++ {
+		cnt := [10]int{}
+		for y := x; y > 0; y /= 10 {
+			cnt[y%10]++
 		}
-		for _, c := range s {
-			if counter[int(c-'0')] != int(c-'0') {
-				return false
+		ok := true
+		for y := x; y > 0; y /= 10 {
+			if y%10 != cnt[y%10] {
+				ok = false
+				break
 			}
 		}
-		return true
-	}
-
-	for i := n + 1; i <= 10000000; i++ {
-		if check(i) {
-			return i
+		if ok {
+			return x
 		}
 	}
-	return -1
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function nextBeautifulNumber(n: number): number {
+    for (let x = n + 1; ; ++x) {
+        const cnt: number[] = Array(10).fill(0);
+        for (let y = x; y > 0; y = (y / 10) | 0) {
+            cnt[y % 10]++;
+        }
+        let ok = true;
+        for (let i = 0; i < 10; ++i) {
+            if (cnt[i] && cnt[i] !== i) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            return x;
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

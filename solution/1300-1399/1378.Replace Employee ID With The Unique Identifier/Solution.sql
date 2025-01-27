@@ -1,10 +1,5 @@
 # Write your MySQL query statement below
-SELECT
-    b.unique_id AS unique_id,
-    a.name AS name
+SELECT unique_id, name
 FROM
-    Employees a
-LEFT JOIN
-    EmployeeUNI b
-ON
-    a.id = b.id;
+    Employees
+    LEFT JOIN EmployeeUNI USING (id);

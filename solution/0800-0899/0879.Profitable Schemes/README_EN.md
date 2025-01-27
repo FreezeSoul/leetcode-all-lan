@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0879.Profitable%20Schemes/README_EN.md
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [879. Profitable Schemes](https://leetcode.com/problems/profitable-schemes)
 
 [中文文档](/solution/0800-0899/0879.Profitable%20Schemes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a group of <code>n</code> members, and a list of various crimes they could commit. The <code>i<sup>th</sup></code> crime generates a <code>profit[i]</code> and requires <code>group[i]</code> members to participate in it. If a member participates in one crime, that member can&#39;t participate in another crime.</p>
 
@@ -39,9 +52,13 @@ There are 7 possible schemes: (0), (1), (2), (0,1), (0,2), (1,2), and (0,1,2).</
 	<li><code>0 &lt;= profit[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: recursion with memoization**
+<!-- solution:start -->
+
+### Solution 1: recursion with memoization
 
 We design a function $dfs(i, j, k)$, which means that we start from the $i$-th job, and have chosen $j$ employees, and the current profit is $k$, then the number of schemes in this case is $dfs(0, 0, 0)$.
 
@@ -56,23 +73,15 @@ In order to avoid repeated calculation, we can use the method of memoization. We
 
 The time complexity is $O(m \times n \times minProfit)$, and th e space complexity is $O(m \times n \times minProfit)$. Here $m$ and $n$ are the number of jobs and employees, and $minProfit$ is the minimum profit.
 
-**Solution 2: Dynamic Programming**
-
-We define $f[i][j][k]$ to be the number of schemes to make a profit of at least $k$ with $i$ jobs and $j$ workers. Initially, we have $f[0][j][0] = 1$, which means that there is only one scheme to make a profit of $0$ without any jobs.
-
-For the $i$-th job, we can choose to work or not to work. If we do not work, then $f[i][j][k] = f[i - 1][j][k]$; if we work, then $f[i][j][k] = f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]$. We need to enumerate $j$ and $k$, and add up all the schemes.
-
-The final answer is $f[m][n][minProfit]$.
-
-The time complexity is $O(m \times n \times minProfit)$, and the space complexity is $O(m \times n \times minProfit)$. Here $m$ and $n$ are the numbers of jobs and workers, and $minProfit$ is the minimum profit to make.
-
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def profitableSchemes(self, n: int, minProfit: int, group: List[int], profit: List[int]) -> int:
+    def profitableSchemes(
+        self, n: int, minProfit: int, group: List[int], profit: List[int]
+    ) -> int:
         @cache
         def dfs(i: int, j: int, k: int) -> int:
             if i >= len(group):
@@ -85,26 +94,7 @@ class Solution:
         return dfs(0, 0, 0)
 ```
 
-```python
-class Solution:
-    def profitableSchemes(self, n: int, minProfit: int, group: List[int], profit: List[int]) -> int:
-        mod = 10**9 + 7
-        m = len(group)
-        f = [[[0] * (minProfit + 1) for _ in range(n + 1)]
-             for _ in range(m + 1)]
-        for j in range(n + 1):
-            f[0][j][0] = 1
-        for i, (x, p) in enumerate(zip(group, profit), 1):
-            for j in range(n + 1):
-                for k in range(minProfit + 1):
-                    f[i][j][k] = f[i - 1][j][k]
-                    if j >= x:
-                        f[i][j][k] = (f[i][j][k] + f[i - 1]
-                                      [j - x][max(0, k - p)]) % mod
-        return f[m][n][minProfit]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -143,34 +133,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
-        final int mod = (int) 1e9 + 7;
-        int m = group.length;
-        int[][][] f = new int[m + 1][n + 1][minProfit + 1];
-        for (int j = 0; j <= n; ++j) {
-            f[0][j][0] = 1;
-        }
-        for (int i = 1; i <= m; ++i) {
-            for (int j = 0; j <= n; ++j) {
-                for (int k = 0; k <= minProfit; ++k) {
-                    f[i][j][k] = f[i - 1][j][k];
-                    if (j >= group[i - 1]) {
-                        f[i][j][k]
-                            = (f[i][j][k]
-                                  + f[i - 1][j - group[i - 1]][Math.max(0, k - profit[i - 1])])
-                            % mod;
-                    }
-                }
-            }
-        }
-        return f[m][n][minProfit];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -199,33 +162,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int profitableSchemes(int n, int minProfit, vector<int>& group, vector<int>& profit) {
-        int m = group.size();
-        int f[m + 1][n + 1][minProfit + 1];
-        memset(f, 0, sizeof(f));
-        for (int j = 0; j <= n; ++j) {
-            f[0][j][0] = 1;
-        }
-        const int mod = 1e9 + 7;
-        for (int i = 1; i <= m; ++i) {
-            for (int j = 0; j <= n; ++j) {
-                for (int k = 0; k <= minProfit; ++k) {
-                    f[i][j][k] = f[i - 1][j][k];
-                    if (j >= group[i - 1]) {
-                        f[i][j][k] = (f[i][j][k] + f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]) % mod;
-                    }
-                }
-            }
-        }
-        return f[m][n][minProfit];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
@@ -262,14 +199,105 @@ func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
 	}
 	return dfs(0, 0, 0)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Dynamic Programming
+
+We define $f[i][j][k]$ to be the number of schemes to make a profit of at least $k$ with $i$ jobs and $j$ workers. Initially, we have $f[0][j][0] = 1$, which means that there is only one scheme to make a profit of $0$ without any jobs.
+
+For the $i$-th job, we can choose to work or not to work. If we do not work, then $f[i][j][k] = f[i - 1][j][k]$; if we work, then $f[i][j][k] = f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]$. We need to enumerate $j$ and $k$, and add up all the schemes.
+
+The final answer is $f[m][n][minProfit]$.
+
+The time complexity is $O(m \times n \times minProfit)$, and the space complexity is $O(m \times n \times minProfit)$. Here $m$ and $n$ are the numbers of jobs and workers, and $minProfit$ is the minimum profit to make.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def profitableSchemes(
+        self, n: int, minProfit: int, group: List[int], profit: List[int]
+    ) -> int:
+        mod = 10**9 + 7
+        m = len(group)
+        f = [[[0] * (minProfit + 1) for _ in range(n + 1)] for _ in range(m + 1)]
+        for j in range(n + 1):
+            f[0][j][0] = 1
+        for i, (x, p) in enumerate(zip(group, profit), 1):
+            for j in range(n + 1):
+                for k in range(minProfit + 1):
+                    f[i][j][k] = f[i - 1][j][k]
+                    if j >= x:
+                        f[i][j][k] = (f[i][j][k] + f[i - 1][j - x][max(0, k - p)]) % mod
+        return f[m][n][minProfit]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        final int mod = (int) 1e9 + 7;
+        int m = group.length;
+        int[][][] f = new int[m + 1][n + 1][minProfit + 1];
+        for (int j = 0; j <= n; ++j) {
+            f[0][j][0] = 1;
+        }
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                for (int k = 0; k <= minProfit; ++k) {
+                    f[i][j][k] = f[i - 1][j][k];
+                    if (j >= group[i - 1]) {
+                        f[i][j][k]
+                            = (f[i][j][k]
+                                  + f[i - 1][j - group[i - 1]][Math.max(0, k - profit[i - 1])])
+                            % mod;
+                    }
+                }
+            }
+        }
+        return f[m][n][minProfit];
+    }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int profitableSchemes(int n, int minProfit, vector<int>& group, vector<int>& profit) {
+        int m = group.size();
+        int f[m + 1][n + 1][minProfit + 1];
+        memset(f, 0, sizeof(f));
+        for (int j = 0; j <= n; ++j) {
+            f[0][j][0] = 1;
+        }
+        const int mod = 1e9 + 7;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                for (int k = 0; k <= minProfit; ++k) {
+                    f[i][j][k] = f[i - 1][j][k];
+                    if (j >= group[i - 1]) {
+                        f[i][j][k] = (f[i][j][k] + f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]) % mod;
+                    }
+                }
+            }
+        }
+        return f[m][n][minProfit];
+    }
+};
+```
+
+#### Go
 
 ```go
 func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
@@ -298,19 +326,10 @@ func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
 	}
 	return f[m][n][minProfit]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

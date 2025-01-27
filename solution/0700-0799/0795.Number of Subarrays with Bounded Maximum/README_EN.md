@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0795.Number%20of%20Subarrays%20with%20Bounded%20Maximum/README_EN.md
+tags:
+    - Array
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [795. Number of Subarrays with Bounded Maximum](https://leetcode.com/problems/number-of-subarrays-with-bounded-maximum)
 
 [中文文档](/solution/0700-0799/0795.Number%20of%20Subarrays%20with%20Bounded%20Maximum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> and two integers <code>left</code> and <code>right</code>, return <em>the number of contiguous non-empty <strong>subarrays</strong> such that the value of the maximum array element in that subarray is in the range </em><code>[left, right]</code>.</p>
 
@@ -33,11 +46,17 @@
 	<li><code>0 &lt;= left &lt;= right &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -51,6 +70,75 @@ class Solution:
 
         return f(right) - f(left - 1)
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int numSubarrayBoundedMax(int[] nums, int left, int right) {
+        return f(nums, right) - f(nums, left - 1);
+    }
+
+    private int f(int[] nums, int x) {
+        int cnt = 0, t = 0;
+        for (int v : nums) {
+            t = v > x ? 0 : t + 1;
+            cnt += t;
+        }
+        return cnt;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
+        auto f = [&](int x) {
+            int cnt = 0, t = 0;
+            for (int& v : nums) {
+                t = v > x ? 0 : t + 1;
+                cnt += t;
+            }
+            return cnt;
+        };
+        return f(right) - f(left - 1);
+    }
+};
+```
+
+#### Go
+
+```go
+func numSubarrayBoundedMax(nums []int, left int, right int) int {
+	f := func(x int) (cnt int) {
+		t := 0
+		for _, v := range nums {
+			t++
+			if v > x {
+				t = 0
+			}
+			cnt += t
+		}
+		return
+	}
+	return f(right) - f(left-1)
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -71,27 +159,12 @@ class Solution:
             if stk:
                 r[i] = stk[-1]
             stk.append(i)
-        return sum((i - l[i]) * (r[i] - i) for i, v in enumerate(nums) if left <= v <= right)
+        return sum(
+            (i - l[i]) * (r[i] - i) for i, v in enumerate(nums) if left <= v <= right
+        )
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public int numSubarrayBoundedMax(int[] nums, int left, int right) {
-        return f(nums, right) - f(nums, left - 1);
-    }
-
-    private int f(int[] nums, int x) {
-        int cnt = 0, t = 0;
-        for (int v : nums) {
-            t = v > x ? 0 : t + 1;
-            cnt += t;
-        }
-        return cnt;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -134,24 +207,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
-        auto f = [&](int x) {
-            int cnt = 0, t = 0;
-            for (int& v : nums) {
-                t = v > x ? 0 : t + 1;
-                cnt += t;
-            }
-            return cnt;
-        };
-        return f(right) - f(left -1);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -185,24 +241,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func numSubarrayBoundedMax(nums []int, left int, right int) int {
-	f := func(x int) (cnt int) {
-		t := 0
-		for _, v := range nums {
-			t++
-			if v > x {
-				t = 0
-			}
-			cnt += t
-		}
-		return
-	}
-	return f(right) - f(left-1)
-}
-```
+#### Go
 
 ```go
 func numSubarrayBoundedMax(nums []int, left int, right int) (ans int) {
@@ -242,10 +281,8 @@ func numSubarrayBoundedMax(nums []int, left int, right int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

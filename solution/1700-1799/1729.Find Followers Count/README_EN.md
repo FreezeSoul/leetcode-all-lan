@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1729.Find%20Followers%20Count/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1729. Find Followers Count](https://leetcode.com/problems/find-followers-count)
 
 [中文文档](/solution/1700-1799/1729.Find%20Followers%20Count/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Followers</code></p>
 
@@ -13,16 +25,16 @@
 | user_id     | int  |
 | follower_id | int  |
 +-------------+------+
-(user_id, follower_id) is the primary key for this table.
+(user_id, follower_id) is the primary key (combination of columns with unique values) for this table.
 This table contains the IDs of a user and a follower in a social media app where the follower follows the user.</pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query that will, for each user, return the number of followers.</p>
+<p>Write a solution that will, for each user, return the number of followers.</p>
 
 <p>Return the result table ordered by <code>user_id</code> in ascending order.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -52,22 +64,30 @@ The followers of 1 are {0}
 The followers of 2 are {0,1}
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Grouping and Aggregation
+
+We can directly group the `Followers` table by `user_id`, and use the `COUNT` function to count the number of followers for each user.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT
-    user_id,
-    count(1) AS followers_count
-FROM
-    Followers
-GROUP BY
-    user_id
-ORDER BY
-    user_id;
+# Write your MySQL query statement below
+SELECT user_id, COUNT(1) AS followers_count
+FROM Followers
+GROUP BY 1
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

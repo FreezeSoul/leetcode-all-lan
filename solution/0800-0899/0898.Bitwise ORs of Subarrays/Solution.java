@@ -1,18 +1,16 @@
 class Solution {
     public int subarrayBitwiseORs(int[] arr) {
+        Set<Integer> ans = new HashSet<>();
         Set<Integer> s = new HashSet<>();
-        int prev = 0;
-        for (int i = 0; i < arr.length; ++i) {
-            prev |= arr[i];
-            int curr = 0;
-            for (int j = i; j >= 0; --j) {
-                curr |= arr[j];
-                s.add(curr);
-                if (curr == prev) {
-                    break;
-                }
+        for (int x : arr) {
+            Set<Integer> t = new HashSet<>();
+            for (int y : s) {
+                t.add(x | y);
             }
+            t.add(x);
+            ans.addAll(t);
+            s = t;
         }
-        return s.size();
+        return ans.size();
     }
 }

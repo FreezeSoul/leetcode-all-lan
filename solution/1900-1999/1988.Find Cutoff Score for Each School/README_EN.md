@@ -1,8 +1,20 @@
-# [1988. Find Cutoff Score for Each School](https://leetcode.com/problems/find-cutoff-score-for-each-school)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1988.Find%20Cutoff%20Score%20for%20Each%20School/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1988. Find Cutoff Score for Each School 🔒](https://leetcode.com/problems/find-cutoff-score-for-each-school)
 
 [中文文档](/solution/1900-1999/1988.Find%20Cutoff%20Score%20for%20Each%20School/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Schools</code></p>
 
@@ -13,7 +25,7 @@
 | school_id   | int  |
 | capacity    | int  |
 +-------------+------+
-school_id is the primary key for this table.
+school_id is the column with unique values for this table.
 This table contains information about the capacity of some schools. The capacity is the maximum number of students the school can accept.
 </pre>
 
@@ -28,7 +40,7 @@ This table contains information about the capacity of some schools. The capacity
 | score         | int  |
 | student_count | int  |
 +---------------+------+
-score is the primary key for this table.
+score is the column with unique values for this table.
 Each row in this table indicates that there are student_count students that got at least score points in the exam.
 The data in this table will be logically correct, meaning a row recording a higher score will have the same or smaller student_count compared to a row recording a lower score. More formally, for every two rows i and j in the table, if score<sub>i</sub> &gt; score<sub>j</sub> then student_count<sub>i</sub> &lt;= student_count<sub>j</sub>.
 </pre>
@@ -43,11 +55,11 @@ The data in this table will be logically correct, meaning a row recording a high
 	<li>They <strong>must</strong> use a score that is in the <code>Exam</code> table.</li>
 </ol>
 
-<p>Write an SQL query to report the <strong>minimum score requirement</strong> for each school. If there are multiple score values satisfying the above conditions, choose the <strong>smallest</strong> one. If the input data is not enough to determine the score, report <code>-1</code>.</p>
+<p>Write a solution to report the <strong>minimum score requirement</strong> for each school. If there are multiple score values satisfying the above conditions, choose the <strong>smallest</strong> one. If the input data is not enough to determine the score, report <code>-1</code>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -89,14 +101,29 @@ Exam table:
 - School 9: The data given is not enough to determine the min score requirement. Choosing 975 as the min score, the school may get 10 requests while its capacity is 9. We do not have information about higher scores, hence we report -1.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT school_id, MIN(IFNULL(score, -1)) AS score
+FROM
+    Schools AS s
+    LEFT JOIN Exam AS e ON s.capacity >= e.student_count
+GROUP BY school_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

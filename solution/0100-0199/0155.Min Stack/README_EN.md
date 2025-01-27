@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0155.Min%20Stack/README_EN.md
+tags:
+    - Stack
+    - Design
+---
+
+<!-- problem:start -->
+
 # [155. Min Stack](https://leetcode.com/problems/min-stack)
 
 [中文文档](/solution/0100-0199/0155.Min%20Stack/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.</p>
 
@@ -49,15 +62,20 @@ minStack.getMin(); // return -2
 	<li>At most <code>3 * 10<sup>4</sup></code> calls will be made to <code>push</code>, <code>pop</code>, <code>top</code>, and <code>getMin</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class MinStack:
-
     def __init__(self):
         self.stk1 = []
         self.stk2 = [inf]
@@ -85,7 +103,7 @@ class MinStack:
 # param_4 = obj.getMin()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class MinStack {
@@ -125,7 +143,7 @@ class MinStack {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class MinStack {
@@ -167,7 +185,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type MinStack struct {
@@ -197,13 +215,6 @@ func (this *MinStack) GetMin() int {
 	return this.stk2[len(this.stk2)-1]
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 /**
  * Your MinStack object will be instantiated and called as such:
  * obj := Constructor();
@@ -214,7 +225,7 @@ func min(a, b int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class MinStack {
@@ -255,7 +266,52 @@ class MinStack {
  */
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+use std::collections::VecDeque;
+struct MinStack {
+    stk1: VecDeque<i32>,
+    stk2: VecDeque<i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl MinStack {
+    fn new() -> Self {
+        Self {
+            stk1: VecDeque::new(),
+            stk2: VecDeque::new(),
+        }
+    }
+
+    fn push(&mut self, x: i32) {
+        self.stk1.push_back(x);
+        if self.stk2.is_empty() || *self.stk2.back().unwrap() >= x {
+            self.stk2.push_back(x);
+        }
+    }
+
+    fn pop(&mut self) {
+        let val = self.stk1.pop_back().unwrap();
+        if *self.stk2.back().unwrap() == val {
+            self.stk2.pop_back();
+        }
+    }
+
+    fn top(&self) -> i32 {
+        *self.stk1.back().unwrap()
+    }
+
+    fn get_min(&self) -> i32 {
+        *self.stk2.back().unwrap()
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 var MinStack = function () {
@@ -304,60 +360,7 @@ MinStack.prototype.getMin = function () {
  */
 ```
 
-### **Rust**
-
-```rust
-use std::collections::VecDeque;
-struct MinStack {
-    stk1: VecDeque<i32>,
-    stk2: VecDeque<i32>,
-}
-
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl MinStack {
-
-    fn new() -> Self {
-        Self { stk1: VecDeque::new(), stk2: VecDeque::new() }
-    }
-
-    fn push(&mut self, x: i32) {
-        self.stk1.push_back(x);
-        if self.stk2.is_empty() || *self.stk2.back().unwrap() >= x {
-            self.stk2.push_back(x);
-        }
-    }
-
-    fn pop(&mut self) {
-        let val = self.stk1.pop_back().unwrap();
-        if *self.stk2.back().unwrap() == val {
-            self.stk2.pop_back();
-        }
-    }
-
-    fn top(&self) -> i32 {
-        *self.stk1.back().unwrap()
-    }
-
-    fn get_min(&self) -> i32 {
-        *self.stk2.back().unwrap()
-    }
-}
-
-/**
- * Your MinStack object will be instantiated and called as such:
- * let obj = MinStack::new();
- * obj.push(x);
- * obj.pop();
- * let ret_3: i32 = obj.top();
- * let ret_4: i32 = obj.get_min();
- */
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class MinStack {
@@ -397,10 +400,8 @@ public class MinStack {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

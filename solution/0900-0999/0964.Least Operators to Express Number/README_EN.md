@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0964.Least%20Operators%20to%20Express%20Number/README_EN.md
+tags:
+    - Memoization
+    - Math
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [964. Least Operators to Express Number](https://leetcode.com/problems/least-operators-to-express-number)
 
 [中文文档](/solution/0900-0999/0964.Least%20Operators%20to%20Express%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a single positive integer <code>x</code>, we will write an expression of the form <code>x (op1) x (op2) x (op3) x ...</code> where each operator <code>op1</code>, <code>op2</code>, etc. is either addition, subtraction, multiplication, or division (<code>+</code>, <code>-</code>, <code>*</code>, or <code>/)</code>. For example, with <code>x = 3</code>, we might write <code>3 * 3 / 3 + 3 - 3</code> which is a value of <font face="monospace">3</font>.</p>
 
@@ -53,26 +67,163 @@ The expression contains 3 operations.
 	<li><code>1 &lt;= target &lt;= 2 * 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
+class Solution:
+    def leastOpsExpressTarget(self, x: int, target: int) -> int:
+        @cache
+        def dfs(v: int) -> int:
+            if x >= v:
+                return min(v * 2 - 1, 2 * (x - v))
+            k = 2
+            while x**k < v:
+                k += 1
+            if x**k - v < v:
+                return min(k + dfs(x**k - v), k - 1 + dfs(v - x ** (k - 1)))
+            return k - 1 + dfs(v - x ** (k - 1))
 
+        return dfs(target)
 ```
 
-### **Java**
+#### Java
 
 ```java
+class Solution {
+    private int x;
+    private Map<Integer, Integer> f = new HashMap<>();
 
+    public int leastOpsExpressTarget(int x, int target) {
+        this.x = x;
+        return dfs(target);
+    }
+
+    private int dfs(int v) {
+        if (x >= v) {
+            return Math.min(v * 2 - 1, 2 * (x - v));
+        }
+        if (f.containsKey(v)) {
+            return f.get(v);
+        }
+        int k = 2;
+        long y = (long) x * x;
+        while (y < v) {
+            y *= x;
+            ++k;
+        }
+        int ans = k - 1 + dfs(v - (int) (y / x));
+        if (y - v < v) {
+            ans = Math.min(ans, k + dfs((int) y - v));
+        }
+        f.put(v, ans);
+        return ans;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int leastOpsExpressTarget(int x, int target) {
+        unordered_map<int, int> f;
+        function<int(int)> dfs = [&](int v) -> int {
+            if (x >= v) {
+                return min(v * 2 - 1, 2 * (x - v));
+            }
+            if (f.count(v)) {
+                return f[v];
+            }
+            int k = 2;
+            long long y = x * x;
+            while (y < v) {
+                y *= x;
+                ++k;
+            }
+            int ans = k - 1 + dfs(v - y / x);
+            if (y - v < v) {
+                ans = min(ans, k + dfs(y - v));
+            }
+            f[v] = ans;
+            return ans;
+        };
+        return dfs(target);
+    }
+};
 ```
 
+#### Go
+
+```go
+func leastOpsExpressTarget(x int, target int) int {
+	f := map[int]int{}
+	var dfs func(int) int
+	dfs = func(v int) int {
+		if x > v {
+			return min(v*2-1, 2*(x-v))
+		}
+		if val, ok := f[v]; ok {
+			return val
+		}
+		k := 2
+		y := x * x
+		for y < v {
+			y *= x
+			k++
+		}
+		ans := k - 1 + dfs(v-y/x)
+		if y-v < v {
+			ans = min(ans, k+dfs(y-v))
+		}
+		f[v] = ans
+		return ans
+	}
+	return dfs(target)
+}
+```
+
+#### TypeScript
+
+```ts
+function leastOpsExpressTarget(x: number, target: number): number {
+    const f: Map<number, number> = new Map();
+    const dfs = (v: number): number => {
+        if (x > v) {
+            return Math.min(v * 2 - 1, 2 * (x - v));
+        }
+        if (f.has(v)) {
+            return f.get(v)!;
+        }
+        let k = 2;
+        let y = x * x;
+        while (y < v) {
+            y *= x;
+            ++k;
+        }
+        let ans = k - 1 + dfs(v - Math.floor(y / x));
+        if (y - v < v) {
+            ans = Math.min(ans, k + dfs(y - v));
+        }
+        f.set(v, ans);
+        return ans;
+    };
+    return dfs(target);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

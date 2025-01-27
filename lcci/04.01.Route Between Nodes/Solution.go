@@ -1,23 +1,24 @@
 func findWhetherExistsPath(n int, graph [][]int, start int, target int) bool {
-	g := map[int][]int{}
+	g := make([][]int, n)
+	vis := make([]bool, n)
 	for _, e := range graph {
-		u, v := e[0], e[1]
-		g[u] = append(g[u], v)
+		g[e[0]] = append(g[e[0]], e[1])
 	}
-	q := []int{start}
-	vis := map[int]bool{start: true}
-	for len(q) > 0 {
-		u := q[0]
-		if u == target {
+	var dfs func(int) bool
+	dfs = func(i int) bool {
+		if i == target {
 			return true
 		}
-		q = q[1:]
-		for _, v := range g[u] {
-			if !vis[v] {
-				vis[v] = true
-				q = append(q, v)
+		if vis[i] {
+			return false
+		}
+		vis[i] = true
+		for _, j := range g[i] {
+			if dfs(j) {
+				return true
 			}
 		}
+		return false
 	}
-	return false
+	return dfs(start)
 }

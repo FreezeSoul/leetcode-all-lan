@@ -1,10 +1,21 @@
-# [408. 有效单词缩写](https://leetcode.cn/problems/valid-word-abbreviation)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0408.Valid%20Word%20Abbreviation/README.md
+tags:
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [408. 有效单词缩写 🔒](https://leetcode.cn/problems/valid-word-abbreviation)
 
 [English Version](/solution/0400-0499/0408.Valid%20Word%20Abbreviation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>字符串可以用 <strong>缩写</strong> 进行表示，<strong>缩写</strong> 的方法是将任意数量的 <strong>不相邻</strong> 的子字符串替换为相应子串的长度。例如，字符串 <code>"substitution"</code> 可以缩写为（不止这几种方法）：</p>
 
@@ -58,154 +69,161 @@
 	<li><code>abbr</code> 中的所有数字均符合 32-bit 整数范围</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-模拟字符匹配替换。
+我们可以直接模拟字符匹配替换。
 
-同时遍历 $word$ 和 $abbr$，若 $abbr$ 遇到数字，则 $word$ 跳过对应数字长度的字符数。若数字为空，或者有前导零，则提前返回 false。
+假设字符串 $word$ 和字符串 $abbr$ 的长度分别为 $m$ 和 $n$，我们使用两个指针 $i$ 和 $j$ 分别指向字符串 $word$ 和字符串 $abbr$ 的初始位置，用一个整型变量 $x$ 记录当前匹配到的 $abbr$ 的数字。
 
-时间复杂度 $O(m+n)$，空间复杂度 $O(1)$。其中 $m$ 是 $word$ 的长度，而 $n$ 是 $abbr$ 的长度。
+循环匹配字符串 $word$ 和字符串 $abbr$ 的每个字符：
+
+如果指针 $j$ 指向的字符 $abbr[j]$ 是数字，如果 $abbr[j]$ 是 `'0'`，并且 $x$ 为 $0$，说明 $abbr$ 中的数字含有前导零，因此不是合法的缩写，返回 `false`；否则将 $x$ 更新为 $x \times 10 + abbr[j] - '0'$。
+
+如果指针 $j$ 指向的字符 $abbr[j]$ 不是数字，那么我们此时将指针 $i$ 往前移动 $x$ 个位置，然后将 $x$ 重置为 $0$。如果此时 $i \geq m$ 或者 $word[i] \neq abbr[j]$，说明两个字符串无法匹配，返回 `false`；否则将指针 $i$ 往前移动 $1$ 个位置。
+
+然后我们将指针 $j$ 往前移动 $1$ 个位置，重复上述过程，直到 $i$ 超出字符串 $word$ 的长度或者 $j$ 超出字符串 $abbr$ 的长度。
+
+最后，如果 $i + x$ 等于 $m$ 且 $j$ 等于 $n$，说明字符串 $word$ 可以缩写成字符串 $abbr$，返回 `true`；否则返回 `false`。
+
+时间复杂度 $O(m + n)$，其中 $m$ 和 $n$ 分别是字符串 $word$ 和字符串 $abbr$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def validWordAbbreviation(self, word: str, abbr: str) -> bool:
-        i = j = 0
         m, n = len(word), len(abbr)
-        while i < m:
-            if j >= n:
-                return False
-            if word[i] == abbr[j]:
-                i, j = i + 1, j + 1
-                continue
-            k = j
-            while k < n and abbr[k].isdigit():
-                k += 1
-            t = abbr[j: k]
-            if not t.isdigit() or t[0] == '0' or int(t) == 0:
-                return False
-            i += int(t)
-            j = k
-        return i == m and j == n
+        i = j = x = 0
+        while i < m and j < n:
+            if abbr[j].isdigit():
+                if abbr[j] == "0" and x == 0:
+                    return False
+                x = x * 10 + int(abbr[j])
+            else:
+                i += x
+                x = 0
+                if i >= m or word[i] != abbr[j]:
+                    return False
+                i += 1
+            j += 1
+        return i + x == m and j == n
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public boolean validWordAbbreviation(String word, String abbr) {
         int m = word.length(), n = abbr.length();
-        int i = 0, j = 0;
-        while (i < m) {
-            if (j >= n) {
-                return false;
-            }
-            if (word.charAt(i) == abbr.charAt(j)) {
+        int i = 0, j = 0, x = 0;
+        for (; i < m && j < n; ++j) {
+            char c = abbr.charAt(j);
+            if (Character.isDigit(c)) {
+                if (c == '0' && x == 0) {
+                    return false;
+                }
+                x = x * 10 + (c - '0');
+            } else {
+                i += x;
+                x = 0;
+                if (i >= m || word.charAt(i) != c) {
+                    return false;
+                }
                 ++i;
-                ++j;
-                continue;
             }
-            int k = j;
-            while (k < n && Character.isDigit(abbr.charAt(k))) {
-                ++k;
-            }
-            String t = abbr.substring(j, k);
-            if (j == k || t.charAt(0) == '0' || Integer.parseInt(t) == 0) {
-                return false;
-            }
-            i += Integer.parseInt(t);
-            j = k;
         }
-        return i == m && j == n;
+        return i + x == m && j == n;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool validWordAbbreviation(string word, string abbr) {
-        int i = 0, j = 0;
         int m = word.size(), n = abbr.size();
-        while (i < m) {
-            if (j >= n) {
-                return false;
-            }
-            if (word[i] == abbr[j]) {
+        int i = 0, j = 0, x = 0;
+        for (; i < m && j < n; ++j) {
+            if (isdigit(abbr[j])) {
+                if (abbr[j] == '0' && x == 0) {
+                    return false;
+                }
+                x = x * 10 + (abbr[j] - '0');
+            } else {
+                i += x;
+                x = 0;
+                if (i >= m || word[i] != abbr[j]) {
+                    return false;
+                }
                 ++i;
-                ++j;
-                continue;
             }
-            int k = j;
-            while (k < n && isdigit(abbr[k])) {
-                ++k;
-            }
-            string t = abbr.substr(j, k - j);
-            if (k == j || t[0] == '0') {
-                return false;
-            }
-            int x = stoi(t);
-            if (x == 0) {
-                return false;
-            }
-            i += x;
-            j = k;
         }
-        return i == m && j == n;
+        return i + x == m && j == n;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func validWordAbbreviation(word string, abbr string) bool {
-	i, j := 0, 0
 	m, n := len(word), len(abbr)
-	for i < m {
-		if j >= n {
-			return false
-		}
-		if word[i] == abbr[j] {
+	i, j, x := 0, 0, 0
+	for ; i < m && j < n; j++ {
+		if abbr[j] >= '0' && abbr[j] <= '9' {
+			if x == 0 && abbr[j] == '0' {
+				return false
+			}
+			x = x*10 + int(abbr[j]-'0')
+		} else {
+			i += x
+			x = 0
+			if i >= m || word[i] != abbr[j] {
+				return false
+			}
 			i++
-			j++
-			continue
 		}
-		k := j
-		for k < n && abbr[k] >= '0' && abbr[k] <= '9' {
-			k++
-		}
-		if k == j || abbr[j] == '0' {
-			return false
-		}
-		x, _ := strconv.Atoi(abbr[j:k])
-		if x == 0 {
-			return false
-		}
-		i += x
-		j = k
 	}
-	return i == m && j == n
+	return i+x == m && j == n
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function validWordAbbreviation(word: string, abbr: string): boolean {
+    const [m, n] = [word.length, abbr.length];
+    let [i, j, x] = [0, 0, 0];
+    for (; i < m && j < n; ++j) {
+        if (abbr[j] >= '0' && abbr[j] <= '9') {
+            if (abbr[j] === '0' && x === 0) {
+                return false;
+            }
+            x = x * 10 + Number(abbr[j]);
+        } else {
+            i += x;
+            x = 0;
+            if (i >= m || word[i++] !== abbr[j]) {
+                return false;
+            }
+        }
+    }
+    return i + x === m && j === n;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

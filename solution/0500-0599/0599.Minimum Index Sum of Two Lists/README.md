@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0599.Minimum%20Index%20Sum%20of%20Two%20Lists/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [599. 两个列表的最小索引总和](https://leetcode.cn/problems/minimum-index-sum-of-two-lists)
 
 [English Version](/solution/0500-0599/0599.Minimum%20Index%20Sum%20of%20Two%20Lists/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>假设 Andy 和 Doris 想在晚餐时选择一家餐厅，并且他们都有一个表示最喜爱餐厅的列表，每个餐厅的名字用字符串表示。</p>
 
@@ -40,21 +52,17 @@
 	<li><code>list2</code> 中的所有字符串都是 <strong>唯一</strong> 的。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-先用哈希表 mp 记录 list2 的每个字符串以及对应的下标。初始化最小的索引和 mi = 2000，ans 表示结果列表，初始值为空。
-
-遍历 list1 每个字符串 v，若 v 在 mp 中，则计算两个字符串的索引和 t，并更新 ans 和 mi。
-
-最后返回 ans 即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -73,9 +81,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,9 +137,9 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
-```cpp
+```go
 func findRestaurant(list1 []string, list2 []string) []string {
 	mp := make(map[string]int)
 	for i, v := range list2 {
@@ -156,7 +162,7 @@ func findRestaurant(list1 []string, list2 []string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findRestaurant(list1: string[], list2: string[]): string[] {
@@ -179,7 +185,7 @@ function findRestaurant(list1: string[], list2: string[]): string[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -194,7 +200,7 @@ impl Solution {
             if map.contains_key(&key) {
                 let sum_i = map.get(&key).unwrap() + i;
                 if sum_i <= min_i {
-                    if (sum_i < min_i) {
+                    if sum_i < min_i {
                         min_i = sum_i;
                         res.clear();
                     }
@@ -207,10 +213,45 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### C++
+
+```cpp
+func findRestaurant(list1[] string, list2[] string)[] string {
+mp:= make(map[string]int)
+	for i, v := range list2 {
+		mp[v] = i
+	}
+	mi := 2000
+	var ans []string
+	for i, v := range list1 {
+        if _
+            , ok : = mp[v];
+        ok {
+        t:
+            = i + mp[v] if t < mi {
+                ans = [] string { v } mi = t
+            }
+            else if t == mi {
+                ans = append(ans, v)
+            }
+        }
+    }
+    return ans
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

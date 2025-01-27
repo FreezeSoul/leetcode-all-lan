@@ -1,34 +1,62 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1140.Stone%20Game%20II/README_EN.md
+rating: 2034
+source: Weekly Contest 147 Q4
+tags:
+    - Array
+    - Math
+    - Dynamic Programming
+    - Game Theory
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [1140. Stone Game II](https://leetcode.com/problems/stone-game-ii)
 
 [中文文档](/solution/1100-1199/1140.Stone%20Game%20II/README.md)
 
 ## Description
 
-<p>Alice and Bob continue their&nbsp;games with piles of stones.&nbsp; There are a number of&nbsp;piles&nbsp;<strong>arranged in a row</strong>, and each pile has a positive integer number of stones&nbsp;<code>piles[i]</code>.&nbsp; The objective of the game is to end with the most&nbsp;stones.&nbsp;</p>
+<!-- description:start -->
 
-<p>Alice&nbsp;and Bob take turns, with Alice starting first.&nbsp; Initially, <code>M = 1</code>.</p>
+<p>Alice and Bob continue their games with piles of stones. There are a number of piles <strong>arranged in a row</strong>, and each pile has a positive integer number of stones <code>piles[i]</code>. The objective of the game is to end with the most stones.</p>
 
-<p>On each player&#39;s turn, that player&nbsp;can take <strong>all the stones</strong> in the <strong>first</strong> <code>X</code> remaining piles, where <code>1 &lt;= X &lt;= 2M</code>.&nbsp; Then, we set&nbsp;<code>M = max(M, X)</code>.</p>
+<p>Alice and Bob take turns, with Alice starting first.</p>
+
+<p>On each player&#39;s turn, that player can take <strong>all the stones</strong> in the <strong>first</strong> <code>X</code> remaining piles, where <code>1 &lt;= X &lt;= 2M</code>. Then, we set <code>M = max(M, X)</code>. Initially, M = 1.</p>
 
 <p>The game continues until all the stones have been taken.</p>
 
-<p>Assuming Alice and Bob play optimally, return the maximum number of stones Alice&nbsp;can get.</p>
+<p>Assuming Alice and Bob play optimally, return the maximum number of stones Alice can get.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre>
-<strong>Input:</strong> piles = [2,7,9,4,4]
-<strong>Output:</strong> 10
-<strong>Explanation:</strong>  If Alice takes one pile at the beginning, Bob takes two piles, then Alice takes 2 piles again. Alice can get 2 + 4 + 4 = 10 piles in total. If Alice takes two piles at the beginning, then Bob can take all three piles left. In this case, Alice get 2 + 7 = 9 piles in total. So we return 10 since it&#39;s larger. 
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">piles = [2,7,9,4,4]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">10</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<ul>
+	<li>If Alice takes one pile at the beginning, Bob takes two piles, then Alice takes 2 piles again. Alice can get <code>2 + 4 + 4 = 10</code> stones in total.</li>
+	<li>If Alice takes two piles at the beginning, then Bob can take all three piles left. In this case, Alice get <code>2 + 7 = 9</code> stones in total.</li>
+</ul>
+
+<p>So we return 10 since it&#39;s larger.</p>
+</div>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre>
-<strong>Input:</strong> piles = [1,2,3,4,5,100]
-<strong>Output:</strong> 104
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">piles = [1,2,3,4,5,100]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">104</span></p>
+</div>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
@@ -38,11 +66,32 @@
 	<li><code>1 &lt;= piles[i]&nbsp;&lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Sum + Memoization Search
+
+Since the player can take all the stones from the first $X$ piles each time, that is, they can take the stones from an interval, we can first preprocess a prefix sum array $s$ of length $n+1$, where $s[i]$ represents the sum of the first $i$ elements of the array `piles`.
+
+Then we design a function $dfs(i, m)$, which represents the maximum number of stones that the current player can take when they can start from index $i$ of the array `piles`, and the current $M$ is $m$. Initially, Alice starts from index $0$, and $M=1$, so the answer we need to find is $dfs(0, 1)$.
+
+The calculation process of the function $dfs(i, m)$ is as follows:
+
+-   If the current player can take all the remaining stones, the maximum number of stones they can take is $s[n] - s[i]$;
+-   Otherwise, the current player can take all the stones from the first $x$ piles of the remaining ones, where $1 \leq x \leq 2m$, and the maximum number of stones they can take is $s[n] - s[i] - dfs(i + x, max(m, x))$. That is to say, the number of stones that the current player can take is the number of all the remaining stones minus the number of stones that the opponent can take in the next round. We need to enumerate all $x$, and take the maximum value as the return value of the function $dfs(i, m)$.
+
+To avoid repeated calculations, we can use memoization search.
+
+Finally, we return $dfs(0, 1)$ as the answer.
+
+The time complexity is $O(n^3)$, and the space complexity is $O(n^2)$. Here, $n$ is the length of the array `piles`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -60,23 +109,7 @@ class Solution:
         return dfs(0, 1)
 ```
 
-```python
-class Solution:
-    def stoneGameII(self, piles: List[int]) -> int:
-        @cache
-        def dfs(i: int, m: int = 1) -> int:
-            if i >= len(piles):
-                return 0
-            t = inf
-            for x in range(1, m << 1 | 1):
-                t = min(t, dfs(i + x, max(m, x)))
-            return s[-1] - s[i] - t
-
-        s = list(accumulate(piles, initial=0))
-        return dfs(0)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,7 +175,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func stoneGameII(piles []int) int {
@@ -169,16 +202,9 @@ func stoneGameII(piles []int) int {
 	}
 	return dfs(0, 1)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function stoneGameII(piles: number[]): number {
@@ -205,10 +231,36 @@ function stoneGameII(piles: number[]): number {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def stoneGameII(self, piles: List[int]) -> int:
+        @cache
+        def dfs(i: int, m: int = 1) -> int:
+            if i >= len(piles):
+                return 0
+            t = inf
+            for x in range(1, m << 1 | 1):
+                t = min(t, dfs(i + x, max(m, x)))
+            return s[-1] - s[i] - t
+
+        s = list(accumulate(piles, initial=0))
+        return dfs(0)
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0506.Relative%20Ranks/README.md
+tags:
+    - 数组
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [506. 相对名次](https://leetcode.cn/problems/relative-ranks)
 
 [English Version](/solution/0500-0599/0506.Relative%20Ranks/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个长度为 <code>n</code> 的整数数组 <code>score</code> ，其中 <code>score[i]</code> 是第 <code>i</code> 位运动员在比赛中的得分。所有得分都 <strong>互不相同</strong> 。</p>
 
@@ -47,15 +59,23 @@
 	<li><code>score</code> 中的所有值 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：排序
+
+我们使用一个数组 $\textit{idx}$ 存储 $0$ 到 $n-1$ 的下标，然后对 $\textit{idx}$ 进行排序，排序规则为：按照 $\textit{score}$ 的值从大到小排序。
+
+然后我们定义一个数组 $\textit{top3} = [\text{Gold Medal}, \text{Silver Medal}, \text{Bronze Medal}]$，遍历 $\textit{idx}$，对于每个下标 $j$，如果 $j$ 小于 $3$，则 $\textit{ans}[j]$ 为 $\textit{top3}[j]$，否则为 $j+1$。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{score}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -63,16 +83,14 @@ class Solution:
         n = len(score)
         idx = list(range(n))
         idx.sort(key=lambda x: -score[x])
-        top3 = ['Gold Medal', 'Silver Medal', 'Bronze Medal']
+        top3 = ["Gold Medal", "Silver Medal", "Bronze Medal"]
         ans = [None] * n
-        for i in range(n):
-            ans[idx[i]] = top3[i] if i < 3 else str(i + 1)
+        for i, j in enumerate(idx):
+            ans[j] = top3[i] if i < 3 else str(i + 1)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,28 +111,29 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> findRelativeRanks(vector<int>& score) {
         int n = score.size();
-        vector<pair<int, int>> idx;
-        for (int i = 0; i < n; ++i)
-            idx.push_back(make_pair(score[i], i));
-        sort(idx.begin(), idx.end(),
-            [&](const pair<int, int>& x, const pair<int, int>& y) { return x.first > y.first; });
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&score](int a, int b) {
+            return score[a] > score[b];
+        });
         vector<string> ans(n);
         vector<string> top3 = {"Gold Medal", "Silver Medal", "Bronze Medal"};
-        for (int i = 0; i < n; ++i)
-            ans[idx[i].second] = i < 3 ? top3[i] : to_string(i + 1);
+        for (int i = 0; i < n; ++i) {
+            ans[idx[i]] = i < 3 ? top3[i] : to_string(i + 1);
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findRelativeRanks(score []int) []string {
@@ -139,10 +158,28 @@ func findRelativeRanks(score []int) []string {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function findRelativeRanks(score: number[]): string[] {
+    const n = score.length;
+    const idx = Array.from({ length: n }, (_, i) => i);
+    idx.sort((a, b) => score[b] - score[a]);
+    const top3 = ['Gold Medal', 'Silver Medal', 'Bronze Medal'];
+    const ans: string[] = Array(n);
+    for (let i = 0; i < n; i++) {
+        if (i < 3) {
+            ans[idx[i]] = top3[i];
+        } else {
+            ans[idx[i]] = (i + 1).toString();
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

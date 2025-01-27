@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2556.Disconnect%20Path%20in%20a%20Binary%20Matrix%20by%20at%20Most%20One%20Flip/README.md
+rating: 2368
+source: 第 97 场双周赛 Q4
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2556. 二进制矩阵中翻转最多一次使路径不连通](https://leetcode.cn/problems/disconnect-path-in-a-binary-matrix-by-at-most-one-flip)
 
 [English Version](/solution/2500-2599/2556.Disconnect%20Path%20in%20a%20Binary%20Matrix%20by%20at%20Most%20One%20Flip/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的&nbsp;<code>m x n</code>&nbsp;<strong>二进制</strong> 矩阵&nbsp;<code>grid</code>&nbsp;。你可以从一个格子&nbsp;<code>(row, col)</code>&nbsp;移动到格子&nbsp;<code>(row + 1, col)</code>&nbsp;或者&nbsp;<code>(row, col + 1)</code>&nbsp;，前提是前往的格子值为 <code>1</code>&nbsp;。如果从&nbsp;<code>(0, 0)</code>&nbsp;到&nbsp;<code>(m - 1, n - 1)</code>&nbsp;没有任何路径，我们称该矩阵是&nbsp;<strong>不连通</strong>&nbsp;的。</p>
 
@@ -48,15 +64,17 @@
 	<li><code>grid[0][0] == grid[m - 1][n - 1] == 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：两次 DFS**
+### 方法一：两次 DFS
 
-我们先进行一次 DFS，判断从 `(0, 0)` 到 `(m - 1, n - 1)` 是否存在路径，记结果为 $a$。在 DFS 的过程中，我们将访问过的格子的值置为 $0$，以防止重复访问。
+我们先进行一次 DFS，判断从 $(0, 0)$ 到 $(m - 1, n - 1)$ 是否存在路径，记结果为 $a$。在 DFS 的过程中，我们将访问过的格子的值置为 $0$，以防止重复访问。
 
-接下来，我们将 `(0, 0)` 和 `(m - 1, n - 1)` 的值置为 $1$，再进行一次 DFS，判断从 `(0, 0)` 到 `(m - 1, n - 1)` 是否存在路径，记结果为 $b$。在 DFS 的过程中，我们将访问过的格子的值置为 $0$，以防止重复访问。
+接下来，我们将 $(0, 0)$ 和 $(m - 1, n - 1)$ 的值置为 $1$，再进行一次 DFS，判断从 $(0, 0)$ 到 $(m - 1, n - 1)$ 是否存在路径，记结果为 $b$。在 DFS 的过程中，我们将访问过的格子的值置为 $0$，避免重复访问。
 
 最后，如果 $a$ 和 $b$ 都为 `true`，则返回 `false`，否则返回 `true`。
 
@@ -64,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +102,7 @@ class Solution:
         return not (a and b)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isPossibleToCutPath(grid [][]int) bool {
@@ -168,10 +182,33 @@ func isPossibleToCutPath(grid [][]int) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function isPossibleToCutPath(grid: number[][]): boolean {
+    const m = grid.length;
+    const n = grid[0].length;
 
+    const dfs = (i: number, j: number): boolean => {
+        if (i >= m || j >= n || grid[i][j] !== 1) {
+            return false;
+        }
+        grid[i][j] = 0;
+        if (i === m - 1 && j === n - 1) {
+            return true;
+        }
+        return dfs(i + 1, j) || dfs(i, j + 1);
+    };
+    const a = dfs(0, 0);
+    grid[0][0] = 1;
+    grid[m - 1][n - 1] = 1;
+    const b = dfs(0, 0);
+    return !(a && b);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->
