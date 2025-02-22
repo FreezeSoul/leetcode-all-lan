@@ -1,14 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0846.Hand%20of%20Straights/README.md
+tags:
+    - 贪心
+    - 数组
+    - 哈希表
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [846. 一手顺子](https://leetcode.cn/problems/hand-of-straights)
 
 [English Version](/solution/0800-0899/0846.Hand%20of%20Straights/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>Alice 手中有一把牌，她想要重新排列这些牌，分成若干组，使每一组的牌数都是 <code>groupSize</code> ，并且由 <code>groupSize</code> 张连续的牌组成。</p>
 
-<p>给你一个整数数组 <code>hand</code> 其中 <code>hand[i]</code> 是写在第 <code>i</code> 张牌，和一个整数 <code>groupSize</code> 。如果她可能重新排列这些牌，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p>给你一个整数数组 <code>hand</code> 其中 <code>hand[i]</code> 是写在第 <code>i</code> 张牌上的<strong>数值</strong>。如果她可能重新排列这些牌，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
 
 <p>&nbsp;</p>
 
@@ -43,11 +56,13 @@
 
 <p><strong>注意：</strong>此题目与 1296 重复：<a href="https://leetcode.cn/problems/divide-array-in-sets-of-k-consecutive-numbers/" target="_blank">https://leetcode.cn/problems/divide-array-in-sets-of-k-consecutive-numbers/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 排序**
+### 方法一：哈希表 + 排序
 
 我们先用哈希表 `cnt` 统计数组 `hand` 中每个数字出现的次数，然后对数组 `hand` 进行排序。
 
@@ -55,19 +70,9 @@
 
 时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `hand` 的长度。
 
-**方法二：有序集合**
-
-我们也可以使用有序集合统计数组 `hand` 中每个数字出现的次数。
-
-接下来，循环取出有序集合中的最小值 $v$，然后枚举 $v$ 到 $v+groupSize-1$ 的每个数字，如果这些数字在有序集合中出现的次数都不为 $0$，则我们将这些数字的出现次数减 $1$，如果出现次数减 $1$ 后为 $0$，则将该数字从有序集合中删除，否则说明无法将数组划分成若干个长度为 $groupSize$ 的子数组，返回 `false`。如果可以将数组划分成若干个长度为 $groupSize$ 的子数组，则遍历结束后返回 `true`。
-
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `hand` 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,35 +89,7 @@ class Solution:
         return True
 ```
 
-```python
-from sortedcontainers import SortedDict
-
-
-class Solution:
-    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
-        if len(hand) % groupSize != 0:
-            return False
-        sd = SortedDict()
-        for h in hand:
-            if h in sd:
-                sd[h] += 1
-            else:
-                sd[h] = 1
-        while sd:
-            v = sd.peekitem(0)[0]
-            for i in range(v, v + groupSize):
-                if i not in sd:
-                    return False
-                if sd[i] == 1:
-                    sd.pop(i)
-                else:
-                    sd[i] -= 1
-        return True
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -139,6 +116,126 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        unordered_map<int, int> cnt;
+        for (int& v : hand) ++cnt[v];
+        sort(hand.begin(), hand.end());
+        for (int& v : hand) {
+            if (cnt.count(v)) {
+                for (int x = v; x < v + groupSize; ++x) {
+                    if (!cnt.count(x)) {
+                        return false;
+                    }
+                    if (--cnt[x] == 0) {
+                        cnt.erase(x);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
+```
+
+#### Go
+
+```go
+func isNStraightHand(hand []int, groupSize int) bool {
+	cnt := map[int]int{}
+	for _, v := range hand {
+		cnt[v]++
+	}
+	sort.Ints(hand)
+	for _, v := range hand {
+		if _, ok := cnt[v]; ok {
+			for x := v; x < v+groupSize; x++ {
+				if _, ok := cnt[x]; !ok {
+					return false
+				}
+				cnt[x]--
+				if cnt[x] == 0 {
+					delete(cnt, x)
+				}
+			}
+		}
+	}
+	return true
+}
+```
+
+#### TypeScript
+
+```ts
+function isNStraightHand(hand: number[], groupSize: number) {
+    const cnt: Record<number, number> = {};
+    for (const i of hand) {
+        cnt[i] = (cnt[i] ?? 0) + 1;
+    }
+
+    const keys = Object.keys(cnt).map(Number);
+    for (const i of keys) {
+        while (cnt[i]) {
+            for (let j = i; j < groupSize + i; j++) {
+                if (!cnt[j]) {
+                    return false;
+                }
+                cnt[j]--;
+            }
+        }
+    }
+
+    return true;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：有序集合
+
+我们也可以使用有序集合统计数组 `hand` 中每个数字出现的次数。
+
+接下来，循环取出有序集合中的最小值 $v$，然后枚举 $v$ 到 $v+groupSize-1$ 的每个数字，如果这些数字在有序集合中出现的次数都不为 $0$，则我们将这些数字的出现次数减 $1$，如果出现次数减 $1$ 后为 $0$，则将该数字从有序集合中删除，否则说明无法将数组划分成若干个长度为 $groupSize$ 的子数组，返回 `false`。如果可以将数组划分成若干个长度为 $groupSize$ 的子数组，则遍历结束后返回 `true`。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `hand` 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        if len(hand) % groupSize != 0:
+            return False
+        sd = SortedDict()
+        for h in hand:
+            if h in sd:
+                sd[h] += 1
+            else:
+                sd[h] = 1
+        while sd:
+            v = sd.peekitem(0)[0]
+            for i in range(v, v + groupSize):
+                if i not in sd:
+                    return False
+                if sd[i] == 1:
+                    sd.pop(i)
+                else:
+                    sd[i] -= 1
+        return True
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -168,31 +265,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool isNStraightHand(vector<int>& hand, int groupSize) {
-        unordered_map<int, int> cnt;
-        for (int& v : hand) ++cnt[v];
-        sort(hand.begin(), hand.end());
-        for (int& v : hand) {
-            if (cnt.count(v)) {
-                for (int x = v; x < v + groupSize; ++x) {
-                    if (!cnt.count(x)) {
-                        return false;
-                    }
-                    if (--cnt[x] == 0) {
-                        cnt.erase(x);
-                    }
-                }
-            }
-        }
-        return true;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -216,31 +289,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func isNStraightHand(hand []int, groupSize int) bool {
-	cnt := map[int]int{}
-	for _, v := range hand {
-		cnt[v]++
-	}
-	sort.Ints(hand)
-	for _, v := range hand {
-		if _, ok := cnt[v]; ok {
-			for x := v; x < v+groupSize; x++ {
-				if _, ok := cnt[x]; !ok {
-					return false
-				}
-				cnt[x]--
-				if cnt[x] == 0 {
-					delete(cnt, x)
-				}
-			}
-		}
-	}
-	return true
-}
-```
+#### Go
 
 ```go
 func isNStraightHand(hand []int, groupSize int) bool {
@@ -272,10 +321,42 @@ func isNStraightHand(hand []int, groupSize int) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function isNStraightHand(hand: number[], groupSize: number): boolean {
+    const n = hand.length;
+    if (n % groupSize) {
+        return false;
+    }
 
+    const groups: number[][] = Array.from({ length: n / groupSize }, () => []);
+    hand.sort((a, b) => a - b);
+
+    for (let i = 0; i < n; i++) {
+        let isPushed = false;
+
+        for (const g of groups) {
+            if (g.length === groupSize || (g.length && hand[i] - g.at(-1)! !== 1)) {
+                continue;
+            }
+
+            g.push(hand[i]);
+            isPushed = true;
+            break;
+        }
+
+        if (!isPushed) {
+            return false;
+        }
+    }
+
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

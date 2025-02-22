@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2718.Sum%20of%20Matrix%20After%20Queries/README_EN.md
+rating: 1768
+source: Weekly Contest 348 Q3
+tags:
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [2718. Sum of Matrix After Queries](https://leetcode.com/problems/sum-of-matrix-after-queries)
 
 [中文文档](/solution/2700-2799/2718.Sum%20of%20Matrix%20After%20Queries/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code> and a <strong>0-indexed</strong>&nbsp;<strong>2D array</strong> <code>queries</code> where <code>queries[i] = [type<sub>i</sub>, index<sub>i</sub>, val<sub>i</sub>]</code>.</p>
 
@@ -44,11 +59,28 @@
 	<li><code>0 &lt;= val<sub>i</sub> &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+Since the value of each row and column depends on the last modification, we can traverse all queries in reverse order and use hash tables $row$ and $col$ to record which rows and columns have been modified.
+
+For each query $(t, i, v)$:
+
+-   If $t = 0$, we check whether the $i$th row has been modified. If not, we add $v \times (n - |col|)$ to the answer, where $|col|$ represents the size of $col$, and then add $i$ to $row$.
+-   If $t = 1$, we check whether the $i$th column has been modified. If not, we add $v \times (n - |row|)$ to the answer, where $|row|$ represents the size of $row$, and then add $i$ to $col$.
+
+Finally, return the answer.
+
+The time complexity is $O(m)$, and the space complexity is $O(n)$. Here, $m$ represents the number of queries.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func matrixSumQueries(n int, queries [][]int) (ans int64) {
@@ -147,7 +179,7 @@ func matrixSumQueries(n int, queries [][]int) (ans int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function matrixSumQueries(n: number, queries: number[][]): number {
@@ -172,10 +204,8 @@ function matrixSumQueries(n: number, queries: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

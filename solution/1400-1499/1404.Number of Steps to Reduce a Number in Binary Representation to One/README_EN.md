@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1404.Number%20of%20Steps%20to%20Reduce%20a%20Number%20in%20Binary%20Representation%20to%20One/README_EN.md
+rating: 1396
+source: Weekly Contest 183 Q2
+tags:
+    - Bit Manipulation
+    - String
+---
+
+<!-- problem:start -->
+
 # [1404. Number of Steps to Reduce a Number in Binary Representation to One](https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one)
 
 [中文文档](/solution/1400-1499/1404.Number%20of%20Steps%20to%20Reduce%20a%20Number%20in%20Binary%20Representation%20to%20One/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the binary representation of an integer as a string <code>s</code>, return <em>the number of steps to reduce it to </em><code>1</code><em> under the following rules</em>:</p>
 
@@ -37,7 +52,7 @@ Step 6) 2 is even, divide by 2 and obtain 1.&nbsp;
 <pre>
 <strong>Input:</strong> s = &quot;10&quot;
 <strong>Output:</strong> 1
-<strong>Explanation:</strong> &quot;10&quot; corressponds to number 2 in their decimal representation.
+<strong>Explanation:</strong> &quot;10&quot; corresponds to number 2 in their decimal representation.
 Step 1) 2 is even, divide by 2 and obtain 1.&nbsp; 
 </pre>
 
@@ -57,11 +72,21 @@ Step 1) 2 is even, divide by 2 and obtain 1.&nbsp;
 	<li><code>s[0] == &#39;1&#39;</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We simulate operations $1$ and $2$, while using `carry` to record the carry-over.
+
+The time complexity is $O(n)$, where $n$ is the length of the string $s$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +109,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -115,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -144,7 +169,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numSteps(s string) int {
@@ -173,10 +198,8 @@ func numSteps(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

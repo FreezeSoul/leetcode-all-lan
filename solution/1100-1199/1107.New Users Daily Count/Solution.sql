@@ -1,10 +1,13 @@
 # Write your MySQL query statement below
-SELECT
-	login_date,
-	count( user_id ) AS user_count 
-FROM
-	( SELECT min( activity_date ) AS login_date, user_id FROM Traffic WHERE activity = 'login' GROUP BY user_id ) t 
-WHERE
-	DATEDIFF( '2019-6-30', login_date ) <= 90 
-GROUP BY
-	login_date;
+WITH
+    T AS (
+        SELECT
+            user_id,
+            MIN(activity_date) OVER (PARTITION BY user_id) AS login_date
+        FROM Traffic
+        WHERE activity = 'login'
+    )
+SELECT login_date, COUNT(DISTINCT user_id) AS user_count
+FROM T
+WHERE DATEDIFF('2019-06-30', login_date) <= 90
+GROUP BY 1;

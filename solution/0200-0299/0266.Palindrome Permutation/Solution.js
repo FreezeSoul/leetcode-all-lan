@@ -3,13 +3,9 @@
  * @return {boolean}
  */
 var canPermutePalindrome = function (s) {
-    let ss = new Set();
-    for (let c of s) {
-        if (ss.has(c)) {
-            ss.delete(c);
-        } else {
-            ss.add(c);
-        }
+    const cnt = new Map();
+    for (const c of s) {
+        cnt.set(c, (cnt.get(c) || 0) + 1);
     }
-    return ss.size < 2;
+    return [...cnt.values()].filter(v => v % 2 === 1).length < 2;
 };

@@ -1,10 +1,22 @@
-# [248. 中心对称数 III](https://leetcode.cn/problems/strobogrammatic-number-iii)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0248.Strobogrammatic%20Number%20III/README.md
+tags:
+    - 递归
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [248. 中心对称数 III 🔒](https://leetcode.cn/problems/strobogrammatic-number-iii)
 
 [English Version](/solution/0200-0299/0248.Strobogrammatic%20Number%20III/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个字符串 low 和 high 表示两个整数 <code>low</code>&nbsp;和 <code>high</code> ，其中&nbsp;<code>low &lt;= high</code>&nbsp;，返回 范围 <code>[low, high]</code>&nbsp;内的 <strong>「中心对称数」</strong>总数&nbsp;&nbsp;。</p>
 
@@ -39,11 +51,13 @@
 	<li><code>low</code>&nbsp;and&nbsp;<code>high</code>&nbsp;不包含任何前导零，除了零本身。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 若长度为 $1$，则中心对称数只有 $0, 1, 8$；若长度为 $2$，则中心对称数只有 $11, 69, 88, 96$。
 
@@ -61,13 +75,13 @@
 
 时间复杂度为 $O(2^{n+2}\times \log n)$。
 
-相似题目：[247. 中心对称数 II](/solution/0200-0299/0247.Strobogrammatic%20Number%20II/README.md)
+相似题目：
+
+-   [247. 中心对称数 II](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0247.Strobogrammatic%20Number%20II/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -95,9 +109,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -140,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 using ll = long long;
@@ -178,7 +190,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func strobogrammaticInRange(low string, high string) int {
@@ -219,10 +231,8 @@ func strobogrammaticInRange(low string, high string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

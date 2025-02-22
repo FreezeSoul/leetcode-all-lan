@@ -1,10 +1,20 @@
-# [2175. 世界排名的变化](https://leetcode.cn/problems/the-change-in-global-rankings)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2175.The%20Change%20in%20Global%20Rankings/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2175. 世界排名的变化 🔒](https://leetcode.cn/problems/the-change-in-global-rankings)
 
 [English Version](/solution/2100-2199/2175.The%20Change%20in%20Global%20Rankings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>TeamPoints</code></p>
 
@@ -16,7 +26,7 @@
 | name        | varchar |
 | points      | int     |
 +-------------+---------+
-team_id 是这张表的主键。
+team_id 包含唯一值。
 这张表的每一行均包含了一支国家队的 ID，它所代表的国家，以及它在全球排名中的得分。没有两支队伍代表同一个国家。
 </pre>
 
@@ -31,7 +41,7 @@ team_id 是这张表的主键。
 | team_id       | int  |
 | points_change | int  |
 +---------------+------+
-team_id 是这张表的主键。
+team_id 包含唯一值。
 这张表的每一行均包含了一支国家队的 ID 以及它在世界排名中的得分的变化。
 分数的变化分以下情况：
 - 0:代表分数没有改变
@@ -46,7 +56,7 @@ TeamPoints 表中出现的每一个 team_id 均会在这张表中出现。
 
 <p>每支国家队的分数应根据其相应的 <code>points_change</code> 进行更新。</p>
 
-<p>编写一条 SQL 查询来计算在分数更新后，每个队伍的全球排名的变化。</p>
+<p>编写解决方案来计算在分数更新后，每个队伍的全球排名的变化。</p>
 
 <p>以<strong> 任意顺序 </strong>返回结果。</p>
 
@@ -111,18 +121,41 @@ Algeria 获得399分，排名上升了1名。
 New Zealand 没有获得或丢失分数，他们的排名也没有发生变化。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：窗口函数
+
+利用 `rank()` 函数求出新老排名，然后用 `CAST` 将字段类型改为 `signed`，保证两个排名可以进行减法操作。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    P AS (
+        SELECT team_id, SUM(points_change) AS delta
+        FROM PointsChange
+        GROUP BY team_id
+    )
+SELECT
+    team_id,
+    name,
+    CAST(RANK() OVER (ORDER BY points DESC, name) AS SIGNED) - CAST(
+        RANK() OVER (ORDER BY (points + delta) DESC, name) AS SIGNED
+    ) AS 'rank_diff'
+FROM
+    TeamPoints
+    JOIN P USING (team_id);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

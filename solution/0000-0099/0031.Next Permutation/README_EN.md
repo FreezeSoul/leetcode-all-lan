@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0031.Next%20Permutation/README_EN.md
+tags:
+    - Array
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [31. Next Permutation](https://leetcode.com/problems/next-permutation)
 
 [中文文档](/solution/0000-0099/0031.Next%20Permutation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>permutation</strong> of an array of integers is an arrangement of its members into a sequence or linear order.</p>
 
@@ -52,9 +65,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Two traversals**
+<!-- solution:start -->
+
+### Solution 1: Two traversals
 
 We first traverse the array from back to front and find the first position $i$ where $nums[i] \lt nums[i + 1]$.
 
@@ -64,7 +81,7 @@ The time complexity is $O(n)$ and the space complexity is $O(1)$. Where $n$ is t
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,7 +94,7 @@ class Solution:
         nums[i + 1 :] = nums[i + 1 :][::-1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +152,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func nextPermutation(nums []int) {
@@ -157,7 +174,7 @@ func nextPermutation(nums []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function nextPermutation(nums: number[]): void {
@@ -180,7 +197,33 @@ function nextPermutation(nums: number[]): void {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var nextPermutation = function (nums) {
+    const n = nums.length;
+    let i = n - 2;
+    while (i >= 0 && nums[i] >= nums[i + 1]) {
+        --i;
+    }
+    if (i >= 0) {
+        let j = n - 1;
+        while (j > i && nums[j] <= nums[i]) {
+            --j;
+        }
+        [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+    for (i = i + 1, j = n - 1; i < j; ++i, --j) {
+        [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+};
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -211,10 +254,47 @@ public class Solution {
 }
 ```
 
-### **...**
+#### PHP
 
-```
+```php
+class Solution {
+    /**
+     * @param integer[] $nums
+     * @return void
+     */
 
+    function nextPermutation(&$nums) {
+        $n = count($nums);
+        $i = $n - 2;
+        while ($i >= 0 && $nums[$i] >= $nums[$i + 1]) {
+            $i--;
+        }
+        if ($i >= 0) {
+            $j = $n - 1;
+            while ($j >= $i && $nums[$j] <= $nums[$i]) {
+                $j--;
+            }
+            $temp = $nums[$i];
+            $nums[$i] = $nums[$j];
+            $nums[$j] = $temp;
+        }
+        $this->reverse($nums, $i + 1, $n - 1);
+    }
+
+    function reverse(&$nums, $start, $end) {
+        while ($start < $end) {
+            $temp = $nums[$start];
+            $nums[$start] = $nums[$end];
+            $nums[$end] = $temp;
+            $start++;
+            $end--;
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0335.Self%20Crossing/README_EN.md
+tags:
+    - Geometry
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [335. Self Crossing](https://leetcode.com/problems/self-crossing)
 
 [中文文档](/solution/0300-0399/0335.Self%20Crossing/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array of integers <code>distance</code>.</p>
 
@@ -43,30 +57,17 @@
 	<li><code>1 &lt;=&nbsp;distance[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-```bash
-                i-2
-    case 1 : i-1┌─┐
-                └─┼─>i
-                 i-3
+<!-- solution:start -->
 
-                   i-2
-    case 2 : i-1 ┌────┐
-                 └─══>┘i-3
-                 i  i-4
-
-    case 3 :    i-4
-               ┌──┐
-               │i<┼─┐
-            i-3│ i-5│i-1
-               └────┘
-                i-2
-```
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -88,7 +89,7 @@ class Solution:
         return False
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isSelfCrossing(distance []int) bool {
@@ -148,10 +149,27 @@ func isSelfCrossing(distance []int) bool {
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public bool IsSelfCrossing(int[] x) {
+        for (var i = 3; i < x.Length; ++i)
+        {
+            if (x[i] >= x[i - 2] && x[i - 1] <= x[i - 3]) return true;
+            if (i > 3 && x[i] + x[i - 4] >= x[i - 2])
+            {
+                if (x[i - 1] == x[i - 3]) return true;
+                if (i > 4 && x[i - 2] >= x[i - 4] && x[i - 1] <= x[i - 3] && x[i - 1] + x[i - 5] >= x[i - 3]) return true;
+            }
+        }
+        return false;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

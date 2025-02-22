@@ -1,8 +1,24 @@
-# [716. Max Stack](https://leetcode.com/problems/max-stack)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0716.Max%20Stack/README_EN.md
+tags:
+    - Stack
+    - Design
+    - Linked List
+    - Doubly-Linked List
+    - Ordered Set
+---
+
+<!-- problem:start -->
+
+# [716. Max Stack 🔒](https://leetcode.com/problems/max-stack)
 
 [中文文档](/solution/0700-0799/0716.Max%20Stack/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a max stack data structure that supports the stack operations and supports finding the stack&#39;s maximum element.</p>
 
@@ -51,16 +67,19 @@ stk.top();     // return 5, [<strong><u>5</u></strong>] the stack did not change
 	<li>There will be <strong>at least one element</strong> in the stack when <code>pop</code>, <code>top</code>, <code>peekMax</code>, or <code>popMax</code> is called.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class Node:
     def __init__(self, val=0):
         self.val = val
@@ -97,7 +116,6 @@ class DoubleLinkedList:
 
 
 class MaxStack:
-
     def __init__(self):
         self.stk = DoubleLinkedList()
         self.sl = SortedList(key=lambda x: x.val)
@@ -122,6 +140,7 @@ class MaxStack:
         DoubleLinkedList.remove(node)
         return node.val
 
+
 # Your MaxStack object will be instantiated and called as such:
 # obj = MaxStack()
 # obj.push(x)
@@ -131,7 +150,7 @@ class MaxStack:
 # param_5 = obj.popMax()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Node {
@@ -232,7 +251,7 @@ class MaxStack {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class MaxStack {
@@ -287,10 +306,8 @@ private:
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

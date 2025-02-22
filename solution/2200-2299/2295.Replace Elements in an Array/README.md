@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2295.Replace%20Elements%20in%20an%20Array/README.md
+rating: 1445
+source: 第 296 场周赛 Q3
+tags:
+    - 数组
+    - 哈希表
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2295. 替换数组中的元素](https://leetcode.cn/problems/replace-elements-in-an-array)
 
 [English Version](/solution/2200-2299/2295.Replace%20Elements%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的数组&nbsp;<code>nums</code>&nbsp;，它包含 <code>n</code>&nbsp;个 <strong>互不相同</strong>&nbsp;的正整数。请你对这个数组执行 <code>m</code>&nbsp;个操作，在第 <code>i</code>&nbsp;个操作中，你需要将数字&nbsp;<code>operations[i][0]</code> 替换成&nbsp;<code>operations[i][1]</code>&nbsp;。</p>
 
@@ -56,56 +70,55 @@
 	<li>在执行第&nbsp;<code>i</code>&nbsp;个操作时，<code>operations[i][1]</code>&nbsp;在&nbsp;<code>nums</code>&nbsp;中不存在。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
-我们先用哈希表 $d$ 记录数组 `nums` 中每个数字的下标，然后遍历操作数组 `operations`，对于每个操作 $[a, b]$，我们将 $a$ 在 `nums` 中的下标 $d[a]$ 对应的数字替换为 $b$，并更新 $d$ 中 $b$ 的下标为 $d[a]$。
+我们先用哈希表 $d$ 记录数组 $\textit{nums}$ 中每个数字的下标，然后遍历操作数组 $\textit{operations}$，对于每个操作 $[x, y]$，我们将 $x$ 在 $\textit{nums}$ 中的下标 $d[x]$ 对应的数字替换为 $y$，并更新 $d$ 中 $y$ 的下标为 $d[x]$。
 
-最后返回 `nums` 即可。
+最后返回 $\textit{nums}$ 即可。
 
-时间复杂度 $O(n + m)$，空间复杂度 $O(n)$。其中 $n$ 和 $m$ 分别是数组 `nums` 和 `operations` 的长度。
+时间复杂度 $O(n + m)$，空间复杂度 $O(n)$。其中 $n$ 和 $m$ 分别是数组 $\textit{nums}$ 的长度和操作数组 $\textit{operations}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def arrayChange(self, nums: List[int], operations: List[List[int]]) -> List[int]:
-        d = {v: i for i, v in enumerate(nums)}
-        for a, b in operations:
-            nums[d[a]] = b
-            d[b] = d[a]
+        d = {x: i for i, x in enumerate(nums)}
+        for x, y in operations:
+            nums[d[x]] = y
+            d[y] = d[x]
         return nums
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int[] arrayChange(int[] nums, int[][] operations) {
-        Map<Integer, Integer> d = new HashMap<>();
-        for (int i = 0; i < nums.length; ++i) {
+        int n = nums.length;
+        Map<Integer, Integer> d = new HashMap<>(n);
+        for (int i = 0; i < n; ++i) {
             d.put(nums[i], i);
         }
         for (var op : operations) {
-            int a = op[0], b = op[1];
-            nums[d.get(a)] = b;
-            d.put(b, d.get(a));
+            int x = op[0], y = op[1];
+            nums[d.get(x)] = y;
+            d.put(y, d.get(x));
         }
         return nums;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,49 +129,47 @@ public:
             d[nums[i]] = i;
         }
         for (auto& op : operations) {
-            int a = op[0], b = op[1];
-            nums[d[a]] = b;
-            d[b] = d[a];
+            int x = op[0], y = op[1];
+            nums[d[x]] = y;
+            d[y] = d[x];
         }
         return nums;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func arrayChange(nums []int, operations [][]int) []int {
 	d := map[int]int{}
-	for i, v := range nums {
-		d[v] = i
+	for i, x := range nums {
+		d[x] = i
 	}
 	for _, op := range operations {
-		a, b := op[0], op[1]
-		nums[d[a]] = b
-		d[b] = d[a]
+		x, y := op[0], op[1]
+		nums[d[x]] = y
+		d[y] = d[x]
 	}
 	return nums
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function arrayChange(nums: number[], operations: number[][]): number[] {
-    const d = new Map(nums.map((v, i) => [v, i]));
-    for (const [a, b] of operations) {
-        nums[d.get(a)] = b;
-        d.set(b, d.get(a));
+    const d: Map<number, number> = new Map(nums.map((x, i) => [x, i]));
+    for (const [x, y] of operations) {
+        nums[d.get(x)!] = y;
+        d.set(y, d.get(x)!);
     }
     return nums;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

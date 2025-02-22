@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2150.Find%20All%20Lonely%20Numbers%20in%20the%20Array/README_EN.md
+rating: 1275
+source: Weekly Contest 277 Q3
+tags:
+    - Array
+    - Hash Table
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2150. Find All Lonely Numbers in the Array](https://leetcode.com/problems/find-all-lonely-numbers-in-the-array)
 
 [中文文档](/solution/2100-2199/2150.Find%20All%20Lonely%20Numbers%20in%20the%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>. A number <code>x</code> is <strong>lonely</strong> when it appears only <strong>once</strong>, and no <strong>adjacent</strong> numbers (i.e. <code>x + 1</code> and <code>x - 1)</code> appear in the array.</p>
 
@@ -43,102 +59,112 @@ Note that [5, 1] may also be returned.
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We use a hash table $\textit{cnt}$ to record the occurrence count of each number. Then, we iterate through the hash table. For each number and its occurrence count $(x, v)$, if $v = 1$ and $\textit{cnt}[x - 1] = 0$ and $\textit{cnt}[x + 1] = 0$, then $x$ is a lonely number, and we add it to the answer array.
+
+After finishing the iteration, we return the answer array.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def findLonely(self, nums: List[int]) -> List[int]:
-        counter = Counter(nums)
-        ans = []
-        for num, cnt in counter.items():
-            if cnt == 1 and counter[num - 1] == 0 and counter[num + 1] == 0:
-                ans.append(num)
-        return ans
+        cnt = Counter(nums)
+        return [
+            x for x, v in cnt.items() if v == 1 and cnt[x - 1] == 0 and cnt[x + 1] == 0
+        ]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-
     public List<Integer> findLonely(int[] nums) {
-        Map<Integer, Integer> counter = new HashMap<>();
-        for (int num : nums) {
-            counter.put(num, counter.getOrDefault(num, 0) + 1);
+        Map<Integer, Integer> cnt = new HashMap<>();
+        for (int x : nums) {
+            cnt.merge(x, 1, Integer::sum);
         }
         List<Integer> ans = new ArrayList<>();
-        counter.forEach((k, v) -> {
-            if (v == 1 && !counter.containsKey(k - 1) && !counter.containsKey(k + 1)) {
-                ans.add(k);
+        for (var e : cnt.entrySet()) {
+            int x = e.getKey(), v = e.getValue();
+            if (v == 1 && !cnt.containsKey(x - 1) && !cnt.containsKey(x + 1)) {
+                ans.add(x);
             }
-        });
+        }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> findLonely(vector<int>& nums) {
-        unordered_map<int, int> counter;
-        for (int num : nums) ++counter[num];
+        unordered_map<int, int> cnt;
+        for (int x : nums) {
+            cnt[x]++;
+        }
         vector<int> ans;
-        for (auto& e : counter) {
-            int k = e.first, v = e.second;
-            if (v == 1 && !counter.count(k - 1) && !counter.count(k + 1)) ans.push_back(k);
+        for (auto& [x, v] : cnt) {
+            if (v == 1 && !cnt.contains(x - 1) && !cnt.contains(x + 1)) {
+                ans.push_back(x);
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func findLonely(nums []int) []int {
-	counter := make(map[int]int)
-	for _, num := range nums {
-		counter[num]++
+func findLonely(nums []int) (ans []int) {
+	cnt := map[int]int{}
+	for _, x := range nums {
+		cnt[x]++
 	}
-	var ans []int
-	for k, v := range counter {
-		if v == 1 && counter[k-1] == 0 && counter[k+1] == 0 {
-			ans = append(ans, k)
+	for x, v := range cnt {
+		if v == 1 && cnt[x-1] == 0 && cnt[x+1] == 0 {
+			ans = append(ans, x)
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findLonely(nums: number[]): number[] {
-    let hashMap: Map<number, number> = new Map();
-    for (let num of nums) {
-        hashMap.set(num, (hashMap.get(num) || 0) + 1);
+    const cnt: Map<number, number> = new Map();
+    for (const x of nums) {
+        cnt.set(x, (cnt.get(x) || 0) + 1);
     }
-    let ans: Array<number> = [];
-    for (let [num, count] of hashMap.entries()) {
-        if (count == 1 && !hashMap.get(num - 1) && !hashMap.get(num + 1)) {
-            ans.push(num);
+    const ans: number[] = [];
+    for (const [x, v] of cnt) {
+        if (v === 1 && !cnt.has(x - 1) && !cnt.has(x + 1)) {
+            ans.push(x);
         }
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

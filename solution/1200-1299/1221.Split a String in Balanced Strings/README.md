@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1221.Split%20a%20String%20in%20Balanced%20Strings/README.md
+rating: 1219
+source: 第 158 场周赛 Q1
+tags:
+    - 贪心
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1221. 分割平衡字符串](https://leetcode.cn/problems/split-a-string-in-balanced-strings)
 
 [English Version](/solution/1200-1299/1221.Split%20a%20String%20in%20Balanced%20Strings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>平衡字符串</strong> 中，<code>'L'</code> 和 <code>'R'</code> 字符的数量是相同的。</p>
 
@@ -52,11 +66,13 @@
 	<li><code>s</code> 是一个 <strong>平衡</strong> 字符串</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 我们用变量 $l$ 维护当前字符串的平衡度，即 $l$ 的值为当前字符串中 $L$ 的数量减去 $R$ 的数量。当 $l$ 的值为 0 时，我们就找到了一个平衡字符串。
 
@@ -66,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +98,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func balancedStringSplit(s string) int {
@@ -145,7 +157,7 @@ func balancedStringSplit(s string) int {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -169,10 +181,8 @@ var balancedStringSplit = function (s) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

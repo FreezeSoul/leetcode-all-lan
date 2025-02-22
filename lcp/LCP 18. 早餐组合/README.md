@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2018.%20%E6%97%A9%E9%A4%90%E7%BB%84%E5%90%88/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 18. 早餐组合](https://leetcode.cn/problems/2vYnGI)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 小扣在秋日市集选择了一家早餐摊位，一维整型数组 `staple` 中记录了每种主食的价格，一维整型数组 `drinks` 中记录了每种饮料的价格。小扣的计划选择一份主食和一款饮料，且花费不超过 `x` 元。请返回小扣共有多少种购买方案。
 
@@ -70,17 +77,17 @@
 
 -   `1 <= x <= 2*10^5`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-二分查找。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -101,9 +108,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -130,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -157,7 +162,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func breakfastNumber(staple []int, drinks []int, x int) int {
@@ -182,10 +187,39 @@ func breakfastNumber(staple []int, drinks []int, x int) int {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func breakfastNumber(_ staple: [Int], _ drinks: [Int], _ x: Int) -> Int {
+        let mod = 1000000007
+        var result = 0
+        let sortedDrinks = drinks.sorted()
 
+        for s in staple {
+            let remaining = x - s
+            if remaining >= sortedDrinks.first ?? 0 {
+                var left = 0
+                var right = sortedDrinks.count - 1
+
+                while left < right {
+                    let mid = (left + right + 1) / 2
+                    if sortedDrinks[mid] <= remaining {
+                        left = mid
+                    } else {
+                        right = mid - 1
+                    }
+                }
+                result = (result + left + 1) % mod
+            }
+        }
+        return result
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2119.A%20Number%20After%20a%20Double%20Reversal/README.md
+rating: 1187
+source: 第 273 场周赛 Q1
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2119. 反转两次的数字](https://leetcode.cn/problems/a-number-after-a-double-reversal)
 
 [English Version](/solution/2100-2199/2119.A%20Number%20After%20a%20Double%20Reversal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>反转</strong> 一个整数意味着倒置它的所有位。</p>
 
@@ -44,15 +56,21 @@
 	<li><code>0 &lt;= num &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：数学
+
+如果数字是 $0$，或者数字的个位不是 $0$，那么反转两次后的数字一定和原数字相等。
+
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -60,9 +78,7 @@ class Solution:
         return num == 0 or num % 10 != 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +88,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -83,7 +99,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isSameAfterReversals(num int) bool {
@@ -91,18 +107,38 @@ func isSameAfterReversals(num int) bool {
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
-
+function isSameAfterReversals(num: number): boolean {
+    return num === 0 || num % 10 !== 0;
+}
 ```
 
-### **...**
+#### Rust
 
+```rust
+impl Solution {
+    pub fn is_same_after_reversals(num: i32) -> bool {
+        num == 0 || num % 10 != 0
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number} num
+ * @return {boolean}
+ */
+var isSameAfterReversals = function (num) {
+    return num === 0 || num % 10 !== 0;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

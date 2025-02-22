@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0951.Flip%20Equivalent%20Binary%20Trees/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [951. Flip Equivalent Binary Trees](https://leetcode.com/problems/flip-equivalent-binary-trees)
 
 [中文文档](/solution/0900-0999/0951.Flip%20Equivalent%20Binary%20Trees/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>For a binary tree <strong>T</strong>, we can define a <strong>flip operation</strong> as follows: choose any node, and swap the left and right child subtrees.</p>
 
@@ -41,13 +55,17 @@
 	<li>Each tree will have <strong>unique node values</strong> in the range <code>[0, 99]</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -70,7 +88,7 @@ class Solution:
         return dfs(root1, root2)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -106,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -134,7 +152,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -160,10 +178,36 @@ func flipEquiv(root1 *TreeNode, root2 *TreeNode) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function flipEquiv(root1: TreeNode | null, root2: TreeNode | null): boolean {
+    if (root1 === root2) return true;
+    if (!root1 || !root2 || root1?.val !== root2?.val) return false;
+
+    const { left: l1, right: r1 } = root1!;
+    const { left: l2, right: r2 } = root2!;
+
+    return (flipEquiv(l1, l2) && flipEquiv(r1, r2)) || (flipEquiv(l1, r2) && flipEquiv(r1, l2));
+}
 ```
 
+#### JavaScript
+
+```js
+function flipEquiv(root1, root2) {
+    if (root1 === root2) return true;
+    if (!root1 || !root2 || root1?.val !== root2?.val) return false;
+
+    const { left: l1, right: r1 } = root1;
+    const { left: l2, right: r2 } = root2;
+
+    return (flipEquiv(l1, l2) && flipEquiv(r1, r2)) || (flipEquiv(l1, r2) && flipEquiv(r1, l2));
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

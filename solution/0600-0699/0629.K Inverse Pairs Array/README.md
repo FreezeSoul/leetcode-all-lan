@@ -1,12 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0629.K%20Inverse%20Pairs%20Array/README.md
+tags:
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [629. K 个逆序对数组](https://leetcode.cn/problems/k-inverse-pairs-array)
 
 [English Version](/solution/0600-0699/0629.K%20Inverse%20Pairs%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>逆序对的定义如下：对于数组 <code>nums</code> 的第 <code>i</code> 个和第 <code>j</code> 个元素，如果满足 <code>0 &lt;= i &lt; j &lt; nums.length</code> 且&nbsp;<code>nums[i] &gt; nums[j]</code>，则其为一个逆序对；否则不是。</p>
+<p>对于一个整数数组&nbsp;<code>nums</code>，<strong>逆序对</strong>是一对满足 <code>0 &lt;= i &lt; j &lt; nums.length</code> 且&nbsp;<code>nums[i] &gt; nums[j]</code>的整数对&nbsp;<code>[i, j]</code>&nbsp;。</p>
 
 <p>给你两个整数&nbsp;<code>n</code>&nbsp;和&nbsp;<code>k</code>，找出所有包含从&nbsp;<code>1</code>&nbsp;到&nbsp;<code>n</code>&nbsp;的数字，且恰好拥有&nbsp;<code>k</code>&nbsp;个 <strong>逆序对</strong> 的不同的数组的个数。由于答案可能很大，只需要返回对 <code>10<sup>9</sup>&nbsp;+ 7</code> 取余的结果。</p>
 
@@ -39,11 +49,13 @@
 	<li><code>0 &lt;= k &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划 + 前缀和**
+### 方法一：动态规划 + 前缀和
 
 我们定义 $f[i][j]$ 表示数组长度为 $i$，逆序对数为 $j$ 的数组个数。初始时 $f[0][0] = 1$，其余 $f[i][j] = 0$。
 
@@ -65,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +93,7 @@ class Solution:
         return f[k]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func kInversePairs(n int, k int) int {
@@ -156,22 +164,15 @@ func kInversePairs(n int, k int) int {
 	}
 	return f[k]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function kInversePairs(n: number, k: number): number {
-    const f: number[] = new Array(k + 1).fill(0);
+    const f: number[] = Array(k + 1).fill(0);
     f[0] = 1;
-    const s: number[] = new Array(k + 2).fill(1);
+    const s: number[] = Array(k + 2).fill(1);
     s[0] = 0;
     const mod: number = 1e9 + 7;
     for (let i = 1; i <= n; ++i) {
@@ -186,10 +187,8 @@ function kInversePairs(n: number, k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0179.Largest%20Number/README.md
+tags:
+    - 贪心
+    - 数组
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [179. 最大数](https://leetcode.cn/problems/largest-number)
 
 [English Version](/solution/0100-0199/0179.Largest%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一组非负整数 <code>nums</code>，重新排列每个数的顺序（每个数不可拆分）使之组成一个最大的整数。</p>
 
@@ -34,19 +47,19 @@
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：自定义排序**
+### 方法一：自定义排序
 
 先转成字符串列表，再对字符串列表进行字典序降序排列。最后将列表所有字符串拼接即可。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -56,9 +69,7 @@ class Solution:
         return "0" if nums[0] == "0" else "".join(nums)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -76,7 +87,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,7 +106,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestNumber(nums []int) string {
@@ -113,7 +124,7 @@ func largestNumber(nums []int) string {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 using System;
@@ -172,10 +183,34 @@ public class Solution {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function largestNumber(nums: number[]): string {
+    nums.sort((a, b) => {
+        const [ab, ba] = [String(a) + String(b), String(b) + String(a)];
+        return +ba - +ab;
+    });
+
+    return nums[0] ? nums.join('') : '0';
+}
 ```
 
+#### JavaScript
+
+```js
+function largestNumber(nums) {
+    nums.sort((a, b) => {
+        const [ab, ba] = [String(a) + String(b), String(b) + String(a)];
+        return +ba - +ab;
+    });
+
+    return nums[0] ? nums.join('') : '0';
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

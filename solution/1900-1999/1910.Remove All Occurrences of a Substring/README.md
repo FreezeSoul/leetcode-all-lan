@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1910.Remove%20All%20Occurrences%20of%20a%20Substring/README.md
+rating: 1460
+source: 第 55 场双周赛 Q2
+tags:
+    - 栈
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [1910. 删除一个字符串中所有出现的给定子字符串](https://leetcode.cn/problems/remove-all-occurrences-of-a-substring)
 
 [English Version](/solution/1900-1999/1910.Remove%20All%20Occurrences%20of%20a%20Substring/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串 <code>s</code> 和 <code>part</code> ，请你对 <code>s</code> 反复执行以下操作直到 <b>所有</b> 子字符串 <code>part</code> 都被删除：</p>
 
@@ -51,32 +65,82 @@
 	<li><code>s</code>​​​​​​ 和 <code>part</code> 只包小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：暴力替换
+
+我们循环判断 $s$ 中是否存在字符串 $part$，是则进行一次替换，继续循环此操作，直至 $s$ 中不存在字符串 $part$，返回此时的 $s$ 作为答案字符串。
+
+时间复杂度 $O(n^2 + n \times m)$，空间复杂度 $O(n + m)$。其中 $n$ 和 $m$ 分别是字符串 $s$ 和字符串 $part$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        while part in s:
+            s = s.replace(part, '', 1)
+        return s
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
+class Solution {
+    public String removeOccurrences(String s, String part) {
+        while (s.contains(part)) {
+            s = s.replaceFirst(part, "");
+        }
+        return s;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    string removeOccurrences(string s, string part) {
+        int m = part.size();
+        while (s.find(part) != -1) {
+            s = s.erase(s.find(part), m);
+        }
+        return s;
+    }
+};
 ```
 
+#### Go
+
+```go
+func removeOccurrences(s string, part string) string {
+	for strings.Contains(s, part) {
+		s = strings.Replace(s, part, "", 1)
+	}
+	return s
+}
+```
+
+#### TypeScript
+
+```ts
+function removeOccurrences(s: string, part: string): string {
+    while (s.includes(part)) {
+        s = s.replace(part, '');
+    }
+    return s;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

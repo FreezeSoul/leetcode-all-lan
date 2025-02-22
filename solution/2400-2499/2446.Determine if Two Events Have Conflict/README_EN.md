@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2446.Determine%20if%20Two%20Events%20Have%20Conflict/README_EN.md
+rating: 1322
+source: Weekly Contest 316 Q1
+tags:
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
 # [2446. Determine if Two Events Have Conflict](https://leetcode.com/problems/determine-if-two-events-have-conflict)
 
 [中文文档](/solution/2400-2499/2446.Determine%20if%20Two%20Events%20Have%20Conflict/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two arrays of strings that represent two inclusive events that happened <strong>on the same day</strong>, <code>event1</code> and <code>event2</code>, where:</p>
 
@@ -46,18 +61,30 @@
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>evnet1.length == event2.length == 2.</code></li>
+	<li><code>event1.length == event2.length == 2</code></li>
 	<li><code>event1[i].length == event2[i].length == 5</code></li>
 	<li><code>startTime<sub>1</sub> &lt;= endTime<sub>1</sub></code></li>
 	<li><code>startTime<sub>2</sub> &lt;= endTime<sub>2</sub></code></li>
 	<li>All the event times follow the <code>HH:MM</code> format.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: String Comparison
+
+If the start time of $event1$ is later than the end time of $event2$, or the end time of $event1$ is earlier than the start time of $event2$, then the two events will not conflict. Otherwise, the two events will conflict.
+
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2400-2499/2446.Determine%20if%20Two%20Events%20Have%20Conflict/images/event.png" />
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,7 +92,7 @@ class Solution:
         return not (event1[0] > event2[1] or event1[1] < event2[0])
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -75,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -86,7 +113,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func haveConflict(event1 []string, event2 []string) bool {
@@ -94,7 +121,7 @@ func haveConflict(event1 []string, event2 []string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function haveConflict(event1: string[], event2: string[]): boolean {
@@ -102,10 +129,18 @@ function haveConflict(event1: string[], event2: string[]): boolean {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn have_conflict(event1: Vec<String>, event2: Vec<String>) -> bool {
+        !(event1[1] < event2[0] || event1[0] > event2[1])
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

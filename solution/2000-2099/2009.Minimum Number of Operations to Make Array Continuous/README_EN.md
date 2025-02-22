@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2009.Minimum%20Number%20of%20Operations%20to%20Make%20Array%20Continuous/README_EN.md
+rating: 2084
+source: Biweekly Contest 61 Q4
+tags:
+    - Array
+    - Hash Table
+    - Binary Search
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [2009. Minimum Number of Operations to Make Array Continuous](https://leetcode.com/problems/minimum-number-of-operations-to-make-array-continuous)
 
 [中文文档](/solution/2000-2099/2009.Minimum%20Number%20of%20Operations%20to%20Make%20Array%20Continuous/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>. In one operation, you can replace <strong>any</strong> element in <code>nums</code> with <strong>any</strong> integer.</p>
 
@@ -55,11 +72,25 @@ The resulting array is [1,2,3,4], which is continuous.
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Deduplication + Binary Search
+
+First, we sort the array and remove duplicates.
+
+Then, we traverse the array, enumerating the current element $nums[i]$ as the minimum value of the consecutive array. We use binary search to find the first position $j$ that is greater than $nums[i] + n - 1$. Then, $j-i$ is the length of the consecutive array when the current element is the minimum value. We update the answer, i.e., $ans = \min(ans, n - (j - i))$.
+
+Finally, we return $ans$.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,20 +103,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def minOperations(self, nums: List[int]) -> int:
-        n = len(nums)
-        nums = sorted(set(nums))
-        ans, j = n, 0
-        for i, v in enumerate(nums):
-            while j < len(nums) and nums[j] - v <= n - 1:
-                j += 1
-            ans = min(ans, n - (j - i))
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -120,6 +138,111 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int m = unique(nums.begin(), nums.end()) - nums.begin();
+        int n = nums.size();
+        int ans = n;
+        for (int i = 0; i < m; ++i) {
+            int j = upper_bound(nums.begin() + i, nums.begin() + m, nums[i] + n - 1) - nums.begin();
+            ans = min(ans, n - (j - i));
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minOperations(nums []int) int {
+	sort.Ints(nums)
+	n := len(nums)
+	m := 1
+	for i := 1; i < n; i++ {
+		if nums[i] != nums[i-1] {
+			nums[m] = nums[i]
+			m++
+		}
+	}
+	ans := n
+	for i := 0; i < m; i++ {
+		j := sort.Search(m, func(k int) bool { return nums[k] > nums[i]+n-1 })
+		ans = min(ans, n-(j-i))
+	}
+	return ans
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::BTreeSet;
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn min_operations(nums: Vec<i32>) -> i32 {
+        let n = nums.len();
+        let nums = nums.into_iter().collect::<BTreeSet<i32>>();
+
+        let m = nums.len();
+        let nums = nums.into_iter().collect::<Vec<i32>>();
+
+        let mut ans = n;
+
+        for i in 0..m {
+            let j = match nums.binary_search(&(nums[i] + (n as i32))) {
+                Ok(idx) => idx,
+                Err(idx) => idx,
+            };
+            ans = std::cmp::min(ans, n - (j - i));
+        }
+
+        ans as i32
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Sorting + Deduplication + Two Pointers
+
+Similar to Solution 1, we first sort the array and remove duplicates.
+
+Then, we traverse the array, enumerating the current element $nums[i]$ as the minimum value of the consecutive array. We use two pointers to find the first position $j$ that is greater than $nums[i] + n - 1$. Then, $j-i$ is the length of the consecutive array when the current element is the minimum value. We update the answer, i.e., $ans = \min(ans, n - (j - i))$.
+
+Finally, we return $ans$.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        n = len(nums)
+        nums = sorted(set(nums))
+        ans, j = n, 0
+        for i, v in enumerate(nums):
+            while j < len(nums) and nums[j] - v <= n - 1:
+                j += 1
+            ans = min(ans, n - (j - i))
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int minOperations(int[] nums) {
@@ -143,24 +266,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minOperations(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int m = unique(nums.begin(), nums.end()) - nums.begin();
-        int n = nums.size();
-        int ans = n;
-        for (int i = 0; i < m; ++i) {
-            int j = upper_bound(nums.begin() + i, nums.begin() + m, nums[i] + n - 1) - nums.begin();
-            ans = min(ans, n - (j - i));
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -181,34 +287,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func minOperations(nums []int) int {
-	sort.Ints(nums)
-	n := len(nums)
-	m := 1
-	for i := 1; i < n; i++ {
-		if nums[i] != nums[i-1] {
-			nums[m] = nums[i]
-			m++
-		}
-	}
-	ans := n
-	for i := 0; i < m; i++ {
-		j := sort.Search(m, func(k int) bool { return nums[k] > nums[i]+n-1 })
-		ans = min(ans, n-(j-i))
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func minOperations(nums []int) int {
@@ -230,19 +309,10 @@ func minOperations(nums []int) int {
 	}
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

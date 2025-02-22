@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0377.Combination%20Sum%20IV/README.md
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [377. 组合总和 Ⅳ](https://leetcode.cn/problems/combination-sum-iv)
 
 [English Version](/solution/0300-0399/0377.Combination%20Sum%20IV/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由 <strong>不同</strong> 整数组成的数组 <code>nums</code> ，和一个目标整数 <code>target</code> 。请你从 <code>nums</code> 中找出并返回总和为 <code>target</code> 的元素组合的个数。</p>
 
@@ -51,11 +62,13 @@
 
 <p><strong>进阶：</strong>如果给定的数组中含有负数会发生什么？问题会产生何种变化？如果允许负数出现，需要向题目中添加哪些限制条件？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i]$ 表示总和为 $i$ 的元素组合的个数，初始时 $f[0] = 1$，其余 $f[i] = 0$。最终答案即为 $f[target]$。
 
@@ -67,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,9 +93,7 @@ class Solution:
         return f[target]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +133,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func combinationSum4(nums []int, target int) int {
@@ -141,33 +150,11 @@ func combinationSum4(nums []int, target int) int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number}
- */
-var combinationSum4 = function (nums, target) {
-    const f = new Array(target + 1).fill(0);
-    f[0] = 1;
-    for (let i = 1; i <= target; ++i) {
-        for (const x of nums) {
-            if (i >= x) {
-                f[i] += f[i - x];
-            }
-        }
-    }
-    return f[target];
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function combinationSum4(nums: number[], target: number): number {
-    const f: number[] = new Array(target + 1).fill(0);
+    const f: number[] = Array(target + 1).fill(0);
     f[0] = 1;
     for (let i = 1; i <= target; ++i) {
         for (const x of nums) {
@@ -180,7 +167,29 @@ function combinationSum4(nums: number[], target: number): number {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var combinationSum4 = function (nums, target) {
+    const f = Array(target + 1).fill(0);
+    f[0] = 1;
+    for (let i = 1; i <= target; ++i) {
+        for (const x of nums) {
+            if (i >= x) {
+                f[i] += f[i - x];
+            }
+        }
+    }
+    return f[target];
+};
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -199,10 +208,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

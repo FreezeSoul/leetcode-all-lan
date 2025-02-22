@@ -1,26 +1,38 @@
 type MedianFinder struct {
-	q1 hp
-	q2 hp
+	minq hp
+	maxq hp
 }
 
-/** initialize your data structure here. */
 func Constructor() MedianFinder {
 	return MedianFinder{hp{}, hp{}}
 }
 
 func (this *MedianFinder) AddNum(num int) {
-	heap.Push(&this.q1, num)
-	heap.Push(&this.q2, -heap.Pop(&this.q1).(int))
-	if this.q2.Len()-this.q1.Len() > 1 {
-		heap.Push(&this.q1, -heap.Pop(&this.q2).(int))
+	minq, maxq := &this.minq, &this.maxq
+	heap.Push(maxq, -num)
+	heap.Push(minq, -heap.Pop(maxq).(int))
+	if minq.Len()-maxq.Len() > 1 {
+		heap.Push(maxq, -heap.Pop(minq).(int))
 	}
 }
 
 func (this *MedianFinder) FindMedian() float64 {
-	if this.q2.Len() > this.q1.Len() {
-		return -float64(this.q2.IntSlice[0])
+	minq, maxq := this.minq, this.maxq
+	if minq.Len() == maxq.Len() {
+		return float64(minq.IntSlice[0]-maxq.IntSlice[0]) / 2
 	}
-	return float64(this.q1.IntSlice[0]-this.q2.IntSlice[0]) / 2.0
+	return float64(minq.IntSlice[0])
+}
+
+type hp struct{ sort.IntSlice }
+
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] < h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
+	a := h.IntSlice
+	v := a[len(a)-1]
+	h.IntSlice = a[:len(a)-1]
+	return v
 }
 
 /**
@@ -29,14 +41,3 @@ func (this *MedianFinder) FindMedian() float64 {
  * obj.AddNum(num);
  * param_2 := obj.FindMedian();
  */
-
-type hp struct{ sort.IntSlice }
-
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] < h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
-	a := h.IntSlice
-	v := a[len(a)-1]
-	h.IntSlice = a[:len(a)-1]
-	return v
-}

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2413.Smallest%20Even%20Multiple/README.md
+rating: 1144
+source: 第 311 场周赛 Q1
+tags:
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [2413. 最小偶倍数](https://leetcode.cn/problems/smallest-even-multiple)
 
 [English Version](/solution/2400-2499/2413.Smallest%20Even%20Multiple/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 给你一个正整数 <code>n</code> ，返回 <code>2</code><em> </em>和<em> </em><code>n</code> 的最小公倍数（正整数）。
 
@@ -32,21 +45,21 @@
 	<li><code>1 &lt;= n &lt;= 150</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
-如果 $n$ 为偶数，那么 $2$ 和 $n$ 的最小公倍数就是 $n$ 本身。否则，$2$ 和 $n$ 的最小公倍数就是 $n\times 2$。
+如果 $n$ 为偶数，那么 $2$ 和 $n$ 的最小公倍数就是 $n$ 本身。否则，$2$ 和 $n$ 的最小公倍数就是 $n \times 2$。
 
 时间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -54,9 +67,7 @@ class Solution:
         return n if n % 2 == 0 else n * 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -66,7 +77,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -77,7 +88,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestEvenMultiple(n int) int {
@@ -88,15 +99,7 @@ func smallestEvenMultiple(n int) int {
 }
 ```
 
-### **C**
-
-```c
-int smallestEvenMultiple(int n) {
-    return n % 2 == 0 ? n : n * 2;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallestEvenMultiple(n: number): number {
@@ -104,7 +107,7 @@ function smallestEvenMultiple(n: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -117,10 +120,16 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+int smallestEvenMultiple(int n) {
+    return n % 2 == 0 ? n : n * 2;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

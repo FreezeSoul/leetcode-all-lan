@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1407.Top%20Travellers/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1407. 排名靠前的旅行者](https://leetcode.cn/problems/top-travellers)
 
 [English Version](/solution/1400-1499/1407.Top%20Travellers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>Users</code></p>
 
@@ -15,10 +25,10 @@
 | id            | int     |
 | name          | varchar |
 +---------------+---------+
-id 是该表单主键。
+id 是该表中具有唯一值的列。
 name 是用户名字。</pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p>表：<code>Rides</code></p>
 
@@ -30,19 +40,24 @@ name 是用户名字。</pre>
 | user_id       | int     |
 | distance      | int     |
 +---------------+---------+
-id 是该表单主键。
+id 是该表中具有唯一值的列。
 user_id 是本次行程的用户的 id, 而该用户此次行程距离为 distance 。
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
-<p>写一段 SQL , 报告每个用户的旅行距离。</p>
+<p>编写解决方案，报告每个用户的旅行距离。</p>
 
-<p>返回的结果表单，以 <code>travelled_distance</code> <strong>降序排列</strong> ，如果有两个或者更多的用户旅行了相同的距离, 那么再以 <code>name</code> <strong>升序排列</strong> 。</p>
+<p>返回的结果表单，以&nbsp;<code>travelled_distance</code>&nbsp;<strong>降序排列</strong> ，如果有两个或者更多的用户旅行了相同的距离,&nbsp;那么再以&nbsp;<code>name</code>&nbsp;<strong>升序排列</strong> 。</p>
 
-<p>查询结果格式如下例所示。</p>
+<p>返回结果格式如下例所示。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例 1：</strong></p>
 
 <pre>
+<strong>输入：</strong>
 Users 表：
 +------+-----------+
 | id   | name      |
@@ -70,8 +85,7 @@ Rides 表：
 | 8    | 19       | 400      |
 | 9    | 7        | 230      |
 +------+----------+----------+
-
-Result 表：
+<strong>输出：</strong>
 +----------+--------------------+
 | name     | travelled_distance |
 +----------+--------------------+
@@ -83,44 +97,38 @@ Result 表：
 | Alice    | 120                |
 | Donald   | 0                  |
 +----------+--------------------+
+<strong>解释：</strong>
 Elvis 和 Lee 旅行了 450 英里，Elvis 是排名靠前的旅行者，因为他的名字在字母表上的排序比 Lee 更小。
 Bob, Jonathan, Alex 和 Alice 只有一次行程，我们只按此次行程的全部距离对他们排序。
 Donald 没有任何行程, 他的旅行距离为 0。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：左连接 + 分组统计
+
+我们可以使用左连接，将 `Users` 表与 `Rides` 表按照用户 id 连接，然后按照用户 id 分组，统计每个用户的旅行距离。注意，如果用户没有旅行记录，那么旅行距离为 $0$。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-```sql
-SELECT name,
-    COALESCE(SUM(distance), 0) AS travelled_distance
-FROM Users AS u
-    LEFT JOIN Rides AS r ON u.id = r.user_id
-GROUP BY
-    name
-ORDER BY
-    travelled_distance DESC,
-    name;
-```
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    name,
-    sum(ifnull(distance, 0)) travelled_distance
-from
-    Users u
-    left join Rides r on u.id = r.user_id
-group by
-(u.id)
-order by
-    travelled_distance desc,
-    name asc;
+SELECT name, IFNULL(SUM(distance), 0) AS travelled_distance
+FROM
+    Users AS u
+    LEFT JOIN Rides AS r ON u.id = r.user_id
+GROUP BY u.id
+ORDER BY 2 DESC, 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

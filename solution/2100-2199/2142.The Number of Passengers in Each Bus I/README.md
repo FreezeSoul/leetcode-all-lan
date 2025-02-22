@@ -1,10 +1,20 @@
-# [2142. 每辆车的乘客人数 I](https://leetcode.cn/problems/the-number-of-passengers-in-each-bus-i)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2142.The%20Number%20of%20Passengers%20in%20Each%20Bus%20I/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2142. 每辆车的乘客人数 I 🔒](https://leetcode.cn/problems/the-number-of-passengers-in-each-bus-i)
 
 [English Version](/solution/2100-2199/2142.The%20Number%20of%20Passengers%20in%20Each%20Bus%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Buses</code></p>
 
@@ -38,7 +48,7 @@ passenger_id 是该表的主键。
 
 <p>公交车和乘客到达 LeetCode 站。如果一辆公交车在时间 <code>t<sub>bus</sub></code> 到站，乘客在时间 <code>t<sub>passenger</sub></code> 到站，其中 <code>t<sub>passenger</sub> &lt;= t<sub>bus</sub></code>，该乘客之前没有赶上任何公交车，则该乘客将搭乘该公交车。</p>
 
-<p>编写一个 SQL 来查询使用每条总线的用户数量。</p>
+<p>编写一个 SQL 来查询使用每辆公交车的用户数量。</p>
 
 <p>返回按 <code>bus_id</code> <strong>升序排序&nbsp;</strong>的结果表。</p>
 
@@ -84,18 +94,34 @@ Passengers 表:
 - 14 号乘客在时间 7 到达。
 - 3 号车在时间 7 到达，搭载 12、13、14 号乘客。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    bus_id,
+    COUNT(passenger_id) - LAG(COUNT(passenger_id), 1, 0) OVER (
+        ORDER BY b.arrival_time
+    ) AS passengers_cnt
+FROM
+    Buses AS b
+    LEFT JOIN Passengers AS p ON p.arrival_time <= b.arrival_time
+GROUP BY 1
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1433.Check%20If%20a%20String%20Can%20Break%20Another%20String/README.md
+rating: 1436
+source: 第 25 场双周赛 Q3
+tags:
+    - 贪心
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1433. 检查一个字符串是否可以打破另一个字符串](https://leetcode.cn/problems/check-if-a-string-can-break-another-string)
 
 [English Version](/solution/1400-1499/1433.Check%20If%20a%20String%20Can%20Break%20Another%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串&nbsp;<code>s1</code>&nbsp;和&nbsp;<code>s2</code>&nbsp;，它们长度相等，请你检查是否存在一个&nbsp;<code>s1</code>&nbsp; 的排列可以打破 <code>s2</code>&nbsp;的一个排列，或者是否存在一个&nbsp;<code>s2</code>&nbsp;的排列可以打破 <code>s1</code> 的一个排列。</p>
 
@@ -43,11 +57,13 @@
 	<li>所有字符串都只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 将字符串 $s1$, $s2$ 分别进行升序排序。然后同时遍历两个字符串，对应字符进行大小比较。若对于任意 $i∈[0, n)，都有 $s1[i] \le s2[i]$，或者都有 $s1[i] \ge s2[i]$，则存在一个排列可以打破另一个排列。
 
@@ -55,9 +71,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -69,9 +83,7 @@ class Solution:
         )
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkIfCanBreak(s1 string, s2 string) bool {
@@ -136,10 +148,28 @@ func checkIfCanBreak(s1 string, s2 string) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function checkIfCanBreak(s1: string, s2: string): boolean {
+    const cs1: string[] = Array.from(s1);
+    const cs2: string[] = Array.from(s2);
+    cs1.sort();
+    cs2.sort();
+    const check = (cs1: string[], cs2: string[]) => {
+        for (let i = 0; i < cs1.length; i++) {
+            if (cs1[i] < cs2[i]) {
+                return false;
+            }
+        }
+        return true;
+    };
+    return check(cs1, cs2) || check(cs2, cs1);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

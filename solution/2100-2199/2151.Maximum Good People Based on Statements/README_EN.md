@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2151.Maximum%20Good%20People%20Based%20on%20Statements/README_EN.md
+rating: 1979
+source: Weekly Contest 277 Q4
+tags:
+    - Bit Manipulation
+    - Array
+    - Backtracking
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [2151. Maximum Good People Based on Statements](https://leetcode.com/problems/maximum-good-people-based-on-statements)
 
 [中文文档](/solution/2100-2199/2151.Maximum%20Good%20People%20Based%20on%20Statements/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are two types of persons:</p>
 
@@ -84,29 +101,35 @@ Note that there is more than one way to arrive at this conclusion.
 	<li><code>statements[i][i] == 2</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maximumGood(self, statements: List[List[int]]) -> int:
-        def check(mask):
+        def check(mask: int) -> int:
             cnt = 0
-            for i, s in enumerate(statements):
-                if (mask >> i) & 1:
-                    for j, v in enumerate(s):
-                        if v < 2 and ((mask >> j) & 1) != v:
+            for i, row in enumerate(statements):
+                if mask >> i & 1:
+                    for j, x in enumerate(row):
+                        if x < 2 and (mask >> j & 1) != x:
                             return 0
                     cnt += 1
             return cnt
 
-        return max(check(mask) for mask in range(1, 1 << len(statements)))
+        return max(check(i) for i in range(1, 1 << len(statements)))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -137,7 +160,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -165,7 +188,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumGood(statements [][]int) int {
@@ -190,16 +213,9 @@ func maximumGood(statements [][]int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumGood(statements: number[][]): number {
@@ -227,10 +243,8 @@ function maximumGood(statements: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

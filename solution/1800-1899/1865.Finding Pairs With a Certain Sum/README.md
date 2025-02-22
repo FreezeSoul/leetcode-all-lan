@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1865.Finding%20Pairs%20With%20a%20Certain%20Sum/README.md
+rating: 1680
+source: 第 241 场周赛 Q3
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+---
+
+<!-- problem:start -->
+
 # [1865. 找出和为指定值的下标对](https://leetcode.cn/problems/finding-pairs-with-a-certain-sum)
 
 [English Version](/solution/1800-1899/1865.Finding%20Pairs%20With%20a%20Certain%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个整数数组 <code>nums1</code> 和 <code>nums2</code> ，请你实现一个支持下述两类查询的数据结构：</p>
 
@@ -58,42 +72,43 @@ findSumPairs.count(7);  // 返回 11 ；下标对 (2,1), (2,2), (2,4), (3,1), (3
 	<li>最多调用 <code>add</code> 和 <code>count</code> 函数各 <code>1000</code> 次</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
-我们可以用哈希表 `cnt` 统计数组 `nums2` 中每个数字出现的次数。
+我们注意到，数组 $\textit{nums1}$ 的长度不超过 ${10}^3$，数组 $\textit{nums2}$ 的长度达到 ${10}^5$，因此，如果直接暴力枚举所有下标对 $(i, j)$，计算 $\textit{nums1}[i] + \textit{nums2}[j]$ 是否等于指定值 $\textit{tot}$，那么会超出时间限制。
 
-对于 `add` 操作，我们需要更新哈希表中 `nums2[index]` 的值，即 `cnt[nums2[index]] -= 1`，然后更新 `nums2[index] += val`，最后更新哈希表中 `nums2[index]` 的值，即 `cnt[nums2[index]] += 1`。
+能否只枚举长度较短的数组 $\textit{nums1}$ 呢？答案是可以的。我们用一个哈希表 $\textit{cnt}$ 统计数组 $\textit{nums2}$ 中每个元素出现的次数，然后枚举数组 $\textit{nums1}$ 中的每个元素 $x$，计算 $\textit{cnt}[\textit{tot} - x]$ 的值之和即可。
 
-对于 `count` 操作，我们遍历数组 `nums1`，对于每个数字 `v`，我们需要统计满足 `tot - v` 的数字出现的次数，即 `cnt[tot - v]`，然后将其累加到答案中。
+在调用 $\text{add}$ 方法时，我们需要先将 $\textit{nums2}[index]$ 对应的值从 $\textit{cnt}$ 中减去 $1$，然后将 $\textit{nums2}[index]$ 的值加上 $\textit{val}$，最后将 $\textit{nums2}[index]$ 对应的值加上 $1$。
 
-时间复杂度：对于 `add` 操作，时间复杂度为 $O(1)$，对于 `count` 操作，时间复杂度为 $O(n)$，其中 $n$ 为数组 `nums1` 的长度。空间复杂度 $O(m)$，其中 $m$ 为数组 `nums2` 的长度。
+在调用 $\text{count}$ 方法时，我们只需要遍历数组 $\textit{nums1}$，对于每个元素 $x$，计算 $\textit{cnt}[\textit{tot} - x]$ 的值之和即可。
+
+时间复杂度 $O(n \times q)$，空间复杂度 $O(m)$。其中 $n$ 和 $m$ 分别是数组 $\textit{nums1}$ 和 $\textit{nums2}$ 的长度，而 $q$ 是调用 $\text{count}$ 方法的次数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class FindSumPairs:
 
     def __init__(self, nums1: List[int], nums2: List[int]):
+        self.cnt = Counter(nums2)
         self.nums1 = nums1
         self.nums2 = nums2
-        self.cnt = Counter(nums2)
 
     def add(self, index: int, val: int) -> None:
-        old = self.nums2[index]
-        self.cnt[old] -= 1
-        self.cnt[old + val] += 1
+        self.cnt[self.nums2[index]] -= 1
         self.nums2[index] += val
+        self.cnt[self.nums2[index]] += 1
 
     def count(self, tot: int) -> int:
-        return sum(self.cnt[tot - v] for v in self.nums1)
+        return sum(self.cnt[tot - x] for x in self.nums1)
 
 
 # Your FindSumPairs object will be instantiated and called as such:
@@ -102,9 +117,7 @@ class FindSumPairs:
 # param_2 = obj.count(tot)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class FindSumPairs {
@@ -115,22 +128,21 @@ class FindSumPairs {
     public FindSumPairs(int[] nums1, int[] nums2) {
         this.nums1 = nums1;
         this.nums2 = nums2;
-        for (int v : nums2) {
-            cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+        for (int x : nums2) {
+            cnt.merge(x, 1, Integer::sum);
         }
     }
 
     public void add(int index, int val) {
-        int old = nums2[index];
-        cnt.put(old, cnt.get(old) - 1);
-        cnt.put(old + val, cnt.getOrDefault(old + val, 0) + 1);
+        cnt.merge(nums2[index], -1, Integer::sum);
         nums2[index] += val;
+        cnt.merge(nums2[index], 1, Integer::sum);
     }
 
     public int count(int tot) {
         int ans = 0;
-        for (int v : nums1) {
-            ans += cnt.getOrDefault(tot - v, 0);
+        for (int x : nums1) {
+            ans += cnt.getOrDefault(tot - x, 0);
         }
         return ans;
     }
@@ -144,7 +156,7 @@ class FindSumPairs {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class FindSumPairs {
@@ -152,22 +164,21 @@ public:
     FindSumPairs(vector<int>& nums1, vector<int>& nums2) {
         this->nums1 = nums1;
         this->nums2 = nums2;
-        for (int& v : nums2) {
-            ++cnt[v];
+        for (int x : nums2) {
+            ++cnt[x];
         }
     }
 
     void add(int index, int val) {
-        int old = nums2[index];
-        --cnt[old];
-        ++cnt[old + val];
+        --cnt[nums2[index]];
         nums2[index] += val;
+        ++cnt[nums2[index]];
     }
 
     int count(int tot) {
         int ans = 0;
-        for (int& v : nums1) {
-            ans += cnt[tot - v];
+        for (int x : nums1) {
+            ans += cnt[tot - x];
         }
         return ans;
     }
@@ -186,7 +197,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type FindSumPairs struct {
@@ -197,22 +208,21 @@ type FindSumPairs struct {
 
 func Constructor(nums1 []int, nums2 []int) FindSumPairs {
 	cnt := map[int]int{}
-	for _, v := range nums2 {
-		cnt[v]++
+	for _, x := range nums2 {
+		cnt[x]++
 	}
 	return FindSumPairs{nums1, nums2, cnt}
 }
 
 func (this *FindSumPairs) Add(index int, val int) {
-	old := this.nums2[index]
-	this.cnt[old]--
-	this.cnt[old+val]++
+	this.cnt[this.nums2[index]]--
 	this.nums2[index] += val
+	this.cnt[this.nums2[index]]++
 }
 
 func (this *FindSumPairs) Count(tot int) (ans int) {
-	for _, v := range this.nums1 {
-		ans += this.cnt[tot-v]
+	for _, x := range this.nums1 {
+		ans += this.cnt[tot-x]
 	}
 	return
 }
@@ -225,10 +235,149 @@ func (this *FindSumPairs) Count(tot int) (ans int) {
  */
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+class FindSumPairs {
+    private nums1: number[];
+    private nums2: number[];
+    private cnt: Map<number, number>;
+
+    constructor(nums1: number[], nums2: number[]) {
+        this.nums1 = nums1;
+        this.nums2 = nums2;
+        this.cnt = new Map();
+        for (const x of nums2) {
+            this.cnt.set(x, (this.cnt.get(x) || 0) + 1);
+        }
+    }
+
+    add(index: number, val: number): void {
+        const old = this.nums2[index];
+        this.cnt.set(old, this.cnt.get(old)! - 1);
+        this.nums2[index] += val;
+        const now = this.nums2[index];
+        this.cnt.set(now, (this.cnt.get(now) || 0) + 1);
+    }
+
+    count(tot: number): number {
+        return this.nums1.reduce((acc, x) => acc + (this.cnt.get(tot - x) || 0), 0);
+    }
+}
+
+/**
+ * Your FindSumPairs object will be instantiated and called as such:
+ * var obj = new FindSumPairs(nums1, nums2)
+ * obj.add(index,val)
+ * var param_2 = obj.count(tot)
+ */
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ */
+var FindSumPairs = function (nums1, nums2) {
+    this.nums1 = nums1;
+    this.nums2 = nums2;
+    this.cnt = new Map();
+    for (const x of nums2) {
+        this.cnt.set(x, (this.cnt.get(x) || 0) + 1);
+    }
+};
+
+/**
+ * @param {number} index
+ * @param {number} val
+ * @return {void}
+ */
+FindSumPairs.prototype.add = function (index, val) {
+    const old = this.nums2[index];
+    this.cnt.set(old, this.cnt.get(old) - 1);
+    this.nums2[index] += val;
+    const now = this.nums2[index];
+    this.cnt.set(now, (this.cnt.get(now) || 0) + 1);
+};
+
+/**
+ * @param {number} tot
+ * @return {number}
+ */
+FindSumPairs.prototype.count = function (tot) {
+    return this.nums1.reduce((acc, x) => acc + (this.cnt.get(tot - x) || 0), 0);
+};
+
+/**
+ * Your FindSumPairs object will be instantiated and called as such:
+ * var obj = new FindSumPairs(nums1, nums2)
+ * obj.add(index,val)
+ * var param_2 = obj.count(tot)
+ */
+```
+
+#### C#
+
+```cs
+public class FindSumPairs {
+    private int[] nums1;
+    private int[] nums2;
+    private Dictionary<int, int> cnt = new Dictionary<int, int>();
+
+    public FindSumPairs(int[] nums1, int[] nums2) {
+        this.nums1 = nums1;
+        this.nums2 = nums2;
+        foreach (int x in nums2) {
+            if (cnt.ContainsKey(x)) {
+                cnt[x]++;
+            } else {
+                cnt[x] = 1;
+            }
+        }
+    }
+
+    public void Add(int index, int val) {
+        int oldVal = nums2[index];
+        if (cnt.TryGetValue(oldVal, out int oldCount)) {
+            if (oldCount == 1) {
+                cnt.Remove(oldVal);
+            } else {
+                cnt[oldVal] = oldCount - 1;
+            }
+        }
+        nums2[index] += val;
+        int newVal = nums2[index];
+        if (cnt.TryGetValue(newVal, out int newCount)) {
+            cnt[newVal] = newCount + 1;
+        } else {
+            cnt[newVal] = 1;
+        }
+    }
+
+    public int Count(int tot) {
+        int ans = 0;
+        foreach (int x in nums1) {
+            int target = tot - x;
+            if (cnt.TryGetValue(target, out int count)) {
+                ans += count;
+            }
+        }
+        return ans;
+    }
+}
+
+/**
+ * Your FindSumPairs object will be instantiated and called as such:
+ * FindSumPairs obj = new FindSumPairs(nums1, nums2);
+ * obj.Add(index,val);
+ * int param_2 = obj.Count(tot);
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

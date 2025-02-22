@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1301.Number%20of%20Paths%20with%20Max%20Score/README.md
+rating: 1853
+source: 第 16 场双周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1301. 最大得分的路径数目](https://leetcode.cn/problems/number-of-paths-with-max-score)
 
 [English Version](/solution/1300-1399/1301.Number%20of%20Paths%20with%20Max%20Score/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正方形字符数组&nbsp;<code>board</code>&nbsp;，你从数组最右下方的字符&nbsp;<code>&#39;S&#39;</code>&nbsp;出发。</p>
 
@@ -47,11 +61,13 @@
 	<li><code>2 &lt;= board.length == board[i].length &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示从起点 $(n - 1, n - 1)$ 到达 $(i, j)$ 的最大得分，定义 $g[i][j]$ 表示从起点 $(n - 1, n - 1)$ 到达 $(i, j)$ 的最大得分的方案数。初始时 $f[n - 1][n - 1] = 0$，并且 $g[n - 1][n - 1] = 1$。其它位置的 $f[i][j]$ 均为 $-1$，而 $g[i][j]$ 均为 $0$。
 
@@ -63,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -94,9 +108,7 @@ class Solution:
         return [0, 0] if f[0][0] == -1 else [f[0][0], g[0][0] % mod]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -152,7 +164,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -201,7 +213,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pathsWithMaxScore(board []string) []int {
@@ -248,10 +260,8 @@ func pathsWithMaxScore(board []string) []int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

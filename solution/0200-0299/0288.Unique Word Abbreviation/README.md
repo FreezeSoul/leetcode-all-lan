@@ -1,10 +1,23 @@
-# [288. 单词的唯一缩写](https://leetcode.cn/problems/unique-word-abbreviation)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0288.Unique%20Word%20Abbreviation/README.md
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [288. 单词的唯一缩写 🔒](https://leetcode.cn/problems/unique-word-abbreviation)
 
 [English Version](/solution/0200-0299/0288.Unique%20Word%20Abbreviation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>单词的 <strong>缩写</strong> 需要遵循 <起始字母><中间字母数><结尾字母> 这样的格式。如果单词只有两个字符，那么它就是它自身的 <strong>缩写</strong> 。</p>
 
@@ -63,33 +76,39 @@ validWordAbbr.isUnique("cake"); // 返回 true，因为 "cake" 已经存在于�
 	<li>最多调用 <code>5000</code> 次 <code>isUnique</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-哈希表实现，其中 key 存放单词缩写，value 存放单词缩写所对应的所有单词的集合。
+### 方法一：哈希表
+
+根据题目描述，我们定义一个函数 $abbr(s)$，它的功能是计算单词 $s$ 的缩写。如果单词 $s$ 的长度小于 $3$，那么它的缩写就是它本身；否则，它的缩写是它的首字母 + (它的长度 - 2) + 它的尾字母。
+
+接下来，我们定义一个哈希表 $d$，它的键是单词的缩写，值是一个集合，集合中的元素是所有缩写为该键的单词。我们遍历给定的单词字典，对于字典中的每个单词 $s$，我们求出它的缩写 $abbr(s)$，并将 $s$ 添加到 $d[abbr(s)]$ 中。
+
+在判断单词 $word$ 是否满足题目要求时，我们求出它的缩写 $abbr(word)$，如果 $abbr(word)$ 不在哈希表 $d$ 中，那么 $word$ 满足题目要求；否则，我们判断 $d[abbr(word)]$ 中是否只有一个元素，如果 $d[abbr(word)]$ 中只有一个元素且该元素就是 $word$，那么 $word$ 满足题目要求。
+
+时间复杂度方面，初始化哈希表的时间复杂度是 $O(n)$，其中 $n$ 是单词字典的长度；判断单词是否满足题目要求的时间复杂度是 $O(1)$。空间复杂度方面，哈希表的空间复杂度是 $O(n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class ValidWordAbbr:
     def __init__(self, dictionary: List[str]):
-        self.words = defaultdict(set)
-        for word in dictionary:
-            abbr = self.word_abbr(word)
-            self.words[abbr].add(word)
+        self.d = defaultdict(set)
+        for s in dictionary:
+            self.d[self.abbr(s)].add(s)
 
     def isUnique(self, word: str) -> bool:
-        abbr = self.word_abbr(word)
-        words = self.words[abbr]
-        return not words or (len(words) == 1 and word in words)
+        s = self.abbr(word)
+        return s not in self.d or all(word == t for t in self.d[s])
 
-    def word_abbr(self, s):
-        return s if len(s) < 3 else f'{s[0]}{len(s) - 2}{s[-1]}'
+    def abbr(self, s: str) -> str:
+        return s if len(s) < 3 else s[0] + str(len(s) - 2) + s[-1]
 
 
 # Your ValidWordAbbr object will be instantiated and called as such:
@@ -97,31 +116,26 @@ class ValidWordAbbr:
 # param_1 = obj.isUnique(word)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class ValidWordAbbr {
-    private Map<String, Set<String>> words;
+    private Map<String, Set<String>> d = new HashMap<>();
 
     public ValidWordAbbr(String[] dictionary) {
-        words = new HashMap<>();
-        for (String word : dictionary) {
-            String abbr = abbr(word);
-            words.computeIfAbsent(abbr, k -> new HashSet<>()).add(word);
+        for (var s : dictionary) {
+            d.computeIfAbsent(abbr(s), k -> new HashSet<>()).add(s);
         }
     }
 
     public boolean isUnique(String word) {
-        String abbr = abbr(word);
-        Set<String> vals = words.get(abbr);
-        return vals == null || (vals.size() == 1 && vals.contains(word));
+        var ws = d.get(abbr(word));
+        return ws == null || (ws.size() == 1 && ws.contains(word));
     }
 
     private String abbr(String s) {
         int n = s.length();
-        return n < 3 ? s : s.charAt(0) + Integer.toString(n - 2) + s.charAt(n - 1);
+        return n < 3 ? s : s.substring(0, 1) + (n - 2) + s.substring(n - 1);
     }
 }
 
@@ -132,28 +146,26 @@ class ValidWordAbbr {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class ValidWordAbbr {
 public:
-    unordered_map<string, unordered_set<string>> words;
-
     ValidWordAbbr(vector<string>& dictionary) {
-        for (auto word : dictionary) {
-            auto abbr = wordAbbr(word);
-            words[abbr].insert(word);
+        for (auto& s : dictionary) {
+            d[abbr(s)].insert(s);
         }
     }
 
     bool isUnique(string word) {
-        auto abbr = wordAbbr(word);
-        if (!words.count(abbr)) return true;
-        auto vals = words[abbr];
-        return vals.size() == 1 && vals.count(word);
+        string s = abbr(word);
+        return !d.count(s) || (d[s].size() == 1 && d[s].count(word));
     }
 
-    string wordAbbr(string s) {
+private:
+    unordered_map<string, unordered_set<string>> d;
+
+    string abbr(string& s) {
         int n = s.size();
         return n < 3 ? s : s.substr(0, 1) + to_string(n - 2) + s.substr(n - 1, 1);
     }
@@ -166,37 +178,36 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type ValidWordAbbr struct {
-	words map[string]map[string]bool
+	d map[string]map[string]bool
 }
 
 func Constructor(dictionary []string) ValidWordAbbr {
-	words := make(map[string]map[string]bool)
-	for _, word := range dictionary {
-		abbr := wordAbbr(word)
-		if words[abbr] == nil {
-			words[abbr] = make(map[string]bool)
+	d := make(map[string]map[string]bool)
+	for _, s := range dictionary {
+		abbr := abbr(s)
+		if _, ok := d[abbr]; !ok {
+			d[abbr] = make(map[string]bool)
 		}
-		words[abbr][word] = true
+		d[abbr][s] = true
 	}
-	return ValidWordAbbr{words}
+	return ValidWordAbbr{d}
 }
 
 func (this *ValidWordAbbr) IsUnique(word string) bool {
-	abbr := wordAbbr(word)
-	words := this.words[abbr]
-	return words == nil || (len(words) == 1 && words[word])
+	ws := this.d[abbr(word)]
+	return ws == nil || (len(ws) == 1 && ws[word])
 }
 
-func wordAbbr(s string) string {
+func abbr(s string) string {
 	n := len(s)
-	if n <= 2 {
+	if n < 3 {
 		return s
 	}
-	return s[0:1] + strconv.Itoa(n-2) + s[n-1:]
+	return fmt.Sprintf("%c%d%c", s[0], n-2, s[n-1])
 }
 
 /**
@@ -206,10 +217,42 @@ func wordAbbr(s string) string {
  */
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+class ValidWordAbbr {
+    private d: Map<string, Set<string>> = new Map();
 
+    constructor(dictionary: string[]) {
+        for (const s of dictionary) {
+            const abbr = this.abbr(s);
+            if (!this.d.has(abbr)) {
+                this.d.set(abbr, new Set());
+            }
+            this.d.get(abbr)!.add(s);
+        }
+    }
+
+    isUnique(word: string): boolean {
+        const ws = this.d.get(this.abbr(word));
+        return ws === undefined || (ws.size === 1 && ws.has(word));
+    }
+
+    abbr(s: string): string {
+        const n = s.length;
+        return n < 3 ? s : s[0] + (n - 2) + s[n - 1];
+    }
+}
+
+/**
+ * Your ValidWordAbbr object will be instantiated and called as such:
+ * var obj = new ValidWordAbbr(dictionary)
+ * var param_1 = obj.isUnique(word)
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1332.Remove%20Palindromic%20Subsequences/README.md
+rating: 1628
+source: 第 173 场周赛 Q1
+tags:
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1332. 删除回文子序列](https://leetcode.cn/problems/remove-palindromic-subsequences)
 
 [English Version](/solution/1300-1399/1332.Remove%20Palindromic%20Subsequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串&nbsp;<code>s</code>，它仅由字母&nbsp;<code>'a'</code> 和 <code>'b'</code>&nbsp;组成。每一次删除操作都可以从 <code>s</code> 中删除一个回文 <strong>子序列</strong>。</p>
 
@@ -51,11 +64,13 @@
 	<li><code>s</code> 仅包含字母&nbsp;<code>'a'</code>&nbsp; 和 <code>'b'</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
 如果字符串 $s$ 本身是个回文串，那么只需要删除 $1$ 次。
 
@@ -65,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +88,7 @@ class Solution:
         return 1 if s[::-1] == s else 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +119,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removePalindromeSub(s string) int {
@@ -121,7 +132,7 @@ func removePalindromeSub(s string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function removePalindromeSub(s: string): number {
@@ -134,7 +145,7 @@ function removePalindromeSub(s: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -154,10 +165,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

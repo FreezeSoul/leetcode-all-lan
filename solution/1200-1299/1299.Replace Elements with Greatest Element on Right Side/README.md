@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1299.Replace%20Elements%20with%20Greatest%20Element%20on%20Right%20Side/README.md
+rating: 1219
+source: 第 16 场双周赛 Q1
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1299. 将每个元素替换为右侧最大元素](https://leetcode.cn/problems/replace-elements-with-greatest-element-on-right-side)
 
 [English Version](/solution/1200-1299/1299.Replace%20Elements%20with%20Greatest%20Element%20on%20Right%20Side/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组 <code>arr</code> ，请你将每个元素用它右边最大的元素替换，如果是最后一个元素，用 <code>-1</code> 替换。</p>
 
@@ -43,48 +55,96 @@
 	<li><code>1 <= arr[i] <= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：逆序遍历
+
+我们用一个变量 $mx$ 记录当前位置右侧的最大值，初始时 $mx = -1$。
+
+然后我们从右向左遍历数组，对于每个位置 $i$，我们记当前位置的值为 $x$，将当前位置的值更新为 $mx$，然后更新 $mx = \max(mx, x)$。
+
+最后返回原数组即可。
+
+时间复杂度 $O(n)$，其中 $n$ 为数组长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def replaceElements(self, arr: List[int]) -> List[int]:
-        m = -1
-        for i in range(len(arr) - 1, -1, -1):
-            t = arr[i]
-            arr[i] = m
-            m = max(m, t)
+        mx = -1
+        for i in reversed(range(len(arr))):
+            x = arr[i]
+            arr[i] = mx
+            mx = max(mx, x)
         return arr
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int[] replaceElements(int[] arr) {
-        for (int i = arr.length - 1, max = -1; i >= 0; --i) {
-            int t = arr[i];
-            arr[i] = max;
-            max = Math.max(max, t);
+        for (int i = arr.length - 1, mx = -1; i >= 0; --i) {
+            int x = arr[i];
+            arr[i] = mx;
+            mx = Math.max(mx, x);
         }
         return arr;
     }
 }
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    vector<int> replaceElements(vector<int>& arr) {
+        for (int i = arr.size() - 1, mx = -1; ~i; --i) {
+            int x = arr[i];
+            arr[i] = mx;
+            mx = max(mx, x);
+        }
+        return arr;
+    }
+};
 ```
 
+#### Go
+
+```go
+func replaceElements(arr []int) []int {
+	for i, mx := len(arr)-1, -1; i >= 0; i-- {
+		x := arr[i]
+		arr[i] = mx
+		mx = max(mx, x)
+	}
+	return arr
+}
+```
+
+#### TypeScript
+
+```ts
+function replaceElements(arr: number[]): number[] {
+    for (let i = arr.length - 1, mx = -1; ~i; --i) {
+        const x = arr[i];
+        arr[i] = mx;
+        mx = Math.max(mx, x);
+    }
+    return arr;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1551.Minimum%20Operations%20to%20Make%20Array%20Equal/README.md
+rating: 1293
+source: 第 202 场周赛 Q2
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1551. 使数组中所有元素相等的最小操作数](https://leetcode.cn/problems/minimum-operations-to-make-array-equal)
 
 [English Version](/solution/1500-1599/1551.Minimum%20Operations%20to%20Make%20Array%20Equal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>存在一个长度为 <code>n</code> 的数组 <code>arr</code> ，其中 <code>arr[i] = (2 * i) + 1</code> （ <code>0 &lt;= i &lt; n</code> ）。</p>
 
@@ -37,72 +49,96 @@
 	<li><code>1 &lt;= n &lt;= 10^4</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-数组 arr 的前 n 项和为 `(1 + (2 * n - 1)) * n / 2 = n * n`，若数组所有元素相等，那么每一项元素应该都是 n，因此只需累计数组前半部分的元素操作次数 `n - (2 * i + 1)` 即可，即 n ∈ `[0, n / 2)`。
+### 方法一：数学
+
+根据题目描述，数组 $arr$ 是一个首项为 $1$，公差为 $2$ 的等差数列。那么数组前 $n$ 项的和为：
+
+$$
+\begin{aligned}
+S_n &= \frac{n}{2} \times (a_1 + a_n) \\
+&= \frac{n}{2} \times (1 + (2n - 1)) \\
+&= n^2
+\end{aligned}
+$$
+
+由于一次操作中，一个数减一，另一个数加一，数组中所有元素的和不变。因此，数组中所有元素相等时，每个元素的值为 $S_n / n = n$。那么，数组中所有元素相等所需的最小操作数为：
+
+$$
+\sum_{i=0}{\frac{n}{2}} (n - (2i + 1))
+$$
+
+时间复杂度 $O(n)$，其中 $n$ 为数组长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minOperations(self, n: int) -> int:
-        ans = 0
-        for i in range(n >> 1):
-            ans += n - (2 * i + 1)
-        return ans
+        return sum(n - (i << 1 | 1) for i in range(n >> 1))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int minOperations(int n) {
         int ans = 0;
-        for (int i = 0; i < (n >> 1); i++) {
-            ans += (n - (2 * i + 1));
+        for (int i = 0; i < n >> 1; ++i) {
+            ans += n - (i << 1 | 1);
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minOperations(int n) {
         int ans = 0;
-        for (int i = 0; i < (n >> 1); ++i) ans += (n - (2 * i + 1));
+        for (int i = 0; i < n >> 1; ++i) {
+            ans += n - (i << 1 | 1);
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func minOperations(n int) int {
-	ans := 0
-	for i := 0; i < (n >> 1); i++ {
-		ans += (n - (2*i + 1))
+func minOperations(n int) (ans int) {
+	for i := 0; i < n>>1; i++ {
+		ans += n - (i<<1 | 1)
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minOperations(n: number): number {
+    let ans = 0;
+    for (let i = 0; i < n >> 1; ++i) {
+        ans += n - ((i << 1) | 1);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

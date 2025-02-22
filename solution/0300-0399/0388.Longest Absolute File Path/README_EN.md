@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0388.Longest%20Absolute%20File%20Path/README_EN.md
+tags:
+    - Stack
+    - Depth-First Search
+    - String
+---
+
+<!-- problem:start -->
+
 # [388. Longest Absolute File Path](https://leetcode.com/problems/longest-absolute-file-path)
 
 [中文文档](/solution/0300-0399/0388.Longest%20Absolute%20File%20Path/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Suppose we have a file system that stores both files and directories. An example of one system is represented in the following picture:</p>
 
@@ -67,11 +81,17 @@ We return 32 since it is the longest absolute path to a file.
 	<li>All file and directory names have <strong>positive</strong> length.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -110,7 +130,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -157,57 +177,7 @@ class Solution {
 }
 ```
 
-### **Go**
-
-```go
-func lengthLongestPath(input string) int {
-	i, n := 0, len(input)
-	ans := 0
-	var stk []int
-	for i < n {
-		ident := 0
-		for ; input[i] == '\t'; i++ {
-			ident++
-		}
-
-		cur, isFile := 0, false
-		for ; i < n && input[i] != '\n'; i++ {
-			cur++
-			if input[i] == '.' {
-				isFile = true
-			}
-		}
-		i++
-
-		// popd
-		for len(stk) > 0 && len(stk) > ident {
-			stk = stk[:len(stk)-1]
-		}
-
-		if len(stk) > 0 {
-			cur += stk[len(stk)-1] + 1
-		}
-
-		// pushd
-		if !isFile {
-			stk = append(stk, cur)
-			continue
-		}
-
-		ans = max(ans, cur)
-	}
-	return ans
-}
-
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -254,10 +224,51 @@ public:
 };
 ```
 
-### **...**
+#### Go
 
-```
+```go
+func lengthLongestPath(input string) int {
+	i, n := 0, len(input)
+	ans := 0
+	var stk []int
+	for i < n {
+		ident := 0
+		for ; input[i] == '\t'; i++ {
+			ident++
+		}
 
+		cur, isFile := 0, false
+		for ; i < n && input[i] != '\n'; i++ {
+			cur++
+			if input[i] == '.' {
+				isFile = true
+			}
+		}
+		i++
+
+		// popd
+		for len(stk) > 0 && len(stk) > ident {
+			stk = stk[:len(stk)-1]
+		}
+
+		if len(stk) > 0 {
+			cur += stk[len(stk)-1] + 1
+		}
+
+		// pushd
+		if !isFile {
+			stk = append(stk, cur)
+			continue
+		}
+
+		ans = max(ans, cur)
+	}
+	return ans
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

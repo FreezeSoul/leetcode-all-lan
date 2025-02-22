@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1145.Binary%20Tree%20Coloring%20Game/README_EN.md
+rating: 1741
+source: Weekly Contest 148 Q2
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [1145. Binary Tree Coloring Game](https://leetcode.com/problems/binary-tree-coloring-game)
 
 [中文文档](/solution/1100-1199/1145.Binary%20Tree%20Coloring%20Game/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Two players play a turn based game on a binary tree. We are given the <code>root</code> of this binary tree, and the number of nodes <code>n</code> in the tree. <code>n</code> is odd, and each node has a distinct value from <code>1</code> to <code>n</code>.</p>
 
@@ -41,11 +57,23 @@
 	<li>All the values of the tree are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+First, we use DFS to find the node where player 1's colored point $x$ is located, denoted as $node$.
+
+Next, we count the number of nodes in the left and right subtrees of $node$, denoted as $l$ and $r$ respectively, and the number of nodes in the direction of $node$'s parent node is $n - l - r - 1$. As long as $\max(l, r, n - l - r - 1) > \frac{n}{2}$, player 2 has a winning strategy.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the total number of nodes.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -71,7 +99,7 @@ class Solution:
         return max(l, r, n - l - r - 1) > n // 2
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -114,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -153,7 +181,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -189,16 +217,48 @@ func btreeGameWinningMove(root *TreeNode, n int, x int) bool {
 	l, r := count(node.Left), count(node.Right)
 	return max(max(l, r), n-l-r-1) > n/2
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function btreeGameWinningMove(root: TreeNode | null, n: number, x: number): boolean {
+    const dfs = (root: TreeNode | null): TreeNode | null => {
+        if (!root || root.val === x) {
+            return root;
+        }
+        return dfs(root.left) || dfs(root.right);
+    };
+
+    const count = (root: TreeNode | null): number => {
+        if (!root) {
+            return 0;
+        }
+        return 1 + count(root.left) + count(root.right);
+    };
+
+    const node = dfs(root);
+    const l = count(node.left);
+    const r = count(node.right);
+    return Math.max(l, r, n - l - r - 1) > n / 2;
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -237,53 +297,8 @@ var btreeGameWinningMove = function (root, n, x) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function btreeGameWinningMove(
-    root: TreeNode | null,
-    n: number,
-    x: number,
-): boolean {
-    const dfs = (root: TreeNode | null): TreeNode | null => {
-        if (!root || root.val === x) {
-            return root;
-        }
-        return dfs(root.left) || dfs(root.right);
-    };
-
-    const count = (root: TreeNode | null): number => {
-        if (!root) {
-            return 0;
-        }
-        return 1 + count(root.left) + count(root.right);
-    };
-
-    const node = dfs(root);
-    const l = count(node.left);
-    const r = count(node.right);
-    return Math.max(l, r, n - l - r - 1) > n / 2;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

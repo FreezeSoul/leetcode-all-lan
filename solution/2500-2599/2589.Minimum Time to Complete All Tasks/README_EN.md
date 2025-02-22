@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2589.Minimum%20Time%20to%20Complete%20All%20Tasks/README_EN.md
+rating: 2380
+source: Weekly Contest 336 Q4
+tags:
+    - Stack
+    - Greedy
+    - Array
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2589. Minimum Time to Complete All Tasks](https://leetcode.com/problems/minimum-time-to-complete-all-tasks)
 
 [中文文档](/solution/2500-2599/2589.Minimum%20Time%20to%20Complete%20All%20Tasks/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a computer that can run an unlimited number of tasks <strong>at the same time</strong>. You are given a 2D integer array <code>tasks</code> where <code>tasks[i] = [start<sub>i</sub>, end<sub>i</sub>, duration<sub>i</sub>]</code> indicates that the <code>i<sup>th</sup></code> task should run for a total of <code>duration<sub>i</sub></code> seconds (not necessarily continuous) within the <strong>inclusive</strong> time range <code>[start<sub>i</sub>, end<sub>i</sub>]</code>.</p>
 
@@ -45,21 +63,27 @@ The computer will be on for a total of 4 seconds.
 	<li><code>1 &lt;= duration<sub>i</sub> &lt;= end<sub>i</sub> - start<sub>i</sub> + 1 </code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Greedy + Sort**
+<!-- solution:start -->
 
-We find that the problem is equivalent to choosing $duration$ integer time points in each interval $[start,..,end]$ so that the total number of integer time points selected is the smallest.
+### Solution 1: Greedy + Sorting
 
-Therefore, we can sort the $tasks$ by the end time $end$ from small to large. Then greedily select. For each task, we start from the end time $end$ and choose as many points as possible from back to front, so that these points are more likely to be reused by later tasks.
+We observe that the problem is equivalent to selecting $duration$ integer time points in each interval $[start,..,end]$, so that the total number of selected integer time points is minimized.
 
-In implementation, we can use a length of $2010$ array $vis$ to record whether each time point has been selected. Then for each task, we first count the number of points that have been selected in the $[start,..,end]$ interval $cnt$, then choose $duration - cnt$ points from back to front, and record the number of points selected $ans$ and update the $vis$ array.
+Therefore, we can first sort $tasks$ in ascending order of end time $end$. Then we greedily make selections. For each task, we start from the end time $end$ and choose the points as late as possible from back to front. This way, these points are more likely to be reused by later tasks.
+
+In our implementation, we can use an array $vis$ of length $2010$ to record whether each time point has been selected. Then for each task, we first count the number of points $cnt$ that have been selected in the interval $[start,..,end]$, and then select $duration - cnt$ points from back to front, while recording the number of selected points $ans$ and updating the $vis$ array.
 
 Finally, we return $ans$.
 
+The time complexity is $O(n \times \log n + n \times m)$, and the space complexity is $O(m)$. Here, $n$ and $m$ are the lengths of $tasks$ and $vis$ array, respectively. In this problem, $m = 2010$.
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +92,7 @@ class Solution:
         vis = [0] * 2010
         ans = 0
         for start, end, duration in tasks:
-            duration -= sum(vis[start: end + 1])
+            duration -= sum(vis[start : end + 1])
             i = end
             while i >= start and duration > 0:
                 if not vis[i]:
@@ -79,7 +103,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findMinimumTime(tasks [][]int) (ans int) {
@@ -153,12 +177,12 @@ func findMinimumTime(tasks [][]int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findMinimumTime(tasks: number[][]): number {
     tasks.sort((a, b) => a[1] - b[1]);
-    const vis = new Array(2010).fill(0);
+    const vis: number[] = Array(2010).fill(0);
     let ans = 0;
     for (let [start, end, duration] of tasks) {
         for (let i = start; i <= end; ++i) {
@@ -175,10 +199,39 @@ function findMinimumTime(tasks: number[][]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn find_minimum_time(tasks: Vec<Vec<i32>>) -> i32 {
+        let mut tasks = tasks;
+        tasks.sort_by(|a, b| a[1].cmp(&b[1]));
+        let mut vis = vec![0; 2010];
+        let mut ans = 0;
 
+        for task in tasks {
+            let start = task[0] as usize;
+            let end = task[1] as usize;
+            let mut duration = task[2] - vis[start..=end].iter().sum::<i32>();
+            let mut i = end;
+
+            while i >= start && duration > 0 {
+                if vis[i] == 0 {
+                    duration -= 1;
+                    vis[i] = 1;
+                    ans += 1;
+                }
+                i -= 1;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

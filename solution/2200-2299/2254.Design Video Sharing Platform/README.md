@@ -1,10 +1,23 @@
-# [2254. 设计视频共享平台](https://leetcode.cn/problems/design-video-sharing-platform)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2254.Design%20Video%20Sharing%20Platform/README.md
+tags:
+    - 栈
+    - 设计
+    - 哈希表
+    - 有序集合
+---
+
+<!-- problem:start -->
+
+# [2254. 设计视频共享平台 🔒](https://leetcode.cn/problems/design-video-sharing-platform)
 
 [English Version](/solution/2200-2299/2254.Design%20Video%20Sharing%20Platform/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一个视频分享平台，用户可以上传和删除视频。每个 <code>video</code> 都是&nbsp;<strong>字符串&nbsp;</strong>类型的数字，其中字符串的第 <code>i</code> 位表示视频中第 <code>i</code> 分钟的内容。例如，第一个数字表示视频中第 <code>0</code> 分钟的内容，第二个数字表示视频中第 <code>1</code> 分钟的内容，以此类推。视频的观众也可以喜欢和不喜欢视频。该平台会跟踪每个视频的&nbsp;<strong>观看次数</strong>、<strong>点赞次数&nbsp;</strong>和 <strong>不喜欢次数</strong>。</p>
 
@@ -87,38 +100,42 @@ videoSharingPlatform.getViews(0);            // 没有视频与 videoId 0 相关
 	<li>所有函数&nbsp;<strong>总共&nbsp;</strong>最多调用 <code>10<sup>5</sup></code> 次。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 
 ```
 
-### **TypeScript**
+#### C++
 
-```ts
-
-```
-
-### **...**
+```cpp
 
 ```
+
+#### Go
+
+```go
 
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

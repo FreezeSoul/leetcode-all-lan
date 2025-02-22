@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2661.First%20Completely%20Painted%20Row%20or%20Column/README_EN.md
+rating: 1502
+source: Weekly Contest 343 Q2
+tags:
+    - Array
+    - Hash Table
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [2661. First Completely Painted Row or Column](https://leetcode.com/problems/first-completely-painted-row-or-column)
 
 [中文文档](/solution/2600-2699/2661.First%20Completely%20Painted%20Row%20or%20Column/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>arr</code>, and an <code>m x n</code> integer <strong>matrix</strong> <code>mat</code>. <code>arr</code> and <code>mat</code> both contain <strong>all</strong> the integers in the range <code>[1, m * n]</code>.</p>
 
@@ -41,9 +57,13 @@
 	<li>All the integers of <code>mat</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Hash Table + Array Counting**
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Array Counting
 
 We use a hash table $idx$ to record the position of each element in the matrix $mat$, that is $idx[mat[i][j]] = (i, j)$, and define two arrays $row$ and $col$ to record the number of colored elements in each row and each column respectively.
 
@@ -53,7 +73,7 @@ The time complexity is $O(m \times n)$, and the space complexity is $O(m \times 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +93,7 @@ class Solution:
                 return k
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,7 +146,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func firstCompleteIndex(arr []int, mat [][]int) int {
@@ -151,7 +171,7 @@ func firstCompleteIndex(arr []int, mat [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function firstCompleteIndex(arr: number[], mat: number[][]): number {
@@ -163,8 +183,8 @@ function firstCompleteIndex(arr: number[], mat: number[][]): number {
             idx.set(mat[i][j], [i, j]);
         }
     }
-    const row: number[] = new Array(m).fill(0);
-    const col: number[] = new Array(n).fill(0);
+    const row: number[] = Array(m).fill(0);
+    const col: number[] = Array(n).fill(0);
     for (let k = 0; ; ++k) {
         const [i, j] = idx.get(arr[k])!;
         ++row[i];
@@ -176,10 +196,42 @@ function firstCompleteIndex(arr: number[], mat: number[][]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::HashMap;
 
+impl Solution {
+    pub fn first_complete_index(arr: Vec<i32>, mat: Vec<Vec<i32>>) -> i32 {
+        let m = mat.len();
+        let n = mat[0].len();
+        let mut idx = HashMap::new();
+        for i in 0..m {
+            for j in 0..n {
+                idx.insert(mat[i][j], [i, j]);
+            }
+        }
+
+        let mut row = vec![0; m];
+        let mut col = vec![0; n];
+        for k in 0..arr.len() {
+            let x = idx.get(&arr[k]).unwrap();
+            let i = x[0];
+            let j = x[1];
+            row[i] += 1;
+            col[j] += 1;
+            if row[i] == n || col[j] == m {
+                return k as i32;
+            }
+        }
+
+        -1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

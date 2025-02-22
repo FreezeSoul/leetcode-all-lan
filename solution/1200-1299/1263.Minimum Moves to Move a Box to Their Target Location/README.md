@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1263.Minimum%20Moves%20to%20Move%20a%20Box%20to%20Their%20Target%20Location/README.md
+rating: 2297
+source: 第 163 场周赛 Q4
+tags:
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1263. 推箱子](https://leetcode.cn/problems/minimum-moves-to-move-a-box-to-their-target-location)
 
 [English Version](/solution/1200-1299/1263.Minimum%20Moves%20to%20Move%20a%20Box%20to%20Their%20Target%20Location/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>「推箱子」是一款风靡全球的益智小游戏，玩家需要将箱子推到仓库中的目标位置。</p>
 
@@ -76,11 +91,13 @@
 	<li><code>grid</code>&nbsp;中&nbsp;<code>'S'</code>, <code>'B'</code>&nbsp;和&nbsp;<code>'T'</code>&nbsp;各只能出现一个。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双端队列 BFS**
+### 方法一：双端队列 + BFS
 
 我们把玩家的位置和箱子的位置看成一个状态，即 $(s_i, s_j, b_i, b_j)$，其中 $(s_i, s_j)$ 是玩家的位置，而 $(b_i, b_j)$ 是箱子的位置。在代码实现上，我们定义一个函数 $f(i, j)$，它将二维坐标 $(i, j)$ 映射到一个一维的状态编号，即 $f(i, j) = i \times n + j$，其中 $n$ 是网格的列数。那么玩家和箱子的状态就是 $(f(s_i, s_j), f(b_i, b_j))$。
 
@@ -109,9 +126,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -155,9 +170,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -227,7 +240,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -287,7 +300,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minPushBox(grid [][]byte) int {
@@ -345,7 +358,7 @@ func minPushBox(grid [][]byte) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minPushBox(grid: string[][]): number {
@@ -365,9 +378,7 @@ function minPushBox(grid: string[][]): number {
         i >= 0 && i < m && j >= 0 && j < n && grid[i][j] !== '#';
 
     const q: Deque<[number, number, number]> = new Deque();
-    const vis: boolean[][] = new Array(m * n)
-        .fill(0)
-        .map(() => new Array(m * n).fill(false));
+    const vis: boolean[][] = new Array(m * n).fill(0).map(() => new Array(m * n).fill(false));
     q.push([f(si, sj), f(bi, bj), 0]);
     vis[f(si, sj)][f(bi, bj)] = true;
     const dirs: number[] = [-1, 0, 1, 0, -1];
@@ -570,10 +581,8 @@ class Deque<T> {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

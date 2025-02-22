@@ -1,19 +1,21 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def pathSum(self, root: TreeNode, sum: int) -> int:
-        def dfs(root, sum, flag):
-            nonlocal ans
-            if not root:
+    def pathSum(self, root: Optional[TreeNode], sum: int) -> int:
+        def dfs(root: Optional[TreeNode], s: int) -> int:
+            if root is None:
                 return 0
-            if sum - root.val == 0:
-                ans += 1
-            if flag == 0:
-                dfs(root.left, sum, 0)
-                dfs(root.right, sum, 0)
-            dfs(root.left, sum - root.val, 1)
-            dfs(root.right, sum - root.val, 1)
+            s += root.val
+            ans = cnt[s - sum]
+            cnt[s] += 1
+            ans += dfs(root.left, s)
+            ans += dfs(root.right, s)
+            cnt[s] -= 1
+            return ans
 
-        if not root:
-            return 0
-        ans = 0
-        dfs(root, sum, 0)
-        return ans
+        cnt = Counter({0: 1})
+        return dfs(root, 0)

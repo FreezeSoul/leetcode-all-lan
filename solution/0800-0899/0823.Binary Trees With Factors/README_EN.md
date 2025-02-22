@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0823.Binary%20Trees%20With%20Factors/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Dynamic Programming
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [823. Binary Trees With Factors](https://leetcode.com/problems/binary-trees-with-factors)
 
 [中文文档](/solution/0800-0899/0823.Binary%20Trees%20With%20Factors/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of unique integers, <code>arr</code>, where each integer <code>arr[i]</code> is strictly greater than <code>1</code>.</p>
 
@@ -34,11 +49,17 @@
 	<li>All the values of <code>arr</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,13 +77,12 @@ class Solution:
         return sum(f) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-    private static final int MOD = (int) 1e9 + 7;
-
     public int numFactoredBinaryTrees(int[] arr) {
+        final int mod = (int) 1e9 + 7;
         Arrays.sort(arr);
         int n = arr.length;
         long[] f = new long[n];
@@ -79,28 +99,27 @@ class Solution {
                     int c = a / b;
                     if (idx.containsKey(c)) {
                         int k = idx.get(c);
-                        f[i] = (f[i] + f[j] * f[k]) % MOD;
+                        f[i] = (f[i] + f[j] * f[k]) % mod;
                     }
                 }
             }
         }
         long ans = 0;
         for (long v : f) {
-            ans = (ans + v) % MOD;
+            ans = (ans + v) % mod;
         }
         return (int) ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
-    const int mod = 1e9 + 7;
-
     int numFactoredBinaryTrees(vector<int>& arr) {
+        const int mod = 1e9 + 7;
         sort(arr.begin(), arr.end());
         unordered_map<int, int> idx;
         int n = arr.size();
@@ -130,25 +149,22 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numFactoredBinaryTrees(arr []int) int {
 	const mod int = 1e9 + 7
 	sort.Ints(arr)
 	f := make([]int, len(arr))
-	for i := range f {
-		f[i] = 1
-	}
 	idx := map[int]int{}
 	for i, v := range arr {
+		f[i] = 1
 		idx[v] = i
 	}
 	for i, a := range arr {
 		for j := 0; j < i; j++ {
 			b := arr[j]
-			if a%b == 0 {
-				c := a / b
+			if c := a / b; a%b == 0 {
 				if k, ok := idx[c]; ok {
 					f[i] = (f[i] + f[j]*f[k]) % mod
 				}
@@ -163,10 +179,37 @@ func numFactoredBinaryTrees(arr []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function numFactoredBinaryTrees(arr: number[]): number {
+    const mod = 10 ** 9 + 7;
+    arr.sort((a, b) => a - b);
+    const idx: Map<number, number> = new Map();
+    const n = arr.length;
+    for (let i = 0; i < n; ++i) {
+        idx.set(arr[i], i);
+    }
+    const f: number[] = new Array(n).fill(1);
+    for (let i = 0; i < n; ++i) {
+        const a = arr[i];
+        for (let j = 0; j < i; ++j) {
+            const b = arr[j];
+            if (a % b === 0) {
+                const c = a / b;
+                if (idx.has(c)) {
+                    const k = idx.get(c)!;
+                    f[i] = (f[i] + f[j] * f[k]) % mod;
+                }
+            }
+        }
+    }
+    return f.reduce((a, b) => a + b) % mod;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

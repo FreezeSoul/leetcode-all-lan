@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1125.Smallest%20Sufficient%20Team/README.md
+rating: 2250
+source: 第 145 场周赛 Q4
+tags:
+    - 位运算
+    - 数组
+    - 动态规划
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [1125. 最小的必要团队](https://leetcode.cn/problems/smallest-sufficient-team)
 
 [English Version](/solution/1100-1199/1125.Smallest%20Sufficient%20Team/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>作为项目经理，你规划了一份需求的技能清单 <code>req_skills</code>，并打算从备选人员名单 <code>people</code> 中选出些人组成一个「必要团队」（ 编号为 <code>i</code> 的备选人员 <code>people[i]</code> 含有一份该备选人员掌握的技能列表）。</p>
 
@@ -50,11 +65,13 @@
 	<li>题目数据保证「必要团队」一定存在</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩动态规划**
+### 方法一：状态压缩动态规划
 
 我们注意到，技能清单 `req_skills` 的长度不超过 $16$，因此，我们可以用一个长度不超过 $16$ 的二进制数来表示每一种技能是否被掌握。不妨记数组 `req_skills` 的长度为 $m$，数组 `people` 的长度为 $n$。
 
@@ -76,9 +93,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -111,9 +126,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -157,7 +170,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -201,7 +214,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestSufficientTeam(req_skills []string, people [][]string) (ans []int) {
@@ -243,13 +256,10 @@ func smallestSufficientTeam(req_skills []string, people [][]string) (ans []int) 
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function smallestSufficientTeam(
-    req_skills: string[],
-    people: string[][],
-): number[] {
+function smallestSufficientTeam(req_skills: string[], people: string[][]): number[] {
     const d: Map<string, number> = new Map();
     const m = req_skills.length;
     const n = people.length;
@@ -287,10 +297,8 @@ function smallestSufficientTeam(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

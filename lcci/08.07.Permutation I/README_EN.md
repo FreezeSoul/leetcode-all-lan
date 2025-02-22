@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/08.07.Permutation%20I/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [08.07. Permutation I](https://leetcode.cn/problems/permutation-i-lcci)
 
 [中文文档](/lcci/08.07.Permutation%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write a method to compute all permutations of a string of unique characters.</p>
 
@@ -29,73 +39,169 @@
 <p><strong>Note:</strong></p>
 
 <ol>
-	<li>All charaters are English letters.</li>
+	<li>All characters are English letters.</li>
 	<li><code>1 &lt;= S.length &lt;= 9</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## Solutions
 
-Backtracking
+<!-- solution:start -->
+
+### Solution 1: DFS (Backtracking)
+
+We design a function $\textit{dfs}(i)$ to represent that the first $i$ positions have been filled, and now we need to fill the $(i+1)$-th position. Enumerate all possible characters, and if the character has not been used, fill in this character and continue to fill the next position until all positions are filled.
+
+The time complexity is $O(n \times n!)$, where $n$ is the length of the string. There are $n!$ permutations in total, and each permutation takes $O(n)$ time to construct.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def permutation(self, S: str) -> List[str]:
-        def dfs(u, t):
-            if u == n:
-                ans.append(''.join(t))
+        def dfs(i: int):
+            if i >= n:
+                ans.append("".join(t))
                 return
-            for i in range(n):
-                if vis[i]:
-                    continue
-                vis[i] = True
-                t.append(S[i])
-                dfs(u + 1, t)
-                t.pop()
-                vis[i] = False
+            for j, c in enumerate(S):
+                if not vis[j]:
+                    vis[j] = True
+                    t[i] = c
+                    dfs(i + 1)
+                    vis[j] = False
 
+        ans = []
         n = len(S)
         vis = [False] * n
-        ans = []
-        dfs(0, [])
+        t = list(S)
+        dfs(0)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
+    private char[] s;
+    private char[] t;
+    private boolean[] vis;
+    private List<String> ans = new ArrayList<>();
+
     public String[] permutation(String S) {
-        Set<Character> vis = new HashSet<>();
-        List<String> ans = new ArrayList<>();
-        StringBuilder t = new StringBuilder();
-        dfs(0, S, t, ans, vis);
+        s = S.toCharArray();
+        int n = s.length;
+        vis = new boolean[n];
+        t = new char[n];
+        dfs(0);
         return ans.toArray(new String[0]);
     }
 
-    private void dfs(int u, String S, StringBuilder t, List<String> ans, Set<Character> vis) {
-        if (u == S.length()) {
-            ans.add(t.toString());
+    private void dfs(int i) {
+        if (i >= s.length) {
+            ans.add(new String(t));
             return;
         }
-        for (char c : S.toCharArray()) {
-            if (vis.contains(c)) {
-                continue;
+        for (int j = 0; j < s.length; ++j) {
+            if (!vis[j]) {
+                vis[j] = true;
+                t[i] = s[j];
+                dfs(i + 1);
+                vis[j] = false;
             }
-            vis.add(c);
-            t.append(c);
-            dfs(u + 1, S, t, ans, vis);
-            t.deleteCharAt(t.length() - 1);
-            vis.remove(c);
         }
     }
 }
 ```
 
-### **JavaSript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<string> permutation(string S) {
+        int n = S.size();
+        vector<bool> vis(n);
+        string t = S;
+        vector<string> ans;
+        auto dfs = [&](this auto&& dfs, int i) {
+            if (i >= n) {
+                ans.emplace_back(t);
+                return;
+            }
+            for (int j = 0; j < n; ++j) {
+                if (!vis[j]) {
+                    vis[j] = true;
+                    t[i] = S[j];
+                    dfs(i + 1);
+                    vis[j] = false;
+                }
+            }
+        };
+        dfs(0);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func permutation(S string) (ans []string) {
+	t := []byte(S)
+	n := len(t)
+	vis := make([]bool, n)
+	var dfs func(int)
+	dfs = func(i int) {
+		if i >= n {
+			ans = append(ans, string(t))
+			return
+		}
+		for j := range S {
+			if !vis[j] {
+				vis[j] = true
+				t[i] = S[j]
+				dfs(i + 1)
+				vis[j] = false
+			}
+		}
+	}
+	dfs(0)
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function permutation(S: string): string[] {
+    const n = S.length;
+    const vis: boolean[] = Array(n).fill(false);
+    const ans: string[] = [];
+    const t: string[] = Array(n).fill('');
+    const dfs = (i: number) => {
+        if (i >= n) {
+            ans.push(t.join(''));
+            return;
+        }
+        for (let j = 0; j < n; ++j) {
+            if (vis[j]) {
+                continue;
+            }
+            vis[j] = true;
+            t[i] = S[j];
+            dfs(i + 1);
+            vis[j] = false;
+        }
+    };
+    dfs(0);
+    return ans;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -103,95 +209,64 @@ class Solution {
  * @return {string[]}
  */
 var permutation = function (S) {
-    let res = [];
-    let arr = [...S];
-    let prev = [];
-    let record = new Array(S.length).fill(false);
-    dfs(arr, 0, prev, record, res);
-    return res;
-};
-
-function dfs(arr, depth, prev, record, res) {
-    if (depth == arr.length) {
-        res.push(prev.join(''));
-        return;
-    }
-    for (let i = 0; i < arr.length; i++) {
-        if (record[i]) {
-            continue;
-        }
-        prev.push(arr[i]);
-        record[i] = true;
-        dfs(arr, depth + 1, prev, record, res);
-        prev.pop();
-        record[i] = false;
-    }
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<string> permutation(string S) {
-        unordered_set<char> vis;
-        vector<string> ans;
-        string t = "";
-        dfs(0, S, t, ans, vis);
-        return ans;
-    }
-
-    void dfs(int u, string& S, string& t, vector<string>& ans, unordered_set<char>& vis) {
-        if (u == S.size()) {
-            ans.push_back(t);
+    const n = S.length;
+    const vis = Array(n).fill(false);
+    const ans = [];
+    const t = Array(n).fill('');
+    const dfs = i => {
+        if (i >= n) {
+            ans.push(t.join(''));
             return;
         }
-        for (char& c : S) {
-            if (vis.count(c)) continue;
-            vis.insert(c);
-            t.push_back(c);
-            dfs(u + 1, S, t, ans, vis);
-            vis.erase(c);
-            t.pop_back();
+        for (let j = 0; j < n; ++j) {
+            if (vis[j]) {
+                continue;
+            }
+            vis[j] = true;
+            t[i] = S[j];
+            dfs(i + 1);
+            vis[j] = false;
         }
-    }
+    };
+    dfs(0);
+    return ans;
 };
 ```
 
-### **Go**
+#### Swift
 
-```go
-func permutation(S string) []string {
-	vis := make(map[byte]bool)
-	var ans []string
-	var t []byte
-	var dfs func(u int, t []byte)
-	dfs = func(u int, t []byte) {
-		if u == len(S) {
-			ans = append(ans, string(t))
-			return
-		}
-		for i := range S {
-			if vis[S[i]] {
-				continue
-			}
-			vis[S[i]] = true
-			t = append(t, S[i])
-			dfs(u+1, t)
-			vis[S[i]] = false
-			t = t[:len(t)-1]
-		}
-	}
-	dfs(0, t)
-	return ans
+```swift
+class Solution {
+    func permutation(_ S: String) -> [String] {
+        var ans: [String] = []
+        let s = Array(S)
+        var t = s
+        var vis = Array(repeating: false, count: s.count)
+        let n = s.count
+
+        func dfs(_ i: Int) {
+            if i >= n {
+                ans.append(String(t))
+                return
+            }
+            for j in 0..<n {
+                if !vis[j] {
+                    vis[j] = true
+                    t[i] = s[j]
+                    dfs(i + 1)
+                    vis[j] = false
+                }
+            }
+        }
+
+        dfs(0)
+        return ans
+    }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

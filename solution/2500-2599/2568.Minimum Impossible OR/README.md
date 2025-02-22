@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2568.Minimum%20Impossible%20OR/README.md
+rating: 1754
+source: 第 98 场双周赛 Q3
+tags:
+    - 位运算
+    - 脑筋急转弯
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2568. 最小无法得到的或值](https://leetcode.cn/problems/minimum-impossible-or)
 
 [English Version](/solution/2500-2599/2568.Minimum%20Impossible%20OR/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code>&nbsp;。</p>
 
@@ -37,11 +51,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举 2 的幂**
+### 方法一：枚举 2 的幂
 
 我们从整数 $1$ 开始考虑，如果 $1$ 是可表达的，那么它必须出现在数组 `nums` 中；如果 $2$ 是可表达的，那么它必须出现在数组 `nums` 中；如果 $1$ 和 $2$ 都是可表达的，那么它们的或运算 $3$ 也是可表达的，以此类推。
 
@@ -51,9 +67,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -62,9 +76,7 @@ class Solution:
         return next(1 << i for i in range(32) if 1 << i not in s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +94,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +110,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minImpossibleOR(nums []int) int {
@@ -114,7 +126,7 @@ func minImpossibleOR(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minImpossibleOR(nums: number[]): number {
@@ -130,10 +142,8 @@ function minImpossibleOR(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

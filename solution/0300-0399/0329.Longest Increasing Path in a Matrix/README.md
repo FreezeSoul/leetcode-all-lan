@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0329.Longest%20Increasing%20Path%20in%20a%20Matrix/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 图
+    - 拓扑排序
+    - 记忆化搜索
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [329. 矩阵中的最长递增路径](https://leetcode.cn/problems/longest-increasing-path-in-a-matrix)
 
 [English Version](/solution/0300-0399/0329.Longest%20Increasing%20Path%20in%20a%20Matrix/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个 <code>m x n</code> 整数矩阵 <code>matrix</code> ，找出其中 <strong>最长递增路径</strong> 的长度。</p>
 
@@ -45,11 +62,13 @@
 	<li><code>0 <= matrix[i][j] <= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i, j)$，它表示从矩阵中的坐标 $(i, j)$ 出发，可以得到的最长递增路径的长度。那么答案就是 $\max_{i, j} \textit{dfs}(i, j)$。
 
@@ -60,13 +79,13 @@
 
 时间复杂度 $O(m \times n)$，空间复杂度 $O(m \times n)$。其中 $m$ 和 $n$ 分别是矩阵的行数和列数。
 
-相似题目：[2328. 网格图中递增路径的数目](/solution/2300-2399/2328.Number%20of%20Increasing%20Paths%20in%20a%20Grid/README.md)。
+相似题目：
+
+-   [2328. 网格图中递增路径的数目](https://github.com/doocs/leetcode/blob/main/solution/2300-2399/2328.Number%20of%20Increasing%20Paths%20in%20a%20Grid/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +103,7 @@ class Solution:
         return max(dfs(i, j) for i in range(m) for j in range(n))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -126,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,7 +178,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestIncreasingPath(matrix [][]int) (ans int) {
@@ -192,16 +209,9 @@ func longestIncreasingPath(matrix [][]int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestIncreasingPath(matrix: number[][]): number {
@@ -218,13 +228,7 @@ function longestIncreasingPath(matrix: number[][]): number {
         for (let k = 0; k < 4; ++k) {
             const x = i + dirs[k];
             const y = j + dirs[k + 1];
-            if (
-                x >= 0 &&
-                x < m &&
-                y >= 0 &&
-                y < n &&
-                matrix[x][y] > matrix[i][j]
-            ) {
+            if (x >= 0 && x < m && y >= 0 && y < n && matrix[x][y] > matrix[i][j]) {
                 f[i][j] = Math.max(f[i][j], dfs(x, y));
             }
         }
@@ -240,10 +244,8 @@ function longestIncreasingPath(matrix: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

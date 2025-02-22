@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2095.Delete%20the%20Middle%20Node%20of%20a%20Linked%20List/README.md
+rating: 1324
+source: 第 270 场周赛 Q2
+tags:
+    - 链表
+    - 双指针
+---
+
+<!-- problem:start -->
+
 # [2095. 删除链表的中间节点](https://leetcode.cn/problems/delete-the-middle-node-of-a-linked-list)
 
 [English Version](/solution/2000-2099/2095.Delete%20the%20Middle%20Node%20of%20a%20Linked%20List/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个链表的头节点 <code>head</code> 。<strong>删除</strong> 链表的 <strong>中间节点</strong> ，并返回修改后的链表的头节点 <code>head</code> 。</p>
 
@@ -62,15 +75,23 @@
 	<li><code>1 &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：快慢指针
+
+快慢指针法是一种用于解决链表中的问题的常用技巧。我们可以维护两个指针，一个慢指针 $\textit{slow}$ 和一个快指针 $\textit{fast}$。初始时 $\textit{slow}$ 指向一个虚拟节点，该虚拟节点的 $\textit{next}$ 指针指向链表的头节点 $\textit{head}$，而 $\textit{fast}$ 指向链表的头节点 $\textit{head}$。
+
+然后，我们每次将慢指针向后移动一个位置，将快指针向后移动两个位置，直到快指针到达链表的末尾。此时，慢指针指向的节点的下一个节点就是链表的中间节点。我们将慢指针指向的节点的 $\textit{next}$ 指针指向下下个节点，即可删除中间节点。
+
+时间复杂度 $O(n)$，其中 $n$ 是链表的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -89,9 +110,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -118,37 +137,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```ts
-/**
- * Definition for singly-linked list.
- * class ListNode {
- *     val: number
- *     next: ListNode | null
- *     constructor(val?: number, next?: ListNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
- */
-
-function deleteMiddle(head: ListNode | null): ListNode | null {
-    if (!head || !head.next) return null;
-    let fast = head.next,
-        slow = head;
-    while (fast.next && fast.next.next) {
-        slow = slow.next;
-        fast = fast.next.next;
-    }
-    slow.next = slow.next.next;
-    return head;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -177,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -198,10 +187,35 @@ func deleteMiddle(head *ListNode) *ListNode {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
 
+function deleteMiddle(head: ListNode | null): ListNode | null {
+    const dummy = new ListNode(0, head);
+    let [slow, fast] = [dummy, head];
+    while (fast && fast.next) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    slow.next = slow.next.next;
+    return dummy.next;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

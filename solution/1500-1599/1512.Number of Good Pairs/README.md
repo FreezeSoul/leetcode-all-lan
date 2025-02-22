@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1512.Number%20of%20Good%20Pairs/README.md
+rating: 1160
+source: 第 197 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 数学
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1512. 好数对的数目](https://leetcode.cn/problems/number-of-good-pairs)
 
 [English Version](/solution/1500-1599/1512.Number%20of%20Good%20Pairs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 。</p>
 
@@ -42,11 +57,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 遍历数组，对于每个元素 $x$，计算 $x$ 之前有多少个元素与其相等，即为 $x$ 与之前元素组成的好数对的数目。遍历完数组后，即可得到答案。
 
@@ -54,9 +71,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -69,16 +84,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def numIdenticalPairs(self, nums: List[int]) -> int:
-        cnt = Counter(nums)
-        return sum(v * (v - 1) for v in cnt.values()) >> 1
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,23 +99,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int numIdenticalPairs(int[] nums) {
-        int[] cnt = new int[101];
-        for (int x : nums) {
-            ++cnt[x];
-        }
-        int ans = 0;
-        for (int v : cnt) {
-            ans += v * (v - 1) / 2;
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,24 +115,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int numIdenticalPairs(vector<int>& nums) {
-        int cnt[101]{};
-        for (int& x : nums) {
-            ++cnt[x];
-        }
-        int ans = 0;
-        for (int v : cnt) {
-            ans += v * (v - 1) / 2;
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func numIdenticalPairs(nums []int) (ans int) {
@@ -155,24 +128,11 @@ func numIdenticalPairs(nums []int) (ans int) {
 }
 ```
 
-```go
-func numIdenticalPairs(nums []int) (ans int) {
-	cnt := [101]int{}
-	for _, x := range nums {
-		cnt[x]++
-	}
-	for _, v := range cnt {
-		ans += v * (v - 1) / 2
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numIdenticalPairs(nums: number[]): number {
-    const cnt = new Array(101).fill(0);
+    const cnt: number[] = Array(101).fill(0);
     let ans = 0;
     for (const x of nums) {
         ans += cnt[x]++;
@@ -181,56 +141,62 @@ function numIdenticalPairs(nums: number[]): number {
 }
 ```
 
-```ts
-function numIdenticalPairs(nums: number[]): number {
-    const cnt = new Array(101).fill(0);
-    for (const x of nums) {
-        ++cnt[x];
+#### Rust
+
+```rust
+impl Solution {
+    pub fn num_identical_pairs(nums: Vec<i32>) -> i32 {
+        let mut ans = 0;
+        let mut cnt = [0; 101];
+        for &x in nums.iter() {
+            ans += cnt[x as usize];
+            cnt[x as usize] += 1;
+        }
+        ans
     }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var numIdenticalPairs = function (nums) {
+    const cnt = Array(101).fill(0);
     let ans = 0;
-    for (const v of cnt) {
-        ans += v * (v - 1);
+    for (const x of nums) {
+        ans += cnt[x]++;
     }
-    return ans >> 1;
-}
+    return ans;
+};
 ```
 
-### **Rust**
+#### PHP
 
-```rust
-impl Solution {
-    pub fn num_identical_pairs(nums: Vec<i32>) -> i32 {
-        let mut cnt = [0; 101];
-        let mut ans = 0;
-        for &num in nums.iter() {
-            ans += cnt[num as usize];
-            cnt[num as usize] += 1;
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function numIdenticalPairs($nums) {
+        $ans = 0;
+        $cnt = array_fill(0, 101, 0);
+        foreach ($nums as $x) {
+            $ans += $cnt[$x]++;
         }
-        ans
-    }
-}
-```
-
-```rust
-impl Solution {
-    pub fn num_identical_pairs(nums: Vec<i32>) -> i32 {
-        let mut cnt = [0; 101];
-        for &num in nums.iter() {
-            cnt[num as usize] += 1;
-        }
-        let mut ans = 0;
-        for &v in cnt.iter() {
-            ans += v * (v - 1) / 2
-        }
-        ans
+        return $ans;
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int numIdenticalPairs(int *nums, int numsSize) {
+int numIdenticalPairs(int* nums, int numsSize) {
     int cnt[101] = {0};
     int ans = 0;
     for (int i = 0; i < numsSize; i++) {
@@ -240,46 +206,8 @@ int numIdenticalPairs(int *nums, int numsSize) {
 }
 ```
 
-```c
-int numIdenticalPairs(int *nums, int numsSize) {
-    int cnt[101] = {0};
-    for (int i = 0; i < numsSize; i++) {
-        cnt[nums[i]]++;
-    }
-    int ans = 0;
-    for (int i = 0; i < 101; ++i) {
-        ans += cnt[i] * (cnt[i] - 1) / 2;
-    }
-    return ans;
-}
-```
-
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param Integer[] $nums
-     * @return Integer
-     */
-    function numIdenticalPairs($nums) {
-        $arr = array_values(array_unique($nums));
-        for ($i = 0; $i < count($nums); $i++) {
-            $v[$nums[$i]] += 1;
-        }
-        $rs = 0;
-        for ($j = 0; $j < count($arr); $j++) {
-            $rs += $v[$arr[$j]] * ($v[$arr[$j]] - 1) / 2;
-        }
-        return $rs;
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

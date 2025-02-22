@@ -1,46 +1,25 @@
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-
-        int len1 = s1.size();
-        int len2 = s2.size();
-
-        if (len2 < len1) {
+        int m = s1.size(), n = s2.size();
+        if (m > n) {
             return false;
         }
-
-        int count[30] = {0};
-
-        for (int i = 0; i < len1; ++i) {
-            ++count[s1[i] - 'a'];
-            --count[s2[i] - 'a'];
+        vector<int> cnt1(26), cnt2(26);
+        for (int i = 0; i < m; ++i) {
+            ++cnt1[s1[i] - 'a'];
+            ++cnt2[s2[i] - 'a'];
         }
-
-        int l = 0;
-        int r = len1 - 1;
-
-        while (r < len2) {
-
-            bool flag = true;
-
-            for (int i : count) {
-                if (i != 0) {
-                    flag = false;
-                }
-            }
-
-            if (flag) {
+        if (cnt1 == cnt2) {
+            return true;
+        }
+        for (int i = m; i < n; ++i) {
+            ++cnt2[s2[i] - 'a'];
+            --cnt2[s2[i - m] - 'a'];
+            if (cnt1 == cnt2) {
                 return true;
             }
-
-            if (r + 1 >= len2) {
-                break;
-            }
-
-            ++count[s2[l++] - 'a'];
-            --count[s2[++r] - 'a'];
         }
-
         return false;
     }
 };

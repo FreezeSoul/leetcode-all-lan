@@ -1,46 +1,52 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0852.Peak%20Index%20in%20a%20Mountain%20Array/README_EN.md
+tags:
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [852. Peak Index in a Mountain Array](https://leetcode.com/problems/peak-index-in-a-mountain-array)
 
 [中文文档](/solution/0800-0899/0852.Peak%20Index%20in%20a%20Mountain%20Array/README.md)
 
 ## Description
 
-<p>An array <code>arr</code> a <strong>mountain</strong> if the following properties hold:</p>
+<!-- description:start -->
 
-<ul>
-	<li><code>arr.length &gt;= 3</code></li>
-	<li>There exists some <code>i</code> with <code>0 &lt; i &lt; arr.length - 1</code> such that:
-	<ul>
-		<li><code>arr[0] &lt; arr[1] &lt; ... &lt; arr[i - 1] &lt; arr[i] </code></li>
-		<li><code>arr[i] &gt; arr[i + 1] &gt; ... &gt; arr[arr.length - 1]</code></li>
-	</ul>
-	</li>
-</ul>
+<p>You are given an integer <strong>mountain</strong> array <code>arr</code> of length <code>n</code> where the values increase to a <strong>peak element</strong> and then decrease.</p>
 
-<p>Given a mountain array <code>arr</code>, return the index <code>i</code> such that <code>arr[0] &lt; arr[1] &lt; ... &lt; arr[i - 1] &lt; arr[i] &gt; arr[i + 1] &gt; ... &gt; arr[arr.length - 1]</code>.</p>
+<p>Return the index of the peak element.</p>
 
-<p>You must solve it in <code>O(log(arr.length))</code> time complexity.</p>
+<p>Your task is to solve it in <code>O(log(n))</code> time complexity.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre>
-<strong>Input:</strong> arr = [0,1,0]
-<strong>Output:</strong> 1
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">arr = [0,1,0]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">1</span></p>
+</div>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre>
-<strong>Input:</strong> arr = [0,2,1,0]
-<strong>Output:</strong> 1
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">arr = [0,2,1,0]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">1</span></p>
+</div>
 
 <p><strong class="example">Example 3:</strong></p>
 
-<pre>
-<strong>Input:</strong> arr = [0,10,5,2]
-<strong>Output:</strong> 1
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">arr = [0,10,5,2]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">1</span></p>
+</div>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
@@ -51,13 +57,17 @@
 	<li><code>arr</code> is <strong>guaranteed</strong> to be a mountain array.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Binary search.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +82,7 @@ class Solution:
         return left
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,7 +120,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func peakIndexInMountainArray(arr []int) int {
@@ -127,29 +137,7 @@ func peakIndexInMountainArray(arr []int) int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} arr
- * @return {number}
- */
-var peakIndexInMountainArray = function (arr) {
-    let left = 1;
-    let right = arr.length - 2;
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        if (arr[mid] > arr[mid + 1]) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    return left;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function peakIndexInMountainArray(arr: number[]): number {
@@ -167,7 +155,7 @@ function peakIndexInMountainArray(arr: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -187,10 +175,30 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+var peakIndexInMountainArray = function (arr) {
+    let left = 1;
+    let right = arr.length - 2;
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (arr[mid] < arr[mid + 1]) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return left;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

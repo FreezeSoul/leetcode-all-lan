@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2666.Allow%20One%20Function%20Call/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2666. 只允许一次函数调用](https://leetcode.cn/problems/allow-one-function-call)
 
 [English Version](/solution/2600-2699/2666.Allow%20One%20Function%20Call/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个函数 <code>fn</code> ，它返回一个新的函数，返回的函数与原始函数完全相同，只不过它确保 <code>fn</code> 最多被调用一次。</p>
 
@@ -43,23 +53,29 @@ onceFn(4, 6, 8); // undefined, fn 没有被调用
 <p><strong>提示：</strong></p>
 
 <ul>
+	<li><code>calls</code> 是一个有效的 JSON 数组</li>
 	<li><code>1 &lt;= calls.length &lt;= 10</code></li>
 	<li><code>1 &lt;= calls[i].length &lt;= 100</code></li>
 	<li><code>2 &lt;= JSON.stringify(calls).length &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function once<T extends (...args: any[]) => any>(
-    fn: T,
-): (...args: Parameters<T>) => ReturnType<T> | undefined {
+type JSONValue = null | boolean | number | string | JSONValue[] | { [key: string]: JSONValue };
+type OnceFn = (...args: JSONValue[]) => JSONValue | undefined;
+
+function once(fn: Function): OnceFn {
     let called = false;
     return function (...args) {
         if (!called) {
@@ -78,10 +94,34 @@ function once<T extends (...args: any[]) => any>(
  */
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {Function} fn
+ * @return {Function}
+ */
+var once = function (fn) {
+    let called = false;
+    return function (...args) {
+        if (!called) {
+            called = true;
+            return fn(...args);
+        }
+    };
+};
 
+/**
+ * let fn = (a,b,c) => (a + b + c)
+ * let onceFn = once(fn)
+ *
+ * onceFn(1,2,3); // 6
+ * onceFn(2,3,6); // returns undefined without calling fn
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0966.Vowel%20Spellchecker/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [966. Vowel Spellchecker](https://leetcode.com/problems/vowel-spellchecker)
 
 [中文文档](/solution/0900-0999/0966.Vowel%20Spellchecker/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a <code>wordlist</code>, we want to implement a spellchecker that converts a query word into a correct word.</p>
 
@@ -55,11 +69,25 @@
 	<li><code>wordlist[i]</code> and <code>queries[i]</code> consist only of only English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We traverse the $\textit{wordlist}$ and store the words in hash tables $\textit{low}$ and $\textit{pat}$ according to case-insensitive and vowel-insensitive rules, respectively. The key of $\textit{low}$ is the lowercase form of the word, and the key of $\textit{pat}$ is the string obtained by replacing the vowels of the word with `*`, with the value being the word itself. We use the hash table $\textit{s}$ to store the words in $\textit{wordlist}$.
+
+We traverse $\textit{queries}$, for each word $\textit{q}$, if $\textit{q}$ is in $\textit{s}$, it means $\textit{q}$ is in $\textit{wordlist}$, and we directly add $\textit{q}$ to the answer array $\textit{ans}$; otherwise, if the lowercase form of $\textit{q}$ is in $\textit{low}$, it means $\textit{q}$ is in $\textit{wordlist}$ and is case-insensitive, and we add $\textit{low}[q.\text{lower}()]$ to the answer array $\textit{ans}$; otherwise, if the string obtained by replacing the vowels of $\textit{q}$ with `*` is in $\textit{pat}$, it means $\textit{q}$ is in $\textit{wordlist}$ and is vowel-insensitive, and we add $\textit{pat}[f(q)]$ to the answer array $\textit{ans}$; otherwise, it means $\textit{q}$ is not in $\textit{wordlist}$, and we add an empty string to the answer array $\textit{ans}$.
+
+Finally, we return the answer array $\textit{ans}$.
+
+The time complexity is $O(n + m)$, and the space complexity is $O(n)$, where $n$ and $m$ are the lengths of $\textit{wordlist}$ and $\textit{queries}$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -94,7 +122,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -144,7 +172,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -198,7 +226,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func spellchecker(wordlist []string, queries []string) (ans []string) {
@@ -245,10 +273,8 @@ func spellchecker(wordlist []string, queries []string) (ans []string) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

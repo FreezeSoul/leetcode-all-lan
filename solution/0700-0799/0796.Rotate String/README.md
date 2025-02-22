@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0796.Rotate%20String/README.md
+tags:
+    - 字符串
+    - 字符串匹配
+---
+
+<!-- problem:start -->
+
 # [796. 旋转字符串](https://leetcode.cn/problems/rotate-string)
 
 [English Version](/solution/0700-0799/0796.Rotate%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个字符串, <code>s</code>&nbsp;和&nbsp;<code>goal</code>。如果在若干次旋转操作之后，<code>s</code>&nbsp;能变成&nbsp;<code>goal</code>&nbsp;，那么返回&nbsp;<code>true</code>&nbsp;。</p>
 
@@ -39,15 +50,17 @@
 	<li><code>s</code>&nbsp;和&nbsp;<code>goal</code>&nbsp;由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -55,9 +68,7 @@ class Solution:
         return len(s) == len(goal) and goal in s + s
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -67,7 +78,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -78,7 +89,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rotateString(s string, goal string) bool {
@@ -86,7 +97,7 @@ func rotateString(s string, goal string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function rotateString(s: string, goal: string): boolean {
@@ -94,7 +105,7 @@ function rotateString(s: string, goal: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -104,7 +115,7 @@ impl Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -114,15 +125,13 @@ class Solution {
      * @return Boolean
      */
     function rotateString($s, $goal) {
-        return strlen($goal) === strlen($s) && strpos(($s.$s), $goal) !== false;
+        return strlen($goal) === strlen($s) && strpos($s . $s, $goal) !== false;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

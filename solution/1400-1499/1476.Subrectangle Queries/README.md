@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1476.Subrectangle%20Queries/README.md
+rating: 1326
+source: 第 28 场双周赛 Q2
+tags:
+    - 设计
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1476. 子矩形查询](https://leetcode.cn/problems/subrectangle-queries)
 
 [English Version](/solution/1400-1499/1476.Subrectangle%20Queries/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你实现一个类&nbsp;<code>SubrectangleQueries</code>&nbsp;，它的构造函数的参数是一个 <code>rows x cols</code>&nbsp;的矩形（这里用整数矩阵表示），并支持以下两种操作：</p>
 
@@ -88,17 +102,17 @@ subrectangleQueries.getValue(2, 2); // 返回 20
 	<li><code>0 &lt;= col &lt; cols</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用历史记录列表保存修改历史。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class SubrectangleQueries:
@@ -124,9 +138,7 @@ class SubrectangleQueries:
 # param_2 = obj.getValue(row,col)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class SubrectangleQueries {
@@ -159,7 +171,7 @@ class SubrectangleQueries {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class SubrectangleQueries {
@@ -194,7 +206,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type SubrectangleQueries struct {
@@ -228,7 +240,7 @@ func (this *SubrectangleQueries) GetValue(row int, col int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class SubrectangleQueries {
@@ -268,10 +280,8 @@ class SubrectangleQueries {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

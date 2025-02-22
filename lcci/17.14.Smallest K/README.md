@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.14.Smallest%20K/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 17.14. 最小 K 个数](https://leetcode.cn/problems/smallest-k-lcci)
 
 [English Version](/lcci/17.14.Smallest%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>设计一个算法，找出数组中最小的k个数。以任意顺序返回这k个数均可。</p>
 <p><strong>示例：</strong></p>
 <pre><strong>输入：</strong> arr = [1,3,5,7,2,4,6,8], k = 4
@@ -16,29 +25,21 @@
 	<li><code>0 &lt;= k &lt;= min(100000, len(arr))</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 直接排序，取前 k 个数即可。
 
 时间复杂度 $O(n\log n)$。其中 $n$ 为数组长度。
 
-**方法二：优先队列（大根堆）**
-
-维护一个大小为 $k$ 的大根堆，遍历数组，将当前元素入堆，如果堆的大小超过 $k$，弹出堆顶元素。
-
-遍历结束，将堆中元素的 $k$ 个元素取出即可。
-
-时间复杂度 $O(n\log k)$。其中 $n$ 为数组长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -46,20 +47,7 @@ class Solution:
         return sorted(arr)[:k]
 ```
 
-```python
-class Solution:
-    def smallestK(self, arr: List[int], k: int) -> List[int]:
-        h = []
-        for v in arr:
-            heappush(h, -v)
-            if len(h) > k:
-                heappop(h)
-        return [-v for v in h]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -73,6 +61,78 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> smallestK(vector<int>& arr, int k) {
+        sort(arr.begin(), arr.end());
+        vector<int> ans(k);
+        for (int i = 0; i < k; ++i) {
+            ans[i] = arr[i];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func smallestK(arr []int, k int) []int {
+	sort.Ints(arr)
+	ans := make([]int, k)
+	for i, v := range arr[:k] {
+		ans[i] = v
+	}
+	return ans
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    func smallestK(_ arr: [Int], _ k: Int) -> [Int] {
+        guard k > 0 else { return [] }
+        let sortedArray = arr.sorted()
+        return Array(sortedArray.prefix(k))
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二：优先队列（大根堆）
+
+维护一个大小为 $k$ 的大根堆，遍历数组，将当前元素入堆，如果堆的大小超过 $k$，弹出堆顶元素。
+
+遍历结束，将堆中元素的 $k$ 个元素取出即可。
+
+时间复杂度 $O(n\log k)$。其中 $n$ 为数组长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def smallestK(self, arr: List[int], k: int) -> List[int]:
+        h = []
+        for v in arr:
+            heappush(h, -v)
+            if len(h) > k:
+                heappop(h)
+        return [-v for v in h]
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -94,21 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<int> smallestK(vector<int>& arr, int k) {
-        sort(arr.begin(), arr.end());
-        vector<int> ans(k);
-        for (int i = 0; i < k; ++i) {
-            ans[i] = arr[i];
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -131,18 +177,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func smallestK(arr []int, k int) []int {
-	sort.Ints(arr)
-	ans := make([]int, k)
-	for i, v := range arr[:k] {
-		ans[i] = v
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func smallestK(arr []int, k int) []int {
@@ -162,9 +197,9 @@ func smallestK(arr []int, k int) []int {
 
 type hp struct{ sort.IntSlice }
 
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] > h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -172,10 +207,8 @@ func (h *hp) Pop() interface{} {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

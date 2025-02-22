@@ -1,11 +1,12 @@
 impl Solution {
-    pub fn minimum_total(mut triangle: Vec<Vec<i32>>) -> i32 {
+    pub fn minimum_total(triangle: Vec<Vec<i32>>) -> i32 {
         let n = triangle.len();
-        for i in (0..n - 1).rev() {
-            for j in 0..i + 1 {
-                triangle[i][j] += triangle[i + 1][j].min(triangle[i + 1][j + 1]);
+        let mut f = vec![0; n + 1];
+        for i in (0..n).rev() {
+            for j in 0..=i {
+                f[j] = f[j].min(f[j + 1]) + triangle[i][j];
             }
         }
-        triangle[0][0]
+        f[0]
     }
 }

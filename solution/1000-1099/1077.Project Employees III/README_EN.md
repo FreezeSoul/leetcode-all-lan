@@ -1,8 +1,20 @@
-# [1077. Project Employees III](https://leetcode.com/problems/project-employees-iii)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1077.Project%20Employees%20III/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1077. Project Employees III 🔒](https://leetcode.com/problems/project-employees-iii)
 
 [中文文档](/solution/1000-1099/1077.Project%20Employees%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Project</code></p>
 
@@ -13,8 +25,8 @@
 | project_id  | int     |
 | employee_id | int     |
 +-------------+---------+
-(project_id, employee_id) is the primary key of this table.
-employee_id is a foreign key to <code>Employee</code> table.
+(project_id, employee_id) is the primary key (combination of columns with unique values) of this table.
+employee_id is a foreign key (reference column) to <code>Employee</code> table.
 Each row of this table indicates that the employee with employee_id is working on the project with project_id.
 </pre>
 
@@ -30,17 +42,17 @@ Each row of this table indicates that the employee with employee_id is working o
 | name             | varchar |
 | experience_years | int     |
 +------------------+---------+
-employee_id is the primary key of this table.
+employee_id is the primary key (column with unique values) of this table.
 Each row of this table contains information about one employee.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query that reports the <strong>most experienced</strong> employees in each project. In case of a tie, report all employees with the maximum number of experience years.</p>
+<p>Write a solution to report&nbsp;the <strong>most experienced</strong> employees in each project. In case of a tie, report all employees with the maximum number of experience years.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -77,26 +89,41 @@ Employee table:
 <strong>Explanation:</strong> Both employees with id 1 and 3 have the most experience among the employees of the first project. For the second project, the employee with id 1 has the most experience.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Inner Join + Window Function
+
+We can first perform an inner join between the `Project` table and the `Employee` table, and then use the window function `rank()` to group the `Project` table, sort it in descending order by `experience_years`, and finally select the most experienced employee for each project.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT  project_id
-       ,employee_id
-FROM
-(
-	SELECT  p.project_id
-	       ,p.employee_id
-	       ,rank() over(partition by p.project_id ORDER BY e.experience_years desc) AS rk
-	FROM Project p
-	LEFT JOIN Employee e
-	ON p.employee_id = e.employee_id
-) t
-WHERE rk = 1
+WITH
+    T AS (
+        SELECT
+            *,
+            RANK() OVER (
+                PARTITION BY project_id
+                ORDER BY experience_years DESC
+            ) AS rk
+        FROM
+            Project
+            JOIN Employee USING (employee_id)
+    )
+SELECT project_id, employee_id
+FROM T
+WHERE rk = 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,21 @@
-# [2655. Find Maximal Uncovered Ranges](https://leetcode.com/problems/find-maximal-uncovered-ranges)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2655.Find%20Maximal%20Uncovered%20Ranges/README_EN.md
+tags:
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [2655. Find Maximal Uncovered Ranges 🔒](https://leetcode.com/problems/find-maximal-uncovered-ranges)
 
 [中文文档](/solution/2600-2699/2655.Find%20Maximal%20Uncovered%20Ranges/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given&nbsp;an integer <code>n</code>&nbsp;which is the length of a <strong>0-indexed</strong> array <code>nums</code>, and a <strong>0-indexed</strong> 2D-array <code>ranges</code>, which is a list of sub-ranges of <code>nums</code>&nbsp;(sub-ranges may <strong>overlap</strong>).</p>
 
@@ -60,15 +73,23 @@
 	<li><code>ranges[i][0] &lt;=&nbsp;ranges[i][1]</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def findMaximalUncoveredRanges(self, n: int, ranges: List[List[int]]) -> List[List[int]]:
+    def findMaximalUncoveredRanges(
+        self, n: int, ranges: List[List[int]]
+    ) -> List[List[int]]:
         ranges.sort()
         last = -1
         ans = []
@@ -81,7 +102,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +151,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findMaximalUncoveredRanges(n int, ranges [][]int) (ans [][]int) {
@@ -147,19 +168,10 @@ func findMaximalUncoveredRanges(n int, ranges [][]int) (ans [][]int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

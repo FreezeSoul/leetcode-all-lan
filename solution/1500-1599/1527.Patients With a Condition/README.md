@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1527.Patients%20With%20a%20Condition/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1527. 患某种疾病的患者](https://leetcode.cn/problems/patients-with-a-condition)
 
 [English Version](/solution/1500-1599/1527.Patients%20With%20a%20Condition/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>患者信息表：&nbsp;<code>Patients</code></p>
 
@@ -16,13 +26,13 @@
 | patient_name | varchar |
 | conditions   | varchar |
 +--------------+---------+
-patient_id （患者 ID）是该表的主键。
+在 SQL 中，patient_id （患者 ID）是该表的主键。
 'conditions' （疾病）包含 0 个或以上的疾病代码，以空格分隔。
 这个表包含医院中患者的信息。</pre>
 
 <p>&nbsp;</p>
 
-<p>写一条&nbsp;SQL 语句，查询患有 I 类糖尿病的患者&nbsp;ID （patient_id）、患者姓名（patient_name）以及其患有的所有疾病代码（conditions）。I 类糖尿病的代码总是包含前缀&nbsp;<code>DIAB1</code>&nbsp;。</p>
+<p>查询患有 I 类糖尿病的患者&nbsp;ID （patient_id）、患者姓名（patient_name）以及其患有的所有疾病代码（conditions）。I 类糖尿病的代码总是包含前缀&nbsp;<code>DIAB1</code>&nbsp;。</p>
 
 <p>按 <strong>任意顺序</strong> 返回结果表。</p>
 
@@ -53,24 +63,29 @@ patient_id （患者 ID）是该表的主键。
 +------------+--------------+--------------+
 <strong>解释：</strong>Bob 和 George 都患有代码以 DIAB1 开头的疾病。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 SELECT
     patient_id,
     patient_name,
     conditions
-FROM
-    patients
-WHERE
-    conditions LIKE 'DIAB1%'
-    OR conditions LIKE '% DIAB1%';
+FROM patients
+WHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%';
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

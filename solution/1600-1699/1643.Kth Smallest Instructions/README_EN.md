@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1643.Kth%20Smallest%20Instructions/README_EN.md
+rating: 2079
+source: Weekly Contest 213 Q4
+tags:
+    - Array
+    - Math
+    - Dynamic Programming
+    - Combinatorics
+---
+
+<!-- problem:start -->
+
 # [1643. Kth Smallest Instructions](https://leetcode.com/problems/kth-smallest-instructions)
 
 [中文文档](/solution/1600-1699/1643.Kth%20Smallest%20Instructions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Bob is standing at cell <code>(0, 0)</code>, and he wants to reach <code>destination</code>: <code>(row, column)</code>. He can only travel <strong>right</strong> and <strong>down</strong>. You are going to help Bob by providing <strong>instructions</strong> for him to reach <code>destination</code>.</p>
 
@@ -58,11 +75,17 @@
 	<li><code>1 &lt;= k &lt;= nCr(row + column, row)</code>, where <code>nCr(a, b)</code> denotes <code>a</code> choose <code>b</code>​​​​​.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +107,7 @@ class Solution:
         return "".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,7 +181,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func kthSmallestPath(destination []int, k int) string {
@@ -194,10 +217,8 @@ func kthSmallestPath(destination []int, k int) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

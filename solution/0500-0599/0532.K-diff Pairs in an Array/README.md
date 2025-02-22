@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0532.K-diff%20Pairs%20in%20an%20Array/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [532. 数组中的 k-diff 数对](https://leetcode.cn/problems/k-diff-pairs-in-an-array)
 
 [English Version](/solution/0500-0599/0532.K-diff%20Pairs%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code> 和一个整数&nbsp;<code>k</code>，请你在数组中找出<strong> 不同的&nbsp;</strong>k-diff 数对，并返回不同的 <strong>k-diff 数对</strong> 的数目。</p>
 
@@ -13,7 +27,7 @@
 <ul>
 	<li><code>0 &lt;= i, j &lt; nums.length</code></li>
 	<li><code>i != j</code></li>
-	<li><code>nums[i] - nums[j] == k</code></li>
+	<li><code>|nums[i] - nums[j]| == k</code></li>
 </ul>
 
 <p><strong>注意</strong>，<code>|val|</code> 表示 <code>val</code> 的绝对值。</p>
@@ -55,11 +69,13 @@
 	<li><code>0 &lt;= k &lt;= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 由于 $k$ 是一个定值，因此用哈希表 $ans$ 记录数对的较小值，就能够确定较大的值。最后返回 ans 的大小作为答案。
 
@@ -67,19 +83,9 @@
 
 时间复杂度 $O(n)$，其中 $n$ 表示数组 $nums$ 的长度。
 
-**方法二：排序 + 双指针**
-
-只需要统计组合的数量，因此可以改动原数组，对其排序，使用双指针来统计。
-
-声明 `left` 与 `right` 指针，初始化为 0 和 1。根据 `abs(nums[left] - nums[right])` 与 `k` 值对比结果移动指针。
-
-需要注意的是，**不能出现重复的组合**，所以移动指针时，不能仅仅是 `+1`，需要到一个不等于当前值的位置。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -94,9 +100,7 @@ class Solution:
         return len(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findPairs(nums []int, k int) int {
@@ -154,7 +158,7 @@ func findPairs(nums []int, k int) int {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -189,10 +193,20 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：排序 + 双指针
+
+只需要统计组合的数量，因此可以改动原数组，对其排序，使用双指针来统计。
+
+声明 `left` 与 `right` 指针，初始化为 0 和 1。根据 `abs(nums[left] - nums[right])` 与 `k` 值对比结果移动指针。
+
+需要注意的是，**不能出现重复的组合**，所以移动指针时，不能仅仅是 `+1`，需要到一个不等于当前值的位置。
+
+<!-- solution:end -->
+
+<!-- problem:end -->

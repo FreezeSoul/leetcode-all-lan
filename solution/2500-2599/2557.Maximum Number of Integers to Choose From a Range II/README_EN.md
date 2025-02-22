@@ -1,8 +1,23 @@
-# [2557. Maximum Number of Integers to Choose From a Range II](https://leetcode.com/problems/maximum-number-of-integers-to-choose-from-a-range-ii)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2557.Maximum%20Number%20of%20Integers%20to%20Choose%20From%20a%20Range%20II/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [2557. Maximum Number of Integers to Choose From a Range II 🔒](https://leetcode.com/problems/maximum-number-of-integers-to-choose-from-a-range-ii)
 
 [中文文档](/solution/2500-2599/2557.Maximum%20Number%20of%20Integers%20to%20Choose%20From%20a%20Range%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>banned</code> and two integers <code>n</code> and <code>maxSum</code>. You are choosing some number of integers following the below rules:</p>
 
@@ -31,7 +46,7 @@
 <strong>Input:</strong> banned = [4,3,5,6], n = 7, maxSum = 18
 <strong>Output:</strong> 3
 <strong>Explanation:</strong> You can choose the integers 1, 2, and 7.
-All these integers are in the range [1, 7], all do not appear in banned, and their sum is 18, which does not exceed maxSum.
+All these integers are in the range [1, 7], all do not appear in banned, and their sum is 10, which does not exceed maxSum.
 </pre>
 
 <p>&nbsp;</p>
@@ -43,11 +58,23 @@ All these integers are in the range [1, 7], all do not appear in banned, and the
 	<li><code>1 &lt;= maxSum &lt;= 10<sup>15</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Deduplication + Sorting + Binary Search
+
+We can add $0$ and $n + 1$ to the array `banned`, then deduplicate and sort the array `banned`.
+
+Next, we enumerate every two adjacent elements $i$ and $j$ in the array `banned`. The range of selectable integers is $[i + 1, j - 1]$. We use binary search to enumerate the number of elements we can select in this range, find the maximum number of selectable elements, and then add it to $ans$. At the same time, we subtract the sum of these elements from `maxSum`. If `maxSum` is less than $0$, we break the loop. Return the answer.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$. Where $n$ is the length of the array `banned`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +97,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -139,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxCount(banned []int, n int, maxSum int64) (ans int) {
@@ -173,10 +200,8 @@ func maxCount(banned []int, n int, maxSum int64) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

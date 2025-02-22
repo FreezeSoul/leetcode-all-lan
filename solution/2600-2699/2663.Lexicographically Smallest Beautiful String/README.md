@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2663.Lexicographically%20Smallest%20Beautiful%20String/README.md
+rating: 2415
+source: 第 343 场周赛 Q4
+tags:
+    - 贪心
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2663. 字典序最小的美丽字符串](https://leetcode.cn/problems/lexicographically-smallest-beautiful-string)
 
 [English Version](/solution/2600-2699/2663.Lexicographically%20Smallest%20Beautiful%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果一个字符串满足以下条件，则称其为 <strong>美丽字符串</strong> ：</p>
 
@@ -51,11 +64,13 @@
 	<li><code>s</code> 是一个美丽字符串</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 我们可以发现，一个长度为 $2$ 的回文字符串，其相邻两个字符一定相同；而一个长度为 $3$ 的回文字符串，其首尾两个字符一定相同。因此，一个美丽字符串不包含任何长度为 $2$ 或更长的回文子字符串，意味着该字符串的每个字符与其相邻的前两个字符都不相同。
 
@@ -68,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -95,9 +108,7 @@ class Solution:
         return ''
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -130,7 +141,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -163,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestBeautifulString(s string, k int) string {
@@ -194,7 +205,7 @@ func smallestBeautifulString(s string, k int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallestBeautifulString(s: string, k: number): string {
@@ -211,10 +222,7 @@ function smallestBeautifulString(s: string, k: number): string {
             for (let l = i + 1; l < n; ++l) {
                 for (let m = 0; m < k; ++m) {
                     c = String.fromCharCode(m + 97);
-                    if (
-                        (l > 0 && cs[l - 1] === c) ||
-                        (l > 1 && cs[l - 2] === c)
-                    ) {
+                    if ((l > 0 && cs[l - 1] === c) || (l > 1 && cs[l - 2] === c)) {
                         continue;
                     }
                     cs[l] = c;
@@ -228,10 +236,8 @@ function smallestBeautifulString(s: string, k: number): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

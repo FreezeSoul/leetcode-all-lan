@@ -1,10 +1,28 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2407.Longest%20Increasing%20Subsequence%20II/README.md
+rating: 2280
+source: 第 310 场周赛 Q4
+tags:
+    - 树状数组
+    - 线段树
+    - 队列
+    - 数组
+    - 分治
+    - 动态规划
+    - 单调队列
+---
+
+<!-- problem:start -->
+
 # [2407. 最长递增子序列 II](https://leetcode.cn/problems/longest-increasing-subsequence-ii)
 
 [English Version](/solution/2400-2499/2407.Longest%20Increasing%20Subsequence%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code>&nbsp;和一个整数&nbsp;<code>k</code>&nbsp;。</p>
 
@@ -58,15 +76,17 @@
 	<li><code>1 &lt;= nums[i], k &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：线段树**
+### 方法一：线段树
 
-我们假设 `f[v]` 表示以数字 $v$ 结尾的最长递增子序列的长度。
+我们假设 $f[v]$ 表示以数字 $v$ 结尾的最长递增子序列的长度。
 
-我们遍历数组 `nums` 中的每个元素 $v$，有状态转移方程：`f[v]=max(f[v], f[x])`，其中 $x$ 的取值范围是 $[v-k, v-1]$。
+我们遍历数组 $nums$ 中的每个元素 $v$，有状态转移方程：$f[v] = \max(f[v], f[x])$，其中 $x$ 的取值范围是 $[v-k, v-1]$。
 
 因此，我们需要一个数据结构，来维护区间的最大值，不难想到使用线段树。
 
@@ -79,13 +99,11 @@
 
 对于本题，线段树节点维护的信息是区间范围内的最大值。
 
-时间复杂度 $O(n\log n)$。其中 $n$ 是数组 `nums` 的长度。
+时间复杂度 $O(n \times \log n)$。其中 $n$ 是数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Node:
@@ -146,9 +164,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -231,7 +247,7 @@ class SegmentTree {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Node {
@@ -261,14 +277,15 @@ public:
     }
 
     void modify(int u, int x, int v) {
-        if (tr[u]->l == x && tr[u]->r == x)
-        {
+        if (tr[u]->l == x && tr[u]->r == x) {
             tr[u]->v = v;
             return;
         }
         int mid = (tr[u]->l + tr[u]->r) >> 1;
-        if (x <= mid) modify(u << 1, x, v);
-        else modify(u << 1 | 1, x, v);
+        if (x <= mid)
+            modify(u << 1, x, v);
+        else
+            modify(u << 1 | 1, x, v);
         pushup(u);
     }
 
@@ -301,14 +318,11 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func lengthOfLIS(nums []int, k int) int {
-	mx := nums[0]
-	for _, v := range nums {
-		mx = max(mx, v)
-	}
+	mx := slices.Max(nums)
 	tree := newSegmentTree(mx)
 	ans := 1
 	for _, v := range nums {
@@ -382,26 +396,10 @@ func (t *segmentTree) query(u, l, r int) int {
 func (t *segmentTree) pushup(u int) {
 	t.tr[u].v = max(t.tr[u<<1].v, t.tr[u<<1|1].v)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

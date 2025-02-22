@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0890.Find%20and%20Replace%20Pattern/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [890. 查找和替换模式](https://leetcode.cn/problems/find-and-replace-pattern)
 
 [English Version](/solution/0800-0899/0890.Find%20and%20Replace%20Pattern/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一个单词列表&nbsp;<code>words</code>&nbsp;和一个模式&nbsp;&nbsp;<code>pattern</code>，你想知道 <code>words</code> 中的哪些单词与模式匹配。</p>
 
@@ -36,17 +48,17 @@
 	<li><code>1 &lt;= pattern.length = words[i].length&nbsp;&lt;= 20</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -62,9 +74,7 @@ class Solution:
         return [word for word in words if match(word, pattern)]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,13 +122,14 @@ public:
             }
             return 1;
         };
-        for (auto& word : words) if (match(word, pattern)) ans.emplace_back(word);
+        for (auto& word : words)
+            if (match(word, pattern)) ans.emplace_back(word);
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findAndReplacePattern(words []string, pattern string) []string {
@@ -143,7 +154,7 @@ func findAndReplacePattern(words []string, pattern string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findAndReplacePattern(words: string[], pattern: string): string[] {
@@ -162,7 +173,7 @@ function findAndReplacePattern(words: string[], pattern: string): string[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -190,10 +201,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

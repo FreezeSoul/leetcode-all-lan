@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1252.Cells%20with%20Odd%20Values%20in%20a%20Matrix/README_EN.md
+rating: 1283
+source: Weekly Contest 162 Q1
+tags:
+    - Array
+    - Math
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1252. Cells with Odd Values in a Matrix](https://leetcode.com/problems/cells-with-odd-values-in-a-matrix)
 
 [中文文档](/solution/1200-1299/1252.Cells%20with%20Odd%20Values%20in%20a%20Matrix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an <code>m x n</code> matrix that is initialized to all <code>0</code>&#39;s. There is also a 2D array <code>indices</code> where each <code>indices[i] = [r<sub>i</sub>, c<sub>i</sub>]</code> represents a <strong>0-indexed location</strong> to perform some increment operations on the matrix.</p>
 
@@ -47,11 +63,23 @@ The final matrix is [[1,3,1],[1,3,1]], which contains 6 odd numbers.
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you solve this in <code>O(n + m + indices.length)</code> time with only <code>O(n + m)</code> extra space?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We create a matrix $g$ to store the result of operations. For each pair $(r_i, c_i)$ in $\textit{indices}$, we add $1$ to all numbers in the $r_i$-th row of the matrix and add $1$ to all elements in the $c_i$-th column.
+
+After the simulation ends, we traverse the matrix and count the number of odd numbers.
+
+The time complexity is $O(k \times (m + n) + m \times n)$, and the space complexity is $O(m \times n)$. Here, $k$ is the length of $\textit{indices}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,31 +93,7 @@ class Solution:
         return sum(v % 2 for row in g for v in row)
 ```
 
-```python
-class Solution:
-    def oddCells(self, m: int, n: int, indices: List[List[int]]) -> int:
-        row = [0] * m
-        col = [0] * n
-        for r, c in indices:
-            row[r] += 1
-            col[c] += 1
-        return sum((i + j) % 2 for i in row for j in col)
-```
-
-```python
-class Solution:
-    def oddCells(self, m: int, n: int, indices: List[List[int]]) -> int:
-        row = [0] * m
-        col = [0] * n
-        for r, c in indices:
-            row[r] += 1
-            col[c] += 1
-        cnt1 = sum(v % 2 for v in row)
-        cnt2 = sum(v % 2 for v in col)
-        return cnt1 * (n - cnt2) + cnt2 * (m - cnt1)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -115,50 +119,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int oddCells(int m, int n, int[][] indices) {
-        int[] row = new int[m];
-        int[] col = new int[n];
-        for (int[] e : indices) {
-            int r = e[0], c = e[1];
-            row[r]++;
-            col[c]++;
-        }
-        int ans = 0;
-        for (int i : row) {
-            for (int j : col) {
-                ans += (i + j) % 2;
-            }
-        }
-        return ans;
-    }
-}
-```
-
-```java
-class Solution {
-    public int oddCells(int m, int n, int[][] indices) {
-        int[] row = new int[m];
-        int[] col = new int[n];
-        for (int[] e : indices) {
-            int r = e[0], c = e[1];
-            row[r]++;
-            col[c]++;
-        }
-        int cnt1 = 0, cnt2 = 0;
-        for (int v : row) {
-            cnt1 += v % 2;
-        }
-        for (int v : col) {
-            cnt2 += v % 2;
-        }
-        return cnt1 * (n - cnt2) + cnt2 * (m - cnt1);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -167,57 +128,25 @@ public:
         vector<vector<int>> g(m, vector<int>(n));
         for (auto& e : indices) {
             int r = e[0], c = e[1];
-            for (int i = 0; i < m; ++i) ++g[i][c];
-            for (int j = 0; j < n; ++j) ++g[r][j];
+            for (int i = 0; i < m; ++i) {
+                ++g[i][c];
+            }
+            for (int j = 0; j < n; ++j) {
+                ++g[r][j];
+            }
         }
         int ans = 0;
-        for (auto& row : g)
-            for (int v : row) ans += v % 2;
+        for (auto& row : g) {
+            for (int v : row) {
+                ans += v % 2;
+            }
+        }
         return ans;
     }
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int oddCells(int m, int n, vector<vector<int>>& indices) {
-        vector<int> row(m);
-        vector<int> col(n);
-        for (auto& e : indices)
-        {
-            int r = e[0], c = e[1];
-            row[r]++;
-            col[c]++;
-        }
-        int ans = 0;
-        for (int i : row) for (int j : col) ans += (i + j) % 2;
-        return ans;
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    int oddCells(int m, int n, vector<vector<int>>& indices) {
-        vector<int> row(m);
-        vector<int> col(n);
-        for (auto& e : indices)
-        {
-            int r = e[0], c = e[1];
-            row[r]++;
-            col[c]++;
-        }
-        int cnt1 = 0, cnt2 = 0;
-        for (int v : row) cnt1 += v % 2;
-        for (int v : col) cnt2 += v % 2;
-        return cnt1 * (n - cnt2) + cnt2 * (m - cnt1);
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func oddCells(m int, n int, indices [][]int) int {
@@ -244,6 +173,84 @@ func oddCells(m int, n int, indices [][]int) int {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Space Optimization
+
+We can use a row array $\textit{row}$ and a column array $\textit{col}$ to record the number of times each row and column is incremented. For each pair $(r_i, c_i)$ in $\textit{indices}$, we add $1$ to $\textit{row}[r_i]$ and $\textit{col}[c_i]$ respectively.
+
+After the operations are completed, the count at position $(i, j)$ can be calculated as $\textit{row}[i] + \textit{col}[j]$. We traverse the matrix and count the number of odd numbers.
+
+The time complexity is $O(k + m \times n)$, and the space complexity is $O(m + n)$. Here, $k$ is the length of $\textit{indices}$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def oddCells(self, m: int, n: int, indices: List[List[int]]) -> int:
+        row = [0] * m
+        col = [0] * n
+        for r, c in indices:
+            row[r] += 1
+            col[c] += 1
+        return sum((i + j) % 2 for i in row for j in col)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int oddCells(int m, int n, int[][] indices) {
+        int[] row = new int[m];
+        int[] col = new int[n];
+        for (int[] e : indices) {
+            int r = e[0], c = e[1];
+            row[r]++;
+            col[c]++;
+        }
+        int ans = 0;
+        for (int i : row) {
+            for (int j : col) {
+                ans += (i + j) % 2;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int oddCells(int m, int n, vector<vector<int>>& indices) {
+        vector<int> row(m);
+        vector<int> col(n);
+        for (auto& e : indices) {
+            int r = e[0], c = e[1];
+            row[r]++;
+            col[c]++;
+        }
+        int ans = 0;
+        for (int i : row) {
+            for (int j : col) {
+                ans += (i + j) % 2;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
 ```go
 func oddCells(m int, n int, indices [][]int) int {
 	row := make([]int, m)
@@ -262,6 +269,88 @@ func oddCells(m int, n int, indices [][]int) int {
 	return ans
 }
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 3: Mathematical Optimization
+
+We notice that a number at position $(i, j)$ in the matrix will be odd only when exactly one of $\textit{row}[i]$ and $\textit{col}[j]$ is odd and the other is even.
+
+We count the number of odd numbers in $\textit{row}$, denoted as $\textit{cnt1}$, and the number of odd numbers in $\textit{col}$, denoted as $\textit{cnt2}$. Therefore, the final count of odd numbers is $\textit{cnt1} \times (n - \textit{cnt2}) + \textit{cnt2} \times (m - \textit{cnt1})$.
+
+The time complexity is $O(k + m + n)$, and the space complexity is $O(m + n)$. Here, $k$ is the length of $\textit{indices}$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def oddCells(self, m: int, n: int, indices: List[List[int]]) -> int:
+        row = [0] * m
+        col = [0] * n
+        for r, c in indices:
+            row[r] += 1
+            col[c] += 1
+        cnt1 = sum(v % 2 for v in row)
+        cnt2 = sum(v % 2 for v in col)
+        return cnt1 * (n - cnt2) + cnt2 * (m - cnt1)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int oddCells(int m, int n, int[][] indices) {
+        int[] row = new int[m];
+        int[] col = new int[n];
+        for (int[] e : indices) {
+            int r = e[0], c = e[1];
+            row[r]++;
+            col[c]++;
+        }
+        int cnt1 = 0, cnt2 = 0;
+        for (int v : row) {
+            cnt1 += v % 2;
+        }
+        for (int v : col) {
+            cnt2 += v % 2;
+        }
+        return cnt1 * (n - cnt2) + cnt2 * (m - cnt1);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int oddCells(int m, int n, vector<vector<int>>& indices) {
+        vector<int> row(m);
+        vector<int> col(n);
+        for (auto& e : indices) {
+            int r = e[0], c = e[1];
+            row[r]++;
+            col[c]++;
+        }
+        int cnt1 = 0, cnt2 = 0;
+        for (int v : row) {
+            cnt1 += v % 2;
+        }
+        for (int v : col) {
+            cnt2 += v % 2;
+        }
+        return cnt1 * (n - cnt2) + cnt2 * (m - cnt1);
+    }
+};
+```
+
+#### Go
 
 ```go
 func oddCells(m int, n int, indices [][]int) int {
@@ -283,10 +372,8 @@ func oddCells(m int, n int, indices [][]int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

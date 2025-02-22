@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1280.Students%20and%20Examinations/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1280. Students and Examinations](https://leetcode.com/problems/students-and-examinations)
 
 [中文文档](/solution/1200-1299/1280.Students%20and%20Examinations/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Students</code></p>
 
@@ -13,7 +25,7 @@
 | student_id    | int     |
 | student_name  | varchar |
 +---------------+---------+
-student_id is the primary key for this table.
+student_id is the primary key (column with unique values) for this table.
 Each row of this table contains the ID and the name of one student in the school.
 </pre>
 
@@ -27,7 +39,7 @@ Each row of this table contains the ID and the name of one student in the school
 +--------------+---------+
 | subject_name | varchar |
 +--------------+---------+
-subject_name is the primary key for this table.
+subject_name is the primary key (column with unique values) for this table.
 Each row of this table contains the name of one subject in the school.
 </pre>
 
@@ -42,18 +54,18 @@ Each row of this table contains the name of one subject in the school.
 | student_id   | int     |
 | subject_name | varchar |
 +--------------+---------+
-There is no primary key for this table. It may contain duplicates.
+There is no primary key (column with unique values) for this table. It may contain duplicates.
 Each student from the Students table takes every course from the Subjects table.
 Each row of this table indicates that a student with ID student_id attended the exam of subject_name.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find the number of times each student attended each exam.</p>
+<p>Write a solution to find the number of times each student attended each exam.</p>
 
 <p>Return the result table ordered by <code>student_id</code> and <code>subject_name</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -118,14 +130,33 @@ Alex did not attend any exams.
 John attended the Math exam 1 time, the Physics exam 1 time, and the Programming exam 1 time.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Joins + Grouping
+
+We can first join the `Students` table and the `Subjects` table to obtain all combinations of students and subjects, and then join the `Examinations` table with the condition of `student_id` and `subject_name`. This way, we can get the number of times each student has taken each subject's test. Finally, we can group by `student_id` and `subject_name` to count the number of times each student has taken each subject's test.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT student_id, student_name, subject_name, COUNT(e.student_id) AS attended_exams
+FROM
+    Students
+    JOIN Subjects
+    LEFT JOIN Examinations AS e USING (student_id, subject_name)
+GROUP BY 1, 3
+ORDER BY 1, 3;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
-# [2093. 前往目标城市的最小费用](https://leetcode.cn/problems/minimum-cost-to-reach-city-with-discounts)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2093.Minimum%20Cost%20to%20Reach%20City%20With%20Discounts/README.md
+tags:
+    - 图
+    - 最短路
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
+# [2093. 前往目标城市的最小费用 🔒](https://leetcode.cn/problems/minimum-cost-to-reach-city-with-discounts)
 
 [English Version](/solution/2000-2099/2093.Minimum%20Cost%20to%20Reach%20City%20With%20Discounts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一组公路连接&nbsp;<code>n</code>&nbsp;个城市，城市编号为从&nbsp;<code>0</code> 到&nbsp;<code>n - 1</code>&nbsp;。 输入包含一个二维数组&nbsp;<code>highways</code>&nbsp;，其中 <code>highways[i] = [city1<sub>i</sub>, city2<sub>i</sub>, toll<sub>i</sub>]</code> 表示有一条连接城市&nbsp;<code>city1<sub>i</sub></code> 和&nbsp;<code>city2<sub>i</sub></code>&nbsp;的双向公路，允许汽车缴纳值为&nbsp;<code>toll<sub>i</sub></code>&nbsp;的费用从&nbsp;&nbsp;<code>city1<sub>i</sub></code>&nbsp;前往&nbsp;<code>city2<sub>i</sub></code>&nbsp;<strong>或</strong> 从&nbsp;&nbsp;<code>city2<sub>i</sub></code>&nbsp;前往&nbsp;<code>city1<sub>i</sub></code>&nbsp;。</p>
 
@@ -64,19 +76,19 @@
 	<li>任意两个城市之间最多只有一条公路相连</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 本题属于带限制的单源最短路问题。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -101,9 +113,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -144,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -175,18 +185,8 @@ public:
 };
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

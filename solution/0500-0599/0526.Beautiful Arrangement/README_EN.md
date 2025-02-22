@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0526.Beautiful%20Arrangement/README_EN.md
+tags:
+    - Bit Manipulation
+    - Array
+    - Dynamic Programming
+    - Backtracking
+    - Bitmask
+---
+
+<!-- problem:start -->
+
 # [526. Beautiful Arrangement](https://leetcode.com/problems/beautiful-arrangement)
 
 [中文文档](/solution/0500-0599/0526.Beautiful%20Arrangement/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Suppose you have <code>n</code> integers labeled <code>1</code> through <code>n</code>. A permutation of those <code>n</code> integers <code>perm</code> (<strong>1-indexed</strong>) is considered a <strong>beautiful arrangement</strong> if for every <code>i</code> (<code>1 &lt;= i &lt;= n</code>), <strong>either</strong> of the following is true:</p>
 
@@ -42,11 +58,17 @@ The second beautiful arrangement is [2,1]:
 	<li><code>1 &lt;= n &lt;= 15</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -74,7 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -118,29 +140,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countArrangement(int N) {
-        int maxn = 1 << N;
-        int[] f = new int[maxn];
-        f[0] = 1;
-        for (int i = 0; i < maxn; ++i) {
-            int s = 1;
-            for (int j = 0; j < N; ++j) {
-                s += (i >> j) & 1;
-            }
-            for (int j = 1; j <= N; ++j) {
-                if (((i >> (j - 1) & 1) == 0) && (s % j == 0 || j % s == 0)) {
-                    f[i | (1 << (j - 1))] += f[i];
-                }
-            }
-        }
-        return f[maxn - 1];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -178,7 +178,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countArrangement(n int) int {
@@ -213,7 +213,7 @@ func countArrangement(n int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countArrangement(n: number): number {
@@ -246,7 +246,7 @@ function countArrangement(n: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -283,10 +283,42 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public int countArrangement(int N) {
+        int maxn = 1 << N;
+        int[] f = new int[maxn];
+        f[0] = 1;
+        for (int i = 0; i < maxn; ++i) {
+            int s = 1;
+            for (int j = 0; j < N; ++j) {
+                s += (i >> j) & 1;
+            }
+            for (int j = 1; j <= N; ++j) {
+                if (((i >> (j - 1) & 1) == 0) && (s % j == 0 || j % s == 0)) {
+                    f[i | (1 << (j - 1))] += f[i];
+                }
+            }
+        }
+        return f[maxn - 1];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

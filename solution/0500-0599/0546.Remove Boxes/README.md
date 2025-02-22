@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0546.Remove%20Boxes/README.md
+tags:
+    - 记忆化搜索
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [546. 移除盒子](https://leetcode.cn/problems/remove-boxes)
 
 [English Version](/solution/0500-0599/0546.Remove%20Boxes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给出一些不同颜色的盒子<meta charset="UTF-8" />&nbsp;<code>boxes</code>&nbsp;，盒子的颜色由不同的正数表示。</p>
 
@@ -50,11 +62,13 @@
 	<li><code>1 &lt;= boxes[i]&nbsp;&lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 设计递归函数 `dfs(i, j, k)` 表示当前处理的区间为 `[i, j]`，且该区间的右边有 `k` 个与 `boxes[j]` 相同的元素，返回该区间的最大积分。答案即为 `dfs(0, n - 1, 0)`。
 
@@ -68,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,9 +105,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -132,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +172,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeBoxes(boxes []int) int {
@@ -196,19 +206,10 @@ func removeBoxes(boxes []int) int {
 	}
 	return dfs(0, n-1, 0)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

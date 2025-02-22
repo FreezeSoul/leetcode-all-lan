@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1578.Minimum%20Time%20to%20Make%20Rope%20Colorful/README_EN.md
+rating: 1574
+source: Weekly Contest 205 Q3
+tags:
+    - Greedy
+    - Array
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1578. Minimum Time to Make Rope Colorful](https://leetcode.com/problems/minimum-time-to-make-rope-colorful)
 
 [中文文档](/solution/1500-1599/1578.Minimum%20Time%20to%20Make%20Rope%20Colorful/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Alice has <code>n</code> balloons arranged on a rope. You are given a <strong>0-indexed</strong> string <code>colors</code> where <code>colors[i]</code> is the color of the <code>i<sup>th</sup></code> balloon.</p>
 
@@ -33,7 +50,7 @@ There are no longer two consecutive balloons of the same color. Total time = 3.<
 <pre>
 <strong>Input:</strong> colors = &quot;aabaa&quot;, neededTime = [1,2,3,4,1]
 <strong>Output:</strong> 2
-<strong>Explanation:</strong> Bob will remove the ballons at indices 0 and 4. Each ballon takes 1 second to remove.
+<strong>Explanation:</strong> Bob will remove the balloons at indices 0 and 4. Each balloons takes 1 second to remove.
 There are no longer two consecutive balloons of the same color. Total time = 1 + 1 = 2.
 </pre>
 
@@ -47,11 +64,17 @@ There are no longer two consecutive balloons of the same color. Total time = 1 +
 	<li><code>colors</code> contains only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +95,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,7 +144,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCost(colors string, neededTime []int) (ans int) {
@@ -144,16 +167,8 @@ func minCost(colors string, neededTime []int) (ans int) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

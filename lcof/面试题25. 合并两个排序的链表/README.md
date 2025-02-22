@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9825.%20%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 25. 合并两个排序的链表](https://leetcode.cn/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。</p>
 
@@ -15,9 +25,13 @@
 
 <p>注意：本题与主站 21 题相同：<a href="https://leetcode.cn/problems/merge-two-sorted-lists/">https://leetcode.cn/problems/merge-two-sorted-lists/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：迭代**
+<!-- solution:start -->
+
+### 方法一：迭代
 
 我们先创建一个虚拟头结点 `dummy`，然后创建一个指针 `cur` 指向 `dummy`。
 
@@ -27,20 +41,9 @@
 
 时间复杂度 $O(m + n)$，空间复杂度 $O(1)$。其中 $m$ 和 $n$ 分别为两个链表的长度。
 
-**方法二：递归**
-
-我们先判断 `l1` 和 `l2` 中有没有一个为空，如果有一个为空，那么我们直接返回另一个链表即可。
-
-接下来，我们比较 `l1` 和 `l2` 的值：
-
--   如果 `l1` 的值小于等于 `l2` 的值，我们递归调用 `mergeTwoLists(l1.next, l2)`，并将 `l1.next` 指向返回的链表，然后返回 `l1`。
--   如果 `l1` 的值大于 `l2` 的值，我们递归调用 `mergeTwoLists(l1, l2.next)`，并将 `l2.next` 指向返回的链表，然后返回 `l2`。
-
-时间复杂度 $O(m + n)$，空间复杂度 $O(m + n)$。其中 $m$ 和 $n$ 分别为两个链表的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -65,26 +68,7 @@ class Solution:
         return dummy.next
 ```
 
-```python
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        if l1 is None or l2 is None:
-            return l1 or l2
-        if l1.val <= l2.val:
-            l1.next = self.mergeTwoLists(l1.next, l2)
-            return l1
-        else:
-            l2.next = self.mergeTwoLists(l1, l2.next)
-            return l2
-```
-
-### **Java**
+#### Java
 
 ```java
 /**
@@ -115,35 +99,7 @@ class Solution {
 }
 ```
 
-```java
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */
-class Solution {
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
-        }
-        if (l2 == null) {
-            return l1;
-        }
-        if (l1.val <= l2.val) {
-            l1.next = mergeTwoLists(l1.next, l2);
-            return l1;
-        } else {
-            l2.next = mergeTwoLists(l1, l2.next);
-            return l2;
-        }
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -175,36 +131,7 @@ public:
 };
 ```
 
-```cpp
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-class Solution {
-public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if (!l1) {
-            return l2;
-        }
-        if (!l2) {
-            return l1;
-        }
-        if (l1->val <= l2->val) {
-            l1->next = mergeTwoLists(l1->next, l2);
-            return l1;
-        } else {
-            l2->next = mergeTwoLists(l1, l2->next);
-            return l2;
-        }
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 /**
@@ -236,92 +163,7 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 }
 ```
 
-```go
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
-func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
-	if l1 == nil {
-		return l2
-	}
-	if l2 == nil {
-		return l1
-	}
-	if l1.Val <= l2.Val {
-		l1.Next = mergeTwoLists(l1.Next, l2)
-		return l1
-	} else {
-		l2.Next = mergeTwoLists(l1, l2.Next)
-		return l2
-	}
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} l1
- * @param {ListNode} l2
- * @return {ListNode}
- */
-var mergeTwoLists = function (l1, l2) {
-    const dummy = new ListNode(0);
-    let cur = dummy;
-    while (l1 && l2) {
-        if (l1.val <= l2.val) {
-            cur.next = l1;
-            l1 = l1.next;
-        } else {
-            cur.next = l2;
-            l2 = l2.next;
-        }
-        cur = cur.next;
-    }
-    cur.next = l1 || l2;
-    return dummy.next;
-};
-```
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} l1
- * @param {ListNode} l2
- * @return {ListNode}
- */
-var mergeTwoLists = function (l1, l2) {
-    if (!(l1 && l2)) {
-        return l1 || l2;
-    }
-    if (l1.val < l2.val) {
-        l1.next = mergeTwoLists(l1.next, l2);
-        return l1;
-    } else {
-        l2.next = mergeTwoLists(l2.next, l1);
-        return l2;
-    }
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -336,10 +178,7 @@ var mergeTwoLists = function (l1, l2) {
  * }
  */
 
-function mergeTwoLists(
-    l1: ListNode | null,
-    l2: ListNode | null,
-): ListNode | null {
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
     const dummy = new ListNode(0);
     let cur = dummy;
     while (l1 && l2) {
@@ -357,36 +196,7 @@ function mergeTwoLists(
 }
 ```
 
-```ts
-/**
- * Definition for singly-linked list.
- * class ListNode {
- *     val: number
- *     next: ListNode | null
- *     constructor(val?: number, next?: ListNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
- */
-
-function mergeTwoLists(
-    l1: ListNode | null,
-    l2: ListNode | null,
-): ListNode | null {
-    if (l1 == null || l2 == null) {
-        return l1 || l2;
-    }
-    if (l1.val < l2.val) {
-        l1.next = mergeTwoLists(l1.next, l2);
-        return l1;
-    }
-    l2.next = mergeTwoLists(l1, l2.next);
-    return l2;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -437,6 +247,267 @@ impl Solution {
 }
 ```
 
+#### JavaScript
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function (l1, l2) {
+    const dummy = new ListNode(0);
+    let cur = dummy;
+    while (l1 && l2) {
+        if (l1.val <= l2.val) {
+            cur.next = l1;
+            l1 = l1.next;
+        } else {
+            cur.next = l2;
+            l2 = l2.next;
+        }
+        cur = cur.next;
+    }
+    cur.next = l1 || l2;
+    return dummy.next;
+};
+```
+
+#### C#
+
+```cs
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode MergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode cur = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                cur.next = l1;
+                l1 = l1.next;
+            } else {
+                cur.next = l2;
+                l2 = l2.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = l1 == null ? l2 : l1;
+        return dummy.next;
+    }
+}
+```
+
+#### Swift
+
+```swift
+/* public class ListNode {
+*     var val: Int
+*     var next: ListNode?
+*     init(_ val: Int) {
+*         self.val = val
+*         self.next = nil
+*     }
+* }
+*/
+
+class Solution {
+    func mergeTwoLists(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+        let dummy = ListNode(0)
+        var cur: ListNode? = dummy
+        var l1 = l1
+        var l2 = l2
+
+        while let l1Node = l1, let l2Node = l2 {
+            if l1Node.val <= l2Node.val {
+                cur?.next = l1Node
+                l1 = l1Node.next
+            } else {
+                cur?.next = l2Node
+                l2 = l2Node.next
+            }
+            cur = cur?.next
+        }
+
+        cur?.next = l1 ?? l2
+
+        return dummy.next
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二：递归
+
+我们先判断 `l1` 和 `l2` 中有没有一个为空，如果有一个为空，那么我们直接返回另一个链表即可。
+
+接下来，我们比较 `l1` 和 `l2` 的值：
+
+-   如果 `l1` 的值小于等于 `l2` 的值，我们递归调用 `mergeTwoLists(l1.next, l2)`，并将 `l1.next` 指向返回的链表，然后返回 `l1`。
+-   如果 `l1` 的值大于 `l2` 的值，我们递归调用 `mergeTwoLists(l1, l2.next)`，并将 `l2.next` 指向返回的链表，然后返回 `l2`。
+
+时间复杂度 $O(m + n)$，空间复杂度 $O(m + n)$。其中 $m$ 和 $n$ 分别为两个链表的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if l1 is None or l2 is None:
+            return l1 or l2
+        if l1.val <= l2.val:
+            l1.next = self.mergeTwoLists(l1.next, l2)
+            return l1
+        else:
+            l2.next = self.mergeTwoLists(l1, l2.next)
+            return l2
+```
+
+#### Java
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        if (l1.val <= l2.val) {
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
+        }
+    }
+}
+```
+
+#### C++
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (!l1) {
+            return l2;
+        }
+        if (!l2) {
+            return l1;
+        }
+        if (l1->val <= l2->val) {
+            l1->next = mergeTwoLists(l1->next, l2);
+            return l1;
+        } else {
+            l2->next = mergeTwoLists(l1, l2->next);
+            return l2;
+        }
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	if l1 == nil {
+		return l2
+	}
+	if l2 == nil {
+		return l1
+	}
+	if l1.Val <= l2.Val {
+		l1.Next = mergeTwoLists(l1.Next, l2)
+		return l1
+	} else {
+		l2.Next = mergeTwoLists(l1, l2.Next)
+		return l2
+	}
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    if (l1 == null || l2 == null) {
+        return l1 || l2;
+    }
+    if (l1.val < l2.val) {
+        l1.next = mergeTwoLists(l1.next, l2);
+        return l1;
+    }
+    l2.next = mergeTwoLists(l1, l2.next);
+    return l2;
+}
+```
+
+#### Rust
+
 ```rust
 // Definition for singly-linked list.
 // #[derive(PartialEq, Eq, Clone, Debug)]
@@ -477,36 +548,36 @@ impl Solution {
 }
 ```
 
-### **C#**
+#### JavaScript
 
-```cs
+```js
 /**
  * Definition for singly-linked list.
- * public class ListNode {
- *     public int val;
- *     public ListNode next;
- *     public ListNode(int x) { val = x; }
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
  * }
  */
-public class Solution {
-    public ListNode MergeTwoLists(ListNode l1, ListNode l2) {
-        ListNode dummy = new ListNode(0);
-        ListNode cur = dummy;
-        while (l1 != null && l2 != null) {
-            if (l1.val <= l2.val) {
-                cur.next = l1;
-                l1 = l1.next;
-            } else {
-                cur.next = l2;
-                l2 = l2.next;
-            }
-            cur = cur.next;
-        }
-        cur.next = l1 == null ? l2 : l1;
-        return dummy.next;
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function (l1, l2) {
+    if (!(l1 && l2)) {
+        return l1 || l2;
     }
-}
+    if (l1.val < l2.val) {
+        l1.next = mergeTwoLists(l1.next, l2);
+        return l1;
+    } else {
+        l2.next = mergeTwoLists(l2.next, l1);
+        return l2;
+    }
+};
 ```
+
+#### C#
 
 ```cs
 /**
@@ -536,10 +607,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

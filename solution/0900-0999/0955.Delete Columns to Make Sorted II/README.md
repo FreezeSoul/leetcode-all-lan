@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0955.Delete%20Columns%20to%20Make%20Sorted%20II/README.md
+tags:
+    - 贪心
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [955. 删列造序 II](https://leetcode.cn/problems/delete-columns-to-make-sorted-ii)
 
 [English Version](/solution/0900-0999/0955.Delete%20Columns%20to%20Make%20Sorted%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定由 <code>n</code> 个字符串组成的数组 <code>strs</code>，其中每个字符串长度相等。</p>
 
@@ -61,32 +73,49 @@ strs 的列已经是按字典序排列了，所以我们不需要删除任何东
 	<li><code>strs[i]</code> 由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
-```
-
-### **...**
-
-```
-
+class Solution {
+    public int minDeletionSize(String[] A) {
+        if (A == null || A.length <= 1) {
+            return 0;
+        }
+        int len = A.length, wordLen = A[0].length(), res = 0;
+        boolean[] cut = new boolean[len];
+    search:
+        for (int j = 0; j < wordLen; j++) {
+            // 判断第 j 列是否应当保留
+            for (int i = 0; i < len - 1; i++) {
+                if (!cut[i] && A[i].charAt(j) > A[i + 1].charAt(j)) {
+                    res += 1;
+                    continue search;
+                }
+            }
+            // 更新 cut 的信息
+            for (int i = 0; i < len - 1; i++) {
+                if (A[i].charAt(j) < A[i + 1].charAt(j)) {
+                    cut[i] = true;
+                }
+            }
+        }
+        return res;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

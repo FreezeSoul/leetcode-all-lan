@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2280.Minimum%20Lines%20to%20Represent%20a%20Line%20Chart/README_EN.md
+rating: 1680
+source: Weekly Contest 294 Q3
+tags:
+    - Geometry
+    - Array
+    - Math
+    - Number Theory
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2280. Minimum Lines to Represent a Line Chart](https://leetcode.com/problems/minimum-lines-to-represent-a-line-chart)
 
 [中文文档](/solution/2200-2299/2280.Minimum%20Lines%20to%20Represent%20a%20Line%20Chart/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a 2D integer array <code>stockPrices</code> where <code>stockPrices[i] = [day<sub>i</sub>, price<sub>i</sub>]</code> indicates the price of the stock on day <code>day<sub>i</sub></code> is <code>price<sub>i</sub></code>. A <strong>line chart</strong> is created from the array by plotting the points on an XY plane with the X-axis representing the day and the Y-axis representing the price and connecting adjacent points. One such example is shown below:</p>
 <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2200-2299/2280.Minimum%20Lines%20to%20Represent%20a%20Line%20Chart/images/1920px-pushkin_population_historysvg.png" style="width: 500px; height: 313px;" />
@@ -42,11 +60,17 @@ As shown in the diagram above, the line chart can be represented with a single l
 	<li>All <code>day<sub>i</sub></code> are <strong>distinct</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +86,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +109,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +122,7 @@ public:
             int x = stockPrices[i - 1][0], y = stockPrices[i - 1][1];
             int x1 = stockPrices[i][0], y1 = stockPrices[i][1];
             int dx1 = x1 - x, dy1 = y1 - y;
-            if ((long long)dy * dx1 != (long long)dx * dy1) ++ans;
+            if ((long long) dy * dx1 != (long long) dx * dy1) ++ans;
             dx = dx1;
             dy = dy1;
         }
@@ -107,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumLines(stockPrices [][]int) int {
@@ -126,7 +150,7 @@ func minimumLines(stockPrices [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumLines(stockPrices: number[][]): number {
@@ -146,10 +170,8 @@ function minimumLines(stockPrices: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

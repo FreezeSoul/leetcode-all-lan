@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2103.Rings%20and%20Rods/README_EN.md
+rating: 1257
+source: Weekly Contest 271 Q1
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [2103. Rings and Rods](https://leetcode.com/problems/rings-and-rods)
 
 [中文文档](/solution/2100-2199/2103.Rings%20and%20Rods/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> rings and each ring is either red, green, or blue. The rings are distributed <strong>across ten rods</strong> labeled from <code>0</code> to <code>9</code>.</p>
 
@@ -60,37 +75,56 @@ Only one ring is given. Thus, no rods have all three colors.
 	<li><code>rings[i]</code> where <code>i</code> is <strong>odd</strong> is a digit from <code>&#39;0&#39;</code> to <code>&#39;9&#39;</code> (<strong>0-indexed</strong>).</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Using hash table.
+<!-- solution:start -->
+
+### Solution 1: Bit Manipulation
+
+We can use an array $mask$ of length $10$ to represent the color situation of the rings on each rod, where $mask[i]$ represents the color situation of the ring on the $i$th rod. If there are red, green, and blue rings on the $i$th rod, then the binary representation of $mask[i]$ is $111$, that is, $mask[i] = 7$.
+
+We traverse the string $rings$. For each color position pair $(c, j)$, where $c$ represents the color of the ring and $j$ represents the number of the rod where the ring is located, we set the corresponding binary bit of $mask[j]$, that is, $mask[j] |= d[c]$, where $d[c]$ represents the binary bit corresponding to color $c$.
+
+Finally, we count the number of elements in $mask$ that are $7$, which is the number of rods that have collected all three colors of rings.
+
+The time complexity is $O(n)$, and the space complexity is $O(|\Sigma|)$, where $n$ represents the length of the string $rings$, and $|\Sigma|$ represents the size of the character set.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def countPoints(self, rings: str) -> int:
-        mp = defaultdict(set)
-        for i in range(1, len(rings), 2):
-            c = int(rings[i])
-            mp[c].add(rings[i - 1])
-        return sum(len(v) == 3 for v in mp.values())
+        mask = [0] * 10
+        d = {"R": 1, "G": 2, "B": 4}
+        for i in range(0, len(rings), 2):
+            c = rings[i]
+            j = int(rings[i + 1])
+            mask[j] |= d[c]
+        return mask.count(7)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int countPoints(String rings) {
-        Map<Integer, Set<Character>> mp = new HashMap<>();
-        for (int i = 1; i < rings.length(); i += 2) {
-            int c = rings.charAt(i) - '0';
-            mp.computeIfAbsent(c, k -> new HashSet<>()).add(rings.charAt(i - 1));
+        int[] d = new int['Z'];
+        d['R'] = 1;
+        d['G'] = 2;
+        d['B'] = 4;
+        int[] mask = new int[10];
+        for (int i = 0, n = rings.length(); i < n; i += 2) {
+            int c = rings.charAt(i);
+            int j = rings.charAt(i + 1) - '0';
+            mask[j] |= d[c];
         }
         int ans = 0;
-        for (Set<Character> e : mp.values()) {
-            if (e.size() == 3) {
+        for (int x : mask) {
+            if (x == 7) {
                 ++ans;
             }
         }
@@ -99,105 +133,142 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int countPoints(string rings) {
-        unordered_map<int, unordered_set<char>> mp;
-        for (int i = 1; i < rings.size(); i += 2) {
-            int c = rings[i] - '0';
-            mp[c].insert(rings[i - 1]);
+        int d['Z']{['R'] = 1, ['G'] = 2, ['B'] = 4};
+        int mask[10]{};
+        for (int i = 0, n = rings.size(); i < n; i += 2) {
+            int c = rings[i];
+            int j = rings[i + 1] - '0';
+            mask[j] |= d[c];
         }
-        int ans = 0;
-        for (int i = 0; i < 10; ++i)
-            if (mp[i].size() == 3)
-                ++ans;
-        return ans;
+        return count(mask, mask + 10, 7);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func countPoints(rings string) int {
-	mp := make(map[byte]map[byte]bool)
-	for i := 1; i < len(rings); i += 2 {
+func countPoints(rings string) (ans int) {
+	d := ['Z']int{'R': 1, 'G': 2, 'B': 4}
+	mask := [10]int{}
+	for i, n := 0, len(rings); i < n; i += 2 {
 		c := rings[i]
-		if len(mp[c]) == 0 {
-			mp[c] = make(map[byte]bool)
-		}
-		mp[c][rings[i-1]] = true
+		j := int(rings[i+1] - '0')
+		mask[j] |= d[c]
 	}
-	ans := 0
-	for _, v := range mp {
-		if len(v) == 3 {
+	for _, x := range mask {
+		if x == 7 {
 			ans++
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countPoints(rings: string): number {
-    const helper = (c: string) => c.charCodeAt(0) - 'A'.charCodeAt(0);
-    const n = rings.length;
-    const target = (1 << helper('R')) + (1 << helper('G')) + (1 << helper('B'));
-    const count = new Array(10).fill(0);
-    for (let i = 0; i < n; i += 2) {
-        count[rings[i + 1]] |= 1 << helper(rings[i]);
+    const idx = (c: string) => c.charCodeAt(0) - 'A'.charCodeAt(0);
+    const d: number[] = Array(26).fill(0);
+    d[idx('R')] = 1;
+    d[idx('G')] = 2;
+    d[idx('B')] = 4;
+    const mask: number[] = Array(10).fill(0);
+    for (let i = 0; i < rings.length; i += 2) {
+        const c = rings[i];
+        const j = rings[i + 1].charCodeAt(0) - '0'.charCodeAt(0);
+        mask[j] |= d[idx(c)];
     }
-    return count.reduce((r, v) => (r += v === target ? 1 : 0), 0);
+    return mask.filter(x => x === 7).length;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn count_points(rings: String) -> i32 {
-        let rings = rings.as_bytes();
-        let target = (1 << b'R' - b'A') + (1 << b'G' - b'A') + (1 << b'B' - b'A');
-        let n = rings.len();
-        let mut count = [0; 10];
-        let mut i = 0;
-        while i < n {
-            count[(rings[i + 1] - b'0') as usize] |= 1 << rings[i] - b'A';
-            i += 2;
+        let mut d: [i32; 90] = [0; 90];
+        d['R' as usize] = 1;
+        d['G' as usize] = 2;
+        d['B' as usize] = 4;
+
+        let mut mask: [i32; 10] = [0; 10];
+
+        let cs: Vec<char> = rings.chars().collect();
+
+        for i in (0..cs.len()).step_by(2) {
+            let c = cs[i] as usize;
+            let j = (cs[i + 1] as usize) - ('0' as usize);
+            mask[j] |= d[c];
         }
-        count.iter().filter(|&v| *v == target).count() as i32
+
+        mask.iter().filter(|&&x| x == 7).count() as i32
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int countPoints(char *rings) {
-    int target = (1 << ('R' - 'A')) + (1 << ('G' - 'A')) + (1 << ('B' - 'A'));
-    int count[10] = {0};
-    for (int i = 0; rings[i]; i += 2) {
-        count[rings[i + 1] - '0'] |= 1 << (rings[i] - 'A');
+int countPoints(char* rings) {
+    int d['Z'];
+    memset(d, 0, sizeof(d));
+    d['R'] = 1;
+    d['G'] = 2;
+    d['B'] = 4;
+
+    int mask[10];
+    memset(mask, 0, sizeof(mask));
+
+    for (int i = 0, n = strlen(rings); i < n; i += 2) {
+        int c = rings[i];
+        int j = rings[i + 1] - '0';
+        mask[j] |= d[c];
     }
+
     int ans = 0;
     for (int i = 0; i < 10; i++) {
-        if (count[i] == target) {
+        if (mask[i] == 7) {
             ans++;
         }
     }
+
     return ans;
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function countPoints(rings: string): number {
+    let c = 0;
+    for (let i = 0; i <= 9; i++) {
+        if (rings.includes('B' + i) && rings.includes('R' + i) && rings.includes('G' + i)) c++;
+    }
+    return c;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0113.Path%20Sum%20II/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 回溯
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [113. 路径总和 II](https://leetcode.cn/problems/path-sum-ii)
 
 [English Version](/solution/0100-0199/0113.Path%20Sum%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你二叉树的根节点 <code>root</code> 和一个整数目标和 <code>targetSum</code> ，找出所有 <strong>从根节点到叶子节点</strong> 路径总和等于给定目标和的路径。</p>
 
@@ -47,11 +60,13 @@
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们从根节点开始，递归遍历所有从根节点到叶子节点的路径，并记录路径和。当遍历到叶子节点时，如果此时路径和等于 `targetSum`，则将此路径加入答案。
 
@@ -59,9 +74,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -89,9 +102,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -134,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -168,7 +179,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -189,9 +200,7 @@ func pathSum(root *TreeNode, targetSum int) (ans [][]int) {
 		s -= root.Val
 		t = append(t, root.Val)
 		if root.Left == nil && root.Right == nil && s == 0 {
-			cp := make([]int, len(t))
-			copy(cp, t)
-			ans = append(ans, cp)
+			ans = append(ans, slices.Clone(t))
 		}
 		dfs(root.Left, s)
 		dfs(root.Right, s)
@@ -202,7 +211,7 @@ func pathSum(root *TreeNode, targetSum int) (ans [][]int) {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -223,12 +232,12 @@ func pathSum(root *TreeNode, targetSum int) (ans [][]int) {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn dfs(
         root: Option<Rc<RefCell<TreeNode>>>,
-        paths: &mut  Vec<i32>,
+        paths: &mut Vec<i32>,
         mut target_sum: i32,
         res: &mut Vec<Vec<i32>>,
     ) {
@@ -255,13 +264,13 @@ impl Solution {
     pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> Vec<Vec<i32>> {
         let mut res = vec![];
         let mut paths = vec![];
-        Self::dfs(root, &mut paths,  target_sum, &mut res);
+        Self::dfs(root, &mut paths, target_sum, &mut res);
         res
     }
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -294,10 +303,8 @@ var pathSum = function (root, targetSum) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

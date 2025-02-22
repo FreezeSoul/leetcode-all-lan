@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0736.Parse%20Lisp%20Expression/README_EN.md
+tags:
+    - Stack
+    - Recursion
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [736. Parse Lisp Expression](https://leetcode.com/problems/parse-lisp-expression)
 
 [中文文档](/solution/0700-0799/0736.Parse%20Lisp%20Expression/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string expression representing a Lisp-like expression to return the integer value of.</p>
 
@@ -57,11 +72,17 @@ The second (add x y) evaluates as 3+2 = 5.
 	<li>The expression is guaranteed to be legal and evaluate to an integer.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -121,7 +142,7 @@ class Solution:
         return eval()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -199,7 +220,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -269,7 +290,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func evaluate(expression string) int {
@@ -351,10 +372,8 @@ func evaluate(expression string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

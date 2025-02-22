@@ -1,10 +1,22 @@
-# [1057. 校园自行车分配](https://leetcode.cn/problems/campus-bikes)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1057.Campus%20Bikes/README.md
+tags:
+    - 贪心
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [1057. 校园自行车分配 🔒](https://leetcode.cn/problems/campus-bikes)
 
 [English Version](/solution/1000-1099/1057.Campus%20Bikes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在 X-Y 平面上表示的校园中，有 <code>n</code> 名工人和 <code>m</code> 辆自行车，其中 <code>n &lt;= m</code>。</p>
 
@@ -54,11 +66,13 @@
 	<li>所有工人和自行车的位置都<strong>不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 先计算每个工人和每个自行车之间的曼哈顿距离，然后按照曼哈顿距离从小到大排序，遍历排序后的数组，如果当前工人和自行车都未被分配，则分配给当前工人和自行车。
 
@@ -66,18 +80,17 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def assignBikes(self, workers: List[List[int]], bikes: List[List[int]]) -> List[int]:
+    def assignBikes(
+        self, workers: List[List[int]], bikes: List[List[int]]
+    ) -> List[int]:
         n, m = len(workers), len(bikes)
         arr = []
         for i, j in product(range(n), range(m)):
-            dist = abs(workers[i][0] - bikes[j][0]) + \
-                abs(workers[i][1] - bikes[j][1])
+            dist = abs(workers[i][0] - bikes[j][0]) + abs(workers[i][1] - bikes[j][1])
             arr.append((dist, i, j))
         arr.sort()
         vis1 = [False] * n
@@ -90,9 +103,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -131,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -160,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func assignBikes(workers [][]int, bikes [][]int) []int {
@@ -203,10 +214,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

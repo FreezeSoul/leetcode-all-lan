@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2286.Booking%20Concert%20Tickets%20in%20Groups/README.md
+rating: 2470
+source: 第 79 场双周赛 Q4
+tags:
+    - 设计
+    - 树状数组
+    - 线段树
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [2286. 以组为单位订音乐会的门票](https://leetcode.cn/problems/booking-concert-tickets-in-groups)
 
 [English Version](/solution/2200-2299/2286.Booking%20Concert%20Tickets%20in%20Groups/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个音乐会总共有&nbsp;<code>n</code>&nbsp;排座位，编号从&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;，每一排有&nbsp;<code>m</code>&nbsp;个座椅，编号为&nbsp;<code>0</code>&nbsp;到&nbsp;<code>m - 1</code>&nbsp;。你需要设计一个买票系统，针对以下情况进行座位安排：</p>
 
@@ -49,7 +64,7 @@ bms.gather(2, 0); // 返回 []
 bms.scatter(5, 1); // 返回 True
                    // 这一组安排第 0 排第 4 个座位和第 1 排 [0, 3] 的座位。
 bms.scatter(5, 1); // 返回 False
-                   // 总共只剩下 2 个座位。
+                   // 总共只剩下 1 个座位。
 </pre>
 
 <p>&nbsp;</p>
@@ -63,11 +78,13 @@ bms.scatter(5, 1); // 返回 False
 	<li><code>gather</code> 和&nbsp;<code>scatter</code>&nbsp;<strong>总</strong> 调用次数不超过&nbsp;<code>5 * 10<sup>4</sup></code> 次。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：线段树**
+### 方法一：线段树
 
 分析题意我们得知：
 
@@ -105,12 +122,12 @@ bms.scatter(5, 1); // 返回 False
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Node:
+    __slots__ = "l", "r", "s", "mx"
+
     def __init__(self):
         self.l = self.r = 0
         self.s = self.mx = 0
@@ -172,7 +189,6 @@ class SegmentTree:
 
 
 class BookMyShow:
-
     def __init__(self, n: int, m: int):
         self.n = n
         self.tree = SegmentTree(n, m)
@@ -207,9 +223,7 @@ class BookMyShow:
 # param_2 = obj.scatter(k,maxRow)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Node {
@@ -346,7 +360,7 @@ class BookMyShow {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Node {
@@ -486,7 +500,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type BookMyShow struct {
@@ -609,13 +623,6 @@ func (t *segmentTree) pushup(u int) {
 	t.tr[u].mx = max(t.tr[u<<1].mx, t.tr[u<<1|1].mx)
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 /**
  * Your BookMyShow object will be instantiated and called as such:
  * obj := Constructor(n, m);
@@ -624,16 +631,144 @@ func max(a, b int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
+class Node {
+    l: number;
+    r: number;
+    mx: number;
+    s: number;
 
-```
+    constructor() {
+        this.l = 0;
+        this.r = 0;
+        this.mx = 0;
+        this.s = 0;
+    }
+}
 
-### **...**
+class SegmentTree {
+    private tr: Node[];
+    private m: number;
 
-```
+    constructor(n: number, m: number) {
+        this.m = m;
+        this.tr = Array.from({ length: n << 2 }, () => new Node());
+        this.build(1, 1, n);
+    }
 
+    private build(u: number, l: number, r: number): void {
+        this.tr[u].l = l;
+        this.tr[u].r = r;
+        if (l === r) {
+            this.tr[u].s = this.m;
+            this.tr[u].mx = this.m;
+            return;
+        }
+        const mid = (l + r) >> 1;
+        this.build(u << 1, l, mid);
+        this.build((u << 1) | 1, mid + 1, r);
+        this.pushup(u);
+    }
+
+    public modify(u: number, x: number, v: number): void {
+        if (this.tr[u].l === x && this.tr[u].r === x) {
+            this.tr[u].s = v;
+            this.tr[u].mx = v;
+            return;
+        }
+        const mid = (this.tr[u].l + this.tr[u].r) >> 1;
+        if (x <= mid) {
+            this.modify(u << 1, x, v);
+        } else {
+            this.modify((u << 1) | 1, x, v);
+        }
+        this.pushup(u);
+    }
+
+    public querySum(u: number, l: number, r: number): number {
+        if (this.tr[u].l >= l && this.tr[u].r <= r) {
+            return this.tr[u].s;
+        }
+        const mid = (this.tr[u].l + this.tr[u].r) >> 1;
+        let v = 0;
+        if (l <= mid) {
+            v += this.querySum(u << 1, l, r);
+        }
+        if (r > mid) {
+            v += this.querySum((u << 1) | 1, l, r);
+        }
+        return v;
+    }
+
+    public queryIdx(u: number, l: number, r: number, k: number): number {
+        if (this.tr[u].mx < k) {
+            return 0;
+        }
+        if (this.tr[u].l === this.tr[u].r) {
+            return this.tr[u].l;
+        }
+        const mid = (this.tr[u].l + this.tr[u].r) >> 1;
+        if (this.tr[u << 1].mx >= k) {
+            return this.queryIdx(u << 1, l, r, k);
+        }
+        if (r > mid) {
+            return this.queryIdx((u << 1) | 1, l, r, k);
+        }
+        return 0;
+    }
+
+    private pushup(u: number): void {
+        this.tr[u].s = this.tr[u << 1].s + this.tr[(u << 1) | 1].s;
+        this.tr[u].mx = Math.max(this.tr[u << 1].mx, this.tr[(u << 1) | 1].mx);
+    }
+}
+
+class BookMyShow {
+    private n: number;
+    private m: number;
+    private tree: SegmentTree;
+
+    constructor(n: number, m: number) {
+        this.n = n;
+        this.m = m;
+        this.tree = new SegmentTree(n, m);
+    }
+
+    public gather(k: number, maxRow: number): number[] {
+        ++maxRow;
+        const i = this.tree.queryIdx(1, 1, maxRow, k);
+        if (i === 0) {
+            return [];
+        }
+        const s = this.tree.querySum(1, i, i);
+        this.tree.modify(1, i, s - k);
+        return [i - 1, this.m - s];
+    }
+
+    public scatter(k: number, maxRow: number): boolean {
+        ++maxRow;
+        if (this.tree.querySum(1, 1, maxRow) < k) {
+            return false;
+        }
+        let i = this.tree.queryIdx(1, 1, maxRow, 1);
+        for (let j = i; j <= this.n; ++j) {
+            const s = this.tree.querySum(1, j, j);
+            if (s >= k) {
+                this.tree.modify(1, j, s - k);
+                return true;
+            }
+            k -= s;
+            this.tree.modify(1, j, 0);
+        }
+        return true;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

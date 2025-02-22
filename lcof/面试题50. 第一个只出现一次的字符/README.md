@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9850.%20%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 50. 第一个只出现一次的字符](https://leetcode.cn/problems/di-yi-ge-zhi-chu-xian-yi-ci-de-zi-fu-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。</p>
 
@@ -24,17 +34,21 @@
 
 <p><code>0 &lt;= s 的长度 &lt;= 50000</code></p>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：数组或哈希表**
+<!-- solution:start -->
 
-我们可以使用哈希表或数组来统计每个字符出现的次数，然后再遍历一遍字符串，找到第一个出现次数为 $1$ 的字符。
+### 方法一：数组或哈希表
+
+我们可以使用哈希表或数组 $cnt$ 来统计每个字符出现的次数，然后再遍历一遍字符串，找到第一个出现次数为 $1$ 的字符。
 
 时间复杂度 $O(n)$，空间复杂度 $O(C)$。其中 $n$ 为字符串长度；而 $C$ 为字符集大小，本题中 $C=26$。
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -46,7 +60,7 @@ class Solution:
         return " "
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -66,7 +80,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -76,7 +90,7 @@ public:
         for (char& c : s) {
             ++cnt[c - 'a'];
         }
-        for (char&c : s) {
+        for (char& c : s) {
             if (cnt[c - 'a'] == 1) {
                 return c;
             }
@@ -86,7 +100,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func firstUniqChar(s string) byte {
@@ -103,7 +117,43 @@ func firstUniqChar(s string) byte {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function firstUniqChar(s: string): string {
+    const cnt: number[] = Array(26).fill(0);
+    for (const c of s) {
+        cnt[c.charCodeAt(0) - 97]++;
+    }
+    for (const c of s) {
+        if (cnt[c.charCodeAt(0) - 97] === 1) {
+            return c;
+        }
+    }
+    return ' ';
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn first_uniq_char(s: String) -> char {
+        let mut cnt = [0; 26];
+        for c in s.chars() {
+            cnt[(c as usize) - ('a' as usize)] += 1;
+        }
+        for c in s.chars() {
+            if cnt[(c as usize) - ('a' as usize)] == 1 {
+                return c;
+            }
+        }
+        ' '
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -111,7 +161,7 @@ func firstUniqChar(s string) byte {
  * @return {character}
  */
 var firstUniqChar = function (s) {
-    const cnt = new Array(26).fill(0);
+    const cnt = Array(26).fill(0);
     for (const c of s) {
         cnt[c.charCodeAt(0) - 97]++;
     }
@@ -124,44 +174,7 @@ var firstUniqChar = function (s) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function firstUniqChar(s: string): string {
-    const map = new Map();
-    for (const c of s) {
-        map.set(c, !map.has(c));
-    }
-    for (const c of s) {
-        if (map.get(c)) {
-            return c;
-        }
-    }
-    return ' ';
-}
-```
-
-### **Rust**
-
-```rust
-use std::collections::HashMap;
-impl Solution {
-    pub fn first_uniq_char(s: String) -> char {
-        let mut map = HashMap::new();
-        for c in s.as_bytes() {
-            map.insert(c, !map.contains_key(c));
-        }
-        for c in s.as_bytes() {
-            if map[c] {
-                return char::from(*c);
-            }
-        }
-        ' '
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -180,10 +193,31 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func firstUniqChar(_ s: String) -> Character {
+        var count = [Int](repeating: 0, count: 26)
+        let aAsciiValue = Int(Character("a").asciiValue!)
 
+        for char in s {
+            count[Int(char.asciiValue!) - aAsciiValue] += 1
+        }
+
+        for char in s {
+            if count[Int(char.asciiValue!) - aAsciiValue] == 1 {
+                return char
+            }
+        }
+
+        return " "
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

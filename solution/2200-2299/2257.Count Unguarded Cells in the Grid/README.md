@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2257.Count%20Unguarded%20Cells%20in%20the%20Grid/README.md
+rating: 1708
+source: 第 77 场双周赛 Q3
+tags:
+    - 数组
+    - 矩阵
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2257. 统计网格图中没有被保卫的格子数](https://leetcode.cn/problems/count-unguarded-cells-in-the-grid)
 
 [English Version](/solution/2200-2299/2257.Count%20Unguarded%20Cells%20in%20the%20Grid/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个整数&nbsp;<code>m</code>&nbsp;和&nbsp;<code>n</code>&nbsp;表示一个下标从<strong>&nbsp;0</strong>&nbsp;开始的&nbsp;<code>m x n</code>&nbsp;网格图。同时给你两个二维整数数组&nbsp;<code>guards</code> 和&nbsp;<code>walls</code>&nbsp;，其中&nbsp;<code>guards[i] = [row<sub>i</sub>, col<sub>i</sub>]</code>&nbsp;且&nbsp;<code>walls[j] = [row<sub>j</sub>, col<sub>j</sub>]</code>&nbsp;，分别表示第 <code>i</code>&nbsp;个警卫和第 <code>j</code>&nbsp;座墙所在的位置。</p>
 
@@ -49,13 +63,15 @@
 	<li><code>guards</code>&nbsp;和&nbsp;<code>walls</code>&nbsp;中所有位置 <strong>互不相同</strong>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-我们创建一个 $m \times n$ 的二维数组 $g$，其中 $g[i][j]$ 表示第 $i$ 行第 $j$ 列的格子。初始时，$g[i][j]$ 的值为 $0$，表示该格子没有被保卫。
+我们创建一个 $m \times n$ 的二维数组 $g$，其中 $g[i][j]$ 表示第 $i$ 行第 $j$ 列的格子。初始时 $g[i][j]$ 的值为 $0$，表示该格子没有被保卫。
 
 然后遍历所有的警卫和墙，将 $g[i][j]$ 的值置为 $2$，这些位置不能被访问。
 
@@ -67,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +105,7 @@ class Solution:
         return sum(v == 0 for row in g for v in row)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -130,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -165,7 +177,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countUnguarded(m int, n int, guards [][]int, walls [][]int) (ans int) {
@@ -201,16 +213,152 @@ func countUnguarded(m int, n int, guards [][]int, walls [][]int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function countUnguarded(m: number, n: number, guards: number[][], walls: number[][]): number {
+    const g: number[][] = Array.from({ length: m }, () => Array.from({ length: n }, () => 0));
+    for (const [i, j] of guards) {
+        g[i][j] = 2;
+    }
+    for (const [i, j] of walls) {
+        g[i][j] = 2;
+    }
+    const dirs: number[] = [-1, 0, 1, 0, -1];
+    for (const [i, j] of guards) {
+        for (let k = 0; k < 4; ++k) {
+            let [x, y] = [i, j];
+            let [a, b] = [dirs[k], dirs[k + 1]];
+            while (x + a >= 0 && x + a < m && y + b >= 0 && y + b < n && g[x + a][y + b] < 2) {
+                x += a;
+                y += b;
+                g[x][y] = 1;
+            }
+        }
+    }
+    let ans = 0;
+    for (const row of g) {
+        for (const v of row) {
+            ans += v === 0 ? 1 : 0;
+        }
+    }
+    return ans;
+}
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+function countUnguarded(m, n, guards, walls) {
+    const g = Array.from({ length: m }, () => Array.from({ length: n }, () => 0));
+    for (const [i, j] of guards) {
+        g[i][j] = 2;
+    }
+    for (const [i, j] of walls) {
+        g[i][j] = 2;
+    }
+    const dirs = [-1, 0, 1, 0, -1];
+    for (const [i, j] of guards) {
+        for (let k = 0; k < 4; ++k) {
+            let [x, y] = [i, j];
+            let [a, b] = [dirs[k], dirs[k + 1]];
+            while (x + a >= 0 && x + a < m && y + b >= 0 && y + b < n && g[x + a][y + b] < 2) {
+                x += a;
+                y += b;
+                g[x][y] = 1;
+            }
+        }
+    }
+    let ans = 0;
+    for (const row of g) {
+        for (const v of row) {
+            ans += v === 0 ? 1 : 0;
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：DFS + 模拟
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function countUnguarded(m: number, n: number, guards: number[][], walls: number[][]): number {
+    let c = 0;
+    const mtx = Array.from({ length: m }, () => Array(n).fill(0));
+    for (const [i, j] of guards) mtx[i][j] = 2;
+    for (const [i, j] of walls) mtx[i][j] = 2;
+
+    const dfs = (i: number, j: number, dx: number, dy: number) => {
+        [i, j] = [i + dx, j + dy];
+
+        if (i < 0 || m <= i || j < 0 || n <= j || mtx[i][j] === 2) return;
+
+        if (mtx[i][j] === 0) {
+            mtx[i][j] = 1;
+            c++;
+        }
+
+        dfs(i, j, dx, dy);
+    };
+
+    const DIRS = [-1, 0, 1, 0, -1];
+    for (const [i, j] of guards) {
+        for (let k = 0; k < 4; k++) {
+            const [dx, dy] = [DIRS[k], DIRS[k + 1]];
+            dfs(i, j, dx, dy);
+        }
+    }
+
+    return m * n - guards.length - walls.length - c;
+}
+```
+
+#### JavaScript
+
+```js
+function countUnguarded(m, n, guards, walls) {
+    let c = 0;
+    const mtx = Array.from({ length: m }, () => Array(n).fill(0));
+    for (const [i, j] of guards) mtx[i][j] = 2;
+    for (const [i, j] of walls) mtx[i][j] = 2;
+
+    const dfs = (i, j, dx, dy) => {
+        [i, j] = [i + dx, j + dy];
+
+        if (i < 0 || m <= i || j < 0 || n <= j || mtx[i][j] === 2) return;
+
+        if (mtx[i][j] === 0) {
+            mtx[i][j] = 1;
+            c++;
+        }
+
+        dfs(i, j, dx, dy);
+    };
+
+    const DIRS = [-1, 0, 1, 0, -1];
+    for (const [i, j] of guards) {
+        for (let k = 0; k < 4; k++) {
+            const [dx, dy] = [DIRS[k], DIRS[k + 1]];
+            dfs(i, j, dx, dy);
+        }
+    }
+
+    return m * n - guards.length - walls.length - c;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

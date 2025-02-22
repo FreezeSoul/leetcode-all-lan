@@ -1,12 +1,26 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2682.Find%20the%20Losers%20of%20the%20Circular%20Game/README.md
+rating: 1382
+source: 第 345 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2682. 找出转圈游戏输家](https://leetcode.cn/problems/find-the-losers-of-the-circular-game)
 
 [English Version](/solution/2600-2699/2682.Find%20the%20Losers%20of%20the%20Circular%20Game/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p><code>n</code> 个朋友在玩游戏。这些朋友坐成一个圈，按 <strong>顺时针方向</strong> 从 <code>1</code> 到 <code>n</code> 编号。从第 <code>i</code> 个朋友的位置开始顺时针移动 <code>1</code> 步会到达第 <code>(i + 1)</code> 个朋友的位置（<code>1 &lt;= i &lt; n</code>），而从第 <code>n</code> 个朋友的位置开始顺时针移动 <code>1</code> 步会回到第 <code>1</code> 个朋友的位置。</p>
+<p><code>n</code> 个朋友在玩游戏。这些朋友坐成一个圈，按 <strong>顺时针方向</strong> 从 <code>1</code> 到 <code>n</code> 编号。准确的说，从第 <code>i</code> 个朋友的位置开始顺时针移动 <code>1</code> 步会到达第 <code>(i + 1)</code> 个朋友的位置（<code>1 &lt;= i &lt; n</code>），而从第 <code>n</code> 个朋友的位置开始顺时针移动 <code>1</code> 步会回到第 <code>1</code> 个朋友的位置。</p>
 
 <p>游戏规则如下：</p>
 
@@ -34,7 +48,7 @@
 <strong>输入：</strong>n = 5, k = 2
 <strong>输出：</strong>[4,5]
 <strong>解释：</strong>以下为游戏进行情况：
-1）第 1 个朋友接球，第 <code>1</code> 个朋友将球传给距离他顺时针方向 2 步的玩家 —— 第 3 个朋友。
+1）第 1 个朋友接球，第 1 个朋友将球传给距离他顺时针方向 2 步的玩家 —— 第 3 个朋友。
 2）第 3 个朋友将球传给距离他顺时针方向 4 步的玩家 —— 第 2 个朋友。
 3）第 2 个朋友将球传给距离他顺时针方向 6 步的玩家 —— 第 3 个朋友。
 4）第 3 个朋友接到两次球，游戏结束。
@@ -46,7 +60,7 @@
 <strong>输入：</strong>n = 4, k = 4
 <strong>输出：</strong>[2,3,4]
 <strong>解释：</strong>以下为游戏进行情况：
-1）第 1 个朋友接球，第 <code>1</code> 个朋友将球传给距离他顺时针方向 4 步的玩家 —— 第 1 个朋友。
+1）第 1 个朋友接球，第 1 个朋友将球传给距离他顺时针方向 4 步的玩家 —— 第 1 个朋友。
 2）第 1 个朋友接到两次球，游戏结束。</pre>
 
 <p>&nbsp;</p>
@@ -57,11 +71,13 @@
 	<li><code>1 &lt;= k &lt;= n &lt;= 50</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们用一个数组 `vis` 记录每个朋友是否接到过球，初始时所有朋友都没有接到过球。然后我们按照题目描述的规则模拟游戏的过程，直到某个朋友第二次接到球为止。
 
@@ -73,9 +89,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +103,7 @@ class Solution:
         return [i + 1 for i in range(n) if not vis[i]]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +126,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,7 +139,7 @@ public:
             i = (i + p * k) % n;
         }
         vector<int> ans;
-        for (int i = 0, j = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             if (!vis[i]) {
                 ans.push_back(i + 1);
             }
@@ -137,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func circularGameLosers(n int, k int) (ans []int) {
@@ -155,10 +167,54 @@ func circularGameLosers(n int, k int) (ans []int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function circularGameLosers(n: number, k: number): number[] {
+    const vis = new Array(n).fill(false);
+    const ans: number[] = [];
+    for (let i = 0, p = 1; !vis[i]; p++) {
+        vis[i] = true;
+        i = (i + p * k) % n;
+    }
+    for (let i = 0; i < vis.length; i++) {
+        if (!vis[i]) {
+            ans.push(i + 1);
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn circular_game_losers(n: i32, k: i32) -> Vec<i32> {
+        let mut vis: Vec<bool> = vec![false; n as usize];
+
+        let mut i = 0;
+        let mut p = 1;
+        while !vis[i] {
+            vis[i] = true;
+            i = (i + p * (k as usize)) % (n as usize);
+            p += 1;
+        }
+
+        let mut ans = Vec::new();
+        for i in 0..vis.len() {
+            if !vis[i] {
+                ans.push((i + 1) as i32);
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

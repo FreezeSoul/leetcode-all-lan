@@ -1,8 +1,23 @@
-# [1804. Implement Trie II (Prefix Tree)](https://leetcode.com/problems/implement-trie-ii-prefix-tree)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1804.Implement%20Trie%20II%20%28Prefix%20Tree%29/README_EN.md
+tags:
+    - Design
+    - Trie
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
+# [1804. Implement Trie II (Prefix Tree) 🔒](https://leetcode.com/problems/implement-trie-ii-prefix-tree)
 
 [中文文档](/solution/1800-1899/1804.Implement%20Trie%20II%20%28Prefix%20Tree%29/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <a href="https://en.wikipedia.org/wiki/Trie" target="_blank"><strong>trie</strong></a> (pronounced as &quot;try&quot;) or <strong>prefix tree</strong> is a tree data structure used to efficiently store and retrieve keys in a dataset of strings. There are various applications of this data structure, such as autocomplete and spellchecker.</p>
 
@@ -49,11 +64,51 @@ trie.countWordsStartingWith(&quot;app&quot;); // return 0
 	<li>It is guaranteed that for any function call to <code>erase</code>, the string <code>word</code> will exist in the trie.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Implement Trie with Array
+
+Each node in the Trie includes three parts:
+
+1. An array of pointers `children` pointing to child nodes. For this problem, the array length is 26, which is the number of lowercase English letters. `children[0]` corresponds to the lowercase letter a, ..., `children[25]` corresponds to the lowercase letter z.
+1. An int variable `v`, representing the number of strings ending with this node.
+1. An int variable `pv`, representing the number of strings with this node as the prefix node.
+
+### 1. Insert String
+
+We start from the root of the Trie and insert the string. For the child node corresponding to the current character, there are two cases:
+
+-   The child node exists. Move to the child node along the pointer and continue to process the next character.
+-   The child node does not exist. Create a new child node, record it in the corresponding position of the `children` array, then move to the child node along the pointer, and increase the `pv` value of the child node by 1. Continue to search for the next character.
+
+Repeat the above steps until the last character of the string is processed, then increase the `v` value of the current node by 1.
+
+The time complexity is $O(n)$, where $n$ is the length of the string.
+
+### 2. Search Prefix
+
+We start from the root of the Trie and search for the prefix. For the child node corresponding to the current character, there are two cases:
+
+-   The child node exists. Move to the child node along the pointer and continue to search for the next character.
+-   The child node does not exist. This means that the Trie does not contain this prefix, return a null pointer.
+
+Repeat the above steps until a null pointer is returned or the last character of the prefix is searched.
+
+The time complexity is $O(n)$, where $n$ is the length of the string.
+
+### 3. Remove String
+
+We start from the root node of the Trie, and sequentially reduce the `pv` value of the corresponding child node by 1, until the last character of the string is searched. Then reduce the `v` value of the current node by 1.
+
+The time complexity is $O(n)$, where $n$ is the length of the string.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Trie:
@@ -105,7 +160,7 @@ class Trie:
 # obj.erase(word)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Trie {
@@ -172,7 +227,7 @@ class Trie {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -243,7 +298,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -315,10 +370,8 @@ func (this *Trie) search(word string) *Trie {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0443.String%20Compression/README_EN.md
+tags:
+    - Two Pointers
+    - String
+---
+
+<!-- problem:start -->
+
 # [443. String Compression](https://leetcode.com/problems/string-compression)
 
 [中文文档](/solution/0400-0499/0443.String%20Compression/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of characters <code>chars</code>, compress it using the following algorithm:</p>
 
@@ -51,11 +64,17 @@
 	<li><code>chars[i]</code> is a lowercase English letter, uppercase English letter, digit, or symbol.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +95,7 @@ class Solution:
         return k
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func compress(chars []byte) int {
@@ -148,10 +167,36 @@ func compress(chars []byte) int {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn compress(chars: &mut Vec<char>) -> i32 {
+        let (mut i, mut k, n) = (0, 0, chars.len());
+        while i < n {
+            let mut j = i + 1;
+            while j < n && chars[j] == chars[i] {
+                j += 1;
+            }
+            chars[k] = chars[i];
+            k += 1;
 
+            if j - i > 1 {
+                let cnt = (j - i).to_string();
+                for c in cnt.chars() {
+                    chars[k] = c;
+                    k += 1;
+                }
+            }
+            i = j;
+        }
+        k as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

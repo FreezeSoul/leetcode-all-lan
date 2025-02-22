@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2225.Find%20Players%20With%20Zero%20or%20One%20Losses/README.md
+rating: 1316
+source: 第 287 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2225. 找出输掉零场或一场比赛的玩家](https://leetcode.cn/problems/find-players-with-zero-or-one-losses)
 
 [English Version](/solution/2200-2299/2225.Find%20Players%20With%20Zero%20or%20One%20Losses/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>matches</code> 其中 <code>matches[i] = [winner<sub>i</sub>, loser<sub>i</sub>]</code> 表示在一场比赛中 <code>winner<sub>i</sub></code> 击败了 <code>loser<sub>i</sub></code> 。</p>
 
@@ -61,56 +76,55 @@
 	<li>所有 <code>matches[i]</code> <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表 + 排序
+
+我们用一个哈希表 $\textit{cnt}$ 记录每个玩家输掉的比赛场次。
+
+然后遍历哈希表，将输掉 $0$ 场比赛的玩家放入 $\textit{ans}[0]$，将输掉 $1$ 场比赛的玩家放入 $\textit{ans}[1]$。
+
+最后将 $\textit{ans}[0]$ 和 $\textit{ans}[1]$ 按照升序排序，返回结果。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为比赛场次数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findWinners(self, matches: List[List[int]]) -> List[List[int]]:
         cnt = Counter()
-        for a, b in matches:
-            if a not in cnt:
-                cnt[a] = 0
-            cnt[b] += 1
+        for winner, loser in matches:
+            if winner not in cnt:
+                cnt[winner] = 0
+            cnt[loser] += 1
         ans = [[], []]
-        for u, v in cnt.items():
+        for x, v in sorted(cnt.items()):
             if v < 2:
-                ans[v].append(u)
-        ans[0].sort()
-        ans[1].sort()
+                ans[v].append(x)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public List<List<Integer>> findWinners(int[][] matches) {
         Map<Integer, Integer> cnt = new HashMap<>();
-        for (int[] m : matches) {
-            int a = m[0], b = m[1];
-            cnt.putIfAbsent(a, 0);
-            cnt.put(b, cnt.getOrDefault(b, 0) + 1);
+        for (var e : matches) {
+            cnt.putIfAbsent(e[0], 0);
+            cnt.merge(e[1], 1, Integer::sum);
         }
-        List<List<Integer>> ans = new ArrayList<>();
-        ans.add(new ArrayList<>());
-        ans.add(new ArrayList<>());
-        for (Map.Entry<Integer, Integer> entry : cnt.entrySet()) {
-            int u = entry.getKey();
-            int v = entry.getValue();
-            if (v < 2) {
-                ans.get(v).add(u);
+        List<List<Integer>> ans = List.of(new ArrayList<>(), new ArrayList<>());
+        for (var e : cnt.entrySet()) {
+            if (e.getValue() < 2) {
+                ans.get(e.getValue()).add(e.getKey());
             }
         }
         Collections.sort(ans.get(0));
@@ -120,45 +134,45 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<vector<int>> findWinners(vector<vector<int>>& matches) {
-        unordered_map<int, int> cnt;
-        for (auto& m : matches) {
-            int a = m[0], b = m[1];
-            if (!cnt.count(a)) cnt[a] = 0;
-            ++cnt[b];
+        map<int, int> cnt;
+        for (auto& e : matches) {
+            if (!cnt.contains(e[0])) {
+                cnt[e[0]] = 0;
+            }
+            ++cnt[e[1]];
         }
         vector<vector<int>> ans(2);
-        for (auto& [u, v] : cnt) {
-            if (v < 2) ans[v].push_back(u);
+        for (auto& [x, v] : cnt) {
+            if (v < 2) {
+                ans[v].push_back(x);
+            }
         }
-        sort(ans[0].begin(), ans[0].end());
-        sort(ans[1].begin(), ans[1].end());
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findWinners(matches [][]int) [][]int {
 	cnt := map[int]int{}
-	for _, m := range matches {
-		a, b := m[0], m[1]
-		if _, ok := cnt[a]; !ok {
-			cnt[a] = 0
+	for _, e := range matches {
+		if _, ok := cnt[e[0]]; !ok {
+			cnt[e[0]] = 0
 		}
-		cnt[b]++
+		cnt[e[1]]++
 	}
 	ans := make([][]int, 2)
-	for u, v := range cnt {
+	for x, v := range cnt {
 		if v < 2 {
-			ans[v] = append(ans[v], u)
+			ans[v] = append(ans[v], x)
 		}
 	}
 	sort.Ints(ans[0])
@@ -167,16 +181,58 @@ func findWinners(matches [][]int) [][]int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function findWinners(matches: number[][]): number[][] {
+    const cnt: Map<number, number> = new Map();
+    for (const [winner, loser] of matches) {
+        if (!cnt.has(winner)) {
+            cnt.set(winner, 0);
+        }
+        cnt.set(loser, (cnt.get(loser) || 0) + 1);
+    }
+    const ans: number[][] = [[], []];
+    for (const [x, v] of cnt) {
+        if (v < 2) {
+            ans[v].push(x);
+        }
+    }
+    ans[0].sort((a, b) => a - b);
+    ans[1].sort((a, b) => a - b);
+    return ans;
+}
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[][]} matches
+ * @return {number[][]}
+ */
+var findWinners = function (matches) {
+    const cnt = new Map();
+    for (const [winner, loser] of matches) {
+        if (!cnt.has(winner)) {
+            cnt.set(winner, 0);
+        }
+        cnt.set(loser, (cnt.get(loser) || 0) + 1);
+    }
+    const ans = [[], []];
+    for (const [x, v] of cnt) {
+        if (v < 2) {
+            ans[v].push(x);
+        }
+    }
+    ans[0].sort((a, b) => a - b);
+    ans[1].sort((a, b) => a - b);
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

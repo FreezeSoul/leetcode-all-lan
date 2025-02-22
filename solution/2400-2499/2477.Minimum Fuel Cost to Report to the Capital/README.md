@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2477.Minimum%20Fuel%20Cost%20to%20Report%20to%20the%20Capital/README.md
+rating: 2011
+source: 第 320 场周赛 Q3
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 图
+---
+
+<!-- problem:start -->
+
 # [2477. 到达首都的最少油耗](https://leetcode.cn/problems/minimum-fuel-cost-to-report-to-the-capital)
 
 [English Version](/solution/2400-2499/2477.Minimum%20Fuel%20Cost%20to%20Report%20to%20the%20Capital/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵 <code>n</code>&nbsp;个节点的树（一个无向、连通、无环图），每个节点表示一个城市，编号从&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;，且恰好有&nbsp;<code>n - 1</code>&nbsp;条路。<code>0</code>&nbsp;是首都。给你一个二维整数数组&nbsp;<code>roads</code>&nbsp;，其中&nbsp;<code>roads[i] = [a<sub>i</sub>, b<sub>i</sub>]</code>&nbsp;，表示城市&nbsp;<code>a<sub>i</sub></code> 和&nbsp;<code>b<sub>i</sub></code>&nbsp;之间有一条&nbsp;<strong>双向路</strong>&nbsp;。</p>
 
@@ -71,34 +86,38 @@
 	<li><code>1 &lt;= seats &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：贪心 + DFS
 
-建图，然后用 DFS 统计以每个点为根的子树的节点个数，假设以 $a$ 为根的子树中有 $size$ 个节点，那么到达根节点一共需要 $\lceil \frac{size}{seats} \rceil$ 辆车。
+根据题目描述，我们可以发现，所有车只会往首都（节点 $0$）开。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为节点个数。
+假设有一个节点 $a$，它的下一个节点为 $b$，节点 $a$ 需要经过节点 $b$ 才能到达首都。为了使得节点 $a$ 的车辆（油耗）尽可能少，我们应该贪心地让节点 $a$ 的子节点先汇聚到节点 $a$，然后按照座位数 $seats$ 分配车辆，那么到达节点 $b$ 需要的最少车辆（油耗）就是 $\lceil \frac{sz}{seats} \rceil$。其中 $sz$ 表示以节点 $a$ 为根的子树的节点数。
+
+我们从节点 $0$ 开始进行深度优先搜索，用一个变量 $sz$ 统计以当前节点为根节点的子树的节点数。初始时 $sz = 1$，表示当前节点本身。然后我们遍历当前节点的所有子节点，对于每个子节点 $b$，我们递归地计算以 $b$ 为根节点的子树的节点数 $t$，并将 $t$ 累加到 $sz$ 上，然后我们将 $\lceil \frac{t}{seats} \rceil$ 累加到答案上。最后返回 $sz$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为节点数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minimumFuelCost(self, roads: List[List[int]], seats: int) -> int:
-        def dfs(a, fa):
-            size = 1
+        def dfs(a: int, fa: int) -> int:
+            nonlocal ans
+            sz = 1
             for b in g[a]:
                 if b != fa:
                     t = dfs(b, a)
-                    nonlocal ans
-                    ans += (t + seats - 1) // seats
-                    size += t
-            return size
+                    ans += ceil(t / seats)
+                    sz += t
+            return sz
 
         g = defaultdict(list)
         for a, b in roads:
@@ -109,15 +128,13 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     private List<Integer>[] g;
-    private long ans;
     private int seats;
+    private long ans;
 
     public long minimumFuelCost(int[][] roads, int seats) {
         int n = roads.length + 1;
@@ -134,43 +151,43 @@ class Solution {
     }
 
     private int dfs(int a, int fa) {
-        int size = 1;
+        int sz = 1;
         for (int b : g[a]) {
             if (b != fa) {
                 int t = dfs(b, a);
                 ans += (t + seats - 1) / seats;
-                size += t;
+                sz += t;
             }
         }
-        return size;
+        return sz;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long minimumFuelCost(vector<vector<int>>& roads, int seats) {
         int n = roads.size() + 1;
-        vector<vector<int>> g(n);
+        vector<int> g[n];
         for (auto& e : roads) {
             int a = e[0], b = e[1];
             g[a].emplace_back(b);
             g[b].emplace_back(a);
         }
         long long ans = 0;
-        function<int(int, int)> dfs = [&](int a, int fa) -> int {
-            int size = 1;
+        function<int(int, int)> dfs = [&](int a, int fa) {
+            int sz = 1;
             for (int b : g[a]) {
                 if (b != fa) {
                     int t = dfs(b, a);
                     ans += (t + seats - 1) / seats;
-                    size += t;
+                    sz += t;
                 }
             }
-            return size;
+            return sz;
         };
         dfs(0, -1);
         return ans;
@@ -178,10 +195,10 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func minimumFuelCost(roads [][]int, seats int) int64 {
+func minimumFuelCost(roads [][]int, seats int) (ans int64) {
 	n := len(roads) + 1
 	g := make([][]int, n)
 	for _, e := range roads {
@@ -189,34 +206,83 @@ func minimumFuelCost(roads [][]int, seats int) int64 {
 		g[a] = append(g[a], b)
 		g[b] = append(g[b], a)
 	}
-	ans := 0
 	var dfs func(int, int) int
 	dfs = func(a, fa int) int {
-		size := 1
+		sz := 1
 		for _, b := range g[a] {
 			if b != fa {
 				t := dfs(b, a)
-				ans += (t + seats - 1) / seats
-				size += t
+				ans += int64((t + seats - 1) / seats)
+				sz += t
 			}
 		}
-		return size
+		return sz
 	}
 	dfs(0, -1)
-	return int64(ans)
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function minimumFuelCost(roads: number[][], seats: number): number {
+    const n = roads.length + 1;
+    const g: number[][] = Array.from({ length: n }, () => []);
+    for (const [a, b] of roads) {
+        g[a].push(b);
+        g[b].push(a);
+    }
+    let ans = 0;
+    const dfs = (a: number, fa: number): number => {
+        let sz = 1;
+        for (const b of g[a]) {
+            if (b !== fa) {
+                const t = dfs(b, a);
+                ans += Math.ceil(t / seats);
+                sz += t;
+            }
+        }
+        return sz;
+    };
+    dfs(0, -1);
+    return ans;
+}
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn minimum_fuel_cost(roads: Vec<Vec<i32>>, seats: i32) -> i64 {
+        let n = roads.len() + 1;
+        let mut g: Vec<Vec<usize>> = vec![vec![]; n];
+        for road in roads.iter() {
+            let a = road[0] as usize;
+            let b = road[1] as usize;
+            g[a].push(b);
+            g[b].push(a);
+        }
+        let mut ans = 0;
+        fn dfs(a: usize, fa: i32, g: &Vec<Vec<usize>>, ans: &mut i64, seats: i32) -> i32 {
+            let mut sz = 1;
+            for &b in g[a].iter() {
+                if (b as i32) != fa {
+                    let t = dfs(b, a as i32, g, ans, seats);
+                    *ans += ((t + seats - 1) / seats) as i64;
+                    sz += t;
+                }
+            }
+            sz
+        }
+        dfs(0, -1, &g, &mut ans, seats);
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

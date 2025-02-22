@@ -1,10 +1,20 @@
-# [2026. 低质量的问题](https://leetcode.cn/problems/low-quality-problems)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2026.Low-Quality%20Problems/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2026. 低质量的问题 🔒](https://leetcode.cn/problems/low-quality-problems)
 
 [English Version](/solution/2000-2099/2026.Low-Quality%20Problems/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：&nbsp;<code>Problems</code></p>
 
@@ -16,15 +26,17 @@
 | likes       | int  |
 | dislikes    | int  |
 +-------------+------+
-problem_id 是这张表的主键。
+在 SQL 中，problem_id 是这张表的主键。
 该表的每一行都表示一个力扣问题的喜欢和不喜欢的数量。
 </pre>
 
-<p>写一个 SQL 查询<strong>低质量</strong>问题的 ID 集合。如果一个力扣问题的喜欢率（喜欢数除以总投票数）<strong>严格低于</strong><code>60%</code><strong>&nbsp;</strong>，则该问题为<strong>低质量</strong>问题。</p>
+<p>&nbsp;</p>
+
+<p>找出&nbsp;<strong>低质量&nbsp;</strong>问题的 ID 集合。如果一个力扣问题的喜欢率（喜欢数除以总投票数）<strong>严格低于&nbsp;</strong><code>60%</code><strong>&nbsp;</strong>，则该问题为<strong>低质量</strong>问题。</p>
 
 <p>按&nbsp;<code>problem_id</code> 升序排列返回结果表。</p>
 
-<p>查询结果的格式在下面的例子中。</p>
+<p>结果表的格式如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -61,18 +73,28 @@ Problems 表:
 - 问题 13: (2050 / (2050 + 4164)) * 100 = 32.99002%
 问题 7, 10, 11, 和 13 是低质量问题，因为它们的同类百分比低于60%。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT problem_id
+FROM Problems
+WHERE likes / (likes + dislikes) < 0.6
+ORDER BY problem_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

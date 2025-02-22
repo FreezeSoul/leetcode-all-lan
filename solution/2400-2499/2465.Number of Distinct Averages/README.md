@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2465.Number%20of%20Distinct%20Averages/README.md
+rating: 1250
+source: 第 91 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2465. 不同的平均值数目](https://leetcode.cn/problems/number-of-distinct-averages)
 
 [English Version](/solution/2400-2499/2465.Number%20of%20Distinct%20Averages/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始长度为 <strong>偶数</strong>&nbsp;的整数数组&nbsp;<code>nums</code>&nbsp;。</p>
 
@@ -57,11 +72,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 题目中要求每次找到数组 $nums$ 中的最小值和最大值，然后删除它们，再计算删除两数的平均值。因此，我们可以先对数组 $nums$ 进行排序，然后每次取数组的首尾元素，计算它们的和，用哈希表或数组 $cnt$ 记录每个和出现的次数，最后统计不同的和的个数即可。
 
@@ -69,9 +86,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,6 +94,104 @@ class Solution:
         nums.sort()
         return len(set(nums[i] + nums[-i - 1] for i in range(len(nums) >> 1)))
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int distinctAverages(int[] nums) {
+        Arrays.sort(nums);
+        Set<Integer> s = new HashSet<>();
+        int n = nums.length;
+        for (int i = 0; i < n >> 1; ++i) {
+            s.add(nums[i] + nums[n - i - 1]);
+        }
+        return s.size();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int distinctAverages(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        unordered_set<int> s;
+        int n = nums.size();
+        for (int i = 0; i < n >> 1; ++i) {
+            s.insert(nums[i] + nums[n - i - 1]);
+        }
+        return s.size();
+    }
+};
+```
+
+#### Go
+
+```go
+func distinctAverages(nums []int) (ans int) {
+	sort.Ints(nums)
+	n := len(nums)
+	s := map[int]struct{}{}
+	for i := 0; i < n>>1; i++ {
+		s[nums[i]+nums[n-i-1]] = struct{}{}
+	}
+	return len(s)
+}
+```
+
+#### TypeScript
+
+```ts
+function distinctAverages(nums: number[]): number {
+    nums.sort((a, b) => a - b);
+    const s: Set<number> = new Set();
+    const n = nums.length;
+    for (let i = 0; i < n >> 1; ++i) {
+        s.add(nums[i] + nums[n - i - 1]);
+    }
+    return s.size;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn distinct_averages(nums: Vec<i32>) -> i32 {
+        let mut nums = nums;
+        nums.sort();
+        let n = nums.len();
+        let mut cnt = vec![0; 201];
+        let mut ans = 0;
+
+        for i in 0..n >> 1 {
+            let x = (nums[i] + nums[n - i - 1]) as usize;
+            cnt[x] += 1;
+
+            if cnt[x] == 1 {
+                ans += 1;
+            }
+        }
+
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -94,23 +207,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int distinctAverages(int[] nums) {
-        Arrays.sort(nums);
-        Set<Integer> s = new HashSet<>();
-        int n = nums.length;
-        for (int i = 0; i < n >> 1; ++i) {
-            s.add(nums[i] + nums[n - i - 1]);
-        }
-        return s.size();
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -129,22 +226,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int distinctAverages(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        unordered_set<int> s;
-        int n = nums.size();
-        for (int i = 0; i < n >> 1; ++i) {
-            s.insert(nums[i] + nums[n - i - 1]);
-        }
-        return s.size();
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -164,19 +246,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func distinctAverages(nums []int) (ans int) {
-	sort.Ints(nums)
-	n := len(nums)
-	s := map[int]struct{}{}
-	for i := 0; i < n>>1; i++ {
-		s[nums[i]+nums[n-i-1]] = struct{}{}
-	}
-	return len(s)
-}
-```
+#### Go
 
 ```go
 func distinctAverages(nums []int) (ans int) {
@@ -194,19 +264,7 @@ func distinctAverages(nums []int) (ans int) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function distinctAverages(nums: number[]): number {
-    nums.sort((a, b) => a - b);
-    const s: Set<number> = new Set();
-    const n = nums.length;
-    for (let i = 0; i < n >> 1; ++i) {
-        s.add(nums[i] + nums[n - i - 1]);
-    }
-    return s.size;
-}
-```
+#### TypeScript
 
 ```ts
 function distinctAverages(nums: number[]): number {
@@ -223,10 +281,74 @@ function distinctAverages(nums: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::HashMap;
 
+impl Solution {
+    pub fn distinct_averages(nums: Vec<i32>) -> i32 {
+        let mut h = HashMap::new();
+        let mut nums = nums;
+        let mut ans = 0;
+        let n = nums.len();
+        nums.sort();
+
+        for i in 0..n >> 1 {
+            let x = nums[i] + nums[n - i - 1];
+            *h.entry(x).or_insert(0) += 1;
+
+            if *h.get(&x).unwrap() == 1 {
+                ans += 1;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+use std::collections::HashSet;
+
+impl Solution {
+    pub fn distinct_averages(nums: Vec<i32>) -> i32 {
+        let mut set = HashSet::new();
+        let mut ans = 0;
+        let n = nums.len();
+        let mut nums = nums;
+        nums.sort();
+
+        for i in 0..n >> 1 {
+            let x = nums[i] + nums[n - i - 1];
+
+            if set.contains(&x) {
+                continue;
+            }
+
+            set.insert(x);
+            ans += 1;
+        }
+
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2054.Two%20Best%20Non-Overlapping%20Events/README.md
+rating: 1883
+source: 第 64 场双周赛 Q2
+tags:
+    - 数组
+    - 二分查找
+    - 动态规划
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2054. 两个最好的不重叠活动](https://leetcode.cn/problems/two-best-non-overlapping-events)
 
 [English Version](/solution/2000-2099/2054.Two%20Best%20Non-Overlapping%20Events/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的二维整数数组&nbsp;<code>events</code>&nbsp;，其中&nbsp;<code>events[i] = [startTime<sub>i</sub>, endTime<sub>i</sub>, value<sub>i</sub>]</code>&nbsp;。第&nbsp;<code>i</code>&nbsp;个活动开始于&nbsp;<code>startTime<sub>i</sub></code>&nbsp;，结束于&nbsp;<code>endTime<sub>i</sub></code>&nbsp;，如果你参加这个活动，那么你可以得到价值&nbsp;<code>value<sub>i</sub></code>&nbsp;。你 <strong>最多</strong>&nbsp;可以参加&nbsp;<strong>两个时间不重叠</strong>&nbsp;活动，使得它们的价值之和 <strong>最大</strong>&nbsp;。</p>
 
@@ -51,19 +67,23 @@
 	<li><code>1 &lt;= value<sub>i</sub> &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 二分查找**
+### 方法一：排序 + 二分查找
 
-时间复杂度 $O(nlogn)$，其中 $n$ 表示 $events$ 的长度。
+我们可以讲活动按照开始排序，然后预处理出以每个活动为作为开始的最大价值，即 $f[i]$ 表示从第 $i$ 个活动开始，到最后一个活动结束，选择其中一个活动的最大价值。
+
+然后我们枚举每个活动，对于每个活动，我们使用二分查找找到第一个开始时间大于当前活动结束时间的活动，下标记为 $\textit{idx}$，那么以当前活动为开始的最大价值就是 $f[\textit{idx}]$，加上当前活动的价值，即为以当前活动为第一个活动，最终能获得的最大价值。求最大值即可。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为活动的数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,9 +102,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,28 +135,33 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maxTwoEvents(vector<vector<int>>& events) {
-        sort(events.begin(), events.end());
+        ranges::sort(events);
         int n = events.size();
         vector<int> f(n + 1);
-        for (int i = n - 1; ~i; --i) f[i] = max(f[i + 1], events[i][2]);
+        for (int i = n - 1; ~i; --i) {
+            f[i] = max(f[i + 1], events[i][2]);
+        }
         int ans = 0;
-        for (auto& e : events) {
+        for (const auto& e : events) {
             int v = e[2];
             int left = 0, right = n;
             while (left < right) {
                 int mid = (left + right) >> 1;
-                if (events[mid][0] > e[1])
+                if (events[mid][0] > e[1]) {
                     right = mid;
-                else
+                } else {
                     left = mid + 1;
+                }
             }
-            if (left < n) v += f[left];
+            if (left < n) {
+                v += f[left];
+            }
             ans = max(ans, v);
         }
         return ans;
@@ -146,7 +169,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxTwoEvents(events [][]int) int {
@@ -177,19 +200,38 @@ func maxTwoEvents(events [][]int) int {
 	}
 	return ans
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maxTwoEvents(events: number[][]): number {
+    events.sort((a, b) => a[0] - b[0]);
+    const n = events.length;
+    const f: number[] = Array(n + 1).fill(0);
+    for (let i = n - 1; ~i; --i) {
+        f[i] = Math.max(f[i + 1], events[i][2]);
+    }
+    let ans = 0;
+    for (const [_, end, v] of events) {
+        let [left, right] = [0, n];
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (events[mid][0] > end) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        const t = left < n ? f[left] : 0;
+        ans = Math.max(ans, t + v);
+    }
+    return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

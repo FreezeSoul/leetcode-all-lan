@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0667.Beautiful%20Arrangement%20II/README_EN.md
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [667. Beautiful Arrangement II](https://leetcode.com/problems/beautiful-arrangement-ii)
 
 [中文文档](/solution/0600-0699/0667.Beautiful%20Arrangement%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two integers <code>n</code> and <code>k</code>, construct a list <code>answer</code> that contains <code>n</code> different positive integers ranging from <code>1</code> to <code>n</code> and obeys the following requirement:</p>
 
@@ -36,11 +49,17 @@ Explanation: The [1,3,2] has three different positive integers ranging from 1 to
 	<li><code>1 &lt;= k &lt; n &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +83,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -101,7 +120,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func constructArray(n int, k int) []int {
@@ -129,7 +148,7 @@ func constructArray(n int, k int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function constructArray(n: number, k: number): number[] {
@@ -146,10 +165,8 @@ function constructArray(n: number, k: number): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0885.Spiral%20Matrix%20III/README_EN.md
+tags:
+    - Array
+    - Matrix
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [885. Spiral Matrix III](https://leetcode.com/problems/spiral-matrix-iii)
 
 [中文文档](/solution/0800-0899/0885.Spiral%20Matrix%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You start at the cell <code>(rStart, cStart)</code> of an <code>rows x cols</code> grid facing east. The northwest corner is at the first row and column in the grid, and the southeast corner is at the last row and column.</p>
 
@@ -34,11 +48,17 @@
 	<li><code>0 &lt;= cStart &lt; cols</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +81,7 @@ class Solution:
             k += 2
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func spiralMatrixIII(rows int, cols int, rStart int, cStart int) [][]int {
@@ -149,10 +169,73 @@ func spiralMatrixIII(rows int, cols int, rStart int, cStart int) [][]int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function spiralMatrixIII(rows: number, cols: number, rStart: number, cStart: number): number[][] {
+    // prettier-ignore
+    const dir = [[1,0],[0,1],[-1,0],[0,-1]]
+    let [x, y, i, size] = [cStart, rStart, 0, 0];
+    const ans: number[][] = [[y, x]];
+    const total = rows * cols;
+
+    while (ans.length < total) {
+        if (i % 2 === 0) size++;
+
+        for (let j = 0; ans.length < total && j < size; j++) {
+            x += dir[i][0];
+            y += dir[i][1];
+
+            if (0 <= x && x < cols && 0 <= y && y < rows) {
+                ans.push([y, x]);
+            }
+        }
+
+        i = (i + 1) % 4;
+    }
+
+    return ans;
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number} rows
+ * @param {number} cols
+ * @param {number} rStart
+ * @param {number} cStart
+ * @return {number[][]}
+ */
+var spiralMatrixIII = function (rows, cols, rStart, cStart) {
+    // prettier-ignore
+    const dir = [[1,0],[0,1],[-1,0],[0,-1]]
+    let [x, y, i, size] = [cStart, rStart, 0, 0];
+    const ans = [[y, x]];
+    const total = rows * cols;
+
+    while (ans.length < total) {
+        if (i % 2 === 0) size++;
+
+        for (let j = 0; ans.length < total && j < size; j++) {
+            x += dir[i][0];
+            y += dir[i][1];
+
+            if (0 <= x && x < cols && 0 <= y && y < rows) {
+                ans.push([y, x]);
+            }
+        }
+
+        i = (i + 1) % 4;
+    }
+
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

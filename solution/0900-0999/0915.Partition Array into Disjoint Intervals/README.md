@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0915.Partition%20Array%20into%20Disjoint%20Intervals/README.md
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [915. 分割数组](https://leetcode.cn/problems/partition-array-into-disjoint-intervals)
 
 [English Version](/solution/0900-0999/0915.Partition%20Array%20into%20Disjoint%20Intervals/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个数组&nbsp;<code>nums</code>&nbsp;，将其划分为两个连续子数组&nbsp;<code>left</code>&nbsp;和&nbsp;<code>right</code>，&nbsp;使得：</p>
 
@@ -46,11 +56,13 @@
 	<li>可以保证至少有一种方法能够按题目所描述的那样对 <code>nums</code> 进行划分。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀最大值 + 后缀最小值**
+### 方法一：前缀最大值 + 后缀最小值
 
 划分后的两个子数组要满足题目要求，需要保证“数组前缀最大值”小于等于“数组后缀最小值”。
 
@@ -62,9 +74,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,9 +90,7 @@ class Solution:
                 return i
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,19 +102,18 @@ class Solution {
             mi[i] = Math.min(nums[i], mi[i + 1]);
         }
         int mx = 0;
-        for (int i = 1; i <= n; ++i) {
+        for (int i = 1;; ++i) {
             int v = nums[i - 1];
             mx = Math.max(mx, v);
             if (mx <= mi[i]) {
                 return i;
             }
         }
-        return 0;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,19 +121,22 @@ public:
     int partitionDisjoint(vector<int>& nums) {
         int n = nums.size();
         vector<int> mi(n + 1, INT_MAX);
-        for (int i = n - 1; ~i; --i) mi[i] = min(nums[i], mi[i + 1]);
+        for (int i = n - 1; ~i; --i) {
+            mi[i] = min(nums[i], mi[i + 1]);
+        }
         int mx = 0;
-        for (int i = 1; i <= n; ++i) {
+        for (int i = 1;; ++i) {
             int v = nums[i - 1];
             mx = max(mx, v);
-            if (mx <= mi[i]) return i;
+            if (mx <= mi[i]) {
+                return i;
+            }
         }
-        return 0;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func partitionDisjoint(nums []int) int {
@@ -137,35 +147,18 @@ func partitionDisjoint(nums []int) int {
 		mi[i] = min(nums[i], mi[i+1])
 	}
 	mx := 0
-	for i := 1; i <= n; i++ {
+	for i := 1; ; i++ {
 		v := nums[i-1]
 		mx = max(mx, v)
 		if mx <= mi[i] {
 			return i
 		}
 	}
-	return 0
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

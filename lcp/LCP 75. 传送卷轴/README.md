@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2075.%20%E4%BC%A0%E9%80%81%E5%8D%B7%E8%BD%B4/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 75. 传送卷轴](https://leetcode.cn/problems/rdmXM7)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 随着不断的深入，小扣来到了守护者之森寻找的魔法水晶。首先，他必须先通过守护者的考验。
 
@@ -70,32 +78,10 @@
 -   `4 <= maze.length == maze[i].length <= 200`
 -   `maze[i][j]` 仅包含 `"."`、`"#"`、`"S"`、`"T"`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-<!-- tabs:start -->
-
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-
-```
-
-### **...**
-
-```
-
-```
-
-<!-- tabs:end -->
+<!-- problem:end -->

@@ -1,10 +1,20 @@
-# [2004. 职员招聘人数](https://leetcode.cn/problems/the-number-of-seniors-and-juniors-to-join-the-company)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2004.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2004. 职员招聘人数 🔒](https://leetcode.cn/problems/the-number-of-seniors-and-juniors-to-join-the-company)
 
 [English Version](/solution/2000-2099/2004.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Candidates</code></p>
 
@@ -88,18 +98,60 @@ Candidates table:
 </strong>我们不能用目前的预算雇佣任何高级员工，因为我们需要至少80000美元来雇佣一名高级员工。
 我们可以用剩下的预算雇佣三名初级员工。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：窗口函数
+
+相似题目：
+
+-   [2010. 职员招聘人数 🔒 II](https://github.com/doocs/leetcode/blob/main/solution/2000-2099/2010.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company%20II/README.md)
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    s AS (
+        SELECT
+            employee_id,
+            SUM(salary) OVER (ORDER BY salary) AS cur
+        FROM Candidates
+        WHERE experience = 'Senior'
+    ),
+    j AS (
+        SELECT
+            employee_id,
+            IFNULL(
+                SELECT
+                    MAX(cur)
+                FROM s
+                WHERE cur <= 70000,
+                0
+            ) + SUM(salary) OVER (ORDER BY salary) AS cur
+        FROM Candidates
+        WHERE experience = 'Junior'
+    )
+SELECT
+    'Senior' AS experience,
+    COUNT(employee_id) AS accepted_candidates
+FROM s
+WHERE cur <= 70000
+UNION ALL
+SELECT
+    'Junior' AS experience,
+    COUNT(employee_id) AS accepted_candidates
+FROM j
+WHERE cur <= 70000;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

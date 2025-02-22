@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2270.Number%20of%20Ways%20to%20Split%20Array/README.md
+rating: 1334
+source: 第 78 场双周赛 Q2
+tags:
+    - 数组
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2270. 分割数组的方案数](https://leetcode.cn/problems/number-of-ways-to-split-array)
 
 [English Version](/solution/2200-2299/2270.Number%20of%20Ways%20to%20Split%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始长度为 <code>n</code>&nbsp;的整数数组&nbsp;<code>nums</code>&nbsp;。<br />
 <span style="">如果以下描述为真，那么</span><span style=""> </span><code>nums</code>&nbsp;在下标 <code>i</code>&nbsp;处有一个 <strong>合法的分割</strong>&nbsp;：</p>
@@ -51,64 +64,65 @@
 	<li><code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和**
+### 方法一：前缀和
+
+我们首先计算数组 $\textit{nums}$ 的总和 $s$，然后遍历数组 $\textit{nums}$ 的前 $n-1$ 个元素，用变量 $t$ 记录前缀和，如果 $t \geq s - t$，则将答案加一。
+
+遍历结束后，返回答案即可。
+
+时间复杂度 $O(n)$，其中 $n$ 为数组 $\textit{nums}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def waysToSplitArray(self, nums: List[int]) -> int:
         s = sum(nums)
         ans = t = 0
-        for v in nums[:-1]:
-            t += v
-            if t >= s - t:
-                ans += 1
+        for x in nums[:-1]:
+            t += x
+            ans += t >= s - t
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int waysToSplitArray(int[] nums) {
         long s = 0;
-        for (int v : nums) {
-            s += v;
+        for (int x : nums) {
+            s += x;
         }
-        int ans = 0;
         long t = 0;
-        for (int i = 0; i < nums.length - 1; ++i) {
+        int ans = 0;
+        for (int i = 0; i + 1 < nums.length; ++i) {
             t += nums[i];
-            if (t >= s - t) {
-                ++ans;
-            }
+            ans += t >= s - t ? 1 : 0;
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int waysToSplitArray(vector<int>& nums) {
-        long long s = accumulate(nums.begin(), nums.end(), 0ll);
+        long long s = accumulate(nums.begin(), nums.end(), 0LL);
         long long t = 0;
         int ans = 0;
-        for (int i = 0; i < nums.size() - 1; ++i) {
+        for (int i = 0; i + 1 < nums.size(); ++i) {
             t += nums[i];
             ans += t >= s - t;
         }
@@ -117,35 +131,42 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func waysToSplitArray(nums []int) int {
-	s := 0
-	for _, v := range nums {
-		s += v
+func waysToSplitArray(nums []int) (ans int) {
+	var s, t int
+	for _, x := range nums {
+		s += x
 	}
-	ans, t := 0, 0
-	for _, v := range nums[:len(nums)-1] {
-		t += v
+	for _, x := range nums[:len(nums)-1] {
+		t += x
 		if t >= s-t {
 			ans++
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function waysToSplitArray(nums: number[]): number {
+    const s = nums.reduce((acc, cur) => acc + cur, 0);
+    let [ans, t] = [0, 0];
+    for (const x of nums.slice(0, -1)) {
+        t += x;
+        if (t >= s - t) {
+            ++ans;
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

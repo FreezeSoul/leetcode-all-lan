@@ -1,12 +1,23 @@
-# [1522. N 叉树的直径](https://leetcode.cn/problems/diameter-of-n-ary-tree)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1522.Diameter%20of%20N-Ary%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+---
+
+<!-- problem:start -->
+
+# [1522. N 叉树的直径 🔒](https://leetcode.cn/problems/diameter-of-n-ary-tree)
 
 [English Version](/solution/1500-1599/1522.Diameter%20of%20N-Ary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给定一棵 N 叉树的根节点&nbsp;<code>root</code>&nbsp;，计算这棵树的直径长度。</p>
+<p>给定一棵 <code>N 叉树</code> 的根节点&nbsp;<code>root</code>&nbsp;，计算这棵树的直径长度。</p>
 
 <p>N 叉树的直径指的是树中任意两个节点间路径中<strong> 最长 </strong>路径的长度。这条路径可能经过根节点，也可能不经过根节点。</p>
 
@@ -50,39 +61,17 @@
 	<li>节点的总个数在&nbsp;<code>[0,&nbsp;10^4]</code>&nbsp;间。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一**：后序遍历求每个结点的深度，此过程中获取每个结点子树的最长两个伸展（深度），迭代获取最长路径。
-
-相似题目：[543. 二叉树的直径](/solution/0500-0599/0543.Diameter%20of%20Binary%20Tree/README.md)
-
-**方法二**：两次 DFS。
-
-首先对任意一个结点做 DFS 求出最远的结点，然后以这个结点为根结点再做 DFS 到达另一个最远结点。第一次 DFS 到达的结点可以证明一定是这个图的直径的一端，第二次 DFS 就会达到另一端。下面来证明这个定理。
-
-定理：在一个连通无向无环图中，以任意结点出发所能到达的最远结点，一定是该图直径的端点之一。
-
-证明：假设这条直径是 δ(s, t)。分两种情况：
-
-1.  当出发结点 y 在 δ(s, t) 时，假设到达的最远结点 z 不是 s, t 中的任一个。这时将 δ(y, z) 与不与之重合的 δ(y, s) 拼接（也可以假设不与之重合的是直径的另一个方向），可以得到一条更长的直径，与前提矛盾。
-1.  当出发结点 y 不在 δ(s, t) 上时，分两种情况：
-
-    -   当 y 到达的最远结点 z 横穿 δ(s, t) 时，记与之相交的结点为 x。此时有 δ(y, z) = δ(y, x) + δ(x, z)。而此时 δ(y, z) > δ(y, t)，故可得 δ(x, z) ＞ δ(x, t)。由 1 的结论可知该假设不成立。
-    -   当 y 到达的最远结点 z 与 δ(s, t) 不相交时，定义从 y 开始到 t 结束的简单路径上，第一个同时也存在于简单路径 δ(s, t) 上的结点为 x，最后一个存在于简单路径 δ(y, z) 上的结点为 x’。如下图。那么根据假设，有 δ(y, z) ≥ δ(y, t) => δ(x', z) ≥ δ(x', x) + δ(x, t)。既然这样，那么 δ(x, z) ≥ δ(x, t)，和 δ(s, t) 对应着直径这一前提不符，故 y 的最远结点 z 不可能在 s 到 t 这个直径对应的路外面。
-
-    <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1500-1599/1522.Diameter%20of%20N-Ary%20Tree/images/tree-diameter.svg">
-
-因此定理成立。
-
-相似题目：[1245. 树的直径](/solution/1200-1299/1245.Tree%20Diameter/README.md)
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 """
@@ -120,56 +109,7 @@ class Solution:
         return ans
 ```
 
-```python
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val=None, children=None):
-        self.val = val
-        self.children = children if children is not None else []
-"""
-
-
-class Solution:
-    def diameter(self, root: 'Node') -> int:
-        """
-        :type root: 'Node'
-        :rtype: int
-        """
-        def build(root):
-            nonlocal d
-            if root is None:
-                return
-            for child in root.children:
-                d[root].add(child)
-                d[child].add(root)
-                build(child)
-
-        def dfs(u, t):
-            nonlocal ans, vis, d, next
-            if u in vis:
-                return
-            vis.add(u)
-            for v in d[u]:
-                dfs(v, t + 1)
-            if ans < t:
-                ans = t
-                next = u
-
-        d = defaultdict(set)
-        vis = set()
-        build(root)
-        ans = 0
-        next = None
-        dfs(root, 0)
-        vis.clear()
-        dfs(next, 0)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /*
@@ -223,6 +163,153 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> children;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+    }
+
+    Node(int _val, vector<Node*> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+
+class Solution {
+public:
+    int ans;
+
+    int diameter(Node* root) {
+        ans = 0;
+        dfs(root);
+        return ans;
+    }
+
+    int dfs(Node* root) {
+        if (!root) return 0;
+        int m1 = 0, m2 = 0;
+        for (Node* child : root->children) {
+            int t = dfs(child);
+            if (t > m1) {
+                m2 = m1;
+                m1 = t;
+            } else if (t > m2)
+                m2 = t;
+        }
+        ans = max(ans, m1 + m2);
+        return 1 + m1;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a Node.
+ * type Node struct {
+ *     Val int
+ *     Children []*Node
+ * }
+ */
+
+func diameter(root *Node) int {
+	ans := 0
+	var dfs func(root *Node) int
+	dfs = func(root *Node) int {
+		if root == nil {
+			return 0
+		}
+		m1, m2 := 0, 0
+		for _, child := range root.Children {
+			t := dfs(child)
+			if t > m1 {
+				m2, m1 = m1, t
+			} else if t > m2 {
+				m2 = t
+			}
+		}
+		ans = max(ans, m1+m2)
+		return 1 + m1
+	}
+	dfs(root)
+	return ans
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children if children is not None else []
+"""
+
+
+class Solution:
+    def diameter(self, root: 'Node') -> int:
+        """
+        :type root: 'Node'
+        :rtype: int
+        """
+
+        def build(root):
+            nonlocal d
+            if root is None:
+                return
+            for child in root.children:
+                d[root].add(child)
+                d[child].add(root)
+                build(child)
+
+        def dfs(u, t):
+            nonlocal ans, vis, d, next
+            if u in vis:
+                return
+            vis.add(u)
+            for v in d[u]:
+                dfs(v, t + 1)
+            if ans < t:
+                ans = t
+                next = u
+
+        d = defaultdict(set)
+        vis = set()
+        build(root)
+        ans = 0
+        next = None
+        dfs(root, 0)
+        vis.clear()
+        dfs(next, 0)
+        return ans
+```
+
+#### Java
 
 ```java
 /*
@@ -295,55 +382,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-/*
-// Definition for a Node.
-class Node {
-public:
-    int val;
-    vector<Node*> children;
-
-    Node() {}
-
-    Node(int _val) {
-        val = _val;
-    }
-
-    Node(int _val, vector<Node*> _children) {
-        val = _val;
-        children = _children;
-    }
-};
-*/
-
-class Solution {
-public:
-    int ans;
-
-    int diameter(Node* root) {
-        ans = 0;
-        dfs(root);
-        return ans;
-    }
-
-    int dfs(Node* root) {
-        if (!root) return 0;
-        int m1 = 0, m2 = 0;
-        for (Node* child : root->children) {
-            int t = dfs(child);
-            if (t > m1) {
-                m2 = m1;
-                m1 = t;
-            } else if (t > m2)
-                m2 = t;
-        }
-        ans = max(ans, m1 + m2);
-        return 1 + m1;
-    }
-};
-```
+#### C++
 
 ```cpp
 /*
@@ -386,8 +425,7 @@ public:
     void dfs(Node* u, int t) {
         if (vis.count(u)) return;
         vis.insert(u);
-        if (ans < t)
-        {
+        if (ans < t) {
             ans = t;
             next = u;
         }
@@ -398,8 +436,7 @@ public:
 
     void build(Node* root) {
         if (!root) return;
-        for (Node* child : root->children)
-        {
+        for (Node* child : root->children) {
             g[root].insert(child);
             g[child].insert(root);
             build(child);
@@ -408,47 +445,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a Node.
- * type Node struct {
- *     Val int
- *     Children []*Node
- * }
- */
-
-func diameter(root *Node) int {
-	ans := 0
-	var dfs func(root *Node) int
-	dfs = func(root *Node) int {
-		if root == nil {
-			return 0
-		}
-		m1, m2 := 0, 0
-		for _, child := range root.Children {
-			t := dfs(child)
-			if t > m1 {
-				m2, m1 = m1, t
-			} else if t > m2 {
-				m2 = t
-			}
-		}
-		ans = max(ans, m1+m2)
-		return 1 + m1
-	}
-	dfs(root)
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 /**
@@ -499,10 +496,8 @@ func diameter(root *Node) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

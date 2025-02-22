@@ -1,17 +1,25 @@
 func maxProfit(prices []int) int {
-	f1, f2, f3 := -prices[0], 0, 0
-	for i := 1; i < len(prices); i++ {
-		pf1, pf2, pf3 := f1, f2, f3
-		f1 = max(pf1, pf3-prices[i])
-		f2 = max(pf2, pf1+prices[i])
-		f3 = max(pf3, pf2)
+	n := len(prices)
+	f := make([][2]int, n)
+	for i := range f {
+		f[i] = [2]int{-1, -1}
 	}
-	return f2
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
+	var dfs func(i, j int) int
+	dfs = func(i, j int) int {
+		if i >= n {
+			return 0
+		}
+		if f[i][j] != -1 {
+			return f[i][j]
+		}
+		ans := dfs(i+1, j)
+		if j > 0 {
+			ans = max(ans, prices[i]+dfs(i+2, 0))
+		} else {
+			ans = max(ans, -prices[i]+dfs(i+1, 1))
+		}
+		f[i][j] = ans
+		return ans
 	}
-	return b
+	return dfs(0, 0)
 }

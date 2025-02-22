@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1464.Maximum%20Product%20of%20Two%20Elements%20in%20an%20Array/README.md
+rating: 1121
+source: 第 191 场周赛 Q1
+tags:
+    - 数组
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1464. 数组中两元素的最大乘积](https://leetcode.cn/problems/maximum-product-of-two-elements-in-an-array)
 
 [English Version](/solution/1400-1499/1464.Maximum%20Product%20of%20Two%20Elements%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code>，请你选择数组的两个不同下标 <code>i</code> 和 <code>j</code><em>，</em>使 <code>(nums[i]-1)*(nums[j]-1)</code> 取得最大值。</p>
 
@@ -41,64 +55,33 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10^3</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：暴力枚举
 
 双重循环，枚举所有的下标对，求出 $(nums[i]-1) \times (nums[j]-1)$ 的最大值。其中 $i \neq j$。
 
 时间复杂度 $O(n^2)$。
 
-**方法二：排序**
-
-对 $nums$ 进行排序，取最后两个元素，计算乘积 $(nums[n-1]-1) \times (nums[n-2]-1)$ 即可。
-
-时间复杂度 $O(nlogn)$。
-
-**方法三：一次遍历**
-
-遍历 $nums$，维护最大值 $a$ 和次大值 $b$。遍历结束，返回 $(a-1) \times (b-1)$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxProduct(self, nums: List[int]) -> int:
         ans = 0
         for i, a in enumerate(nums):
-            for b in nums[i + 1:]:
+            for b in nums[i + 1 :]:
                 ans = max(ans, (a - 1) * (b - 1))
         return ans
 ```
 
-```python
-class Solution:
-    def maxProduct(self, nums: List[int]) -> int:
-        nums.sort()
-        return (nums[-1] - 1) * (nums[-2] - 1)
-```
-
-```python
-class Solution:
-    def maxProduct(self, nums: List[int]) -> int:
-        a = b = 0
-        for v in nums:
-            if v > a:
-                a, b = v, a
-            elif v > b:
-                b = v
-        return (a - 1) * (b - 1)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -115,34 +98,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int maxProduct(int[] nums) {
-        Arrays.sort(nums);
-        int n = nums.length;
-        return (nums[n - 1] - 1) * (nums[n - 2] - 1);
-    }
-}
-```
-
-```java
-class Solution {
-    public int maxProduct(int[] nums) {
-        int a = 0, b = 0;
-        for (int v : nums) {
-            if (v > a) {
-                b = a;
-                a = v;
-            } else if (v > b) {
-                b = v;
-            }
-        }
-        return (a - 1) * (b - 1);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -160,35 +116,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int maxProduct(vector<int>& nums) {
-        sort(nums.rbegin(), nums.rend());
-        return (nums[0] - 1) * (nums[1] - 1);
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    int maxProduct(vector<int>& nums) {
-        int a = 0, b = 0;
-        for (int v : nums) {
-            if (v > a) {
-                b = a;
-                a = v;
-            } else if (v > b) {
-                b = v;
-            }
-        }
-        return (a - 1) * (b - 1);
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func maxProduct(nums []int) int {
@@ -205,48 +133,7 @@ func maxProduct(nums []int) int {
 }
 ```
 
-```go
-func maxProduct(nums []int) int {
-	sort.Ints(nums)
-	n := len(nums)
-	return (nums[n-1] - 1) * (nums[n-2] - 1)
-}
-```
-
-```go
-func maxProduct(nums []int) int {
-	a, b := 0, 0
-	for _, v := range nums {
-		if v > a {
-			b, a = a, v
-		} else if v > b {
-			b = v
-		}
-	}
-	return (a - 1) * (b - 1)
-}
-```
-
-### **C**
-
-```c
-int maxProduct(int* nums, int numsSize){
-    int max = 0;
-    int submax = 0;
-    for (int i = 0; i < numsSize; i++) {
-        int num = nums[i];
-        if (num > max) {
-            submax = max;
-            max = num;
-        } else if (num > submax) {
-            submax = num;
-        }
-    }
-    return (max - 1) * (submax - 1);
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxProduct(nums: number[]): number {
@@ -264,23 +151,7 @@ function maxProduct(nums: number[]): number {
 }
 ```
 
-```ts
-function maxProduct(nums: number[]): number {
-    let max = 0;
-    let submax = 0;
-    for (const num of nums) {
-        if (num > max) {
-            submax = max;
-            max = num;
-        } else if (num > submax) {
-            submax = num;
-        }
-    }
-    return (max - 1) * (submax - 1);
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -300,7 +171,7 @@ impl Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -315,17 +186,192 @@ class Solution {
             if ($nums[$i] > $max) {
                 $submax = $max;
                 $max = $nums[$i];
-            } else if ($nums[$i] > $submax) $submax = $nums[$i];
+            } elseif ($nums[$i] > $submax) {
+                $submax = $nums[$i];
+            }
         }
         return ($max - 1) * ($submax - 1);
     }
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+int maxProduct(int* nums, int numsSize) {
+    int max = 0;
+    int submax = 0;
+    for (int i = 0; i < numsSize; i++) {
+        int num = nums[i];
+        if (num > max) {
+            submax = max;
+            max = num;
+        } else if (num > submax) {
+            submax = num;
+        }
+    }
+    return (max - 1) * (submax - 1);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：排序
+
+对 $nums$ 进行排序，取最后两个元素，计算乘积 $(nums[n-1]-1) \times (nums[n-2]-1)$ 即可。
+
+时间复杂度 $O(nlogn)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        nums.sort()
+        return (nums[-1] - 1) * (nums[-2] - 1)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int maxProduct(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        return (nums[n - 1] - 1) * (nums[n - 2] - 1);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        sort(nums.rbegin(), nums.rend());
+        return (nums[0] - 1) * (nums[1] - 1);
+    }
+};
+```
+
+#### Go
+
+```go
+func maxProduct(nums []int) int {
+	sort.Ints(nums)
+	n := len(nums)
+	return (nums[n-1] - 1) * (nums[n-2] - 1)
+}
+```
+
+#### TypeScript
+
+```ts
+function maxProduct(nums: number[]): number {
+    let max = 0;
+    let submax = 0;
+    for (const num of nums) {
+        if (num > max) {
+            submax = max;
+            max = num;
+        } else if (num > submax) {
+            submax = num;
+        }
+    }
+    return (max - 1) * (submax - 1);
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三：一次遍历
+
+遍历 $nums$，维护最大值 $a$ 和次大值 $b$。遍历结束，返回 $(a-1) \times (b-1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        a = b = 0
+        for v in nums:
+            if v > a:
+                a, b = v, a
+            elif v > b:
+                b = v
+        return (a - 1) * (b - 1)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int maxProduct(int[] nums) {
+        int a = 0, b = 0;
+        for (int v : nums) {
+            if (v > a) {
+                b = a;
+                a = v;
+            } else if (v > b) {
+                b = v;
+            }
+        }
+        return (a - 1) * (b - 1);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int a = 0, b = 0;
+        for (int v : nums) {
+            if (v > a) {
+                b = a;
+                a = v;
+            } else if (v > b) {
+                b = v;
+            }
+        }
+        return (a - 1) * (b - 1);
+    }
+};
+```
+
+#### Go
+
+```go
+func maxProduct(nums []int) int {
+	a, b := 0, 0
+	for _, v := range nums {
+		if v > a {
+			b, a = a, v
+		} else if v > b {
+			b = v
+		}
+	}
+	return (a - 1) * (b - 1)
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

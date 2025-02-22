@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2068.Check%20Whether%20Two%20Strings%20are%20Almost%20Equivalent/README.md
+rating: 1273
+source: 第 65 场双周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2068. 检查两个字符串是否几乎相等](https://leetcode.cn/problems/check-whether-two-strings-are-almost-equivalent)
 
 [English Version](/solution/2000-2099/2068.Check%20Whether%20Two%20Strings%20are%20Almost%20Equivalent/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果两个字符串 <code>word1</code>&nbsp;和 <code>word2</code>&nbsp;中从 <code>'a'</code>&nbsp;到 <code>'z'</code>&nbsp;每一个字母出现频率之差都 <strong>不超过</strong>&nbsp;<code>3</code>&nbsp;，那么我们称这两个字符串&nbsp;<code>word1</code> 和&nbsp;<code>word2</code> <strong>几乎相等</strong>&nbsp;。</p>
 
@@ -56,11 +70,13 @@
 	<li><code>word1</code> 和&nbsp;<code>word2</code>&nbsp;都只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 我们可以创建一个长度为 $26$ 的数组 $cnt$，记录两个字符串中每个字母出现的次数之差。最后遍历 $cnt$，如果有任意一个字母出现的次数之差大于 $3$，则返回 `false`，否则返回 `true`。
 
@@ -68,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,9 +95,7 @@ class Solution:
         return all(abs(x) <= 3 for x in cnt.values())
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkAlmostEquivalent(word1 string, word2 string) bool {
@@ -148,7 +160,7 @@ func checkAlmostEquivalent(word1 string, word2 string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function checkAlmostEquivalent(word1: string, word2: string): boolean {
@@ -163,47 +175,7 @@ function checkAlmostEquivalent(word1: string, word2: string): boolean {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool CheckAlmostEquivalent(string word1, string word2) {
-        int[] cnt = new int[26];
-        foreach (var c in word1) {
-            cnt[c - 'a']++;
-        }
-        foreach (var c in word2) {
-            cnt[c - 'a']--;
-        }
-        return cnt.All(x => Math.Abs(x) <= 3);
-    }
-}
-```
-
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param String $word1
-     * @param String $word2
-     * @return Boolean
-     */
-    function checkAlmostEquivalent($word1, $word2) {
-        for ($i = 0; $i < strlen($word1); $i++) {
-            $hashtable[$word1[$i]] += 1;
-            $hashtable[$word2[$i]] -= 1;
-        }
-        $keys = array_keys($hashtable);
-        for ($j = 0; $j < count($keys); $j++) {
-            if (abs($hashtable[$keys[$j]]) > 3) return false;
-        }
-        return true;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -226,10 +198,50 @@ var checkAlmostEquivalent = function (word1, word2) {
 };
 ```
 
-### **...**
+#### C#
 
+```cs
+public class Solution {
+    public bool CheckAlmostEquivalent(string word1, string word2) {
+        int[] cnt = new int[26];
+        foreach (var c in word1) {
+            cnt[c - 'a']++;
+        }
+        foreach (var c in word2) {
+            cnt[c - 'a']--;
+        }
+        return cnt.All(x => Math.Abs(x) <= 3);
+    }
+}
 ```
 
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param String $word1
+     * @param String $word2
+     * @return Boolean
+     */
+    function checkAlmostEquivalent($word1, $word2) {
+        for ($i = 0; $i < strlen($word1); $i++) {
+            $hashtable[$word1[$i]] += 1;
+            $hashtable[$word2[$i]] -= 1;
+        }
+        $keys = array_keys($hashtable);
+        for ($j = 0; $j < count($keys); $j++) {
+            if (abs($hashtable[$keys[$j]]) > 3) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1366.Rank%20Teams%20by%20Votes/README.md
+rating: 1626
+source: 第 178 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 计数
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1366. 通过投票对团队排名](https://leetcode.cn/problems/rank-teams-by-votes)
 
 [English Version](/solution/1300-1399/1366.Rank%20Teams%20by%20Votes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现在有一个特殊的排名系统，依据参赛团队在投票人心中的次序进行排名，每个投票者都需要按从高到低的顺序对参与排名的所有团队进行排位。</p>
 
@@ -21,46 +37,33 @@
 
 <p>&nbsp;</p>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
-<pre><strong>输入：</strong>votes = [&quot;ABC&quot;,&quot;ACB&quot;,&quot;ABC&quot;,&quot;ACB&quot;,&quot;ACB&quot;]
-<strong>输出：</strong>&quot;ACB&quot;
-<strong>解释：</strong>A 队获得五票「排位第一」，没有其他队获得「排位第一」，所以 A 队排名第一。
+<pre>
+<strong>输入：</strong>votes = ["ABC","ACB","ABC","ACB","ACB"]
+<strong>输出：</strong>"ACB"
+<strong>解释：</strong>
+A 队获得五票「排位第一」，没有其他队获得「排位第一」，所以 A 队排名第一。
 B 队获得两票「排位第二」，三票「排位第三」。
 C 队获得三票「排位第二」，两票「排位第三」。
 由于 C 队「排位第二」的票数较多，所以 C 队排第二，B 队排第三。
 </pre>
 
-<p><strong>示例 2：</strong></p>
+<p><strong class="example">示例 2：</strong></p>
 
-<pre><strong>输入：</strong>votes = [&quot;WXYZ&quot;,&quot;XYZW&quot;]
-<strong>输出：</strong>&quot;XWYZ&quot;
-<strong>解释：</strong>X 队在并列僵局打破后成为排名第一的团队。X 队和 W 队的「排位第一」票数一样，但是 X 队有一票「排位第二」，而 W 没有获得「排位第二」。 
+<pre>
+<strong>输入：</strong>votes = ["WXYZ","XYZW"]
+<strong>输出：</strong>"XWYZ"
+<strong>解释：</strong>
+X 队在并列僵局打破后成为排名第一的团队。X 队和 W 队的「排位第一」票数一样，但是 X 队有一票「排位第二」，而 W 没有获得「排位第二」。 
 </pre>
 
-<p><strong>示例 3：</strong></p>
+<p><strong class="example">示例 3：</strong></p>
 
-<pre><strong>输入：</strong>votes = [&quot;ZMNAGUEDSJYLBOPHRQICWFXTVK&quot;]
-<strong>输出：</strong>&quot;ZMNAGUEDSJYLBOPHRQICWFXTVK&quot;
+<pre>
+<strong>输入：</strong>votes = ["ZMNAGUEDSJYLBOPHRQICWFXTVK"]
+<strong>输出：</strong>"ZMNAGUEDSJYLBOPHRQICWFXTVK"
 <strong>解释：</strong>只有一个投票者，所以排名完全按照他的意愿。
-</pre>
-
-<p><strong>示例 4：</strong></p>
-
-<pre><strong>输入：</strong>votes = [&quot;BCA&quot;,&quot;CAB&quot;,&quot;CBA&quot;,&quot;ABC&quot;,&quot;ACB&quot;,&quot;BAC&quot;]
-<strong>输出：</strong>&quot;ABC&quot;
-<strong>解释：</strong> 
-A 队获得两票「排位第一」，两票「排位第二」，两票「排位第三」。
-B 队获得两票「排位第一」，两票「排位第二」，两票「排位第三」。
-C 队获得两票「排位第一」，两票「排位第二」，两票「排位第三」。
-完全并列，所以我们需要按照字母升序排名。
-</pre>
-
-<p><strong>示例 5：</strong></p>
-
-<pre><strong>输入：</strong>votes = [&quot;M&quot;,&quot;M&quot;,&quot;M&quot;,&quot;M&quot;]
-<strong>输出：</strong>&quot;M&quot;
-<strong>解释：</strong>只有 M 队参赛，所以它排名第一。
 </pre>
 
 <p>&nbsp;</p>
@@ -76,63 +79,60 @@ C 队获得两票「排位第一」，两票「排位第二」，两票「排位
 	<li><code>votes[0]</code>&nbsp;中出现的所有字母 <strong>同样也</strong> 出现在&nbsp;<code>votes[j]</code>&nbsp;中，其中&nbsp;<code>1 &lt;= j &lt; votes.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 自定义排序**
+### 方法一：计数 + 自定义排序
 
 对于每个候选人，我们可以统计他在每个排位上的票数，然后根据不同的排位依次比较票数，票数相同则比较字母。
 
-时间复杂度 $O(n^2 \times \log n)$，空间复杂度 $O(n^2)$。其中 $n$ 为候选人的数量。
+时间复杂度 $O(n \times m + m^2 \times \log m)$，空间复杂度 $O(m^2)$。其中 $n$ 是 $\textit{votes}$ 的长度，而 $m$ 是候选人的数量，即 $\textit{votes}[0]$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def rankTeams(self, votes: List[str]) -> str:
-        n = len(votes[0])
-        cnt = defaultdict(lambda: [0] * n)
+        m = len(votes[0])
+        cnt = defaultdict(lambda: [0] * m)
         for vote in votes:
             for i, c in enumerate(vote):
                 cnt[c][i] += 1
-        return "".join(sorted(votes[0], key=lambda x: (cnt[x], -ord(x)), reverse=True))
+        return "".join(sorted(cnt, key=lambda c: (cnt[c], -ord(c)), reverse=True))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public String rankTeams(String[] votes) {
-        int n = votes[0].length();
-        int[][] cnt = new int[26][n];
+        int m = votes[0].length();
+        int[][] cnt = new int[26][m + 1];
         for (var vote : votes) {
-            for (int i = 0; i < n; ++i) {
-                cnt[vote.charAt(i) - 'A'][i]++;
+            for (int i = 0; i < m; ++i) {
+                ++cnt[vote.charAt(i) - 'A'][i];
             }
         }
-        Character[] cs = new Character[n];
-        for (int i = 0; i < n; ++i) {
-            cs[i] = votes[0].charAt(i);
+        Character[] s = new Character[m];
+        for (int i = 0; i < m; ++i) {
+            s[i] = votes[0].charAt(i);
         }
-        Arrays.sort(cs, (a, b) -> {
+        Arrays.sort(s, (a, b) -> {
             int i = a - 'A', j = b - 'A';
-            for (int k = 0; k < n; ++k) {
-                int d = cnt[i][k] - cnt[j][k];
-                if (d != 0) {
-                    return d > 0 ? -1 : 1;
+            for (int k = 0; k < m; ++k) {
+                if (cnt[i][k] != cnt[j][k]) {
+                    return cnt[j][k] - cnt[i][k];
                 }
             }
             return a - b;
         });
         StringBuilder ans = new StringBuilder();
-        for (char c : cs) {
+        for (var c : s) {
             ans.append(c);
         }
         return ans.toString();
@@ -140,64 +140,121 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string rankTeams(vector<string>& votes) {
-        int n = votes[0].size();
-        int cnt[26][n];
-        memset(cnt, 0, sizeof cnt);
-        for (auto& vote : votes) {
-            for (int i = 0; i < n; ++i) {
-                cnt[vote[i] - 'A'][i]++;
+        int m = votes[0].size();
+        array<array<int, 27>, 26> cnt{};
+
+        for (const auto& vote : votes) {
+            for (int i = 0; i < m; ++i) {
+                ++cnt[vote[i] - 'A'][i];
             }
         }
-        string ans = votes[0];
-        sort(ans.begin(), ans.end(), [&](auto& a, auto& b) {
+        string s = votes[0];
+        ranges::sort(s, [&](char a, char b) {
             int i = a - 'A', j = b - 'A';
-            for (int k = 0; k < n; ++k) {
+            for (int k = 0; k < m; ++k) {
                 if (cnt[i][k] != cnt[j][k]) {
                     return cnt[i][k] > cnt[j][k];
                 }
             }
             return a < b;
         });
-        return ans;
+        return string(s.begin(), s.end());
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rankTeams(votes []string) string {
-	cnt := [26][26]int{}
+	m := len(votes[0])
+	cnt := [26][27]int{}
 	for _, vote := range votes {
-		for i, c := range vote {
-			cnt[c-'A'][i]++
+		for i, ch := range vote {
+			cnt[ch-'A'][i]++
 		}
 	}
-	ans := []byte(votes[0])
-	sort.Slice(ans, func(i, j int) bool {
-		cnt1, cnt2 := cnt[ans[i]-'A'], cnt[ans[j]-'A']
-		for k, a := range cnt1 {
-			b := cnt2[k]
-			if a != b {
-				return a > b
+	s := []rune(votes[0])
+	sort.Slice(s, func(i, j int) bool {
+		a, b := s[i]-'A', s[j]-'A'
+		for k := 0; k < m; k++ {
+			if cnt[a][k] != cnt[b][k] {
+				return cnt[a][k] > cnt[b][k]
 			}
 		}
-		return ans[i] < ans[j]
+		return s[i] < s[j]
 	})
-	return string(ans)
+	return string(s)
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function rankTeams(votes: string[]): string {
+    const m = votes[0].length;
+    const cnt: number[][] = Array.from({ length: 26 }, () => Array(m + 1).fill(0));
+    for (const vote of votes) {
+        for (let i = 0; i < m; i++) {
+            cnt[vote.charCodeAt(i) - 65][i]++;
+        }
+    }
+    const s: string[] = votes[0].split('');
+    s.sort((a, b) => {
+        const i = a.charCodeAt(0) - 65;
+        const j = b.charCodeAt(0) - 65;
+        for (let k = 0; k < m; k++) {
+            if (cnt[i][k] !== cnt[j][k]) {
+                return cnt[j][k] - cnt[i][k];
+            }
+        }
+        return a.localeCompare(b);
+    });
+    return s.join('');
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn rank_teams(votes: Vec<String>) -> String {
+        let m = votes[0].len();
+        let mut cnt = vec![vec![0; m + 1]; 26];
+
+        for vote in &votes {
+            for (i, ch) in vote.chars().enumerate() {
+                cnt[(ch as u8 - b'A') as usize][i] += 1;
+            }
+        }
+
+        let mut s: Vec<char> = votes[0].chars().collect();
+
+        s.sort_by(|&a, &b| {
+            let i = (a as u8 - b'A') as usize;
+            let j = (b as u8 - b'A') as usize;
+
+            for k in 0..m {
+                if cnt[i][k] != cnt[j][k] {
+                    return cnt[j][k].cmp(&cnt[i][k]);
+                }
+            }
+            a.cmp(&b)
+        });
+
+        s.into_iter().collect()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

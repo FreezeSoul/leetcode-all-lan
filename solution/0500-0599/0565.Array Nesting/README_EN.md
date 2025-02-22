@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0565.Array%20Nesting/README_EN.md
+tags:
+    - Depth-First Search
+    - Array
+---
+
+<!-- problem:start -->
+
 # [565. Array Nesting](https://leetcode.com/problems/array-nesting)
 
 [中文文档](/solution/0500-0599/0565.Array%20Nesting/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> of length <code>n</code> where <code>nums</code> is a permutation of the numbers in the range <code>[0, n - 1]</code>.</p>
 
@@ -44,11 +57,17 @@ s[0] = {nums[0], nums[5], nums[6], nums[2]} = {5, 6, 2, 0}
 	<li>All the values of <code>nums</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,22 +88,7 @@ class Solution:
         return res
 ```
 
-```python
-class Solution:
-    def arrayNesting(self, nums: List[int]) -> int:
-        ans, n = 0, len(nums)
-        for i in range(n):
-            cnt = 0
-            while nums[i] != n:
-                j = nums[i]
-                nums[i] = n
-                i = j
-                cnt += 1
-            ans = max(ans, cnt)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -110,27 +114,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int arrayNesting(int[] nums) {
-        int ans = 0, n = nums.length;
-        for (int i = 0; i < n; ++i) {
-            int cnt = 0;
-            int j = i;
-            while (nums[j] < n) {
-                int k = nums[j];
-                nums[j] = n;
-                j = k;
-                ++cnt;
-            }
-            ans = Math.max(ans, cnt);
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -155,30 +139,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int arrayNesting(vector<int>& nums) {
-        int ans = 0, n = nums.size();
-        for (int i = 0; i < n; ++i)
-        {
-            int cnt = 0;
-            int j = i;
-            while (nums[j] < n)
-            {
-                int k = nums[j];
-                nums[j] = n;
-                j = k;
-                ++cnt;
-            }
-            ans = max(ans, cnt);
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func arrayNesting(nums []int) int {
@@ -204,6 +165,80 @@ func arrayNesting(nums []int) int {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def arrayNesting(self, nums: List[int]) -> int:
+        ans, n = 0, len(nums)
+        for i in range(n):
+            cnt = 0
+            while nums[i] != n:
+                j = nums[i]
+                nums[i] = n
+                i = j
+                cnt += 1
+            ans = max(ans, cnt)
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int arrayNesting(int[] nums) {
+        int ans = 0, n = nums.length;
+        for (int i = 0; i < n; ++i) {
+            int cnt = 0;
+            int j = i;
+            while (nums[j] < n) {
+                int k = nums[j];
+                nums[j] = n;
+                j = k;
+                ++cnt;
+            }
+            ans = Math.max(ans, cnt);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int arrayNesting(vector<int>& nums) {
+        int ans = 0, n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            int cnt = 0;
+            int j = i;
+            while (nums[j] < n) {
+                int k = nums[j];
+                nums[j] = n;
+                j = k;
+                ++cnt;
+            }
+            ans = max(ans, cnt);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
 ```go
 func arrayNesting(nums []int) int {
 	ans, n := 0, len(nums)
@@ -223,10 +258,8 @@ func arrayNesting(nums []int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

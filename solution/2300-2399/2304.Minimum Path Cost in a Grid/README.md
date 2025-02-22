@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2304.Minimum%20Path%20Cost%20in%20a%20Grid/README.md
+rating: 1658
+source: 第 297 场周赛 Q2
+tags:
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2304. 网格中的最小路径代价](https://leetcode.cn/problems/minimum-path-cost-in-a-grid)
 
 [English Version](/solution/2300-2399/2304.Minimum%20Path%20Cost%20in%20a%20Grid/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的整数矩阵&nbsp;<code>grid</code> ，矩阵大小为 <code>m x n</code> ，由从 <code>0</code> 到 <code>m * n - 1</code> 的不同整数组成。你可以在此矩阵中，从一个单元格移动到 <strong>下一行</strong> 的任何其他单元格。如果你位于单元格 <code>(x, y)</code> ，且满足 <code>x &lt; m - 1</code> ，你可以移动到 <code>(x + 1, 0)</code>, <code>(x + 1, 1)</code>, ..., <code>(x + 1, n - 1)</code><strong> </strong>中的任何一个单元格。<strong>注意：</strong>&nbsp;在最后一行中的单元格不能触发移动。</p>
 
@@ -53,31 +67,31 @@
 	<li><code>1 &lt;= moveCost[i][j] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示从第一行出发，到达第 $i$ 行第 $j$ 列的最小路径代价。由于每次只能从上一行的某一列移动到当前行的某一列，因此 $f[i][j]$ 的值可以从 $f[i - 1][k]$ 转移而来，其中 $k$ 的取值范围为 $[0, n - 1]$。因此状态转移方程为：
 
 $$
-f[i][j] = \min_{0 \leq k < n} \{f[i - 1][k] + \text{moveCost}[grid[i - 1][k]][j] + grid[i][j]\}
+f[i][j] = \min_{0 \leq k < n} \{f[i - 1][k] + \textit{moveCost}[grid[i - 1][k]][j] + grid[i][j]\}
 $$
 
-其中 $\text{moveCost}[grid[i - 1][k]][j]$ 表示从第 $i - 1$ 行第 $k$ 列移动到第 $i$ 行第 $j$ 列的代价。
+其中 $\textit{moveCost}[grid[i - 1][k]][j]$ 表示从第 $i - 1$ 行第 $k$ 列移动到第 $i$ 行第 $j$ 列的代价。
 
-最终答案即为 $f[m - 1][j]$ 的最小值，其中 $j$ 的取值范围为 $[0, n - 1]$。
+最终答案即为 $\min_{0 \leq j < n} \{f[m - 1][j]\}$。
 
-由于每次转移只需要用到上一行的状态，因此可以将空间复杂度优化到 $O(n)$。
+由于每次转移只需要用到上一行的状态，因此我们可以使用滚动数组的方式，将空间复杂度优化到 $O(n)$。
 
 时间复杂度 $O(m \times n^2)$，空间复杂度 $O(n)$。其中 $m$ 和 $n$ 分别为网格的行数和列数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,9 +107,7 @@ class Solution:
         return min(f)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -124,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,94 +159,72 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minPathCost(grid [][]int, moveCost [][]int) int {
 	m, n := len(grid), len(grid[0])
-	const inf = 1 << 30
 	f := grid[0]
 	for i := 1; i < m; i++ {
 		g := make([]int, n)
 		for j := 0; j < n; j++ {
-			g[j] = inf
+			g[j] = 1 << 30
 			for k := 0; k < n; k++ {
 				g[j] = min(g[j], f[k]+moveCost[grid[i-1][k]][j]+grid[i][j])
 			}
 		}
 		f = g
 	}
-	ans := inf
-	for _, v := range f {
-		ans = min(ans, v)
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return slices.Min(f)
 }
 ```
 
-### **Rust**
+#### TypeScript
+
+```ts
+function minPathCost(grid: number[][], moveCost: number[][]): number {
+    const m = grid.length;
+    const n = grid[0].length;
+    const f = grid[0];
+    for (let i = 1; i < m; ++i) {
+        const g: number[] = Array(n).fill(Infinity);
+        for (let j = 0; j < n; ++j) {
+            for (let k = 0; k < n; ++k) {
+                g[j] = Math.min(g[j], f[k] + moveCost[grid[i - 1][k]][j] + grid[i][j]);
+            }
+        }
+        f.splice(0, n, ...g);
+    }
+    return Math.min(...f);
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
     pub fn min_path_cost(grid: Vec<Vec<i32>>, move_cost: Vec<Vec<i32>>) -> i32 {
-        let (m, n) = (grid.len(), grid[0].len());
-        let mut dp = vec![0; n];
-        for i in 0..m - 1 {
-            let mut counter = vec![i32::MAX; n];
+        let m = grid.len();
+        let n = grid[0].len();
+        let mut f = grid[0].clone();
+
+        for i in 1..m {
+            let mut g: Vec<i32> = vec![i32::MAX; n];
             for j in 0..n {
-                let val = grid[i][j];
                 for k in 0..n {
-                    counter[k] = counter[k].min(val + move_cost[val as usize][k] + dp[j]);
+                    g[j] = g[j].min(f[k] + move_cost[grid[i - 1][k] as usize][j] + grid[i][j]);
                 }
             }
-            for j in 0..n {
-                dp[j] = counter[j];
-            }
+            f.copy_from_slice(&g);
         }
-        let mut res = i32::MAX;
-        for i in 0..n {
-            res = res.min(dp[i] + grid[m - 1][i]);
-        }
-        res
+
+        f.iter().cloned().min().unwrap_or(0)
     }
 }
-```
-
-### **TypeScript**
-
-```ts
-function minPathCost(grid: number[][], moveCost: number[][]): number {
-    const m = grid.length,
-        n = grid[0].length;
-    let pre = grid[0].slice();
-    for (let i = 1; i < m; i++) {
-        let next = new Array(n);
-        for (let j = 0; j < n; j++) {
-            const key = grid[i - 1][j];
-            for (let k = 0; k < n; k++) {
-                let sum = pre[j] + moveCost[key][k] + grid[i][k];
-                if (j == 0 || next[k] > sum) {
-                    next[k] = sum;
-                }
-            }
-        }
-        pre = next;
-    }
-    return Math.min(...pre);
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

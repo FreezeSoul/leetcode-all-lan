@@ -1,48 +1,60 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0242.Valid%20Anagram/README.md
+tags:
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [242. 有效的字母异位词](https://leetcode.cn/problems/valid-anagram)
 
 [English Version](/solution/0200-0299/0242.Valid%20Anagram/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给定两个字符串 <code><em>s</em></code> 和 <code><em>t</em></code> ，编写一个函数来判断 <code><em>t</em></code> 是否是 <code><em>s</em></code> 的字母异位词。</p>
+<p>给定两个字符串 <code>s</code> 和 <code>t</code> ，编写一个函数来判断 <code>t</code> 是否是 <code>s</code> 的 <span data-keyword="anagram">字母异位词</span>。</p>
 
-<p><strong>注意：</strong>若 <code><em>s</em></code> 和 <code><em>t</em></code><em> </em>中每个字符出现的次数都相同，则称 <code><em>s</em></code> 和 <code><em>t</em></code><em> </em>互为字母异位词。</p>
+<p>&nbsp;</p>
 
-<p> </p>
-
-<p><strong>示例 1:</strong></p>
+<p><strong>示例&nbsp;1:</strong></p>
 
 <pre>
-<strong>输入:</strong> <em>s</em> = "anagram", <em>t</em> = "nagaram"
+<strong>输入:</strong> s = "anagram", t = "nagaram"
 <strong>输出:</strong> true
 </pre>
 
 <p><strong>示例 2:</strong></p>
 
 <pre>
-<strong>输入:</strong> <em>s</em> = "rat", <em>t</em> = "car"
+<strong>输入:</strong> s = "rat", t = "car"
 <strong>输出: </strong>false</pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示:</strong></p>
 
 <ul>
-	<li><code>1 <= s.length, t.length <= 5 * 10<sup>4</sup></code></li>
-	<li><code>s</code> 和 <code>t</code> 仅包含小写字母</li>
+	<li><code>1 &lt;= s.length, t.length &lt;= 5 * 10<sup>4</sup></code></li>
+	<li><code>s</code> 和 <code>t</code>&nbsp;仅包含小写字母</li>
 </ul>
 
-<p> </p>
+<p>&nbsp;</p>
 
-<p><strong>进阶: </strong>如果输入字符串包含 unicode 字符怎么办？你能否调整你的解法来应对这种情况？</p>
+<p><strong>进阶:&nbsp;</strong>如果输入字符串包含 unicode 字符怎么办？你能否调整你的解法来应对这种情况？</p>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 我们先判断两个字符串的长度是否相等，如果不相等，说明两个字符串中的字符肯定不同，返回 `false`。
 
@@ -52,9 +64,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -69,9 +79,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isAnagram(s string, t string) bool {
@@ -134,28 +142,7 @@ func isAnagram(s string, t string) bool {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {string} s
- * @param {string} t
- * @return {boolean}
- */
-var isAnagram = function (s, t) {
-    if (s.length !== t.length) {
-        return false;
-    }
-    const cnt = new Array(26).fill(0);
-    for (let i = 0; i < s.length; ++i) {
-        ++cnt[s.charCodeAt(i) - 'a'.charCodeAt(0)];
-        --cnt[t.charCodeAt(i) - 'a'.charCodeAt(0)];
-    }
-    return cnt.every(x => x === 0);
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isAnagram(s: string, t: string): boolean {
@@ -171,25 +158,7 @@ function isAnagram(s: string, t: string): boolean {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool IsAnagram(string s, string t) {
-        if (s.Length != t.Length) {
-            return false;
-        }
-        int[] cnt = new int[26];
-        for (int i = 0; i < s.Length; ++i) {
-            ++cnt[s[i] - 'a'];
-            --cnt[t[i] - 'a'];
-        }
-        return cnt.All(x => x == 0);
-    }
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -213,6 +182,84 @@ impl Solution {
 }
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {boolean}
+ */
+var isAnagram = function (s, t) {
+    if (s.length !== t.length) {
+        return false;
+    }
+    const cnt = new Array(26).fill(0);
+    for (let i = 0; i < s.length; ++i) {
+        ++cnt[s.charCodeAt(i) - 'a'.charCodeAt(0)];
+        --cnt[t.charCodeAt(i) - 'a'.charCodeAt(0)];
+    }
+    return cnt.every(x => x === 0);
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public bool IsAnagram(string s, string t) {
+        if (s.Length != t.Length) {
+            return false;
+        }
+        int[] cnt = new int[26];
+        for (int i = 0; i < s.Length; ++i) {
+            ++cnt[s[i] - 'a'];
+            --cnt[t[i] - 'a'];
+        }
+        return cnt.All(x => x == 0);
+    }
+}
+```
+
+#### C
+
+```c
+int cmp(const void* a, const void* b) {
+    return *(char*) a - *(char*) b;
+}
+
+bool isAnagram(char* s, char* t) {
+    int n = strlen(s);
+    int m = strlen(t);
+    if (n != m) {
+        return 0;
+    }
+    qsort(s, n, sizeof(char), cmp);
+    qsort(t, n, sizeof(char), cmp);
+    return !strcmp(s, t);
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        return Counter(s) == Counter(t)
+```
+
+#### Rust
+
 ```rust
 impl Solution {
     pub fn is_anagram(s: String, t: String) -> bool {
@@ -232,27 +279,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int cmp(const void *a, const void *b) {
-    return *(char *) a - *(char *) b;
-}
-
-bool isAnagram(char *s, char *t) {
-    int n = strlen(s);
-    int m = strlen(t);
-    if (n != m) {
-        return 0;
-    }
-    qsort(s, n, sizeof(char), cmp);
-    qsort(t, n, sizeof(char), cmp);
-    return !strcmp(s, t);
-}
-```
-
-```c
-bool isAnagram(char *s, char *t) {
+bool isAnagram(char* s, char* t) {
     int n = strlen(s);
     int m = strlen(t);
     if (n != m) {
@@ -272,10 +302,8 @@ bool isAnagram(char *s, char *t) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

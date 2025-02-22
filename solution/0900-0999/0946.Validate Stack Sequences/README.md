@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0946.Validate%20Stack%20Sequences/README.md
+tags:
+    - 栈
+    - 数组
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [946. 验证栈序列](https://leetcode.cn/problems/validate-stack-sequences)
 
 [English Version](/solution/0900-0999/0946.Validate%20Stack%20Sequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定&nbsp;<code>pushed</code>&nbsp;和&nbsp;<code>popped</code>&nbsp;两个序列，每个序列中的 <strong>值都不重复</strong>，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop 操作序列的结果时，返回 <code>true</code>；否则，返回 <code>false</code>&nbsp;。</p>
 
@@ -40,151 +52,128 @@ push(5), pop() -&gt; 5, pop() -&gt; 3, pop() -&gt; 2, pop() -&gt; 1
 	<li><code>popped</code> 是 <code>pushed</code> 的一个排列</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：栈模拟**
+### 方法一：栈模拟
 
-遍历 `pushed` 序列，将每个数 `v` 依次压入栈中，压入后检查这个数是不是 `popped` 序列中下一个要弹出的值，如果是就循环把栈顶元素弹出。
+我们遍历 $\textit{pushed}$ 数组，对于当前遍历到的元素 $x$，我们将其压入栈 $\textit{stk}$ 中，然后判断栈顶元素是否和 $\textit{popped}$ 数组中下一个要弹出的元素相等，如果相等，我们就将栈顶元素弹出并将 $\textit{popped}$ 数组中下一个要弹出的元素的索引 $i$ 加一。最后，如果要弹出的元素都能按照 $\textit{popped}$ 数组的顺序弹出，返回 $\textit{true}$，否则返回 $\textit{false}$。
 
-遍历结束，如果 `popped` 序列已经到末尾，说明是一个合法的序列，否则不是。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是 `pushed` 序列的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 $\textit{pushed}$ 数组的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
-        j, stk = 0, []
-        for v in pushed:
-            stk.append(v)
-            while stk and stk[-1] == popped[j]:
+        stk = []
+        i = 0
+        for x in pushed:
+            stk.append(x)
+            while stk and stk[-1] == popped[i]:
                 stk.pop()
-                j += 1
-        return j == len(pushed)
+                i += 1
+        return i == len(popped)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public boolean validateStackSequences(int[] pushed, int[] popped) {
         Deque<Integer> stk = new ArrayDeque<>();
-        int j = 0;
-        for (int v : pushed) {
-            stk.push(v);
-            while (!stk.isEmpty() && stk.peek() == popped[j]) {
+        int i = 0;
+        for (int x : pushed) {
+            stk.push(x);
+            while (!stk.isEmpty() && stk.peek() == popped[i]) {
                 stk.pop();
-                ++j;
+                ++i;
             }
         }
-        return j == pushed.length;
+        return i == popped.length;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
         stack<int> stk;
-        int j = 0;
-        for (int v : pushed) {
-            stk.push(v);
-            while (!stk.empty() && stk.top() == popped[j]) {
+        int i = 0;
+        for (int x : pushed) {
+            stk.push(x);
+            while (stk.size() && stk.top() == popped[i]) {
                 stk.pop();
-                ++j;
+                ++i;
             }
         }
-        return j == pushed.size();
+        return i == popped.size();
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func validateStackSequences(pushed []int, popped []int) bool {
 	stk := []int{}
-	j := 0
-	for _, v := range pushed {
-		stk = append(stk, v)
-		for len(stk) > 0 && stk[len(stk)-1] == popped[j] {
+	i := 0
+	for _, x := range pushed {
+		stk = append(stk, x)
+		for len(stk) > 0 && stk[len(stk)-1] == popped[i] {
 			stk = stk[:len(stk)-1]
-			j++
+			i++
 		}
 	}
-	return j == len(pushed)
+	return i == len(popped)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function validateStackSequences(pushed: number[], popped: number[]): boolean {
-    const stk = [];
-    let j = 0;
-    for (const v of pushed) {
-        stk.push(v);
-        while (stk.length && stk[stk.length - 1] == popped[j]) {
+    const stk: number[] = [];
+    let i = 0;
+    for (const x of pushed) {
+        stk.push(x);
+        while (stk.length && stk.at(-1)! === popped[i]) {
             stk.pop();
-            ++j;
+            i++;
         }
     }
-    return j == pushed.length;
+    return i === popped.length;
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool ValidateStackSequences(int[] pushed, int[] popped) {
-        Stack<int> stk = new Stack<int>();
-        int j = 0;
-        foreach (int x in pushed)
-        {
-            stk.Push(x);
-            while (stk.Count != 0 && stk.Peek() == popped[j]) {
-                stk.Pop();
-                ++j;
-            }
-        }
-        return stk.Count == 0;
-    }
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn validate_stack_sequences(pushed: Vec<i32>, popped: Vec<i32>) -> bool {
-        let mut stack = Vec::new();
+        let mut stk: Vec<i32> = Vec::new();
         let mut i = 0;
-        for &num in pushed.iter() {
-            stack.push(num);
-            while !stack.is_empty() && *stack.last().unwrap() == popped[i] {
-                stack.pop();
+        for &x in &pushed {
+            stk.push(x);
+            while !stk.is_empty() && *stk.last().unwrap() == popped[i] {
+                stk.pop();
                 i += 1;
             }
         }
-        stack.len() == 0
+        i == popped.len()
     }
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -193,23 +182,42 @@ impl Solution {
  * @return {boolean}
  */
 var validateStackSequences = function (pushed, popped) {
-    let stk = [];
-    let j = 0;
-    for (const v of pushed) {
-        stk.push(v);
-        while (stk.length && stk[stk.length - 1] == popped[j]) {
+    const stk = [];
+    let i = 0;
+    for (const x of pushed) {
+        stk.push(x);
+        while (stk.length && stk.at(-1) === popped[i]) {
             stk.pop();
-            ++j;
+            i++;
         }
     }
-    return j == pushed.length;
+    return i === popped.length;
 };
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+public class Solution {
+    public bool ValidateStackSequences(int[] pushed, int[] popped) {
+        Stack<int> stk = new Stack<int>();
+        int i = 0;
 
+        foreach (int x in pushed) {
+            stk.Push(x);
+            while (stk.Count > 0 && stk.Peek() == popped[i]) {
+                stk.Pop();
+                i++;
+            }
+        }
+
+        return i == popped.Length;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

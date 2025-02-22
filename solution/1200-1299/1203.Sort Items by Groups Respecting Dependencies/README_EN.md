@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1203.Sort%20Items%20by%20Groups%20Respecting%20Dependencies/README_EN.md
+rating: 2418
+source: Weekly Contest 155 Q4
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Topological Sort
+---
+
+<!-- problem:start -->
+
 # [1203. Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies)
 
 [中文文档](/solution/1200-1299/1203.Sort%20Items%20by%20Groups%20Respecting%20Dependencies/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are&nbsp;<code>n</code>&nbsp;items each&nbsp;belonging to zero or one of&nbsp;<code>m</code>&nbsp;groups where <code>group[i]</code>&nbsp;is the group that the <code>i</code>-th item belongs to and it&#39;s equal to <code>-1</code>&nbsp;if the <code>i</code>-th item belongs to no group. The items and the groups are zero indexed. A group can have no item belonging to it.</p>
 
@@ -46,11 +63,25 @@
 	<li><code>beforeItems[i]&nbsp;</code>does not contain&nbsp;duplicates elements.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Topological Sorting
+
+First, we traverse the array $group$. For each project, if it does not belong to any group, we create a new group for it with the ID $m$, and increment $m$. This ensures that all projects belong to some group. Then, we use an array $groupItems$ to record the projects contained in each group. The array index is the group ID, and the array value is the list of projects in the group.
+
+Next, we need to build the graph. For each project, we need to build two types of graphs: one for the projects and one for the groups. We traverse the array $group$. For the current project $i$, its group is $group[i]$. We traverse $beforeItems[i]$, and for each project $j$ in it, if $group[i] = group[j]$, it means that $i$ and $j$ belong to the same group. We add an edge $j \to i$ in the project graph. Otherwise, it means that $i$ and $j$ belong to different groups. We add an edge $group[j] \to group[i]$ in the group graph, and update the corresponding in-degree array.
+
+Next, we perform topological sorting on the group graph to get the sorted group list $groupOrder$. If the length of the sorted list is not equal to the total number of groups, it means that the sorting cannot be completed, so we return an empty list. Otherwise, we traverse $groupOrder$, and for each group $gi$, we perform topological sorting on the project list $groupItems[gi]$ to get the sorted project list $itemOrder$. If the length of the sorted list is not equal to the total number of projects in the group, it means that the sorting cannot be completed, so we return an empty list. Otherwise, we add the projects in $itemOrder$ to the answer array, and finally return this answer array.
+
+The time complexity is $O(n + m)$, and the space complexity is $O(n + m)$. Here, $n$ and $m$ are the total number of projects and groups, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -104,7 +135,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -177,7 +208,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -246,7 +277,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortItems(n int, m int, group []int, beforeItems [][]int) []int {
@@ -317,15 +348,10 @@ func sortItems(n int, m int, group []int, beforeItems [][]int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function sortItems(
-    n: number,
-    m: number,
-    group: number[],
-    beforeItems: number[][],
-): number[] {
+function sortItems(n: number, m: number, group: number[], beforeItems: number[][]): number[] {
     let idx = m;
     const groupItems: number[][] = new Array(n + m).fill(0).map(() => []);
     const itemDegree: number[] = new Array(n).fill(0);
@@ -350,11 +376,7 @@ function sortItems(
         }
     }
     let items = new Array(n + m).fill(0).map((_, i) => i);
-    const topoSort = (
-        graph: number[][],
-        degree: number[],
-        items: number[],
-    ): number[] => {
+    const topoSort = (graph: number[][], degree: number[], items: number[]): number[] => {
         const q: number[] = [];
         for (const i of items) {
             if (degree[i] === 0) {
@@ -390,10 +412,8 @@ function sortItems(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,7 +1,9 @@
 class Solution:
     def maxScore(self, s: str) -> int:
-        ans = t = (s[0] == '0') + s[1:].count('1')
-        for i in range(1, len(s) - 1):
-            t += 1 if s[i] == '0' else -1
-            ans = max(ans, t)
+        l, r = 0, s.count("1")
+        ans = 0
+        for x in s[:-1]:
+            l += int(x) ^ 1
+            r -= int(x)
+            ans = max(ans, l + r)
         return ans

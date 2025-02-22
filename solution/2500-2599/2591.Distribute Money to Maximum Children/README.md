@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2591.Distribute%20Money%20to%20Maximum%20Children/README.md
+rating: 1530
+source: 第 100 场双周赛 Q1
+tags:
+    - 贪心
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2591. 将钱分给最多的儿童](https://leetcode.cn/problems/distribute-money-to-maximum-children)
 
 [English Version](/solution/2500-2599/2591.Distribute%20Money%20to%20Maximum%20Children/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数&nbsp;<code>money</code>&nbsp;，表示你总共有的钱数（单位为美元）和另一个整数&nbsp;<code>children</code>&nbsp;，表示你要将钱分配给多少个儿童。</p>
 
@@ -48,11 +61,13 @@
 	<li><code>2 &lt;= children &lt;= 30</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：分类讨论**
+### 方法一：分类讨论
 
 如果 $money \lt children$，那么一定存在儿童没有分到钱，返回 $-1$。
 
@@ -66,9 +81,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +96,7 @@ class Solution:
         return (money - children) // 7
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,7 +137,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func distMoney(money int, children int) int {
@@ -144,7 +155,7 @@ func distMoney(money int, children int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function distMoney(money: number, children: number): number {
@@ -161,10 +172,30 @@ function distMoney(money: number, children: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn dist_money(money: i32, children: i32) -> i32 {
+        if money < children {
+            return -1;
+        }
 
+        if money > children * 8 {
+            return children - 1;
+        }
+
+        if money == children * 8 - 4 {
+            return children - 2;
+        }
+
+        (money - children) / 7
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,16 +1,12 @@
 # Write your MySQL query statement below
-with t as (
-    select
-        tiv_2016,
-        count(pid) over(partition by tiv_2015) as cnt1,
-        count(pid) over(partition by concat(lat, lon)) as cnt2
-    from
-        Insurance
-)
-select
-    round(sum(TIV_2016), 2) tiv_2016
-from
-    t
-where
-    cnt1 != 1
-    and cnt2 = 1;
+WITH
+    T AS (
+        SELECT
+            tiv_2016,
+            COUNT(1) OVER (PARTITION BY tiv_2015) AS cnt1,
+            COUNT(1) OVER (PARTITION BY lat, lon) AS cnt2
+        FROM Insurance
+    )
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM T
+WHERE cnt1 > 1 AND cnt2 = 1;

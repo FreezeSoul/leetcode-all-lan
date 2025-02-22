@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9822.%20%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E8%8A%82%E7%82%B9/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 22. 链表中倒数第 k 个节点](https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。</p>
 
@@ -15,9 +25,13 @@
 
 返回链表 4<strong>->5</strong>.</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：快慢指针**
+<!-- solution:start -->
+
+### 方法一：快慢指针
 
 我们可以定义快慢指针 `fast` 和 `slow`，初始时均指向 `head`。
 
@@ -27,7 +41,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -47,7 +61,7 @@ class Solution:
         return slow
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -73,7 +87,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -100,7 +114,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -122,36 +136,7 @@ func getKthFromEnd(head *ListNode, k int) *ListNode {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} head
- * @param {number} k
- * @return {ListNode}
- */
-var getKthFromEnd = function (head, k) {
-    let fast = head;
-    while (k--) {
-        fast = fast.next;
-    }
-    let slow = head;
-    while (fast) {
-        slow = slow.next;
-        fast = fast.next;
-    }
-    return slow;
-};
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -186,7 +171,36 @@ impl Solution {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var getKthFromEnd = function (head, k) {
+    let fast = head;
+    while (k--) {
+        fast = fast.next;
+    }
+    let slow = head;
+    while (fast) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+    return slow;
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -212,10 +226,42 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* public class ListNode {
+*     var val: Int
+*     var next: ListNode?
+*     init(_ val: Int) {
+*         self.val = val
+*         self.next = nil
+*     }
+* }
+*/
 
+class Solution {
+    func getKthFromEnd(_ head: ListNode?, _ k: Int) -> ListNode? {
+        var slow = head
+        var fast = head
+        var k = k
+
+        while k > 0 {
+            fast = fast?.next
+            k -= 1
+        }
+
+        while fast != nil {
+            slow = slow?.next
+            fast = fast?.next
+        }
+
+        return slow
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

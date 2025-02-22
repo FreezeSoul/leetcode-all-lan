@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0669.Trim%20a%20Binary%20Search%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉搜索树
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [669. 修剪二叉搜索树](https://leetcode.cn/problems/trim-a-binary-search-tree)
 
 [English Version](/solution/0600-0699/0669.Trim%20a%20Binary%20Search%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你二叉搜索树的根节点 <code>root</code> ，同时给定最小边界<code>low</code> 和最大边界 <code>high</code>。通过修剪二叉搜索树，使得所有节点的值在<code>[low, high]</code>中。修剪树 <strong>不应该</strong>&nbsp;改变保留在树中的元素的相对结构 (即，如果没有被移除，原有的父代子代关系都应当保留)。 可以证明，存在&nbsp;<strong>唯一的答案</strong>&nbsp;。</p>
 
@@ -38,11 +51,13 @@
 	<li><code>0 &lt;= low &lt;= high &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 判断 `root.val` 与 `low` 和 `high` 的大小关系：
 
@@ -54,27 +69,9 @@
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉搜索树的节点个数。
 
-**方法二：迭代**
-
-我们先循环判断 `root`，若 `root.val` 不在 `[low, high]` 之间，那么直接将 `root` 置为对应的左孩子或右孩子，循环直至 `root` 为空或者 `root.val` 在 `[low, high]` 之间。
-
-若此时 `root` 为空，直接返回。否则，说明 `root` 是一个需要保留的节点。接下来只需要分别迭代修剪 `root` 的左右子树。
-
-以左子树 `node = root.left` 为例：
-
--   若 `node.left.val` 小于 `low`，那么 `node.left` 及其左孩子均不满足条件，我们直接将 `node.left` 置为 `node.left.right`；
--   否则，我们将 `node` 置为 `node.left`；
--   循环判断，直至 `node.left` 为空。
-
-右子树的修剪过程与之类似。
-
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 是二叉搜索树的节点个数。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -101,39 +98,7 @@ class Solution:
         return dfs(root)
 ```
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def trimBST(
-        self, root: Optional[TreeNode], low: int, high: int
-    ) -> Optional[TreeNode]:
-        while root and (root.val < low or root.val > high):
-            root = root.left if root.val > high else root.right
-        if root is None:
-            return None
-        node = root
-        while node.left:
-            if node.left.val < low:
-                node.left = node.left.right
-            else:
-                node = node.left
-        node = root
-        while node.right:
-            if node.right.val > high:
-                node.right = node.right.left
-            else:
-                node = node.right
-        return root
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -168,6 +133,264 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* trimBST(TreeNode* root, int low, int high) {
+        if (!root) return root;
+        if (root->val > high) return trimBST(root->left, low, high);
+        if (root->val < low) return trimBST(root->right, low, high);
+        root->left = trimBST(root->left, low, high);
+        root->right = trimBST(root->right, low, high);
+        return root;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func trimBST(root *TreeNode, low int, high int) *TreeNode {
+	if root == nil {
+		return root
+	}
+	if root.Val > high {
+		return trimBST(root.Left, low, high)
+	}
+	if root.Val < low {
+		return trimBST(root.Right, low, high)
+	}
+	root.Left = trimBST(root.Left, low, high)
+	root.Right = trimBST(root.Right, low, high)
+	return root
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function trimBST(root: TreeNode | null, low: number, high: number): TreeNode | null {
+    const dfs = (root: TreeNode | null) => {
+        if (root == null) {
+            return root;
+        }
+        const { val, left, right } = root;
+        if (val < low || val > high) {
+            return dfs(left) || dfs(right);
+        }
+        root.left = dfs(left);
+        root.right = dfs(right);
+        return root;
+    };
+    return dfs(root);
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::rc::Rc;
+impl Solution {
+    pub fn trim_bst(
+        mut root: Option<Rc<RefCell<TreeNode>>>,
+        low: i32,
+        high: i32,
+    ) -> Option<Rc<RefCell<TreeNode>>> {
+        if root.is_none() {
+            return root;
+        }
+        {
+            let mut node = root.as_mut().unwrap().borrow_mut();
+            if node.val < low {
+                return Self::trim_bst(node.right.take(), low, high);
+            }
+            if node.val > high {
+                return Self::trim_bst(node.left.take(), low, high);
+            }
+            node.left = Self::trim_bst(node.left.take(), low, high);
+            node.right = Self::trim_bst(node.right.take(), low, high);
+        }
+        root
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} low
+ * @param {number} high
+ * @return {TreeNode}
+ */
+var trimBST = function (root, low, high) {
+    function dfs(root) {
+        if (!root) {
+            return root;
+        }
+        if (root.val < low) {
+            return dfs(root.right);
+        }
+        if (root.val > high) {
+            return dfs(root.left);
+        }
+        root.left = dfs(root.left);
+        root.right = dfs(root.right);
+        return root;
+    }
+    return dfs(root);
+};
+```
+
+#### C
+
+```c
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+struct TreeNode* trimBST(struct TreeNode* root, int low, int high) {
+    if (!root) {
+        return root;
+    }
+    if (root->val < low) {
+        return trimBST(root->right, low, high);
+    }
+    if (root->val > high) {
+        return trimBST(root->left, low, high);
+    }
+    root->left = trimBST(root->left, low, high);
+    root->right = trimBST(root->right, low, high);
+    return root;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：迭代
+
+我们先循环判断 `root`，若 `root.val` 不在 `[low, high]` 之间，那么直接将 `root` 置为对应的左孩子或右孩子，循环直至 `root` 为空或者 `root.val` 在 `[low, high]` 之间。
+
+若此时 `root` 为空，直接返回。否则，说明 `root` 是一个需要保留的节点。接下来只需要分别迭代修剪 `root` 的左右子树。
+
+以左子树 `node = root.left` 为例：
+
+-   若 `node.left.val` 小于 `low`，那么 `node.left` 及其左孩子均不满足条件，我们直接将 `node.left` 置为 `node.left.right`；
+-   否则，我们将 `node` 置为 `node.left`；
+-   循环判断，直至 `node.left` 为空。
+
+右子树的修剪过程与之类似。
+
+时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 是二叉搜索树的节点个数。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def trimBST(
+        self, root: Optional[TreeNode], low: int, high: int
+    ) -> Optional[TreeNode]:
+        while root and (root.val < low or root.val > high):
+            root = root.left if root.val > high else root.right
+        if root is None:
+            return None
+        node = root
+        while node.left:
+            if node.left.val < low:
+                node.left = node.left.right
+            else:
+                node = node.left
+        node = root
+        while node.right:
+            if node.right.val > high:
+                node.right = node.right.left
+            else:
+                node = node.right
+        return root
+```
+
+#### Java
 
 ```java
 /**
@@ -214,32 +437,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    TreeNode* trimBST(TreeNode* root, int low, int high) {
-        if (!root) return root;
-        if (root->val > high) return trimBST(root->left, low, high);
-        if (root->val < low) return trimBST(root->right, low, high);
-        root->left = trimBST(root->left, low, high);
-        root->right = trimBST(root->right, low, high);
-        return root;
-    }
-};
-```
+#### C++
 
 ```cpp
 /**
@@ -283,32 +481,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func trimBST(root *TreeNode, low int, high int) *TreeNode {
-	if root == nil {
-		return root
-	}
-	if root.Val > high {
-		return trimBST(root.Left, low, high)
-	}
-	if root.Val < low {
-		return trimBST(root.Right, low, high)
-	}
-	root.Left = trimBST(root.Left, low, high)
-	root.Right = trimBST(root.Right, low, high)
-	return root
-}
-```
+#### Go
 
 ```go
 /**
@@ -350,41 +523,7 @@ func trimBST(root *TreeNode, low int, high int) *TreeNode {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {TreeNode} root
- * @param {number} low
- * @param {number} high
- * @return {TreeNode}
- */
-var trimBST = function (root, low, high) {
-    function dfs(root) {
-        if (!root) {
-            return root;
-        }
-        if (root.val < low) {
-            return dfs(root.right);
-        }
-        if (root.val > high) {
-            return dfs(root.left);
-        }
-        root.left = dfs(root.left);
-        root.right = dfs(root.right);
-        return root;
-    }
-    return dfs(root);
-};
-```
+#### JavaScript
 
 ```js
 /**
@@ -428,125 +567,8 @@ var trimBST = function (root, low, high) {
 };
 ```
 
-### **C**
-
-```c
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     struct TreeNode *left;
- *     struct TreeNode *right;
- * };
- */
-
-
-struct TreeNode *trimBST(struct TreeNode *root, int low, int high) {
-    if (!root) {
-        return root;
-    }
-    if (root->val < low) {
-        return trimBST(root->right, low, high);
-    }
-    if (root->val > high) {
-        return trimBST(root->left, low, high);
-    }
-    root->left = trimBST(root->left, low, high);
-    root->right = trimBST(root->right, low, high);
-    return root;
-}
-```
-
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function trimBST(
-    root: TreeNode | null,
-    low: number,
-    high: number,
-): TreeNode | null {
-    const dfs = (root: TreeNode | null) => {
-        if (root == null) {
-            return root;
-        }
-        const { val, left, right } = root;
-        if (val < low || val > high) {
-            return dfs(left) || dfs(right);
-        }
-        root.left = dfs(left);
-        root.right = dfs(right);
-        return root;
-    };
-    return dfs(root);
-}
-```
-
-### **Rust**
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
-use std::rc::Rc;
-use std::cell::RefCell;
-impl Solution {
-    pub fn trim_bst(
-        mut root: Option<Rc<RefCell<TreeNode>>>,
-        low: i32,
-        high: i32,
-    ) -> Option<Rc<RefCell<TreeNode>>> {
-        if root.is_none() {
-            return root;
-        }
-        {
-            let mut node = root.as_mut().unwrap().borrow_mut();
-            if node.val < low {
-                return Self::trim_bst(node.right.take(), low, high);
-            }
-            if node.val > high {
-                return Self::trim_bst(node.left.take(), low, high);
-            }
-            node.left = Self::trim_bst(node.left.take(), low, high);
-            node.right = Self::trim_bst(node.right.take(), low, high);
-        }
-        root
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -12,13 +12,11 @@ class Solution:
         pipes.sort(key=lambda x: x[2])
         p = list(range(n + 1))
         ans = 0
-        for i, j, c in pipes:
-            pa, pb = find(i), find(j)
-            if pa == pb:
-                continue
-            p[pa] = pb
-            ans += c
-            n -= 1
-            if n == 0:
-                break
-        return ans
+        for a, b, c in pipes:
+            pa, pb = find(a), find(b)
+            if pa != pb:
+                p[pa] = pb
+                n -= 1
+                ans += c
+                if n == 0:
+                    return ans

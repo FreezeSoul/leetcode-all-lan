@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2379.Minimum%20Recolors%20to%20Get%20K%20Consecutive%20Black%20Blocks/README.md
+rating: 1360
+source: 第 85 场双周赛 Q1
+tags:
+    - 字符串
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [2379. 得到 K 个黑块的最少涂色次数](https://leetcode.cn/problems/minimum-recolors-to-get-k-consecutive-black-blocks)
 
 [English Version](/solution/2300-2399/2379.Minimum%20Recolors%20to%20Get%20K%20Consecutive%20Black%20Blocks/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个长度为 <code>n</code>&nbsp;下标从 <strong>0</strong>&nbsp;开始的字符串&nbsp;<code>blocks</code>&nbsp;，<code>blocks[i]</code>&nbsp;要么是&nbsp;<code>'W'</code>&nbsp;要么是&nbsp;<code>'B'</code>&nbsp;，表示第&nbsp;<code>i</code>&nbsp;块的颜色。字符&nbsp;<code>'W'</code> 和&nbsp;<code>'B'</code>&nbsp;分别表示白色和黑色。</p>
 
@@ -49,11 +62,13 @@
 	<li><code>1 &lt;= k &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：滑动窗口**
+### 方法一：滑动窗口
 
 我们观察发现，题目实际上求的是一个 $k$ 大小的滑动窗口中白色块的最小数量。
 
@@ -61,13 +76,11 @@
 
 遍历结束后即可得到答案。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $blocks$ 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为字符串 $blocks$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,9 +93,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumRecolors(blocks string, k int) int {
@@ -141,7 +152,7 @@ func minimumRecolors(blocks string, k int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumRecolors(blocks: string, k: number): number {
@@ -159,7 +170,7 @@ function minimumRecolors(blocks: string, k: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -188,12 +199,43 @@ impl Solution {
 }
 ```
 
-### **C**
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param String $blocks
+     * @param Integer $k
+     * @return Integer
+     */
+    function minimumRecolors($blocks, $k) {
+        $cnt = 0;
+        for ($i = 0; $i < $k; $i++) {
+            if ($blocks[$i] === 'W') {
+                $cnt++;
+            }
+        }
+        $min = $cnt;
+        for ($i = $k; $i < strlen($blocks); $i++) {
+            if ($blocks[$i] === 'W') {
+                $cnt++;
+            }
+            if ($blocks[$i - $k] === 'W') {
+                $cnt--;
+            }
+            $min = min($min, $cnt);
+        }
+        return $min;
+    }
+}
+```
+
+#### C
 
 ```c
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-int minimumRecolors(char *blocks, int k) {
+int minimumRecolors(char* blocks, int k) {
     int n = strlen(blocks);
     int count = 0;
     for (int i = 0; i < k; i++) {
@@ -209,11 +251,8 @@ int minimumRecolors(char *blocks, int k) {
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

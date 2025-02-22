@@ -18,8 +18,9 @@ class Solution {
         if (root.left == null) {
             return root.val == 1;
         }
-        boolean l = evaluateTree(root.left);
-        boolean r = evaluateTree(root.right);
-        return root.val == 2 ? l || r : l && r;
+        if (root.val == 2) {
+            return evaluateTree(root.left) || evaluateTree(root.right);
+        }
+        return evaluateTree(root.left) && evaluateTree(root.right);
     }
 }

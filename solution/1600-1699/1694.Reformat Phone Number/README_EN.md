@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1694.Reformat%20Phone%20Number/README_EN.md
+rating: 1321
+source: Weekly Contest 220 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [1694. Reformat Phone Number](https://leetcode.com/problems/reformat-phone-number)
 
 [中文文档](/solution/1600-1699/1694.Reformat%20Phone%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a phone number as a string <code>number</code>. <code>number</code> consists of digits, spaces <code>&#39; &#39;</code>, and/or dashes <code>&#39;-&#39;</code>.</p>
 
@@ -62,11 +76,27 @@ Joining the blocks gives &quot;123-456-78&quot;.
 	<li>There are at least <strong>two</strong> digits in <code>number</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simple Simulation
+
+First, according to the problem description, we remove all spaces and hyphens from the string.
+
+Let the current string length be $n$. Then we traverse the string from the beginning, grouping every $3$ characters together and adding them to the result string. We take a total of $n / 3$ groups.
+
+If there is $1$ character left in the end, we form a new group of two characters with the last character of the last group and this character, and add it to the result string. If there are $2$ characters left, we directly form a new group with these two characters and add it to the result string.
+
+Finally, we add hyphens between all groups and return the result string.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -82,7 +112,7 @@ class Solution:
         return "-".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -138,7 +168,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func reformatNumber(number string) string {
@@ -159,7 +189,7 @@ func reformatNumber(number string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function reformatNumber(number: string): string {
@@ -167,10 +197,7 @@ function reformatNumber(number: string): string {
     const n = cs.length;
     return cs
         .map((v, i) => {
-            if (
-                ((i + 1) % 3 === 0 && i < n - 2) ||
-                (n % 3 === 1 && n - 3 === i)
-            ) {
+            if (((i + 1) % 3 === 0 && i < n - 2) || (n % 3 === 1 && n - 3 === i)) {
                 return v + '-';
             }
             return v;
@@ -179,7 +206,7 @@ function reformatNumber(number: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -189,7 +216,7 @@ impl Solution {
         cs.iter()
             .enumerate()
             .map(|(i, c)| {
-                if (i + 1) % 3 == 0 && i < n - 2 || n % 3 == 1 && i == n - 3 {
+                if ((i + 1) % 3 == 0 && i < n - 2) || (n % 3 == 1 && i == n - 3) {
                     return c.to_string() + &"-";
                 }
                 c.to_string()
@@ -199,10 +226,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

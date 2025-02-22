@@ -1,8 +1,23 @@
-# [490. The Maze](https://leetcode.com/problems/the-maze)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0490.The%20Maze/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
+# [490. The Maze 🔒](https://leetcode.com/problems/the-maze)
 
 [中文文档](/solution/0400-0499/0490.The%20Maze/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a ball in a <code>maze</code> with empty spaces (represented as <code>0</code>) and walls (represented as <code>1</code>). The ball can go through the empty spaces by rolling <strong>up, down, left or right</strong>, but it won&#39;t stop rolling until hitting a wall. When the ball stops, it could choose the next direction.</p>
 
@@ -44,19 +59,23 @@
 	<li><code>maze[i][j]</code> is <code>0</code> or <code>1</code>.</li>
 	<li><code>start.length == 2</code></li>
 	<li><code>destination.length == 2</code></li>
-	<li><code>0 &lt;= start<sub>row</sub>, destination<sub>row</sub> &lt;= m</code></li>
-	<li><code>0 &lt;= start<sub>col</sub>, destination<sub>col</sub> &lt;= n</code></li>
+	<li><code>0 &lt;= start<sub>row</sub>, destination<sub>row</sub> &lt; m</code></li>
+	<li><code>0 &lt;= start<sub>col</sub>, destination<sub>col</sub> &lt; n</code></li>
 	<li>Both the ball and the destination exist in an empty space, and they will not be in the same position initially.</li>
 	<li>The maze contains <strong>at least 2 empty spaces</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
-
-DFS.
+#### Python3
 
 ```python
 class Solution:
@@ -81,32 +100,7 @@ class Solution:
         return vis[destination[0]][destination[1]]
 ```
 
-BFS.
-
-```python
-class Solution:
-    def hasPath(self, maze: List[List[int]], start: List[int], destination: List[int]) -> bool:
-        m, n = len(maze), len(maze[0])
-        q = deque([start])
-        rs, cs = start
-        vis = {(rs, cs)}
-        while q:
-            i, j = q.popleft()
-            for a, b in [[0, -1], [0, 1], [-1, 0], [1, 0]]:
-                x, y = i, j
-                while 0 <= x + a < m and 0 <= y + b < n and maze[x + a][y + b] == 0:
-                    x, y = x + a, y + b
-                if [x, y] == destination:
-                    return True
-                if (x, y) not in vis:
-                    vis.add((x, y))
-                    q.append((x, y))
-        return False
-```
-
-### **Java**
-
-DFS.
+#### Java
 
 ```java
 class Solution {
@@ -148,44 +142,7 @@ class Solution {
 }
 ```
 
-BFS.
-
-```java
-class Solution {
-    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
-        int m = maze.length;
-        int n = maze[0].length;
-        boolean[][] vis = new boolean[m][n];
-        vis[start[0]][start[1]] = true;
-        Deque<int[]> q = new LinkedList<>();
-        q.offer(start);
-        int[] dirs = {-1, 0, 1, 0, -1};
-        while (!q.isEmpty()) {
-            int[] p = q.poll();
-            int i = p[0], j = p[1];
-            for (int k = 0; k < 4; ++k) {
-                int x = i, y = j;
-                int a = dirs[k], b = dirs[k + 1];
-                while (
-                    x + a >= 0 && x + a < m && y + b >= 0 && y + b < n && maze[x + a][y + b] == 0) {
-                    x += a;
-                    y += b;
-                }
-                if (x == destination[0] && y == destination[1]) {
-                    return true;
-                }
-                if (!vis[x][y]) {
-                    vis[x][y] = true;
-                    q.offer(new int[] {x, y});
-                }
-            }
-        }
-        return false;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -224,44 +181,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
-        int m = maze.size();
-        int n = maze[0].size();
-        queue<vector<int>> q{{start}};
-        vector<vector<bool>> vis(m, vector<bool>(n));
-        vis[start[0]][start[1]] = true;
-        vector<int> dirs = {-1, 0, 1, 0, -1};
-        while (!q.empty())
-        {
-            auto p = q.front();
-            q.pop();
-            int i = p[0], j = p[1];
-            for (int k = 0; k < 4; ++k)
-            {
-                int x = i, y = j;
-                int a = dirs[k], b = dirs[k + 1];
-                while (x + a >= 0 && x + a < m && y + b >= 0 && y + b < n && maze[x + a][y + b] == 0)
-                {
-                    x += a;
-                    y += b;
-                }
-                if (x == destination[0] && y == destination[1]) return 1;
-                if (!vis[x][y])
-                {
-                    vis[x][y] = true;
-                    q.push({x, y});
-                }
-            }
-        }
-        return 0;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func hasPath(maze [][]int, start []int, destination []int) bool {
@@ -294,6 +214,115 @@ func hasPath(maze [][]int, start []int, destination []int) bool {
 	return vis[destination[0]][destination[1]]
 }
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def hasPath(
+        self, maze: List[List[int]], start: List[int], destination: List[int]
+    ) -> bool:
+        m, n = len(maze), len(maze[0])
+        q = deque([start])
+        rs, cs = start
+        vis = {(rs, cs)}
+        while q:
+            i, j = q.popleft()
+            for a, b in [[0, -1], [0, 1], [-1, 0], [1, 0]]:
+                x, y = i, j
+                while 0 <= x + a < m and 0 <= y + b < n and maze[x + a][y + b] == 0:
+                    x, y = x + a, y + b
+                if [x, y] == destination:
+                    return True
+                if (x, y) not in vis:
+                    vis.add((x, y))
+                    q.append((x, y))
+        return False
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        int m = maze.length;
+        int n = maze[0].length;
+        boolean[][] vis = new boolean[m][n];
+        vis[start[0]][start[1]] = true;
+        Deque<int[]> q = new LinkedList<>();
+        q.offer(start);
+        int[] dirs = {-1, 0, 1, 0, -1};
+        while (!q.isEmpty()) {
+            int[] p = q.poll();
+            int i = p[0], j = p[1];
+            for (int k = 0; k < 4; ++k) {
+                int x = i, y = j;
+                int a = dirs[k], b = dirs[k + 1];
+                while (
+                    x + a >= 0 && x + a < m && y + b >= 0 && y + b < n && maze[x + a][y + b] == 0) {
+                    x += a;
+                    y += b;
+                }
+                if (x == destination[0] && y == destination[1]) {
+                    return true;
+                }
+                if (!vis[x][y]) {
+                    vis[x][y] = true;
+                    q.offer(new int[] {x, y});
+                }
+            }
+        }
+        return false;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
+        int m = maze.size();
+        int n = maze[0].size();
+        queue<vector<int>> q{{start}};
+        vector<vector<bool>> vis(m, vector<bool>(n));
+        vis[start[0]][start[1]] = true;
+        vector<int> dirs = {-1, 0, 1, 0, -1};
+        while (!q.empty()) {
+            auto p = q.front();
+            q.pop();
+            int i = p[0], j = p[1];
+            for (int k = 0; k < 4; ++k) {
+                int x = i, y = j;
+                int a = dirs[k], b = dirs[k + 1];
+                while (x + a >= 0 && x + a < m && y + b >= 0 && y + b < n && maze[x + a][y + b] == 0) {
+                    x += a;
+                    y += b;
+                }
+                if (x == destination[0] && y == destination[1]) return 1;
+                if (!vis[x][y]) {
+                    vis[x][y] = true;
+                    q.push({x, y});
+                }
+            }
+        }
+        return 0;
+    }
+};
+```
+
+#### Go
 
 ```go
 func hasPath(maze [][]int, start []int, destination []int) bool {
@@ -328,10 +357,8 @@ func hasPath(maze [][]int, start []int, destination []int) bool {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

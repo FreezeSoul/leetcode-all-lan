@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1946.Largest%20Number%20After%20Mutating%20Substring/README.md
+rating: 1445
+source: 第 251 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1946. 子字符串突变后可能得到的最大整数](https://leetcode.cn/problems/largest-number-after-mutating-substring)
 
 [English Version](/solution/1900-1999/1946.Largest%20Number%20After%20Mutating%20Substring/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>num</code> ，该字符串表示一个大整数。另给你一个长度为 <code>10</code> 且 <strong>下标从 0&nbsp; 开始</strong> 的整数数组 <code>change</code> ，该数组将 <code>0-9</code> 中的每个数字映射到另一个数字。更规范的说法是，数字 <code>d</code> 映射为数字 <code>change[d]</code> 。</p>
 
@@ -56,69 +70,81 @@
 	<li><code>0 &lt;= change[d] &lt;= 9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
-从左到右遍历字符串 `num`，找到第一个比 `change` 中对应数字小的数字，然后将其替换为 `change` 中对应的数字，直到遇到比 `change` 中对应数字大的数字，停止替换。
+根据题目描述，我们可以从字符串的高位开始，贪心的进行连续的替换操作，直到遇到一个比当前位数字小的数字为止。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串 `num` 的长度。
+我们先将字符串 $\textit{num}$ 转换为字符数组 $\textit{s}$，用一个变量 $\textit{changed}$ 记录是否已经发生过变化，初始时 $\textit{changed} = \text{false}$。
+
+然后我们遍历字符数组 $\textit{s}$，对于每个字符 $\textit{c}$，我们将其转换为数字 $\textit{d} = \text{change}[\text{int}(\textit{c})]$，如果已经发生过变化且 $\textit{d} < \textit{c}$，则说明我们不能再继续变化，直接退出循环；否则，如果 $\textit{d} > \textit{c}$，则说明我们可以将 $\textit{c}$ 替换为 $\textit{d}$，此时我们将 $\textit{changed} = \text{true}$，并将 $\textit{s}[i]$ 替换为 $\textit{d}$。
+
+最后我们将字符数组 $\textit{s}$ 转换为字符串并返回即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串 $\textit{num}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maximumNumber(self, num: str, change: List[int]) -> str:
         s = list(num)
+        changed = False
         for i, c in enumerate(s):
-            if change[int(c)] > int(c):
-                while i < len(s) and int(s[i]) <= change[int(s[i])]:
-                    s[i] = str(change[int(s[i])])
-                    i += 1
+            d = str(change[int(c)])
+            if changed and d < c:
                 break
-        return ''.join(s)
+            if d > c:
+                changed = True
+                s[i] = d
+        return "".join(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public String maximumNumber(String num, int[] change) {
         char[] s = num.toCharArray();
+        boolean changed = false;
         for (int i = 0; i < s.length; ++i) {
-            if (change[s[i] - '0'] > s[i] - '0') {
-                for (; i < s.length && s[i] - '0' <= change[s[i] - '0']; ++i) {
-                    s[i] = (char) (change[s[i] - '0'] + '0');
-                }
+            char d = (char) (change[s[i] - '0'] + '0');
+            if (changed && d < s[i]) {
                 break;
             }
+            if (d > s[i]) {
+                changed = true;
+                s[i] = d;
+            }
         }
-        return String.valueOf(s);
+        return new String(s);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string maximumNumber(string num, vector<int>& change) {
         int n = num.size();
+        bool changed = false;
         for (int i = 0; i < n; ++i) {
-            if (change[num[i] - '0'] > num[i] - '0') {
-                for (; i < n && change[num[i] - '0'] >= num[i] - '0'; ++i) {
-                    num[i] = change[num[i] - '0'] + '0';
-                }
+            char d = '0' + change[num[i] - '0'];
+            if (changed && d < num[i]) {
                 break;
+            }
+            if (d > num[i]) {
+                changed = true;
+                num[i] = d;
             }
         }
         return num;
@@ -126,27 +152,95 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumNumber(num string, change []int) string {
 	s := []byte(num)
+	changed := false
 	for i, c := range num {
-		if change[c-'0'] > int(c-'0') {
-			for ; i < len(s) && change[s[i]-'0'] >= int(s[i]-'0'); i++ {
-				s[i] = byte(change[s[i]-'0']) + '0'
-			}
+		d := byte('0' + change[c-'0'])
+		if changed && d < s[i] {
 			break
+		}
+		if d > s[i] {
+			s[i] = d
+			changed = true
 		}
 	}
 	return string(s)
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function maximumNumber(num: string, change: number[]): string {
+    const s = num.split('');
+    let changed = false;
+    for (let i = 0; i < s.length; ++i) {
+        const d = change[+s[i]].toString();
+        if (changed && d < s[i]) {
+            break;
+        }
+        if (d > s[i]) {
+            s[i] = d;
+            changed = true;
+        }
+    }
+    return s.join('');
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn maximum_number(num: String, change: Vec<i32>) -> String {
+        let mut s: Vec<char> = num.chars().collect();
+        let mut changed = false;
+        for i in 0..s.len() {
+            let d = (change[s[i] as usize - '0' as usize] + '0' as i32) as u8 as char;
+            if changed && d < s[i] {
+                break;
+            }
+            if d > s[i] {
+                changed = true;
+                s[i] = d;
+            }
+        }
+        s.into_iter().collect()
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} num
+ * @param {number[]} change
+ * @return {string}
+ */
+var maximumNumber = function (num, change) {
+    const s = num.split('');
+    let changed = false;
+    for (let i = 0; i < s.length; ++i) {
+        const d = change[+s[i]].toString();
+        if (changed && d < s[i]) {
+            break;
+        }
+        if (d > s[i]) {
+            s[i] = d;
+            changed = true;
+        }
+    }
+    return s.join('');
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2018.Check%20if%20Word%20Can%20Be%20Placed%20In%20Crossword/README_EN.md
+rating: 1929
+source: Weekly Contest 260 Q3
+tags:
+    - Array
+    - Enumeration
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [2018. Check if Word Can Be Placed In Crossword](https://leetcode.com/problems/check-if-word-can-be-placed-in-crossword)
 
 [中文文档](/solution/2000-2099/2018.Check%20if%20Word%20Can%20Be%20Placed%20In%20Crossword/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an <code>m x n</code> matrix <code>board</code>, representing the<strong> current </strong>state of a crossword puzzle. The crossword contains lowercase English letters (from solved words), <code>&#39; &#39;</code> to represent any <strong>empty </strong>cells, and <code>&#39;#&#39;</code> to represent any <strong>blocked</strong> cells.</p>
 
@@ -53,11 +69,36 @@
 	<li><code>word</code> will contain only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+We can enumerate each position $(i, j)$ in the matrix, and judge whether we can place the word `word` from left to right or from right to left, or from top to bottom or from bottom to top, starting from this position.
+
+The following conditions must be met for this position to be used as a starting point:
+
+1. If the word `word` is to be placed from left to right, then this position must be the left boundary, or the cell `board[i][j - 1]` to the left of this position is `'#'`.
+2. If the word `word` is to be placed from right to left, then this position must be the right boundary, or the cell `board[i][j + 1]` to the right of this position is `'#'`.
+3. If the word `word` is to be placed from top to bottom, then this position must be the upper boundary, or the cell `board[i - 1][j]` above this position is `'#'`.
+4. If the word `word` is to be placed from bottom to top, then this position must be the lower boundary, or the cell `board[i + 1][j]` below this position is `'#'`.
+
+Under the above conditions, we can start from this position and judge whether the word `word` can be placed. We design a function $check(i, j, a, b)$, which represents whether it is legal to place the word `word` from the position $(i, j)$ in the direction $(a, b)$. If it is legal, return `true`, otherwise return `false`.
+
+The implementation of the function $check(i, j, a, b)$ is as follows:
+
+We first get the other boundary position $(x, y)$ in the current direction, i.e., $(x, y) = (i + a \times k, j + b \times k)$, where $k$ is the length of the word `word`. If $(x, y)$ is in the matrix and the cell at $(x, y)$ is not `'#'`, it means that the other boundary position in the current direction is not `'#'`, so the word `word` cannot be placed, and `false` is returned.
+
+Otherwise, we start from the position $(i, j)$ and traverse the word `word` in the direction $(a, b)$. If we encounter a cell `board[i][j]` that is not a space or not the current character of the word `word`, it means that the word `word` cannot be placed, and `false` is returned. If the word `word` is traversed, it means that the word `word` can be placed, and `true` is returned.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(1)$. Here, $m$ and $n$ are the number of rows and columns in the matrix, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -95,7 +136,7 @@ class Solution:
         return False
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -143,7 +184,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -181,7 +222,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func placeWordInCrossword(board [][]byte, word string) bool {
@@ -215,10 +256,8 @@ func placeWordInCrossword(board [][]byte, word string) bool {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

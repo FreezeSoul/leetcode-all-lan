@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2375.Construct%20Smallest%20Number%20From%20DI%20String/README_EN.md
+rating: 1641
+source: Weekly Contest 306 Q3
+tags:
+    - Stack
+    - Greedy
+    - String
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [2375. Construct Smallest Number From DI String](https://leetcode.com/problems/construct-smallest-number-from-di-string)
 
 [中文文档](/solution/2300-2399/2375.Construct%20Smallest%20Number%20From%20DI%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> string <code>pattern</code> of length <code>n</code> consisting of the characters <code>&#39;I&#39;</code> meaning <strong>increasing</strong> and <code>&#39;D&#39;</code> meaning <strong>decreasing</strong>.</p>
 
@@ -47,11 +64,17 @@ It can be proven that &quot;4321&quot; is the smallest possible num that meets t
 	<li><code>pattern</code> consists of only the letters <code>&#39;I&#39;</code> and <code>&#39;D&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -82,7 +105,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -124,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +185,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestNumber(pattern string) string {
@@ -199,7 +222,7 @@ func smallestNumber(pattern string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallestNumber(pattern: string): string {
@@ -256,11 +279,8 @@ function smallestNumber(pattern: string): string {
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

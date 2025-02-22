@@ -1,10 +1,28 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2597.The%20Number%20of%20Beautiful%20Subsets/README.md
+rating: 2023
+source: 第 337 场周赛 Q3
+tags:
+    - 数组
+    - 哈希表
+    - 数学
+    - 动态规划
+    - 回溯
+    - 组合数学
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2597. 美丽子集的数目](https://leetcode.cn/problems/the-number-of-beautiful-subsets)
 
 [English Version](/solution/2500-2599/2597.The%20Number%20of%20Beautiful%20Subsets/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由正整数组成的数组 <code>nums</code> 和一个 <strong>正</strong> 整数 <code>k</code> 。</p>
 
@@ -18,7 +36,8 @@
 
 <p><strong>示例 1：</strong></p>
 
-<pre><strong>输入：</strong>nums = [2,4,6], k = 2
+<pre>
+<strong>输入：</strong>nums = [2,4,6], k = 2
 <strong>输出：</strong>4
 <strong>解释：</strong>数组 nums 中的美丽子集有：[2], [4], [6], [2, 6] 。
 可以证明数组 [2,4,6] 中只存在 4 个美丽子集。
@@ -26,7 +45,8 @@
 
 <p><strong>示例 2：</strong></p>
 
-<pre><strong>输入：</strong>nums = [1], k = 1
+<pre>
+<strong>输入：</strong>nums = [1], k = 1
 <strong>输出：</strong>1
 <strong>解释：</strong>数组 nums 中的美丽数组有：[1] 。
 可以证明数组 [1] 中只存在 1 个美丽子集。 
@@ -37,15 +57,17 @@
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 &lt;= nums.length &lt;= 20</code></li>
+	<li><code>1 &lt;= nums.length &lt;= 18</code></li>
 	<li><code>1 &lt;= nums[i], k &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 回溯**
+### 方法一：计数 + 回溯
 
 我们用哈希表或数组 $cnt$ 记录当前已经选择的数字以及它们的个数，用 $ans$ 记录美丽子集的数目，初始时 $ans = -1$，表示排除空集。
 
@@ -60,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +104,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +137,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -149,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func beautifulSubsets(nums []int, k int) int {
@@ -176,7 +194,7 @@ func beautifulSubsets(nums []int, k int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function beautifulSubsets(nums: number[], k: number): number {
@@ -202,10 +220,8 @@ function beautifulSubsets(nums: number[], k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

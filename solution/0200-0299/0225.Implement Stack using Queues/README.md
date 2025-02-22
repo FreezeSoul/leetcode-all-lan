@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0225.Implement%20Stack%20using%20Queues/README.md
+tags:
+    - 栈
+    - 设计
+    - 队列
+---
+
+<!-- problem:start -->
+
 # [225. 用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues)
 
 [English Version](/solution/0200-0299/0225.Implement%20Stack%20using%20Queues/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（<code>push</code>、<code>top</code>、<code>pop</code> 和 <code>empty</code>）。</p>
 
@@ -22,7 +34,7 @@
 <p><strong>注意：</strong></p>
 
 <ul>
-	<li>你只能使用队列的基本操作 —— 也就是&nbsp;<code>push to back</code>、<code>peek/pop from front</code>、<code>size</code> 和&nbsp;<code>is empty</code>&nbsp;这些操作。</li>
+	<li>你只能使用队列的标准操作 —— 也就是&nbsp;<code>push to back</code>、<code>peek/pop from front</code>、<code>size</code> 和&nbsp;<code>is empty</code>&nbsp;这些操作。</li>
 	<li>你所使用的语言也许不支持队列。&nbsp;你可以使用 list （列表）或者 deque（双端队列）来模拟一个队列&nbsp;, 只要是标准的队列操作即可。</li>
 </ul>
 
@@ -60,11 +72,13 @@ myStack.empty(); // 返回 False
 
 <p><strong>进阶：</strong>你能否仅用一个队列来实现栈。</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：两个队列**
+### 方法一：两个队列
 
 我们使用两个队列 $q_1$ 和 $q_2$，其中 $q_1$ 用于存储栈中的元素，而 $q_2$ 用于辅助实现栈的操作。
 
@@ -77,13 +91,10 @@ myStack.empty(); // 返回 False
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class MyStack:
-
     def __init__(self):
         self.q1 = deque()
         self.q2 = deque()
@@ -112,13 +123,9 @@ class MyStack:
 # param_4 = obj.empty()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-import java.util.Deque;
-
 class MyStack {
     private Deque<Integer> q1 = new ArrayDeque<>();
     private Deque<Integer> q2 = new ArrayDeque<>();
@@ -159,13 +166,12 @@ class MyStack {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class MyStack {
 public:
     MyStack() {
-
     }
 
     void push(int x) {
@@ -206,7 +212,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type MyStack struct {
@@ -251,7 +257,7 @@ func (this *MyStack) Empty() bool {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class MyStack {
@@ -291,10 +297,62 @@ class MyStack {
  */
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::VecDeque;
 
+struct MyStack {
+    /// There could only be two status at all time
+    /// 1. One contains N elements, the other is empty
+    /// 2. One contains N - 1 elements, the other contains exactly 1 element
+    q_1: VecDeque<i32>,
+    q_2: VecDeque<i32>,
+    // Either 1 or 2, originally begins from 1
+    index: i32,
+}
+
+impl MyStack {
+    fn new() -> Self {
+        Self {
+            q_1: VecDeque::new(),
+            q_2: VecDeque::new(),
+            index: 1,
+        }
+    }
+
+    fn move_data(&mut self) {
+        // Always move from q1 to q2
+        assert!(self.q_2.len() == 1);
+        while !self.q_1.is_empty() {
+            self.q_2.push_back(self.q_1.pop_front().unwrap());
+        }
+        let tmp = self.q_1.clone();
+        self.q_1 = self.q_2.clone();
+        self.q_2 = tmp;
+    }
+
+    fn push(&mut self, x: i32) {
+        self.q_2.push_back(x);
+        self.move_data();
+    }
+
+    fn pop(&mut self) -> i32 {
+        self.q_1.pop_front().unwrap()
+    }
+
+    fn top(&mut self) -> i32 {
+        *self.q_1.front().unwrap()
+    }
+
+    fn empty(&self) -> bool {
+        self.q_1.is_empty()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

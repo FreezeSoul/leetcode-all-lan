@@ -1,10 +1,24 @@
-# [2524. 子数组的最大频率分数](https://leetcode.cn/problems/maximum-frequency-score-of-a-subarray)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2524.Maximum%20Frequency%20Score%20of%20a%20Subarray/README.md
+tags:
+    - 栈
+    - 数组
+    - 哈希表
+    - 数学
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
+# [2524. 子数组的最大频率分数 🔒](https://leetcode.cn/problems/maximum-frequency-score-of-a-subarray)
 
 [English Version](/solution/2500-2599/2524.Maximum%20Frequency%20Score%20of%20a%20Subarray/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数数组 <code>nums</code> 和一个 <strong>正</strong> 整数 <code>k</code> 。</p>
 
@@ -43,23 +57,23 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 滑动窗口 + 快速幂**
+### 方法一：哈希表 + 滑动窗口 + 快速幂
 
-我们用哈希表 `cnt` 维护窗口大小为 $k$ 的元素及其出现的次数。
+我们用哈希表 $\textit{cnt}$ 维护窗口大小为 $k$ 的元素及其出现的次数。
 
 先算出初始窗口为 $k$ 的所有元素的分数。然后利用滑动窗口，每次加入一个元素，并移除最左边的元素，同时利用快速幂更新分数。
 
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `nums` 的长度。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 $\textit{nums}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,21 +95,20 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
+    private final int mod = (int) 1e9 + 7;
+
     public int maxFrequencyScore(int[] nums, int k) {
-        final int mod = (int) 1e9 + 7;
         Map<Integer, Integer> cnt = new HashMap<>();
         for (int i = 0; i < k; ++i) {
-            cnt.put(nums[i], cnt.getOrDefault(nums[i], 0) + 1);
+            cnt.merge(nums[i], 1, Integer::sum);
         }
         long cur = 0;
         for (var e : cnt.entrySet()) {
-            cur = (cur + qmi(e.getKey(), e.getValue(), mod)) % mod;
+            cur = (cur + qpow(e.getKey(), e.getValue())) % mod;
         }
         long ans = cur;
         for (int i = k; i < nums.length; ++i) {
@@ -103,12 +116,12 @@ class Solution {
             int b = nums[i];
             if (a != b) {
                 if (cnt.getOrDefault(b, 0) > 0) {
-                    cur += (b - 1) * qmi(b, cnt.get(b), mod) % mod;
+                    cur += (b - 1) * qpow(b, cnt.get(b)) % mod;
                 } else {
                     cur += b;
                 }
                 if (cnt.getOrDefault(a, 0) > 1) {
-                    cur -= (a - 1) * qmi(a, cnt.get(a) - 1, mod) % mod;
+                    cur -= (a - 1) * qpow(a, cnt.get(a) - 1) % mod;
                 } else {
                     cur -= a;
                 }
@@ -121,41 +134,51 @@ class Solution {
         return (int) ans;
     }
 
-    long qmi(long a, long k, long p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
+    private long qpow(long a, long n) {
+        long ans = 1;
+        for (; n > 0; n >>= 1) {
+            if ((n & 1) == 1) {
+                ans = ans * a % mod;
             }
-            k >>= 1;
-            a = a * a % p;
+            a = a * a % mod;
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maxFrequencyScore(vector<int>& nums, int k) {
+        using ll = long long;
+        const int mod = 1e9 + 7;
+        auto qpow = [&](ll a, ll n) {
+            ll ans = 1;
+            for (; n; n >>= 1) {
+                if (n & 1) {
+                    ans = ans * a % mod;
+                }
+                a = a * a % mod;
+            }
+            return ans;
+        };
         unordered_map<int, int> cnt;
         for (int i = 0; i < k; ++i) {
             cnt[nums[i]]++;
         }
-        long cur = 0;
-        const int mod = 1e9 + 7;
+        ll cur = 0;
         for (auto& [k, v] : cnt) {
-            cur = (cur + qmi(k, v, mod)) % mod;
+            cur = (cur + qpow(k, v)) % mod;
         }
-        long ans = cur;
+        ll ans = cur;
         for (int i = k; i < nums.size(); ++i) {
             int a = nums[i - k], b = nums[i];
             if (a != b) {
-                cur += cnt[b] ? (b - 1) * qmi(b, cnt[b], mod) % mod : b;
-                cur -= cnt[a] > 1 ? (a - 1) * qmi(a, cnt[a] - 1, mod) % mod : a;
+                cur += cnt[b] ? (b - 1) * qpow(b, cnt[b]) % mod : b;
+                cur -= cnt[a] > 1 ? (a - 1) * qpow(a, cnt[a] - 1) % mod : a;
                 cur = (cur + mod) % mod;
                 ans = max(ans, cur);
                 cnt[b]++;
@@ -164,22 +187,10 @@ public:
         }
         return ans;
     }
-
-    long qmi(long a, long k, long p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
-            }
-            k >>= 1;
-            a = a * a % p;
-        }
-        return res;
-    }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxFrequencyScore(nums []int, k int) int {
@@ -189,20 +200,30 @@ func maxFrequencyScore(nums []int, k int) int {
 	}
 	cur := 0
 	const mod int = 1e9 + 7
+	qpow := func(a, n int) int {
+		ans := 1
+		for ; n > 0; n >>= 1 {
+			if n&1 == 1 {
+				ans = ans * a % mod
+			}
+			a = a * a % mod
+		}
+		return ans
+	}
 	for k, v := range cnt {
-		cur = (cur + qmi(k, v, mod)) % mod
+		cur = (cur + qpow(k, v)) % mod
 	}
 	ans := cur
 	for i := k; i < len(nums); i++ {
 		a, b := nums[i-k], nums[i]
 		if a != b {
 			if cnt[b] > 0 {
-				cur += (b - 1) * qmi(b, cnt[b], mod) % mod
+				cur += (b - 1) * qpow(b, cnt[b]) % mod
 			} else {
 				cur += b
 			}
 			if cnt[a] > 1 {
-				cur -= (a - 1) * qmi(a, cnt[a]-1, mod) % mod
+				cur -= (a - 1) * qpow(a, cnt[a]-1) % mod
 			} else {
 				cur -= a
 			}
@@ -214,31 +235,10 @@ func maxFrequencyScore(nums []int, k int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func qmi(a, k, p int) int {
-	res := 1
-	for k != 0 {
-		if k&1 == 1 {
-			res = res * a % p
-		}
-		k >>= 1
-		a = a * a % p
-	}
-	return res
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

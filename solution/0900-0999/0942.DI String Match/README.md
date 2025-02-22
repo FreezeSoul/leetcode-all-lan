@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0942.DI%20String%20Match/README.md
+tags:
+    - 贪心
+    - 数组
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [942. 增减字符串匹配](https://leetcode.cn/problems/di-string-match)
 
 [English Version](/solution/0900-0999/0942.DI%20String%20Match/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>由范围 <code>[0,n]</code> 内所有整数组成的 <code>n + 1</code> 个整数的排列序列可以表示为长度为 <code>n</code> 的字符串 <code>s</code> ，其中:</p>
 
@@ -46,26 +59,31 @@
 	<li><code><font color="#c7254e"><font face="Menlo, Monaco, Consolas, Courier New, monospace"><span style="font-size:12.6px"><span style="background-color:#f9f2f4">s</span></span></font></font></code> 只包含字符&nbsp;<code>"I"</code>&nbsp;或&nbsp;<code>"D"</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-类似贪心思想，如果当前字母是 `I`，我们只需要选择当前可选的最小数字，就能保证后面的数字无论怎么排列，当前数字和下一个数字一定是递增关系。`D` 同理，选择当前可选的最大数字即可
+### 方法一：贪心
+
+我们可以使用两个指针 `low` 和 `high` 分别表示当前的最小值和最大值，然后遍历字符串 `s`，如果当前字符是 `I`，那么我们就将 `low` 加入到结果数组中，并且 `low` 自增 1；如果当前字符是 `D`，那么我们就将 `high` 加入到结果数组中，并且 `high` 自减 1。
+
+最后，我们将 `low` 加入到结果数组中，返回结果数组即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串 `s` 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def diStringMatch(self, s: str) -> List[int]:
-        n = len(s)
-        low, high = 0, n
+        low, high = 0, len(s)
         ans = []
-        for i in range(n):
-            if s[i] == 'I':
+        for c in s:
+            if c == "I":
                 ans.append(low)
                 low += 1
             else:
@@ -75,9 +93,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,15 +136,13 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func diStringMatch(s string) []int {
-	n := len(s)
-	low, high := 0, n
-	var ans []int
-	for i := 0; i < n; i++ {
-		if s[i] == 'I' {
+func diStringMatch(s string) (ans []int) {
+	low, high := 0, len(s)
+	for _, c := range s {
+		if c == 'I' {
 			ans = append(ans, low)
 			low++
 		} else {
@@ -137,58 +151,55 @@ func diStringMatch(s string) []int {
 		}
 	}
 	ans = append(ans, low)
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function diStringMatch(s: string): number[] {
-    const n = s.length;
-    const res = new Array(n + 1);
-    let low = 0;
-    let high = n;
-    for (let i = 0; i < n; i++) {
-        if (s[i] === 'I') {
-            res[i] = low++;
+    const ans: number[] = [];
+    let [low, high] = [0, s.length];
+    for (const c of s) {
+        if (c === 'I') {
+            ans.push(low++);
         } else {
-            res[i] = high--;
+            ans.push(high--);
         }
     }
-    res[n] = low;
-    return res;
+    ans.push(low);
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn di_string_match(s: String) -> Vec<i32> {
-        let s = s.as_bytes();
-        let n = s.len();
-        let mut res = Vec::with_capacity(n + 1);
-        let (mut low, mut high) = (-1, (n + 1) as i32);
-        for i in 0..n {
-            res.push(if s[i] == b'I' {
+        let mut low = 0;
+        let mut high = s.len() as i32;
+        let mut ans = Vec::with_capacity(s.len() + 1);
+
+        for c in s.chars() {
+            if c == 'I' {
+                ans.push(low);
                 low += 1;
-                low
             } else {
+                ans.push(high);
                 high -= 1;
-                high
-            });
+            }
         }
-        res.push(low + 1);
-        res
+
+        ans.push(low);
+        ans
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

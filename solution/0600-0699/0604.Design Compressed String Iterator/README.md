@@ -1,10 +1,23 @@
-# [604. 迭代压缩字符串](https://leetcode.cn/problems/design-compressed-string-iterator)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0604.Design%20Compressed%20String%20Iterator/README.md
+tags:
+    - 设计
+    - 数组
+    - 字符串
+    - 迭代器
+---
+
+<!-- problem:start -->
+
+# [604. 迭代压缩字符串 🔒](https://leetcode.cn/problems/design-compressed-string-iterator)
 
 [English Version](/solution/0600-0699/0604.Design%20Compressed%20String%20Iterator/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计并实现一个迭代压缩字符串的数据结构。给定的压缩字符串的形式是，每个字母后面紧跟一个正整数，表示该字母在原始未压缩字符串中出现的次数。</p>
 
@@ -49,11 +62,13 @@ stringIterator.hasNext(); // 返回 True</pre>
 	<li><code>next</code>&nbsp;和&nbsp;<code>hasNext</code>&nbsp;的操作数最多为&nbsp;<code>100</code>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：解析存储**
+### 方法一：解析存储
 
 将 `compressedString` 解析成字符 $c$ 和对应的重复次数 $x$，存储在数组或列表 $d$ 中，用 $p$ 指向当前字符。
 
@@ -63,13 +78,10 @@ stringIterator.hasNext(); // 返回 True</pre>
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class StringIterator:
-
     def __init__(self, compressedString: str):
         self.d = []
         self.p = 0
@@ -103,9 +115,7 @@ class StringIterator:
 # param_2 = obj.hasNext()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class StringIterator {
@@ -159,7 +169,7 @@ class Node {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class StringIterator {
@@ -189,6 +199,7 @@ public:
     bool hasNext() {
         return p < d.size() && d[p].second > 0;
     }
+
 private:
     vector<pair<char, int>> d;
     int p = 0;
@@ -202,7 +213,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type pair struct {
@@ -256,10 +267,8 @@ func (this *StringIterator) HasNext() bool {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

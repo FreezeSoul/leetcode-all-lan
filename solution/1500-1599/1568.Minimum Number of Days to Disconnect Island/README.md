@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1568.Minimum%20Number%20of%20Days%20to%20Disconnect%20Island/README.md
+rating: 2208
+source: 第 204 场周赛 Q3
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+    - 强连通分量
+---
+
+<!-- problem:start -->
+
 # [1568. 使陆地分离的最少天数](https://leetcode.cn/problems/minimum-number-of-days-to-disconnect-island)
 
 [English Version](/solution/1500-1599/1568.Minimum%20Number%20of%20Days%20to%20Disconnect%20Island/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个大小为 <code>m x n</code> ，由若干 <code>0</code> 和 <code>1</code> 组成的二维网格 <code>grid</code> ，其中 <code>1</code> 表示陆地， <code>0</code> 表示水。<strong>岛屿</strong> 由水平方向或竖直方向上相邻的 <code>1</code> （陆地）连接形成。</p>
 
@@ -43,11 +59,13 @@
 	<li><code>grid[i][j]</code> 为 <code>0</code> 或 <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
 观察发现，我们总是可以通过把角落相邻的两个陆地变成水，使得岛屿分离。因此，答案只可能是 0，1 或 2。
 
@@ -61,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -102,9 +118,7 @@ class Solution:
         return cnt
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -166,7 +180,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -225,7 +239,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDays(grid [][]int) int {
@@ -281,10 +295,119 @@ func minDays(grid [][]int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function minDays(grid: number[][]): number {
+    const [m, n] = [grid.length, grid[0].length];
+
+    const dfs = (i: number, j: number) => {
+        if (i < 0 || m <= i || j < 0 || n <= j || [0, 2].includes(grid[i][j])) return;
+
+        grid[i][j] = 2;
+        const dir = [-1, 0, 1, 0, -1];
+        for (let k = 0; k < 4; k++) {
+            const [y, x] = [i + dir[k], j + dir[k + 1]];
+            dfs(y, x);
+        }
+    };
+
+    const count = () => {
+        let c = 0;
+
+        for (let i = 0; i < m; i++) {
+            for (let j = 0; j < n; j++) {
+                if (grid[i][j] === 1) {
+                    dfs(i, j);
+                    c++;
+                }
+            }
+        }
+
+        for (let i = 0; i < m; i++) {
+            for (let j = 0; j < n; j++) {
+                if (grid[i][j] === 2) {
+                    grid[i][j] = 1;
+                }
+            }
+        }
+
+        return c;
+    };
+
+    if (count() !== 1) return 0;
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 1) {
+                grid[i][j] = 0;
+
+                if (count() !== 1) return 1;
+
+                grid[i][j] = 1;
+            }
+        }
+    }
+
+    return 2;
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var minDays = function (grid) {
+    const dirs = [-1, 0, 1, 0, -1];
+    const [m, n] = [grid.length, grid[0].length];
+
+    const dfs = (i, j, visited) => {
+        if (i < 0 || m <= i || j < 0 || n <= j || grid[i][j] === 0 || visited[i][j]) {
+            return;
+        }
+
+        visited[i][j] = true;
+        for (let d = 0; d < 4; d++) {
+            const [y, x] = [i + dirs[d], j + dirs[d + 1]];
+            dfs(y, x, visited);
+        }
+    };
+
+    const count = () => {
+        const vis = Array.from({ length: m }, () => Array(n).fill(false));
+        let c = 0;
+        for (let i = 0; i < m; i++) {
+            for (let j = 0; j < n; j++) {
+                if (grid[i][j] === 1 && !vis[i][j]) {
+                    c++;
+                    dfs(i, j, vis);
+                }
+            }
+        }
+        return c;
+    };
+
+    if (count() !== 1) return 0;
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 1) {
+                grid[i][j] = 0;
+                if (count() !== 1) return 1;
+                grid[i][j] = 1;
+            }
+        }
+    }
+
+    return 2;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

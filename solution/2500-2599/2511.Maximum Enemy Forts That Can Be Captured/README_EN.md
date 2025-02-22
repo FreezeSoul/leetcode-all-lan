@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2511.Maximum%20Enemy%20Forts%20That%20Can%20Be%20Captured/README_EN.md
+rating: 1450
+source: Biweekly Contest 94 Q1
+tags:
+    - Array
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [2511. Maximum Enemy Forts That Can Be Captured](https://leetcode.com/problems/maximum-enemy-forts-that-can-be-captured)
 
 [中文文档](/solution/2500-2599/2511.Maximum%20Enemy%20Forts%20That%20Can%20Be%20Captured/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>forts</code> of length <code>n</code> representing the positions of several forts. <code>forts[i]</code> can be <code>-1</code>, <code>0</code>, or <code>1</code> where:</p>
 
@@ -51,11 +66,17 @@ Since 4 is the maximum number of enemy forts that can be captured, we return 4.
 	<li><code>-1 &lt;= forts[i] &lt;= 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +94,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func captureForts(forts []int) (ans int) {
@@ -142,16 +163,9 @@ func captureForts(forts []int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function captureForts(forts: number[]): number {
@@ -174,7 +188,7 @@ function captureForts(forts: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -199,10 +213,45 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn capture_forts(forts: Vec<i32>) -> i32 {
+        let mut ans = 0;
+        let mut i = 0;
+
+        while let Some((idx, &value)) = forts.iter().enumerate().skip(i).find(|&(_, &x)| x != 0) {
+            if let Some((jdx, _)) = forts
+                .iter()
+                .enumerate()
+                .skip(idx + 1)
+                .find(|&(_, &x)| x != 0)
+            {
+                if value + forts[jdx] == 0 {
+                    ans = ans.max(jdx - idx - 1);
+                }
+            }
+            i = idx + 1;
+        }
+
+        ans as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

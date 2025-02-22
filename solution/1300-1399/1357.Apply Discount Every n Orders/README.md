@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1357.Apply%20Discount%20Every%20n%20Orders/README.md
+rating: 1429
+source: 第 20 场双周赛 Q2
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+---
+
+<!-- problem:start -->
+
 # [1357. 每隔 n 个顾客打折](https://leetcode.cn/problems/apply-discount-every-n-orders)
 
 [English Version](/solution/1300-1399/1357.Apply%20Discount%20Every%20n%20Orders/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>超市里正在举行打折活动，每隔&nbsp;<code>n</code>&nbsp;个顾客会得到 <code>discount</code>&nbsp;的折扣。</p>
 
@@ -61,11 +75,13 @@ cashier.getBill([2,3,5],[5,3,2]);                    // 返回 2500.0
 	<li>返回结果与标准答案误差在&nbsp;<code>10^-5</code>&nbsp;以内都视为正确结果。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 模拟**
+### 方法一：哈希表 + 模拟
 
 用哈希表 $d$ 存储商品编号和价格，然后遍历商品编号和数量，计算总价，再根据折扣计算折扣后的价格。
 
@@ -73,13 +89,10 @@ cashier.getBill([2,3,5],[5,3,2]);                    // 返回 2500.0
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Cashier:
-
     def __init__(self, n: int, discount: int, products: List[int], prices: List[int]):
         self.i = 0
         self.n = n
@@ -101,9 +114,7 @@ class Cashier:
 # param_1 = obj.getBill(product,amount)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Cashier {
@@ -139,7 +150,7 @@ class Cashier {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Cashier {
@@ -176,7 +187,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Cashier struct {
@@ -214,10 +225,8 @@ func (this *Cashier) GetBill(product []int, amount []int) (ans float64) {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

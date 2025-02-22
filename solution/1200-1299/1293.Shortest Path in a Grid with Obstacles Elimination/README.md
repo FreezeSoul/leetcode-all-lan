@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1293.Shortest%20Path%20in%20a%20Grid%20with%20Obstacles%20Elimination/README.md
+rating: 1967
+source: 第 167 场周赛 Q4
+tags:
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1293. 网格中的最短路径](https://leetcode.cn/problems/shortest-path-in-a-grid-with-obstacles-elimination)
 
 [English Version](/solution/1200-1299/1293.Shortest%20Path%20in%20a%20Grid%20with%20Obstacles%20Elimination/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个&nbsp;<code>m * n</code>&nbsp;的网格，其中每个单元格不是&nbsp;<code>0</code>（空）就是&nbsp;<code>1</code>（障碍物）。每一步，您都可以在空白单元格中上、下、左、右移动。</p>
 
@@ -14,7 +28,7 @@
 
 <p><strong>示例 1：</strong></p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1293.Shortest%20Path%20in%20a%20Grid%20with%20Obstacles%20Elimination/images/short1-grid.jpg" /></p>
+<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1293.Shortest%20Path%20in%20a%20Grid%20with%20Obstacles%20Elimination/images/1700710956-kcxqcC-img_v3_025f_d55a658c-8f40-464b-800f-22ccd27cc9fg.jpg" style="width: 243px; height: 404px;" /></p>
 
 <pre>
 <strong>输入：</strong> grid = [[0,0,0],[1,1,0],[0,0,0],[0,1,1],[0,0,0]], k = 1
@@ -26,7 +40,7 @@
 
 <p><strong>示例 2：</strong></p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1293.Shortest%20Path%20in%20a%20Grid%20with%20Obstacles%20Elimination/images/short2-grid.jpg" /></p>
+<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1293.Shortest%20Path%20in%20a%20Grid%20with%20Obstacles%20Elimination/images/1700710701-uPqkZe-img_v3_025f_0edd50fb-8a70-4a42-add0-f602caaad35g.jpg" style="width: 243px; height: 244px;" /></p>
 
 <pre>
 <strong>输入：</strong>grid = [[0,1,1],[1,1,1],[1,0,0]], k = 1
@@ -47,19 +61,17 @@
 	<li><code>grid[0][0] == grid[m-1][n-1] == 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-BFS 最短路模型。
-
-对于本题，如果 `k >= m + n - 3`，那么最短路径长度一定是 `m + n - 2`，直接返回，无需 BFS 计算。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,9 +100,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -134,7 +144,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -174,7 +184,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestPath(grid [][]int, k int) int {
@@ -220,10 +230,54 @@ func shortestPath(grid [][]int, k int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function shortestPath(grid: number[][], k: number): number {
+    const m = grid.length;
+    const n = grid[0].length;
+    if (k >= m + n - 3) {
+        return m + n - 2;
+    }
 
+    let q: Point[] = [[0, 0, k]];
+    const vis = Array.from({ length: m }, () =>
+        Array.from({ length: n }, () => Array.from({ length: k + 1 }, () => false)),
+    );
+    vis[0][0][k] = true;
+    const dirs = [0, 1, 0, -1, 0];
+    let ans = 0;
+
+    while (q.length) {
+        const nextQ: Point[] = [];
+        ++ans;
+
+        for (const [i, j, k] of q) {
+            for (let d = 0; d < 4; ++d) {
+                const [x, y] = [i + dirs[d], j + dirs[d + 1]];
+                if (x === m - 1 && y === n - 1) {
+                    return ans;
+                }
+                const v = grid[x]?.[y];
+                if (v === 0 && !vis[x][y][k]) {
+                    nextQ.push([x, y, k]);
+                    vis[x][y][k] = true;
+                } else if (v === 1 && k > 0 && !vis[x][y][k - 1]) {
+                    nextQ.push([x, y, k - 1]);
+                    vis[x][y][k - 1] = true;
+                }
+            }
+        }
+        q = nextQ;
+    }
+    return -1;
+}
+
+type Point = [number, number, number];
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

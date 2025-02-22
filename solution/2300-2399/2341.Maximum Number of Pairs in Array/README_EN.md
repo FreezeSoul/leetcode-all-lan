@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2341.Maximum%20Number%20of%20Pairs%20in%20Array/README_EN.md
+rating: 1184
+source: Weekly Contest 302 Q1
+tags:
+    - Array
+    - Hash Table
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2341. Maximum Number of Pairs in Array](https://leetcode.com/problems/maximum-number-of-pairs-in-array)
 
 [中文文档](/solution/2300-2399/2341.Maximum%20Number%20of%20Pairs%20in%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>. In one operation, you may do the following:</p>
 
@@ -53,11 +69,27 @@ No more pairs can be formed. A total of 1 pair has been formed, and there are 0 
 	<li><code>0 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We can count the occurrences of each number $x$ in the array $\textit{nums}$ and record them in a hash table or array $\textit{cnt}$.
+
+Then, we traverse $\textit{cnt}$. For each number $x$, if the occurrence count $v$ of $x$ is greater than $1$, we can select two $x$'s from the array to form a pair. We divide $v$ by $2$ and take the floor value to get the number of pairs that can be formed by the current number $x$. We then add this number to the variable $s$.
+
+The remaining count is the length of the array $\textit{nums}$ minus the number of pairs formed multiplied by $2$, i.e., $n - s \times 2$.
+
+The answer is $[s, n - s \times 2]$.
+
+The time complexity is $O(n)$, and the space complexity is $O(C)$. Here, $n$ is the length of the array $\textit{nums}$, and $C$ is the range of numbers in the array $\textit{nums}$, which is $101$ in this problem.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +99,7 @@ class Solution:
         return [s, len(nums) - s * 2]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfPairs(nums []int) []int {
@@ -120,7 +152,7 @@ func numberOfPairs(nums []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numberOfPairs(nums: number[]): number[] {
@@ -134,7 +166,7 @@ function numberOfPairs(nums: number[]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -153,30 +185,7 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-int *numberOfPairs(int *nums, int numsSize, int *returnSize) {
-    int count[101] = {0};
-    for (int i = 0; i < numsSize; i++) {
-        count[nums[i]]++;
-    }
-    int sum = 0;
-    for (int i = 0; i < 101; i++) {
-        sum += count[i] >> 1;
-    }
-    int *ans = malloc(sizeof(int) * 2);
-    ans[0] = sum;
-    ans[1] = numsSize - sum * 2;
-    *returnSize = 2;
-    return ans;
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -193,7 +202,7 @@ var numberOfPairs = function (nums) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -211,10 +220,31 @@ public class Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* numberOfPairs(int* nums, int numsSize, int* returnSize) {
+    int count[101] = {0};
+    for (int i = 0; i < numsSize; i++) {
+        count[nums[i]]++;
+    }
+    int sum = 0;
+    for (int i = 0; i < 101; i++) {
+        sum += count[i] >> 1;
+    }
+    int* ans = malloc(sizeof(int) * 2);
+    ans[0] = sum;
+    ans[1] = numsSize - sum * 2;
+    *returnSize = 2;
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

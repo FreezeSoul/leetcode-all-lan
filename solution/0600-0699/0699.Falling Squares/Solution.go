@@ -9,15 +9,8 @@ func newNode(l, r int) *node {
 	return &node{
 		l:   l,
 		r:   r,
-		mid: int(uint(l+r) >> 1),
+		mid: (l + r) >> 1,
 	}
-}
-
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
 }
 
 type segmentTree struct {

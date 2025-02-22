@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0282.Expression%20Add%20Operators/README.md
+tags:
+    - 数学
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [282. 给表达式添加运算符](https://leetcode.cn/problems/expression-add-operators)
 
 [English Version](/solution/0200-0299/0282.Expression%20Add%20Operators/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个仅包含数字&nbsp;<code>0-9</code>&nbsp;的字符串 <code>num</code> 和一个目标值整数 <code>target</code> ，在 <code>num</code> 的数字之间添加 <strong>二元 </strong>运算符（不是一元）<code>+</code>、<code>-</code>&nbsp;或&nbsp;<code>*</code>&nbsp;，返回 <strong>所有</strong> 能够得到 <code>target </code>的表达式。</p>
 
@@ -46,15 +58,17 @@
 	<li><code>-2<sup>31</sup> &lt;= target &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,12 +100,9 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
 class Solution {
     private List<String> ans;
     private String num;
@@ -127,10 +138,122 @@ class Solution {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+using System;
+using System.Collections.Generic;
 
+public class Expression
+{
+    public long Value;
+
+    public override string ToString()
+    {
+        return Value.ToString();
+    }
+}
+
+public class BinaryExpression : Expression
+{
+    public char Operator;
+
+    public Expression LeftChild;
+    public Expression RightChild;
+
+    public override string ToString()
+    {
+        return string.Format("{0}{1}{2}", LeftChild, Operator, RightChild);
+    }
+}
+
+public class Solution {
+    public IList<string> AddOperators(string num, int target) {
+        var results = new List<string>();
+        if (string.IsNullOrEmpty(num)) return results;
+        this.num = num;
+        this.results = new List<Expression>[num.Length, num.Length, 3];
+        foreach (var ex in Search(0, num.Length - 1, 0))
+        {
+            if (ex.Value == target)
+            {
+                results.Add(ex.ToString());
+            }
+        }
+        return results;
+    }
+
+    private string num;
+    private List<Expression>[,,] results;
+
+    private List<Expression> Search(int left, int right, int level)
+    {
+        if (results[left, right, level] != null)
+        {
+            return results[left, right, level];
+        }
+        var result = new List<Expression>();
+        if (level < 2)
+        {
+            for (var i = left + 1; i <= right; ++i)
+            {
+                List<Expression> leftResult, rightResult;
+                leftResult = Search(left, i - 1, level);
+                rightResult = Search(i, right, level + 1);
+                foreach (var l in leftResult)
+                {
+                    foreach (var r in rightResult)
+                    {
+                        var newObjects = new List<Tuple<char, long>>();
+                        if (level == 0)
+                        {
+                            newObjects.Add(Tuple.Create('+', l.Value + r.Value));
+                            newObjects.Add(Tuple.Create('-', l.Value - r.Value));
+                        }
+                        else
+                        {
+                            newObjects.Add(Tuple.Create('*', l.Value * r.Value));
+                        }
+                        foreach (var newObject in newObjects)
+                        {
+                            result.Add(new BinaryExpression
+                            {
+                                Value = newObject.Item2,
+                                Operator = newObject.Item1,
+                                LeftChild = l,
+                                RightChild = r
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (left == right || num[left] != '0')
+            {
+                long x = 0;
+                for (var i = left; i <= right; ++i)
+                {
+                    x = x * 10 + num[i] - '0';
+                }
+                result.Add(new Expression
+                {
+                    Value = x
+                });
+            }
+        }
+        if (level < 2)
+        {
+            result.AddRange(Search(left, right, level + 1));
+        }
+        return results[left, right, level] = result;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

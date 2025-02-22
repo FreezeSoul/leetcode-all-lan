@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2425.Bitwise%20XOR%20of%20All%20Pairings/README_EN.md
+rating: 1622
+source: Biweekly Contest 88 Q3
+tags:
+    - Bit Manipulation
+    - Brainteaser
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2425. Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings)
 
 [中文文档](/solution/2400-2499/2425.Bitwise%20XOR%20of%20All%20Pairings/README.md)
 
 ## Description
 
-<p>You are given two <strong>0-indexed</strong> arrays, <code>nums1</code> and <code>nums2</code>, consisting of non-negative integers. There exists another array, <code>nums3</code>, which contains the bitwise XOR of <strong>all pairings</strong> of integers between <code>nums1</code> and <code>nums2</code> (every integer in <code>nums1</code> is paired with every integer in <code>nums2</code> <strong>exactly once</strong>).</p>
+<!-- description:start -->
+
+<p>You are given two <strong>0-indexed</strong> arrays, <code>nums1</code> and <code>nums2</code>, consisting of non-negative integers. Let there be another array, <code>nums3</code>, which contains the bitwise XOR of <strong>all pairings</strong> of integers between <code>nums1</code> and <code>nums2</code> (every integer in <code>nums1</code> is paired with every integer in <code>nums2</code> <strong>exactly once</strong>).</p>
 
 <p>Return<em> the <strong>bitwise XOR</strong> of all integers in </em><code>nums3</code>.</p>
 
@@ -39,11 +55,27 @@ Thus, one possible nums3 array is [2,5,1,6].
 	<li><code>0 &lt;= nums1[i], nums2[j] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Quick Thinking + Bit Manipulation
+
+Since each element of the array will be XORed with each element of another array, we know that the result remains the same when the same number is XORed twice, i.e., $a \oplus a = 0$. Therefore, we only need to count the length of the array to know how many times each element is XORed with each element of another array.
+
+If the length of the `nums2` array is odd, it means that each element in `nums1` has been XORed an odd number of times with each element in `nums2`, so the final XOR result of the `nums1` array is the XOR result of all elements in the `nums1` array. If it is even, it means that each element in `nums1` has been XORed an even number of times with each element in `nums2`, so the final XOR result of the `nums1` array is 0.
+
+Similarly, we can know the final XOR result of the `nums2` array.
+
+Finally, XOR the two results again to get the final result.
+
+The time complexity is $O(m+n)$. Where $m$ and $n$ are the lengths of the `nums1` and `nums2` arrays, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +90,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -79,7 +111,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -101,7 +133,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func xorAllNums(nums1 []int, nums2 []int) int {
@@ -120,7 +152,7 @@ func xorAllNums(nums1 []int, nums2 []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function xorAllNums(nums1: number[], nums2: number[]): number {
@@ -135,10 +167,8 @@ function xorAllNums(nums1: number[], nums2: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1675.Minimize%20Deviation%20in%20Array/README.md
+rating: 2533
+source: 第 217 场周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 有序集合
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1675. 数组的最小偏移量](https://leetcode.cn/problems/minimize-deviation-in-array)
 
 [English Version](/solution/1600-1699/1675.Minimize%20Deviation%20in%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由 <code>n</code> 个正整数组成的数组 <code>nums</code> 。</p>
 
@@ -12,6 +27,7 @@
 
 <ul>
 	<li>如果元素是<strong> 偶数</strong> ，<strong>除以</strong> <code>2</code>
+
     <ul>
     	<li>例如，如果数组是 <code>[1,2,3,4]</code> ，那么你可以对最后一个元素执行此操作，使其变成 <code>[1,2,3,<strong>2</strong>]</code></li>
     </ul>
@@ -21,6 +37,7 @@
     	<li>例如，如果数组是 <code>[1,2,3,4]</code> ，那么你可以对第一个元素执行此操作，使其变成 <code>[<strong>2</strong>,2,3,4]</code></li>
     </ul>
     </li>
+
 </ul>
 
 <p>数组的 <strong>偏移量</strong> 是数组中任意两个元素之间的 <strong>最大差值</strong> 。</p>
@@ -62,11 +79,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 优先队列**
+### 方法一：贪心 + 优先队列
 
 直观上，为了得到数组的最小偏移量，我们需要将减小数组的最大值，增大数组的最小值。
 
@@ -80,9 +99,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +121,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -132,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,7 +173,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumDeviation(nums []int) int {
@@ -181,17 +196,10 @@ func minimumDeviation(nums []int) int {
 	return ans
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -200,10 +208,8 @@ func (h *hp) Pop() interface{} {
 func (h *hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

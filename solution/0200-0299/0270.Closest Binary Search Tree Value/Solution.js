@@ -12,19 +12,24 @@
  * @return {number}
  */
 var closestValue = function (root, target) {
-    let ans = root.val;
-    let mi = Number.MAX_VALUE;
-    while (root) {
-        const t = Math.abs(root.val - target);
-        if (t < mi) {
-            mi = t;
-            ans = root.val;
+    let ans = 0;
+    let diff = Infinity;
+
+    const dfs = node => {
+        if (!node) {
+            return;
         }
-        if (root.val > target) {
-            root = root.left;
-        } else {
-            root = root.right;
+
+        const nxt = Math.abs(target - node.val);
+        if (nxt < diff || (nxt === diff && node.val < ans)) {
+            diff = nxt;
+            ans = node.val;
         }
-    }
+
+        node = target < node.val ? node.left : node.right;
+        dfs(node);
+    };
+
+    dfs(root);
     return ans;
 };

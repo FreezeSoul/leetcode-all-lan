@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1413.Minimum%20Value%20to%20Get%20Positive%20Step%20by%20Step%20Sum/README_EN.md
+rating: 1212
+source: Biweekly Contest 24 Q1
+tags:
+    - Array
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [1413. Minimum Value to Get Positive Step by Step Sum](https://leetcode.com/problems/minimum-value-to-get-positive-step-by-step-sum)
 
 [中文文档](/solution/1400-1499/1413.Minimum%20Value%20to%20Get%20Positive%20Step%20by%20Step%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of integers&nbsp;<code>nums</code>, you start with an initial <strong>positive</strong> value <em>startValue</em><em>.</em></p>
 
@@ -49,11 +64,17 @@
 	<li><code>-100 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,14 +86,7 @@ class Solution:
         return max(1, 1 - t)
 ```
 
-```python
-class Solution:
-    def minStartValue(self, nums: List[int]) -> int:
-        s = list(accumulate(nums))
-        return 1 if min(s) >= 0 else abs(min(s)) + 1
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -88,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +118,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minStartValue(nums []int) int {
@@ -122,7 +136,7 @@ func minStartValue(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minStartValue(nums: number[]): number {
@@ -136,7 +150,7 @@ function minStartValue(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -147,15 +161,32 @@ impl Solution {
             sum += num;
             min = min.min(sum);
         }
-        1.max(1 - min)
+        (1).max(1 - min)
     }
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minStartValue(self, nums: List[int]) -> int:
+        s = list(accumulate(nums))
+        return 1 if min(s) >= 0 else abs(min(s)) + 1
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

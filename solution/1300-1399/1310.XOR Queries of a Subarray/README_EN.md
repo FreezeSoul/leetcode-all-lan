@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1310.XOR%20Queries%20of%20a%20Subarray/README_EN.md
+rating: 1459
+source: Weekly Contest 170 Q2
+tags:
+    - Bit Manipulation
+    - Array
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [1310. XOR Queries of a Subarray](https://leetcode.com/problems/xor-queries-of-a-subarray)
 
 [中文文档](/solution/1300-1399/1310.XOR%20Queries%20of%20a%20Subarray/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>arr</code> of positive integers. You are also given the array <code>queries</code> where <code>queries[i] = [left<sub>i, </sub>right<sub>i</sub>]</code>.</p>
 
@@ -46,11 +62,30 @@ The XOR values for queries are:
 	<li><code>0 &lt;= left<sub>i</sub> &lt;= right<sub>i</sub> &lt; arr.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix XOR
+
+We can use a prefix XOR array $s$ of length $n+1$ to store the prefix XOR results of the array $\textit{arr}$, where $s[i] = s[i-1] \oplus \textit{arr}[i-1]$. That is, $s[i]$ represents the XOR result of the first $i$ elements of $\textit{arr}$.
+
+For a query $[l, r]$, we can obtain:
+
+$$
+\begin{aligned}
+\textit{arr}[l] \oplus \textit{arr}[l+1] \oplus \cdots \oplus \textit{arr}[r] &= (\textit{arr}[0] \oplus \textit{arr}[1] \oplus \cdots \oplus \textit{arr}[l-1]) \oplus (\textit{arr}[0] \oplus \textit{arr}[1] \oplus \cdots \oplus \textit{arr}[r]) \\
+&= s[l] \oplus s[r+1]
+\end{aligned}
+$$
+
+Time complexity is $O(n+m)$, and space complexity is $O(n)$. Here, $n$ and $m$ are the lengths of the array $\textit{arr}$ and the query array $\textit{queries}$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +94,7 @@ class Solution:
         return [s[r + 1] ^ s[l] for l, r in queries]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -80,29 +115,7 @@ class Solution {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} arr
- * @param {number[][]} queries
- * @return {number[]}
- */
-var xorQueries = function (arr, queries) {
-    let n = arr.length;
-    let xors = new Array(n + 1).fill(0);
-    for (let i = 0; i < n; i++) {
-        xors[i + 1] = xors[i] ^ arr[i];
-    }
-    let res = [];
-    for (let [l, r] of queries) {
-        res.push(xors[l] ^ xors[r + 1]);
-    }
-    return res;
-};
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +137,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func xorQueries(arr []int, queries [][]int) (ans []int) {
@@ -141,24 +154,20 @@ func xorQueries(arr []int, queries [][]int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function xorQueries(arr: number[], queries: number[][]): number[] {
     const n = arr.length;
-    const s: number[] = new Array(n + 1).fill(0);
+    const s: number[] = Array(n + 1).fill(0);
     for (let i = 0; i < n; ++i) {
         s[i + 1] = s[i] ^ arr[i];
     }
-    const ans: number[] = [];
-    for (const [l, r] of queries) {
-        ans.push(s[r + 1] ^ s[l]);
-    }
-    return ans;
+    return queries.map(([l, r]) => s[r + 1] ^ s[l]);
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -168,22 +177,16 @@ function xorQueries(arr: number[], queries: number[][]): number[] {
  */
 var xorQueries = function (arr, queries) {
     const n = arr.length;
-    const s = new Array(n + 1).fill(0);
+    const s = Array(n + 1).fill(0);
     for (let i = 0; i < n; ++i) {
         s[i + 1] = s[i] ^ arr[i];
     }
-    const ans = [];
-    for (const [l, r] of queries) {
-        ans.push(s[r + 1] ^ s[l]);
-    }
-    return ans;
+    return queries.map(([l, r]) => s[r + 1] ^ s[l]);
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

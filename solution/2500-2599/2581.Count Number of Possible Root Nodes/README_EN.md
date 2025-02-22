@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2581.Count%20Number%20of%20Possible%20Root%20Nodes/README_EN.md
+rating: 2228
+source: Biweekly Contest 99 Q4
+tags:
+    - Tree
+    - Depth-First Search
+    - Array
+    - Hash Table
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [2581. Count Number of Possible Root Nodes](https://leetcode.com/problems/count-number-of-possible-root-nodes)
 
 [中文文档](/solution/2500-2599/2581.Count%20Number%20of%20Possible%20Root%20Nodes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Alice has an undirected tree with <code>n</code> nodes labeled from <code>0</code> to <code>n - 1</code>. The tree is represented as a 2D integer array <code>edges</code> of length <code>n - 1</code> where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that there is an edge between nodes <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code> in the tree.</p>
 
@@ -70,9 +88,13 @@ Considering any node as root will give at least 1 correct guess.
 	<li><code>0 &lt;= k &lt;= guesses.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Tree DP (change root)**
+<!-- solution:start -->
+
+### Solution 1: Tree DP (change root)
 
 First, we traverse the given edge set $edges$ and convert it to an adjacency list $g$ where $g[i]$ represents the adjacent nodes of node $i$. Use a hash map $gs$ to record the given guess set $guesses$.
 
@@ -88,7 +110,7 @@ The time complexity is $O(n + m)$ and the space complexity is $O(n + m)$, where 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -125,7 +147,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -185,14 +207,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int rootCount(vector<vector<int>>& edges, vector<vector<int>>& guesses, int k) {
         int n = edges.size() + 1;
-        vector<vector<int>> g(n);
+        vector<int> g[n];
         unordered_map<long long, int> gs;
         auto f = [&](int i, int j) {
             return 1LL * i * n + j;
@@ -239,7 +261,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rootCount(edges [][]int, guesses [][]int, k int) (ans int) {
@@ -291,10 +313,54 @@ func rootCount(edges [][]int, guesses [][]int, k int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function rootCount(edges: number[][], guesses: number[][], k: number): number {
+    const n = edges.length + 1;
+    const g: number[][] = Array.from({ length: n }, () => []);
+    const gs: Map<number, number> = new Map();
+    const f = (i: number, j: number) => i * n + j;
+    for (const [a, b] of edges) {
+        g[a].push(b);
+        g[b].push(a);
+    }
+    for (const [a, b] of guesses) {
+        const x = f(a, b);
+        gs.set(x, gs.has(x) ? gs.get(x)! + 1 : 1);
+    }
+    let ans = 0;
+    let cnt = 0;
+    const dfs1 = (i: number, fa: number): void => {
+        for (const j of g[i]) {
+            if (j !== fa) {
+                cnt += gs.get(f(i, j)) || 0;
+                dfs1(j, i);
+            }
+        }
+    };
+    const dfs2 = (i: number, fa: number): void => {
+        ans += cnt >= k ? 1 : 0;
+        for (const j of g[i]) {
+            if (j !== fa) {
+                const a = gs.get(f(i, j)) || 0;
+                const b = gs.get(f(j, i)) || 0;
+                cnt -= a;
+                cnt += b;
+                dfs2(j, i);
+                cnt -= b;
+                cnt += a;
+            }
+        }
+    };
+    dfs1(0, -1);
+    dfs2(0, -1);
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

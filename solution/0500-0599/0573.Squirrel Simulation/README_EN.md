@@ -1,8 +1,21 @@
-# [573. Squirrel Simulation](https://leetcode.com/problems/squirrel-simulation)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0573.Squirrel%20Simulation/README_EN.md
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
+# [573. Squirrel Simulation 🔒](https://leetcode.com/problems/squirrel-simulation)
 
 [中文文档](/solution/0500-0599/0573.Squirrel%20Simulation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two integers <code>height</code> and <code>width</code> representing a garden of size <code>height x width</code>. You are also given:</p>
 
@@ -47,11 +60,23 @@
 	<li><code>0 &lt;= tree<sub>c</sub>, squirrel<sub>c</sub>, nut<sub>i<sub>c</sub></sub> &lt;= width</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Mathematics
+
+Observing the squirrel's movement path, we can see that the squirrel will first move to the position of a nut, then move to the position of the tree. After that, the total movement path of the squirrel is equal to "the sum of the distances from the remaining nuts to the tree" multiplied by $2$.
+
+Therefore, we only need to select a nut as the squirrel's first target, such that the sum of its distance to the tree is minimized, to obtain the shortest path.
+
+The time complexity is $O(n)$, where $n$ is the number of nuts. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,93 +88,84 @@ class Solution:
         squirrel: List[int],
         nuts: List[List[int]],
     ) -> int:
-        x, y, a, b = *tree, *squirrel
-        s = sum(abs(i - x) + abs(j - y) for i, j in nuts) * 2
+        tr, tc = tree
+        sr, sc = squirrel
+        s = sum(abs(r - tr) + abs(c - tc) for r, c in nuts) * 2
         ans = inf
-        for i, j in nuts:
-            c = abs(i - x) + abs(j - y)
-            d = abs(i - a) + abs(j - b) + c
-            ans = min(ans, s + d - c * 2)
+        for r, c in nuts:
+            a = abs(r - tr) + abs(c - tc)
+            b = abs(r - sr) + abs(c - sc)
+            ans = min(ans, s - a + b)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
+import static java.lang.Math.*;
+
 class Solution {
     public int minDistance(int height, int width, int[] tree, int[] squirrel, int[][] nuts) {
-        int ans = Integer.MAX_VALUE;
+        int tr = tree[0], tc = tree[1];
+        int sr = squirrel[0], sc = squirrel[1];
         int s = 0;
-        for (int[] a : nuts) {
-            s += f(a, tree);
+        for (var e : nuts) {
+            s += abs(e[0] - tr) + abs(e[1] - tc);
         }
-        s *= 2;
-        for (int[] a : nuts) {
-            int c = f(a, tree);
-            int d = f(a, squirrel) + c;
-            ans = Math.min(ans, s + d - c * 2);
+        s <<= 1;
+        int ans = Integer.MAX_VALUE;
+        for (var e : nuts) {
+            int a = abs(e[0] - tr) + abs(e[1] - tc);
+            int b = abs(e[0] - sr) + abs(e[1] - sc);
+            ans = min(ans, s - a + b);
         }
         return ans;
-    }
-
-    private int f(int[] a, int[] b) {
-        return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minDistance(int height, int width, vector<int>& tree, vector<int>& squirrel, vector<vector<int>>& nuts) {
-        int ans = INT_MAX;
+        int tr = tree[0], tc = tree[1];
+        int sr = squirrel[0], sc = squirrel[1];
         int s = 0;
-        for (auto& a : nuts) {
-            s += f(a, tree);
+        for (const auto& e : nuts) {
+            s += abs(e[0] - tr) + abs(e[1] - tc);
         }
-        s *= 2;
-        for (auto& a : nuts) {
-            int c = f(a, tree);
-            int d = f(a, squirrel) + c;
-            ans = min(ans, s + d - c * 2);
+        s <<= 1;
+        int ans = INT_MAX;
+        for (const auto& e : nuts) {
+            int a = abs(e[0] - tr) + abs(e[1] - tc);
+            int b = abs(e[0] - sr) + abs(e[1] - sc);
+            ans = min(ans, s - a + b);
         }
         return ans;
-    }
-
-    int f(vector<int>& a, vector<int>& b) {
-        return abs(a[0] - b[0]) + abs(a[1] - b[1]);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDistance(height int, width int, tree []int, squirrel []int, nuts [][]int) int {
-	f := func(a, b []int) int {
-		return abs(a[0]-b[0]) + abs(a[1]-b[1])
-	}
-	ans := math.MaxInt32
+	tr, tc := tree[0], tree[1]
+	sr, sc := squirrel[0], squirrel[1]
 	s := 0
-	for _, a := range nuts {
-		s += f(a, tree)
+	for _, e := range nuts {
+		s += abs(e[0]-tr) + abs(e[1]-tc)
 	}
-	s *= 2
-	for _, a := range nuts {
-		c := f(a, tree)
-		d := f(a, squirrel) + c
-		ans = min(ans, s+d-c*2)
+	s <<= 1
+	ans := math.MaxInt32
+	for _, e := range nuts {
+		a := abs(e[0]-tr) + abs(e[1]-tc)
+		b := abs(e[0]-sr) + abs(e[1]-sc)
+		ans = min(ans, s-a+b)
 	}
 	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
 
 func abs(x int) int {
@@ -160,10 +176,88 @@ func abs(x int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function minDistance(
+    height: number,
+    width: number,
+    tree: number[],
+    squirrel: number[],
+    nuts: number[][],
+): number {
+    const [tr, tc] = tree;
+    const [sr, sc] = squirrel;
+    const s = nuts.reduce((acc, [r, c]) => acc + (Math.abs(tr - r) + Math.abs(tc - c)) * 2, 0);
+    let ans = Infinity;
+    for (const [r, c] of nuts) {
+        const a = Math.abs(tr - r) + Math.abs(tc - c);
+        const b = Math.abs(sr - r) + Math.abs(sc - c);
+        ans = Math.min(ans, s - a + b);
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_distance(
+        height: i32,
+        width: i32,
+        tree: Vec<i32>,
+        squirrel: Vec<i32>,
+        nuts: Vec<Vec<i32>>,
+    ) -> i32 {
+        let (tr, tc) = (tree[0], tree[1]);
+        let (sr, sc) = (squirrel[0], squirrel[1]);
+        let s: i32 = nuts
+            .iter()
+            .map(|nut| (nut[0] - tr).abs() + (nut[1] - tc).abs())
+            .sum::<i32>()
+            * 2;
+
+        let mut ans = i32::MAX;
+        for nut in &nuts {
+            let a = (nut[0] - tr).abs() + (nut[1] - tc).abs();
+            let b = (nut[0] - sr).abs() + (nut[1] - sc).abs();
+            ans = ans.min(s - a + b);
+        }
+
+        ans
+    }
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int MinDistance(int height, int width, int[] tree, int[] squirrel, int[][] nuts) {
+        int tr = tree[0], tc = tree[1];
+        int sr = squirrel[0], sc = squirrel[1];
+        int s = 0;
+
+        foreach (var e in nuts) {
+            s += Math.Abs(e[0] - tr) + Math.Abs(e[1] - tc);
+        }
+        s <<= 1;
+
+        int ans = int.MaxValue;
+        foreach (var e in nuts) {
+            int a = Math.Abs(e[0] - tr) + Math.Abs(e[1] - tc);
+            int b = Math.Abs(e[0] - sr) + Math.Abs(e[1] - sc);
+            ans = Math.Min(ans, s - a + b);
+        }
+
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

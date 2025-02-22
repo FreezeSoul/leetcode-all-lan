@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2274.Maximum%20Consecutive%20Floors%20Without%20Special%20Floors/README.md
+rating: 1332
+source: 第 293 场周赛 Q2
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2274. 不含特殊楼层的最大连续楼层数](https://leetcode.cn/problems/maximum-consecutive-floors-without-special-floors)
 
 [English Version](/solution/2200-2299/2274.Maximum%20Consecutive%20Floors%20Without%20Special%20Floors/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>Alice 管理着一家公司，并租用大楼的部分楼层作为办公空间。Alice 决定将一些楼层作为 <strong>特殊楼层</strong> ，仅用于放松。</p>
 
@@ -44,29 +57,33 @@
 	<li><code>special</code> 中的所有值 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：排序
+
+我们可以将特殊楼层按照升序排序，然后计算相邻两个特殊楼层之间的楼层数，最后再计算第一个特殊楼层和 $\textit{bottom}$ 之间的楼层数，以及最后一个特殊楼层和 $\textit{top}$ 之间的楼层数，取这些楼层数的最大值即可。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 是数组 $\textit{special}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxConsecutive(self, bottom: int, top: int, special: List[int]) -> int:
         special.sort()
         ans = max(special[0] - bottom, top - special[-1])
-        for i in range(1, len(special)):
-            ans = max(ans, special[i] - special[i - 1] - 1)
+        for x, y in pairwise(special):
+            ans = max(ans, y - x - 1)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -82,30 +99,51 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxConsecutive(int bottom, int top, vector<int>& special) {
+        ranges::sort(special);
+        int ans = max(special[0] - bottom, top - special.back());
+        for (int i = 1; i < special.size(); ++i) {
+            ans = max(ans, special[i] - special[i - 1] - 1);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxConsecutive(bottom int, top int, special []int) int {
+	sort.Ints(special)
+	ans := max(special[0]-bottom, top-special[len(special)-1])
+	for i, x := range special[1:] {
+		ans = max(ans, x-special[i]-1)
+	}
+	return ans
+}
+```
+
+#### TypeScript
 
 ```ts
-function maxConsecutive(
-    bottom: number,
-    top: number,
-    special: number[],
-): number {
-    let nums = special.slice().sort((a, b) => a - b);
-    nums.unshift(bottom - 1);
-    nums.push(top + 1);
-    let ans = 0;
-    const n = nums.length;
-    for (let i = 1; i < n; i++) {
-        ans = Math.max(ans, nums[i] - nums[i - 1] - 1);
+function maxConsecutive(bottom: number, top: number, special: number[]): number {
+    special.sort((a, b) => a - b);
+    const n = special.length;
+    let ans = Math.max(special[0] - bottom, top - special[n - 1]);
+    for (let i = 1; i < n; ++i) {
+        ans = Math.max(ans, special[i] - special[i - 1] - 1);
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

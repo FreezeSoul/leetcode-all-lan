@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0228.Summary%20Ranges/README_EN.md
+tags:
+    - Array
+---
+
+<!-- problem:start -->
+
 # [228. Summary Ranges](https://leetcode.com/problems/summary-ranges)
 
 [中文文档](/solution/0200-0299/0228.Summary%20Ranges/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>sorted unique</strong> integer array <code>nums</code>.</p>
 
@@ -51,9 +63,13 @@
 	<li><code>nums</code> is sorted in ascending order.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Two Pointers**
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
 
 We can use two pointers $i$ and $j$ to find the left and right endpoints of each interval.
 
@@ -63,7 +79,7 @@ Time complexity $O(n)$, where $n$ is the length of the array. Space complexity $
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -83,7 +99,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func summaryRanges(nums []int) (ans []string) {
@@ -148,7 +164,7 @@ func summaryRanges(nums []int) (ans []string) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function summaryRanges(nums: number[]): string[] {
@@ -168,7 +184,49 @@ function summaryRanges(nums: number[]): string[] {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn summary_ranges(nums: Vec<i32>) -> Vec<String> {
+        if nums.is_empty() {
+            return vec![];
+        }
+
+        let mut ret = Vec::new();
+        let mut start = nums[0];
+        let mut prev = nums[0];
+        let mut current = 0;
+        let n = nums.len();
+
+        for i in 1..n {
+            current = nums[i];
+            if current != prev + 1 {
+                if start == prev {
+                    ret.push(start.to_string());
+                } else {
+                    ret.push(start.to_string() + "->" + &prev.to_string());
+                }
+                start = current;
+                prev = current;
+            } else {
+                prev = current;
+            }
+        }
+
+        if start == prev {
+            ret.push(start.to_string());
+        } else {
+            ret.push(start.to_string() + "->" + &prev.to_string());
+        }
+
+        ret
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -190,10 +248,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

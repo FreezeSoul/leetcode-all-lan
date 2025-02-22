@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1224.Maximum%20Equal%20Frequency/README.md
+rating: 2050
+source: 第 158 场周赛 Q4
+tags:
+    - 数组
+    - 哈希表
+---
+
+<!-- problem:start -->
+
 # [1224. 最大相等频率](https://leetcode.cn/problems/maximum-equal-frequency)
 
 [English Version](/solution/1200-1299/1224.Maximum%20Equal%20Frequency/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组&nbsp;<code>nums</code>，请你帮忙从该数组中找出能满足下面要求的 <strong>最长</strong> 前缀，并返回该前缀的长度：</p>
 
@@ -40,13 +53,15 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数组/哈希表**
+### 方法一：数组或哈希表
 
-用 $cnt$ 记录 $nums$ 中每个元素 $v$ 出现的次数，而 $ccnt$ 记录每个次数出现的次数，元素出现的最大次数用 $mx$ 表示。
+我们用 $cnt$ 记录 $nums$ 中每个元素 $v$ 出现的次数，而 $ccnt$ 记录每个次数出现的次数，元素出现的最大次数用 $mx$ 表示。
 
 遍历 $nums$：
 
@@ -58,9 +73,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -118,7 +129,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +156,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxEqualFreq(nums []int) int {
@@ -170,16 +181,9 @@ func maxEqualFreq(nums []int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxEqualFreq(nums: number[]): number {
@@ -219,10 +223,8 @@ function maxEqualFreq(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

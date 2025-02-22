@@ -1,10 +1,20 @@
-# [569. 员工薪水中位数](https://leetcode.cn/problems/median-employee-salary)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0569.Median%20Employee%20Salary/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [569. 员工薪水中位数 🔒](https://leetcode.cn/problems/median-employee-salary)
 
 [English Version](/solution/0500-0599/0569.Median%20Employee%20Salary/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表:&nbsp;<code>Employee</code></p>
 
@@ -16,13 +26,13 @@
 | company      | varchar |
 | salary       | int     |
 +--------------+---------+
-Id是该表的主键列。
+id 是该表的主键列(具有唯一值的列)。
 该表的每一行表示公司和一名员工的工资。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写一个SQL查询，找出每个公司的工资中位数。</p>
+<p>编写解决方案，找出每个公司的工资中位数。</p>
 
 <p>以 <strong>任意顺序</strong> 返回结果表。</p>
 
@@ -72,16 +82,41 @@ Employee 表:
 
 <p><strong>进阶:&nbsp;</strong>你能在不使用任何内置函数或窗口函数的情况下解决它吗?</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY company
+                ORDER BY salary ASC
+            ) AS rk,
+            COUNT(id) OVER (PARTITION BY company) AS n
+        FROM Employee
+    )
+SELECT
+    id,
+    company,
+    salary
+FROM t
+WHERE rk >= n / 2 AND rk <= n / 2 + 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

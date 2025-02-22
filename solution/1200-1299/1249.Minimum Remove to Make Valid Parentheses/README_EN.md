@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1249.Minimum%20Remove%20to%20Make%20Valid%20Parentheses/README_EN.md
+rating: 1657
+source: Weekly Contest 161 Q3
+tags:
+    - Stack
+    - String
+---
+
+<!-- problem:start -->
+
 # [1249. Minimum Remove to Make Valid Parentheses](https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses)
 
 [中文文档](/solution/1200-1299/1249.Minimum%20Remove%20to%20Make%20Valid%20Parentheses/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <font face="monospace">s</font> of <code>&#39;(&#39;</code> , <code>&#39;)&#39;</code> and lowercase English characters.</p>
 
@@ -45,14 +60,29 @@
 
 <ul>
 	<li><code>1 &lt;= s.length &lt;= 10<sup>5</sup></code></li>
-	<li><code>s[i]</code> is either<code>&#39;(&#39;</code> , <code>&#39;)&#39;</code>, or lowercase English letter<code>.</code></li>
+	<li><code>s[i]</code> is either&nbsp;<code>&#39;(&#39;</code> , <code>&#39;)&#39;</code>, or lowercase English letter.</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1: Two Passes
+
+First, we scan from left to right and remove the extra right parentheses. Then, we scan from right to left and remove the extra left parentheses.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the length of the string $s$.
+
+Similar problems:
+
+-   [678. Valid Parenthesis String](https://github.com/doocs/leetcode/blob/main/solution/0600-0699/0678.Valid%20Parenthesis%20String/README_EN.md)
+-   [2116. Check if a Parentheses String Can Be Valid](https://github.com/doocs/leetcode/blob/main/solution/2100-2199/2116.Check%20if%20a%20Parentheses%20String%20Can%20Be%20Valid/README_EN.md)
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -80,7 +110,7 @@ class Solution:
         return ''.join(ans[::-1])
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -118,7 +148,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,8 +158,10 @@ public:
         int x = 0;
         for (char& c : s) {
             if (c == ')' && x == 0) continue;
-            if (c == '(') ++x;
-            else if (c == ')') --x;
+            if (c == '(')
+                ++x;
+            else if (c == ')')
+                --x;
             stk.push_back(c);
         }
         string ans;
@@ -138,8 +170,10 @@ public:
             char c = stk.back();
             stk.pop_back();
             if (c == '(' && x == 0) continue;
-            if (c == ')') ++x;
-            else if (c == '(') --x;
+            if (c == ')')
+                ++x;
+            else if (c == '(')
+                --x;
             ans.push_back(c);
         }
         reverse(ans.begin(), ans.end());
@@ -148,7 +182,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minRemoveToMakeValid(s string) string {
@@ -187,7 +221,7 @@ func minRemoveToMakeValid(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minRemoveToMakeValid(s: string): string {
@@ -225,7 +259,7 @@ function minRemoveToMakeValid(s: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -236,8 +270,12 @@ impl Solution {
             let mut right = 0;
             for c in bs.iter() {
                 match c {
-                    &b'(' => left += 1,
-                    &b')' if right < left => right += 1,
+                    &b'(' => {
+                        left += 1;
+                    }
+                    &b')' if right < left => {
+                        right += 1;
+                    }
                     _ => {}
                 }
             }
@@ -270,10 +308,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

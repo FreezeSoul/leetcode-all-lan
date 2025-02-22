@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9859%20-%20I.%20%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 59 - I. 滑动窗口的最大值](https://leetcode.cn/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个数组 <code>nums</code> 和滑动窗口的大小 <code>k</code>，请找出所有滑动窗口里的最大值。</p>
 
@@ -29,11 +37,13 @@
 
 <p>注意：本题与主站 239 题相同：<a href="https://leetcode.cn/problems/sliding-window-maximum/">https://leetcode.cn/problems/sliding-window-maximum/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调队列**
+### 方法一：单调队列
 
 单调队列常见模型：找出滑动窗口中的最大值/最小值。模板：
 
@@ -52,9 +62,7 @@ for i in range(n):
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,9 +80,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSlidingWindow(nums []int, k int) (ans []int) {
@@ -146,7 +152,57 @@ func maxSlidingWindow(nums []int, k int) (ans []int) {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function maxSlidingWindow(nums: number[], k: number): number[] {
+    const q: number[] = [];
+    const n = nums.length;
+    const ans: number[] = [];
+    for (let i = 0; i < n; ++i) {
+        while (q.length && i - q[0] + 1 > k) {
+            q.shift();
+        }
+        while (q.length && nums[q[q.length - 1]] <= nums[i]) {
+            q.pop();
+        }
+        q.push(i);
+        if (i >= k - 1) {
+            ans.push(nums[q[0]]);
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::VecDeque;
+impl Solution {
+    pub fn max_sliding_window(nums: Vec<i32>, k: i32) -> Vec<i32> {
+        let k = k as usize;
+        let n = nums.len();
+        let mut ans = vec![0; n - k + 1];
+        let mut q = VecDeque::new();
+        for i in 0..n {
+            while !q.is_empty() && i - q[0] + 1 > k {
+                q.pop_front();
+            }
+            while !q.is_empty() && nums[*q.back().unwrap()] <= nums[i] {
+                q.pop_back();
+            }
+            q.push_back(i);
+            if i >= k - 1 {
+                ans[i - k + 1] = nums[q[0]];
+            }
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -174,57 +230,7 @@ var maxSlidingWindow = function (nums, k) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function maxSlidingWindow(nums: number[], k: number): number[] {
-    const q: number[] = [];
-    const n = nums.length;
-    const ans: number[] = [];
-    for (let i = 0; i < n; ++i) {
-        while (q.length && i - q[0] + 1 > k) {
-            q.shift();
-        }
-        while (q.length && nums[q[q.length - 1]] <= nums[i]) {
-            q.pop();
-        }
-        q.push(i);
-        if (i >= k - 1) {
-            ans.push(nums[q[0]]);
-        }
-    }
-    return ans;
-}
-```
-
-### **Rust**
-
-```rust
-use std::collections::VecDeque;
-impl Solution {
-    pub fn max_sliding_window(nums: Vec<i32>, k: i32) -> Vec<i32> {
-        let k = k as usize;
-        let n = nums.len();
-        let mut ans = vec![0; n - k + 1];
-        let mut q = VecDeque::new();
-        for i in 0..n {
-            while !q.is_empty() && i - q[0] + 1 > k {
-                q.pop_front();
-            }
-            while !q.is_empty() && nums[*q.back().unwrap()] <= nums[i] {
-                q.pop_back();
-            }
-            q.push_back(i);
-            if i >= k - 1 {
-                ans[i - k + 1] = nums[q[0]]
-            }
-        }
-        ans
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -248,10 +254,38 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
+        let n = nums.count
+        var ans = [Int]()
+        var deque = [Int]()
 
+        for i in 0..<n {
+            if !deque.isEmpty && deque.first! < i - k + 1 {
+                deque.removeFirst()
+            }
+
+            while !deque.isEmpty && nums[deque.last!] <= nums[i] {
+                deque.removeLast()
+            }
+
+            deque.append(i)
+
+            if i >= k - 1 {
+                ans.append(nums[deque.first!])
+            }
+        }
+
+        return ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

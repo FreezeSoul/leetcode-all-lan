@@ -1,10 +1,28 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1202.Smallest%20String%20With%20Swaps/README.md
+rating: 1855
+source: 第 155 场周赛 Q3
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 并查集
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1202. 交换字符串中的元素](https://leetcode.cn/problems/smallest-string-with-swaps)
 
 [English Version](/solution/1200-1299/1202.Smallest%20String%20With%20Swaps/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串&nbsp;<code>s</code>，以及该字符串中的一些「索引对」数组&nbsp;<code>pairs</code>，其中&nbsp;<code>pairs[i] =&nbsp;[a, b]</code>&nbsp;表示字符串中的两个索引（编号从 0 开始）。</p>
 
@@ -53,11 +71,13 @@
 	<li><code>s</code>&nbsp;中只含有小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：并查集**
+### 方法一：并查集
 
 我们注意到，索引对具有传递性，即如果 $a$ 与 $b$ 可交换，而 $b$ 与 $c$ 可交换，那么 $a$ 与 $c$ 也可交换。因此，我们可以考虑使用并查集维护这些索引对的连通性，将属于同一个连通分量的字符按照字典序排序。
 
@@ -67,9 +87,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +109,7 @@ class Solution:
         return "".join(d[find(i)].pop() for i in range(n))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -134,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -170,7 +186,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestStringWithSwaps(s string, pairs [][]int) string {
@@ -208,7 +224,7 @@ func smallestStringWithSwaps(s string, pairs [][]int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallestStringWithSwaps(s: string, pairs: number[][]): string {
@@ -238,10 +254,69 @@ function smallestStringWithSwaps(s: string, pairs: number[][]): string {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn smallest_string_with_swaps(s: String, pairs: Vec<Vec<i32>>) -> String {
+        let n = s.as_bytes().len();
+        let s = s.as_bytes();
+        let mut disjoint_set: Vec<usize> = vec![0; n];
+        let mut str_vec: Vec<Vec<u8>> = vec![Vec::new(); n];
+        let mut ret_str = String::new();
 
+        // Initialize the disjoint set
+        for i in 0..n {
+            disjoint_set[i] = i;
+        }
+
+        // Union the pairs
+        for pair in pairs {
+            Self::union(pair[0] as usize, pair[1] as usize, &mut disjoint_set);
+        }
+
+        // Initialize the return vector
+        for (i, c) in s.iter().enumerate() {
+            let p_c = Self::find(i, &mut disjoint_set);
+            str_vec[p_c].push(*c);
+        }
+
+        // Sort the return vector in reverse order
+        for cur_vec in &mut str_vec {
+            cur_vec.sort();
+            cur_vec.reverse();
+        }
+
+        // Construct the return string
+        for i in 0..n {
+            let index = Self::find(i, &mut disjoint_set);
+            ret_str.push(str_vec[index].last().unwrap().clone() as char);
+            str_vec[index].pop();
+        }
+
+        ret_str
+    }
+
+    #[allow(dead_code)]
+    fn find(x: usize, d_set: &mut Vec<usize>) -> usize {
+        if d_set[x] != x {
+            d_set[x] = Self::find(d_set[x], d_set);
+        }
+        d_set[x]
+    }
+
+    #[allow(dead_code)]
+    fn union(x: usize, y: usize, d_set: &mut Vec<usize>) {
+        let p_x = Self::find(x, d_set);
+        let p_y = Self::find(y, d_set);
+        d_set[p_x] = p_y;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

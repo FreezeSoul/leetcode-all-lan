@@ -1,10 +1,23 @@
-# [2464. 有效分割中的最少子数组数目](https://leetcode.cn/problems/minimum-subarrays-in-a-valid-split)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2464.Minimum%20Subarrays%20in%20a%20Valid%20Split/README.md
+tags:
+    - 数组
+    - 数学
+    - 动态规划
+    - 数论
+---
+
+<!-- problem:start -->
+
+# [2464. 有效分割中的最少子数组数目 🔒](https://leetcode.cn/problems/minimum-subarrays-in-a-valid-split)
 
 [English Version](/solution/2400-2499/2464.Minimum%20Subarrays%20in%20a%20Valid%20Split/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数数组 <code>nums</code>。</p>
 
@@ -64,21 +77,21 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i)$ 表示从下标 $i$ 开始的最小分割数。对于下标 $i$，我们可以枚举所有的分割点 $j$，即 $i \leq j \lt n$，其中 $n$ 为数组长度。对于每个分割点 $j$，我们需要判断 $nums[i]$ 和 $nums[j]$ 的最大公约数是否大于 $1$，如果大于 $1$，则可以进行分割，此时分割数为 $1 + dfs(j + 1)$，否则分割数为 $+\infty$。最后我们取所有分割数的最小值即可。
 
-时间复杂度 $O(n^2)$，空间复杂度 $O(n)$。
+时间复杂度 $O(n^2)$，空间复杂度 $O(n)$。其中 $n$ 为数组长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,9 +112,7 @@ class Solution:
         return ans if ans < inf else -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -141,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,7 +179,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func validSubarraySplit(nums []int) int {
@@ -199,13 +210,6 @@ func validSubarraySplit(nums []int) int {
 	return -1
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func gcd(a, b int) int {
 	if b == 0 {
 		return a
@@ -214,16 +218,8 @@ func gcd(a, b int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

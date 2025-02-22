@@ -1,12 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0763.Partition%20Labels/README.md
+tags:
+    - 贪心
+    - 哈希表
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [763. 划分字母区间](https://leetcode.cn/problems/partition-labels)
 
 [English Version](/solution/0700-0799/0763.Partition%20Labels/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个字符串 <code>s</code> 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。</p>
+<p>给你一个字符串 <code>s</code> 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。例如，字符串&nbsp;<code>"ababcc"</code> 能够被分为 <code>["abab", "cc"]</code>，但类似&nbsp;<code>["aba", "bcc"]</code> 或&nbsp;<code>["ab", "ab", "cc"]</code> 的划分是非法的。</p>
 
 <p>注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 <code>s</code> 。</p>
 
@@ -39,21 +52,23 @@
 	<li><code>s</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数组或哈希表 + 贪心**
+### 方法一：贪心
 
-我们先用数组或哈希表 `last` 记录字符串 $s$ 中每个字母最后一次出现的位置。
+我们先用数组或哈希表 $last$ 记录字符串 $s$ 中每个字母最后一次出现的位置。
 
-接下来使用贪心的方法，将字符串划分为尽可能多的片段：
+接下来我们使用贪心的方法，将字符串划分为尽可能多的片段。
 
-从左到右遍历字符串，遍历的同时维护当前片段的开始下标 $left$ 和结束下标 $right$，初始均为 $0$。
+从左到右遍历字符串 $s$，遍历的同时维护当前片段的开始下标 $j$ 和结束下标 $i$，初始均为 $0$。
 
-对于每个访问到的字母 $c$，获取到最后一次出现的位置 $last[c]$。由于当前片段的结束下标一定不会小于 $last[c]$，因此令 $right = \max(right, last[c])$。
+对于每个访问到的字母 $c$，获取到最后一次出现的位置 $last[c]$。由于当前片段的结束下标一定不会小于 $last[c]$，因此令 $mx = \max(mx, last[c])$。
 
-当访问到下标 $right$ 时，意味着当前片段访问结束，当前片段的下标范围是 $[left,.. right]$，长度为 $right - left + 1$，我们将其添加到结果数组中。然后令 $left = right + 1$, 继续寻找下一个片段。
+当访问到下标 $mx$ 时，意味着当前片段访问结束，当前片段的下标范围是 $[j,.. i]$，长度为 $i - j + 1$，我们将其添加到结果数组中。然后令 $j = i + 1$, 继续寻找下一个片段。
 
 重复上述过程，直至字符串遍历结束，即可得到所有片段的长度。
 
@@ -61,27 +76,23 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def partitionLabels(self, s: str) -> List[int]:
         last = {c: i for i, c in enumerate(s)}
+        mx = j = 0
         ans = []
-        left = right = 0
         for i, c in enumerate(s):
-            right = max(right, last[c])
-            if i == right:
-                ans.append(right - left + 1)
-                left = right + 1
+            mx = max(mx, last[c])
+            if mx == i:
+                ans.append(i - j + 1)
+                j = i + 1
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -92,11 +103,12 @@ class Solution {
             last[s.charAt(i) - 'a'] = i;
         }
         List<Integer> ans = new ArrayList<>();
-        for (int i = 0, left = 0, right = 0; i < n; ++i) {
-            right = Math.max(right, last[s.charAt(i) - 'a']);
-            if (i == right) {
-                ans.add(right - left + 1);
-                left = right + 1;
+        int mx = 0, j = 0;
+        for (int i = 0; i < n; ++i) {
+            mx = Math.max(mx, last[s.charAt(i) - 'a']);
+            if (mx == i) {
+                ans.add(i - j + 1);
+                j = i + 1;
             }
         }
         return ans;
@@ -104,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,13 +124,16 @@ public:
     vector<int> partitionLabels(string s) {
         int last[26] = {0};
         int n = s.size();
-        for (int i = 0; i < n; ++i) last[s[i] - 'a'] = i;
+        for (int i = 0; i < n; ++i) {
+            last[s[i] - 'a'] = i;
+        }
         vector<int> ans;
-        for (int i = 0, left = 0, right = 0; i < n; ++i) {
-            right = max(right, last[s[i] - 'a']);
-            if (i == right) {
-                ans.push_back(right - left + 1);
-                left = right + 1;
+        int mx = 0, j = 0;
+        for (int i = 0; i < n; ++i) {
+            mx = max(mx, last[s[i] - 'a']);
+            if (mx == i) {
+                ans.push_back(i - j + 1);
+                j = i + 1;
             }
         }
         return ans;
@@ -126,84 +141,75 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func partitionLabels(s string) []int {
-	last := make([]int, 26)
-	n := len(s)
-	for i := 0; i < n; i++ {
-		last[s[i]-'a'] = i
+func partitionLabels(s string) (ans []int) {
+	last := [26]int{}
+	for i, c := range s {
+		last[c-'a'] = i
 	}
-	var ans []int
-	for i, left, right := 0, 0, 0; i < n; i++ {
-		right = max(right, last[s[i]-'a'])
-		if i == right {
-			ans = append(ans, right-left+1)
-			left = right + 1
+	var mx, j int
+	for i, c := range s {
+		mx = max(mx, last[c-'a'])
+		if mx == i {
+			ans = append(ans, i-j+1)
+			j = i + 1
 		}
 	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function partitionLabels(s: string): number[] {
+    const last: number[] = Array(26).fill(0);
+    const idx = (c: string) => c.charCodeAt(0) - 'a'.charCodeAt(0);
     const n = s.length;
-    let last = new Array(26);
-    for (let i = 0; i < n; i++) {
-        last[s.charCodeAt(i) - 'a'.charCodeAt(0)] = i;
+    for (let i = 0; i < n; ++i) {
+        last[idx(s[i])] = i;
     }
-    let ans = [];
-    let left = 0,
-        right = 0;
-    for (let i = 0; i < n; i++) {
-        right = Math.max(right, last[s.charCodeAt(i) - 'a'.charCodeAt(0)]);
-        if (i == right) {
-            ans.push(right - left + 1);
-            left = right + 1;
+    const ans: number[] = [];
+    for (let i = 0, j = 0, mx = 0; i < n; ++i) {
+        mx = Math.max(mx, last[idx(s[i])]);
+        if (mx === i) {
+            ans.push(i - j + 1);
+            j = i + 1;
         }
     }
     return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn partition_labels(s: String) -> Vec<i32> {
         let n = s.len();
         let bytes = s.as_bytes();
-        let mut inx_arr = [0; 26];
+        let mut last = [0; 26];
         for i in 0..n {
-            inx_arr[(bytes[i] - b'a') as usize] = i;
+            last[(bytes[i] - b'a') as usize] = i;
         }
-        let mut res = vec![];
-        let mut left = 0;
-        let mut right = 0;
+        let mut ans = vec![];
+        let mut j = 0;
+        let mut mx = 0;
         for i in 0..n {
-            right = right.max(inx_arr[(bytes[i] - b'a') as usize]);
-            if right == i {
-                res.push((right - left + 1) as i32);
-                left = i + 1;
+            mx = mx.max(last[(bytes[i] - b'a') as usize]);
+            if mx == i {
+                ans.push((i - j + 1) as i32);
+                j = i + 1;
             }
         }
-        res
+        ans
     }
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -211,29 +217,49 @@ impl Solution {
  * @return {number[]}
  */
 var partitionLabels = function (s) {
+    const last = new Array(26).fill(0);
+    const idx = c => c.charCodeAt() - 'a'.charCodeAt();
     const n = s.length;
-    let last = new Array(26);
-    for (let i = 0; i < n; i++) {
-        last[s.charCodeAt(i) - 'a'.charCodeAt(0)] = i;
+    for (let i = 0; i < n; ++i) {
+        last[idx(s[i])] = i;
     }
-    let ans = [];
-    let left = 0,
-        right = 0;
-    for (let i = 0; i < n; i++) {
-        right = Math.max(right, last[s.charCodeAt(i) - 'a'.charCodeAt(0)]);
-        if (i == right) {
-            ans.push(right - left + 1);
-            left = right + 1;
+    const ans = [];
+    for (let i = 0, j = 0, mx = 0; i < n; ++i) {
+        mx = Math.max(mx, last[idx(s[i])]);
+        if (mx === i) {
+            ans.push(i - j + 1);
+            j = i + 1;
         }
     }
     return ans;
 };
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public IList<int> PartitionLabels(string s) {
+        int[] last = new int[26];
+        int n = s.Length;
+        for (int i = 0; i < n; i++) {
+            last[s[i] - 'a'] = i;
+        }
+        IList<int> ans = new List<int>();
+        for (int i = 0, j = 0, mx = 0; i < n; ++i) {
+            mx = Math.Max(mx, last[s[i] - 'a']);
+            if (mx == i) {
+                ans.Add(i - j + 1);
+                j = i + 1;
+            }
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2440.Create%20Components%20With%20Same%20Value/README_EN.md
+rating: 2460
+source: Biweekly Contest 89 Q4
+tags:
+    - Tree
+    - Depth-First Search
+    - Array
+    - Math
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [2440. Create Components With Same Value](https://leetcode.com/problems/create-components-with-same-value)
 
 [中文文档](/solution/2400-2499/2440.Create%20Components%20With%20Same%20Value/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an undirected tree with <code>n</code> nodes labeled from <code>0</code> to <code>n - 1</code>.</p>
 
@@ -42,11 +60,27 @@
 	<li><code>edges</code> represents a valid tree.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration of Connected Blocks
+
+Assume the number of connected blocks is $k$, then the number of edges to be deleted is $k-1$, and the value of each connected block is $\frac{s}{k}$, where $s$ is the sum of the values of all nodes in $nums$.
+
+We enumerate $k$ from large to small. If there exists a $k$ such that $\frac{s}{k}$ is an integer, and the value of each connected block obtained is equal, then directly return $k-1$. The initial value of $k$ is $\min(n, \frac{s}{mx})$, where $mx$ is the maximum value in $nums$.
+
+The key point is to judge whether for a given $\frac{s}{k}$, it is possible to divide several subtrees such that the value of each subtree is $\frac{s}{k}$.
+
+Here we use the `dfs` function to judge. We recursively traverse from top to bottom to calculate the value of each subtree. If the sum of the subtree values is exactly $\frac{s}{k}$, it means that the division is successful at this time. We set the value to $0$ and return it to the upper level, indicating that this subtree can be disconnected from the parent node. If the sum of the subtree values is greater than $\frac{s}{k}$, it means that the division fails at this time. We return $-1$, indicating that it cannot be divided.
+
+The time complexity is $O(n \times \sqrt{s})$, where $n$ and $s$ are the length of $nums$ and the sum of the values of all nodes in $nums$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -78,7 +112,7 @@ class Solution:
         return 0
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -143,7 +177,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -184,14 +218,13 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func componentValue(nums []int, edges [][]int) int {
-	s, mx := 0, 0
+	s, mx := 0, slices.Max(nums)
 	for _, x := range nums {
 		s += x
-		mx = max(mx, x)
 	}
 	n := len(nums)
 	g := make([][]int, n)
@@ -231,32 +264,10 @@ func componentValue(nums []int, edges [][]int) int {
 	}
 	return 0
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

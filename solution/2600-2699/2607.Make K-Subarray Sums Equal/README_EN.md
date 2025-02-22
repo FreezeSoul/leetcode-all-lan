@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2607.Make%20K-Subarray%20Sums%20Equal/README_EN.md
+rating: 2071
+source: Biweekly Contest 101 Q3
+tags:
+    - Greedy
+    - Array
+    - Math
+    - Number Theory
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2607. Make K-Subarray Sums Equal](https://leetcode.com/problems/make-k-subarray-sums-equal)
 
 [中文文档](/solution/2600-2699/2607.Make%20K-Subarray%20Sums%20Equal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>arr</code> and an integer <code>k</code>. The array <code>arr</code> is circular. In other words, the first element of the array is the next element of the last element, and the last element of the array is the previous element of the first element.</p>
 
@@ -51,11 +69,17 @@ The array after the operations is [5,5,5,5]
 	<li><code>1 &lt;= arr[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +94,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +147,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeSubKSumEqual(arr []int, k int) (ans int64) {
@@ -158,7 +182,7 @@ func gcd(a, b int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makeSubKSumEqual(arr: number[], k: number): number {
@@ -187,10 +211,8 @@ function gcd(a: number, b: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

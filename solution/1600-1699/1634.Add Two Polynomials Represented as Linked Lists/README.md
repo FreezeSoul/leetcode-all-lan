@@ -1,10 +1,22 @@
-# [1634. 求两个多项式链表的和](https://leetcode.cn/problems/add-two-polynomials-represented-as-linked-lists)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1634.Add%20Two%20Polynomials%20Represented%20as%20Linked%20Lists/README.md
+tags:
+    - 链表
+    - 数学
+    - 双指针
+---
+
+<!-- problem:start -->
+
+# [1634. 求两个多项式链表的和 🔒](https://leetcode.cn/problems/add-two-polynomials-represented-as-linked-lists)
 
 [English Version](/solution/1600-1699/1634.Add%20Two%20Polynomials%20Represented%20as%20Linked%20Lists/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>多项式链表是一种特殊形式的链表，每个节点表示多项式的一项。</p>
 
@@ -68,11 +80,13 @@
 	<li><code>PolyNode.power > PolyNode.next.power</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：遍历链表**
+### 方法一：遍历链表
 
 我们可以同时遍历两个链表，根据指数大小关系，将节点添加到结果链表中。
 
@@ -82,9 +96,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for polynomial singly-linked list.
@@ -117,9 +129,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -169,7 +179,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -218,7 +228,51 @@ public:
 };
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for polynomial singly-linked list.
+ * function PolyNode(x=0, y=0, next=null) {
+ *     this.coefficient = x;
+ *     this.power = y;
+ *     this.next = next;
+ * }
+ */
+
+/**
+ * @param {PolyNode} poly1
+ * @param {PolyNode} poly2
+ * @return {PolyNode}
+ */
+var addPoly = function (poly1, poly2) {
+    const dummy = new PolyNode();
+    let curr = dummy;
+    while (poly1 && poly2) {
+        if (poly1.power > poly2.power) {
+            curr.next = poly1;
+            poly1 = poly1.next;
+            curr = curr.next;
+        } else if (poly1.power < poly2.power) {
+            curr.next = poly2;
+            poly2 = poly2.next;
+            curr = curr.next;
+        } else {
+            const c = poly1.coefficient + poly2.coefficient;
+            if (c != 0) {
+                curr.next = new PolyNode(c, poly1.power);
+                curr = curr.next;
+            }
+            poly1 = poly1.next;
+            poly2 = poly2.next;
+        }
+    }
+    curr.next = poly1 || poly2;
+    return dummy.next;
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -269,54 +323,8 @@ public class Solution {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for polynomial singly-linked list.
- * function PolyNode(x=0, y=0, next=null) {
- *     this.coefficient = x;
- *     this.power = y;
- *     this.next = next;
- * }
- */
-
-/**
- * @param {PolyNode} poly1
- * @param {PolyNode} poly2
- * @return {PolyNode}
- */
-var addPoly = function (poly1, poly2) {
-    const dummy = new PolyNode();
-    let curr = dummy;
-    while (poly1 && poly2) {
-        if (poly1.power > poly2.power) {
-            curr.next = poly1;
-            poly1 = poly1.next;
-            curr = curr.next;
-        } else if (poly1.power < poly2.power) {
-            curr.next = poly2;
-            poly2 = poly2.next;
-            curr = curr.next;
-        } else {
-            const c = poly1.coefficient + poly2.coefficient;
-            if (c != 0) {
-                curr.next = new PolyNode(c, poly1.power);
-                curr = curr.next;
-            }
-            poly1 = poly1.next;
-            poly2 = poly2.next;
-        }
-    }
-    curr.next = poly1 || poly2;
-    return dummy.next;
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

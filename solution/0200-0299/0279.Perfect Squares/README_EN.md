@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0279.Perfect%20Squares/README_EN.md
+tags:
+    - Breadth-First Search
+    - Math
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [279. Perfect Squares](https://leetcode.com/problems/perfect-squares)
 
 [中文文档](/solution/0200-0299/0279.Perfect%20Squares/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code>, return <em>the least number of perfect square numbers that sum to</em> <code>n</code>.</p>
 
@@ -32,107 +46,264 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-For dynamic programming, define `dp[i]` to represent the least number of perfect square numbers that sum to `i`.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def numSquares(self, n: int) -> int:
-        dp = [0] * (n + 1)
-        for i in range(1, n + 1):
-            j, mi = 1, inf
-            while j * j <= i:
-                mi = min(mi, dp[i - j * j])
-                j += 1
-            dp[i] = mi + 1
-        return dp[-1]
+        m = int(sqrt(n))
+        f = [[inf] * (n + 1) for _ in range(m + 1)]
+        f[0][0] = 0
+        for i in range(1, m + 1):
+            for j in range(n + 1):
+                f[i][j] = f[i - 1][j]
+                if j >= i * i:
+                    f[i][j] = min(f[i][j], f[i][j - i * i] + 1)
+        return f[m][n]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int numSquares(int n) {
-        int[] dp = new int[n + 1];
-        for (int i = 1; i <= n; ++i) {
-            int mi = Integer.MAX_VALUE;
-            for (int j = 1; j * j <= i; ++j) {
-                mi = Math.min(mi, dp[i - j * j]);
-            }
-            dp[i] = mi + 1;
+        int m = (int) Math.sqrt(n);
+        int[][] f = new int[m + 1][n + 1];
+        for (var g : f) {
+            Arrays.fill(g, 1 << 30);
         }
-        return dp[n];
+        f[0][0] = 0;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                f[i][j] = f[i - 1][j];
+                if (j >= i * i) {
+                    f[i][j] = Math.min(f[i][j], f[i][j - i * i] + 1);
+                }
+            }
+        }
+        return f[m][n];
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int numSquares(int n) {
-        vector<int> dp(n + 1);
-        for (int i = 1; i <= n; ++i) {
-            int mi = 100000;
-            for (int j = 1; j * j <= i; ++j) {
-                mi = min(mi, dp[i - j * j]);
+        int m = sqrt(n);
+        int f[m + 1][n + 1];
+        memset(f, 0x3f, sizeof(f));
+        f[0][0] = 0;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                f[i][j] = f[i - 1][j];
+                if (j >= i * i) {
+                    f[i][j] = min(f[i][j], f[i][j - i * i] + 1);
+                }
             }
-            dp[i] = mi + 1;
         }
-        return dp[n];
+        return f[m][n];
     }
 };
 ```
 
-### **TypeScript**
-
-```ts
-function numSquares(n: number): number {
-    let dp = new Array(n + 1).fill(0);
-    for (let i = 1; i <= n; ++i) {
-        let min = Infinity;
-        for (let j = 1; j * j <= i; ++j) {
-            min = Math.min(min, dp[i - j * j]);
-        }
-        dp[i] = min + 1;
-    }
-    return dp.pop();
-}
-```
-
-### **Go**
+#### Go
 
 ```go
 func numSquares(n int) int {
-	dp := make([]int, n+1)
-	for i := 1; i <= n; i++ {
-		mi := 100000
-		for j := 1; j*j <= i; j++ {
-			mi = min(mi, dp[i-j*j])
+	m := int(math.Sqrt(float64(n)))
+	f := make([][]int, m+1)
+	const inf = 1 << 30
+	for i := range f {
+		f[i] = make([]int, n+1)
+		for j := range f[i] {
+			f[i][j] = inf
 		}
-		dp[i] = mi + 1
 	}
-	return dp[n]
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
+	f[0][0] = 0
+	for i := 1; i <= m; i++ {
+		for j := 0; j <= n; j++ {
+			f[i][j] = f[i-1][j]
+			if j >= i*i {
+				f[i][j] = min(f[i][j], f[i][j-i*i]+1)
+			}
+		}
 	}
-	return b
+	return f[m][n]
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function numSquares(n: number): number {
+    const m = Math.floor(Math.sqrt(n));
+    const f: number[][] = Array(m + 1)
+        .fill(0)
+        .map(() => Array(n + 1).fill(1 << 30));
+    f[0][0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 0; j <= n; ++j) {
+            f[i][j] = f[i - 1][j];
+            if (j >= i * i) {
+                f[i][j] = Math.min(f[i][j], f[i][j - i * i] + 1);
+            }
+        }
+    }
+    return f[m][n];
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn num_squares(n: i32) -> i32 {
+        let (row, col) = ((n as f32).sqrt().floor() as usize, n as usize);
+        let mut dp = vec![vec![i32::MAX; col + 1]; row + 1];
+        dp[0][0] = 0;
+        for i in 1..=row {
+            for j in 0..=col {
+                dp[i][j] = dp[i - 1][j];
+                if j >= i * i {
+                    dp[i][j] = std::cmp::min(dp[i][j], dp[i][j - i * i] + 1);
+                }
+            }
+        }
+        dp[row][col]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numSquares(self, n: int) -> int:
+        m = int(sqrt(n))
+        f = [0] + [inf] * n
+        for i in range(1, m + 1):
+            for j in range(i * i, n + 1):
+                f[j] = min(f[j], f[j - i * i] + 1)
+        return f[n]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        int m = (int) Math.sqrt(n);
+        int[] f = new int[n + 1];
+        Arrays.fill(f, 1 << 30);
+        f[0] = 0;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = i * i; j <= n; ++j) {
+                f[j] = Math.min(f[j], f[j - i * i] + 1);
+            }
+        }
+        return f[n];
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numSquares(int n) {
+        int m = sqrt(n);
+        int f[n + 1];
+        memset(f, 0x3f, sizeof(f));
+        f[0] = 0;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = i * i; j <= n; ++j) {
+                f[j] = min(f[j], f[j - i * i] + 1);
+            }
+        }
+        return f[n];
+    }
+};
+```
+
+#### Go
+
+```go
+func numSquares(n int) int {
+	m := int(math.Sqrt(float64(n)))
+	f := make([]int, n+1)
+	for i := range f {
+		f[i] = 1 << 30
+	}
+	f[0] = 0
+	for i := 1; i <= m; i++ {
+		for j := i * i; j <= n; j++ {
+			f[j] = min(f[j], f[j-i*i]+1)
+		}
+	}
+	return f[n]
+}
+```
+
+#### TypeScript
+
+```ts
+function numSquares(n: number): number {
+    const m = Math.floor(Math.sqrt(n));
+    const f: number[] = Array(n + 1).fill(1 << 30);
+    f[0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = i * i; j <= n; ++j) {
+            f[j] = Math.min(f[j], f[j - i * i] + 1);
+        }
+    }
+    return f[n];
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn num_squares(n: i32) -> i32 {
+        let (row, col) = ((n as f32).sqrt().floor() as usize, n as usize);
+        let mut dp = vec![i32::MAX; col + 1];
+        dp[0] = 0;
+        for i in 1..=row {
+            for j in i * i..=col {
+                dp[j] = std::cmp::min(dp[j], dp[j - i * i] + 1);
+            }
+        }
+        dp[col]
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

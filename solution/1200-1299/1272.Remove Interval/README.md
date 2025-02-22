@@ -1,10 +1,22 @@
-# [1272. 删除区间](https://leetcode.cn/problems/remove-interval)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1272.Remove%20Interval/README.md
+rating: 1524
+source: 第 14 场双周赛 Q2
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
+# [1272. 删除区间 🔒](https://leetcode.cn/problems/remove-interval)
 
 [English Version](/solution/1200-1299/1272.Remove%20Interval/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>实数集合可以表示为若干不相交区间的并集，其中每个区间的形式为 <code>[a, b)</code>（左闭右开），表示满足&nbsp;<code>a &lt;= x &lt; b</code> 的所有实数&nbsp; <code>x</code>&nbsp;的集合。如果某个区间&nbsp;<code>[a, b)</code> 中包含实数 <code>x</code> ，则称实数 <code>x</code> 在集合中。</p>
 
@@ -46,11 +58,13 @@
 	<li><code>-10<sup>9</sup> &lt;= a<sub>i</sub> &lt; b<sub>i</sub> &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：分类讨论**
+### 方法一：分类讨论
 
 我们记要删除的区间为 $[x, y)$，遍历区间列表，对于每个区间 $[a, b)$，有以下三种情况：
 
@@ -58,17 +72,17 @@
 -   $a \lt x$, $b \gt y$，表示该区间与要删除的区间有交集，将该区间分成两个区间加入答案；
 -   $a \geq x$, $b \leq y$，表示该区间被要删除的区间完全覆盖，不加入答案。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为区间列表的长度。
+时间复杂度 $O(n)$，其中 $n$ 为区间列表的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def removeInterval(self, intervals: List[List[int]], toBeRemoved: List[int]) -> List[List[int]]:
+    def removeInterval(
+        self, intervals: List[List[int]], toBeRemoved: List[int]
+    ) -> List[List[int]]:
         x, y = toBeRemoved
         ans = []
         for a, b in intervals:
@@ -82,9 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +147,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeInterval(intervals [][]int, toBeRemoved []int) (ans [][]int) {
@@ -157,10 +169,8 @@ func removeInterval(intervals [][]int, toBeRemoved []int) (ans [][]int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2322.Minimum%20Score%20After%20Removals%20on%20a%20Tree/README_EN.md
+rating: 2391
+source: Weekly Contest 299 Q4
+tags:
+    - Bit Manipulation
+    - Tree
+    - Depth-First Search
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2322. Minimum Score After Removals on a Tree](https://leetcode.com/problems/minimum-score-after-removals-on-a-tree)
 
 [中文文档](/solution/2300-2399/2322.Minimum%20Score%20After%20Removals%20on%20a%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an undirected connected tree with <code>n</code> nodes labeled from <code>0</code> to <code>n - 1</code> and <code>n - 1</code> edges.</p>
 
@@ -62,11 +79,17 @@ We cannot obtain a smaller score than 0.
 	<li><code>edges</code> represents a valid tree.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -108,7 +131,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -168,7 +191,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -222,7 +245,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumScore(nums []int, edges [][]int) int {
@@ -272,32 +295,10 @@ func minimumScore(nums []int, edges [][]int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

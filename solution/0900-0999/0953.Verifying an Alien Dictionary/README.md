@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0953.Verifying%20an%20Alien%20Dictionary/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [953. 验证外星语词典](https://leetcode.cn/problems/verifying-an-alien-dictionary)
 
 [English Version](/solution/0900-0999/0953.Verifying%20an%20Alien%20Dictionary/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>某种外星语也使用英文小写字母，但可能顺序 <code>order</code> 不同。字母表的顺序（<code>order</code>）是一些小写字母的排列。</p>
 
@@ -45,17 +57,17 @@
 	<li>在 <code>words[i]</code> 和 <code>order</code> 中的所有字符都是英文小写字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用数组或哈希表存放字母顺序。依次遍历单词列表，检测相邻两单词是否满足字典序。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +88,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isAlienSorted(words []string, order string) bool {
@@ -165,7 +175,7 @@ func isAlienSorted(words []string, order string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isAlienSorted(words: string[], order: string): boolean {
@@ -196,7 +206,7 @@ function isAlienSorted(words: string[], order: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -229,19 +239,19 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-bool isAlienSorted(char **words, int wordsSize, char *order) {
+bool isAlienSorted(char** words, int wordsSize, char* order) {
     int map[26] = {0};
     for (int i = 0; i < 26; i++) {
         map[order[i] - 'a'] = i;
     }
     for (int i = 1; i < wordsSize; i++) {
-        char *s1 = words[i - 1];
-        char *s2 = words[i];
+        char* s1 = words[i - 1];
+        char* s2 = words[i];
         int n = strlen(s1);
         int m = strlen(s2);
         int len = min(n, m);
@@ -263,10 +273,8 @@ bool isAlienSorted(char **words, int wordsSize, char *order) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

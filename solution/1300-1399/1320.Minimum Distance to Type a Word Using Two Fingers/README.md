@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1320.Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers/README.md
+rating: 2027
+source: 第 171 场周赛 Q4
+tags:
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1320. 二指输入的的最小距离](https://leetcode.cn/problems/minimum-distance-to-type-a-word-using-two-fingers)
 
 [English Version](/solution/1300-1399/1320.Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1300-1399/1320.Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers/images/leetcode_keyboard.png" /></p>
 
@@ -60,36 +73,36 @@
 	<li>每个 <code>word[i]</code>&nbsp;都是一个大写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-我们定义 $f[i][j][k]$ 表示输入完 $word[i]$，且手指 $1$ 位于位置 $j$，手指 $2$ 位于位置 $k$ 时，最小的移动距离。这里的位置 $j$ 和 $k$ 表示的是字母对应的数字，取值范围为 $[0,..25]$。初始时 $f[i][j][k]=\infty$。
+我们定义 $f[i][j][k]$ 表示输入完 $\textit{word}[i]$，且手指 $1$ 位于位置 $j$，手指 $2$ 位于位置 $k$ 时，最小的移动距离。这里的位置 $j$ 和 $k$ 表示的是字母对应的数字，取值范围为 $[0,..25]$。初始时 $f[i][j][k]=\infty$。
 
-我们实现一个函数 $dist(a, b)$，表示位置 $a$ 和位置 $b$ 之间的距离，即 $dist(a, b) = |\frac{a}{6} - \frac{b}{6}| + |a \bmod 6 - b \bmod 6|$。
+我们实现一个函数 $\textit{dist}(a, b)$，表示位置 $a$ 和位置 $b$ 之间的距离，即 $\textit{dist}(a, b) = |\frac{a}{6} - \frac{b}{6}| + |a \bmod 6 - b \bmod 6|$。
 
-接下来，我们考虑输入 $word[0]$，即只有一个字母的的情况，此时有两种选择：
+接下来，我们考虑输入 $\textit{word}[0]$，即只有一个字母的的情况，此时有两种选择：
 
--   手指 $1$ 位于 $word[0]$ 所在的位置，手指 $2$ 位于任意位置，此时 $f[0][word[0]][k] = 0$，其中 $k \in [0,..25]$。
--   手指 $2$ 位于 $word[0]$ 所在的位置，手指 $1$ 位于任意位置，此时 $f[0][k][word[0]] = 0$，其中 $k \in [0,..25]$。
+-   手指 $1$ 位于 $\textit{word}[0]$ 所在的位置，手指 $2$ 位于任意位置，此时 $f[0][\textit{word}[0]][k] = 0$，其中 $k \in [0,..25]$。
+-   手指 $2$ 位于 $\textit{word}[0]$ 所在的位置，手指 $1$ 位于任意位置，此时 $f[0][k][\textit{word}[0]] = 0$，其中 $k \in [0,..25]$。
 
-然后我们考虑输入 $word[1,..n-1]$，我们记上一个字母和当前字母所在的位置分别为 $a$ 和 $b$，接下来我们进行分情况讨论：
+然后我们考虑输入 $\textit{word}[1,..n-1]$，我们记上一个字母和当前字母所在的位置分别为 $a$ 和 $b$，接下来我们进行分情况讨论：
 
-如果当前手指 $1$ 位于位置 $b$，我们枚举手指 $2$ 的位置 $j$，假如上一个位置 $a$ 也是手指 $1$ 的位置，那么此时有 $f[i][b][j]=\min(f[i][b][j], f[i-1][a][j]+dist(a, b))$。如果手指 $2$ 的位置与上一个位置 $a$ 相同，即 $j=a$，那么我们枚举上一个位置的手指 $1$ 所在的位置 $k$，此时有 $f[i][j][j]=\min(f[i][b][j], f[i-1][k][a]+dist(k, b))$。
+如果当前手指 $1$ 位于位置 $b$，我们枚举手指 $2$ 的位置 $j$，假如上一个位置 $a$ 也是手指 $1$ 的位置，那么此时有 $f[i][b][j]=\min(f[i][b][j], f[i-1][a][j]+\textit{dist}(a, b))$。如果手指 $2$ 的位置与上一个位置 $a$ 相同，即 $j=a$，那么我们枚举上一个位置的手指 $1$ 所在的位置 $k$，此时有 $f[i][j][j]=\min(f[i][b][j], f[i-1][k][a]+\textit{dist}(k, b))$。
 
-同理，如果当前手指 $2$ 位于位置 $b$，我们枚举手指 $1$ 的位置 $j$，假如上一个位置 $a$ 也是手指 $2$ 的位置，那么此时有 $f[i][j][b]=\min(f[i][j][b], f[i-1][j][a]+dist(a, b))$。如果手指 $1$ 的位置与上一个位置 $a$ 相同，即 $j=a$，那么我们枚举上一个位置的手指 $2$ 所在的位置 $k$，此时有 $f[i][j][b]=\min(f[i][j][b], f[i-1][a][k]+dist(k, b))$。
+同理，如果当前手指 $2$ 位于位置 $b$，我们枚举手指 $1$ 的位置 $j$，假如上一个位置 $a$ 也是手指 $2$ 的位置，那么此时有 $f[i][j][b]=\min(f[i][j][b], f[i-1][j][a]+\textit{dist}(a, b))$。如果手指 $1$ 的位置与上一个位置 $a$ 相同，即 $j=a$，那么我们枚举上一个位置的手指 $2$ 所在的位置 $k$，此时有 $f[i][j][b]=\min(f[i][j][b], f[i-1][a][k]+\textit{dist}(k, b))$。
 
 最后，我们枚举最后一个位置的手指 $1$ 和手指 $2$ 所在的位置，取最小值即为答案。
 
-时间复杂度 $O(n \times 26^2)$，空间复杂度 $O(n \times 26^2)$。其中 $n$ 为字符串 $word$ 的长度。
+时间复杂度 $O(n \times |\Sigma|^2)$，空间复杂度 $O(n \times |\Sigma|^2)$。其中 $n$ 为字符串 $\textit{word}$ 的长度，而 $|\Sigma|$ 为字母表的大小，本题中 $|\Sigma|=26$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -120,9 +133,7 @@ class Solution:
         return int(min(a, b))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -171,7 +182,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -216,7 +227,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumDistance(word string) int {
@@ -262,13 +273,6 @@ func minimumDistance(word string) int {
 	return ans
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -277,10 +281,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

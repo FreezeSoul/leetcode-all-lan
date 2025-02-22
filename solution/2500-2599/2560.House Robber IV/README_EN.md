@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2560.House%20Robber%20IV/README_EN.md
+rating: 2081
+source: Weekly Contest 331 Q3
+tags:
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [2560. House Robber IV](https://leetcode.com/problems/house-robber-iv)
 
 [中文文档](/solution/2500-2599/2560.House%20Robber%20IV/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are several consecutive houses along a street, each of which has some money inside. There is also a robber, who wants to steal money from the homes, but he <strong>refuses to steal from adjacent homes</strong>.</p>
 
@@ -45,11 +60,21 @@ Therefore, we return min(5, 9, 9) = 5.
 	<li><code>1 &lt;= k &lt;= (nums.length + 1)/2</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Binary Search + Greedy
+
+The problem is asking for the minimum stealing ability of the thief. We can use binary search to enumerate the stealing ability of the thief. For the enumerated ability $x$, we can use a greedy approach to determine whether the thief can steal at least $k$ houses. Specifically, we traverse the array from left to right. For the current house $i$ we are traversing, if $nums[i] \leq x$ and the difference between the index of $i$ and the last stolen house is greater than $1$, then the thief can steal house $i$. Otherwise, the thief cannot steal house $i$. We accumulate the number of stolen houses. If the number of stolen houses is greater than or equal to $k$, it means that the thief can steal at least $k$ houses, and at this time, the stealing ability $x$ of the thief might be the minimum. Otherwise, the stealing ability $x$ of the thief is not the minimum.
+
+The time complexity is $O(n \times \log m)$, and the space complexity is $O(1)$. Where $n$ and $m$ are the length of the array $nums$ and the maximum value in the array $nums$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,7 +91,7 @@ class Solution:
         return bisect_left(range(max(nums) + 1), True, key=f)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCapability(nums []int, k int) int {
@@ -146,10 +171,38 @@ func minCapability(nums []int, k int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function minCapability(nums: number[], k: number): number {
+    const f = (mx: number): boolean => {
+        let cnt = 0;
+        let j = -2;
+        for (let i = 0; i < nums.length; ++i) {
+            if (nums[i] <= mx && i - j > 1) {
+                ++cnt;
+                j = i;
+            }
+        }
+        return cnt >= k;
+    };
 
+    let left = 1;
+    let right = Math.max(...nums);
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (f(mid)) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

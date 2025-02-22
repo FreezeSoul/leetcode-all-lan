@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2099.Find%20Subsequence%20of%20Length%20K%20With%20the%20Largest%20Sum/README.md
+rating: 1447
+source: 第 67 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2099. 找到和最大的长度为 K 的子序列](https://leetcode.cn/problems/find-subsequence-of-length-k-with-the-largest-sum)
 
 [English Version](/solution/2000-2099/2099.Find%20Subsequence%20of%20Length%20K%20With%20the%20Largest%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code>&nbsp;和一个整数&nbsp;<code>k</code>&nbsp;。你需要找到&nbsp;<code>nums</code>&nbsp;中长度为 <code>k</code>&nbsp;的 <strong>子序列</strong>&nbsp;，且这个子序列的&nbsp;<strong>和最大&nbsp;</strong>。</p>
 
@@ -48,105 +63,87 @@
 	<li><code>1 &lt;= k &lt;= nums.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-两次排序。
+### 方法一：排序
 
-先按照数字大小**对下标进行排序**，然后取出倒数 k 个下标（对应的数字是数组中前 k 个数字），对下标进行排序。最后将排序后的下标依次映射成数字，得到结果数组。
+我们先创建一个索引数组 $\textit{idx}$，数组中的每个元素是数组 $\textit{nums}$ 的下标。然后我们根据数组 $\textit{nums}$ 的值对索引数组 $\textit{idx}$ 进行排序，排序的规则是 $\textit{nums}[i] < \textit{nums}[j]$，其中 $i$ 和 $j$ 是索引数组 $\textit{idx}$ 中的两个下标。
+
+排序完成后，我们取索引数组 $\textit{idx}$ 的最后 $k$ 个元素，这 $k$ 个元素对应的就是数组 $\textit{nums}$ 中最大的 $k$ 个元素。然后我们对这 $k$ 个下标进行排序，得到的就是最大的 $k$ 个元素在数组 $\textit{nums}$ 中的顺序。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为数组的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxSubsequence(self, nums: List[int], k: int) -> List[int]:
-        idx = list(range(len(nums)))
-        idx.sort(key=lambda i: nums[i])
-        return [nums[i] for i in sorted(idx[-k:])]
+        idx = sorted(range(len(nums)), key=lambda i: nums[i])[-k:]
+        return [nums[i] for i in sorted(idx)]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int[] maxSubsequence(int[] nums, int k) {
-        int[] ans = new int[k];
-        List<Integer> idx = new ArrayList<>();
         int n = nums.length;
+        Integer[] idx = new Integer[n];
         for (int i = 0; i < n; ++i) {
-            idx.add(i);
+            idx[i] = i;
         }
-        idx.sort(Comparator.comparingInt(i -> - nums[i]));
-        int[] t = new int[k];
-        for (int i = 0; i < k; ++i) {
-            t[i] = idx.get(i);
-        }
-        Arrays.sort(t);
-        for (int i = 0; i < k; ++i) {
-            ans[i] = nums[t[i]];
+        Arrays.sort(idx, (i, j) -> nums[i] - nums[j]);
+        Arrays.sort(idx, n - k, n);
+        int[] ans = new int[k];
+        for (int i = n - k; i < n; ++i) {
+            ans[i - (n - k)] = nums[idx[i]];
         }
         return ans;
     }
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<int> maxSubsequence(vector<int>& nums, int k) {
-        int n = nums.size();
-        vector<pair<int, int>> vals;
-        for (int i = 0; i < n; ++i) vals.push_back({i, nums[i]});
-        sort(vals.begin(), vals.end(), [&](auto x1, auto x2) {
-            return x1.second > x2.second;
-        });
-        sort(vals.begin(), vals.begin() + k);
-        vector<int> ans;
-        for (int i = 0; i < k; ++i) ans.push_back(vals[i].second);
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func maxSubsequence(nums []int, k int) []int {
-	idx := make([]int, len(nums))
+	n := len(nums)
+	idx := make([]int, n)
 	for i := range idx {
 		idx[i] = i
 	}
-	sort.Slice(idx, func(i, j int) bool { return nums[idx[i]] > nums[idx[j]] })
-	sort.Ints(idx[:k])
+	sort.Slice(idx, func(i, j int) bool { return nums[idx[i]] < nums[idx[j]] })
+	sort.Ints(idx[n-k:])
 	ans := make([]int, k)
-	for i, j := range idx[:k] {
-		ans[i] = nums[j]
+	for i := n - k; i < n; i++ {
+		ans[i-(n-k)] = nums[idx[i]]
 	}
 	return ans
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function maxSubsequence(nums: number[], k: number): number[] {
+    const n = nums.length;
+    const idx: number[] = Array.from({ length: n }, (_, i) => i);
+    idx.sort((i, j) => nums[i] - nums[j]);
+    return idx
+        .slice(n - k)
+        .sort((i, j) => i - j)
+        .map(i => nums[i]);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

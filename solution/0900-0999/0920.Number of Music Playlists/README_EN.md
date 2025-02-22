@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0920.Number%20of%20Music%20Playlists/README_EN.md
+tags:
+    - Math
+    - Dynamic Programming
+    - Combinatorics
+---
+
+<!-- problem:start -->
+
 # [920. Number of Music Playlists](https://leetcode.com/problems/number-of-music-playlists)
 
 [中文文档](/solution/0900-0999/0920.Number%20of%20Music%20Playlists/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Your music player contains <code>n</code> different songs. You want to listen to <code>goal</code> songs (not necessarily different) during your trip. To avoid boredom, you will create a playlist so that:</p>
 
@@ -44,9 +58,13 @@
 	<li><code>0 &lt;= k &lt; n &lt;= goal &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Dynamic Programming**
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
 
 We define $f[i][j]$ to be the number of playlists that can be made from $i$ songs with exactly $j$ different songs. We have $f[0][0] = 1$ and the answer is $f[goal][n]$.
 
@@ -65,11 +83,9 @@ The final answer is $f[goal][n]$.
 
 The time complexity is $O(goal \times n)$, and the space complexity is $O(goal \times n)$. Here, $goal$ and $n$ are the parameters given in the problem.
 
-Notice that $f[i][j]$ only depends on $f[i - 1][j - 1]$ and $f[i - 1][j]$, so we can use rolling array to optimize the space complexity. The time complexity is unchanged.
-
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -86,24 +102,7 @@ class Solution:
         return f[goal][n]
 ```
 
-```python
-class Solution:
-    def numMusicPlaylists(self, n: int, goal: int, k: int) -> int:
-        mod = 10**9 + 7
-        f = [0] * (goal + 1)
-        f[0] = 1
-        for i in range(1, goal + 1):
-            g = [0] * (goal + 1)
-            for j in range(1, n + 1):
-                g[j] = f[j - 1] * (n - j + 1)
-                if j > k:
-                    g[j] += f[j] * (j - k)
-                g[j] %= mod
-            f = g
-        return f[n]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -124,6 +123,140 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numMusicPlaylists(int n, int goal, int k) {
+        const int mod = 1e9 + 7;
+        long long f[goal + 1][n + 1];
+        memset(f, 0, sizeof(f));
+        f[0][0] = 1;
+        for (int i = 1; i <= goal; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                f[i][j] = f[i - 1][j - 1] * (n - j + 1);
+                if (j > k) {
+                    f[i][j] += f[i - 1][j] * (j - k);
+                }
+                f[i][j] %= mod;
+            }
+        }
+        return f[goal][n];
+    }
+};
+```
+
+#### Go
+
+```go
+func numMusicPlaylists(n int, goal int, k int) int {
+	const mod = 1e9 + 7
+	f := make([][]int, goal+1)
+	for i := range f {
+		f[i] = make([]int, n+1)
+	}
+	f[0][0] = 1
+	for i := 1; i <= goal; i++ {
+		for j := 1; j <= n; j++ {
+			f[i][j] = f[i-1][j-1] * (n - j + 1)
+			if j > k {
+				f[i][j] += f[i-1][j] * (j - k)
+			}
+			f[i][j] %= mod
+		}
+	}
+	return f[goal][n]
+}
+```
+
+#### TypeScript
+
+```ts
+function numMusicPlaylists(n: number, goal: number, k: number): number {
+    const mod = 1e9 + 7;
+    const f = new Array(goal + 1).fill(0).map(() => new Array(n + 1).fill(0));
+    f[0][0] = 1;
+    for (let i = 1; i <= goal; ++i) {
+        for (let j = 1; j <= n; ++j) {
+            f[i][j] = f[i - 1][j - 1] * (n - j + 1);
+            if (j > k) {
+                f[i][j] += f[i - 1][j] * (j - k);
+            }
+            f[i][j] %= mod;
+        }
+    }
+    return f[goal][n];
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn num_music_playlists(n: i32, goal: i32, k: i32) -> i32 {
+        let mut dp: Vec<Vec<i64>> = vec![vec![0; n as usize + 1]; goal as usize + 1];
+
+        // Initialize the dp vector
+        dp[0][0] = 1;
+
+        // Begin the dp process
+        for i in 1..=goal as usize {
+            for j in 1..=n as usize {
+                // Choose the song that has not been chosen before
+                // We have n - (j - 1) songs to choose
+                dp[i][j] += dp[i - 1][j - 1] * ((n - ((j as i32) - 1)) as i64);
+
+                // Choose the song that has been chosen before
+                // We have j - k songs to choose if j > k
+                if (j as i32) > k {
+                    dp[i][j] += dp[i - 1][j] * (((j as i32) - k) as i64);
+                }
+
+                // Update dp[i][j]
+                dp[i][j] %= ((1e9 as i32) + 7) as i64;
+            }
+        }
+
+        dp[goal as usize][n as usize] as i32
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Dynamic Programming (Space Optimization)
+
+We notice that $f[i][j]$ is only related to $f[i - 1][j - 1]$ and $f[i - 1][j]$. Therefore, we can use a rolling array to optimize the space complexity, reducing the space complexity to $O(n)$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numMusicPlaylists(self, n: int, goal: int, k: int) -> int:
+        mod = 10**9 + 7
+        f = [0] * (goal + 1)
+        f[0] = 1
+        for i in range(1, goal + 1):
+            g = [0] * (goal + 1)
+            for j in range(1, n + 1):
+                g[j] = f[j - 1] * (n - j + 1)
+                if j > k:
+                    g[j] += f[j] * (j - k)
+                g[j] %= mod
+            f = g
+        return f[n]
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -147,29 +280,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int numMusicPlaylists(int n, int goal, int k) {
-        const int mod = 1e9 + 7;
-        long long f[goal + 1][n + 1];
-        memset(f, 0, sizeof(f));
-        f[0][0] = 1;
-        for (int i = 1; i <= goal; ++i) {
-            for (int j = 1; j <= n; ++j) {
-                f[i][j] = f[i - 1][j - 1] * (n - j + 1);
-                if (j > k) {
-                    f[i][j] += f[i - 1][j] * (j - k);
-                }
-                f[i][j] %= mod;
-            }
-        }
-        return f[goal][n];
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -194,28 +305,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func numMusicPlaylists(n int, goal int, k int) int {
-	const mod = 1e9 + 7
-	f := make([][]int, goal+1)
-	for i := range f {
-		f[i] = make([]int, n+1)
-	}
-	f[0][0] = 1
-	for i := 1; i <= goal; i++ {
-		for j := 1; j <= n; j++ {
-			f[i][j] = f[i-1][j-1] * (n - j + 1)
-			if j > k {
-				f[i][j] += f[i-1][j] * (j - k)
-			}
-			f[i][j] %= mod
-		}
-	}
-	return f[goal][n]
-}
-```
+#### Go
 
 ```go
 func numMusicPlaylists(n int, goal int, k int) int {
@@ -237,25 +327,7 @@ func numMusicPlaylists(n int, goal int, k int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function numMusicPlaylists(n: number, goal: number, k: number): number {
-    const mod = 1e9 + 7;
-    const f = new Array(goal + 1).fill(0).map(() => new Array(n + 1).fill(0));
-    f[0][0] = 1;
-    for (let i = 1; i <= goal; ++i) {
-        for (let j = 1; j <= n; ++j) {
-            f[i][j] = f[i - 1][j - 1] * (n - j + 1);
-            if (j > k) {
-                f[i][j] += f[i - 1][j] * (j - k);
-            }
-            f[i][j] %= mod;
-        }
-    }
-    return f[goal][n];
-}
-```
+#### TypeScript
 
 ```ts
 function numMusicPlaylists(n: number, goal: number, k: number): number {
@@ -277,10 +349,8 @@ function numMusicPlaylists(n: number, goal: number, k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

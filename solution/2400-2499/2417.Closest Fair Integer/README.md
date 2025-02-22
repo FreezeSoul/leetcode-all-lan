@@ -1,10 +1,21 @@
-# [2417. 最近的公平整数](https://leetcode.cn/problems/closest-fair-integer)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2417.Closest%20Fair%20Integer/README.md
+tags:
+    - 数学
+    - 枚举
+---
+
+<!-- problem:start -->
+
+# [2417. 最近的公平整数 🔒](https://leetcode.cn/problems/closest-fair-integer)
 
 [English Version](/solution/2400-2499/2417.Closest%20Fair%20Integer/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个 <strong>正整数</strong>&nbsp;<code>n</code>。</p>
 
@@ -39,11 +50,13 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：分类讨论**
+### 方法一：分类讨论
 
 我们记 $n$ 的位数为 $k$，奇数位数、偶数位数分别为 $a$ 和 $b$。
 
@@ -54,9 +67,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +90,7 @@ class Solution:
         return self.closestFair(n + 1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +109,7 @@ class Solution {
         if (k % 2 == 1) {
             int x = (int) Math.pow(10, k);
             int y = 0;
-            for (int i = 0; i<k> > 1; ++i) {
+            for (int i = 0; i < k >> 1; ++i) {
                 y = y * 10 + 1;
             }
             return x + y;
@@ -113,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -146,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func closestFair(n int) int {
@@ -176,16 +185,8 @@ func closestFair(n int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

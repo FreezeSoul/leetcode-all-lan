@@ -1,8 +1,27 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1255.Maximum%20Score%20Words%20Formed%20by%20Letters/README_EN.md
+rating: 1881
+source: Weekly Contest 162 Q4
+tags:
+    - Bit Manipulation
+    - Array
+    - String
+    - Dynamic Programming
+    - Backtracking
+    - Bitmask
+---
+
+<!-- problem:start -->
+
 # [1255. Maximum Score Words Formed by Letters](https://leetcode.com/problems/maximum-score-words-formed-by-letters)
 
 [中文文档](/solution/1200-1299/1255.Maximum%20Score%20Words%20Formed%20by%20Letters/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a list of <code>words</code>, list of&nbsp; single&nbsp;<code>letters</code> (might be repeating)&nbsp;and <code>score</code>&nbsp;of every character.</p>
 
@@ -52,15 +71,33 @@ Letter &quot;e&quot; can only be used once.</pre>
 	<li><code>words[i]</code>, <code>letters[i]</code>&nbsp;contains only lower case English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Binary Enumeration
+
+Given the small data range in the problem, we can use binary enumeration to enumerate all word combinations for the given word list. Then, we check whether each word combination meets the requirements of the problem. If it does, we calculate its score and finally take the word combination with the highest score.
+
+First, we use a hash table or array $cnt$ to record the number of occurrences of each letter in the alphabet $letters$.
+
+Next, we use binary enumeration to enumerate all word combinations. Each bit in the binary represents whether each word in the word list is selected. If the $i$th bit is $1$, it means the $i$th word is selected; otherwise, the $i$th word is not selected.
+
+Then, we count the number of occurrences of each letter in the current word combination and record it in the hash table or array $cur$. If the number of occurrences of each letter in $cur$ is not greater than the corresponding letter in $cnt$, it means the current word combination meets the requirements of the problem. We calculate the score of the current word combination and take the word combination with the highest score.
+
+The time complexity is $(2^n \times n \times M)$, and the space complexity is $O(C)$. Where $n$ and $M$ are the number of words in the word set and the maximum length of the word, respectively; and $C$ is the number of letters in the alphabet, in this problem, $C=26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def maxScoreWords(self, words: List[str], letters: List[str], score: List[int]) -> int:
+    def maxScoreWords(
+        self, words: List[str], letters: List[str], score: List[int]
+    ) -> int:
         cnt = Counter(letters)
         n = len(words)
         ans = 0
@@ -72,7 +109,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -149,7 +186,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxScoreWords(words []string, letters []byte, score []int) (ans int) {
@@ -184,10 +221,8 @@ func maxScoreWords(words []string, letters []byte, score []int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

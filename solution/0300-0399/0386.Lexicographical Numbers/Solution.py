@@ -1,8 +1,8 @@
 class Solution:
     def lexicalOrder(self, n: int) -> List[int]:
-        v = 1
         ans = []
-        for i in range(n):
+        v = 1
+        for _ in range(n):
             ans.append(v)
             if v * 10 <= n:
                 v *= 10

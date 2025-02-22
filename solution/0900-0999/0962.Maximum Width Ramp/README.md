@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0962.Maximum%20Width%20Ramp/README.md
+tags:
+    - 栈
+    - 数组
+    - 双指针
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [962. 最大宽度坡](https://leetcode.cn/problems/maximum-width-ramp)
 
 [English Version](/solution/0900-0999/0962.Maximum%20Width%20Ramp/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数数组&nbsp;<code>A</code>，<em>坡</em>是元组&nbsp;<code>(i, j)</code>，其中&nbsp;&nbsp;<code>i &lt; j</code>&nbsp;且&nbsp;<code>A[i] &lt;= A[j]</code>。这样的坡的宽度为&nbsp;<code>j - i</code>。</p>
 
@@ -39,11 +52,13 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈**
+### 方法一：单调栈
 
 根据题意，我们可以发现，所有可能的 $nums[i]$ 所构成的子序列一定是单调递减的。为什么呢？我们不妨用反证法证明一下。
 
@@ -55,9 +70,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +88,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxWidthRamp(nums []int) int {
@@ -150,19 +161,100 @@ func maxWidthRamp(nums []int) int {
 	}
 	return ans
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maxWidthRamp(nums: number[]): number {
+    let [ans, n] = [0, nums.length];
+    const stk: number[] = [];
+
+    for (let i = 0; i < n - 1; i++) {
+        if (stk.length === 0 || nums[stk.at(-1)!] > nums[i]) {
+            stk.push(i);
+        }
+    }
+
+    for (let i = n - 1; i >= 0; i--) {
+        while (stk.length && nums[stk.at(-1)!] <= nums[i]) {
+            ans = Math.max(ans, i - stk.pop()!);
+        }
+        if (stk.length === 0) break;
+    }
+
+    return ans;
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+function maxWidthRamp(nums) {
+    let [ans, n] = [0, nums.length];
+    const stk = [];
 
+    for (let i = 0; i < n - 1; i++) {
+        if (stk.length === 0 || nums[stk.at(-1)] > nums[i]) {
+            stk.push(i);
+        }
+    }
+
+    for (let i = n - 1; i >= 0; i--) {
+        while (stk.length && nums[stk.at(-1)] <= nums[i]) {
+            ans = Math.max(ans, i - stk.pop());
+        }
+        if (stk.length === 0) break;
+    }
+
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：排序
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function maxWidthRamp(nums: number[]): number {
+    const idx = nums.map((x, i) => [x, i]).sort(([a], [b]) => a - b);
+    let [ans, j] = [0, nums.length];
+
+    for (const [_, i] of idx) {
+        ans = Math.max(ans, i - j);
+        j = Math.min(j, i);
+    }
+
+    return ans;
+}
+```
+
+#### JavaScript
+
+```js
+function maxWidthRamp(nums) {
+    const idx = nums.map((x, i) => [x, i]).sort(([a], [b]) => a - b);
+    let [ans, j] = [0, nums.length];
+
+    for (const [_, i] of idx) {
+        ans = Math.max(ans, i - j);
+        j = Math.min(j, i);
+    }
+
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

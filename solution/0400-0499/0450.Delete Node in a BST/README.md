@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0450.Delete%20Node%20in%20a%20BST/README.md
+tags:
+    - 树
+    - 二叉搜索树
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst)
 
 [English Version](/solution/0400-0499/0450.Delete%20Node%20in%20a%20BST/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个二叉搜索树的根节点 <strong>root </strong>和一个值 <strong>key</strong>，删除二叉搜索树中的&nbsp;<strong>key&nbsp;</strong>对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。</p>
 
@@ -61,11 +73,13 @@
 
 <p><strong>进阶：</strong> 要求算法时间复杂度为&nbsp;O(h)，h 为树的高度。</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 二叉搜索树有以下性质：
 
@@ -86,9 +100,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -119,9 +131,7 @@ class Solution:
         return root
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -169,7 +179,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -206,7 +216,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -245,7 +255,7 @@ func deleteNode(root *TreeNode, key int) *TreeNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -295,7 +305,7 @@ function deleteNode(root: TreeNode | null, key: number): TreeNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -316,8 +326,8 @@ function deleteNode(root: TreeNode | null, key: number): TreeNode | null {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn dfs(root: &Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let node = root.as_ref().unwrap().borrow();
@@ -342,9 +352,15 @@ impl Solution {
                 }
                 std::cmp::Ordering::Equal => {
                     match (node.left.is_some(), node.right.is_some()) {
-                        (false, false) => return None,
-                        (true, false) => return node.left.take(),
-                        (false, true) => return node.right.take(),
+                        (false, false) => {
+                            return None;
+                        }
+                        (true, false) => {
+                            return node.left.take();
+                        }
+                        (false, true) => {
+                            return node.right.take();
+                        }
                         (true, true) => {
                             if node.right.as_ref().unwrap().borrow().left.is_none() {
                                 let mut r = node.right.take();
@@ -365,10 +381,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

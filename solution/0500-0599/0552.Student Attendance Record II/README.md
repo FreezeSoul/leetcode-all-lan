@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0552.Student%20Attendance%20Record%20II/README.md
+tags:
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [552. 学生出勤记录 II](https://leetcode.cn/problems/student-attendance-record-ii)
 
 [English Version](/solution/0500-0599/0552.Student%20Attendance%20Record%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 可以用字符串表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：
 
@@ -58,11 +68,13 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i, j, k)$，表示从第 $i$ 个出勤记录开始，当前缺勤次数为 $j$，目前最后连续迟到次数为 $k$ 时，可获得出勤奖励的情况数量。那么答案就是 $dfs(0, 0, 0)$。
 
@@ -79,21 +91,9 @@
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为出勤记录的长度。
 
-**方法二：动态规划**
-
-动态规划，定义 `dp[i][j][k]` 表示前 `i` 天，缺勤 `j` 次，连续迟到 `k` 次时，可获得出勤奖励的情况数量
-
-状态转移需要对第 `i` 天的出勤情况分别讨论：
-
--   缺勤：之前不能有任何缺勤记录，即 `j == 0`
--   迟到：之前最多连续迟到 1 次，即 `k == 0 || k == 1`
--   到场：无限制
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -116,39 +116,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def checkRecord(self, n: int) -> int:
-        mod = int(1e9 + 7)
-        dp = [[[0, 0, 0], [0, 0, 0]] for _ in range(n)]
-
-        # base case
-        dp[0][0][0] = dp[0][0][1] = dp[0][1][0] = 1
-
-        for i in range(1, n):
-            # A
-            dp[i][1][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % mod
-            # L
-            dp[i][0][1] = dp[i - 1][0][0]
-            dp[i][0][2] = dp[i - 1][0][1]
-            dp[i][1][1] = dp[i - 1][1][0]
-            dp[i][1][2] = dp[i - 1][1][1]
-            # P
-            dp[i][0][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % mod
-            dp[i][1][0] = (
-                dp[i][1][0] + dp[i - 1][1][0] + dp[i - 1][1][1] + dp[i - 1][1][2]
-            ) % mod
-
-        ans = 0
-        for j in range(2):
-            for k in range(3):
-                ans = (ans + dp[n - 1][j][k]) % mod
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -180,6 +148,125 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int checkRecord(int n) {
+        int f[n][2][3];
+        memset(f, -1, sizeof(f));
+        const int mod = 1e9 + 7;
+        auto dfs = [&](this auto&& dfs, int i, int j, int k) -> int {
+            if (i >= n) {
+                return 1;
+            }
+            if (f[i][j][k] != -1) {
+                return f[i][j][k];
+            }
+            int ans = dfs(i + 1, j, 0);
+            if (j == 0) {
+                ans = (ans + dfs(i + 1, j + 1, 0)) % mod;
+            }
+            if (k < 2) {
+                ans = (ans + dfs(i + 1, j, k + 1)) % mod;
+            }
+            return f[i][j][k] = ans;
+        };
+        return dfs(0, 0, 0);
+    }
+};
+```
+
+#### Go
+
+```go
+func checkRecord(n int) int {
+	f := make([][][]int, n)
+	for i := range f {
+		f[i] = make([][]int, 2)
+		for j := range f[i] {
+			f[i][j] = make([]int, 3)
+			for k := range f[i][j] {
+				f[i][j][k] = -1
+			}
+		}
+	}
+	const mod = 1e9 + 7
+	var dfs func(i, j, k int) int
+	dfs = func(i, j, k int) int {
+		if i >= n {
+			return 1
+		}
+		if f[i][j][k] != -1 {
+			return f[i][j][k]
+		}
+		ans := dfs(i+1, j, 0)
+		if j == 0 {
+			ans = (ans + dfs(i+1, j+1, 0)) % mod
+		}
+		if k < 2 {
+			ans = (ans + dfs(i+1, j, k+1)) % mod
+		}
+		f[i][j][k] = ans
+		return ans
+	}
+	return dfs(0, 0, 0)
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+动态规划，定义 `dp[i][j][k]` 表示前 `i` 天，缺勤 `j` 次，连续迟到 `k` 次时，可获得出勤奖励的情况数量
+
+状态转移需要对第 `i` 天的出勤情况分别讨论：
+
+-   缺勤：之前不能有任何缺勤记录，即 `j == 0`
+-   迟到：之前最多连续迟到 1 次，即 `k == 0 || k == 1`
+-   到场：无限制
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def checkRecord(self, n: int) -> int:
+        mod = int(1e9 + 7)
+        dp = [[[0, 0, 0], [0, 0, 0]] for _ in range(n)]
+
+        # base case
+        dp[0][0][0] = dp[0][0][1] = dp[0][1][0] = 1
+
+        for i in range(1, n):
+            # A
+            dp[i][1][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % mod
+            # L
+            dp[i][0][1] = dp[i - 1][0][0]
+            dp[i][0][2] = dp[i - 1][0][1]
+            dp[i][1][1] = dp[i - 1][1][0]
+            dp[i][1][2] = dp[i - 1][1][1]
+            # P
+            dp[i][0][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % mod
+            dp[i][1][0] = (
+                dp[i][1][0] + dp[i - 1][1][0] + dp[i - 1][1][1] + dp[i - 1][1][2]
+            ) % mod
+
+        ans = 0
+        for j in range(2):
+            for k in range(3):
+                ans = (ans + dp[n - 1][j][k]) % mod
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -217,42 +304,45 @@ class Solution {
 }
 ```
 
-### **Go**
+#### C++
 
-```go
-func checkRecord(n int) int {
-	f := make([][][]int, n)
-	for i := range f {
-		f[i] = make([][]int, 2)
-		for j := range f[i] {
-			f[i][j] = make([]int, 3)
-			for k := range f[i][j] {
-				f[i][j][k] = -1
-			}
-		}
-	}
-	const mod = 1e9 + 7
-	var dfs func(i, j, k int) int
-	dfs = func(i, j, k int) int {
-		if i >= n {
-			return 1
-		}
-		if f[i][j][k] != -1 {
-			return f[i][j][k]
-		}
-		ans := dfs(i+1, j, 0)
-		if j == 0 {
-			ans = (ans + dfs(i+1, j+1, 0)) % mod
-		}
-		if k < 2 {
-			ans = (ans + dfs(i+1, j, k+1)) % mod
-		}
-		f[i][j][k] = ans
-		return ans
-	}
-	return dfs(0, 0, 0)
-}
+```cpp
+constexpr int MOD = 1e9 + 7;
+
+class Solution {
+public:
+    int checkRecord(int n) {
+        using ll = long long;
+        vector<vector<vector<ll>>> dp(n, vector<vector<ll>>(2, vector<ll>(3)));
+
+        // base case
+        dp[0][0][0] = dp[0][0][1] = dp[0][1][0] = 1;
+
+        for (int i = 1; i < n; ++i) {
+            // A
+            dp[i][1][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % MOD;
+            // L
+            dp[i][0][1] = dp[i - 1][0][0];
+            dp[i][0][2] = dp[i - 1][0][1];
+            dp[i][1][1] = dp[i - 1][1][0];
+            dp[i][1][2] = dp[i - 1][1][1];
+            // P
+            dp[i][0][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % MOD;
+            dp[i][1][0] = (dp[i][1][0] + dp[i - 1][1][0] + dp[i - 1][1][1] + dp[i - 1][1][2]) % MOD;
+        }
+
+        ll ans = 0;
+        for (int j = 0; j < 2; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                ans = (ans + dp[n - 1][j][k]) % MOD;
+            }
+        }
+        return ans;
+    }
+};
 ```
+
+#### Go
 
 ```go
 const _mod int = 1e9 + 7
@@ -294,82 +384,8 @@ func checkRecord(n int) int {
 }
 ```
 
-### **C++**
-
-```cpp
-int f[100010][2][3];
-const int mod = 1e9 + 7;
-
-class Solution {
-public:
-    int checkRecord(int n) {
-        this->n = n;
-        memset(f, -1, sizeof(f));
-        return dfs(0, 0, 0);
-    }
-
-    int dfs(int i, int j, int k) {
-        if (i >= n) {
-            return 1;
-        }
-        if (f[i][j][k] != -1) {
-            return f[i][j][k];
-        }
-        int ans = dfs(i + 1, j, 0);
-        if (j == 0) {
-            ans = (ans + dfs(i + 1, j + 1, 0)) % mod;
-        }
-        if (k < 2) {
-            ans = (ans + dfs(i + 1, j, k + 1)) % mod;
-        }
-        return f[i][j][k] = ans;
-    }
-
-private:
-    int n;
-};
-```
-
-```cpp
-constexpr int MOD = 1e9 + 7;
-
-class Solution {
-public:
-    int checkRecord(int n) {
-        using ll = long long;
-        vector<vector<vector<ll>>> dp(n, vector<vector<ll>>(2, vector<ll>(3)));
-
-        // base case
-        dp[0][0][0] = dp[0][0][1] = dp[0][1][0] = 1;
-
-        for (int i = 1; i < n; ++i) {
-            // A
-            dp[i][1][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % MOD;
-            // L
-            dp[i][0][1] = dp[i - 1][0][0];
-            dp[i][0][2] = dp[i - 1][0][1];
-            dp[i][1][1] = dp[i - 1][1][0];
-            dp[i][1][2] = dp[i - 1][1][1];
-            // P
-            dp[i][0][0] = (dp[i - 1][0][0] + dp[i - 1][0][1] + dp[i - 1][0][2]) % MOD;
-            dp[i][1][0] = (dp[i][1][0] + dp[i - 1][1][0] + dp[i - 1][1][1] + dp[i - 1][1][2]) % MOD;
-        }
-
-        ll ans = 0;
-        for (int j = 0; j < 2; ++j) {
-            for (int k = 0; k < 3; ++k) {
-                ans = (ans + dp[n - 1][j][k]) % MOD;
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

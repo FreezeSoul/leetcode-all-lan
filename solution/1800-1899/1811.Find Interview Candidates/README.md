@@ -1,10 +1,20 @@
-# [1811. 寻找面试候选人](https://leetcode.cn/problems/find-interview-candidates)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1811.Find%20Interview%20Candidates/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1811. 寻找面试候选人 🔒](https://leetcode.cn/problems/find-interview-candidates)
 
 [English Version](/solution/1800-1899/1811.Find%20Interview%20Candidates/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Contests</code></p>
 
@@ -103,18 +113,62 @@ Quarz在连续5场竞赛中赢得了奖牌(190, 191, 192, 193, and 194), 所以�
 	<li>有的用户可能没有参加每一场竞赛，但是在参加的每一场竞赛中都表现得不错。你如何更改你的解法，以达到只考虑那些&nbsp;<strong>用户参与了的&nbsp;</strong>比赛？可假设另一张表给出了每场比赛的注册用户信息。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT contest_id, gold_medal AS user_id, 1 AS type
+        FROM Contests
+        UNION
+        SELECT contest_id, silver_medal AS user_id, 2 AS type
+        FROM Contests
+        UNION
+        SELECT contest_id, bronze_medal AS user_id, 3 AS type
+        FROM Contests
+    ),
+    T AS (
+        SELECT
+            user_id,
+            (
+                contest_id - ROW_NUMBER() OVER (
+                    PARTITION BY user_id
+                    ORDER BY contest_id
+                )
+            ) AS diff
+        FROM S
+    ),
+    P AS (
+        SELECT user_id
+        FROM S
+        WHERE type = 1
+        GROUP BY user_id
+        HAVING COUNT(1) >= 3
+        UNION
+        SELECT DISTINCT user_id
+        FROM T
+        GROUP BY user_id, diff
+        HAVING COUNT(1) >= 3
+    )
+SELECT name, mail
+FROM
+    P AS p
+    LEFT JOIN Users AS u ON p.user_id = u.user_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1856.Maximum%20Subarray%20Min-Product/README.md
+rating: 2051
+source: 第 240 场周赛 Q3
+tags:
+    - 栈
+    - 数组
+    - 前缀和
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [1856. 子数组最小乘积的最大值](https://leetcode.cn/problems/maximum-subarray-min-product)
 
 [English Version](/solution/1800-1899/1856.Maximum%20Subarray%20Min-Product/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个数组的 <strong>最小乘积</strong> 定义为这个数组中 <strong>最小值</strong> <strong>乘以 </strong>数组的 <strong>和</strong> 。</p>
 
@@ -56,11 +71,13 @@
 	<li><code>1 <= nums[i] <= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈 + 前缀和**
+### 方法一：单调栈 + 前缀和
 
 我们可以枚举每个元素 $nums[i]$ 作为子数组的最小值，找出子数组的左右边界 $left[i]$ 和 $right[i]$。其中 $left[i]$ 表示 $i$ 左侧第一个严格小于 $nums[i]$ 的位置，而 $right[i]$ 表示 $i$ 右侧第一个小于等于 $nums[i]$ 的位置。
 
@@ -72,9 +89,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -101,9 +116,7 @@ class Solution:
         return max((s[right[i]] - s[left[i] + 1]) * x for i, x in enumerate(nums)) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -147,7 +160,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -191,7 +204,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSumMinProduct(nums []int) int {
@@ -237,34 +250,34 @@ func maxSumMinProduct(nums []int) int {
 }
 ```
 
-### **TypeSript**
+#### TypeScript
 
 ```ts
 function maxSumMinProduct(nums: number[]): number {
     const n = nums.length;
-    const left: number[] = new Array(n).fill(-1);
-    const right: number[] = new Array(n).fill(n);
-    let stk: number[] = [];
+    const left: number[] = Array(n).fill(-1);
+    const right: number[] = Array(n).fill(n);
+    const stk: number[] = [];
     for (let i = 0; i < n; ++i) {
-        while (stk.length && nums[stk[stk.length - 1]] >= nums[i]) {
+        while (stk.length && nums[stk.at(-1)!] >= nums[i]) {
             stk.pop();
         }
         if (stk.length) {
-            left[i] = stk[stk.length - 1];
+            left[i] = stk.at(-1)!;
         }
         stk.push(i);
     }
-    stk = [];
+    stk.length = 0;
     for (let i = n - 1; i >= 0; --i) {
-        while (stk.length && nums[stk[stk.length - 1]] > nums[i]) {
+        while (stk.length && nums[stk.at(-1)!] > nums[i]) {
             stk.pop();
         }
         if (stk.length) {
-            right[i] = stk[stk.length - 1];
+            right[i] = stk.at(-1)!;
         }
         stk.push(i);
     }
-    const s: number[] = new Array(n + 1).fill(0);
+    const s: number[] = Array(n + 1).fill(0);
     for (let i = 0; i < n; ++i) {
         s[i + 1] = s[i] + nums[i];
     }
@@ -280,10 +293,8 @@ function maxSumMinProduct(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

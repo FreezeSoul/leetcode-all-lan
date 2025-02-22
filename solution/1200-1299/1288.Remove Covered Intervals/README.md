@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1288.Remove%20Covered%20Intervals/README.md
+rating: 1375
+source: 第 15 场双周赛 Q2
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1288. 删除被覆盖区间](https://leetcode.cn/problems/remove-covered-intervals)
 
 [English Version](/solution/1200-1299/1288.Remove%20Covered%20Intervals/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个区间列表，请你删除列表中被其他区间所覆盖的区间。</p>
 
@@ -32,103 +45,140 @@
 	<li>对于所有的&nbsp;<code>i != j</code>：<code>intervals[i] != intervals[j]</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-对起点按升序排列，若起点相同，则对终点按降序排列。
+### 方法一：排序
 
-设 cnt 表示没有被覆盖的区间数，初始化为 1，pre 表示前一个未被覆盖的区间，初始化为 `intervals[0]`。
+我们可以按照区间的左端点升序排序，如果左端点相同，则按照右端点降序排序。
 
-从下标 1 开始遍历区间列表，若 `pre[1] < intervals[i][1]`，说明当前区间不被前一个区间覆盖，`cnt++`，并且更新 pre 为 `intervals[i]`。否则表示当前区间被前一个区间覆盖，不做任何操作。
+排序后，我们可以遍历区间，如果当前区间的右端点大于之前的右端点，说明当前区间不被覆盖，答案加一。
 
-最后返回 cnt 即可。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 是区间的数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
         intervals.sort(key=lambda x: (x[0], -x[1]))
-        cnt, pre = 1, intervals[0]
-        for e in intervals[1:]:
-            if pre[1] < e[1]:
-                cnt += 1
-                pre = e
-        return cnt
+        ans = 0
+        pre = -inf
+        for _, cur in intervals:
+            if cur > pre:
+                ans += 1
+                pre = cur
+        return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int removeCoveredIntervals(int[][] intervals) {
-        Arrays.sort(intervals, (a, b) -> a[0] - b[0] == 0 ? b[1] - a[1] : a[0] - b[0]);
-        int[] pre = intervals[0];
-        int cnt = 1;
-        for (int i = 1; i < intervals.length; ++i) {
-            if (pre[1] < intervals[i][1]) {
-                ++cnt;
-                pre = intervals[i];
+        Arrays.sort(intervals, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);
+        int ans = 0, pre = Integer.MIN_VALUE;
+        for (var e : intervals) {
+            int cur = e[1];
+            if (cur > pre) {
+                ++ans;
+                pre = cur;
             }
         }
-        return cnt;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int removeCoveredIntervals(vector<vector<int>>& intervals) {
-        sort(intervals.begin(), intervals.end(), [](const vector<int>& a, const vector<int>& b) { return a[0] == b[0] ? b[1] < a[1] : a[0] < b[0]; });
-        int cnt = 1;
-        vector<int> pre = intervals[0];
-        for (int i = 1; i < intervals.size(); ++i) {
-            if (pre[1] < intervals[i][1]) {
-                ++cnt;
-                pre = intervals[i];
+        ranges::sort(intervals, [](const vector<int>& a, const vector<int>& b) {
+            return a[0] == b[0] ? a[1] > b[1] : a[0] < b[0];
+        });
+        int ans = 0, pre = INT_MIN;
+        for (const auto& e : intervals) {
+            int cur = e[1];
+            if (cur > pre) {
+                ++ans;
+                pre = cur;
             }
         }
-        return cnt;
+        return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func removeCoveredIntervals(intervals [][]int) int {
+func removeCoveredIntervals(intervals [][]int) (ans int) {
 	sort.Slice(intervals, func(i, j int) bool {
 		if intervals[i][0] == intervals[j][0] {
-			return intervals[j][1] < intervals[i][1]
+			return intervals[i][1] > intervals[j][1]
 		}
 		return intervals[i][0] < intervals[j][0]
 	})
-	cnt := 1
-	pre := intervals[0]
-	for i := 1; i < len(intervals); i++ {
-		if pre[1] < intervals[i][1] {
-			cnt++
-			pre = intervals[i]
+	pre := math.MinInt32
+	for _, e := range intervals {
+		cur := e[1]
+		if cur > pre {
+			ans++
+			pre = cur
 		}
 	}
-	return cnt
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function removeCoveredIntervals(intervals: number[][]): number {
+    intervals.sort((a, b) => (a[0] === b[0] ? b[1] - a[1] : a[0] - b[0]));
+    let ans = 0;
+    let pre = -Infinity;
+    for (const [_, cur] of intervals) {
+        if (cur > pre) {
+            ++ans;
+            pre = cur;
+        }
+    }
+    return ans;
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[][]} intervals
+ * @return {number}
+ */
+var removeCoveredIntervals = function (intervals) {
+    intervals.sort((a, b) => (a[0] === b[0] ? b[1] - a[1] : a[0] - b[0]));
+    let ans = 0;
+    let pre = -Infinity;
+    for (const [_, cur] of intervals) {
+        if (cur > pre) {
+            ++ans;
+            pre = cur;
+        }
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

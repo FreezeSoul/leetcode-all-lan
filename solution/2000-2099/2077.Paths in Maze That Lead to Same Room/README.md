@@ -1,12 +1,22 @@
-# [2077. 殊途同归](https://leetcode.cn/problems/paths-in-maze-that-lead-to-same-room)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2077.Paths%20in%20Maze%20That%20Lead%20to%20Same%20Room/README.md
+tags:
+    - 图
+---
+
+<!-- problem:start -->
+
+# [2077. 殊途同归 🔒](https://leetcode.cn/problems/paths-in-maze-that-lead-to-same-room)
 
 [English Version](/solution/2000-2099/2077.Paths%20in%20Maze%20That%20Lead%20to%20Same%20Room/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>迷宫由 <code>n</code> 个从 <code>1</code> 到 <code>n</code> 的房间组成，有些房间由走廊连接。给定一个二维整数数组 <code>corridors</code>，其中 <code>corridors[i] = [room1<sub>i</sub>, room2<sub>i</sub>]</code>&nbsp;表示有一条走廊连接 <code>room1<sub>i</sub></code> 和<code>room2<sub>i</sub></code>，允许迷宫中的一个人从 <code>room1<sub>i</sub></code> 到 <code>room1<sub>i</sub></code> ，<strong>反之亦然</strong>。</p>
+<p>迷宫由 <code>n</code> 个从 <code>1</code> 到 <code>n</code> 的房间组成，有些房间由走廊连接。给定一个二维整数数组 <code>corridors</code>，其中 <code>corridors[i] = [room1<sub>i</sub>, room2<sub>i</sub>]</code>&nbsp;表示有一条走廊连接 <code>room1<sub>i</sub></code> 和<code>room2<sub>i</sub></code>，允许迷宫中的一个人从 <code>room1<sub>i</sub></code> 到 <code>room2<sub>i</sub></code> ，<strong>反之亦然</strong>。</p>
 
 <p>迷宫的设计者想知道迷宫有多让人困惑。迷宫的&nbsp;<strong>混乱分数&nbsp;</strong>是&nbsp;<strong>长度为 3</strong> 的不同的环的数量。</p>
 
@@ -53,11 +63,13 @@
 	</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 长度为 `3` 的环，由三个顶点、三条边组成。我们假设三个顶点分别为 `a`, `b`, `c`。
 
@@ -69,9 +81,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,9 +98,7 @@ class Solution:
         return ans // 3
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -122,7 +130,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -151,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfPaths(n int, corridors [][]int) int {
@@ -184,10 +192,8 @@ func numberOfPaths(n int, corridors [][]int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

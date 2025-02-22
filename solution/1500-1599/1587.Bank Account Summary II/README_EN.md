@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1587.Bank%20Account%20Summary%20II/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1587. Bank Account Summary II](https://leetcode.com/problems/bank-account-summary-ii)
 
 [中文文档](/solution/1500-1599/1587.Bank%20Account%20Summary%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Users</code></p>
 
@@ -13,7 +25,7 @@
 | account      | int     |
 | name         | varchar |
 +--------------+---------+
-account is the primary key for this table.
+account is the primary key (column with unique values) for this table.
 Each row of this table contains the account number of each user in the bank.
 There will be no two users having the same name in the table.
 </pre>
@@ -31,7 +43,7 @@ There will be no two users having the same name in the table.
 | amount        | int     |
 | transacted_on | date    |
 +---------------+---------+
-trans_id is the primary key for this table.
+trans_id is the primary key (column with unique values) for this table.
 Each row of this table contains all changes made to all accounts.
 amount is positive if the user received money and negative if they transferred money.
 All accounts start with a balance of 0.
@@ -39,11 +51,11 @@ All accounts start with a balance of 0.
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the name and balance of users with a balance higher than <code>10000</code>. The balance of an account is equal to the sum of the amounts of all transactions involving that account.</p>
+<p>Write a solution to report the name and balance of users with a balance higher than <code>10000</code>. The balance of an account is equal to the sum of the amounts of all transactions involving that account.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -82,37 +94,34 @@ Bob&#39;s balance is 1000.
 Charlie&#39;s balance is (6000 + 6000 - 4000) = 8000.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Equi-Join + Group By + Sum
+
+We can use an equi-join to join the `Users` table and the `Transactions` table on the condition of `account`, and then group by `account` to calculate the balance for each account using the `SUM` function. Finally, we can filter out the users whose balance is less than or equal to $10000$.
 
 <!-- tabs:start -->
 
-### **SQL**
-
-```sql
-SELECT
-    u.name,
-    SUM(t.amount) AS balance
-FROM
-    users AS u
-    JOIN transactions AS t ON u.account = t.account
-GROUP BY
-    name
-HAVING
-    SUM(t.amount) > 10000;
-```
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
+SELECT
     name,
-    sum(amount) as balance
-from
-    Users u
-    left join Transactions t on u.account = t.account
-group by
-    u.account
-having
-    sum(amount) > 10000
+    SUM(amount) AS balance
+FROM
+    Users
+    JOIN Transactions USING (account)
+GROUP BY account
+HAVING balance > 10000;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0944.Delete%20Columns%20to%20Make%20Sorted/README.md
+tags:
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [944. 删列造序](https://leetcode.cn/problems/delete-columns-to-make-sorted)
 
 [English Version](/solution/0900-0999/0944.Delete%20Columns%20to%20Make%20Sorted/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你由 <code>n</code> 个小写字母字符串组成的数组 <code>strs</code>，其中每个字符串长度相等。</p>
 
@@ -15,11 +26,11 @@ abc
 bce
 cae</pre>
 
-<p>你需要找出并删除 <strong>不是按字典序升序排列的</strong> 列。在上面的例子（下标从 0 开始）中，列 0（<code>'a'</code>, <code>'b'</code>, <code>'c'</code>）和列 2（<code>'c'</code>, <code>'e'</code>, <code>'e'</code>）都是按升序排列的，而列 1（<code>'b'</code>, <code>'c'</code>, <code>'a'</code>）不是，所以要删除列 1 。</p>
+<p>你需要找出并删除 <strong>不是按字典序非严格递增排列的</strong> 列。在上面的例子（下标从 0 开始）中，列 0（<code>'a'</code>, <code>'b'</code>, <code>'c'</code>）和列 2（<code>'c'</code>, <code>'e'</code>, <code>'e'</code>）都是按字典序非严格递增排列的，而列 1（<code>'b'</code>, <code>'c'</code>, <code>'a'</code>）不是，所以要删除列 1 。</p>
 
 <p>返回你需要删除的列数。</p>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
@@ -56,26 +67,36 @@ cae</pre>
 所有 3 列都是非升序排列的，所以都要删除。
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
 	<li><code>n == strs.length</code></li>
-	<li><code>1 <= n <= 100</code></li>
-	<li><code>1 <= strs[i].length <= 1000</code></li>
+	<li><code>1 &lt;= n &lt;= 100</code></li>
+	<li><code>1 &lt;= strs[i].length &lt;= 1000</code></li>
 	<li><code>strs[i]</code> 由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：逐列比较
+
+我们记字符串数组 $\textit{strs}$ 的行数为 $n$，列数为 $m$。
+
+遍历每一列，从第二行开始，逐列比较当前行和上一行的字符，如果当前行的字符小于上一行的字符，说明当前列不是按字典序非严格递增排列的，需要删除，结果加一，然后跳出内层循环。
+
+最后返回结果即可。
+
+时间复杂度 $O(L)$，其中 $L$ 为字符串数组 $\textit{strs}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -90,9 +111,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,55 +131,32 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minDeletionSize(vector<string>& strs) {
-        int n = strs.size();
-        int m = strs[0].size();
-        int res = 0;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n - 1; ++j) {
-                if (strs[j][i] > strs[j + 1][i]) {
-                    res++;
+        int m = strs[0].size(), n = strs.size();
+        int ans = 0;
+        for (int j = 0; j < m; ++j) {
+            for (int i = 1; i < n; ++i) {
+                if (strs[i][j] < strs[i - 1][j]) {
+                    ++ans;
                     break;
                 }
             }
         }
-        return res;
+        return ans;
     }
 };
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn min_deletion_size(strs: Vec<String>) -> i32 {
-        let n = strs.len();
-        let m = strs[0].len();
-        let mut res = 0;
-        for i in 0..m {
-            for j in 1..n {
-                if strs[j - 1].as_bytes()[i] > strs[j].as_bytes()[i] {
-                    res += 1;
-                    break;
-                }
-            }
-        }
-        res
-    }
-}
-```
-
-### **Go**
+#### Go
 
 ```go
-func minDeletionSize(strs []string) int {
+func minDeletionSize(strs []string) (ans int) {
 	m, n := len(strs[0]), len(strs)
-	ans := 0
 	for j := 0; j < m; j++ {
 		for i := 1; i < n; i++ {
 			if strs[i][j] < strs[i-1][j] {
@@ -169,14 +165,51 @@ func minDeletionSize(strs []string) int {
 			}
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function minDeletionSize(strs: string[]): number {
+    const [m, n] = [strs[0].length, strs.length];
+    let ans = 0;
+    for (let j = 0; j < m; ++j) {
+        for (let i = 1; i < n; ++i) {
+            if (strs[i][j] < strs[i - 1][j]) {
+                ++ans;
+                break;
+            }
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_deletion_size(strs: Vec<String>) -> i32 {
+        let n = strs.len();
+        let m = strs[0].len();
+        let mut ans = 0;
+        for j in 0..m {
+            for i in 1..n {
+                if strs[i].as_bytes()[j] < strs[i - 1].as_bytes()[j] {
+                    ans += 1;
+                    break;
+                }
+            }
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

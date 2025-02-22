@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0972.Equal%20Rational%20Numbers/README.md
+tags:
+    - 数学
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [972. 相等的有理数](https://leetcode.cn/problems/equal-rational-numbers)
 
 [English Version](/solution/0900-0999/0972.Equal%20Rational%20Numbers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个字符串&nbsp;<code>s</code>&nbsp;和&nbsp;<code>t</code>&nbsp;，每个字符串代表一个非负有理数，只有当它们表示相同的数字时才返回 <code>true</code>&nbsp;。字符串中可以使用括号来表示有理数的重复部分。</p>
 
@@ -12,6 +23,7 @@
 
 <ul>
 	<li><code>&lt;IntegerPart&gt;</code>&nbsp;
+
     <ul>
     	<li>例：&nbsp;<code>0</code>&nbsp;,<code>12</code>&nbsp;和&nbsp;<code>123</code>&nbsp;</li>
     </ul>
@@ -26,6 +38,7 @@
     	<li>例： <code>0.1(6)</code> ， <code>1.(9)</code>， <code>123.00(1212)</code></li>
     </ul>
     </li>
+
 </ul>
 
 <p>十进制展开的重复部分通常在一对圆括号内表示。例如：</p>
@@ -72,32 +85,42 @@
 </ul>
 <span style="display:block"><span style="height:0px"><span style="position:absolute">​​​​​</span></span></span>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 
 ```
 
-### **...**
+#### C++
+
+```cpp
 
 ```
+
+#### Go
+
+```go
 
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

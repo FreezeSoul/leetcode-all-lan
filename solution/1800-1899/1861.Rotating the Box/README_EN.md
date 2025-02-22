@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1861.Rotating%20the%20Box/README_EN.md
+rating: 1536
+source: Biweekly Contest 52 Q3
+tags:
+    - Array
+    - Two Pointers
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1861. Rotating the Box](https://leetcode.com/problems/rotating-the-box)
 
 [中文文档](/solution/1800-1899/1861.Rotating%20the%20Box/README.md)
 
 ## Description
 
-<p>You are given an <code>m x n</code> matrix of characters <code>box</code> representing a side-view of a box. Each cell of the box is one of the following:</p>
+<!-- description:start -->
+
+<p>You are given an <code>m x n</code> matrix of characters <code>boxGrid</code> representing a side-view of a box. Each cell of the box is one of the following:</p>
 
 <ul>
 	<li>A stone <code>&#39;#&#39;</code></li>
@@ -14,7 +30,7 @@
 
 <p>The box is rotated <strong>90 degrees clockwise</strong>, causing some of the stones to fall due to gravity. Each stone falls down until it lands on an obstacle, another stone, or the bottom of the box. Gravity <strong>does not</strong> affect the obstacles&#39; positions, and the inertia from the box&#39;s rotation <strong>does not </strong>affect the stones&#39; horizontal positions.</p>
 
-<p>It is <strong>guaranteed</strong> that each stone in <code>box</code> rests on an obstacle, another stone, or the bottom of the box.</p>
+<p>It is <strong>guaranteed</strong> that each stone in <code>boxGrid</code> rests on an obstacle, another stone, or the bottom of the box.</p>
 
 <p>Return <em>an </em><code>n x m</code><em> matrix representing the box after the rotation described above</em>.</p>
 
@@ -24,7 +40,7 @@
 <p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1800-1899/1861.Rotating%20the%20Box/images/rotatingtheboxleetcodewithstones.png" style="width: 300px; height: 150px;" /></p>
 
 <pre>
-<strong>Input:</strong> box = [[&quot;#&quot;,&quot;.&quot;,&quot;#&quot;]]
+<strong>Input:</strong> boxGrid = [[&quot;#&quot;,&quot;.&quot;,&quot;#&quot;]]
 <strong>Output:</strong> [[&quot;.&quot;],
 &nbsp;        [&quot;#&quot;],
 &nbsp;        [&quot;#&quot;]]
@@ -35,7 +51,7 @@
 <p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1800-1899/1861.Rotating%20the%20Box/images/rotatingtheboxleetcode2withstones.png" style="width: 375px; height: 195px;" /></p>
 
 <pre>
-<strong>Input:</strong> box = [[&quot;#&quot;,&quot;.&quot;,&quot;*&quot;,&quot;.&quot;],
+<strong>Input:</strong> boxGrid = [[&quot;#&quot;,&quot;.&quot;,&quot;*&quot;,&quot;.&quot;],
 &nbsp;             [&quot;#&quot;,&quot;#&quot;,&quot;*&quot;,&quot;.&quot;]]
 <strong>Output:</strong> [[&quot;#&quot;,&quot;.&quot;],
 &nbsp;        [&quot;#&quot;,&quot;#&quot;],
@@ -48,7 +64,7 @@
 <p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1800-1899/1861.Rotating%20the%20Box/images/rotatingtheboxleetcode3withstone.png" style="width: 400px; height: 218px;" /></p>
 
 <pre>
-<strong>Input:</strong> box = [[&quot;#&quot;,&quot;#&quot;,&quot;*&quot;,&quot;.&quot;,&quot;*&quot;,&quot;.&quot;],
+<strong>Input:</strong> boxGrid = [[&quot;#&quot;,&quot;#&quot;,&quot;*&quot;,&quot;.&quot;,&quot;*&quot;,&quot;.&quot;],
 &nbsp;             [&quot;#&quot;,&quot;#&quot;,&quot;#&quot;,&quot;*&quot;,&quot;.&quot;,&quot;.&quot;],
 &nbsp;             [&quot;#&quot;,&quot;#&quot;,&quot;#&quot;,&quot;.&quot;,&quot;#&quot;,&quot;.&quot;]]
 <strong>Output:</strong> [[&quot;.&quot;,&quot;#&quot;,&quot;#&quot;],
@@ -63,17 +79,27 @@
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>m == box.length</code></li>
-	<li><code>n == box[i].length</code></li>
+	<li><code>m == boxGrid.length</code></li>
+	<li><code>n == boxGrid[i].length</code></li>
 	<li><code>1 &lt;= m, n &lt;= 500</code></li>
-	<li><code>box[i][j]</code> is either <code>&#39;#&#39;</code>, <code>&#39;*&#39;</code>, or <code>&#39;.&#39;</code>.</li>
+	<li><code>boxGrid[i][j]</code> is either <code>&#39;#&#39;</code>, <code>&#39;*&#39;</code>, or <code>&#39;.&#39;</code>.</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1: Queue Simulation
+
+First, we rotate the matrix 90 degrees clockwise, then simulate the falling process of the stones in each column.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Where $m$ and $n$ are the number of rows and columns of the matrix, respectively.
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -97,7 +123,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -128,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +188,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rotateTheBox(box [][]byte) [][]byte {
@@ -195,10 +221,8 @@ func rotateTheBox(box [][]byte) [][]byte {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

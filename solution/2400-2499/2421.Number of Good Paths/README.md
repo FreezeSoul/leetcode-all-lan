@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2421.Number%20of%20Good%20Paths/README.md
+rating: 2444
+source: 第 312 场周赛 Q4
+tags:
+    - 树
+    - 并查集
+    - 图
+    - 数组
+    - 哈希表
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2421. 好路径的数目](https://leetcode.cn/problems/number-of-good-paths)
 
 [English Version](/solution/2400-2499/2421.Number%20of%20Good%20Paths/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵 <code>n</code>&nbsp;个节点的树（连通无向无环的图），节点编号从&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;且恰好有&nbsp;<code>n - 1</code>&nbsp;条边。</p>
 
@@ -69,23 +86,23 @@
 	<li><code>edges</code>&nbsp;表示一棵合法的树。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 并查集**
+### 方法一：排序 + 并查集
 
 要保证路径起点（终点）大于等于路径上的所有点，因此我们可以考虑先把所有点按值从小到大排序，然后再进行遍历，添加到连通块中，具体如下：
 
 当遍历到点 $a$ 时， 对于小于等于 $vals[a]$ 的邻接点 $b$ 来说，若二者不在同一个连通块，则可以合并，并且可以以点 $a$ 所在的连通块中所有值为 $vals[a]$ 的点为起点，以点 $b$ 所在的连通块中所有值为 $vals[a]$ 的点为终点，两种点的个数的乘积即为加入点 $a$ 时对答案的贡献。
 
-时间复杂度 $O(n\log n)$。
+时间复杂度 $O(n \times \log n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -119,9 +136,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -173,7 +188,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -221,7 +236,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfGoodPaths(vals []int, edges [][]int) int {
@@ -273,16 +288,8 @@ func numberOfGoodPaths(vals []int, edges [][]int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1192.Critical%20Connections%20in%20a%20Network/README.md
+rating: 2084
+source: 第 154 场周赛 Q4
+tags:
+    - 深度优先搜索
+    - 图
+    - 双连通分量
+---
+
+<!-- problem:start -->
+
 # [1192. 查找集群内的关键连接](https://leetcode.cn/problems/critical-connections-in-a-network)
 
 [English Version](/solution/1100-1199/1192.Critical%20Connections%20in%20a%20Network/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>力扣数据中心有&nbsp;<code>n</code>&nbsp;台服务器，分别按从&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n-1</code>&nbsp;的方式进行了编号。它们之间以 <strong>服务器到服务器</strong> 的形式相互连接组成了一个内部集群，连接是无向的。用 &nbsp;<code>connections</code> 表示集群网络，<code>connections[i] = [a, b]</code>&nbsp;表示服务器 <code>a</code>&nbsp;和 <code>b</code>&nbsp;之间形成连接。任何服务器都可以直接或者间接地通过网络到达任何其他服务器。</p>
 
@@ -42,11 +56,13 @@
 	<li>不存在重复的连接</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：Tarjan 算法**
+### 方法一：Tarjan 算法
 
 此题中的「关键连接」即为「桥」。
 
@@ -60,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -97,9 +111,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -143,7 +155,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -182,7 +194,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func criticalConnections(n int, connections [][]int) (ans [][]int) {
@@ -217,16 +229,9 @@ func criticalConnections(n int, connections [][]int) (ans [][]int) {
 	tarjan(0, -1)
 	return
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function criticalConnections(n: number, connections: number[][]): number[][] {
@@ -263,10 +268,8 @@ function criticalConnections(n: number, connections: number[][]): number[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

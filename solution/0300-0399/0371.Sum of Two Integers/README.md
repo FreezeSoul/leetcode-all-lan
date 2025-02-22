@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0371.Sum%20of%20Two%20Integers/README.md
+tags:
+    - 位运算
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [371. 两整数之和](https://leetcode.cn/problems/sum-of-two-integers)
 
 [English Version](/solution/0300-0399/0371.Sum%20of%20Two%20Integers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个整数 <code>a</code> 和 <code>b</code> ，<strong>不使用 </strong>运算符&nbsp;<code>+</code> 和&nbsp;<code>-</code>&nbsp;​​​​​​​，计算并返回两整数之和。</p>
 
@@ -32,11 +43,13 @@
 	<li><code>-1000 &lt;= a, b &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 两数字的二进制形式 a,b ，求和 s = a + b ，a(i)、b(i) 分别表示 a、b 的第 i 个二进制位。一共有 4 种情况：
 
@@ -58,11 +71,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-由于 python `int` 是无限长整型，左移不会自动溢出，因此需要特殊处理。
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +83,7 @@ class Solution:
         return a if a < 0x80000000 else ~(a ^ 0xFFFFFFFF)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -86,14 +93,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int getSum(int a, int b) {
         while (b) {
-            unsigned int carry = (unsigned int)(a & b) << 1;
+            unsigned int carry = (unsigned int) (a & b) << 1;
             a = a ^ b;
             b = carry;
         }
@@ -102,7 +109,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getSum(a int, b int) int {
@@ -115,10 +122,8 @@ func getSum(a int, b int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0423.Reconstruct%20Original%20Digits%20from%20English/README_EN.md
+tags:
+    - Hash Table
+    - Math
+    - String
+---
+
+<!-- problem:start -->
+
 # [423. Reconstruct Original Digits from English](https://leetcode.com/problems/reconstruct-original-digits-from-english)
 
 [中文文档](/solution/0400-0499/0423.Reconstruct%20Original%20Digits%20from%20English/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> containing an out-of-order English representation of digits <code>0-9</code>, return <em>the digits in <strong>ascending</strong> order</em>.</p>
 
@@ -23,11 +37,17 @@
 	<li><code>s</code> is <strong>guaranteed</strong> to be valid.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -51,7 +71,7 @@ class Solution:
         return ''.join(cnt[i] * str(i) for i in range(10))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func originalDigits(s string) string {
@@ -146,10 +166,8 @@ func originalDigits(s string) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

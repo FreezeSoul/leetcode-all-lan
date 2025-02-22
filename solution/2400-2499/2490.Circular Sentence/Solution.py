@@ -1,4 +1,5 @@
 class Solution:
     def isCircularSentence(self, sentence: str) -> bool:
-        sentence = sentence.split()
-        return all(s[0] == sentence[i - 1][-1] for i, s in enumerate(sentence))
+        ss = sentence.split()
+        n = len(ss)
+        return all(s[-1] == ss[(i + 1) % n][0] for i, s in enumerate(ss))

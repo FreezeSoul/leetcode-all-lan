@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0352.Data%20Stream%20as%20Disjoint%20Intervals/README.md
+tags:
+    - 设计
+    - 二分查找
+    - 有序集合
+---
+
+<!-- problem:start -->
+
 # [352. 将数据流变为多个不相交区间](https://leetcode.cn/problems/data-stream-as-disjoint-intervals)
 
 [English Version](/solution/0300-0399/0352.Data%20Stream%20as%20Disjoint%20Intervals/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>&nbsp;给你一个由非负整数&nbsp;<code>a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>n</sub></code> 组成的数据流输入，请你将到目前为止看到的数字总结为不相交的区间列表。</p>
 
@@ -58,20 +70,19 @@ summaryRanges.getIntervals(); // 返回 [[1, 3], [6, 7]]
 
 <p><strong>进阶：</strong>如果存在大量合并，并且与数据流的大小相比，不相交区间的数量很小，该怎么办?</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedDict
-
-
 class SummaryRanges:
     def __init__(self):
         self.mp = SortedDict()
@@ -107,9 +118,7 @@ class SummaryRanges:
 # # param_2 = obj.getIntervals()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class SummaryRanges {
@@ -152,7 +161,7 @@ class SummaryRanges {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class SummaryRanges {
@@ -192,10 +201,8 @@ public:
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

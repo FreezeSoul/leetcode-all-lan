@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0027.Remove%20Element/README_EN.md
+tags:
+    - Array
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [27. Remove Element](https://leetcode.com/problems/remove-element)
 
 [中文文档](/solution/0000-0099/0027.Remove%20Element/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> and an integer <code>val</code>, remove all occurrences of <code>val</code> in <code>nums</code> <a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank"><strong>in-place</strong></a>. The order of the elements may be changed. Then return <em>the number of elements in </em><code>nums</code><em> which are not equal to </em><code>val</code>.</p>
 
@@ -63,9 +76,13 @@ It does not matter what you leave beyond the returned k (hence they are undersco
 	<li><code>0 &lt;= val &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: One Pass**
+<!-- solution:start -->
+
+### Solution 1: One Pass
 
 We use the variable $k$ to record the number of elements that are not equal to $val$.
 
@@ -77,7 +94,7 @@ The time complexity is $O(n)$ and the space complexity is $O(1)$, where $n$ is t
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -90,7 +107,7 @@ class Solution:
         return k
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeElement(nums []int, val int) int {
@@ -138,7 +155,7 @@ func removeElement(nums []int, val int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function removeElement(nums: number[], val: number): number {
@@ -152,7 +169,24 @@ function removeElement(nums: number[], val: number): number {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {
+        let mut k = 0;
+        for i in 0..nums.len() {
+            if nums[i] != val {
+                nums[k] = nums[i];
+                k += 1;
+            }
+        }
+        k as i32
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -171,28 +205,26 @@ var removeElement = function (nums, val) {
 };
 ```
 
-### **Rust**
+#### C#
 
-```rust
-impl Solution {
-    pub fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {
-        let mut k = 0;
-        for i in 0..nums.len() {
-            if nums[i] != val {
-                nums[k] = nums[i];
-                k += 1;
+```cs
+public class Solution {
+    public int RemoveElement(int[] nums, int val) {
+        int k = 0;
+        foreach (int x in nums) {
+            if (x != val) {
+                nums[k++] = x;
             }
         }
-        k as i32
+        return k;
     }
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
-
     /**
      * @param Integer[] $nums
      * @param Integer $val
@@ -208,10 +240,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

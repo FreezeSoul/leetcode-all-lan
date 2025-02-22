@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1797.Design%20Authentication%20Manager/README_EN.md
+rating: 1534
+source: Biweekly Contest 48 Q2
+tags:
+    - Design
+    - Hash Table
+    - Linked List
+    - Doubly-Linked List
+---
+
+<!-- problem:start -->
+
 # [1797. Design Authentication Manager](https://leetcode.com/problems/design-authentication-manager)
 
 [中文文档](/solution/1700-1799/1797.Design%20Authentication%20Manager/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an authentication system that works with authentication tokens. For each session, the user will receive a new authentication token that will expire <code>timeToLive</code> seconds after the <code>currentTime</code>. If the token is renewed, the expiry time will be <b>extended</b> to expire <code>timeToLive</code> seconds after the (potentially different) <code>currentTime</code>.</p>
 
@@ -52,15 +69,30 @@ authenticationManager.<code>countUnexpiredTokens</code>(15); // The token with t
 	<li>At most <code>2000</code> calls will be made to all functions combined.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We can simply maintain a hash table $d$, where the key is `tokenId` and the value is the expiration time.
+
+-   During the `generate` operation, we store `tokenId` as the key and `currentTime + timeToLive` as the value in the hash table $d$.
+-   During the `renew` operation, if `tokenId` is not in the hash table $d$, or `currentTime >= d[tokenId]`, we ignore this operation; otherwise, we update `d[tokenId]` to `currentTime + timeToLive`.
+-   During the `countUnexpiredTokens` operation, we traverse the hash table $d$ and count the number of unexpired `tokenId`.
+
+In terms of time complexity, both `generate` and `renew` operations have a time complexity of $O(1)$, and the `countUnexpiredTokens` operation has a time complexity of $O(n)$, where $n$ is the number of key-value pairs in the hash table $d$.
+
+The space complexity is $O(n)$, where $n$ is the number of key-value pairs in the hash table $d$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class AuthenticationManager:
-
     def __init__(self, timeToLive: int):
         self.t = timeToLive
         self.d = defaultdict(int)
@@ -84,7 +116,7 @@ class AuthenticationManager:
 # param_3 = obj.countUnexpiredTokens(currentTime)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class AuthenticationManager {
@@ -126,7 +158,7 @@ class AuthenticationManager {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class AuthenticationManager {
@@ -164,7 +196,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type AuthenticationManager struct {
@@ -206,7 +238,7 @@ func (this *AuthenticationManager) CountUnexpiredTokens(currentTime int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class AuthenticationManager {
@@ -249,7 +281,7 @@ class AuthenticationManager {
  */
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -282,24 +314,16 @@ impl AuthenticationManager {
     }
 
     fn count_unexpired_tokens(&self, current_time: i32) -> i32 {
-        self.map.values().filter(|&time| *time > current_time).count() as i32
+        self.map
+            .values()
+            .filter(|&time| *time > current_time)
+            .count() as i32
     }
 }
-
-
-/**
- * Your AuthenticationManager object will be instantiated and called as such:
- * let obj = AuthenticationManager::new(timeToLive);
- * obj.generate(tokenId, currentTime);
- * obj.renew(tokenId, currentTime);
- * let ret_3: i32 = obj.count_unexpired_tokens(currentTime);
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

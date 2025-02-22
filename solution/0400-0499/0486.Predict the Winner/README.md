@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0486.Predict%20the%20Winner/README.md
+tags:
+    - 递归
+    - 数组
+    - 数学
+    - 动态规划
+    - 博弈
+---
+
+<!-- problem:start -->
+
 # [486. 预测赢家](https://leetcode.cn/problems/predict-the-winner)
 
 [English Version](/solution/0400-0499/0486.Predict%20the%20Winner/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 。玩家 1 和玩家 2 基于这个数组设计了一个游戏。</p>
 
@@ -41,11 +55,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i, j)$，表示从第 $i$ 个数到第 $j$ 个数，当前玩家与另一个玩家的得分之差的最大值。那么答案就是 $dfs(0, n - 1) \gt 0$。
 
@@ -60,32 +76,9 @@
 
 时间复杂度 $O(n^2)$，空间复杂度 $O(n^2)$。其中 $n$ 是数组的长度。
 
-**方法二：动态规划**
-
-我们也可以使用动态规划的方法，定义 $f[i][j]$ 表示当前玩家在 $nums[i..j]$ 这些数字中能够获得的最大得分的差值。那么最后答案就是 $f[0][n - 1] \gt 0$。
-
-初始时 $f[i][i]=nums[i]$，因为只有一个数，所以当前玩家只能拿取这个数，得分差值为 $nums[i]$。
-
-考虑 $f[i][j]$，其中 $i \lt j$，有两种情况：
-
--   如果当前玩家拿走了 $nums[i]$，那么剩下的数字为 $nums[i + 1..j]$，此时轮到另一个玩家进行游戏，所以 $f[i][j] = nums[i] - f[i + 1][j]$。
--   如果当前玩家拿走了 $nums[j]$，那么剩下的数字为 $nums[i..j - 1]$，此时轮到另一个玩家进行游戏，所以 $f[i][j] = nums[j] - f[i][j - 1]$。
-
-因此，最终的状态转移方程为 $f[i][j] = \max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1])$。
-
-最后，我们只需要判断 $f[0][n - 1] \gt 0$ 即可。
-
-时间复杂度 $O(n^2)$，空间复杂度 $O(n^2)$。其中 $n$ 是数组的长度。
-
-相似题目：
-
--   [877. 石子游戏](/solution/0800-0899/0877.Stone%20Game/README.md)
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,22 +92,7 @@ class Solution:
         return dfs(0, len(nums) - 1) >= 0
 ```
 
-```python
-class Solution:
-    def PredictTheWinner(self, nums: List[int]) -> bool:
-        n = len(nums)
-        f = [[0] * n for _ in range(n)]
-        for i, x in enumerate(nums):
-            f[i][i] = x
-        for i in range(n - 2, -1, -1):
-            for j in range(i + 1, n):
-                f[i][j] = max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1])
-        return f[0][n - 1] >= 0
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -140,25 +118,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean PredictTheWinner(int[] nums) {
-        int n = nums.length;
-        int[][] f = new int[n][n];
-        for (int i = 0; i < n; ++i) {
-            f[i][i] = nums[i];
-        }
-        for (int i = n - 2; i >= 0; --i) {
-            for (int j = i + 1; j < n; ++j) {
-                f[i][j] = Math.max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1]);
-            }
-        }
-        return f[0][n - 1] >= 0;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -181,6 +141,145 @@ public:
 };
 ```
 
+#### Go
+
+```go
+func PredictTheWinner(nums []int) bool {
+	n := len(nums)
+	f := make([][]int, n)
+	for i := range f {
+		f[i] = make([]int, n)
+	}
+	var dfs func(i, j int) int
+	dfs = func(i, j int) int {
+		if i > j {
+			return 0
+		}
+		if f[i][j] == 0 {
+			f[i][j] = max(nums[i]-dfs(i+1, j), nums[j]-dfs(i, j-1))
+		}
+		return f[i][j]
+	}
+	return dfs(0, n-1) >= 0
+}
+```
+
+#### TypeScript
+
+```ts
+function PredictTheWinner(nums: number[]): boolean {
+    const n = nums.length;
+    const f: number[][] = new Array(n).fill(0).map(() => new Array(n).fill(0));
+    const dfs = (i: number, j: number): number => {
+        if (i > j) {
+            return 0;
+        }
+        if (f[i][j] === 0) {
+            f[i][j] = Math.max(nums[i] - dfs(i + 1, j), nums[j] - dfs(i, j - 1));
+        }
+        return f[i][j];
+    };
+    return dfs(0, n - 1) >= 0;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn predict_the_winner(nums: Vec<i32>) -> bool {
+        let n = nums.len();
+        let mut dp: Vec<Vec<i32>> = vec![vec![0; n]; n];
+
+        // Initialize the dp vector
+        for i in 0..n {
+            dp[i][i] = nums[i];
+        }
+
+        // Begin the dp process
+        for i in (0..n - 1).rev() {
+            for j in i + 1..n {
+                dp[i][j] = std::cmp::max(
+                    // Take i-th num
+                    nums[i] - dp[i + 1][j],
+                    // Take j-th num
+                    nums[j] - dp[i][j - 1],
+                );
+            }
+        }
+
+        dp[0][n - 1] >= 0
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+我们也可以使用动态规划的方法，定义 $f[i][j]$ 表示当前玩家在 $nums[i..j]$ 这些数字中能够获得的最大得分的差值。那么最后答案就是 $f[0][n - 1] \gt 0$。
+
+初始时 $f[i][i]=nums[i]$，因为只有一个数，所以当前玩家只能拿取这个数，得分差值为 $nums[i]$。
+
+考虑 $f[i][j]$，其中 $i \lt j$，有两种情况：
+
+-   如果当前玩家拿走了 $nums[i]$，那么剩下的数字为 $nums[i + 1..j]$，此时轮到另一个玩家进行游戏，所以 $f[i][j] = nums[i] - f[i + 1][j]$。
+-   如果当前玩家拿走了 $nums[j]$，那么剩下的数字为 $nums[i..j - 1]$，此时轮到另一个玩家进行游戏，所以 $f[i][j] = nums[j] - f[i][j - 1]$。
+
+因此，最终的状态转移方程为 $f[i][j] = \max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1])$。
+
+最后，我们只需要判断 $f[0][n - 1] \gt 0$ 即可。
+
+时间复杂度 $O(n^2)$，空间复杂度 $O(n^2)$。其中 $n$ 是数组的长度。
+
+相似题目：
+
+-   [877. 石子游戏](https://github.com/doocs/leetcode/blob/main/solution/0800-0899/0877.Stone%20Game/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def PredictTheWinner(self, nums: List[int]) -> bool:
+        n = len(nums)
+        f = [[0] * n for _ in range(n)]
+        for i, x in enumerate(nums):
+            f[i][i] = x
+        for i in range(n - 2, -1, -1):
+            for j in range(i + 1, n):
+                f[i][j] = max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1])
+        return f[0][n - 1] >= 0
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean PredictTheWinner(int[] nums) {
+        int n = nums.length;
+        int[][] f = new int[n][n];
+        for (int i = 0; i < n; ++i) {
+            f[i][i] = nums[i];
+        }
+        for (int i = n - 2; i >= 0; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                f[i][j] = Math.max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1]);
+            }
+        }
+        return f[0][n - 1] >= 0;
+    }
+}
+```
+
+#### C++
+
 ```cpp
 class Solution {
 public:
@@ -201,35 +300,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func PredictTheWinner(nums []int) bool {
-    n := len(nums)
-	f := make([][]int, n)
-	for i := range f {
-		f[i] = make([]int, n)
-	}
-	var dfs func(i, j int) int
-	dfs = func(i, j int) int {
-		if i > j {
-			return 0
-		}
-		if f[i][j] == 0 {
-			f[i][j] = max(nums[i]-dfs(i+1, j), nums[j]-dfs(i, j-1))
-		}
-		return f[i][j]
-	}
-	return dfs(0, n-1) >= 0
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func PredictTheWinner(nums []int) bool {
@@ -246,36 +317,9 @@ func PredictTheWinner(nums []int) bool {
 	}
 	return f[0][n-1] >= 0
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function PredictTheWinner(nums: number[]): boolean {
-    const n = nums.length;
-    const f: number[][] = new Array(n).fill(0).map(() => new Array(n).fill(0));
-    const dfs = (i: number, j: number): number => {
-        if (i > j) {
-            return 0;
-        }
-        if (f[i][j] === 0) {
-            f[i][j] = Math.max(
-                nums[i] - dfs(i + 1, j),
-                nums[j] - dfs(i, j - 1),
-            );
-        }
-        return f[i][j];
-    };
-    return dfs(0, n - 1) >= 0;
-}
-```
+#### TypeScript
 
 ```ts
 function PredictTheWinner(nums: number[]): boolean {
@@ -293,10 +337,8 @@ function PredictTheWinner(nums: number[]): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

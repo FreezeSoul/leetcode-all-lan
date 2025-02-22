@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9854.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E7%AC%ACk%E5%A4%A7%E8%8A%82%E7%82%B9/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 54. 二叉搜索树的第 k 大节点](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>给定一棵二叉搜索树，请找出其中第 <code>k</code> 大的节点的值。</p>
 
@@ -38,9 +48,13 @@
 	<li>1 ≤ k ≤ 二叉搜索树元素个数</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：反序中序遍历**
+<!-- solution:start -->
+
+### 方法一：反序中序遍历
 
 由于二叉搜索树的中序遍历是升序的，因此可以反序中序遍历，即先递归遍历右子树，再访问根节点，最后递归遍历左子树。
 
@@ -50,7 +64,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -78,7 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -113,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -145,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -174,74 +188,7 @@ func kthLargest(root *TreeNode, k int) (ans int) {
 }
 ```
 
-利用 Go 的特性，中序遍历“生产”的数字传到 `channel`，返回第 `k` 个。
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func kthLargest(root *TreeNode, k int) int {
-	ch := make(chan int)
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	go inorder(ctx, root, ch)
-	for ; k > 1; k-- {
-		<-ch
-	}
-	return <-ch
-}
-
-func inorder(ctx context.Context, cur *TreeNode, ch chan<- int) {
-	if cur != nil {
-		inorder(ctx, cur.Right, ch)
-		select {
-		case ch <- cur.Val:
-		case <-ctx.Done():
-			return
-		}
-		inorder(ctx, cur.Left, ch)
-	}
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-/**
- * @param {TreeNode} root
- * @param {number} k
- * @return {number}
- */
-var kthLargest = function (root, k) {
-    let ans = 0;
-    const dfs = root => {
-        if (!root || !k) {
-            return;
-        }
-        dfs(root.right);
-        if (--k == 0) {
-            ans = root.val;
-        }
-        dfs(root.left);
-    };
-    dfs(root);
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -276,7 +223,7 @@ function kthLargest(root: TreeNode | null, k: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -297,8 +244,8 @@ function kthLargest(root: TreeNode | null, k: number): number {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 
 impl Solution {
     fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, arr: &mut Vec<i32>) {
@@ -317,7 +264,39 @@ impl Solution {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} k
+ * @return {number}
+ */
+var kthLargest = function (root, k) {
+    let ans = 0;
+    const dfs = root => {
+        if (!root || !k) {
+            return;
+        }
+        dfs(root.right);
+        if (--k == 0) {
+            ans = root.val;
+        }
+        dfs(root.left);
+    };
+    dfs(root);
+    return ans;
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -352,10 +331,46 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* public class TreeNode {
+*     public var val: Int
+*     public var left: TreeNode?
+*     public var right: TreeNode?
+*     public init(_ val: Int) {
+*         self.val = val
+*         self.left = nil
+*         self.right = nil
+*     }
+* }
+*/
 
+class Solution {
+    private var k: Int = 0
+    private var ans: Int = 0
+
+    func kthLargest(_ root: TreeNode?, _ k: Int) -> Int {
+        self.k = k
+        dfs(root)
+        return ans
+    }
+
+    private func dfs(_ root: TreeNode?) {
+        guard let root = root, k > 0 else { return }
+        dfs(root.right)
+        k -= 1
+        if k == 0 {
+            ans = root.val
+            return
+        }
+        dfs(root.left)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

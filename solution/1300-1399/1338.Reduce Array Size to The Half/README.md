@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1338.Reduce%20Array%20Size%20to%20The%20Half/README.md
+rating: 1303
+source: 第 174 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 哈希表
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1338. 数组大小减半](https://leetcode.cn/problems/reduce-array-size-to-the-half)
 
 [English Version](/solution/1300-1399/1338.Reduce%20Array%20Size%20to%20The%20Half/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>arr</code>。你可以从中选出一个整数集合，并删除这些整数在数组中的每次出现。</p>
 
@@ -40,21 +56,21 @@
 	<li><code>1 &lt;= arr[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 排序**
+### 方法一：计数 + 排序
 
-我们可以用哈希表或数组 $cnt$ 统计数组 $arr$ 中每个数字出现的次数，然后将 $cnt$ 中的数字从大到小排序，从大到小遍历 $cnt$，每次遍历将当前数字 $x$ 加入答案，并将 $m$ 加上 $x$，如果 $m \geq \frac{n}{2}$，则返回答案。
+我们可以用哈希表或数组 $cnt$ 统计数组 $\textit{arr}$ 中每个数字出现的次数，然后将 $cnt$ 中的数字从大到小排序，从大到小遍历 $\textit{cnt}$，每次遍历将当前数字 $x$ 加入答案，并将 $m$ 加上 $x$，如果 $m \geq \frac{n}{2}$，则返回答案。
 
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $arr$ 的长度。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{arr}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -69,9 +85,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -100,13 +114,13 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minSetSize(vector<int>& arr) {
-        int mx = *max_element(arr.begin(), arr.end());
+        int mx = ranges::max(arr);
         int cnt[mx + 1];
         memset(cnt, 0, sizeof(cnt));
         for (int& x : arr) {
@@ -129,14 +143,11 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSetSize(arr []int) (ans int) {
-	mx := 0
-	for _, x := range arr {
-		mx = max(mx, x)
-	}
+	mx := slices.Max(arr)
 	cnt := make([]int, mx+1)
 	for _, x := range arr {
 		cnt[x]++
@@ -152,31 +163,21 @@ func minSetSize(arr []int) (ans int) {
 		}
 	}
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minSetSize(arr: number[]): number {
-    const counter = new Map<number, number>();
+    const cnt = new Map<number, number>();
     for (const v of arr) {
-        counter.set(v, (counter.get(v) ?? 0) + 1);
+        cnt.set(v, (cnt.get(v) ?? 0) + 1);
     }
-    const t = Array.from(counter.values());
-    t.sort((a, b) => b - a);
-    let ans = 0;
-    let n = 0;
-    for (const cnt of t) {
-        n += cnt;
+    let [ans, m] = [0, 0];
+    for (const v of Array.from(cnt.values()).sort((a, b) => b - a)) {
+        m += v;
         ++ans;
-        if (n * 2 >= arr.length) {
+        if (m * 2 >= arr.length) {
             break;
         }
     }
@@ -184,10 +185,8 @@ function minSetSize(arr: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

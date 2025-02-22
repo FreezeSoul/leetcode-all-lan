@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0514.Freedom%20Trail/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [514. Freedom Trail](https://leetcode.com/problems/freedom-trail)
 
 [中文文档](/solution/0500-0599/0514.Freedom%20Trail/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>In the video game Fallout 4, the quest <strong>&quot;Road to Freedom&quot;</strong> requires players to reach a metal dial called the <strong>&quot;Freedom Trail Ring&quot;</strong> and use the dial to spell a specific keyword to open the door.</p>
 
@@ -46,11 +61,29 @@ So the final output is 4.
 	<li>It is guaranteed that <code>key</code> could always be spelled by rotating <code>ring</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+First, we preprocess the positions of each character $c$ in the string $ring$, and record them in the array $pos[c]$. Suppose the lengths of the strings $key$ and $ring$ are $m$ and $n$, respectively.
+
+Then we define $f[i][j]$ as the minimum number of steps to spell the first $i+1$ characters of the string $key$, and the $j$-th character of $ring$ is aligned with the $12:00$ direction. Initially, $f[i][j]=+\infty$. The answer is $\min_{0 \leq j < n} f[m - 1][j]$.
+
+We can first initialize $f[0][j]$, where $j$ is the position where the character $key[0]$ appears in $ring$. Since the $j$-th character of $ring$ is aligned with the $12:00$ direction, we only need $1$ step to spell $key[0]$. In addition, we need $min(j, n - j)$ steps to rotate $ring$ to the $12:00$ direction. Therefore, $f[0][j]=min(j, n - j) + 1$.
+
+Next, we consider how the state transitions when $i \geq 1$. We can enumerate the position list $pos[key[i]]$ where $key[i]$ appears in $ring$, and enumerate the position list $pos[key[i-1]]$ where $key[i-1]$ appears in $ring$, and then update $f[i][j]$, i.e., $f[i][j]=\min_{k \in pos[key[i-1]]} f[i-1][k] + \min(\textit{abs}(j - k), n - \textit{abs}(j - k)) + 1$.
+
+Finally, we return $\min_{0 \leq j \lt n} f[m - 1][j]$.
+
+The time complexity is $O(m \times n^2)$, and the space complexity is $O(m \times n)$. Here, $m$ and $n$ are the lengths of the strings $key$ and $ring$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +104,7 @@ class Solution:
         return min(f[-1][j] for j in pos[key[-1]])
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,7 +159,7 @@ public:
         for (int i = 1; i < m; ++i) {
             for (int j : pos[key[i] - 'a']) {
                 for (int k : pos[key[i - 1] - 'a']) {
-                    f[i][j] = min(f[i][j], f[i - 1][k] + min(abs(j - k), n - abs(j -  k)) + 1);
+                    f[i][j] = min(f[i][j], f[i - 1][k] + min(abs(j - k), n - abs(j - k)) + 1);
                 }
             }
         }
@@ -139,7 +172,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findRotateSteps(ring string, key string) int {
@@ -172,13 +205,6 @@ func findRotateSteps(ring string, key string) int {
 	return ans
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -187,10 +213,44 @@ func abs(x int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function findRotateSteps(ring: string, key: string): number {
+    const m: number = key.length;
+    const n: number = ring.length;
+    const pos: number[][] = Array.from({ length: 26 }, () => []);
+    for (let i = 0; i < n; ++i) {
+        const j: number = ring.charCodeAt(i) - 'a'.charCodeAt(0);
+        pos[j].push(i);
+    }
 
+    const f: number[][] = Array.from({ length: m }, () => Array(n).fill(1 << 30));
+    for (const j of pos[key.charCodeAt(0) - 'a'.charCodeAt(0)]) {
+        f[0][j] = Math.min(j, n - j) + 1;
+    }
+
+    for (let i = 1; i < m; ++i) {
+        for (const j of pos[key.charCodeAt(i) - 'a'.charCodeAt(0)]) {
+            for (const k of pos[key.charCodeAt(i - 1) - 'a'.charCodeAt(0)]) {
+                f[i][j] = Math.min(
+                    f[i][j],
+                    f[i - 1][k] + Math.min(Math.abs(j - k), n - Math.abs(j - k)) + 1,
+                );
+            }
+        }
+    }
+
+    let ans: number = 1 << 30;
+    for (const j of pos[key.charCodeAt(m - 1) - 'a'.charCodeAt(0)]) {
+        ans = Math.min(ans, f[m - 1][j]);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

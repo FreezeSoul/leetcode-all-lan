@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2541.Minimum%20Operations%20to%20Make%20Array%20Equal%20II/README.md
+rating: 1619
+source: 第 96 场双周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2541. 使数组中所有元素相等的最小操作数 II](https://leetcode.cn/problems/minimum-operations-to-make-array-equal-ii)
 
 [English Version](/solution/2500-2599/2541.Minimum%20Operations%20to%20Make%20Array%20Equal%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个整数数组&nbsp;<code>nums1</code> 和&nbsp;<code>nums2</code>&nbsp;，两个数组长度都是&nbsp;<code>n</code>&nbsp;，再给你一个整数&nbsp;<code>k</code>&nbsp;。你可以对数组&nbsp;<code>nums1</code>&nbsp;进行以下操作：</p>
 
@@ -45,11 +59,13 @@
 	<li><code>0 &lt;= k &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 我们用变量 $x$ 记录加减次数的差值，用变量 $ans$ 记录操作次数。
 
@@ -61,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,9 +96,7 @@ class Solution:
         return -1 if x else ans // 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -137,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minOperations(nums1 []int, nums2 []int, k int) int64 {
@@ -171,7 +183,7 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minOperations(nums1: number[], nums2: number[], k: number): number {
@@ -196,7 +208,7 @@ function minOperations(nums1: number[], nums2: number[], k: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -228,10 +240,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-long long minOperations(int *nums1, int nums1Size, int *nums2, int nums2Size, int k) {
+long long minOperations(int* nums1, int nums1Size, int* nums2, int nums2Size, int k) {
     if (k == 0) {
         for (int i = 0; i < nums1Size; i++) {
             if (nums1[i] != nums2[i]) {
@@ -257,10 +269,8 @@ long long minOperations(int *nums1, int nums1Size, int *nums2, int nums2Size, in
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

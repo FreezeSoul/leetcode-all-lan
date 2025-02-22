@@ -1,10 +1,20 @@
-# [2253. 动态取消表的旋转](https://leetcode.cn/problems/dynamic-unpivoting-of-a-table)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2253.Dynamic%20Unpivoting%20of%20a%20Table/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2253. 动态取消表的旋转 🔒](https://leetcode.cn/problems/dynamic-unpivoting-of-a-table)
 
 [English Version](/solution/2200-2299/2253.Dynamic%20Unpivoting%20of%20a%20Table/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Products</code></p>
 
@@ -68,18 +78,50 @@ Products 表:
 商品 2 在 Nozama 和 Souq 销售，价格分别为 200 和 190。
 商品 3 在 Shop 和 Souq 出售，价格分别为 1000 和 1900。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+CREATE PROCEDURE UnpivotProducts()
+BEGIN
+    # Write your MySQL query statement below.
+    SET group_concat_max_len = 5000;
+    WITH
+        t AS (
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE
+                table_schema = DATABASE()
+                AND table_name = 'Products'
+                AND column_name != 'product_id'
+        )
+    SELECT
+        GROUP_CONCAT(
+            'SELECT product_id, \'',
+            column_name,
+            '\' store, ',
+            column_name,
+            ' price FROM Products WHERE ',
+            column_name,
+            ' IS NOT NULL' SEPARATOR ' UNION '
+        ) INTO @sql from t;
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

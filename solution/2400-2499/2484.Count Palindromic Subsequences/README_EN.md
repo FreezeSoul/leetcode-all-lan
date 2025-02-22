@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2484.Count%20Palindromic%20Subsequences/README_EN.md
+rating: 2223
+source: Biweekly Contest 92 Q4
+tags:
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [2484. Count Palindromic Subsequences](https://leetcode.com/problems/count-palindromic-subsequences)
 
 [中文文档](/solution/2400-2499/2484.Count%20Palindromic%20Subsequences/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string of digits <code>s</code>, return <em>the number of <strong>palindromic subsequences</strong> of</em> <code>s</code><em> having length </em><code>5</code>. Since the answer may be very large, return it <strong>modulo</strong> <code>10<sup>9</sup> + 7</code>.</p>
 
@@ -48,11 +63,19 @@ Two of them (both equal to &quot;10301&quot;) are palindromic.
 	<li><code>s</code> consists of digits.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration + Counting
+
+The time complexity is $O(100 \times n)$, and the space complexity is $O(100 \times n)$. Where $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -88,7 +111,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -142,7 +165,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -197,7 +220,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPalindromes(s string) int {
@@ -248,10 +271,8 @@ func countPalindromes(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,34 +1,26 @@
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
 func isValidBST(root *TreeNode) bool {
-	return check(root, math.MinInt64, math.MaxInt64)
-}
-
-func check(node *TreeNode, lower, upper int) bool {
-	if node == nil {
-		return true
+	var prev *TreeNode
+	var dfs func(*TreeNode) bool
+	dfs = func(root *TreeNode) bool {
+		if root == nil {
+			return true
+		}
+		if !dfs(root.Left) {
+			return false
+		}
+		if prev != nil && prev.Val >= root.Val {
+			return false
+		}
+		prev = root
+		return dfs(root.Right)
 	}
-	if node.Val <= lower || node.Val >= upper {
-		return false
-	}
-	return check(node.Left, lower, node.Val) && check(node.Right, node.Val, upper)
+	return dfs(root)
 }
-
-// func isValidBST(root *TreeNode) bool {
-// 	stack := make([]*TreeNode, 0)
-// 	var prev *TreeNode = nil
-// 	node := root
-// 	for len(stack) > 0 || node != nil {
-// 		for node != nil {
-// 			stack = append(stack, node)
-// 			node = node.Left
-// 		}
-// 		node = stack[len(stack)-1]
-// 		stack = stack[:len(stack)-1]
-// 		if prev == nil || node.Val > prev.Val {
-// 			prev = node
-// 		} else {
-// 			return false
-// 		}
-// 		node = node.Right
-// 	}
-// 	return true
-// }

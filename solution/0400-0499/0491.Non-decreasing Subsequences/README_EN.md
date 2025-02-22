@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0491.Non-decreasing%20Subsequences/README_EN.md
+tags:
+    - Bit Manipulation
+    - Array
+    - Hash Table
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [491. Non-decreasing Subsequences](https://leetcode.com/problems/non-decreasing-subsequences)
 
 [中文文档](/solution/0400-0499/0491.Non-decreasing%20Subsequences/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return <em>all the different possible non-decreasing subsequences of the given array with at least two elements</em>. You may return the answer in <strong>any order</strong>.</p>
 
@@ -29,11 +44,17 @@
 	<li><code>-100 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +76,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -88,7 +109,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -115,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findSubsequences(nums []int) [][]int {
@@ -124,9 +145,7 @@ func findSubsequences(nums []int) [][]int {
 	dfs = func(u, last int, t []int) {
 		if u == len(nums) {
 			if len(t) > 1 {
-				cp := make([]int, len(t))
-				copy(cp, t)
-				ans = append(ans, cp)
+				ans = append(ans, slices.Clone(t))
 			}
 			return
 		}
@@ -145,10 +164,8 @@ func findSubsequences(nums []int) [][]int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

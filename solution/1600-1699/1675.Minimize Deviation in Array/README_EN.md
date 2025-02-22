@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1675.Minimize%20Deviation%20in%20Array/README_EN.md
+rating: 2533
+source: Weekly Contest 217 Q4
+tags:
+    - Greedy
+    - Array
+    - Ordered Set
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1675. Minimize Deviation in Array](https://leetcode.com/problems/minimize-deviation-in-array)
 
 [中文文档](/solution/1600-1699/1675.Minimize%20Deviation%20in%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>nums</code> of <code>n</code> positive integers.</p>
 
@@ -10,6 +27,7 @@
 
 <ul>
 	<li>If the element is <strong>even</strong>, <strong>divide</strong> it by <code>2</code>.
+
     <ul>
     	<li>For example, if the array is <code>[1,2,3,4]</code>, then you can do this operation on the last element, and the array will be <code>[1,2,3,<u>2</u>].</code></li>
     </ul>
@@ -19,6 +37,7 @@
     	<li>For example, if the array is <code>[1,2,3,4]</code>, then you can do this operation on the first element, and the array will be <code>[<u>2</u>,2,3,4].</code></li>
     </ul>
     </li>
+
 </ul>
 
 <p>The <strong>deviation</strong> of the array is the <strong>maximum difference</strong> between any two elements in the array.</p>
@@ -58,11 +77,27 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Priority Queue
+
+Intuitively, to get the minimum offset of the array, we need to decrease the maximum value of the array and increase the minimum value of the array.
+
+Since there are two operations that can be performed each time: multiply an odd number by $2$; divide an even number by $2$, the situation is more complex. We can multiply all odd numbers by $2$ to convert them into even numbers, which is equivalent to having only one division operation. The division operation can only reduce a certain number, and only by reducing the maximum value can the result be more optimal.
+
+Therefore, we use a priority queue (max heap) to maintain the maximum value of the array. Each time we take out the top element of the heap for division operation, put the new value into the heap, and update the minimum value and the minimum value of the difference between the top element of the heap and the minimum value.
+
+When the top element of the heap is an odd number, the operation stops.
+
+The time complexity is $O(n\log n \times \log m)$. Where $n$ and $m$ are the length of the array `nums` and the maximum element of the array, respectively. Since the maximum element in the array is divided by $2$ at most $O(\log m)$ times, all elements are divided by $2$ at most $O(n\log m)$ times. Each time the heap is popped and put into operation, the time complexity is $O(\log n)$. Therefore, the total time complexity is $O(n\log n \times \log m)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +119,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -136,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumDeviation(nums []int) int {
@@ -159,17 +194,10 @@ func minimumDeviation(nums []int) int {
 	return ans
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -178,10 +206,8 @@ func (h *hp) Pop() interface{} {
 func (h *hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

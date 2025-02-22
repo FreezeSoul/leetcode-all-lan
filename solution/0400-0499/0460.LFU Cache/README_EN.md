@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0460.LFU%20Cache/README_EN.md
+tags:
+    - Design
+    - Hash Table
+    - Linked List
+    - Doubly-Linked List
+---
+
+<!-- problem:start -->
+
 # [460. LFU Cache](https://leetcode.com/problems/lfu-cache)
 
 [中文文档](/solution/0400-0499/0460.LFU%20Cache/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design and implement a data structure for a <a href="https://en.wikipedia.org/wiki/Least_frequently_used" target="_blank">Least Frequently Used (LFU)</a> cache.</p>
 
@@ -65,17 +80,110 @@ lfu.get(4);      // return 4
 <p>&nbsp;</p>
 <span style="display: none;">&nbsp;</span>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
+class Node:
+    def __init__(self, key: int, value: int) -> None:
+        self.key = key
+        self.value = value
+        self.freq = 1
+        self.prev = None
+        self.next = None
 
+
+class DoublyLinkedList:
+    def __init__(self) -> None:
+        self.head = Node(-1, -1)
+        self.tail = Node(-1, -1)
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def add_first(self, node: Node) -> None:
+        node.prev = self.head
+        node.next = self.head.next
+        self.head.next.prev = node
+        self.head.next = node
+
+    def remove(self, node: Node) -> Node:
+        node.next.prev = node.prev
+        node.prev.next = node.next
+        node.next, node.prev = None, None
+        return node
+
+    def remove_last(self) -> Node:
+        return self.remove(self.tail.prev)
+
+    def is_empty(self) -> bool:
+        return self.head.next == self.tail
+
+
+class LFUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.min_freq = 0
+        self.map = defaultdict(Node)
+        self.freq_map = defaultdict(DoublyLinkedList)
+
+    def get(self, key: int) -> int:
+        if self.capacity == 0 or key not in self.map:
+            return -1
+        node = self.map[key]
+        self.incr_freq(node)
+        return node.value
+
+    def put(self, key: int, value: int) -> None:
+        if self.capacity == 0:
+            return
+        if key in self.map:
+            node = self.map[key]
+            node.value = value
+            self.incr_freq(node)
+            return
+        if len(self.map) == self.capacity:
+            ls = self.freq_map[self.min_freq]
+            node = ls.remove_last()
+            self.map.pop(node.key)
+        node = Node(key, value)
+        self.add_node(node)
+        self.map[key] = node
+        self.min_freq = 1
+
+    def incr_freq(self, node: Node) -> None:
+        freq = node.freq
+        ls = self.freq_map[freq]
+        ls.remove(node)
+        if ls.is_empty():
+            self.freq_map.pop(freq)
+            if freq == self.min_freq:
+                self.min_freq += 1
+        node.freq += 1
+        self.add_node(node)
+
+    def add_node(self, node: Node) -> None:
+        freq = node.freq
+        ls = self.freq_map[freq]
+        ls.add_first(node)
+        self.freq_map[freq] = ls
+
+
+# Your LFUCache object will be instantiated and called as such:
+# obj = LFUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class LFUCache {
@@ -196,7 +304,133 @@ class LFUCache {
 }
 ```
 
-### **Go**
+#### C++
+
+```cpp
+class Node {
+public:
+    int key;
+    int value;
+    int freq;
+    Node* prev;
+    Node* next;
+    Node(int key, int value) {
+        this->key = key;
+        this->value = value;
+        this->freq = 1;
+        this->prev = nullptr;
+        this->next = nullptr;
+    }
+};
+
+class DoublyLinkedList {
+public:
+    Node* head;
+    Node* tail;
+    DoublyLinkedList() {
+        this->head = new Node(-1, -1);
+        this->tail = new Node(-1, -1);
+        this->head->next = this->tail;
+        this->tail->prev = this->head;
+    }
+    void addFirst(Node* node) {
+        node->prev = this->head;
+        node->next = this->head->next;
+        this->head->next->prev = node;
+        this->head->next = node;
+    }
+    Node* remove(Node* node) {
+        node->next->prev = node->prev;
+        node->prev->next = node->next;
+        node->next = nullptr;
+        node->prev = nullptr;
+        return node;
+    }
+    Node* removeLast() {
+        return remove(this->tail->prev);
+    }
+    bool isEmpty() {
+        return this->head->next == this->tail;
+    }
+};
+
+class LFUCache {
+public:
+    LFUCache(int capacity) {
+        this->capacity = capacity;
+        this->minFreq = 0;
+    }
+
+    int get(int key) {
+        if (capacity == 0 || map.find(key) == map.end()) {
+            return -1;
+        }
+        Node* node = map[key];
+        incrFreq(node);
+        return node->value;
+    }
+
+    void put(int key, int value) {
+        if (capacity == 0) {
+            return;
+        }
+        if (map.find(key) != map.end()) {
+            Node* node = map[key];
+            node->value = value;
+            incrFreq(node);
+            return;
+        }
+        if (map.size() == capacity) {
+            DoublyLinkedList* list = freqMap[minFreq];
+            Node* node = list->removeLast();
+            map.erase(node->key);
+        }
+        Node* node = new Node(key, value);
+        addNode(node);
+        map[key] = node;
+        minFreq = 1;
+    }
+
+private:
+    int capacity;
+    int minFreq;
+    unordered_map<int, Node*> map;
+    unordered_map<int, DoublyLinkedList*> freqMap;
+
+    void incrFreq(Node* node) {
+        int freq = node->freq;
+        DoublyLinkedList* list = freqMap[freq];
+        list->remove(node);
+        if (list->isEmpty()) {
+            freqMap.erase(freq);
+            if (freq == minFreq) {
+                minFreq++;
+            }
+        }
+        node->freq++;
+        addNode(node);
+    }
+
+    void addNode(Node* node) {
+        int freq = node->freq;
+        if (freqMap.find(freq) == freqMap.end()) {
+            freqMap[freq] = new DoublyLinkedList();
+        }
+        DoublyLinkedList* list = freqMap[freq];
+        list->addFirst(node);
+        freqMap[freq] = list;
+    }
+};
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+```
+
+#### Go
 
 ```go
 type LFUCache struct {
@@ -206,7 +440,6 @@ type LFUCache struct {
 	capacity int
 }
 
-
 func Constructor(capacity int) LFUCache {
 	return LFUCache{
 		cache:    make(map[int]*node),
@@ -215,29 +448,24 @@ func Constructor(capacity int) LFUCache {
 	}
 }
 
-
 func (this *LFUCache) Get(key int) int {
 	if this.capacity == 0 {
 		return -1
 	}
-
 
 	n, ok := this.cache[key]
 	if !ok {
 		return -1
 	}
 
-
 	this.incrFreq(n)
 	return n.val
 }
-
 
 func (this *LFUCache) Put(key int, value int) {
 	if this.capacity == 0 {
 		return
 	}
-
 
 	n, ok := this.cache[key]
 	if ok {
@@ -245,7 +473,6 @@ func (this *LFUCache) Put(key int, value int) {
 		this.incrFreq(n)
 		return
 	}
-
 
 	if len(this.cache) == this.capacity {
 		l := this.freqMap[this.minFreq]
@@ -256,7 +483,6 @@ func (this *LFUCache) Put(key int, value int) {
 	this.cache[key] = n
 	this.minFreq = 1
 }
-
 
 func (this *LFUCache) incrFreq(n *node) {
 	l := this.freqMap[n.freq]
@@ -271,7 +497,6 @@ func (this *LFUCache) incrFreq(n *node) {
 	this.addNode(n)
 }
 
-
 func (this *LFUCache) addNode(n *node) {
 	l, ok := this.freqMap[n.freq]
 	if !ok {
@@ -281,7 +506,6 @@ func (this *LFUCache) addNode(n *node) {
 	l.pushFront(n)
 }
 
-
 type node struct {
 	key  int
 	val  int
@@ -290,12 +514,10 @@ type node struct {
 	next *node
 }
 
-
 type list struct {
 	head *node
 	tail *node
 }
-
 
 func newList() *list {
 	head := new(node)
@@ -308,14 +530,12 @@ func newList() *list {
 	}
 }
 
-
 func (l *list) pushFront(n *node) {
 	n.prev = l.head
 	n.next = l.head.next
 	l.head.next.prev = n
 	l.head.next = n
 }
-
 
 func (l *list) remove(n *node) {
 	n.prev.next = n.next
@@ -324,26 +544,23 @@ func (l *list) remove(n *node) {
 	n.prev = nil
 }
 
-
 func (l *list) removeBack() *node {
 	n := l.tail.prev
 	l.remove(n)
 	return n
 }
 
-
 func (l *list) empty() bool {
 	return l.head.next == l.tail
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
-
 
 struct Node {
     key: i32,
@@ -352,7 +569,6 @@ struct Node {
     prev: Option<Rc<RefCell<Node>>>,
     next: Option<Rc<RefCell<Node>>>,
 }
-
 
 impl Node {
     fn new(key: i32, value: i32) -> Self {
@@ -366,12 +582,10 @@ impl Node {
     }
 }
 
-
 struct LinkedList {
     head: Option<Rc<RefCell<Node>>>,
     tail: Option<Rc<RefCell<Node>>>,
 }
-
 
 impl LinkedList {
     fn new() -> Self {
@@ -380,7 +594,6 @@ impl LinkedList {
             tail: None,
         }
     }
-
 
     fn push_front(&mut self, node: &Rc<RefCell<Node>>) {
         match self.head.take() {
@@ -398,7 +611,6 @@ impl LinkedList {
             }
         };
     }
-
 
     fn remove(&mut self, node: &Rc<RefCell<Node>>) {
         match (node.borrow().prev.as_ref(), node.borrow().next.as_ref()) {
@@ -421,7 +633,6 @@ impl LinkedList {
         };
     }
 
-
     fn pop_back(&mut self) -> Option<Rc<RefCell<Node>>> {
         match self.tail.take() {
             Some(tail) => {
@@ -432,12 +643,10 @@ impl LinkedList {
         }
     }
 
-
     fn is_empty(&self) -> bool {
         self.head.is_none()
     }
 }
-
 
 struct LFUCache {
     cache: HashMap<i32, Rc<RefCell<Node>>>,
@@ -445,7 +654,6 @@ struct LFUCache {
     min_freq: i32,
     capacity: usize,
 }
-
 
 /**
  * `&self` means the method takes an immutable reference.
@@ -461,12 +669,10 @@ impl LFUCache {
         }
     }
 
-
     fn get(&mut self, key: i32) -> i32 {
         if self.capacity == 0 {
             return -1;
         }
-
 
         match self.cache.get(&key) {
             Some(node) => {
@@ -479,12 +685,10 @@ impl LFUCache {
         }
     }
 
-
     fn put(&mut self, key: i32, value: i32) {
         if self.capacity == 0 {
             return;
         }
-
 
         match self.cache.get(&key) {
             Some(node) => {
@@ -505,7 +709,6 @@ impl LFUCache {
         };
     }
 
-
     fn incr_freq(&mut self, node: &Rc<RefCell<Node>>) {
         let freq = node.borrow().freq;
         let list = self.freq_map.get_mut(&freq).unwrap();
@@ -519,7 +722,6 @@ impl LFUCache {
         node.borrow_mut().freq += 1;
         self.add_node(node);
     }
-
 
     fn add_node(&mut self, node: &Rc<RefCell<Node>>) {
         let freq = node.borrow().freq;
@@ -535,20 +737,10 @@ impl LFUCache {
         };
     }
 }
-
-
-/**
- * Your LFUCache object will be instantiated and called as such:
- * let obj = LFUCache::new(capacity);
- * let ret_1: i32 = obj.get(key);
- * obj.put(key, value);
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

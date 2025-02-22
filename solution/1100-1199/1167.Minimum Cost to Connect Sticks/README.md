@@ -1,16 +1,30 @@
-# [1167. 连接棒材的最低费用](https://leetcode.cn/problems/minimum-cost-to-connect-sticks)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1167.Minimum%20Cost%20to%20Connect%20Sticks/README.md
+rating: 1481
+source: 第 7 场双周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
+# [1167. 连接木棍的最低费用 🔒](https://leetcode.cn/problems/minimum-cost-to-connect-sticks)
 
 [English Version](/solution/1100-1199/1167.Minimum%20Cost%20to%20Connect%20Sticks/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>你有一些长度为正整数的棍子。这些长度以数组<meta charset="UTF-8" />&nbsp;<code>sticks</code>&nbsp;的形式给出，<meta charset="UTF-8" />&nbsp;<code>sticks[i]</code>&nbsp;是 <code>第i个</code> 木棍的长度。</p>
+<p>你有一些长度为正整数的木棍。这些长度以数组<meta charset="UTF-8" />&nbsp;<code>sticks</code>&nbsp;的形式给出，<meta charset="UTF-8" />&nbsp;<code>sticks[i]</code>&nbsp;是第 <code>i</code> 个木棍的长度。</p>
 
-<p>你可以通过支付 <code>x + y</code> 的成本将任意两个长度为 <code>x</code> 和 <code>y</code> 的棍子连接成一个棍子。你必须连接所有的棍子，直到剩下一个棍子。</p>
+<p>你可以通过支付 <code>x + y</code> 的成本将任意两个长度为 <code>x</code> 和 <code>y</code> 的木棍连接成一个木棍。你必须连接所有的木棍，直到剩下一个木棍。</p>
 
-<p>返回以这种方式将所有给定的棍子连接成一个棍子的 <em>最小成本</em> 。</p>
+<p>返回以这种方式将所有给定的木棍连接成一个木棍的<em> 最小成本 </em>。</p>
 
 <p>&nbsp;</p>
 
@@ -54,11 +68,13 @@
 	<li><code>1 &lt;= sticks[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 优先队列（小根堆）**
+### 方法一：贪心 + 优先队列（小根堆）
 
 我们可以使用贪心的思路，每次选择最短的两根棍子进行拼接，这样可以保证拼接的代价最小。
 
@@ -68,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +98,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func connectSticks(sticks []int) (ans int) {
@@ -147,9 +159,9 @@ func connectSticks(sticks []int) (ans int) {
 
 type hp struct{ sort.IntSlice }
 
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] < h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] < h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -157,7 +169,7 @@ func (h *hp) Pop() interface{} {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function connectSticks(sticks: number[]): number {
@@ -184,8 +196,7 @@ class Heap<T = number> {
     constructor(data: T[] | Compare<T>, compare?: (lhs: T, rhs: T) => number);
     constructor(
         data: T[] | Compare<T> = [],
-        compare: Compare<T> = (lhs: T, rhs: T) =>
-            lhs < rhs ? -1 : lhs > rhs ? 1 : 0,
+        compare: Compare<T> = (lhs: T, rhs: T) => (lhs < rhs ? -1 : lhs > rhs ? 1 : 0),
     ) {
         if (typeof data === 'function') {
             compare = data;
@@ -240,10 +251,8 @@ class Heap<T = number> {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

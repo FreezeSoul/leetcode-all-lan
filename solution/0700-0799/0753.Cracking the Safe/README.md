@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0753.Cracking%20the%20Safe/README.md
+tags:
+    - 深度优先搜索
+    - 图
+    - 欧拉回路
+---
+
+<!-- problem:start -->
+
 # [753. 破解保险箱](https://leetcode.cn/problems/cracking-the-safe)
 
 [English Version](/solution/0700-0799/0753.Cracking%20the%20Safe/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个需要密码才能打开的保险箱。密码是&nbsp;<code>n</code> 位数, 密码的每一位都是范围&nbsp;<code>[0, k - 1]</code>&nbsp;中的一个数字。</p>
 
@@ -60,11 +72,13 @@
 	<li><code>1 &lt;= k<sup>n</sup> &lt;= 4096</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：欧拉回路**
+### 方法一：欧拉回路
 
 我们可以对题目中所描述的内容构建有向图：将每个点看作一个长度为 $n-1$ 的 $k$ 字符串，每条边都带有一个从 $0$ 到 $k-1$ 的字符。如果点 $u$ 到点 $v$ 之间有一条有向边 $e$，假设 $e$ 携带的字符为 $c$，那么 $u+c$ 的末尾 $k-1$ 个字符形成的字符串等于 $v$，此时边 $u+c$ 就表示了一个长度为 $n$ 的密码。
 
@@ -74,9 +88,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,9 +110,7 @@ class Solution:
         return "".join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -128,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -154,7 +164,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func crackSafe(n int, k int) string {
@@ -179,10 +189,34 @@ func crackSafe(n int, k int) string {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function crackSafe(n: number, k: number): string {
+    function dfs(u: number): void {
+        for (let x = 0; x < k; x++) {
+            const e = u * 10 + x;
+            if (!vis.has(e)) {
+                vis.add(e);
+                const v = e % mod;
+                dfs(v);
+                ans.push(x.toString());
+            }
+        }
+    }
 
+    const mod = Math.pow(10, n - 1);
+    const vis = new Set<number>();
+    const ans: string[] = [];
+
+    dfs(0);
+    ans.push('0'.repeat(n - 1));
+    return ans.join('');
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

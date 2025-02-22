@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2423.Remove%20Letter%20To%20Equalize%20Frequency/README.md
+rating: 1648
+source: 第 88 场双周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2423. 删除字符使频率相同](https://leetcode.cn/problems/remove-letter-to-equalize-frequency)
 
 [English Version](/solution/2400-2499/2423.Remove%20Letter%20To%20Equalize%20Frequency/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的字符串&nbsp;<code>word</code>&nbsp;，字符串只包含小写英文字母。你需要选择 <strong>一个</strong>&nbsp;下标并 <strong>删除</strong>&nbsp;下标处的字符，使得 <code>word</code>&nbsp;中剩余每个字母出现 <strong>频率</strong>&nbsp;相同。</p>
 
@@ -21,14 +35,16 @@
 
 <p><strong>示例 1：</strong></p>
 
-<pre><b>输入：</b>word = "abcc"
+<pre>
+<b>输入：</b>word = "abcc"
 <b>输出：</b>true
-<b>解释：</b>选择下标 3 并删除该字母，word 变成 "abc" 且每个字母出现频率都为 1 。
+<b>解释：</b>选择下标 3 并删除该字母：word 变成 "abc" 且每个字母出现频率都为 1 。
 </pre>
 
 <p><strong>示例 2：</strong></p>
 
-<pre><b>输入：</b>word = "aazz"
+<pre>
+<b>输入：</b>word = "aazz"
 <b>输出：</b>false
 <b>解释：</b>我们必须删除一个字母，所以要么 "a" 的频率变为 1 且 "z" 的频率为 2 ，要么两个字母频率反过来。所以不可能让剩余所有字母出现频率相同。
 </pre>
@@ -42,11 +58,13 @@
 	<li><code>word</code>&nbsp;只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 枚举**
+### 方法一：计数 + 枚举
 
 我们先用哈希表或者一个长度为 $26$ 的数组 $cnt$ 统计字符串中每个字母出现的次数。
 
@@ -58,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +90,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func equalFrequency(word string) bool {
@@ -180,7 +194,7 @@ func equalFrequency(word string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function equalFrequency(word: string): boolean {
@@ -213,10 +227,8 @@ function equalFrequency(word: string): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

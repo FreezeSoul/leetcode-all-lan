@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1179.Reformat%20Department%20Table/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1179. Reformat Department Table](https://leetcode.com/problems/reformat-department-table)
 
 [中文文档](/solution/1100-1199/1179.Reformat%20Department%20Table/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Department</code></p>
 
@@ -14,18 +26,18 @@
 | revenue     | int     |
 | month       | varchar |
 +-------------+---------+
-(id, month) is the primary key of this table.
+In SQL,(id, month) is the primary key of this table.
 The table has information about the revenue of each department per month.
 The month has values in [&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;].
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to reformat the table such that there is a department id column and a revenue column <strong>for each month</strong>.</p>
+<p>Reformat the table such that there is a department id column and a revenue column <strong>for each month</strong>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -54,92 +66,88 @@ Department table:
 Note that the result table has 13 columns (1 for the department id + 12 for the months).
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
+SELECT
     id,
-    sum(
-        case
-            month
-            when 'Jan' then revenue
-        end
-    ) as Jan_Revenue,
-    sum(
-        case
-            month
-            when 'Feb' then revenue
-        end
-    ) as Feb_Revenue,
-    sum(
-        case
-            month
-            when 'Mar' then revenue
-        end
-    ) as Mar_Revenue,
-    sum(
-        case
-            month
-            when 'Apr' then revenue
-        end
-    ) as Apr_Revenue,
-    sum(
-        case
-            month
-            when 'May' then revenue
-        end
-    ) as May_Revenue,
-    sum(
-        case
-            month
-            when 'Jun' then revenue
-        end
-    ) as Jun_Revenue,
-    sum(
-        case
-            month
-            when 'Jul' then revenue
-        end
-    ) as Jul_Revenue,
-    sum(
-        case
-            month
-            when 'Aug' then revenue
-        end
-    ) as Aug_Revenue,
-    sum(
-        case
-            month
-            when 'Sep' then revenue
-        end
-    ) as Sep_Revenue,
-    sum(
-        case
-            month
-            when 'Oct' then revenue
-        end
-    ) as Oct_Revenue,
-    sum(
-        case
-            month
-            when 'Nov' then revenue
-        end
-    ) as Nov_Revenue,
-    sum(
-        case
-            month
-            when 'Dec' then revenue
-        end
-    ) as Dec_Revenue
-from
-    Department
-group by
-    id
+    SUM(
+        CASE month
+            WHEN 'Jan' THEN revenue
+        END
+    ) AS Jan_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Feb' THEN revenue
+        END
+    ) AS Feb_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Mar' THEN revenue
+        END
+    ) AS Mar_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Apr' THEN revenue
+        END
+    ) AS Apr_Revenue,
+    SUM(
+        CASE month
+            WHEN 'May' THEN revenue
+        END
+    ) AS May_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Jun' THEN revenue
+        END
+    ) AS Jun_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Jul' THEN revenue
+        END
+    ) AS Jul_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Aug' THEN revenue
+        END
+    ) AS Aug_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Sep' THEN revenue
+        END
+    ) AS Sep_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Oct' THEN revenue
+        END
+    ) AS Oct_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Nov' THEN revenue
+        END
+    ) AS Nov_Revenue,
+    SUM(
+        CASE month
+            WHEN 'Dec' THEN revenue
+        END
+    ) AS Dec_Revenue
+FROM Department
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

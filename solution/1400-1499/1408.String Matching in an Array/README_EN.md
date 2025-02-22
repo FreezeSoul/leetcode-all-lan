@@ -1,12 +1,26 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1408.String%20Matching%20in%20an%20Array/README_EN.md
+rating: 1223
+source: Weekly Contest 184 Q1
+tags:
+    - Array
+    - String
+    - String Matching
+---
+
+<!-- problem:start -->
+
 # [1408. String Matching in an Array](https://leetcode.com/problems/string-matching-in-an-array)
 
 [中文文档](/solution/1400-1499/1408.String%20Matching%20in%20an%20Array/README.md)
 
 ## Description
 
-<p>Given an array of string <code>words</code>, return <em>all strings in </em><code>words</code><em> that is a <strong>substring</strong> of another word</em>. You can return the answer in <strong>any order</strong>.</p>
+<!-- description:start -->
 
-<p>A <strong>substring</strong> is a contiguous sequence of characters within a string</p>
+<p>Given an array of string <code>words</code>, return all strings in<em> </em><code>words</code><em> </em>that are a <span data-keyword="substring-nonempty">substring</span> of another word. You can return the answer in <strong>any order</strong>.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -44,25 +58,33 @@
 	<li>All the strings of <code>words</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Brute Force Enumeration
+
+We directly enumerate all strings $words[i]$, and check whether it is a substring of other strings. If it is, we add it to the answer.
+
+The time complexity is $O(n^3)$, and the space complexity is $O(n)$. Where $n$ is the length of the string array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def stringMatching(self, words: List[str]) -> List[str]:
         ans = []
-        for i, w1 in enumerate(words):
-            for j, w2 in enumerate(words):
-                if i != j and w1 in w2:
-                    ans.append(w1)
-                    break
+        for i, s in enumerate(words):
+            if any(i != j and s in t for j, t in enumerate(words)):
+                ans.append(s)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +125,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func stringMatching(words []string) []string {
@@ -120,46 +142,46 @@ func stringMatching(words []string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function stringMatching(words: string[]): string[] {
-    const res: string[] = [];
-    for (const target of words) {
-        for (const word of words) {
-            if (word !== target && word.includes(target)) {
-                res.push(target);
+    const ans: string[] = [];
+    const n = words.length;
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < n; ++j) {
+            if (words[j].includes(words[i]) && i !== j) {
+                ans.push(words[i]);
                 break;
             }
         }
     }
-    return res;
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn string_matching(words: Vec<String>) -> Vec<String> {
-        let mut res = Vec::new();
-        for target in words.iter() {
-            for word in words.iter() {
-                if word != target && word.contains(target) {
-                    res.push(target.clone());
+        let mut ans = Vec::new();
+        let n = words.len();
+        for i in 0..n {
+            for j in 0..n {
+                if i != j && words[j].contains(&words[i]) {
+                    ans.push(words[i].clone());
                     break;
                 }
             }
         }
-        res
+        ans
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

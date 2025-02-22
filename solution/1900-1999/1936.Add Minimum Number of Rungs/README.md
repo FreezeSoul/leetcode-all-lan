@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1936.Add%20Minimum%20Number%20of%20Rungs/README.md
+rating: 1322
+source: 第 250 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1936. 新增的最少台阶数](https://leetcode.cn/problems/add-minimum-number-of-rungs)
 
 [English Version](/solution/1900-1999/1936.Add%20Minimum%20Number%20of%20Rungs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>严格递增</strong> 的整数数组 <code>rungs</code> ，用于表示梯子上每一台阶的 <strong>高度</strong> 。当前你正站在高度为 <code>0</code> 的地板上，并打算爬到最后一个台阶。</p>
 
@@ -64,47 +77,107 @@
 	<li><code>rungs</code> <strong>严格递增</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：贪心 + 模拟
+
+根据题目描述，我们知道，每一次计划爬上一个新的台阶，都需要满足新的台阶的高度与当前所在位置的高度之差不超过 `dist`，否则，我们需要贪心地在距离当前位置 $dist$ 的地方插入一个新的台阶，爬上一个新的台阶，一共需要插入的台阶数为 $\lfloor \frac{b - a - 1}{dist} \rfloor$，其中 $a$ 和 $b$ 分别为当前位置和新台阶的高度。那么答案即为所有插入的台阶数之和。
+
+时间复杂度 $O(n)$，其中 $n$ 为 `rungs` 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def addRungs(self, rungs: List[int], dist: int) -> int:
-        prev = res = 0
-        for rung in rungs:
-            res += (rung - prev - 1) // dist
-            prev = rung
-        return res
+        rungs = [0] + rungs
+        return sum((b - a - 1) // dist for a, b in pairwise(rungs))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int addRungs(int[] rungs, int dist) {
-        int res = 0;
-        for (int i = 0, prev = 0; i < rungs.length; ++i) {
-            res += (rungs[i] - prev - 1) / dist;
-            prev = rungs[i];
+        int ans = 0, prev = 0;
+        for (int x : rungs) {
+            ans += (x - prev - 1) / dist;
+            prev = x;
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int addRungs(vector<int>& rungs, int dist) {
+        int ans = 0, prev = 0;
+        for (int& x : rungs) {
+            ans += (x - prev - 1) / dist;
+            prev = x;
+        }
+        return ans;
+    }
+};
 ```
 
+#### Go
+
+```go
+func addRungs(rungs []int, dist int) (ans int) {
+	prev := 0
+	for _, x := range rungs {
+		ans += (x - prev - 1) / dist
+		prev = x
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function addRungs(rungs: number[], dist: number): number {
+    let ans = 0;
+    let prev = 0;
+    for (const x of rungs) {
+        ans += ((x - prev - 1) / dist) | 0;
+        prev = x;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn add_rungs(rungs: Vec<i32>, dist: i32) -> i32 {
+        let mut ans = 0;
+        let mut prev = 0;
+
+        for &x in rungs.iter() {
+            ans += (x - prev - 1) / dist;
+            prev = x;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

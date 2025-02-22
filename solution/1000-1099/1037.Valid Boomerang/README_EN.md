@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1037.Valid%20Boomerang/README_EN.md
+rating: 1255
+source: Weekly Contest 135 Q1
+tags:
+    - Geometry
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1037. Valid Boomerang](https://leetcode.com/problems/valid-boomerang)
 
 [中文文档](/solution/1000-1099/1037.Valid%20Boomerang/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array <code>points</code> where <code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code> represents a point on the <strong>X-Y</strong> plane, return <code>true</code> <em>if these points are a <strong>boomerang</strong></em>.</p>
 
@@ -25,11 +41,17 @@
 	<li><code>0 &lt;= x<sub>i</sub>, y<sub>i</sub> &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -38,7 +60,7 @@ class Solution:
         return (y2 - y1) * (x3 - x2) != (y3 - y2) * (x2 - x1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -51,7 +73,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -65,7 +87,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isBoomerang(points [][]int) bool {
@@ -76,7 +98,7 @@ func isBoomerang(points [][]int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isBoomerang(points: number[][]): boolean {
@@ -87,7 +109,7 @@ function isBoomerang(points: number[][]): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -100,10 +122,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1946.Largest%20Number%20After%20Mutating%20Substring/README_EN.md
+rating: 1445
+source: Weekly Contest 251 Q2
+tags:
+    - Greedy
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
 # [1946. Largest Number After Mutating Substring](https://leetcode.com/problems/largest-number-after-mutating-substring)
 
 [中文文档](/solution/1900-1999/1946.Largest%20Number%20After%20Mutating%20Substring/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>num</code>, which represents a large integer. You are also given a <strong>0-indexed</strong> integer array <code>change</code> of length <code>10</code> that maps each digit <code>0-9</code> to another digit. More formally, digit <code>d</code> maps to digit <code>change[d]</code>.</p>
 
@@ -55,57 +71,81 @@ Thus, &quot;<u>021</u>&quot; becomes &quot;<u>934</u>&quot;.
 	<li><code>0 &lt;= change[d] &lt;= 9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+According to the problem description, we can start from the highest digit of the string and greedily perform continuous replacement operations until we encounter a digit smaller than the current digit.
+
+First, we convert the string $\textit{num}$ into a character array $\textit{s}$ and use a variable $\textit{changed}$ to record whether a change has already occurred, initially $\textit{changed} = \text{false}$.
+
+Then we traverse the character array $\textit{s}$. For each character $\textit{c}$, we convert it to a number $\textit{d} = \text{change}[\text{int}(\textit{c})]$. If a change has already occurred and $\textit{d} < \textit{c}$, it means we cannot continue changing, so we exit the loop immediately. Otherwise, if $\textit{d} > \textit{c}$, it means we can replace $\textit{c}$ with $\textit{d}$. At this point, we set $\textit{changed} = \text{true}$ and replace $\textit{s}[i]$ with $\textit{d}$.
+
+Finally, we convert the character array $\textit{s}$ back to a string and return it.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $\textit{num}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maximumNumber(self, num: str, change: List[int]) -> str:
         s = list(num)
+        changed = False
         for i, c in enumerate(s):
-            if change[int(c)] > int(c):
-                while i < len(s) and int(s[i]) <= change[int(s[i])]:
-                    s[i] = str(change[int(s[i])])
-                    i += 1
+            d = str(change[int(c)])
+            if changed and d < c:
                 break
-        return ''.join(s)
+            if d > c:
+                changed = True
+                s[i] = d
+        return "".join(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public String maximumNumber(String num, int[] change) {
         char[] s = num.toCharArray();
+        boolean changed = false;
         for (int i = 0; i < s.length; ++i) {
-            if (change[s[i] - '0'] > s[i] - '0') {
-                for (; i < s.length && s[i] - '0' <= change[s[i] - '0']; ++i) {
-                    s[i] = (char) (change[s[i] - '0'] + '0');
-                }
+            char d = (char) (change[s[i] - '0'] + '0');
+            if (changed && d < s[i]) {
                 break;
             }
+            if (d > s[i]) {
+                changed = true;
+                s[i] = d;
+            }
         }
-        return String.valueOf(s);
+        return new String(s);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string maximumNumber(string num, vector<int>& change) {
         int n = num.size();
+        bool changed = false;
         for (int i = 0; i < n; ++i) {
-            if (change[num[i] - '0'] > num[i] - '0') {
-                for (; i < n && change[num[i] - '0'] >= num[i] - '0'; ++i) {
-                    num[i] = change[num[i] - '0'] + '0';
-                }
+            char d = '0' + change[num[i] - '0'];
+            if (changed && d < num[i]) {
                 break;
+            }
+            if (d > num[i]) {
+                changed = true;
+                num[i] = d;
             }
         }
         return num;
@@ -113,27 +153,95 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumNumber(num string, change []int) string {
 	s := []byte(num)
+	changed := false
 	for i, c := range num {
-		if change[c-'0'] > int(c-'0') {
-			for ; i < len(s) && change[s[i]-'0'] >= int(s[i]-'0'); i++ {
-				s[i] = byte(change[s[i]-'0']) + '0'
-			}
+		d := byte('0' + change[c-'0'])
+		if changed && d < s[i] {
 			break
+		}
+		if d > s[i] {
+			s[i] = d
+			changed = true
 		}
 	}
 	return string(s)
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function maximumNumber(num: string, change: number[]): string {
+    const s = num.split('');
+    let changed = false;
+    for (let i = 0; i < s.length; ++i) {
+        const d = change[+s[i]].toString();
+        if (changed && d < s[i]) {
+            break;
+        }
+        if (d > s[i]) {
+            s[i] = d;
+            changed = true;
+        }
+    }
+    return s.join('');
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn maximum_number(num: String, change: Vec<i32>) -> String {
+        let mut s: Vec<char> = num.chars().collect();
+        let mut changed = false;
+        for i in 0..s.len() {
+            let d = (change[s[i] as usize - '0' as usize] + '0' as i32) as u8 as char;
+            if changed && d < s[i] {
+                break;
+            }
+            if d > s[i] {
+                changed = true;
+                s[i] = d;
+            }
+        }
+        s.into_iter().collect()
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} num
+ * @param {number[]} change
+ * @return {string}
+ */
+var maximumNumber = function (num, change) {
+    const s = num.split('');
+    let changed = false;
+    for (let i = 0; i < s.length; ++i) {
+        const d = change[+s[i]].toString();
+        if (changed && d < s[i]) {
+            break;
+        }
+        if (d > s[i]) {
+            s[i] = d;
+            changed = true;
+        }
+    }
+    return s.join('');
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

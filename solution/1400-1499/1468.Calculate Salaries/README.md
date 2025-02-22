@@ -1,10 +1,20 @@
-# [1468. 计算税后工资](https://leetcode.cn/problems/calculate-salaries)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1468.Calculate%20Salaries/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1468. 计算税后工资 🔒](https://leetcode.cn/problems/calculate-salaries)
 
 [English Version](/solution/1400-1499/1468.Calculate%20Salaries/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><code>Salaries</code> 表：</p>
 
@@ -17,29 +27,32 @@
 | employee_name | varchar |
 | salary        | int     |
 +---------------+---------+
-(company_id, employee_id) 是这个表的主键
+在 SQL 中，(company_id, employee_id) 是这个表的主键
 这个表包括员工的company id, id, name 和 salary 
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
-<p>写一条查询 SQL 来查找每个员工的税后工资</p>
+<p>查找出每个员工的税后工资</p>
 
 <p>每个公司的税率计算依照以下规则</p>
 
 <ul>
-	<li>如果这个公司员工最高工资不到 1000 ，税率为 0%</li>
-	<li>如果这个公司员工最高工资在 1000 到 10000 之间，税率为 24%</li>
-	<li>如果这个公司员工最高工资大于 10000 ，税率为 49%</li>
+	<li>如果这个公司员工最高工资不到 <code>$1000</code> ，税率为 <code>0%</code></li>
+	<li>如果这个公司员工最高工资在 <code>[1000, 10000]</code> 之间，税率为 <code>24%</code></li>
+	<li>如果这个公司员工最高工资大于 <code>$10000</code> ，税率为 <code>49%</code></li>
 </ul>
 
-<p>按任意顺序返回结果，税后工资结果取整</p>
+<p>按 <strong>任意顺序</strong> 返回结果。</p>
 
-<p> </p>
+<p>返回结果的格式如下例所示。</p>
 
-<p>结果表格式如下例所示：</p>
+<p>&nbsp;</p>
+
+<p><strong>示例 1：</strong></p>
 
 <pre>
+<strong>输入：</strong>
 Salaries 表：
 +------------+-------------+---------------+--------+
 | company_id | employee_id | employee_name | salary |
@@ -55,8 +68,7 @@ Salaries 表：
 | 3          | 13          | Nyancat       | 3300   |
 | 3          | 15          | Morninngcat   | 7777   |
 +------------+-------------+---------------+--------+
-
-Result 表：
+<strong>输出：</strong>
 +------------+-------------+---------------+--------+
 | company_id | employee_id | employee_name | salary |
 +------------+-------------+---------------+--------+
@@ -71,23 +83,51 @@ Result 表：
 | 3          | 13          | Nyancat       | 2508   |
 | 3          | 15          | Morninngcat   | 5911   |
 +------------+-------------+---------------+--------+
-对于公司 1 ，最高工资是 21300 ，其每个员工的税率为 49%
-对于公司 2 ，最高工资是 700 ，其每个员工税率为 0%
-对于公司 3 ，最高工资是 7777 ，其每个员工税率是 24%
-税后工资计算 = 工资 - ( 税率 / 100）*工资
-对于上述案例，Morninngcat 的税后工资 = 7777 - 7777 * ( 24 / 100) = 7777 - 1866.48 = 5910.52 ，取整为 5911
-</pre>
+<strong>解释：</strong>
+对于公司 1，最高薪资为 21300。公司 1 的员工税率为 49%。
+对于公司 2，最高薪资为 700。公司 2 的员工税率为 0%。
+对于公司 3，最高薪资为 7777。公司 3 的员工税率为 24%。
+薪资扣除税后的金额计算公式为：薪资 - (税率百分比 / 100) * 薪资
+例如，Morninngcat（员工号 3，薪资为 7777）扣除税后的薪资为：7777 - 7777 * (24 / 100) = 7777 - 1866.48 = 5910.52，四舍五入为 5911。</pre>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    s.company_id,
+    employee_id,
+    employee_name,
+    ROUND(
+        CASE
+            WHEN top < 1000 THEN salary
+            WHEN top >= 1000
+            AND top <= 10000 THEN salary * 0.76
+            ELSE salary * 0.51
+        END
+    ) AS salary
+FROM
+    Salaries AS s
+    JOIN (
+        SELECT company_id, MAX(salary) AS top
+        FROM Salaries
+        GROUP BY company_id
+    ) AS t
+        ON s.company_id = t.company_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

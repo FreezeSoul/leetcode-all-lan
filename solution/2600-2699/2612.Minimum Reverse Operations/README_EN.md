@@ -1,47 +1,78 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2612.Minimum%20Reverse%20Operations/README_EN.md
+rating: 2824
+source: Weekly Contest 339 Q4
+tags:
+    - Breadth-First Search
+    - Array
+    - Ordered Set
+---
+
+<!-- problem:start -->
+
 # [2612. Minimum Reverse Operations](https://leetcode.com/problems/minimum-reverse-operations)
 
 [中文文档](/solution/2600-2699/2612.Minimum%20Reverse%20Operations/README.md)
 
 ## Description
 
-<p>You are given an integer <code>n</code> and an integer <code>p</code> in the range <code>[<font face="monospace">0</font>, n - 1]</code>. Representing a <strong>0-indexed</strong> array <code>arr</code>&nbsp;of length <code>n</code> where all positions are set to <code>0</code>&#39;s, except position <code>p</code> which is set to <code>1</code>.</p>
+<!-- description:start -->
 
-<p>You are also given an integer array <code>banned</code> containing some positions from the array. For the <strong>i</strong><sup><strong>th</strong></sup> position in <code>banned</code>, <code>arr[banned[i]] = 0</code>, and <code>banned[i] != p</code>.</p>
-
-<p>You can perform <strong>multiple</strong> operations on <code>arr</code>. In an operation, you can choose a <strong>subarray</strong> with size <code>k</code> and <strong>reverse</strong> the subarray. However, the <code>1</code> in <code>arr</code> should never go to any of the positions in <code>banned</code>. In other words, after each operation <code>arr[banned[i]]</code> <strong>remains</strong> <code>0</code>.</p>
-
-<p><em>Return an array</em> <code>ans</code> <em>where</em><em> for each </em><code>i</code><em> from </em><code>[0, n - 1]</code>, <code>ans[i]</code> <em>is the <strong>minimum</strong> number of reverse operations needed to bring the</em> <code>1</code> <em>to position</em> <code>i</code><em> in arr</em>, <em>or</em> <code>-1</code> <em>if it is impossible</em>.</p>
+<p>You are given an integer <code>n</code> and an integer <code>p</code> representing an array <code>arr</code> of length <code>n</code> where all elements are set to 0&#39;s, except position <code>p</code> which is set to 1. You are also given an integer array <code>banned</code> containing restricted positions. Perform the following operation on <code>arr</code>:</p>
 
 <ul>
-	<li>A <strong>subarray</strong> is a contiguous <strong>non-empty</strong> sequence of elements within an array.</li>
-	<li>The values of <code>ans[i]</code> are independent for all <code>i</code>&#39;s.</li>
-	<li>The <strong>reverse </strong>of an array is an array containing the values in <strong>reverse order</strong>.</li>
+	<li>Reverse a <span data-keyword="subarray-nonempty"><strong>subarray</strong></span> with size <code>k</code> if the single 1 is not set to a position in <code>banned</code>.</li>
 </ul>
+
+<p>Return an integer array <code>answer</code> with <code>n</code> results where the <code>i<sup>th</sup></code> result is<em> </em>the <strong>minimum</strong> number of operations needed to bring the single 1 to position <code>i</code> in <code>arr</code>, or -1 if it is impossible.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre>
-<strong>Input:</strong> n = 4, p = 0, banned = [1,2], k = 4
-<strong>Output:</strong> [0,-1,-1,1]
-<strong>Explanation:</strong> In this case <code>k = 4</code> so there is only one possible reverse operation we can perform, which is reversing the whole array. Initially, 1<strong> </strong>is placed at position 0 so the amount of operations we need for position 0 is <code>0</code>. We can never place a 1 on the banned positions, so the answer for positions 1 and 2 is <code>-1</code>. Finally, with one reverse operation we can bring the 1 to index 3, so the answer for position 3 is <code>1</code>. 
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">n = 4, p = 0, banned = [1,2], k = 4</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[0,-1,-1,1]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<ul>
+	<li>Initially 1 is placed at position 0 so the number of operations we need for position 0 is 0.</li>
+	<li>We can never place 1 on the banned positions, so the answer for positions 1 and 2 is -1.</li>
+	<li>Perform the operation of size 4 to reverse the whole array.</li>
+	<li>After a single operation 1 is at position 3 so the answer for position 3 is 1.</li>
+</ul>
+</div>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre>
-<strong>Input:</strong> n = 5, p = 0, banned = [2,4], k = 3
-<strong>Output:</strong> [0,-1,-1,-1,-1]
-<strong>Explanation:</strong> In this case the 1 is initially at position 0, so the answer for that position is <code>0</code>. We can perform reverse operations of size 3. The 1 is currently located at position 0, so we need to reverse the subarray <code>[0, 2]</code> for it to leave that position, but reversing that subarray makes position 2 have a 1, which shouldn&#39;t happen. So, we can&#39;t move the 1 from position 0, making the result for all the other positions <code>-1</code>. 
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">n = 5, p = 0, banned = [2,4], k = 3</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[0,-1,-1,-1,-1]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<ul>
+	<li>Initially 1 is placed at position 0 so the number of operations we need for position 0 is 0.</li>
+	<li>We cannot perform the operation on the subarray positions <code>[0, 2]</code> because position 2 is in banned.</li>
+	<li>Because 1 cannot be set at position 2, it is impossible to set 1 at other positions in more operations.</li>
+</ul>
+</div>
 
 <p><strong class="example">Example 3:</strong></p>
 
-<pre>
-<strong>Input:</strong> n = 4, p = 2, banned = [0,1,3], k = 1
-<strong>Output:</strong> [-1,-1,0,-1]
-<strong>Explanation:</strong> In this case we can only perform reverse operations of size 1.<strong>&nbsp;</strong>So the 1 never changes its position.
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">n = 4, p = 2, banned = [0,1,3], k = 1</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">[-1,-1,0,-1]</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p>Perform operations of size 1 and 1 never changes its position.</p>
+</div>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
@@ -56,9 +87,13 @@
 	<li>all values in <code>banned</code>&nbsp;are <strong>unique</strong>&nbsp;</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Ordered Set + BFS**
+<!-- solution:start -->
+
+### Solution 1: Ordered Set + BFS
 
 We notice that for any index $i$ in the subarray interval $[l,..r]$, the flipped index $j = l + r - i$.
 
@@ -84,12 +119,9 @@ The time complexity is $O(n \times \log n)$ and the space complexity is $O(n)$. 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedSet
-
-
 class Solution:
     def minReverseOperations(
         self, n: int, p: int, banned: List[int], k: int
@@ -119,7 +151,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -154,7 +186,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -192,7 +224,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minReverseOperations(n int, p int, banned []int, k int) []int {
@@ -225,31 +257,12 @@ func minReverseOperations(n int, p int, banned []int, k int) []int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function minReverseOperations(
-    n: number,
-    p: number,
-    banned: number[],
-    k: number,
-): number[] {
+function minReverseOperations(n: number, p: number, banned: number[], k: number): number[] {
     const ans = new Array(n).fill(-1);
     const ts = new Array(2).fill(0).map(() => new TreeSet<number>());
     for (let i = 0; i < n; ++i) {
@@ -316,9 +329,7 @@ class RBTreeNode<T = number> {
 class RBTree<T> {
     root: RBTreeNode<T> | null;
     lt: (l: T, r: T) => boolean;
-    constructor(
-        compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0),
-    ) {
+    constructor(compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0)) {
         this.root = null;
         this.lt = (l: T, r: T) => compare(l, r) < 0;
     }
@@ -626,9 +637,7 @@ class RBTree<T> {
         for (const v of this.inOrder(root.right!)) yield v;
     }
 
-    *reverseInOrder(
-        root: RBTreeNode<T> = this.root!,
-    ): Generator<T, undefined, void> {
+    *reverseInOrder(root: RBTreeNode<T> = this.root!): Generator<T, undefined, void> {
         if (!root) return;
         for (const v of this.reverseInOrder(root.right!)) yield v;
         yield root.data;
@@ -925,13 +934,20 @@ class TreeMultiSet<T = number> {
 }
 ```
 
-````ts
-function minReverseOperations(
-    n: number,
-    p: number,
-    banned: number[],
-    k: number,
-): number[] {
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function minReverseOperations(n: number, p: number, banned: number[], k: number): number[] {
     const ans = new Array(n).fill(-1);
     const ts = new Array(2).fill(0).map(() => new TreapMultiSet<number>());
     for (let i = 0; i < n; ++i) {
@@ -1063,43 +1079,8 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
     private readonly leftBound: T;
     private readonly rightBound: T;
 
-    /**
-   *
-   * @param compareFn A compare function which returns boolean or number
-   * @param leftBound defalut value is `-Infinity`
-   * @param rightBound defalut value is `Infinity`
-   * @description
-   * create a `MultiSet`, compare elements using `compareFn`, which is increasing order by default.
-   * @example
-   * ```ts
-   * interface Person {
-        name: string
-        age: number
-    }
-
-    const leftBound = {
-        name: 'Alice',
-        age: -Infinity,
-    }
-
-    const rightBound = {
-        name: 'Bob',
-        age: Infinity,
-    }
-
-    const sortedList = new TreapMultiSet<Person>(
-        (a: Person, b: Person) => a.age - b.age,
-        leftBound,
-        rightBound
-    )
-   * ```
-   */
     constructor(compareFn?: CompareFunction<T, 'number'>);
-    constructor(
-        compareFn: CompareFunction<T, 'number'>,
-        leftBound: T,
-        rightBound: T,
-    );
+    constructor(compareFn: CompareFunction<T, 'number'>, leftBound: T, rightBound: T);
     constructor(
         compareFn: CompareFunction<T, any> = (a: any, b: any) => a - b,
         leftBound: any = -Infinity,
@@ -1219,24 +1200,13 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
                     // 旋到根节点
                     if (
                         node.right == null ||
-                        TreapNode.getFac(node.left) >
-                            TreapNode.getFac(node.right)
+                        TreapNode.getFac(node.left) > TreapNode.getFac(node.right)
                     ) {
                         parent[direction] = node.rotateRight();
-                        dfs(
-                            parent[direction]?.right ?? null,
-                            value,
-                            parent[direction]!,
-                            'right',
-                        );
+                        dfs(parent[direction]?.right ?? null, value, parent[direction]!, 'right');
                     } else {
                         parent[direction] = node.rotateLeft();
-                        dfs(
-                            parent[direction]?.left ?? null,
-                            value,
-                            parent[direction]!,
-                            'left',
-                        );
+                        dfs(parent[direction]?.left ?? null, value, parent[direction]!, 'left');
                     }
                 }
             } else if (compare(node.value, value) > 0) {
@@ -1267,11 +1237,7 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
             } else if (compare(node.value, value) > 0) {
                 return dfs(node.left, value);
             } else if (compare(node.value, value) < 0) {
-                return (
-                    dfs(node.right, value) +
-                    TreapNode.getSize(node.left) +
-                    node.count
-                );
+                return dfs(node.right, value) + TreapNode.getSize(node.left) + node.count;
             }
 
             return 0;
@@ -1296,11 +1262,7 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
             } else if (compare(node.value, value) > 0) {
                 return dfs(node.left, value);
             } else if (compare(node.value, value) < 0) {
-                return (
-                    dfs(node.right, value) +
-                    TreapNode.getSize(node.left) +
-                    node.count
-                );
+                return dfs(node.right, value) + TreapNode.getSize(node.left) + node.count;
             }
 
             return 0;
@@ -1326,11 +1288,7 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
             } else if (compare(node.value, value) > 0) {
                 return dfs(node.left, value);
             } else if (compare(node.value, value) < 0) {
-                return (
-                    dfs(node.right, value) +
-                    TreapNode.getSize(node.left) +
-                    node.count
-                );
+                return dfs(node.right, value) + TreapNode.getSize(node.left) + node.count;
             }
 
             return 0;
@@ -1357,11 +1315,7 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
             } else if (compare(node.value, value) > 0) {
                 return dfs(node.left, value);
             } else if (compare(node.value, value) < 0) {
-                return (
-                    dfs(node.right, value) +
-                    TreapNode.getSize(node.left) +
-                    node.count
-                );
+                return dfs(node.right, value) + TreapNode.getSize(node.left) + node.count;
             }
 
             return 0;
@@ -1381,10 +1335,7 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
         if (index < 0) index += this.size;
         if (index < 0 || index >= this.size) return undefined;
 
-        const dfs = (
-            node: TreapNode<T> | null,
-            rank: number,
-        ): T | undefined => {
+        const dfs = (node: TreapNode<T> | null, rank: number): T | undefined => {
             if (node == null) return undefined;
 
             if (TreapNode.getSize(node.left) >= rank) {
@@ -1392,17 +1343,12 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
             } else if (TreapNode.getSize(node.left) + node.count >= rank) {
                 return node.value;
             } else {
-                return dfs(
-                    node.right,
-                    rank - TreapNode.getSize(node.left) - node.count,
-                );
+                return dfs(node.right, rank - TreapNode.getSize(node.left) - node.count);
             }
         };
 
         const res = dfs(this.root, index + 2);
-        return ([this.leftBound, this.rightBound] as any[]).includes(res)
-            ? undefined
-            : res;
+        return ([this.leftBound, this.rightBound] as any[]).includes(res) ? undefined : res;
     }
 
     /**
@@ -1629,9 +1575,7 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
         }
     }
 
-    private *inOrder(
-        root: TreapNode<T> | null = this.root,
-    ): Generator<T, any, any> {
+    private *inOrder(root: TreapNode<T> | null = this.root): Generator<T, any, any> {
         if (root == null) return;
         yield* this.inOrder(root.left);
         const count = root.count;
@@ -1641,9 +1585,7 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
         yield* this.inOrder(root.right);
     }
 
-    private *reverseInOrder(
-        root: TreapNode<T> | null = this.root,
-    ): Generator<T, any, any> {
+    private *reverseInOrder(root: TreapNode<T> | null = this.root): Generator<T, any, any> {
         if (root == null) return;
         yield* this.reverseInOrder(root.right);
         const count = root.count;
@@ -1653,12 +1595,10 @@ class TreapMultiSet<T = number> implements ITreapMultiSet<T> {
         yield* this.reverseInOrder(root.left);
     }
 }
-````
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

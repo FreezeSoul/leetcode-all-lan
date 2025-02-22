@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0844.Backspace%20String%20Compare/README.md
+tags:
+    - 栈
+    - 双指针
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [844. 比较含退格的字符串](https://leetcode.cn/problems/backspace-string-compare)
 
 [English Version](/solution/0800-0899/0844.Backspace%20String%20Compare/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定 <code>s</code> 和 <code>t</code> 两个字符串，当它们分别被输入到空白的文本编辑器后，如果两者相等，返回 <code>true</code> 。<code>#</code> 代表退格字符。</p>
 
@@ -52,11 +65,13 @@
 	<li>你可以用 <code>O(n)</code> 的时间复杂度和 <code>O(1)</code> 的空间复杂度解决该问题吗？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们用双指针 $i$ 和 $j$ 分别指向字符串 $s$ 和 $t$ 的末尾。
 
@@ -68,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +117,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -149,7 +160,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -188,7 +199,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func backspaceCompare(s string, t string) bool {
@@ -229,7 +240,7 @@ func backspaceCompare(s string, t string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function backspaceCompare(s: string, t: string): boolean {
@@ -268,7 +279,7 @@ function backspaceCompare(s: string, t: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -285,7 +296,7 @@ impl Solution {
                 } else {
                     break;
                 }
-                i -= 1
+                i -= 1;
             }
             skip = 0;
             while j != 0 {
@@ -296,7 +307,7 @@ impl Solution {
                 } else {
                     break;
                 }
-                j -= 1
+                j -= 1;
             }
             if i == 0 && j == 0 {
                 break;
@@ -315,10 +326,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

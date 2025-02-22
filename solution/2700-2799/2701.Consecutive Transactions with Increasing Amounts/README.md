@@ -1,10 +1,20 @@
-# [2701. 连续递增交易](https://leetcode.cn/problems/consecutive-transactions-with-increasing-amounts)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2701.Consecutive%20Transactions%20with%20Increasing%20Amounts/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2701. 连续递增交易 🔒](https://leetcode.cn/problems/consecutive-transactions-with-increasing-amounts)
 
 [English Version](/solution/2700-2799/2701.Consecutive%20Transactions%20with%20Increasing%20Amounts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Transactions</code></p>
 
@@ -65,18 +75,49 @@ Transactions 表:
 - customer_id 为 105 的客户有两组连续交易：从 2023年5月1日 至 2023年5月4日，以及 2023年5月12日 至 2023年5月14日。结果按 customer_id 升序排序
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            t1.*,
+            SUM(
+                CASE
+                    WHEN t2.customer_id IS NULL THEN 1
+                    ELSE 0
+                END
+            ) OVER (ORDER BY customer_id, transaction_date) AS s
+        FROM
+            Transactions AS t1
+            LEFT JOIN Transactions AS t2
+                ON t1.customer_id = t2.customer_id
+                AND t1.amount > t2.amount
+                AND DATEDIFF(t1.transaction_date, t2.transaction_date) = 1
+    )
+SELECT
+    customer_id,
+    MIN(transaction_date) AS consecutive_start,
+    MAX(transaction_date) AS consecutive_end
+FROM T
+GROUP BY customer_id, s
+HAVING COUNT(1) >= 3
+ORDER BY customer_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

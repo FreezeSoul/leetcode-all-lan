@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2601.Prime%20Subtraction%20Operation/README.md
+rating: 1779
+source: 第 338 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 数学
+    - 二分查找
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [2601. 质数减法运算](https://leetcode.cn/problems/prime-subtraction-operation)
 
 [English Version](/solution/2600-2699/2601.Prime%20Subtraction%20Operation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的整数数组 <code>nums</code> ，数组长度为 <code>n</code> 。</p>
 
@@ -54,11 +70,13 @@
 	<li><code>nums.length == n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：预处理质数 + 二分查找**
+### 方法一：预处理质数 + 二分查找
 
 我们先预处理得到 $1000$ 以内的所有质数，记录在数组 $p$ 中。
 
@@ -70,9 +88,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -96,9 +112,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -145,7 +159,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -180,7 +194,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func primeSubOperation(nums []int) bool {
@@ -211,7 +225,7 @@ func primeSubOperation(nums []int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function primeSubOperation(nums: number[]): boolean {
@@ -256,10 +270,90 @@ function primeSubOperation(nums: number[]): boolean {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：预处理素数
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function primeSubOperation(nums: number[]): boolean {
+    const p: number[] = [];
+    const max = Math.max(...nums);
+
+    for (let i = 2; i < max; i++) {
+        let isPrime = true;
+
+        for (const x of p) {
+            if (i % x === 0) {
+                isPrime = false;
+                break;
+            }
+        }
+
+        while (isPrime && p.length <= i) {
+            p.push(i);
+        }
+    }
+
+    for (let i = nums.length - 2; i >= 0; i--) {
+        if (nums[i] < nums[i + 1]) continue;
+
+        const [x, next] = [nums[i], nums[i + 1]];
+        const prime = p[x - next + 1];
+
+        if (!prime || prime >= x) return false;
+        nums[i] -= prime;
+    }
+
+    return true;
+}
 ```
 
+#### JavaScript
+
+```js
+function primeSubOperation(nums) {
+    const p = [];
+    const max = Math.max(...nums);
+
+    for (let i = 2; i < max; i++) {
+        let isPrime = true;
+
+        for (const x of p) {
+            if (i % x === 0) {
+                isPrime = false;
+                break;
+            }
+        }
+
+        while (isPrime && p.length <= i) {
+            p.push(i);
+        }
+    }
+
+    for (let i = nums.length - 2; i >= 0; i--) {
+        if (nums[i] < nums[i + 1]) continue;
+
+        const [x, next] = [nums[i], nums[i + 1]];
+        const prime = p[x - next + 1];
+
+        if (!prime || prime >= x) return false;
+        nums[i] -= prime;
+    }
+
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2535.Difference%20Between%20Element%20Sum%20and%20Digit%20Sum%20of%20an%20Array/README_EN.md
+rating: 1222
+source: Weekly Contest 328 Q1
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2535. Difference Between Element Sum and Digit Sum of an Array](https://leetcode.com/problems/difference-between-element-sum-and-digit-sum-of-an-array)
 
 [中文文档](/solution/2500-2599/2535.Difference%20Between%20Element%20Sum%20and%20Digit%20Sum%20of%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a positive integer array <code>nums</code>.</p>
 
@@ -46,134 +61,139 @@ The absolute difference between the element sum and digit sum is |10 - 10| = 0.
 	<li><code>1 &lt;= nums[i] &lt;= 2000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+Solution 1: Simulation
+We traverse the array $\textit{nums}$, calculate the sum of the elements $x$ and the sum of the digits $y$, and finally return $|x - y|$. Since $x$ is always greater than or equal to $y$, we can directly return $x - y$.
+
+The time complexity is $O(n \times \log_{10} M)$, where $n$ and $M$ are the length of the array $\textit{nums}$ and the maximum value of the elements in the array, respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def differenceOfSum(self, nums: List[int]) -> int:
-        a, b = sum(nums), 0
-        for x in nums:
-            while x:
-                b += x % 10
-                x //= 10
-        return abs(a - b)
+        x = y = 0
+        for v in nums:
+            x += v
+            while v:
+                y += v % 10
+                v //= 10
+        return x - y
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int differenceOfSum(int[] nums) {
-        int a = 0, b = 0;
-        for (int x : nums) {
-            a += x;
-            for (; x > 0; x /= 10) {
-                b += x % 10;
+        int x = 0, y = 0;
+        for (int v : nums) {
+            x += v;
+            for (; v > 0; v /= 10) {
+                y += v % 10;
             }
         }
-        return Math.abs(a - b);
+        return x - y;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int differenceOfSum(vector<int>& nums) {
-        int a = 0, b = 0;
-        for (int x : nums) {
-            a += x;
-            for (; x; x /= 10) {
-                b += x % 10;
+        int x = 0, y = 0;
+        for (int v : nums) {
+            x += v;
+            for (; v; v /= 10) {
+                y += v % 10;
             }
         }
-        return abs(a - b);
+        return x - y;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func differenceOfSum(nums []int) int {
-	a, b := 0, 0
-	for _, x := range nums {
-		a += x
-		for ; x > 0; x /= 10 {
-			b += x % 10
+	var x, y int
+	for _, v := range nums {
+		x += v
+		for ; v > 0; v /= 10 {
+			y += v % 10
 		}
 	}
-	return abs(a - b)
-}
-
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
+	return x - y
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function differenceOfSum(nums: number[]): number {
-    return nums.reduce((r, v) => {
-        r += v;
-        while (v !== 0) {
-            r -= v % 10;
-            v = Math.floor(v / 10);
+    let [x, y] = [0, 0];
+    for (let v of nums) {
+        x += v;
+        for (; v; v = Math.floor(v / 10)) {
+            y += v % 10;
         }
-        return r;
-    }, 0);
+    }
+    return x - y;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn difference_of_sum(nums: Vec<i32>) -> i32 {
-        let mut ans = 0;
-        for &num in nums.iter() {
-            let mut num = num;
-            ans += num;
-            while num != 0 {
-                ans -= num % 10;
+        let mut x = 0;
+        let mut y = 0;
+
+        for &v in &nums {
+            x += v;
+            let mut num = v;
+            while num > 0 {
+                y += num % 10;
                 num /= 10;
             }
         }
-        ans
+
+        x - y
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int differenceOfSum(int *nums, int numsSize) {
-    int ans = 0;
+int differenceOfSum(int* nums, int numsSize) {
+    int x = 0, y = 0;
     for (int i = 0; i < numsSize; i++) {
-        ans += nums[i];
-        while (nums[i]) {
-            ans -= nums[i] % 10;
-            nums[i] /= 10;
+        int v = nums[i];
+        x += v;
+        while (v > 0) {
+            y += v % 10;
+            v /= 10;
         }
     }
-    return ans;
+    return x - y;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

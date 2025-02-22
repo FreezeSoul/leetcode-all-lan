@@ -1,10 +1,22 @@
-# [342. 4 的幂](https://leetcode.cn/problems/power-of-four)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0342.Power%20of%20Four/README.md
+tags:
+    - 位运算
+    - 递归
+    - 数学
+---
+
+<!-- problem:start -->
+
+# [342. 4的幂](https://leetcode.cn/problems/power-of-four)
 
 [English Version](/solution/0300-0399/0342.Power%20of%20Four/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数，写一个函数来判断它是否是 4 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
 
@@ -45,15 +57,23 @@
 
 <p><strong>进阶：</strong>你能不使用循环或者递归来完成本题吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：位运算
+
+如果一个数是 4 的幂次方，那么这个数必须是大于 $0$ 的。不妨假设这个数是 $4^x$，即 $2^{2x}$，那么这个数的二进制表示中有且仅有一个 $1$，且这个 $1$ 出现在偶数位上。
+
+因此，我们首先判断这个数是否大于 $0$，然后判断这个数是否是 $2^{2x}$，即 $n$ 与 $n-1$ 的按位与结果是否为 $0$，最后判断这个数的 $1$ 是否出现在偶数位上，即 $n$ 与 $\textit{0xAAAAAAAA}$ 的按位与结果是否为 $0$。如果这三个条件都满足，那么这个数就是 4 的幂次方。
+
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -61,9 +81,7 @@ class Solution:
         return n > 0 and (n & (n - 1)) == 0 and (n & 0xAAAAAAAA) == 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -73,7 +91,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -84,7 +102,23 @@ public:
 };
 ```
 
-### **JavaScript**
+#### Go
+
+```go
+func isPowerOfFour(n int) bool {
+	return n > 0 && (n&(n-1)) == 0 && (n&0xaaaaaaaa) == 0
+}
+```
+
+#### TypeScript
+
+```ts
+function isPowerOfFour(n: number): boolean {
+    return n > 0 && (n & (n - 1)) == 0 && (n & 0xaaaaaaaa) == 0;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -96,26 +130,8 @@ var isPowerOfFour = function (n) {
 };
 ```
 
-### **Go**
-
-```go
-func isPowerOfFour(n int) bool {
-    return n > 0 && (n & (n - 1)) == 0 && (n & 0xaaaaaaaa) == 0
-}
-```
-
-### **TypeScript**
-
-```ts
-function isPowerOfFour(n: number): boolean {
-    return n > 0 && (n & (n - 1)) == 0 && (n & 0xaaaaaaaa) == 0;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

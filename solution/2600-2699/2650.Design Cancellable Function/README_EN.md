@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2650.Design%20Cancellable%20Function/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2650. Design Cancellable Function](https://leetcode.com/problems/design-cancellable-function)
 
 [中文文档](/solution/2600-2699/2650.Design%20Cancellable%20Function/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Sometimes you have a long running task, and you may wish to cancel it before it completes. To help with this goal, write a function&nbsp;<code>cancellable</code> that accepts a generator object and returns an array of two values: a <strong>cancel function</strong> and a <strong>promise</strong>.</p>
 
@@ -137,19 +149,23 @@ The first yielded promise immediately rejects. This error is caught. Because the
 
 <ul>
 	<li><code>cancelledAt == null or 0 &lt;= cancelledAt &lt;= 1000</code></li>
-	<li><code>generatorFunction returns a generator object</code></li>
+	<li><code>generatorFunction</code> returns a generator object</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function cancellable<T>(
-    generator: Generator<Promise<any>, T, unknown>,
-): [() => void, Promise<T>] {
+function cancellable<T>(generator: Generator<Promise<any>, T, unknown>): [() => void, Promise<T>] {
     let cancel: () => void = () => {};
     const cancelPromise = new Promise((resolve, reject) => {
         cancel = () => reject('Cancelled');
@@ -160,9 +176,7 @@ function cancellable<T>(
         let next = generator.next();
         while (!next.done) {
             try {
-                next = generator.next(
-                    await Promise.race([next.value, cancelPromise]),
-                );
+                next = generator.next(await Promise.race([next.value, cancelPromise]));
             } catch (e) {
                 next = generator.throw(e);
             }
@@ -185,10 +199,8 @@ function cancellable<T>(
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

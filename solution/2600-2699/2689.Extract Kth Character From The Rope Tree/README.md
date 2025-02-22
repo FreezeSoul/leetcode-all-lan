@@ -1,10 +1,22 @@
-# [2689. 从 Rope 树中提取第 K 个字符](https://leetcode.cn/problems/extract-kth-character-from-the-rope-tree)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2689.Extract%20Kth%20Character%20From%20The%20Rope%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
+# [2689. 从 Rope 树中提取第 K 个字符 🔒](https://leetcode.cn/problems/extract-kth-character-from-the-rope-tree)
 
 [English Version](/solution/2600-2699/2689.Extract%20Kth%20Character%20From%20The%20Rope%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个二叉树的根节点 <code>root</code> 和整数 <code>k</code>。除了左右孩子之外，该树的每个节点还有另外两个属性：一个仅包含小写英文字母（可能为空）的 <strong>字符串</strong> <code>node.val</code> 和一个非负整数 <code>node.len</code>。这棵树中有两种类型的节点：</p>
 
@@ -70,11 +82,13 @@
 	<li><code>1 &lt;= k &lt;= S[root].length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们可以使用深度优先搜索的方法，定义一个函数 $dfs(root)$，表示从根节点开始搜索，返回以 $root$ 为根节点的子树的字符串。那么答案就是 $dfs(root)[k-1]$。
 
@@ -88,9 +102,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a rope tree node.
@@ -112,9 +124,7 @@ class Solution:
         return dfs(root)[k - 1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -160,7 +170,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -179,7 +189,7 @@ class Solution {
 class Solution {
 public:
     char getKthCharacter(RopeTreeNode* root, int k) {
-        function<string(RopeTreeNode* root)> dfs = [&](RopeTreeNode* root) -> string {
+        function<string(RopeTreeNode * root)> dfs = [&](RopeTreeNode* root) -> string {
             if (root == nullptr) {
                 return "";
             }
@@ -195,7 +205,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -223,10 +233,8 @@ func getKthCharacter(root *RopeTreeNode, k int) byte {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

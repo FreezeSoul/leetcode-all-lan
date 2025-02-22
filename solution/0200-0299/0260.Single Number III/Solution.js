@@ -3,17 +3,14 @@
  * @return {number[]}
  */
 var singleNumber = function (nums) {
-    let eor = 0;
+    const xs = nums.reduce((a, b) => a ^ b);
+    const lb = xs & -xs;
+    let a = 0;
     for (const x of nums) {
-        eor ^= x;
-    }
-    const lowbit = eor & -eor;
-    let ans = [0];
-    for (const x of nums) {
-        if ((x & lowbit) == 0) {
-            ans[0] ^= x;
+        if (x & lb) {
+            a ^= x;
         }
     }
-    ans.push(eor ^ ans[0]);
-    return ans;
+    const b = xs ^ a;
+    return [a, b];
 };

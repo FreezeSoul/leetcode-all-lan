@@ -1,10 +1,20 @@
-# [580. 统计各专业学生人数](https://leetcode.cn/problems/count-student-number-in-departments)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0580.Count%20Student%20Number%20in%20Departments/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [580. 统计各专业学生人数 🔒](https://leetcode.cn/problems/count-student-number-in-departments)
 
 [English Version](/solution/0500-0599/0580.Count%20Student%20Number%20in%20Departments/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表:&nbsp;<code>Student</code></p>
 
@@ -17,7 +27,7 @@
 | gender       | varchar |
 | dept_id      | int     |
 +--------------+---------+
-Student_id是该表的主键。
+student_id 是该表的主键（具有唯一值的列）。
 dept_id是Department表中dept_id的外键。
 该表的每一行都表示学生的姓名、性别和所属系的id。
 </pre>
@@ -33,16 +43,16 @@ dept_id是Department表中dept_id的外键。
 | dept_id     | int     |
 | dept_name   | varchar |
 +-------------+---------+
-Dept_id是该表的主键。
+dept_id是该表的主键（具有唯一值的列）。
 该表的每一行包含一个部门的id和名称。</pre>
 
 <p>&nbsp;</p>
 
-<p>编写一个SQL查询，为&nbsp;<code>Department</code>&nbsp;表中的所有部门(甚至是没有当前学生的部门)报告各自的部门名称和每个部门的学生人数。</p>
+<p>编写解决方案，为&nbsp;<code>Department</code>&nbsp;表中的所有部门(甚至是没有当前学生的部门)报告各自的部门名称和每个部门的学生人数。</p>
 
 <p>按 <code>student_number</code> <strong>降序&nbsp;</strong>返回结果表。如果是平局，则按 <code>dept_name</code> 的&nbsp; <strong>字母顺序&nbsp;</strong>排序。</p>
 
-<p>查询结果格式如下所示。</p>
+<p>结果格式如下所示。</p>
 
 <p>&nbsp;</p>
 
@@ -75,23 +85,32 @@ Department 表:
 | Law         | 0              |
 +-------------+----------------+</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：左连接 + 分组统计
+
+我们可以使用左连接，将 `Department` 表与 `Student` 表按照 `dept_id` 进行连接，然后按照 `dept_id` 分组统计学生人数，最后按照 `student_number` 降序、`dept_name` 升序排序即可。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT
-    department.dept_name, COUNT(student.dept_id) student_number
+# Write your MySQL query statement below
+SELECT dept_name, COUNT(student_id) AS student_number
 FROM
-    Student
-        RIGHT JOIN
-    Department ON student.dept_id = department.dept_id
-GROUP BY dept_name
-ORDER BY student_number DESC , dept_name;
+    Department
+    LEFT JOIN Student USING (dept_id)
+GROUP BY dept_id
+ORDER BY 2 DESC, 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

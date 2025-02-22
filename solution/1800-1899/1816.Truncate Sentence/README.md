@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1816.Truncate%20Sentence/README.md
+rating: 1235
+source: 第 235 场周赛 Q1
+tags:
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1816. 截断句子](https://leetcode.cn/problems/truncate-sentence)
 
 [English Version](/solution/1800-1899/1816.Truncate%20Sentence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>句子</strong> 是一个单词列表，列表中的单词之间用单个空格隔开，且不存在前导或尾随空格。每个单词仅由大小写英文字母组成（不含标点符号）。</p>
 
@@ -53,13 +66,15 @@ s 中的单词为 ["What", "is" "the", "solution", "to", "this", "problem"]
 	<li>不存在前导或尾随空格</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-我们从前往后遍历字符串 $s$，对于当前遍历到的字符 $s[i]$，如果 $s[i]$ 是空格，那么 $k$ 自减 1，当 $k$ 为 0 时，说明已经截取了 $k$ 个单词，截取字符串 $s[0:i]$ 返回即可。
+我们从前往后遍历字符串 $s$，对于当前遍历到的字符 $s[i]$，如果 $s[i]$ 是空格，那么 $k$ 自减 $1$，当 $k$ 为 $0$ 时，说明已经截取了 $k$ 个单词，截取字符串 $s[0..i)$ 返回即可。
 
 遍历结束，返回 $s$ 即可。
 
@@ -67,9 +82,7 @@ s 中的单词为 ["What", "is" "the", "solution", "to", "this", "problem"]
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,19 +90,7 @@ class Solution:
         return ' '.join(s.split()[:k])
 ```
 
-```python
-class Solution:
-    def truncateSentence(self, s: str, k: int) -> str:
-        for i, c in enumerate(s):
-            k -= c == ' '
-            if k == 0:
-                return s[:i]
-        return s
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func truncateSentence(s string, k int) string {
@@ -136,7 +137,20 @@ func truncateSentence(s string, k int) string {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function truncateSentence(s: string, k: number): string {
+    for (let i = 0; i < s.length; ++i) {
+        if (s[i] === ' ' && --k === 0) {
+            return s.slice(0, i);
+        }
+    }
+    return s;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -146,7 +160,7 @@ func truncateSentence(s string, k int) string {
  */
 var truncateSentence = function (s, k) {
     for (let i = 0; i < s.length; ++i) {
-        if (s[i] == ' ' && --k == 0) {
+        if (s[i] === ' ' && --k === 0) {
             return s.slice(0, i);
         }
     }
@@ -154,10 +168,30 @@ var truncateSentence = function (s, k) {
 };
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def truncateSentence(self, s: str, k: int) -> str:
+        for i, c in enumerate(s):
+            k -= c == ' '
+            if k == 0:
+                return s[:i]
+        return s
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

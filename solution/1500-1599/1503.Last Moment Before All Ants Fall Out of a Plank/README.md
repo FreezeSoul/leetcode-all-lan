@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1503.Last%20Moment%20Before%20All%20Ants%20Fall%20Out%20of%20a%20Plank/README.md
+rating: 1618
+source: 第 196 场周赛 Q2
+tags:
+    - 脑筋急转弯
+    - 数组
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [1503. 所有蚂蚁掉下来前的最后一刻](https://leetcode.cn/problems/last-moment-before-all-ants-fall-out-of-a-plank)
 
 [English Version](/solution/1500-1599/1503.Last%20Moment%20Before%20All%20Ants%20Fall%20Out%20of%20a%20Plank/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一块木板，长度为 <code>n</code> 个 <strong>单位</strong> 。一些蚂蚁在木板上移动，每只蚂蚁都以 <strong>每秒一个单位</strong> 的速度移动。其中，一部分蚂蚁向 <strong>左</strong> 移动，其他蚂蚁向 <strong>右</strong> 移动。</p>
 
@@ -66,23 +80,23 @@
 	<li><code>left</code> 和 <code>right</code> 中的所有值都是唯一的，并且每个值 <strong>只能出现在二者之一</strong> 中。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
 题目关键点在于两只蚂蚁相遇，然后分别调转方向的情况，实际上相当于两只蚂蚁继续往原来的方向移动。因此，我们只需要求出所有蚂蚁中最远的那只蚂蚁的移动距离即可。
 
-注意 $left$ 和 $right$ 数组的长度可能为 $0$。
+注意 $\textit{left}$ 和 $\textit{right}$ 数组的长度可能为 $0$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为木板的长度。
+时间复杂度 $O(n)$，其中 $n$ 为木板的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -95,9 +109,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +126,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -132,7 +144,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getLastMoment(n int, left []int, right []int) (ans int) {
@@ -144,16 +156,9 @@ func getLastMoment(n int, left []int, right []int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function getLastMoment(n: number, left: number[], right: number[]): number {
@@ -168,10 +173,8 @@ function getLastMoment(n: number, left: number[], right: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

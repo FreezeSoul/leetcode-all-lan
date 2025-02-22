@@ -1,10 +1,27 @@
-# [2152. 穿过所有点的所需最少直线数量](https://leetcode.cn/problems/minimum-number-of-lines-to-cover-points)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2152.Minimum%20Number%20of%20Lines%20to%20Cover%20Points/README.md
+tags:
+    - 位运算
+    - 几何
+    - 数组
+    - 哈希表
+    - 数学
+    - 动态规划
+    - 回溯
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
+# [2152. 穿过所有点的所需最少直线数量 🔒](https://leetcode.cn/problems/minimum-number-of-lines-to-cover-points)
 
 [English Version](/solution/2100-2199/2152.Minimum%20Number%20of%20Lines%20to%20Cover%20Points/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个 <code>points</code>&nbsp;数组，<code>points[i] = [xi, yi]</code>&nbsp;表示直角坐标系 <strong>X-Y</strong> 的一个点。</p>
 
@@ -44,11 +61,13 @@
 	<li><code>points</code>&nbsp;中元素都是唯一的</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + 记忆化搜索**
+### 方法一：状态压缩 + 记忆化搜索
 
 我们可以用一个整数 `state` 来表示当前已经添加的直线，其中 `state` 的第 $i$ 位表示第 $i$ 条直线是否已经添加。如果 `state` 的第 $i$ 位为 $1$，则表示第 $i$ 条直线已经添加，否则表示第 $i$ 条直线还未添加。
 
@@ -65,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,9 +116,7 @@ class Solution:
         return dfs(0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -152,7 +167,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -194,7 +209,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumLines(points [][]int) int {
@@ -236,25 +251,10 @@ func minimumLines(points [][]int) int {
 	}
 	return dfs(0)
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
-# [1173. Immediate Food Delivery I](https://leetcode.com/problems/immediate-food-delivery-i)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1173.Immediate%20Food%20Delivery%20I/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1173. Immediate Food Delivery I 🔒](https://leetcode.com/problems/immediate-food-delivery-i)
 
 [中文文档](/solution/1100-1199/1173.Immediate%20Food%20Delivery%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Delivery</code></p>
 
@@ -15,7 +27,7 @@
 | order_date                  | date    |
 | customer_pref_delivery_date | date    |
 +-----------------------------+---------+
-delivery_id is the primary key of this table.
+delivery_id is the primary key (column with unique values) of this table.
 The table holds information about food delivery to customers that make orders at some date and specify a preferred delivery date (on the same order date or after it).
 </pre>
 
@@ -23,9 +35,9 @@ The table holds information about food delivery to customers that make orders at
 
 <p>If the customer&#39;s preferred delivery date is the same as the order date, then the order is called <strong>immediate;</strong> otherwise, it is called <strong>scheduled</strong>.</p>
 
-<p>Write an SQL query to find the percentage of immediate orders in the table, <strong>rounded to 2 decimal places</strong>.</p>
+<p>Write a solution to find the percentage of immediate orders in the table, <strong>rounded to 2 decimal places</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -52,21 +64,29 @@ Delivery table:
 <strong>Explanation:</strong> The orders with delivery id 2 and 3 are immediate while the others are scheduled.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sum
+
+We can use the `sum` function to count the number of instant orders, and then divide it by the total number of orders. Since the problem requires a percentage, we need to multiply by 100. Finally, we can use the `round` function to keep two decimal places.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    round(
-        sum(if(order_date = customer_pref_delivery_date, 1, 0)) / count(1) * 100,
-        2
-    ) as immediate_percentage
-from
-    Delivery;
+SELECT
+    ROUND(SUM(order_date = customer_pref_delivery_date) / COUNT(1) * 100, 2) AS immediate_percentage
+FROM Delivery;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

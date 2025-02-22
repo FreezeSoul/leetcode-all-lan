@@ -1,10 +1,20 @@
-# [1479. 周内每天的销售情况](https://leetcode.cn/problems/sales-by-day-of-the-week)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1479.Sales%20by%20Day%20of%20the%20Week/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1479. 周内每天的销售情况 🔒](https://leetcode.cn/problems/sales-by-day-of-the-week)
 
 [English Version](/solution/1400-1499/1479.Sales%20by%20Day%20of%20the%20Week/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>Orders</code></p>
 
@@ -18,7 +28,7 @@
 | item_id       | varchar |
 | quantity      | int     |
 +---------------+---------+
-(order_id, item_id) 是该表主键
+(order_id, item_id) 是该表主键(具有唯一值的列的组合)
 该表包含了订单信息
 order_date 是id为 item_id 的商品被id为 customer_id 的消费者订购的日期.</pre>
 
@@ -32,7 +42,7 @@ order_date 是id为 item_id 的商品被id为 customer_id 的消费者订购的�
 | item_name           | varchar |
 | item_category       | varchar |
 +---------------------+---------+
-item_id 是该表主键
+item_id 是该表主键(具有唯一值的列)
 item_name 是商品的名字
 item_category&nbsp;是商品的类别
 </pre>
@@ -41,11 +51,11 @@ item_category&nbsp;是商品的类别
 
 <p>你是企业主，想要获得分类商品和周内每天的销售报告。</p>
 
-<p>写一个SQL语句，报告 <strong>周内每天 </strong>每个商品类别下订购了多少单位。</p>
+<p>编写解决方案，报告 <strong>周内每天 </strong>每个商品类别下订购了多少单位。</p>
 
 <p>返回结果表单<strong> 按商品类别排序 </strong>。</p>
 
-<p>查询结果格式如下例所示。</p>
+<p>结果格式如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -98,16 +108,38 @@ Orders</code> 表：
 在周天(2020-06-14, 2020-06-21)，Phone分类(ids: 3, 4)下，总共销售了10个单位(5 + 5)
 没有销售 T-Shirt 类别的商品</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    item_category AS category,
+    SUM(IF(DAYOFWEEK(order_date) = '2', quantity, 0)) AS Monday,
+    SUM(IF(DAYOFWEEK(order_date) = '3', quantity, 0)) AS Tuesday,
+    SUM(IF(DAYOFWEEK(order_date) = '4', quantity, 0)) AS Wednesday,
+    SUM(IF(DAYOFWEEK(order_date) = '5', quantity, 0)) AS Thursday,
+    SUM(IF(DAYOFWEEK(order_date) = '6', quantity, 0)) AS Friday,
+    SUM(IF(DAYOFWEEK(order_date) = '7', quantity, 0)) AS Saturday,
+    SUM(IF(DAYOFWEEK(order_date) = '1', quantity, 0)) AS Sunday
+FROM
+    Orders AS o
+    RIGHT JOIN Items AS i ON o.item_id = i.item_id
+GROUP BY category
+ORDER BY category;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

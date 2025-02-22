@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2002.Maximum%20Product%20of%20the%20Length%20of%20Two%20Palindromic%20Subsequences/README.md
+rating: 1869
+source: 第 258 场周赛 Q3
+tags:
+    - 位运算
+    - 字符串
+    - 动态规划
+    - 回溯
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [2002. 两个回文子序列长度的最大乘积](https://leetcode.cn/problems/maximum-product-of-the-length-of-two-palindromic-subsequences)
 
 [English Version](/solution/2000-2099/2002.Maximum%20Product%20of%20the%20Length%20of%20Two%20Palindromic%20Subsequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串&nbsp;<code>s</code>&nbsp;，请你找到&nbsp;<code>s</code>&nbsp;中两个&nbsp;<strong>不相交回文子序列</strong>&nbsp;，使得它们长度的&nbsp;<strong>乘积最大</strong>&nbsp;。两个子序列在原字符串中如果没有任何相同下标的字符，则它们是&nbsp;<strong>不相交</strong>&nbsp;的。</p>
 
@@ -49,11 +65,13 @@
 	<li><code>s</code>&nbsp;只含有小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二进制枚举**
+### 方法一：二进制枚举
 
 我们注意到，字符串 $s$ 的长度不超过 $12$，因此我们可以使用二进制枚举的方法来枚举 $s$ 的所有子序列。不妨设 $s$ 的长度为 $n$，我们可以使用 $2^n$ 个长度为 $n$ 的二进制数来表示 $s$ 的所有子序列。对于每个二进制数，第 $i$ 位为 $1$ 表示 $s$ 的第 $i$ 个字符在子序列中，为 $0$ 表示不在子序列中。我们对于每个二进制数，判断其是否为回文子序列，并且记录在数组 $p$ 中。
 
@@ -63,9 +81,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -97,9 +113,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -139,7 +153,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -179,7 +193,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxProduct(s string) (ans int) {
@@ -217,19 +231,10 @@ func maxProduct(s string) (ans int) {
 	return
 
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

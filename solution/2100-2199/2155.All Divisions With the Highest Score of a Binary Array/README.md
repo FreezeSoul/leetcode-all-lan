@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2155.All%20Divisions%20With%20the%20Highest%20Score%20of%20a%20Binary%20Array/README.md
+rating: 1390
+source: 第 278 场周赛 Q2
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2155. 分组得分最高的所有下标](https://leetcode.cn/problems/all-divisions-with-the-highest-score-of-a-binary-array)
 
 [English Version](/solution/2100-2199/2155.All%20Divisions%20With%20the%20Highest%20Score%20of%20a%20Binary%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的二进制数组 <code>nums</code> ，数组长度为 <code>n</code> 。<code>nums</code> 可以按下标 <code>i</code>（ <code>0 &lt;= i &lt;= n</code> ）拆分成两个数组（可能为空）：<code>nums<sub>left</sub></code> 和 <code>nums<sub>right</sub></code> 。</p>
 
@@ -66,126 +78,90 @@
 	<li><code>nums[i]</code> 为 <code>0</code> 或 <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：前缀和
+
+我们从 $i = 0$ 开始，用两个变量 $\textit{l0}$ 和 $\textit{r1}$ 分别记录 $i$ 左侧和右侧的 $1$ 的个数，初始时 $\textit{l0} = 0$，而 $\textit{r1} = \sum \textit{nums}$。
+
+我们遍历数组 $\textit{nums}$，对于每个 $i$，更新 $\textit{l0}$ 和 $\textit{r1}$，计算当前分组得分 $t = \textit{l0} + \textit{r1}$，如果 $t$ 等于当前最大分组得分 $\textit{mx}$，则将 $i$ 加入答案数组，如果 $t$ 大于 $\textit{mx}$，则更新 $\textit{mx}$ 为 $t$，并将答案数组清空，然后将 $i$ 加入答案数组。
+
+遍历结束后，返回答案数组。
+
+时间复杂度 $O(n)$，其中 $n$ 为数组 $\textit{nums}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxScoreIndices(self, nums: List[int]) -> List[int]:
-        left, right = 0, sum(nums)
-        mx = right
+        l0, r1 = 0, sum(nums)
+        mx = r1
         ans = [0]
-        for i, num in enumerate(nums):
-            if num == 0:
-                left += 1
-            else:
-                right -= 1
-            t = left + right
+        for i, x in enumerate(nums, 1):
+            l0 += x ^ 1
+            r1 -= x
+            t = l0 + r1
             if mx == t:
-                ans.append(i + 1)
+                ans.append(i)
             elif mx < t:
                 mx = t
-                ans = [i + 1]
+                ans = [i]
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-
     public List<Integer> maxScoreIndices(int[] nums) {
-        int left = 0, right = sum(nums);
-        int mx = right;
+        int l0 = 0, r1 = Arrays.stream(nums).sum();
+        int mx = r1;
         List<Integer> ans = new ArrayList<>();
         ans.add(0);
-        for (int i = 0; i < nums.length; ++i) {
-            if (nums[i] == 0) {
-                ++left;
-            } else {
-                --right;
-            }
-            int t = left + right;
+        for (int i = 1; i <= nums.length; ++i) {
+            int x = nums[i - 1];
+            l0 += x ^ 1;
+            r1 -= x;
+            int t = l0 + r1;
             if (mx == t) {
-                ans.add(i + 1);
+                ans.add(i);
             } else if (mx < t) {
                 mx = t;
                 ans.clear();
-                ans.add(i + 1);
+                ans.add(i);
             }
         }
         return ans;
     }
-
-    private int sum(int[] nums) {
-        int s = 0;
-        for (int num : nums) {
-            s += num;
-        }
-        return s;
-    }
 }
 ```
 
-### **TypeScript**
-
-```ts
-function maxScoreIndices(nums: number[]): number[] {
-    const n = nums.length;
-    const total = nums.reduce((a, c) => a + c, 0);
-    let left = 0,
-        right = total;
-    let record: Array<number> = [total];
-    for (const num of nums) {
-        if (num == 0) {
-            left++;
-        } else {
-            right--;
-        }
-        record.push(left + right);
-    }
-    const max = Math.max(...record);
-    let ans: Array<number> = [];
-    for (let i = 0; i <= n; i++) {
-        if (record[i] == max) {
-            ans.push(i);
-        }
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> maxScoreIndices(vector<int>& nums) {
-        int left = 0, right = accumulate(nums.begin(), nums.end(), 0);
-        int mx = right;
-        vector<int> ans;
-        ans.push_back(0);
-        for (int i = 0; i < nums.size(); ++i) {
-            if (nums[i] == 0)
-                ++left;
-            else
-                --right;
-            int t = left + right;
-            if (mx == t)
-                ans.push_back(i + 1);
-            else if (mx < t) {
+        int l0 = 0, r1 = accumulate(nums.begin(), nums.end(), 0);
+        int mx = r1;
+        vector<int> ans = {0};
+        for (int i = 1; i <= nums.size(); ++i) {
+            int x = nums[i - 1];
+            l0 += x ^ 1;
+            r1 -= x;
+            int t = l0 + r1;
+            if (mx == t) {
+                ans.push_back(i);
+            } else if (mx < t) {
                 mx = t;
-                ans.clear();
-                ans.push_back(i + 1);
+                ans = {i};
             }
         }
         return ans;
@@ -193,23 +169,20 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxScoreIndices(nums []int) []int {
-	left, right := 0, 0
-	for _, num := range nums {
-		right += num
+	l0, r1 := 0, 0
+	for _, x := range nums {
+		r1 += x
 	}
-	mx := right
+	mx := r1
 	ans := []int{0}
-	for i, num := range nums {
-		if num == 0 {
-			left++
-		} else {
-			right--
-		}
-		t := left + right
+	for i, x := range nums {
+		l0 += x ^ 1
+		r1 -= x
+		t := l0 + r1
 		if mx == t {
 			ans = append(ans, i+1)
 		} else if mx < t {
@@ -221,10 +194,61 @@ func maxScoreIndices(nums []int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function maxScoreIndices(nums: number[]): number[] {
+    const n = nums.length;
+    let [l0, r1] = [0, nums.reduce((a, b) => a + b, 0)];
+    let mx = r1;
+    const ans: number[] = [0];
+    for (let i = 1; i <= n; ++i) {
+        const x = nums[i - 1];
+        l0 += x ^ 1;
+        r1 -= x;
+        const t = l0 + r1;
+        if (mx === t) {
+            ans.push(i);
+        } else if (mx < t) {
+            mx = t;
+            ans.length = 0;
+            ans.push(i);
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_score_indices(nums: Vec<i32>) -> Vec<i32> {
+        let mut l0 = 0;
+        let mut r1: i32 = nums.iter().sum();
+        let mut mx = r1;
+        let mut ans = vec![0];
+
+        for i in 1..=nums.len() {
+            let x = nums[i - 1];
+            l0 += x ^ 1;
+            r1 -= x;
+            let t = l0 + r1;
+            if mx == t {
+                ans.push(i as i32);
+            } else if mx < t {
+                mx = t;
+                ans = vec![i as i32];
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

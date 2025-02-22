@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1672.Richest%20Customer%20Wealth/README_EN.md
+rating: 1182
+source: Weekly Contest 217 Q1
+tags:
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1672. Richest Customer Wealth](https://leetcode.com/problems/richest-customer-wealth)
 
 [中文文档](/solution/1600-1699/1672.Richest%20Customer%20Wealth/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an <code>m x n</code> integer grid <code>accounts</code> where <code>accounts[i][j]</code> is the amount of money the <code>i​​​​​<sup>​​​​​​th</sup>​​​​</code> customer has in the <code>j​​​​​<sup>​​​​​​th</sup></code>​​​​ bank. Return<em> the <strong>wealth</strong> that the richest customer has.</em></p>
 
@@ -48,11 +63,21 @@ The 2nd customer is the richest with a wealth of 10.</pre>
 	<li><code>1 &lt;= accounts[i][j] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Summation
+
+We traverse `accounts` and find the maximum sum of each row.
+
+The time complexity is $O(m \times n)$, where $m$ and $n$ are the number of rows and columns in the grid, respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -60,7 +85,7 @@ class Solution:
         return max(sum(v) for v in accounts)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -79,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -94,25 +119,25 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumWealth(accounts [][]int) int {
-    ans := 0
-    for _, e := range accounts {
-        s := 0
-        for _, v := range e {
-            s += v
-        }
-        if ans < s {
-            ans = s
-        }
-    }
-    return ans
+	ans := 0
+	for _, e := range accounts {
+		s := 0
+		for _, v := range e {
+			s += v
+		}
+		if ans < s {
+			ans = s
+		}
+	}
+	return ans
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumWealth(accounts: number[][]): number {
@@ -127,26 +152,46 @@ function maximumWealth(accounts: number[][]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn maximum_wealth(accounts: Vec<Vec<i32>>) -> i32 {
-        accounts
-            .iter()
-            .map(|v| v.iter().sum())
-            .max()
-            .unwrap()
+        accounts.iter().map(|v| v.iter().sum()).max().unwrap()
     }
 }
 ```
 
-### **C**
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param Integer[][] $accounts
+     * @return Integer
+     */
+    function maximumWealth($accounts) {
+        $rs = 0;
+        for ($i = 0; $i < count($accounts); $i++) {
+            $sum = 0;
+            for ($j = 0; $j < count($accounts[$i]); $j++) {
+                $sum += $accounts[$i][$j];
+            }
+            if ($sum > $rs) {
+                $rs = $sum;
+            }
+        }
+        return $rs;
+    }
+}
+```
+
+#### C
 
 ```c
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
-int maximumWealth(int **accounts, int accountsSize, int *accountsColSize) {
+int maximumWealth(int** accounts, int accountsSize, int* accountsColSize) {
     int ans = INT_MIN;
     for (int i = 0; i < accountsSize; i++) {
         int sum = 0;
@@ -159,7 +204,7 @@ int maximumWealth(int **accounts, int accountsSize, int *accountsColSize) {
 }
 ```
 
-### **Kotlin**
+#### Kotlin
 
 ```kotlin
 class Solution {
@@ -176,31 +221,8 @@ class Solution {
 }
 ```
 
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param Integer[][] $accounts
-     * @return Integer
-     */
-    function maximumWealth($accounts) {
-        $rs = 0;
-        for ($i = 0; $i < count($accounts); $i++) {
-            $sum = 0;
-            for ($j = 0; $j < count($accounts[$i]); $j++)
-                $sum += $accounts[$i][$j];
-            if ($sum > $rs) $rs = $sum;
-        }
-        return $rs;
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

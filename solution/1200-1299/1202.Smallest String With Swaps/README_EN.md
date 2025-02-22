@@ -1,8 +1,28 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1202.Smallest%20String%20With%20Swaps/README_EN.md
+rating: 1855
+source: Weekly Contest 155 Q3
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Union Find
+    - Array
+    - Hash Table
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1202. Smallest String With Swaps](https://leetcode.com/problems/smallest-string-with-swaps)
 
 [中文文档](/solution/1200-1299/1202.Smallest%20String%20With%20Swaps/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code>, and an array of pairs of indices in the string&nbsp;<code>pairs</code>&nbsp;where&nbsp;<code>pairs[i] =&nbsp;[a, b]</code>&nbsp;indicates 2 indices(0-indexed) of the string.</p>
 
@@ -52,11 +72,23 @@ Swap s[0] and s[1], s = &quot;abc&quot;
 	<li><code>s</code>&nbsp;only contains lower case English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Union-Find
+
+We notice that the index pairs have transitivity, i.e., if $a$ and $b$ can be swapped, and $b$ and $c$ can be swapped, then $a$ and $c$ can also be swapped. Therefore, we can consider using a union-find data structure to maintain the connectivity of these index pairs, and sort the characters belonging to the same connected component in lexicographical order.
+
+Finally, we traverse the string. For the character at the current position, we replace it with the smallest character in the connected component, then remove this character from the connected component, and continue to traverse the string.
+
+The time complexity is $O(n \times \log n + m \times \alpha(m))$, and the space complexity is $O(n)$. Here, $n$ and $m$ are the length of the string and the number of index pairs, respectively, and $\alpha$ is the inverse Ackermann function.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -78,7 +110,7 @@ class Solution:
         return "".join(d[find(i)].pop() for i in range(n))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +151,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -155,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestStringWithSwaps(s string, pairs [][]int) string {
@@ -193,7 +225,7 @@ func smallestStringWithSwaps(s string, pairs [][]int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallestStringWithSwaps(s: string, pairs: number[][]): string {
@@ -223,10 +255,69 @@ function smallestStringWithSwaps(s: string, pairs: number[][]): string {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn smallest_string_with_swaps(s: String, pairs: Vec<Vec<i32>>) -> String {
+        let n = s.as_bytes().len();
+        let s = s.as_bytes();
+        let mut disjoint_set: Vec<usize> = vec![0; n];
+        let mut str_vec: Vec<Vec<u8>> = vec![Vec::new(); n];
+        let mut ret_str = String::new();
 
+        // Initialize the disjoint set
+        for i in 0..n {
+            disjoint_set[i] = i;
+        }
+
+        // Union the pairs
+        for pair in pairs {
+            Self::union(pair[0] as usize, pair[1] as usize, &mut disjoint_set);
+        }
+
+        // Initialize the return vector
+        for (i, c) in s.iter().enumerate() {
+            let p_c = Self::find(i, &mut disjoint_set);
+            str_vec[p_c].push(*c);
+        }
+
+        // Sort the return vector in reverse order
+        for cur_vec in &mut str_vec {
+            cur_vec.sort();
+            cur_vec.reverse();
+        }
+
+        // Construct the return string
+        for i in 0..n {
+            let index = Self::find(i, &mut disjoint_set);
+            ret_str.push(str_vec[index].last().unwrap().clone() as char);
+            str_vec[index].pop();
+        }
+
+        ret_str
+    }
+
+    #[allow(dead_code)]
+    fn find(x: usize, d_set: &mut Vec<usize>) -> usize {
+        if d_set[x] != x {
+            d_set[x] = Self::find(d_set[x], d_set);
+        }
+        d_set[x]
+    }
+
+    #[allow(dead_code)]
+    fn union(x: usize, y: usize, d_set: &mut Vec<usize>) {
+        let p_x = Self::find(x, d_set);
+        let p_y = Self::find(y, d_set);
+        d_set[p_x] = p_y;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

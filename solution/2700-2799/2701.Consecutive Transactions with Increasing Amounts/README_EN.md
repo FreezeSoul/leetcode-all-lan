@@ -1,8 +1,20 @@
-# [2701. Consecutive Transactions with Increasing Amounts](https://leetcode.com/problems/consecutive-transactions-with-increasing-amounts)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2701.Consecutive%20Transactions%20with%20Increasing%20Amounts/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2701. Consecutive Transactions with Increasing Amounts 🔒](https://leetcode.com/problems/consecutive-transactions-with-increasing-amounts)
 
 [中文文档](/solution/2700-2799/2701.Consecutive%20Transactions%20with%20Increasing%20Amounts/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Transactions</code></p>
 
@@ -65,14 +77,49 @@ customer_id is sorted in ascending order.
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            t1.*,
+            SUM(
+                CASE
+                    WHEN t2.customer_id IS NULL THEN 1
+                    ELSE 0
+                END
+            ) OVER (ORDER BY customer_id, transaction_date) AS s
+        FROM
+            Transactions AS t1
+            LEFT JOIN Transactions AS t2
+                ON t1.customer_id = t2.customer_id
+                AND t1.amount > t2.amount
+                AND DATEDIFF(t1.transaction_date, t2.transaction_date) = 1
+    )
+SELECT
+    customer_id,
+    MIN(transaction_date) AS consecutive_start,
+    MAX(transaction_date) AS consecutive_end
+FROM T
+GROUP BY customer_id, s
+HAVING COUNT(1) >= 3
+ORDER BY customer_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

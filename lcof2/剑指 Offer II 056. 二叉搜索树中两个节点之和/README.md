@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20056.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E4%B8%A4%E4%B8%AA%E8%8A%82%E7%82%B9%E4%B9%8B%E5%92%8C/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 056. 二叉搜索树中两个节点之和](https://leetcode.cn/problems/opLdQZ)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个二叉搜索树的 <strong>根节点</strong> <code>root</code>&nbsp;和一个整数 <code>k</code> , 请判断该二叉搜索树中是否存在两个节点它们的值之和等于 <code>k</code> 。假设二叉搜索树中节点的值均唯一。</p>
 
@@ -39,17 +46,17 @@
 
 <p>注意：本题与主站 653 题相同：&nbsp;<a href="https://leetcode.cn/problems/two-sum-iv-input-is-a-bst/">https://leetcode.cn/problems/two-sum-iv-input-is-a-bst/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用哈希表记录访问过的节点。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -72,9 +79,7 @@ class Solution:
         return find(root)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -113,37 +118,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function findTarget(root: TreeNode | null, k: number): boolean {
-    let nodes: Set<number> = new Set();
-    return find(root, k, nodes);
-}
-
-function find(root: TreeNode | null, k: number, nodes: Set<number>): boolean {
-    if (!root) return false;
-    if (nodes.has(k - root.val)) return true;
-    nodes.add(root.val);
-    return find(root.left, k, nodes) || find(root.right, k, nodes);
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -174,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -203,10 +178,84 @@ func findTarget(root *TreeNode, k int) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function findTarget(root: TreeNode | null, k: number): boolean {
+    let nodes: Set<number> = new Set();
+    return find(root, k, nodes);
+}
+
+function find(root: TreeNode | null, k: number, nodes: Set<number>): boolean {
+    if (!root) return false;
+    if (nodes.has(k - root.val)) return true;
+    nodes.add(root.val);
+    return find(root.left, k, nodes) || find(root.right, k, nodes);
+}
 ```
 
+#### Swift
+
+```swift
+/* class TreeNode {
+*     var val: Int
+*     var left: TreeNode?
+*     var right: TreeNode?
+*     init() {
+*         self.val = 0
+*         self.left = nil
+*         self.right = nil
+*     }
+*     init(_ val: Int) {
+*         self.val = val
+*         self.left = nil
+*         self.right = nil
+*     }
+*     init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+*         self.val = val
+*         self.left = left
+*         self.right = right
+*     }
+* }
+*/
+
+class Solution {
+    private var nodes: Set<Int> = []
+
+    func findTarget(_ root: TreeNode?, _ k: Int) -> Bool {
+        nodes = []
+        return find(root, k)
+    }
+
+    private func find(_ root: TreeNode?, _ k: Int) -> Bool {
+        guard let node = root else {
+            return false
+        }
+        if nodes.contains(k - node.val) {
+            return true
+        }
+        nodes.insert(node.val)
+        return find(node.left, k) || find(node.right, k)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

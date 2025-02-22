@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0862.Shortest%20Subarray%20with%20Sum%20at%20Least%20K/README.md
+tags:
+    - 队列
+    - 数组
+    - 二分查找
+    - 前缀和
+    - 滑动窗口
+    - 单调队列
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [862. 和至少为 K 的最短子数组](https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k)
 
 [English Version](/solution/0800-0899/0862.Shortest%20Subarray%20with%20Sum%20at%20Least%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> ，找出 <code>nums</code> 中和至少为 <code>k</code> 的 <strong>最短非空子数组</strong> ，并返回该子数组的长度。如果不存在这样的 <strong>子数组</strong> ，返回 <code>-1</code> 。</p>
 
@@ -46,15 +62,17 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和 + 单调队列**
+### 方法一：前缀和 + 单调队列
 
 题目要求找到一个最短的子数组，使得子数组的和大于等于 $k$。不难想到，可以使用前缀和快速计算子数组的和。
 
-我们用一个长度为 $n+1$ 的数组 $s[i]$ 表示数组 `nums` 前 $i$ 个元素的和。另外，我们需要维护一个严格单调递增的队列 $q$，队列中存储的是前缀和数组 $s[i]$ 的下标。注意，这里的单调递增是指下标对应的前缀和的大小，而不是下标的大小。
+我们用一个长度为 $n+1$ 的数组 $s[i]$ 表示数组 $nums$ 前 $i$ 个元素的和。另外，我们需要维护一个严格单调递增的队列 $q$，队列中存储的是前缀和数组 $s[i]$ 的下标。注意，这里的单调递增是指下标对应的前缀和的大小，而不是下标的大小。
 
 为什么存的是下标呢？这是为了方便计算子数组的长度。那为什么队列严格单调递增？我们可以用反证法来说明。
 
@@ -68,13 +86,11 @@
 
 遍历结束，如果我们没有找到可行解，那么返回 $-1$。否则，返回答案。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `nums` 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +107,7 @@ class Solution:
         return -1 if ans == inf else ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -143,7 +157,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestSubarray(nums []int, k int) int {
@@ -169,19 +183,68 @@ func shortestSubarray(nums []int, k int) int {
 	}
 	return ans
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function shortestSubarray(nums: number[], k: number): number {
+    const [n, MAX] = [nums.length, Number.POSITIVE_INFINITY];
+    const s = Array(n + 1).fill(0);
+    const q: number[] = [];
+    let ans = MAX;
+
+    for (let i = 0; i < n; i++) {
+        s[i + 1] = s[i] + nums[i];
+    }
+
+    for (let i = 0; i < n + 1; i++) {
+        while (q.length && s[i] - s[q[0]] >= k) {
+            ans = Math.min(ans, i - q.shift()!);
+        }
+
+        while (q.length && s[i] <= s[q.at(-1)!]) {
+            q.pop();
+        }
+
+        q.push(i);
+    }
+
+    return ans === MAX ? -1 : ans;
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+function shortestSubarray(nums, k) {
+    const [n, MAX] = [nums.length, Number.POSITIVE_INFINITY];
+    const s = Array(n + 1).fill(0);
+    const q = [];
+    let ans = MAX;
 
+    for (let i = 0; i < n; i++) {
+        s[i + 1] = s[i] + nums[i];
+    }
+
+    for (let i = 0; i < n + 1; i++) {
+        while (q.length && s[i] - s[q[0]] >= k) {
+            ans = Math.min(ans, i - q.shift());
+        }
+
+        while (q.length && s[i] <= s[q.at(-1)]) {
+            q.pop();
+        }
+
+        q.push(i);
+    }
+
+    return ans === MAX ? -1 : ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

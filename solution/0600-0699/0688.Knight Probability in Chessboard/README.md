@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0688.Knight%20Probability%20in%20Chessboard/README.md
+tags:
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [688. 骑士在棋盘上的概率](https://leetcode.cn/problems/knight-probability-in-chessboard)
 
 [English Version](/solution/0600-0699/0688.Knight%20Probability%20in%20Chessboard/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一个&nbsp;<code>n x n</code>&nbsp;的国际象棋棋盘上，一个骑士从单元格 <code>(row, column)</code>&nbsp;开始，并尝试进行 <code>k</code> 次移动。行和列是 <strong>从 0 开始</strong> 的，所以左上单元格是 <code>(0,0)</code> ，右下单元格是 <code>(n - 1, n - 1)</code> 。</p>
 
@@ -47,33 +57,33 @@
 	<li><code>0 &lt;= row, column &lt;= n - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-我们定义 $f[h][i][j]$ 表示骑士从 $(i, j)$ 位置出发，走了 $h$ 步以后还留在棋盘上的概率。那么最终答案就是 $f[k][row][column]$。
+我们定义 $f[h][i][j]$ 表示骑士从 $(i, j)$ 位置出发，走了 $h$ 步以后还留在棋盘上的概率。那么最终答案就是 $f[k][\textit{row}][\textit{column}]$。
 
 当 $h=0$ 时，骑士一定在棋盘上，概率为 $1$，即 $f[0][i][j]=1$。
 
 当 $h \gt 0$ 时，骑士在 $(i, j)$ 位置上的概率可以由其上一步的 $8$ 个位置上的概率转移得到，即：
 
 $$
-f[h][i][j] = \sum_{a, b} f[h - 1][a][b] \times \frac{1}{8}
+f[h][i][j] = \sum_{x, y} f[h - 1][x][y] \times \frac{1}{8}
 $$
 
-其中 $(a, b)$ 是从 $(i, j)$ 位置可以走到的 $8$ 个位置中的一个。
+其中 $(x, y)$ 是从 $(i, j)$ 位置可以走到的 $8$ 个位置中的一个。
 
-最终答案即为 $f[k][row][column]$。
+最终答案即为 $f[k][\textit{row}][\textit{column}]$。
 
 时间复杂度 $O(k \times n^2)$，空间复杂度 $O(k \times n^2)$。其中 $k$ 和 $n$ 分别是给定的步数和棋盘大小。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +102,7 @@ class Solution:
         return f[k][row][column]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -123,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -154,7 +162,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func knightProbability(n int, k int, row int, column int) float64 {
@@ -185,18 +193,13 @@ func knightProbability(n int, k int, row int, column int) float64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function knightProbability(
-    n: number,
-    k: number,
-    row: number,
-    column: number,
-): number {
-    const f = new Array(k + 1)
-        .fill(0)
-        .map(() => new Array(n).fill(0).map(() => new Array(n).fill(0)));
+function knightProbability(n: number, k: number, row: number, column: number): number {
+    const f = Array.from({ length: k + 1 }, () =>
+        Array.from({ length: n }, () => Array(n).fill(0)),
+    );
     for (let i = 0; i < n; ++i) {
         for (let j = 0; j < n; ++j) {
             f[0][i][j] = 1;
@@ -220,10 +223,48 @@ function knightProbability(
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn knight_probability(n: i32, k: i32, row: i32, column: i32) -> f64 {
+        let n = n as usize;
+        let k = k as usize;
 
+        let mut f = vec![vec![vec![0.0; n]; n]; k + 1];
+
+        for i in 0..n {
+            for j in 0..n {
+                f[0][i][j] = 1.0;
+            }
+        }
+
+        let dirs = [-2, -1, 2, 1, -2, 1, 2, -1, -2];
+
+        for h in 1..=k {
+            for i in 0..n {
+                for j in 0..n {
+                    for p in 0..8 {
+                        let x = i as isize + dirs[p];
+                        let y = j as isize + dirs[p + 1];
+
+                        if x >= 0 && x < n as isize && y >= 0 && y < n as isize {
+                            let x = x as usize;
+                            let y = y as usize;
+                            f[h][i][j] += f[h - 1][x][y] / 8.0;
+                        }
+                    }
+                }
+            }
+        }
+
+        f[k][row as usize][column as usize]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

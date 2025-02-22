@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0103.Binary%20Tree%20Zigzag%20Level%20Order%20Traversal/README_EN.md
+tags:
+    - Tree
+    - Breadth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [103. Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal)
 
 [中文文档](/solution/0100-0199/0103.Binary%20Tree%20Zigzag%20Level%20Order%20Traversal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree, return <em>the zigzag level order traversal of its nodes&#39; values</em>. (i.e., from left to right, then right to left for the next level and alternate between).</p>
 
@@ -36,11 +50,21 @@
 	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: BFS
+
+To implement zigzag level order traversal, we need to add a flag `left` on the basis of level order traversal. This flag is used to mark the order of the node values in the current level. If `left` is `true`, the node values of the current level are stored in the result array `ans` from left to right. If `left` is `false`, the node values of the current level are stored in the result array `ans` from right to left.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -71,7 +95,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -121,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -139,7 +163,9 @@ class Solution {
 public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         vector<vector<int>> ans;
-        if (!root) return ans;
+        if (!root) {
+            return ans;
+        }
         queue<TreeNode*> q{{root}};
         int left = 1;
         while (!q.empty()) {
@@ -148,10 +174,16 @@ public:
                 auto node = q.front();
                 q.pop();
                 t.emplace_back(node->val);
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
+                if (node->left) {
+                    q.push(node->left);
+                }
+                if (node->right) {
+                    q.push(node->right);
+                }
             }
-            if (!left) reverse(t.begin(), t.end());
+            if (!left) {
+                reverse(t.begin(), t.end());
+            }
             ans.emplace_back(t);
             left ^= 1;
         }
@@ -160,7 +192,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -202,7 +234,104 @@ func zigzagLevelOrder(root *TreeNode) (ans [][]int) {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function zigzagLevelOrder(root: TreeNode | null): number[][] {
+    const ans: number[][] = [];
+    if (!root) {
+        return ans;
+    }
+    const q: TreeNode[] = [root];
+    let left: number = 1;
+    while (q.length) {
+        const t: number[] = [];
+        const qq: TreeNode[] = [];
+        for (const { val, left, right } of q) {
+            t.push(val);
+            left && qq.push(left);
+            right && qq.push(right);
+        }
+        ans.push(left ? t : t.reverse());
+        q.splice(0, q.length, ...qq);
+        left ^= 1;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::collections::VecDeque;
+use std::rc::Rc;
+impl Solution {
+    pub fn zigzag_level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+        let mut ans = Vec::new();
+        let mut left = true;
+        if let Some(root_node) = root {
+            let mut q = VecDeque::new();
+            q.push_back(root_node);
+            while !q.is_empty() {
+                let mut t = Vec::new();
+                for _ in 0..q.len() {
+                    if let Some(node) = q.pop_front() {
+                        let node_ref = node.borrow();
+                        t.push(node_ref.val);
+                        if let Some(ref left) = node_ref.left {
+                            q.push_back(Rc::clone(left));
+                        }
+                        if let Some(ref right) = node_ref.right {
+                            q.push_back(Rc::clone(right));
+                        }
+                    }
+                }
+                if !left {
+                    t.reverse();
+                }
+                ans.push(t);
+                left = !left;
+            }
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -226,126 +355,22 @@ var zigzagLevelOrder = function (root) {
     let left = 1;
     while (q.length) {
         const t = [];
-        for (let n = q.length; n; --n) {
-            const node = q.shift();
-            t.push(node.val);
-            if (node.left) {
-                q.push(node.left);
-            }
-            if (node.right) {
-                q.push(node.right);
-            }
+        const qq = [];
+        for (const { val, left, right } of q) {
+            t.push(val);
+            left && qq.push(left);
+            right && qq.push(right);
         }
-        if (!left) {
-            t.reverse();
-        }
-        ans.push(t);
+        ans.push(left ? t : t.reverse());
+        q.splice(0, q.length, ...qq);
         left ^= 1;
     }
     return ans;
 };
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function zigzagLevelOrder(root: TreeNode | null): number[][] {
-    const res = [];
-    if (root == null) {
-        return res;
-    }
-    let isDesc = false;
-    const queue = [root];
-    while (queue.length !== 0) {
-        const arr = queue.slice().map(() => {
-            const { val, left, right } = queue.shift();
-            left && queue.push(left);
-            right && queue.push(right);
-            return val;
-        });
-        res.push(isDesc ? arr.reverse() : arr);
-        isDesc = !isDesc;
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
-use std::rc::Rc;
-use std::cell::RefCell;
-use std::collections::VecDeque;
-impl Solution {
-    pub fn zigzag_level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
-        let mut res = vec![];
-        if root.is_none() {
-            return res;
-        }
-        let mut is_desc = false;
-        let mut q = VecDeque::new();
-        q.push_back(root);
-        while !q.is_empty() {
-            let mut arr = vec![];
-            for _ in 0..q.len() {
-                if let Some(node) = q.pop_front().unwrap() {
-                    let mut node = node.borrow_mut();
-                    arr.push(node.val);
-                    if node.left.is_some() {
-                        q.push_back(node.left.take());
-                    }
-                    if node.right.is_some() {
-                        q.push_back(node.right.take());
-                    }
-                }
-            }
-            if is_desc {
-                arr.reverse();
-            }
-            is_desc = !is_desc;
-            res.push(arr);
-        }
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

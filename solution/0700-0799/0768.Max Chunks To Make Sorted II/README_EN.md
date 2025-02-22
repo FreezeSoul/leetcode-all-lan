@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0768.Max%20Chunks%20To%20Make%20Sorted%20II/README_EN.md
+tags:
+    - Stack
+    - Greedy
+    - Array
+    - Sorting
+    - Monotonic Stack
+---
+
+<!-- problem:start -->
+
 # [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii)
 
 [中文文档](/solution/0700-0799/0768.Max%20Chunks%20To%20Make%20Sorted%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>arr</code>.</p>
 
@@ -39,11 +55,17 @@ However, splitting into [2, 1], [3], [4], [4] is the highest number of chunks po
 	<li><code>0 &lt;= arr[i] &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -60,7 +82,7 @@ class Solution:
         return len(stk)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxChunksToSorted(arr []int) int {
@@ -125,7 +147,7 @@ func maxChunksToSorted(arr []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxChunksToSorted(arr: number[]): number {
@@ -145,7 +167,7 @@ function maxChunksToSorted(arr: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -157,7 +179,7 @@ impl Solution {
                 while !stack.is_empty() && num < stack.last().unwrap() {
                     stack.pop();
                 }
-                stack.push(max)
+                stack.push(max);
             } else {
                 stack.push(*num);
             }
@@ -167,10 +189,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

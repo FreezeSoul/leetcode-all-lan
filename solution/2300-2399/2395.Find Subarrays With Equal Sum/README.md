@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2395.Find%20Subarrays%20With%20Equal%20Sum/README.md
+rating: 1249
+source: 第 86 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+---
+
+<!-- problem:start -->
+
 # [2395. 和相等的子数组](https://leetcode.cn/problems/find-subarrays-with-equal-sum)
 
 [English Version](/solution/2300-2399/2395.Find%20Subarrays%20With%20Equal%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code>&nbsp;，判断是否存在&nbsp;<strong>两个</strong>&nbsp;长度为&nbsp;<code>2</code>&nbsp;的子数组且它们的&nbsp;<strong>和</strong>&nbsp;相等。注意，这两个子数组起始位置的下标必须&nbsp;<strong>不相同</strong>&nbsp;。</p>
 
@@ -45,11 +58,13 @@
 	<li><code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们可以遍历数组 $nums$，用哈希表 $vis$ 记录数组中每两个相邻元素的和，如果当前两个元素的和已经在哈希表中出现过，则返回 `true`，否则将当前两个元素的和加入哈希表中。
 
@@ -59,9 +74,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +87,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -111,7 +122,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findSubarrays(nums []int) bool {
@@ -127,7 +138,7 @@ func findSubarrays(nums []int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findSubarrays(nums: number[]): boolean {
@@ -143,7 +154,7 @@ function findSubarrays(nums: number[]): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -161,10 +172,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-bool findSubarrays(int *nums, int numsSize) {
+bool findSubarrays(int* nums, int numsSize) {
     for (int i = 1; i < numsSize - 1; i++) {
         for (int j = i + 1; j < numsSize; j++) {
             if (nums[i - 1] + nums[i] == nums[j - 1] + nums[j]) {
@@ -176,11 +187,8 @@ bool findSubarrays(int *nums, int numsSize) {
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

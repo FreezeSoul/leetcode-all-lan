@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0779.K-th%20Symbol%20in%20Grammar/README_EN.md
+tags:
+    - Bit Manipulation
+    - Recursion
+    - Math
+---
+
+<!-- problem:start -->
+
 # [779. K-th Symbol in Grammar](https://leetcode.com/problems/k-th-symbol-in-grammar)
 
 [中文文档](/solution/0700-0799/0779.K-th%20Symbol%20in%20Grammar/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>We build a table of <code>n</code> rows (<strong>1-indexed</strong>). We start by writing <code>0</code> in the <code>1<sup>st</sup></code> row. Now in every subsequent row, we look at the previous row and replace each occurrence of <code>0</code> with <code>01</code>, and each occurrence of <code>1</code> with <code>10</code>.</p>
 
@@ -49,11 +63,17 @@ row 2: 0<u>1</u>
 	<li><code>1 &lt;= k &lt;= 2<sup>n - 1</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,13 +85,7 @@ class Solution:
         return self.kthGrammar(n - 1, k - (1 << (n - 2))) ^ 1
 ```
 
-```python
-class Solution:
-    def kthGrammar(self, n: int, k: int) -> int:
-        return (k - 1).bit_count() & 1
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,15 +101,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int kthGrammar(int n, int k) {
-        return Integer.bitCount(k - 1) & 1;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,16 +114,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int kthGrammar(int n, int k) {
-        return __builtin_popcount(k - 1) & 1;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func kthGrammar(n int, k int) int {
@@ -131,16 +128,55 @@ func kthGrammar(n int, k int) int {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def kthGrammar(self, n: int, k: int) -> int:
+        return (k - 1).bit_count() & 1
+```
+
+#### Java
+
+```java
+class Solution {
+    public int kthGrammar(int n, int k) {
+        return Integer.bitCount(k - 1) & 1;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int kthGrammar(int n, int k) {
+        return __builtin_popcount(k - 1) & 1;
+    }
+};
+```
+
+#### Go
+
 ```go
 func kthGrammar(n int, k int) int {
 	return bits.OnesCount(uint(k-1)) & 1
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

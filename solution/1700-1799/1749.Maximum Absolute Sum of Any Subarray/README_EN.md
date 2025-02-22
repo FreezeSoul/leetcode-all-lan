@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1749.Maximum%20Absolute%20Sum%20of%20Any%20Subarray/README_EN.md
+rating: 1541
+source: Biweekly Contest 45 Q2
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1749. Maximum Absolute Sum of Any Subarray](https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray)
 
 [中文文档](/solution/1700-1799/1749.Maximum%20Absolute%20Sum%20of%20Any%20Subarray/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>. The <strong>absolute sum</strong> of a subarray <code>[nums<sub>l</sub>, nums<sub>l+1</sub>, ..., nums<sub>r-1</sub>, nums<sub>r</sub>]</code> is <code>abs(nums<sub>l</sub> + nums<sub>l+1</sub> + ... + nums<sub>r-1</sub> + nums<sub>r</sub>)</code>.</p>
 
@@ -40,9 +55,13 @@
 	<li><code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Dynamic Programming**
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
 
 We define $f[i]$ to represent the maximum value of the subarray ending with $nums[i]$, and define $g[i]$ to represent the minimum value of the subarray ending with $nums[i]$. Then the state transition equation of $f[i]$ and $g[i]$ is as follows:
 
@@ -61,7 +80,7 @@ Time complexity $O(n)$, space complexity $O(1)$, where $n$ is the length of the 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -75,7 +94,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +111,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxAbsoluteSum(nums []int) (ans int) {
@@ -129,23 +148,9 @@ func abs(x int) int {
 	}
 	return x
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxAbsoluteSum(nums: number[]): number {
@@ -161,10 +166,26 @@ function maxAbsoluteSum(nums: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn max_absolute_sum(nums: Vec<i32>) -> i32 {
+        let mut f = 0;
+        let mut g = 0;
+        let mut ans = 0;
+        for x in nums {
+            f = i32::max(f, 0) + x;
+            g = i32::min(g, 0) + x;
+            ans = i32::max(ans, f.max(-g));
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

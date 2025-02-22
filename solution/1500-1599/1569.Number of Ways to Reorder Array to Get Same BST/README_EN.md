@@ -1,8 +1,31 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1569.Number%20of%20Ways%20to%20Reorder%20Array%20to%20Get%20Same%20BST/README_EN.md
+rating: 2288
+source: Weekly Contest 204 Q4
+tags:
+    - Tree
+    - Union Find
+    - Binary Search Tree
+    - Memoization
+    - Array
+    - Math
+    - Divide and Conquer
+    - Dynamic Programming
+    - Binary Tree
+    - Combinatorics
+---
+
+<!-- problem:start -->
+
 # [1569. Number of Ways to Reorder Array to Get Same BST](https://leetcode.com/problems/number-of-ways-to-reorder-array-to-get-same-bst)
 
 [中文文档](/solution/1500-1599/1569.Number%20of%20Ways%20to%20Reorder%20Array%20to%20Get%20Same%20BST/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array <code>nums</code> that represents a permutation of integers from <code>1</code> to <code>n</code>. We are going to construct a binary search tree (BST) by inserting the elements of <code>nums</code> in order into an initially empty BST. Find the number of different ways to reorder <code>nums</code> so that the constructed BST is identical to that formed from the original array <code>nums</code>.</p>
 
@@ -53,9 +76,13 @@
 	<li>All integers in <code>nums</code> are <strong>distinct</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Combination Counting + Recursion**
+<!-- solution:start -->
+
+### Solution 1: Combination Counting + Recursion
 
 We design a function $dfs(nums)$, which is used to calculate the number of solutions of the binary search tree with $nums$ as nodes. Then the answer is $dfs(nums)-1$, because $dfs(nums)$ calculates the number of solutions of the binary search tree with $nums$ as nodes, while the problem requires the number of solutions of the binary search tree with $nums$ as nodes after reordering, so the answer needs to be subtracted by one.
 
@@ -75,7 +102,7 @@ The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Where $n$
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -100,7 +127,7 @@ class Solution:
         return (dfs(nums) - 1 + mod) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -144,7 +171,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -182,7 +209,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numOfWays(nums []int) int {
@@ -220,7 +247,7 @@ func numOfWays(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numOfWays(nums: number[]): number {
@@ -251,18 +278,14 @@ function numOfWays(nums: number[]): number {
         const n = right.length;
         const a = dfs(left);
         const b = dfs(right);
-        return Number(
-            (BigInt(c[m + n][m]) * BigInt(a) * BigInt(b)) % BigInt(mod),
-        );
+        return Number((BigInt(c[m + n][m]) * BigInt(a) * BigInt(b)) % BigInt(mod));
     };
     return (dfs(nums) - 1 + mod) % mod;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2430.Maximum%20Deletions%20on%20a%20String/README_EN.md
+rating: 2101
+source: Weekly Contest 313 Q4
+tags:
+    - String
+    - Dynamic Programming
+    - String Matching
+    - Hash Function
+    - Rolling Hash
+---
+
+<!-- problem:start -->
+
 # [2430. Maximum Deletions on a String](https://leetcode.com/problems/maximum-deletions-on-a-string)
 
 [中文文档](/solution/2400-2499/2430.Maximum%20Deletions%20on%20a%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> consisting of only lowercase English letters. In one operation, you can:</p>
 
@@ -57,11 +75,30 @@ We used 4 operations so return 4. It can be proven that 4 is the maximum number 
 	<li><code>s</code> consists only of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Memoization Search
+
+We design a function $dfs(i)$, which represents the maximum number of operations needed to delete all characters from $s[i..]$. The answer is $dfs(0)$.
+
+The calculation process of the function $dfs(i)$ is as follows:
+
+-   If $i \geq n$, then $dfs(i) = 0$, return directly.
+-   Otherwise, we enumerate the length of the string $j$, where $1 \leq j \leq (n-1)/2$. If $s[i..i+j] = s[i+j..i+j+j]$, we can delete $s[i..i+j]$, then $dfs(i)=max(dfs(i), dfs(i+j)+1)$. We need to enumerate all $j$ to find the maximum value of $dfs(i)$.
+
+Here we need to quickly determine whether $s[i..i+j]$ is equal to $s[i+j..i+j+j]$. We can preprocess all the longest common prefixes of string $s$, that is, $g[i][j]$ represents the length of the longest common prefix of $s[i..]$ and $s[j..]$. In this way, we can quickly determine whether $s[i..i+j]$ is equal to $s[i+j..i+j+j]$, that is, $g[i][i+j] \geq j$.
+
+To avoid repeated calculations, we can use memoization search and use an array $f$ to record the value of the function $dfs(i)$.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Here, $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +109,7 @@ class Solution:
                 return 0
             ans = 1
             for j in range(1, (n - i) // 2 + 1):
-                if s[i: i + j] == s[i + j: i + j + j]:
+                if s[i : i + j] == s[i + j : i + j + j]:
                     ans = max(ans, 1 + dfs(i + j))
             return ans
 
@@ -80,25 +117,7 @@ class Solution:
         return dfs(0)
 ```
 
-```python
-class Solution:
-    def deleteString(self, s: str) -> int:
-        n = len(s)
-        g = [[0] * (n + 1) for _ in range(n + 1)]
-        for i in range(n - 1, -1, -1):
-            for j in range(i + 1, n):
-                if s[i] == s[j]:
-                    g[i][j] = g[i + 1][j + 1] + 1
-
-        f = [1] * n
-        for i in range(n - 1, -1, -1):
-            for j in range(1, (n - i) // 2 + 1):
-                if g[i][i + j] >= j:
-                    f[i] = max(f[i], f[i + j] + 1)
-        return f[0]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -138,33 +157,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int deleteString(String s) {
-        int n = s.length();
-        int[][] g = new int[n + 1][n + 1];
-        for (int i = n - 1; i >= 0; --i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (s.charAt(i) == s.charAt(j)) {
-                    g[i][j] = g[i + 1][j + 1] + 1;
-                }
-            }
-        }
-        int[] f = new int[n];
-        for (int i = n - 1; i >= 0; --i) {
-            f[i] = 1;
-            for (int j = 1; j <= (n - i) / 2; ++j) {
-                if (g[i][i + j] >= j) {
-                    f[i] = Math.max(f[i], f[i + j] + 1);
-                }
-            }
-        }
-        return f[0];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -202,35 +195,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int deleteString(string s) {
-        int n = s.size();
-        int g[n + 1][n + 1];
-        memset(g, 0, sizeof(g));
-        for (int i = n - 1; ~i; --i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (s[i] == s[j]) {
-                    g[i][j] = g[i + 1][j + 1] + 1;
-                }
-            }
-        }
-        int f[n];
-        for (int i = n - 1; ~i; --i) {
-            f[i] = 1;
-            for (int j = 1; j <= (n - i) / 2; ++j) {
-                if (g[i][i + j] >= j) {
-                    f[i] = max(f[i], f[i + j] + 1);
-                }
-            }
-        }
-        return f[0];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func deleteString(s string) int {
@@ -265,14 +230,128 @@ func deleteString(s string) int {
 	}
 	return dfs(0)
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function deleteString(s: string): number {
+    const n = s.length;
+    const f: number[] = new Array(n).fill(0);
+    const dfs = (i: number): number => {
+        if (i == n) {
+            return 0;
+        }
+        if (f[i] > 0) {
+            return f[i];
+        }
+        f[i] = 1;
+        for (let j = 1; j <= (n - i) >> 1; ++j) {
+            if (s.slice(i, i + j) == s.slice(i + j, i + j + j)) {
+                f[i] = Math.max(f[i], dfs(i + j) + 1);
+            }
+        }
+        return f[i];
+    };
+    return dfs(0);
 }
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Dynamic Programming
+
+We can change the memoization search in Solution 1 to dynamic programming. Define $f[i]$ to represent the maximum number of operations needed to delete all characters from $s[i..]$. Initially, $f[i]=1$, and the answer is $f[0]$.
+
+We can enumerate $i$ from back to front. For each $i$, we enumerate the length of the string $j$, where $1 \leq j \leq (n-1)/2$. If $s[i..i+j] = s[i+j..i+j+j]$, we can delete $s[i..i+j]$, then $f[i]=max(f[i], f[i+j]+1)$. We need to enumerate all $j$ to find the maximum value of $f[i]$.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $s$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def deleteString(self, s: str) -> int:
+        n = len(s)
+        g = [[0] * (n + 1) for _ in range(n + 1)]
+        for i in range(n - 1, -1, -1):
+            for j in range(i + 1, n):
+                if s[i] == s[j]:
+                    g[i][j] = g[i + 1][j + 1] + 1
+
+        f = [1] * n
+        for i in range(n - 1, -1, -1):
+            for j in range(1, (n - i) // 2 + 1):
+                if g[i][i + j] >= j:
+                    f[i] = max(f[i], f[i + j] + 1)
+        return f[0]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int deleteString(String s) {
+        int n = s.length();
+        int[][] g = new int[n + 1][n + 1];
+        for (int i = n - 1; i >= 0; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    g[i][j] = g[i + 1][j + 1] + 1;
+                }
+            }
+        }
+        int[] f = new int[n];
+        for (int i = n - 1; i >= 0; --i) {
+            f[i] = 1;
+            for (int j = 1; j <= (n - i) / 2; ++j) {
+                if (g[i][i + j] >= j) {
+                    f[i] = Math.max(f[i], f[i + j] + 1);
+                }
+            }
+        }
+        return f[0];
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int deleteString(string s) {
+        int n = s.size();
+        int g[n + 1][n + 1];
+        memset(g, 0, sizeof(g));
+        for (int i = n - 1; ~i; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (s[i] == s[j]) {
+                    g[i][j] = g[i + 1][j + 1] + 1;
+                }
+            }
+        }
+        int f[n];
+        for (int i = n - 1; ~i; --i) {
+            f[i] = 1;
+            for (int j = 1; j <= (n - i) / 2; ++j) {
+                if (g[i][i + j] >= j) {
+                    f[i] = max(f[i], f[i + j] + 1);
+                }
+            }
+        }
+        return f[0];
+    }
+};
+```
+
+#### Go
 
 ```go
 func deleteString(s string) int {
@@ -299,39 +378,9 @@ func deleteString(s string) int {
 	}
 	return f[0]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function deleteString(s: string): number {
-    const n = s.length;
-    const f: number[] = new Array(n).fill(0);
-    const dfs = (i: number): number => {
-        if (i == n) {
-            return 0;
-        }
-        if (f[i] > 0) {
-            return f[i];
-        }
-        f[i] = 1;
-        for (let j = 1; j <= (n - i) >> 1; ++j) {
-            if (s.slice(i, i + j) == s.slice(i + j, i + j + j)) {
-                f[i] = Math.max(f[i], dfs(i + j) + 1);
-            }
-        }
-        return f[i];
-    };
-    return dfs(0);
-}
-```
+#### TypeScript
 
 ```ts
 function deleteString(s: string): number {
@@ -348,10 +397,8 @@ function deleteString(s: string): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

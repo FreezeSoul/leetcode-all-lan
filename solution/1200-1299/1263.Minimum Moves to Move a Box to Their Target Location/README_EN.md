@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1263.Minimum%20Moves%20to%20Move%20a%20Box%20to%20Their%20Target%20Location/README_EN.md
+rating: 2297
+source: Weekly Contest 163 Q4
+tags:
+    - Breadth-First Search
+    - Array
+    - Matrix
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1263. Minimum Moves to Move a Box to Their Target Location](https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location)
 
 [中文文档](/solution/1200-1299/1263.Minimum%20Moves%20to%20Move%20a%20Box%20to%20Their%20Target%20Location/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A storekeeper is a game in which the player pushes boxes around in a warehouse trying to get them to target locations.</p>
 
@@ -13,7 +30,7 @@
 <ul>
 	<li>The character <code>&#39;S&#39;</code> represents the player. The player can move up, down, left, right in <code>grid</code> if it is a floor (empty cell).</li>
 	<li>The character <code>&#39;.&#39;</code> represents the floor which means a free cell to walk.</li>
-	<li>The character <code>&#39;#&#39; </code>represents the wall which means an obstacle (impossible to walk there).</li>
+	<li>The character<font face="monospace">&nbsp;</font><code>&#39;#&#39;</code><font face="monospace">&nbsp;</font>represents the wall which means an obstacle (impossible to walk there).</li>
 	<li>There is only one box <code>&#39;B&#39;</code> and one target cell <code>&#39;T&#39;</code> in the <code>grid</code>.</li>
 	<li>The box can be moved to an adjacent free cell by standing next to the box and then moving in the direction of the box. This is a <strong>push</strong>.</li>
 	<li>The player cannot walk through the box.</li>
@@ -70,11 +87,42 @@
 	<li>There is only one character <code>&#39;S&#39;</code>, <code>&#39;B&#39;</code>, and <code>&#39;T&#39;</code> in the <code>grid</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Double-ended Queue + BFS
+
+We consider the player's position and the box's position as a state, i.e., $(s_i, s_j, b_i, b_j)$, where $(s_i, s_j)$ is the player's position, and $(b_i, b_j)$ is the box's position. In the code implementation, we define a function $f(i, j)$, which maps the two-dimensional coordinates $(i, j)$ to a one-dimensional state number, i.e., $f(i, j) = i \times n + j$, where $n$ is the number of columns in the grid. So the player and the box's state is $(f(s_i, s_j), f(b_i, b_j))$.
+
+First, we traverse the grid to find the initial positions of the player and the box, denoted as $(s_i, s_j)$ and $(b_i, b_j)$.
+
+Then, we define a double-ended queue $q$, where each element is a triplet $(f(s_i, s_j), f(b_i, b_j), d)$, indicating that the player is at $(s_i, s_j)$, the box is at $(b_i, b_j)$, and $d$ pushes have been made. Initially, we add $(f(s_i, s_j), f(b_i, b_j), 0)$ to the queue $q$.
+
+Additionally, we use a two-dimensional array $vis$ to record whether each state has been visited. Initially, $vis[f(s_i, s_j), f(b_i, b_j)]$ is marked as visited.
+
+Next, we start the breadth-first search.
+
+In each step of the search, we take out the queue head element $(f(s_i, s_j), f(b_i, b_j), d)$, and check whether $grid[b_i][b_j] = 'T'$ is satisfied. If it is, it means the box has been pushed to the target position, and now $d$ can be returned as the answer.
+
+Otherwise, we enumerate the player's next move direction. The player's new position is denoted as $(s_x, s_y)$. If $(s_x, s_y)$ is a valid position, we judge whether $(s_x, s_y)$ is the same as the box's position $(b_i, b_j)$:
+
+-   If they are the same, it means the player has reached the box's position and pushed the box forward by one step. The box's new position is $(b_x, b_y)$. If $(b_x, b_y)$ is a valid position, and the state $(f(s_x, s_y), f(b_x, b_y))$ has not been visited, then we add $(f(s_x, s_y), f(b_x, b_y), d + 1)$ to the end of the queue $q$, and mark $vis[f(s_x, s_y), f(b_x, b_y)]$ as visited.
+-   If they are different, it means the player has not pushed the box. Then we only need to judge whether the state $(f(s_x, s_y), f(b_i, b_j))$ has been visited. If it has not been visited, then we add $(f(s_x, s_y), f(b_i, b_j), d)$ to the head of the queue $q$, and mark $vis[f(s_x, s_y), f(b_i, b_j)]$ as visited.
+
+We continue the breadth-first search until the queue is empty.
+
+> Note, if the box is pushed, the push count $d$ needs to be incremented by $1$, and the new state is added to the end of the queue $q$. If the box is not pushed, the push count $d$ remains unchanged, and the new state is added to the head of the queue $q$.
+
+Finally, if no valid push scheme is found, then return $-1$.
+
+The time complexity is $O(m^2 \times n^2)$, and the space complexity is $O(m^2 \times n^2)$. Where $m$ and $n$ are the number of rows and columns in the grid, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -118,7 +166,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -188,7 +236,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -248,7 +296,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minPushBox(grid [][]byte) int {
@@ -306,7 +354,7 @@ func minPushBox(grid [][]byte) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minPushBox(grid: string[][]): number {
@@ -326,9 +374,7 @@ function minPushBox(grid: string[][]): number {
         i >= 0 && i < m && j >= 0 && j < n && grid[i][j] !== '#';
 
     const q: Deque<[number, number, number]> = new Deque();
-    const vis: boolean[][] = new Array(m * n)
-        .fill(0)
-        .map(() => new Array(m * n).fill(false));
+    const vis: boolean[][] = new Array(m * n).fill(0).map(() => new Array(m * n).fill(false));
     q.push([f(si, sj), f(bi, bj), 0]);
     vis[f(si, sj)][f(bi, bj)] = true;
     const dirs: number[] = [-1, 0, 1, 0, -1];
@@ -531,10 +577,8 @@ class Deque<T> {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

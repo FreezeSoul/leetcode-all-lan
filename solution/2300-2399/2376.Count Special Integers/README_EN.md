@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2376.Count%20Special%20Integers/README_EN.md
+rating: 2120
+source: Weekly Contest 306 Q4
+tags:
+    - Math
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [2376. Count Special Integers](https://leetcode.com/problems/count-special-integers)
 
 [中文文档](/solution/2300-2399/2376.Count%20Special%20Integers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>We call a positive integer <strong>special</strong> if all of its digits are <strong>distinct</strong>.</p>
 
@@ -40,356 +55,247 @@ Some of the integers that are not special are: 22, 114, and 131.</pre>
 	<li><code>1 &lt;= n &lt;= 2 * 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: State Compression + Digit DP
+
+This problem essentially asks for the number of numbers in the given range $[l, ..r]$ that satisfy certain conditions. The conditions are related to the composition of the numbers rather than their size, so we can use the concept of Digit DP to solve it. In Digit DP, the size of the number has little impact on the complexity.
+
+For the range $[l, ..r]$ problem, we generally convert it to the problem of $[1, ..r]$ and then subtract the result of $[1, ..l - 1]$, i.e.:
+
+$$
+ans = \sum_{i=1}^{r} ans_i -  \sum_{i=1}^{l-1} ans_i
+$$
+
+However, for this problem, we only need to find the value for the range $[1, ..n]$.
+
+Here, we use memoized search to implement Digit DP. We search from the starting point downwards, and at the lowest level, we get the number of solutions. We then return the answers layer by layer upwards, and finally get the final answer from the starting point of the search.
+
+Based on the problem information, we design a function $\textit{dfs}(i, \textit{mask}, \textit{lead}, \textit{limit})$, where:
+
+-   The digit $i$ represents the current position being searched, starting from the highest digit, i.e., $i = 0$ represents the highest digit.
+-   The digit $\textit{mask}$ represents the current state of the number, i.e., the $j$-th bit of $\textit{mask}$ being $1$ indicates that the digit $j$ has been used.
+-   The boolean $\textit{lead}$ indicates whether the current number only contains leading $0$s.
+-   The boolean $\textit{limit}$ indicates whether the current number is restricted by the upper bound.
+
+The function executes as follows:
+
+If $i$ exceeds the length of the number $n$, it means the search is over. If $\textit{lead}$ is true, it means the current number only contains leading $0$s, so return $0$. Otherwise, return $1$.
+
+If $\textit{limit}$ is false and $\textit{lead}$ is false and the state of $\textit{mask}$ has been memoized, directly return the memoized result.
+
+Otherwise, we calculate the current upper bound $up$. If $\textit{limit}$ is true, $up$ is the $i$-th digit of the current number. Otherwise, $up = 9$.
+
+Then we iterate over $[0, up]$. For each digit $j$, if the $j$-th bit of $\textit{mask}$ is $1$, it means the digit $j$ has been used, so we skip it. Otherwise, if $\textit{lead}$ is true and $j = 0$, it means the current number only contains leading $0$s, so we recursively search the next digit. Otherwise, we recursively search the next digit and update the state of $\textit{mask}$.
+
+Finally, if $\textit{limit}$ is false and $\textit{lead}$ is false, memoize the current state.
+
+Return the final answer.
+
+The time complexity is $O(m \times 2^D \times D)$, and the space complexity is $O(m \times 2^D)$. Here, $m$ is the length of the number $n$, and $D = 10$.
+
+Similar Problems:
+
+-   [233. Number of Digit One](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0233.Number%20of%20Digit%20One/README_EN.md)
+-   [357. Count Numbers with Unique Digits](https://github.com/doocs/leetcode/blob/main/solution/0300-0399/0357.Count%20Numbers%20with%20Unique%20Digits/README_EN.md)
+-   [600. Non-negative Integers without Consecutive Ones](https://github.com/doocs/leetcode/blob/main/solution/0600-0699/0600.Non-negative%20Integers%20without%20Consecutive%20Ones/README_EN.md)
+-   [788. Rotated Digits](https://github.com/doocs/leetcode/blob/main/solution/0700-0799/0788.Rotated%20Digits/README_EN.md)
+-   [902. Numbers At Most N Given Digit Set](https://github.com/doocs/leetcode/blob/main/solution/0900-0999/0902.Numbers%20At%20Most%20N%20Given%20Digit%20Set/README_EN.md)
+-   [1012. Numbers with Repeated Digits](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1012.Numbers%20With%20Repeated%20Digits/README_EN.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def countSpecialNumbers(self, n: int) -> int:
-        def A(m, n):
-            return 1 if n == 0 else A(m, n - 1) * (m - n + 1)
-
-        vis = [False] * 10
-        ans = 0
-        digits = [int(c) for c in str(n)[::-1]]
-        m = len(digits)
-        for i in range(1, m):
-            ans += 9 * A(9, i - 1)
-        for i in range(m - 1, -1, -1):
-            v = digits[i]
-            j = 1 if i == m - 1 else 0
-            while j < v:
-                if not vis[j]:
-                    ans += A(10 - (m - i), i)
-                j += 1
-            if vis[v]:
-                break
-            vis[v] = True
-            if i == 0:
-                ans += 1
-        return ans
-```
-
-```python
-class Solution:
-    def countSpecialNumbers(self, n: int) -> int:
-        return self.f(n)
-
-    def f(self, n):
         @cache
-        def dfs(pos, mask, lead, limit):
-            if pos <= 0:
-                return lead ^ 1
-            up = a[pos] if limit else 9
+        def dfs(i: int, mask: int, lead: bool, limit: bool) -> int:
+            if i >= len(s):
+                return int(lead ^ 1)
+            up = int(s[i]) if limit else 9
             ans = 0
-            for i in range(up + 1):
-                if (mask >> i) & 1:
+            for j in range(up + 1):
+                if mask >> j & 1:
                     continue
-                if i == 0 and lead:
-                    ans += dfs(pos - 1, mask, lead, limit and i == up)
+                if lead and j == 0:
+                    ans += dfs(i + 1, mask, True, limit and j == up)
                 else:
-                    ans += dfs(pos - 1, mask | 1 << i, False, limit and i == up)
+                    ans += dfs(i + 1, mask | 1 << j, False, limit and j == up)
             return ans
 
-        a = [0] * 11
-        l = 0
-        while n:
-            l += 1
-            a[l] = n % 10
-            n //= 10
-        return dfs(l, 0, True, True)
+        s = str(n)
+        return dfs(0, 0, True, True)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-    public int countSpecialNumbers(int n) {
-        List<Integer> digits = new ArrayList<>();
-        while (n != 0) {
-            digits.add(n % 10);
-            n /= 10;
-        }
-        int m = digits.size();
-        int ans = 0;
-        for (int i = 1; i < m; ++i) {
-            ans += 9 * A(9, i - 1);
-        }
-        boolean[] vis = new boolean[10];
-        for (int i = m - 1; i >= 0; --i) {
-            int v = digits.get(i);
-            for (int j = i == m - 1 ? 1 : 0; j < v; ++j) {
-                if (vis[j]) {
-                    continue;
-                }
-                ans += A(10 - (m - i), i);
-            }
-            if (vis[v]) {
-                break;
-            }
-            vis[v] = true;
-            if (i == 0) {
-                ++ans;
-            }
-        }
-        return ans;
-    }
-
-    private int A(int m, int n) {
-        return n == 0 ? 1 : A(m, n - 1) * (m - n + 1);
-    }
-}
-```
-
-```java
-class Solution {
-    private int[] a = new int[11];
-    private int[][] dp = new int[11][1 << 11];
+    private char[] s;
+    private Integer[][] f;
 
     public int countSpecialNumbers(int n) {
-        return f(n);
+        s = String.valueOf(n).toCharArray();
+        f = new Integer[s.length][1 << 10];
+        return dfs(0, 0, true, true);
     }
 
-    private int f(int n) {
-        for (var e : dp) {
-            Arrays.fill(e, -1);
-        }
-        int len = 0;
-        while (n > 0) {
-            a[++len] = n % 10;
-            n /= 10;
-        }
-        return dfs(len, 0, true, true);
-    }
-
-    private int dfs(int pos, int mask, boolean lead, boolean limit) {
-        if (pos <= 0) {
+    private int dfs(int i, int mask, boolean lead, boolean limit) {
+        if (i >= s.length) {
             return lead ? 0 : 1;
         }
-        if (!lead && !limit && dp[pos][mask] != -1) {
-            return dp[pos][mask];
+        if (!limit && !lead && f[i][mask] != null) {
+            return f[i][mask];
         }
-        int up = limit ? a[pos] : 9;
+        int up = limit ? s[i] - '0' : 9;
         int ans = 0;
-        for (int i = 0; i <= up; ++i) {
-            if (((mask >> i) & 1) == 1) {
+        for (int j = 0; j <= up; ++j) {
+            if ((mask >> j & 1) == 1) {
                 continue;
             }
-            if (i == 0 && lead) {
-                ans += dfs(pos - 1, mask, lead, limit && i == up);
+            if (lead && j == 0) {
+                ans += dfs(i + 1, mask, true, limit && j == up);
             } else {
-                ans += dfs(pos - 1, mask | 1 << i, false, limit && i == up);
+                ans += dfs(i + 1, mask | (1 << j), false, limit && j == up);
             }
         }
-        if (!lead && !limit) {
-            dp[pos][mask] = ans;
+        if (!limit && !lead) {
+            f[i][mask] = ans;
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int countSpecialNumbers(int n) {
-        int ans = 0;
-        vector<int> digits;
-        while (n) {
-            digits.push_back(n % 10);
-            n /= 10;
-        }
-        int m = digits.size();
-        vector<bool> vis(10);
-        for (int i = 1; i < m; ++i) {
-            ans += 9 * A(9, i - 1);
-        }
-        for (int i = m - 1; ~i; --i) {
-            int v = digits[i];
-            for (int j = i == m - 1 ? 1 : 0; j < v; ++j) {
-                if (!vis[j]) {
-                    ans += A(10 - (m - i), i);
+        string s = to_string(n);
+        int m = s.size();
+        int f[m][1 << 10];
+        memset(f, -1, sizeof(f));
+        auto dfs = [&](this auto&& dfs, int i, int mask, bool lead, bool limit) -> int {
+            if (i >= m) {
+                return lead ^ 1;
+            }
+            if (!limit && !lead && f[i][mask] != -1) {
+                return f[i][mask];
+            }
+            int up = limit ? s[i] - '0' : 9;
+            int ans = 0;
+            for (int j = 0; j <= up; ++j) {
+                if (mask >> j & 1) {
+                    continue;
+                }
+                if (lead && j == 0) {
+                    ans += dfs(i + 1, mask, true, limit && j == up);
+                } else {
+                    ans += dfs(i + 1, mask | (1 << j), false, limit && j == up);
                 }
             }
-            if (vis[v]) {
-                break;
+            if (!limit && !lead) {
+                f[i][mask] = ans;
             }
-            vis[v] = true;
-            if (i == 0) {
-                ++ans;
-            }
-        }
-        return ans;
-    }
-
-    int A(int m, int n) {
-        return n == 0 ? 1 : A(m, n - 1) * (m - n + 1);
+            return ans;
+        };
+        return dfs(0, 0, true, true);
     }
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int a[11];
-    int dp[11][1 << 11];
-
-    int countSpecialNumbers(int n) {
-        return f(n);
-    }
-
-    int f(int n) {
-        memset(dp, -1, sizeof dp);
-        int len = 0;
-        while (n) {
-            a[++len] = n % 10;
-            n /= 10;
-        }
-        return dfs(len, 0, true, true);
-    }
-
-    int dfs(int pos, int mask, bool lead, bool limit) {
-        if (pos <= 0) {
-            return lead ? 0 : 1;
-        }
-        if (!lead && !limit && dp[pos][mask] != -1) {
-            return dp[pos][mask];
-        }
-        int up = limit ? a[pos] : 9;
-        int ans = 0;
-        for (int i = 0; i <= up; ++i) {
-            if ((mask >> i) & 1) continue;
-            if (i == 0 && lead) {
-                ans += dfs(pos - 1, mask, lead, limit && i == up);
-            } else {
-                ans += dfs(pos - 1, mask | 1 << i, false, limit && i == up);
-            }
-        }
-        if (!lead && !limit) {
-            dp[pos][mask] = ans;
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countSpecialNumbers(n int) int {
-	digits := []int{}
-	for n != 0 {
-		digits = append(digits, n%10)
-		n /= 10
-	}
-	m := len(digits)
-	vis := make([]bool, 10)
-	ans := 0
-	for i := 1; i < m; i++ {
-		ans += 9 * A(9, i-1)
-	}
-	for i := m - 1; i >= 0; i-- {
-		v := digits[i]
-		j := 0
-		if i == m-1 {
-			j = 1
+	s := strconv.Itoa(n)
+	m := len(s)
+	f := make([][1 << 10]int, m+1)
+	for i := range f {
+		for j := range f[i] {
+			f[i][j] = -1
 		}
-		for ; j < v; j++ {
-			if !vis[j] {
-				ans += A(10-(m-i), i)
-			}
-		}
-		if vis[v] {
-			break
-		}
-		vis[v] = true
-		if i == 0 {
-			ans++
-		}
-	}
-	return ans
-}
-
-func A(m, n int) int {
-	if n == 0 {
-		return 1
-	}
-	return A(m, n-1) * (m - n + 1)
-}
-```
-
-```go
-func countSpecialNumbers(n int) int {
-    return f(n)
-}
-
-func f(n int) int {
-	a := make([]int, 11)
-	dp := make([][]int, 11)
-	for i := range dp {
-		dp[i] = make([]int, 1<<11)
-		for j := range dp[i] {
-			dp[i][j] = -1
-		}
-	}
-	l := 0
-	for n > 0 {
-		l++
-		a[l] = n % 10
-		n /= 10
 	}
 	var dfs func(int, int, bool, bool) int
-	dfs = func(pos, mask int, lead, limit bool) int {
-		if pos <= 0 {
+	dfs = func(i, mask int, lead, limit bool) int {
+		if i >= m {
 			if lead {
 				return 0
 			}
 			return 1
 		}
-		if !lead && !limit && dp[pos][mask] != -1 {
-			return dp[pos][mask]
+		if !limit && !lead && f[i][mask] != -1 {
+			return f[i][mask]
 		}
-		ans := 0
 		up := 9
 		if limit {
-			up = a[pos]
+			up = int(s[i] - '0')
 		}
-		for i := 0; i <= up; i++ {
-			if ((mask >> i) & 1) == 1 {
+		ans := 0
+		for j := 0; j <= up; j++ {
+			if mask>>j&1 == 1 {
 				continue
 			}
-			if i == 0 && lead {
-				ans += dfs(pos-1, mask, lead, limit && i == up)
+			if lead && j == 0 {
+				ans += dfs(i+1, mask, true, limit && j == up)
 			} else {
-				ans += dfs(pos-1, mask|1<<i, false, limit && i == up)
+				ans += dfs(i+1, mask|1<<j, false, limit && j == up)
 			}
 		}
-		if !lead && !limit {
-			dp[pos][mask] = ans
+		if !limit && !lead {
+			f[i][mask] = ans
 		}
 		return ans
 	}
-
-	return dfs(l, 0, true, true)
+	return dfs(0, 0, true, true)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
-
+function countSpecialNumbers(n: number): number {
+    const s = n.toString();
+    const m = s.length;
+    const f: number[][] = Array.from({ length: m }, () => Array(1 << 10).fill(-1));
+    const dfs = (i: number, mask: number, lead: boolean, limit: boolean): number => {
+        if (i >= m) {
+            return lead ? 0 : 1;
+        }
+        if (!limit && !lead && f[i][mask] !== -1) {
+            return f[i][mask];
+        }
+        const up = limit ? +s[i] : 9;
+        let ans = 0;
+        for (let j = 0; j <= up; ++j) {
+            if ((mask >> j) & 1) {
+                continue;
+            }
+            if (lead && j === 0) {
+                ans += dfs(i + 1, mask, true, limit && j === up);
+            } else {
+                ans += dfs(i + 1, mask | (1 << j), false, limit && j === up);
+            }
+        }
+        if (!limit && !lead) {
+            f[i][mask] = ans;
+        }
+        return ans;
+    };
+    return dfs(0, 0, true, true);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

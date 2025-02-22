@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2321.Maximum%20Score%20Of%20Spliced%20Array/README_EN.md
+rating: 1790
+source: Weekly Contest 299 Q3
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [2321. Maximum Score Of Spliced Array](https://leetcode.com/problems/maximum-score-of-spliced-array)
 
 [中文文档](/solution/2300-2399/2321.Maximum%20Score%20Of%20Spliced%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two <strong>0-indexed</strong> integer arrays <code>nums1</code> and <code>nums2</code>, both of length <code>n</code>.</p>
 
@@ -56,11 +71,17 @@ The score is max(sum(nums1), sum(nums2)) = max(31, 3) = 31.
 	<li><code>1 &lt;= nums1[i], nums2[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -80,7 +101,7 @@ class Solution:
         return max(s2 + f(nums1, nums2), s1 + f(nums2, nums1))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -140,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumsSplicedArray(nums1 []int, nums2 []int) int {
@@ -166,25 +187,10 @@ func maximumsSplicedArray(nums1 []int, nums2 []int) int {
 	}
 	return max(s2+f(nums1, nums2), s1+f(nums2, nums1))
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,20 +1,30 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0055.Jump%20Game/README.md
+tags:
+    - 贪心
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [55. 跳跃游戏](https://leetcode.cn/problems/jump-game)
 
 [English Version](/solution/0000-0099/0055.Jump%20Game/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给定一个非负整数数组 <code>nums</code> ，你最初位于数组的 <strong>第一个下标</strong> 。</p>
+<p>给你一个非负整数数组&nbsp;<code>nums</code> ，你最初位于数组的 <strong>第一个下标</strong> 。数组中的每个元素代表你在该位置可以跳跃的最大长度。</p>
 
-<p>数组中的每个元素代表你在该位置可以跳跃的最大长度。</p>
+<p>判断你是否能够到达最后一个下标，如果可以，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
 
-<p>判断你是否能够到达最后一个下标。</p>
+<p>&nbsp;</p>
 
-<p> </p>
-
-<p><strong>示例 1：</strong></p>
+<p><strong>示例&nbsp;1：</strong></p>
 
 <pre>
 <strong>输入：</strong>nums = [2,3,1,1,4]
@@ -22,7 +32,7 @@
 <strong>解释：</strong>可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
 </pre>
 
-<p><strong>示例 2：</strong></p>
+<p><strong>示例&nbsp;2：</strong></p>
 
 <pre>
 <strong>输入：</strong>nums = [3,2,1,0,4]
@@ -30,20 +40,22 @@
 <strong>解释：</strong>无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 <= nums.length <= 3 * 10<sup>4</sup></code></li>
-	<li><code>0 <= nums[i] <= 10<sup>5</sup></code></li>
+	<li><code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code></li>
+	<li><code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 我们用变量 $mx$ 维护当前能够到达的最远下标，初始时 $mx = 0$。
 
@@ -55,15 +67,13 @@
 
 相似题目：
 
--   [45. 跳跃游戏 II](/solution/0000-0099/0045.Jump%20Game%20II/README.md)
--   [1024. 视频拼接](/solution/1000-1099/1024.Video%20Stitching/README.md)
--   [1326. 灌溉花园的最少水龙头数目](/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README.md)
+-   [45. 跳跃游戏 II](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0045.Jump%20Game%20II/README.md)
+-   [1024. 视频拼接](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1024.Video%20Stitching/README.md)
+-   [1326. 灌溉花园的最少水龙头数目](https://github.com/doocs/leetcode/blob/main/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +86,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canJump(nums []int) bool {
@@ -126,16 +134,9 @@ func canJump(nums []int) bool {
 	}
 	return true
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canJump(nums: number[]): boolean {
@@ -150,7 +151,28 @@ function canJump(nums: number[]): boolean {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn can_jump(nums: Vec<i32>) -> bool {
+        let n = nums.len();
+        let mut mx = 0;
+
+        for i in 0..n {
+            if mx < i {
+                return false;
+            }
+            mx = std::cmp::max(mx, i + (nums[i] as usize));
+        }
+
+        true
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -169,7 +191,7 @@ var canJump = function (nums) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -186,10 +208,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

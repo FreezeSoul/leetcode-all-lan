@@ -1,8 +1,14 @@
 class Solution {
 public:
     int maximumCount(vector<int>& nums) {
-        int a = nums.end() - lower_bound(nums.begin(), nums.end(), 1);
-        int b = lower_bound(nums.begin(), nums.end(), 0) - nums.begin();
+        int a = 0, b = 0;
+        for (int x : nums) {
+            if (x > 0) {
+                ++a;
+            } else if (x < 0) {
+                ++b;
+            }
+        }
         return max(a, b);
     }
 };

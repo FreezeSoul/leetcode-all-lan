@@ -1,8 +1,20 @@
-# [1336. Number of Transactions per Visit](https://leetcode.com/problems/number-of-transactions-per-visit)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1336.Number%20of%20Transactions%20per%20Visit/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1336. Number of Transactions per Visit 🔒](https://leetcode.com/problems/number-of-transactions-per-visit)
 
 [中文文档](/solution/1300-1399/1336.Number%20of%20Transactions%20per%20Visit/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Visits</code></p>
 
@@ -13,7 +25,7 @@
 | user_id       | int     |
 | visit_date    | date    |
 +---------------+---------+
-(user_id, visit_date) is the primary key for this table.
+(user_id, visit_date) is the primary key (combination of columns with unique values) for this table.
 Each row of this table indicates that user_id has visited the bank in visit_date.
 </pre>
 
@@ -29,7 +41,7 @@ Each row of this table indicates that user_id has visited the bank in visit_date
 | transaction_date | date    |
 | amount           | int     |
 +------------------+---------+
-There is no primary key for this table, it may contain duplicates.
+This table may contain duplicates rows.
 Each row of this table indicates that user_id has done a transaction of amount in transaction_date.
 It is guaranteed that the user has visited the bank in the transaction_date.(i.e The Visits table contains (user_id, transaction_date) in one row)
 </pre>
@@ -38,7 +50,7 @@ It is guaranteed that the user has visited the bank in the transaction_date.(i.e
 
 <p>A bank wants to draw a chart of the number of transactions bank visitors did in one visit to the bank and the corresponding number of visitors who have done this number of transaction in one visit.</p>
 
-<p>Write an SQL query to find how many users visited the bank and didn&#39;t do any transactions, how many visited the bank and did one transaction and so on.</p>
+<p>Write a solution&nbsp;to find how many users visited the bank and didn&#39;t do any transactions, how many visited the bank and did one transaction, and so on.</p>
 
 <p>The result table will contain two columns:</p>
 
@@ -51,7 +63,7 @@ It is guaranteed that the user has visited the bank in the transaction_date.(i.e
 
 <p>Return the result table ordered by <code>transactions_count</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -103,14 +115,58 @@ Transactions table:
 * For transactions_count &gt;= 4, No customers visited the bank and did more than three transactions so we will stop at transactions_count = 3
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH RECURSIVE
+    S AS (
+        SELECT 0 AS n
+        UNION
+        SELECT n + 1
+        FROM S
+        WHERE
+            n < (
+                SELECT MAX(cnt)
+                FROM
+                    (
+                        SELECT COUNT(1) AS cnt
+                        FROM Transactions
+                        GROUP BY user_id, transaction_date
+                    ) AS t
+            )
+    ),
+    T AS (
+        SELECT v.user_id, visit_date, IFNULL(cnt, 0) AS cnt
+        FROM
+            Visits AS v
+            LEFT JOIN (
+                SELECT user_id, transaction_date, COUNT(1) AS cnt
+                FROM Transactions
+                GROUP BY 1, 2
+            ) AS t
+                ON v.user_id = t.user_id AND v.visit_date = t.transaction_date
+    )
+SELECT n AS transactions_count, COUNT(user_id) AS visits_count
+FROM
+    S AS s
+    LEFT JOIN T AS t ON s.n = t.cnt
+GROUP BY n
+ORDER BY n;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

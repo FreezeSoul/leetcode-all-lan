@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1304.Find%20N%20Unique%20Integers%20Sum%20up%20to%20Zero/README_EN.md
+rating: 1167
+source: Weekly Contest 169 Q1
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1304. Find N Unique Integers Sum up to Zero](https://leetcode.com/problems/find-n-unique-integers-sum-up-to-zero)
 
 [中文文档](/solution/1300-1399/1304.Find%20N%20Unique%20Integers%20Sum%20up%20to%20Zero/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code>, return <strong>any</strong> array containing <code>n</code> <strong>unique</strong> integers such that they add up to <code>0</code>.</p>
 
@@ -36,11 +51,17 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -54,15 +75,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def sumZero(self, n: int) -> List[int]:
-        ans = list(range(1, n))
-        ans.append(-sum(ans))
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -76,6 +89,71 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> sumZero(int n) {
+        vector<int> ans(n);
+        for (int i = 1, j = 0; i <= n / 2; ++i) {
+            ans[j++] = i;
+            ans[j++] = -i;
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func sumZero(n int) []int {
+	ans := make([]int, n)
+	for i, j := 1, 0; i <= n/2; i, j = i+1, j+1 {
+		ans[j] = i
+		j++
+		ans[j] = -i
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function sumZero(n: number): number[] {
+    const ans = new Array(n).fill(0);
+    for (let i = 1, j = 0; i <= n / 2; ++i) {
+        ans[j++] = i;
+        ans[j++] = -i;
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def sumZero(self, n: int) -> List[int]:
+        ans = list(range(1, n))
+        ans.append(-sum(ans))
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -90,21 +168,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<int> sumZero(int n) {
-        vector<int> ans(n);
-        for (int i = 1, j = 0; i <= n / 2; ++i) {
-            ans[j++] = i;
-            ans[j++] = -i;
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -118,19 +182,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func sumZero(n int) []int {
-	ans := make([]int, n)
-	for i, j := 1, 0; i <= n/2; i, j = i+1, j+1 {
-		ans[j] = i
-		j++
-		ans[j] = -i
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func sumZero(n int) []int {
@@ -143,18 +195,7 @@ func sumZero(n int) []int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function sumZero(n: number): number[] {
-    const ans = new Array(n).fill(0);
-    for (let i = 1, j = 0; i <= n / 2; ++i) {
-        ans[j++] = i;
-        ans[j++] = -i;
-    }
-    return ans;
-}
-```
+#### TypeScript
 
 ```ts
 function sumZero(n: number): number[] {
@@ -167,10 +208,8 @@ function sumZero(n: number): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

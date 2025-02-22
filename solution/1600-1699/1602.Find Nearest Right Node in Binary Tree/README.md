@@ -1,10 +1,22 @@
-# [1602. 找到二叉树中最近的右侧节点](https://leetcode.cn/problems/find-nearest-right-node-in-binary-tree)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1602.Find%20Nearest%20Right%20Node%20in%20Binary%20Tree/README.md
+tags:
+    - 树
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
+# [1602. 找到二叉树中最近的右侧节点 🔒](https://leetcode.cn/problems/find-nearest-right-node-in-binary-tree)
 
 [English Version](/solution/1600-1699/1602.Find%20Nearest%20Right%20Node%20in%20Binary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一棵二叉树的根节点 <code>root</code> 和树中的一个节点 <code>u</code> ，返回与 <code>u</code> <strong>所在层</strong>中<strong>距离最近</strong>的<strong>右侧</strong>节点，当 <code>u</code> 是所在层中最右侧的节点，返回 <code>null</code> 。</p>
 
@@ -55,27 +67,21 @@
 	<li><code>u</code> 是以 <code>root</code> 为根的二叉树的一个节点。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
-BFS 层序遍历，找到 $u$ 所在层的右侧相邻节点。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点个数。
-
-**方法二：DFS**
-
-DFS 先序遍历二叉树，首次搜索到 $u$ 时，标记目前层数 $d$，下次遇到同一层的节点时，即为目标节点。
+我们可以使用广度优先搜索，从根节点开始搜索，当搜索到节点 $u$ 时，返回队列中的下一个节点。
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点个数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -98,37 +104,7 @@ class Solution:
                     q.append(root.right)
 ```
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def findNearestRightNode(self, root: TreeNode, u: TreeNode) -> Optional[TreeNode]:
-        def dfs(root, i):
-            nonlocal d, ans
-            if root is None or ans:
-                return
-            if d == i:
-                ans = root
-                return
-            if root == u:
-                d = i
-                return
-            dfs(root.left, i + 1)
-            dfs(root.right, i + 1)
-
-        d = 0
-        ans = None
-        dfs(root, 1)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -168,6 +144,161 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* findNearestRightNode(TreeNode* root, TreeNode* u) {
+        queue<TreeNode*> q{{root}};
+        while (q.size()) {
+            for (int i = q.size(); i; --i) {
+                root = q.front();
+                q.pop();
+                if (root == u) {
+                    return i > 1 ? q.front() : nullptr;
+                }
+                if (root->left) {
+                    q.push(root->left);
+                }
+                if (root->right) {
+                    q.push(root->right);
+                }
+            }
+        }
+        return nullptr;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func findNearestRightNode(root *TreeNode, u *TreeNode) *TreeNode {
+	q := []*TreeNode{root}
+	for len(q) > 0 {
+		for i := len(q); i > 0; i-- {
+			root = q[0]
+			q = q[1:]
+			if root == u {
+				if i > 1 {
+					return q[0]
+				}
+				return nil
+			}
+			if root.Left != nil {
+				q = append(q, root.Left)
+			}
+			if root.Right != nil {
+				q = append(q, root.Right)
+			}
+		}
+	}
+	return nil
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} u
+ * @return {TreeNode}
+ */
+var findNearestRightNode = function (root, u) {
+    const q = [root];
+    while (q.length) {
+        for (let i = q.length; i; --i) {
+            root = q.shift();
+            if (root == u) {
+                return i > 1 ? q[0] : null;
+            }
+            if (root.left) {
+                q.push(root.left);
+            }
+            if (root.right) {
+                q.push(root.right);
+            }
+        }
+    }
+    return null;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：DFS
+
+DFS 先序遍历二叉树，首次搜索到 $u$ 时，标记目前层数 $d$，下次遇到同一层的节点时，即为目标节点。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点个数。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def findNearestRightNode(self, root: TreeNode, u: TreeNode) -> Optional[TreeNode]:
+        def dfs(root, i):
+            nonlocal d, ans
+            if root is None or ans:
+                return
+            if d == i:
+                ans = root
+                return
+            if root == u:
+                d = i
+                return
+            dfs(root.left, i + 1)
+            dfs(root.right, i + 1)
+
+        d = 0
+        ans = None
+        dfs(root, 1)
+        return ans
+```
+
+#### Java
 
 ```java
 /**
@@ -214,7 +345,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -231,95 +362,30 @@ class Solution {
 class Solution {
 public:
     TreeNode* findNearestRightNode(TreeNode* root, TreeNode* u) {
-        queue<TreeNode*> q{{root}};
-        while (q.size()) {
-            for (int i = q.size(); i; --i) {
-                root = q.front();
-                q.pop();
-                if (root == u) return i > 1 ? q.front() : nullptr;
-                if (root->left) q.push(root->left);
-                if (root->right) q.push(root->right);
+        TreeNode* ans;
+        int d = 0;
+        function<void(TreeNode*, int)> dfs = [&](TreeNode* root, int i) {
+            if (!root || ans) {
+                return;
             }
-        }
-        return nullptr;
-    }
-};
-```
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    TreeNode* u;
-    TreeNode* ans;
-    int d = 0;
-
-    TreeNode* findNearestRightNode(TreeNode* root, TreeNode* u) {
-        this->u = u;
+            if (d == i) {
+                ans = root;
+                return;
+            }
+            if (root == u) {
+                d = i;
+                return;
+            }
+            dfs(root->left, i + 1);
+            dfs(root->right, i + 1);
+        };
         dfs(root, 1);
         return ans;
     }
-
-    void dfs(TreeNode* root, int i) {
-        if (!root || ans) return;
-        if (d == i) {
-            ans = root;
-            return;
-        }
-        if (root == u) {
-            d = i;
-            return;
-        }
-        dfs(root->left, i + 1);
-        dfs(root->right, i + 1);
-    }
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func findNearestRightNode(root *TreeNode, u *TreeNode) *TreeNode {
-	q := []*TreeNode{root}
-	for len(q) > 0 {
-		for i := len(q); i > 0; i-- {
-			root = q[0]
-			q = q[1:]
-			if root == u {
-				if i > 1 {
-					return q[0]
-				}
-				return nil
-			}
-			if root.Left != nil {
-				q = append(q, root.Left)
-			}
-			if root.Right != nil {
-				q = append(q, root.Right)
-			}
-		}
-	}
-	return nil
-}
-```
+#### Go
 
 ```go
 /**
@@ -354,41 +420,7 @@ func findNearestRightNode(root *TreeNode, u *TreeNode) *TreeNode {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {TreeNode} root
- * @param {TreeNode} u
- * @return {TreeNode}
- */
-var findNearestRightNode = function (root, u) {
-    const q = [root];
-    while (q.length) {
-        for (let i = q.length; i; --i) {
-            root = q.shift();
-            if (root == u) {
-                return i > 1 ? q[0] : null;
-            }
-            if (root.left) {
-                q.push(root.left);
-            }
-            if (root.right) {
-                q.push(root.right);
-            }
-        }
-    }
-    return null;
-};
-```
+#### JavaScript
 
 ```js
 /**
@@ -427,10 +459,8 @@ var findNearestRightNode = function (root, u) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

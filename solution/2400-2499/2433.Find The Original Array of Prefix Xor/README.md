@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2433.Find%20The%20Original%20Array%20of%20Prefix%20Xor/README.md
+rating: 1366
+source: 第 314 场周赛 Q2
+tags:
+    - 位运算
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2433. 找出前缀异或的原始数组](https://leetcode.cn/problems/find-the-original-array-of-prefix-xor)
 
 [English Version](/solution/2400-2499/2433.Find%20The%20Original%20Array%20of%20Prefix%20Xor/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个长度为 <code>n</code> 的 <strong>整数</strong> 数组 <code>pref</code> 。找出并返回满足下述条件且长度为 <code>n</code> 的数组<em> </em><code>arr</code> ：</p>
 
@@ -46,11 +59,13 @@
 	<li><code>0 &lt;= pref[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 根据题意，我们有式子一：
 
@@ -72,13 +87,11 @@ $$
 
 即答案数组的每一项都是前缀异或数组的相邻两项进行异或运算得到的。
 
-时间复杂度 $O(n)$，忽略答案的空间消耗，空间复杂度 $O(1)$。其中 $n$ 为前缀异或数组的长度。
+时间复杂度 $O(n)$，其中 $n$ 为前缀异或数组的长度。忽略答案的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +99,7 @@ class Solution:
         return [a ^ b for a, b in pairwise([0] + pref)]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findArray(pref []int) []int {
@@ -133,24 +144,7 @@ func findArray(pref []int) []int {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-int *findArray(int *pref, int prefSize, int *returnSize) {
-    int *res = (int *) malloc(sizeof(int) * prefSize);
-    res[0] = pref[0];
-    for (int i = 1; i < prefSize; i++) {
-        res[i] = pref[i - 1] ^ pref[i];
-    }
-    *returnSize = prefSize;
-    return res;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findArray(pref: number[]): number[] {
@@ -162,7 +156,7 @@ function findArray(pref: number[]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -178,10 +172,25 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* findArray(int* pref, int prefSize, int* returnSize) {
+    int* res = (int*) malloc(sizeof(int) * prefSize);
+    res[0] = pref[0];
+    for (int i = 1; i < prefSize; i++) {
+        res[i] = pref[i - 1] ^ pref[i];
+    }
+    *returnSize = prefSize;
+    return res;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

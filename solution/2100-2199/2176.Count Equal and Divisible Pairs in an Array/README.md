@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2176.Count%20Equal%20and%20Divisible%20Pairs%20in%20an%20Array/README.md
+rating: 1215
+source: 第 72 场双周赛 Q1
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2176. 统计数组中相等且可以被整除的数对](https://leetcode.cn/problems/count-equal-and-divisible-pairs-in-an-array)
 
 [English Version](/solution/2100-2199/2176.Count%20Equal%20and%20Divisible%20Pairs%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始长度为 <code>n</code>&nbsp;的整数数组&nbsp;<code>nums</code>&nbsp;和一个整数&nbsp;<code>k</code>&nbsp;，请你返回满足&nbsp;<code>0 &lt;= i &lt; j &lt; n</code>&nbsp;，<code>nums[i] == nums[j]</code> 且&nbsp;<code>(i * j)</code>&nbsp;能被&nbsp;<code>k</code>&nbsp;整除的数对&nbsp;<code>(i, j)</code>&nbsp;的&nbsp;<strong>数目</strong>&nbsp;。</p>
 
@@ -38,43 +50,41 @@
 	<li><code>1 &lt;= nums[i], k &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：枚举
+
+我们先在 $[0, n)$ 的范围内枚举下标 $j$，然后在 $[0, j)$ 的范围内枚举下标 $i$，统计满足 $\textit{nums}[i] = \textit{nums}[j]$ 且 $(i \times j) \bmod k = 0$ 的数对个数。
+
+时间复杂度 $O(n^2)$，其中 $n$ 是数组 $\textit{nums}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def countPairs(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        return sum(
-            nums[i] == nums[j] and (i * j) % k == 0
-            for i in range(n)
-            for j in range(i + 1, n)
-        )
+        ans = 0
+        for j, y in enumerate(nums):
+            for i, x in enumerate(nums[:j]):
+                ans += int(x == y and i * j % k == 0)
+        return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int countPairs(int[] nums, int k) {
-        int n = nums.length;
         int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (nums[i] == nums[j] && (i * j) % k == 0) {
-                    ++ans;
-                }
+        for (int j = 1; j < nums.length; ++j) {
+            for (int i = 0; i < j; ++i) {
+                ans += nums[i] == nums[j] && (i * j % k) == 0 ? 1 : 0;
             }
         }
         return ans;
@@ -82,17 +92,16 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int countPairs(vector<int>& nums, int k) {
-        int n = nums.size();
         int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (nums[i] == nums[j] && (i * j) % k == 0) ++ans;
+        for (int j = 1; j < nums.size(); ++j) {
+            for (int i = 0; i < j; ++i) {
+                ans += nums[i] == nums[j] && (i * j % k) == 0;
             }
         }
         return ans;
@@ -100,33 +109,30 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func countPairs(nums []int, k int) int {
-	n := len(nums)
-	ans := 0
-	for i, v := range nums {
-		for j := i + 1; j < n; j++ {
-			if v == nums[j] && (i*j)%k == 0 {
+func countPairs(nums []int, k int) (ans int) {
+	for j, y := range nums {
+		for i, x := range nums[:j] {
+			if x == y && (i*j%k) == 0 {
 				ans++
 			}
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countPairs(nums: number[], k: number): number {
-    const n = nums.length;
     let ans = 0;
-    for (let i = 0; i < n - 1; i++) {
-        for (let j = i + 1; j < n; j++) {
+    for (let j = 1; j < nums.length; ++j) {
+        for (let i = 0; i < j; ++i) {
             if (nums[i] === nums[j] && (i * j) % k === 0) {
-                ans++;
+                ++ans;
             }
         }
     }
@@ -134,17 +140,15 @@ function countPairs(nums: number[], k: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn count_pairs(nums: Vec<i32>, k: i32) -> i32 {
-        let k = k as usize;
-        let n = nums.len();
         let mut ans = 0;
-        for i in 0..n - 1 {
-            for j in i + 1..n {
-                if nums[i] == nums[j] && i * j % k == 0 {
+        for j in 1..nums.len() {
+            for (i, &x) in nums[..j].iter().enumerate() {
+                if x == nums[j] && (i * j) as i32 % k == 0 {
                     ans += 1;
                 }
             }
@@ -154,26 +158,22 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int countPairs(int *nums, int numsSize, int k) {
+int countPairs(int* nums, int numsSize, int k) {
     int ans = 0;
-    for (int i = 0; i < numsSize - 1; i++) {
-        for (int j = i + 1; j < numsSize; j++) {
-            if (nums[i] == nums[j] && i * j % k == 0) {
-                ans++;
-            }
+    for (int j = 1; j < numsSize; ++j) {
+        for (int i = 0; i < j; ++i) {
+            ans += (nums[i] == nums[j] && (i * j % k) == 0);
         }
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

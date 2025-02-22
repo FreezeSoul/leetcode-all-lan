@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0322.Coin%20Change/README_EN.md
+tags:
+    - Breadth-First Search
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [322. Coin Change](https://leetcode.com/problems/coin-change)
 
 [中文文档](/solution/0300-0399/0322.Coin%20Change/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>coins</code> representing coins of different denominations and an integer <code>amount</code> representing a total amount of money.</p>
 
@@ -42,83 +56,181 @@
 	<li><code>0 &lt;= amount &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Dynamic programming.
+<!-- solution:start -->
 
-Similar to the idea of ​​a complete backpack, there is no limit to the number of coins. Find the minimum number of coins required to make up the total amount.
+### Solution 1: Dynamic Programming (Complete Knapsack)
+
+We define $f[i][j]$ as the minimum number of coins needed to make up the amount $j$ using the first $i$ types of coins. Initially, $f[0][0] = 0$, and the values of other positions are all positive infinity.
+
+We can enumerate the quantity $k$ of the last coin used, then we have:
+
+$$
+f[i][j] = \min(f[i - 1][j], f[i - 1][j - x] + 1, \cdots, f[i - 1][j - k \times x] + k)
+$$
+
+where $x$ represents the face value of the $i$-th type of coin.
+
+Let $j = j - x$, then we have:
+
+$$
+f[i][j - x] = \min(f[i - 1][j - x], f[i - 1][j - 2 \times x] + 1, \cdots, f[i - 1][j - k \times x] + k - 1)
+$$
+
+Substituting the second equation into the first one, we can get the following state transition equation:
+
+$$
+f[i][j] = \min(f[i - 1][j], f[i][j - x] + 1)
+$$
+
+The final answer is $f[m][n]$.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Where $m$ and $n$ are the number of types of coins and the total amount, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         m, n = len(coins), amount
-        dp = [[n + 1] * (n + 1) for _ in range(m + 1)]
-        dp[0][0] = 0
-        for i in range(1, m + 1):
+        f = [[inf] * (n + 1) for _ in range(m + 1)]
+        f[0][0] = 0
+        for i, x in enumerate(coins, 1):
             for j in range(n + 1):
-                dp[i][j] = dp[i - 1][j]
-                if j >= coins[i - 1]:
-                    dp[i][j] = min(dp[i][j], dp[i][j - coins[i - 1]] + 1)
-        return -1 if dp[-1][-1] > n else dp[-1][-1]
+                f[i][j] = f[i - 1][j]
+                if j >= x:
+                    f[i][j] = min(f[i][j], f[i][j - x] + 1)
+        return -1 if f[m][n] >= inf else f[m][n]
 ```
 
-```python
-class Solution:
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        dp = [amount + 1] * (amount + 1)
-        dp[0] = 0
-        for coin in coins:
-            for j in range(coin, amount + 1):
-                dp[j] = min(dp[j], dp[j - coin] + 1)
-        return -1 if dp[-1] > amount else dp[-1]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int coinChange(int[] coins, int amount) {
+        final int inf = 1 << 30;
         int m = coins.length;
-        int[][] dp = new int[m + 1][amount + 1];
-        for (int i = 0; i <= m; ++i) {
-            Arrays.fill(dp[i], amount + 1);
+        int n = amount;
+        int[][] f = new int[m + 1][n + 1];
+        for (var g : f) {
+            Arrays.fill(g, inf);
         }
-        dp[0][0] = 0;
+        f[0][0] = 0;
         for (int i = 1; i <= m; ++i) {
-            int v = coins[i - 1];
-            for (int j = 0; j <= amount; ++j) {
-                dp[i][j] = dp[i - 1][j];
-                if (j >= v) {
-                    dp[i][j] = Math.min(dp[i][j], dp[i][j - v] + 1);
+            for (int j = 0; j <= n; ++j) {
+                f[i][j] = f[i - 1][j];
+                if (j >= coins[i - 1]) {
+                    f[i][j] = Math.min(f[i][j], f[i][j - coins[i - 1]] + 1);
                 }
             }
         }
-        return dp[m][amount] > amount ? - 1 : dp[m][amount];
+        return f[m][n] >= inf ? -1 : f[m][n];
     }
 }
 ```
 
-```java
+#### C++
+
+```cpp
 class Solution {
-    public int coinChange(int[] coins, int amount) {
-        int[] dp = new int[amount + 1];
-        Arrays.fill(dp, amount + 1);
-        dp[0] = 0;
-        for (int coin : coins) {
-            for (int j = coin; j <= amount; j++) {
-                dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int m = coins.size(), n = amount;
+        int f[m + 1][n + 1];
+        memset(f, 0x3f, sizeof(f));
+        f[0][0] = 0;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                f[i][j] = f[i - 1][j];
+                if (j >= coins[i - 1]) {
+                    f[i][j] = min(f[i][j], f[i][j - coins[i - 1]] + 1);
+                }
             }
         }
-        return dp[amount] > amount ? -1 : dp[amount];
+        return f[m][n] > n ? -1 : f[m][n];
+    }
+};
+```
+
+#### Go
+
+```go
+func coinChange(coins []int, amount int) int {
+	m, n := len(coins), amount
+	f := make([][]int, m+1)
+	const inf = 1 << 30
+	for i := range f {
+		f[i] = make([]int, n+1)
+		for j := range f[i] {
+			f[i][j] = inf
+		}
+	}
+	f[0][0] = 0
+	for i := 1; i <= m; i++ {
+		for j := 0; j <= n; j++ {
+			f[i][j] = f[i-1][j]
+			if j >= coins[i-1] {
+				f[i][j] = min(f[i][j], f[i][j-coins[i-1]]+1)
+			}
+		}
+	}
+	if f[m][n] > n {
+		return -1
+	}
+	return f[m][n]
+}
+```
+
+#### TypeScript
+
+```ts
+function coinChange(coins: number[], amount: number): number {
+    const m = coins.length;
+    const n = amount;
+    const f: number[][] = Array(m + 1)
+        .fill(0)
+        .map(() => Array(n + 1).fill(1 << 30));
+    f[0][0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 0; j <= n; ++j) {
+            f[i][j] = f[i - 1][j];
+            if (j >= coins[i - 1]) {
+                f[i][j] = Math.min(f[i][j], f[i][j - coins[i - 1]] + 1);
+            }
+        }
+    }
+    return f[m][n] > n ? -1 : f[m][n];
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
+        let n = amount as usize;
+        let mut f = vec![n + 1; n + 1];
+        f[0] = 0;
+        for &x in &coins {
+            for j in x as usize..=n {
+                f[j] = f[j].min(f[j - (x as usize)] + 1);
+            }
+        }
+        if f[n] > n {
+            -1
+        } else {
+            f[n] as i32
+        }
     }
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -127,105 +239,148 @@ class Solution {
  * @return {number}
  */
 var coinChange = function (coins, amount) {
-    let dp = Array(amount + 1).fill(amount + 1);
-    dp[0] = 0;
-    for (const coin of coins) {
-        for (let j = coin; j <= amount; ++j) {
-            dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+    const m = coins.length;
+    const n = amount;
+    const f = Array(m + 1)
+        .fill(0)
+        .map(() => Array(n + 1).fill(1 << 30));
+    f[0][0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 0; j <= n; ++j) {
+            f[i][j] = f[i - 1][j];
+            if (j >= coins[i - 1]) {
+                f[i][j] = Math.min(f[i][j], f[i][j - coins[i - 1]] + 1);
+            }
         }
     }
-    return dp[amount] > amount ? -1 : dp[amount];
+    return f[m][n] > n ? -1 : f[m][n];
 };
 ```
 
-### **C++**
+<!-- tabs:end -->
+
+We notice that $f[i][j]$ is only related to $f[i - 1][j]$ and $f[i][j - x]$. Therefore, we can optimize the two-dimensional array into a one-dimensional array, reducing the space complexity to $O(n)$.
+
+Similar problems:
+
+-   [279. Perfect Squares](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0279.Perfect%20Squares/README_EN.md)
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        n = amount
+        f = [0] + [inf] * n
+        for x in coins:
+            for j in range(x, n + 1):
+                f[j] = min(f[j], f[j - x] + 1)
+        return -1 if f[n] >= inf else f[n]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        final int inf = 1 << 30;
+        int n = amount;
+        int[] f = new int[n + 1];
+        Arrays.fill(f, inf);
+        f[0] = 0;
+        for (int x : coins) {
+            for (int j = x; j <= n; ++j) {
+                f[j] = Math.min(f[j], f[j - x] + 1);
+            }
+        }
+        return f[n] >= inf ? -1 : f[n];
+    }
+}
+```
+
+#### C++
 
 ```cpp
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount + 1, amount + 1);
-        dp[0] = 0;
-        for (auto& coin : coins)
-            for (int j = coin; j <= amount; ++j)
-                dp[j] = min(dp[j], dp[j - coin] + 1);
-        return dp[amount] > amount ? -1 : dp[amount];
+        int n = amount;
+        int f[n + 1];
+        memset(f, 0x3f, sizeof(f));
+        f[0] = 0;
+        for (int x : coins) {
+            for (int j = x; j <= n; ++j) {
+                f[j] = min(f[j], f[j - x] + 1);
+            }
+        }
+        return f[n] > n ? -1 : f[n];
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func coinChange(coins []int, amount int) int {
-	dp := make([]int, amount+1)
-	for i := 1; i <= amount; i++ {
-		dp[i] = amount + 1
+	n := amount
+	f := make([]int, n+1)
+	for i := range f {
+		f[i] = 1 << 30
 	}
-	for _, coin := range coins {
-		for j := coin; j <= amount; j++ {
-			dp[j] = min(dp[j], dp[j-coin]+1)
+	f[0] = 0
+	for _, x := range coins {
+		for j := x; j <= n; j++ {
+			f[j] = min(f[j], f[j-x]+1)
 		}
 	}
-	if dp[amount] > amount {
+	if f[n] > n {
 		return -1
 	}
-	return dp[amount]
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return f[n]
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function coinChange(coins: number[], amount: number): number {
-    let dp = new Array(amount + 1).fill(amount + 1);
-    dp[0] = 0;
-    for (const coin of coins) {
-        for (let j = coin; j <= amount; ++j) {
-            dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+    const n = amount;
+    const f: number[] = Array(n + 1).fill(1 << 30);
+    f[0] = 0;
+    for (const x of coins) {
+        for (let j = x; j <= n; ++j) {
+            f[j] = Math.min(f[j], f[j - x] + 1);
         }
     }
-    return dp[amount] > amount ? -1 : dp[amount];
+    return f[n] > n ? -1 : f[n];
 }
 ```
 
-### **Rust**
+#### JavaScript
 
-```rust
-impl Solution {
-    pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
-        let n = coins.len();
-        let amount = amount as usize;
-        let mut dp = vec![amount + 1; amount + 1];
-        dp[0] = 0;
-        for i in 1..=amount {
-            for j in 0..n {
-                let coin = coins[j] as usize;
-                if coin <= i {
-                    dp[i] = dp[i].min(dp[i - coin] + 1);
-                }
-            }
-        }
-        if dp[amount] > amount {
-            -1
-        } else {
-            dp[amount] as i32
+```js
+/**
+ * @param {number[]} coins
+ * @param {number} amount
+ * @return {number}
+ */
+var coinChange = function (coins, amount) {
+    const n = amount;
+    const f = Array(n + 1).fill(1 << 30);
+    f[0] = 0;
+    for (const x of coins) {
+        for (let j = x; j <= n; ++j) {
+            f[j] = Math.min(f[j], f[j - x] + 1);
         }
     }
-}
-```
-
-### **....**
-
-```
-
+    return f[n] > n ? -1 : f[n];
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

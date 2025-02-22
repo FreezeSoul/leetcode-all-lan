@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2319.Check%20if%20Matrix%20Is%20X-Matrix/README_EN.md
+rating: 1200
+source: Weekly Contest 299 Q1
+tags:
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [2319. Check if Matrix Is X-Matrix](https://leetcode.com/problems/check-if-matrix-is-x-matrix)
 
 [中文文档](/solution/2300-2399/2319.Check%20if%20Matrix%20Is%20X-Matrix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A square matrix is said to be an <strong>X-Matrix</strong> if <strong>both</strong> of the following conditions hold:</p>
 
@@ -43,11 +58,17 @@ Thus, grid is not an X-Matrix.
 	<li><code>0 &lt;= grid[i][j] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +83,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -107,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkXMatrix(grid [][]int) bool {
@@ -126,7 +147,7 @@ func checkXMatrix(grid [][]int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function checkXMatrix(grid: number[][]): boolean {
@@ -146,29 +167,7 @@ function checkXMatrix(grid: number[][]): boolean {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool CheckXMatrix(int[][] grid) {
-        int n = grid.Length;
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (i == j || i + j == n - 1) {
-                    if (grid[i][j] == 0) {
-                        return false;
-                    }
-                } else if (grid[i][j] != 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -190,10 +189,32 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C#
+
+```cs
+public class Solution {
+    public bool CheckXMatrix(int[][] grid) {
+        int n = grid.Length;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (i == j || i + j == n - 1) {
+                    if (grid[i][j] == 0) {
+                        return false;
+                    }
+                } else if (grid[i][j] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+```
+
+#### C
 
 ```c
-bool checkXMatrix(int **grid, int gridSize, int *gridColSize) {
+bool checkXMatrix(int** grid, int gridSize, int* gridColSize) {
     for (int i = 0; i < gridSize; i++) {
         for (int j = 0; j < gridSize; j++) {
             if (i == j || i + j == gridSize - 1) {
@@ -209,10 +230,8 @@ bool checkXMatrix(int **grid, int gridSize, int *gridColSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

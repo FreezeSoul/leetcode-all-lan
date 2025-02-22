@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2616.Minimize%20the%20Maximum%20Difference%20of%20Pairs/README_EN.md
+rating: 2155
+source: Weekly Contest 340 Q3
+tags:
+    - Greedy
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [2616. Minimize the Maximum Difference of Pairs](https://leetcode.com/problems/minimize-the-maximum-difference-of-pairs)
 
 [中文文档](/solution/2600-2699/2616.Minimize%20the%20Maximum%20Difference%20of%20Pairs/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code> and an integer <code>p</code>. Find <code>p</code> pairs of indices of <code>nums</code> such that the <strong>maximum</strong> difference amongst all the pairs is <strong>minimized</strong>. Also, ensure no index appears more than once amongst the <code>p</code> pairs.</p>
 
@@ -37,9 +53,13 @@ The maximum difference is max(|nums[1] - nums[4]|, |nums[2] - nums[5]|) = max(0,
 	<li><code>0 &lt;= p &lt;= (nums.length)/2</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Binary search + Greedy**
+<!-- solution:start -->
+
+### Solution 1: Binary search + Greedy
 
 We find that the maximum difference has the monotonicity, that is, if the maximum difference $x$ satisfies the condition, then $x-1$ must also satisfy the condition. Therefore, we can use the binary search method to find the smallest maximum difference that satisfies the condition.
 
@@ -51,7 +71,7 @@ The time complexity is $O(n \times (\log n + \log m))$, where $n$ is the length 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +90,7 @@ class Solution:
         return bisect_left(range(nums[-1] - nums[0] + 1), True, key=check)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -134,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimizeMax(nums []int, p int) int {
@@ -154,10 +174,8 @@ func minimizeMax(nums []int, p int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

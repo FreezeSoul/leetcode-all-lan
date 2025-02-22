@@ -13,31 +13,22 @@ public:
     }
 };
 */
+
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        if (!head) {
-            return nullptr;
-        }
-        for (Node* cur = head; cur;) {
+        Node* dummy = new Node(0);
+        Node* tail = dummy;
+        unordered_map<Node*, Node*> d;
+        for (Node* cur = head; cur; cur = cur->next) {
             Node* node = new Node(cur->val);
-            node->next = cur->next;
-            cur->next = node;
-            cur = node->next;
+            tail->next = node;
+            tail = node;
+            d[cur] = node;
         }
-        for (Node* cur = head; cur; cur = cur->next->next) {
-            if (cur->random) {
-                cur->next->random = cur->random->next;
-            }
+        for (Node* cur = head; cur; cur = cur->next) {
+            d[cur]->random = cur->random ? d[cur->random] : nullptr;
         }
-        Node* ans = head->next;
-        for (Node* cur = head; cur;) {
-            Node* nxt = cur->next;
-            if (nxt) {
-                cur->next = nxt->next;
-            }
-            cur = nxt;
-        }
-        return ans;
+        return dummy->next;
     }
 };

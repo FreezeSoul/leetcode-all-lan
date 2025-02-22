@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9828.%20%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 28. 对称的二叉树](https://leetcode.cn/problems/dui-cheng-de-er-cha-shu-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。</p>
 
@@ -40,9 +50,13 @@
 
 <p>注意：本题与主站 101 题相同：<a href="https://leetcode.cn/problems/symmetric-tree/">https://leetcode.cn/problems/symmetric-tree/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：递归**
+<!-- solution:start -->
+
+### 方法一：递归
 
 我们设计一个递归函数 `dfs`，它接收两个参数 `a` 和 `b`，分别代表两棵树的根节点。我们可以对 `a` 和 `b` 进行如下判断：
 
@@ -57,7 +71,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -80,7 +94,7 @@ class Solution:
         return dfs(root, root)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -109,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -138,7 +152,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -164,35 +178,7 @@ func isSymmetric(root *TreeNode) bool {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {boolean}
- */
-var isSymmetric = function (root) {
-    const dfs = (a, b) => {
-        if (!a && !b) {
-            return true;
-        }
-        if (!a || !b || a.val != b.val) {
-            return false;
-        }
-        return dfs(a.left, b.right) && dfs(a.right, b.left);
-    };
-    return dfs(root, root);
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -223,7 +209,7 @@ function isSymmetric(root: TreeNode | null): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -265,7 +251,35 @@ impl Solution {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isSymmetric = function (root) {
+    const dfs = (a, b) => {
+        if (!a && !b) {
+            return true;
+        }
+        if (!a || !b || a.val != b.val) {
+            return false;
+        }
+        return dfs(a.left, b.right) && dfs(a.right, b.left);
+    };
+    return dfs(root, root);
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -294,10 +308,40 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* public class TreeNode {
+*     var val: Int
+*     var left: TreeNode?
+*     var right: TreeNode?
+*     init(_ val: Int) {
+*         self.val = val
+*         self.left = nil
+*         self.right = nil
+*     }
+* }
+*/
 
+class Solution {
+    func isSymmetric(_ root: TreeNode?) -> Bool {
+        return dfs(root, root)
+    }
+
+    private func dfs(_ a: TreeNode?, _ b: TreeNode?) -> Bool {
+        if a == nil && b == nil {
+            return true
+        }
+        if a == nil || b == nil || a!.val != b!.val {
+            return false
+        }
+        return dfs(a!.left, b!.right) && dfs(a!.right, b!.left)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

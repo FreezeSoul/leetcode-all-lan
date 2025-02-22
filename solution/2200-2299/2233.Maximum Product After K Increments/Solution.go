@@ -5,13 +5,13 @@ func maximumProduct(nums []int, k int) int {
 		heap.Fix(&h, 0)
 	}
 	ans := 1
-	for _, v := range nums {
-		ans = (ans * v) % (1e9 + 7)
+	for _, x := range nums {
+		ans = (ans * x) % (1e9 + 7)
 	}
 	return ans
 }
 
 type hp struct{ sort.IntSlice }
 
-func (hp) Push(interface{})     {}
-func (hp) Pop() (_ interface{}) { return }
+func (hp) Push(any)     {}
+func (hp) Pop() (_ any) { return }

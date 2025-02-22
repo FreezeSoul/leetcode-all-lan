@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1671.Minimum%20Number%20of%20Removals%20to%20Make%20Mountain%20Array/README_EN.md
+rating: 1912
+source: Biweekly Contest 40 Q4
+tags:
+    - Greedy
+    - Array
+    - Binary Search
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1671. Minimum Number of Removals to Make Mountain Array](https://leetcode.com/problems/minimum-number-of-removals-to-make-mountain-array)
 
 [中文文档](/solution/1600-1699/1671.Minimum%20Number%20of%20Removals%20to%20Make%20Mountain%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You may recall that an array <code>arr</code> is a <strong>mountain array</strong> if and only if:</p>
 
@@ -44,11 +61,25 @@
 	<li>It is guaranteed that you can make a mountain array out of <code>nums</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+This problem can be transformed into finding the longest increasing subsequence and the longest decreasing subsequence.
+
+We define $left[i]$ as the length of the longest increasing subsequence ending with $nums[i]$, and define $right[i]$ as the length of the longest decreasing subsequence starting with $nums[i]$.
+
+Then the final answer is $n - \max(left[i] + right[i] - 1)$, where $1 \leq i \leq n$, and $left[i] \gt 1$ and $right[i] \gt 1$.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +98,7 @@ class Solution:
         return n - max(a + b - 1 for a, b in zip(left, right) if a > 1 and b > 1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumMountainRemovals(nums []int) int {
@@ -166,22 +197,15 @@ func minimumMountainRemovals(nums []int) int {
 	}
 	return n - ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumMountainRemovals(nums: number[]): number {
     const n = nums.length;
-    const left = new Array(n).fill(1);
-    const right = new Array(n).fill(1);
+    const left = Array(n).fill(1);
+    const right = Array(n).fill(1);
     for (let i = 1; i < n; ++i) {
         for (let j = 0; j < i; ++j) {
             if (nums[i] > nums[j]) {
@@ -206,10 +230,43 @@ function minimumMountainRemovals(nums: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn minimum_mountain_removals(nums: Vec<i32>) -> i32 {
+        let n = nums.len();
+        let mut left = vec![1; n];
+        let mut right = vec![1; n];
+        for i in 1..n {
+            for j in 0..i {
+                if nums[i] > nums[j] {
+                    left[i] = left[i].max(left[j] + 1);
+                }
+            }
+        }
+        for i in (0..n - 1).rev() {
+            for j in i + 1..n {
+                if nums[i] > nums[j] {
+                    right[i] = right[i].max(right[j] + 1);
+                }
+            }
+        }
 
+        let mut ans = 0;
+        for i in 0..n {
+            if left[i] > 1 && right[i] > 1 {
+                ans = ans.max(left[i] + right[i] - 1);
+            }
+        }
+
+        (n as i32) - ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

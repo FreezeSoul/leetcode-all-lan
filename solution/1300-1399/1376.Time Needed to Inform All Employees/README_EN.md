@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1376.Time%20Needed%20to%20Inform%20All%20Employees/README_EN.md
+rating: 1561
+source: Weekly Contest 179 Q3
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+---
+
+<!-- problem:start -->
+
 # [1376. Time Needed to Inform All Employees](https://leetcode.com/problems/time-needed-to-inform-all-employees)
 
 [中文文档](/solution/1300-1399/1376.Time%20Needed%20to%20Inform%20All%20Employees/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A company has <code>n</code> employees with a unique ID for each employee from <code>0</code> to <code>n - 1</code>. The head of the company is the one with <code>headID</code>.</p>
 
@@ -47,9 +63,13 @@ The tree structure of the employees in the company is shown.
 	<li>It is <strong>guaranteed</strong> that all the employees can be informed.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: DFS**
+<!-- solution:start -->
+
+### Solution 1: DFS
 
 We first build an adjacent list $g$ according to the $manager$ array, where $g[i]$ represents all direct subordinates of employee $i$.
 
@@ -61,11 +81,13 @@ The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:
+    def numOfMinutes(
+        self, n: int, headID: int, manager: List[int], informTime: List[int]
+    ) -> int:
         def dfs(i: int) -> int:
             ans = 0
             for j in g[i]:
@@ -78,7 +100,7 @@ class Solution:
         return dfs(headID)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +129,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numOfMinutes(n int, headID int, manager []int, informTime []int) int {
@@ -150,24 +172,12 @@ func numOfMinutes(n int, headID int, manager []int, informTime []int) int {
 	}
 	return dfs(headID)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function numOfMinutes(
-    n: number,
-    headID: number,
-    manager: number[],
-    informTime: number[],
-): number {
+function numOfMinutes(n: number, headID: number, manager: number[], informTime: number[]): number {
     const g: number[][] = new Array(n).fill(0).map(() => []);
     for (let i = 0; i < n; ++i) {
         if (manager[i] !== -1) {
@@ -185,7 +195,7 @@ function numOfMinutes(
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -216,10 +226,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

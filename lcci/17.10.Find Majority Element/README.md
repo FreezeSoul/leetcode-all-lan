@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.10.Find%20Majority%20Element/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 17.10. 主要元素](https://leetcode.cn/problems/find-majority-element-lcci)
 
 [English Version](/lcci/17.10.Find%20Majority%20Element/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>如果数组中多一半的数都是同一个，则称之为主要元素。给定一个<strong>整数</strong>数组，找到它的主要元素。若没有，返回-1。</p>
 
 <p><strong>示例 1：</strong></p>
@@ -31,11 +40,13 @@
 <p><strong>说明：</strong><br>
 你有办法在时间复杂度为 O(N)，空间复杂度为 O(1) 内完成吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：摩尔投票法**
+### 方法一：摩尔投票法
 
 摩尔投票法的基本步骤如下：
 
@@ -51,9 +62,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +76,7 @@ class Solution:
         return m if nums.count(m) > len(nums) // 2 else -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,35 +101,7 @@ class Solution {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var majorityElement = function (nums) {
-    let cnt = 0,
-        m = 0;
-    for (const v of nums) {
-        if (cnt == 0) {
-            m = v;
-            cnt = 1;
-        } else {
-            cnt += m == v ? 1 : -1;
-        }
-    }
-    cnt = 0;
-    for (const v of nums) {
-        if (m == v) {
-            ++cnt;
-        }
-    }
-    return cnt > nums.length / 2 ? m : -1;
-};
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func majorityElement(nums []int) int {
@@ -171,7 +150,35 @@ func majorityElement(nums []int) int {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var majorityElement = function (nums) {
+    let cnt = 0,
+        m = 0;
+    for (const v of nums) {
+        if (cnt == 0) {
+            m = v;
+            cnt = 1;
+        } else {
+            cnt += m == v ? 1 : -1;
+        }
+    }
+    cnt = 0;
+    for (const v of nums) {
+        if (m == v) {
+            ++cnt;
+        }
+    }
+    return cnt > nums.length / 2 ? m : -1;
+};
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -202,10 +209,44 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func majorityElement(_ nums: [Int]) -> Int {
+        var count = 0
+        var candidate: Int?
 
+        for num in nums {
+            if count == 0 {
+                candidate = num
+                count = 1
+            } else if let candidate = candidate, candidate == num {
+                count += 1
+            } else {
+                count -= 1
+            }
+        }
+
+        count = 0
+        if let candidate = candidate {
+            for num in nums {
+                if num == candidate {
+                    count += 1
+                }
+            }
+            if count > nums.count / 2 {
+                return candidate
+            }
+        }
+
+        return -1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

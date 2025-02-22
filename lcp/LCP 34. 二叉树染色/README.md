@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2034.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9F%93%E8%89%B2/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 34. 二叉树染色](https://leetcode.cn/problems/er-cha-shu-ran-se-UGC)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 小扣有一个根结点为 `root` 的二叉树模型，初始所有结点均为白色，可以用蓝色染料给模型结点染色，模型的每个结点有一个 `val` 价值。小扣出于美观考虑，希望最后二叉树上每个蓝色相连部分的结点个数不能超过 `k` 个，求所有染成蓝色的结点价值总和最大是多少？
 
@@ -12,7 +20,7 @@
 >
 > 输出：`12`
 >
-> 解释：`结点 5、3、4 染成蓝色，获得最大的价值 5+3+4=12` > ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2034.%20二叉树染色/images/1616126267-BqaCRj-image.png)
+> 解释：`结点 5、3、4 染成蓝色，获得最大的价值 5+3+4=12` > ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2034.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9F%93%E8%89%B2/images/1616126267-BqaCRj-image.png)
 
 **示例 2：**
 
@@ -21,7 +29,7 @@
 > 输出：`16`
 >
 > 解释：结点 4、3、9 染成蓝色，获得最大的价值 4+3+9=16
-> ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2034.%20二叉树染色/images/1616126301-gJbhba-image.png)
+> ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2034.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9F%93%E8%89%B2/images/1616126301-gJbhba-image.png)
 
 **提示：**
 
@@ -29,11 +37,13 @@
 -   `1 <= val <= 10000`
 -   `1 <= 结点数量 <= 10000`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划（树形 DP）**
+### 方法一：动态规划（树形 DP）
 
 我们考虑以 $root$ 为根节点的子树，且 $root$ 节点连着 $t$ 个染色节点的最大价值，其中 $t \in [0, k]$。我们用状态 $f[root][t]$ 来表示。
 
@@ -47,9 +57,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -76,9 +84,7 @@ class Solution:
         return max(dfs(root))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -116,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -152,7 +158,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -172,7 +178,7 @@ func maxValue(root *TreeNode, k int) int {
 		}
 		l := dfs(node.Left)
 		r := dfs(node.Right)
-		ans[0] = max(l...) + max(r...)
+		ans[0] = slices.Max(l) + slices.Max(r)
 		for i := 0; i < k; i++ {
 			for j := 0; j < k-i; j++ {
 				ans[i+j+1] = max(ans[i+j+1], l[i]+r[j]+node.Val)
@@ -180,21 +186,11 @@ func maxValue(root *TreeNode, k int) int {
 		}
 		return ans
 	}
-	return max(dfs(root)...)
-}
-
-func max(nums ...int) int {
-	ans := nums[0]
-	for _, x := range nums {
-		if x > ans {
-			ans = x
-		}
-	}
-	return ans
+	return slices.Max(dfs(root))
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -220,10 +216,7 @@ var maxValue = function (root, k) {
         ans[0] = Math.max(...l) + Math.max(...r);
         for (let i = 0; i < k; i++) {
             for (let j = 0; j < k - i; ++j) {
-                ans[i + j + 1] = Math.max(
-                    ans[i + j + 1],
-                    l[i] + r[j] + root.val,
-                );
+                ans[i + j + 1] = Math.max(ans[i + j + 1], l[i] + r[j] + root.val);
             }
         }
         return ans;
@@ -232,10 +225,51 @@ var maxValue = function (root, k) {
 };
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* class TreeNode {
+*    var val: Int
+*    var left: TreeNode?
+*    var right: TreeNode?
+*    init(_ val: Int) {
+*        self.val = val
+*        self.left = nil
+*        self.right = nil
+*    }
+* }
+*/
 
+class Solution {
+    private var k: Int = 0
+
+    func maxValue(_ root: TreeNode?, _ k: Int) -> Int {
+        self.k = k
+        return dfs(root).max() ?? 0
+    }
+
+    private func dfs(_ root: TreeNode?) -> [Int] {
+        var ans = [Int](repeating: 0, count: k + 1)
+        guard let root = root else {
+            return ans
+        }
+        let l = dfs(root.left)
+        let r = dfs(root.right)
+
+        ans[0] = (l.max() ?? 0) + (r.max() ?? 0)
+
+        for i in 0..<k {
+            for j in 0..<k - i {
+                ans[i + j + 1] = max(ans[i + j + 1], root.val + l[i] + r[j])
+            }
+        }
+        return ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

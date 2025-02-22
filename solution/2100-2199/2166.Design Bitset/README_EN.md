@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2166.Design%20Bitset/README_EN.md
+rating: 1751
+source: Weekly Contest 279 Q3
+tags:
+    - Design
+    - Array
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [2166. Design Bitset](https://leetcode.com/problems/design-bitset)
 
 [中文文档](/solution/2100-2199/2166.Design%20Bitset/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>Bitset</strong> is a data structure that compactly stores bits.</p>
 
@@ -54,11 +71,17 @@ bs.toString(); // return &quot;01010&quot;, which is the composition of bitset.
 	<li>At most <code>5</code> calls will be made to <code>toString</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Bitset:
@@ -107,7 +130,7 @@ class Bitset:
 # param_7 = obj.toString()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Bitset {
@@ -175,7 +198,7 @@ class Bitset {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Bitset {
@@ -233,7 +256,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Bitset struct {
@@ -298,16 +321,8 @@ func (this *Bitset) ToString() string {
  */
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

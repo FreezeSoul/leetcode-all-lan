@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1912.Design%20Movie%20Rental%20System/README.md
+rating: 2181
+source: 第 55 场双周赛 Q4
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+    - 有序集合
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1912. 设计电影租借系统](https://leetcode.cn/problems/design-movie-rental-system)
 
 [English Version](/solution/1900-1999/1912.Design%20Movie%20Rental%20System/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一个电影租借公司和 <code>n</code> 个电影商店。你想要实现一个电影租借系统，它支持查询、预订和返还电影的操作。同时系统还能生成一份当前被借出电影的报告。</p>
 
@@ -65,32 +81,55 @@ movieRentingSystem.search(2);  // 返回 [0, 1] 。商店 0 和 1 有未借出�
 	<li><code>search</code>，<code>rent</code>，<code>drop</code> 和 <code>report</code> 的调用 <strong>总共</strong> 不超过 <code>10<sup>5</sup></code> 次。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
+class MovieRentingSystem:
+    def __init__(self, n: int, entries: List[List[int]]):
+        self.unrented = collections.defaultdict(SortedList)  # {movie: (price, shop)}
+        self.shopAndMovieToPrice = {}  # {(shop, movie): price}
+        self.rented = SortedList()  # (price, shop, movie)
+        for shop, movie, price in entries:
+            self.unrented[movie].add((price, shop))
+            self.shopAndMovieToPrice[(shop, movie)] = price
 
-```
+    def search(self, movie: int) -> List[int]:
+        return [shop for _, shop in self.unrented[movie][:5]]
 
-### **Java**
+    def rent(self, shop: int, movie: int) -> None:
+        price = self.shopAndMovieToPrice[(shop, movie)]
+        self.unrented[movie].remove((price, shop))
+        self.rented.add((price, shop, movie))
 
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+    def drop(self, shop: int, movie: int) -> None:
+        price = self.shopAndMovieToPrice[(shop, movie)]
+        self.unrented[movie].add((price, shop))
+        self.rented.remove((price, shop, movie))
 
-```java
+    def report(self) -> List[List[int]]:
+        return [[shop, movie] for _, shop, movie in self.rented[:5]]
 
-```
 
-### **...**
-
-```
-
+# Your MovieRentingSystem object will be instantiated and called as such:
+# obj = MovieRentingSystem(n, entries)
+# param_1 = obj.search(movie)
+# obj.rent(shop,movie)
+# obj.drop(shop,movie)
+# param_4 = obj.report()
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

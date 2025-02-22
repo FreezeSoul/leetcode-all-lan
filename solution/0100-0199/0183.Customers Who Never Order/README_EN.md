@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0183.Customers%20Who%20Never%20Order/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [183. Customers Who Never Order](https://leetcode.com/problems/customers-who-never-order)
 
 [中文文档](/solution/0100-0199/0183.Customers%20Who%20Never%20Order/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Customers</code></p>
 
@@ -13,7 +25,7 @@
 | id          | int     |
 | name        | varchar |
 +-------------+---------+
-id is the primary key column for this table.
+id is the primary key (column with unique values) for this table.
 Each row of this table indicates the ID and name of a customer.
 </pre>
 
@@ -28,18 +40,18 @@ Each row of this table indicates the ID and name of a customer.
 | id          | int  |
 | customerId  | int  |
 +-------------+------+
-id is the primary key column for this table.
-customerId is a foreign key of the ID from the Customers table.
+id is the primary key (column with unique values) for this table.
+customerId is a foreign key (reference columns) of the ID from the Customers table.
 Each row of this table indicates the ID of an order and the ID of the customer who ordered it.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report all customers who never order anything.</p>
+<p>Write a solution to find all customers who never order anything.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -71,29 +83,72 @@ Orders table:
 +-----------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: NOT IN
+
+List all customer IDs of existing orders, and use `NOT IN` to find customers who are not in the list.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### Python3
+
+```python
+import pandas as pd
+
+
+def find_customers(customers: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:
+    # Select the customers whose 'id' is not present in the orders DataFrame's 'customerId' column.
+    df = customers[~customers["id"].isin(orders["customerId"])]
+
+    # Build a DataFrame that only contains the 'name' column and rename it as 'Customers'.
+    df = df[["name"]].rename(columns={"name": "Customers"})
+
+    return df
+```
+
+#### MySQL
 
 ```sql
-select Name as Customers
-from Customers
-where id not in (
-        select CustomerId
-        from Orders
+# Write your MySQL query statement below
+SELECT name AS Customers
+FROM Customers
+WHERE
+    id NOT IN (
+        SELECT customerId
+        FROM Orders
     );
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: LEFT JOIN
+
+Use `LEFT JOIN` to join the tables and return the data where `CustomerId` is `NULL`.
+
+<!-- tabs:start -->
+
+#### MySQL
+
 ```sql
-SELECT
-    c.Name AS Customers
+# Write your MySQL query statement below
+SELECT name AS Customers
 FROM
-    customers AS c
-    LEFT JOIN orders AS o ON c.Id  = o.CustomerId
-WHERE
-    o.CustomerId IS NULL;
+    Customers AS c
+    LEFT JOIN Orders AS o ON c.id = o.customerId
+WHERE o.id IS NULL;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
-# [266. Palindrome Permutation](https://leetcode.com/problems/palindrome-permutation)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0266.Palindrome%20Permutation/README_EN.md
+tags:
+    - Bit Manipulation
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
+# [266. Palindrome Permutation 🔒](https://leetcode.com/problems/palindrome-permutation)
 
 [中文文档](/solution/0200-0299/0266.Palindrome%20Permutation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, return <code>true</code> <em>if a permutation of the string could form a </em><span data-keyword="palindrome-string"><em><strong>palindrome</strong></em></span><em> and </em><code>false</code><em> otherwise</em>.</p>
 
@@ -36,19 +50,29 @@
 	<li><code>s</code> consists of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+If a string is a palindrome, at most one character can appear an odd number of times, while all other characters must appear an even number of times. Therefore, we only need to count the occurrences of each character and then check if this condition is satisfied.
+
+Time complexity is $O(n)$, and space complexity is $O(|\Sigma|)$. Here, $n$ is the length of the string, and $|\Sigma|$ is the size of the character set. In this problem, the character set consists of lowercase letters, so $|\Sigma|=26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def canPermutePalindrome(self, s: str) -> bool:
-        return sum(v % 2 for v in Counter(s).values()) <= 1
+        return sum(v & 1 for v in Counter(s).values()) < 2
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -57,47 +81,63 @@ class Solution {
         for (char c : s.toCharArray()) {
             ++cnt[c - 'a'];
         }
-        int n = 0;
-        for (int v : cnt) {
-            n += v % 2;
+        int odd = 0;
+        for (int x : cnt) {
+            odd += x & 1;
         }
-        return n < 2;
+        return odd < 2;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool canPermutePalindrome(string s) {
         vector<int> cnt(26);
-        for (char& c : s) ++cnt[c - 'a'];
-        int n = 0;
-        for (int& v : cnt) n += v & 1;
-        return n < 2;
+        for (char& c : s) {
+            ++cnt[c - 'a'];
+        }
+        int odd = 0;
+        for (int x : cnt) {
+            odd += x & 1;
+        }
+        return odd < 2;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canPermutePalindrome(s string) bool {
-	cnt := make([]int, 26)
+	cnt := [26]int{}
 	for _, c := range s {
 		cnt[c-'a']++
 	}
-	n := 0
-	for _, v := range cnt {
-		n += v & 1
+	odd := 0
+	for _, x := range cnt {
+		odd += x & 1
 	}
-	return n < 2
+	return odd < 2
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function canPermutePalindrome(s: string): boolean {
+    const cnt: number[] = Array(26).fill(0);
+    for (const c of s) {
+        ++cnt[c.charCodeAt(0) - 97];
+    }
+    return cnt.filter(c => c % 2 === 1).length < 2;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -105,22 +145,16 @@ func canPermutePalindrome(s string) bool {
  * @return {boolean}
  */
 var canPermutePalindrome = function (s) {
-    let ss = new Set();
-    for (let c of s) {
-        if (ss.has(c)) {
-            ss.delete(c);
-        } else {
-            ss.add(c);
-        }
+    const cnt = new Map();
+    for (const c of s) {
+        cnt.set(c, (cnt.get(c) || 0) + 1);
     }
-    return ss.size < 2;
+    return [...cnt.values()].filter(v => v % 2 === 1).length < 2;
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

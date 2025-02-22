@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9861.%20%E6%89%91%E5%85%8B%E7%89%8C%E4%B8%AD%E7%9A%84%E9%A1%BA%E5%AD%90/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 61. 扑克牌中的顺子](https://leetcode.cn/problems/bu-ke-pai-zhong-de-shun-zi-lcof/)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>从<strong>若干副扑克牌</strong>中随机抽 <code>5</code> 张牌，判断是不是一个顺子，即这5张牌是不是连续的。2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王为 0 ，可以看成任意数字。A 不能视为 14。</p>
 
@@ -30,11 +38,13 @@
 
 <p>数组的数取值为 [0, 13] .</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：遍历**
+### 方法一：遍历
 
 我们首先明确顺子不成立的核心条件：
 
@@ -47,9 +57,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +75,7 @@ class Solution:
         return mx - mi <= 4
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +98,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +122,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isStraight(nums []int) bool {
@@ -135,23 +141,45 @@ func isStraight(nums []int) bool {
 	}
 	return mx-mi <= 4
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
+#### TypeScript
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+```ts
+function isStraight(nums: number[]): boolean {
+    nums.sort((a, b) => a - b);
+    let j = 0;
+    for (let i = 0; i < 4; i++) {
+        if (nums[i] === 0) {
+            j++;
+        } else if (nums[i] === nums[i + 1]) {
+            return false;
+        }
+    }
+    return nums[4] - nums[j] <= 4;
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn is_straight(mut nums: Vec<i32>) -> bool {
+        nums.sort();
+        let mut j = 0;
+        for i in 0..4 {
+            if nums[i] == 0 {
+                j += 1;
+            } else if nums[i] == nums[i + 1] {
+                return false;
+            }
+        }
+        nums[4] - nums[j] <= 4
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -177,43 +205,7 @@ var isStraight = function (nums) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function isStraight(nums: number[]): boolean {
-    nums.sort((a, b) => a - b);
-    let j = 0;
-    for (let i = 0; i < 4; i++) {
-        if (nums[i] === 0) {
-            j++;
-        } else if (nums[i] === nums[i + 1]) {
-            return false;
-        }
-    }
-    return nums[4] - nums[j] <= 4;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn is_straight(mut nums: Vec<i32>) -> bool {
-        nums.sort();
-        let mut j = 0;
-        for i in 0..4 {
-            if nums[i] == 0 {
-                j += 1;
-            } else if nums[i] == nums[i + 1] {
-                return false;
-            }
-        }
-        nums[4] - nums[j] <= 4
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -236,10 +228,32 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func isStraight(_ nums: [Int]) -> Bool {
+        var vis = Array(repeating: false, count: 14)
+        var mi = 20, mx = -1
+        for x in nums {
+            if x == 0 {
+                continue
+            }
+            if vis[x] {
+                return false
+            }
+            vis[x] = true
+            mi = min(mi, x)
+            mx = max(mx, x)
+        }
+        return mx - mi <= 4
+    }
+}
 
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

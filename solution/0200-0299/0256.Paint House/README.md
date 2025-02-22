@@ -1,10 +1,21 @@
-# [256. 粉刷房子](https://leetcode.cn/problems/paint-house)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0256.Paint%20House/README.md
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
+# [256. 粉刷房子 🔒](https://leetcode.cn/problems/paint-house)
 
 [English Version](/solution/0200-0299/0256.Paint%20House/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>假如有一排房子，共 <code>n</code> 个，每个房子可以被粉刷成红色、蓝色或者绿色这三种颜色中的一种，你需要粉刷所有的房子并且使其相邻的两个房子颜色不能相同。</p>
 
@@ -43,19 +54,19 @@
 	<li><code>1 <= costs[i][j] <= 20</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 表示房子的数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -66,9 +77,7 @@ class Solution:
         return min(a, b, c)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +94,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +112,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCost(costs [][]int) int {
@@ -116,16 +125,9 @@ func minCost(costs [][]int) int {
 	}
 	return min(r, min(g, b))
 }
-
-func min(x, y int) int {
-	if x < y {
-		return x
-	}
-	return y
-}
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -135,20 +137,14 @@ func min(x, y int) int {
 var minCost = function (costs) {
     let [a, b, c] = [0, 0, 0];
     for (let [ca, cb, cc] of costs) {
-        [a, b, c] = [
-            Math.min(b, c) + ca,
-            Math.min(a, c) + cb,
-            Math.min(a, b) + cc,
-        ];
+        [a, b, c] = [Math.min(b, c) + ca, Math.min(a, c) + cb, Math.min(a, b) + cc];
     }
     return Math.min(a, b, c);
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1284.Minimum%20Number%20of%20Flips%20to%20Convert%20Binary%20Matrix%20to%20Zero%20Matrix/README_EN.md
+rating: 1810
+source: Weekly Contest 166 Q4
+tags:
+    - Bit Manipulation
+    - Breadth-First Search
+    - Array
+    - Hash Table
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1284. Minimum Number of Flips to Convert Binary Matrix to Zero Matrix](https://leetcode.com/problems/minimum-number-of-flips-to-convert-binary-matrix-to-zero-matrix)
 
 [中文文档](/solution/1200-1299/1284.Minimum%20Number%20of%20Flips%20to%20Convert%20Binary%20Matrix%20to%20Zero%20Matrix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a <code>m x n</code> binary matrix <code>mat</code>. In one step, you can choose one cell and flip it and all the four neighbors of it if they exist (Flip is changing <code>1</code> to <code>0</code> and <code>0</code> to <code>1</code>). A pair of cells are called neighbors if they share one edge.</p>
 
@@ -47,11 +65,17 @@
 	<li><code>mat[i][j]</code> is either <code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -85,7 +109,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -139,7 +163,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -151,8 +175,8 @@ public:
             for (int j = 0; j < n; ++j)
                 if (mat[i][j])
                     state |= (1 << (i * n + j));
-        queue<int> q {{state}};
-        unordered_set<int> vis {{state}};
+        queue<int> q{{state}};
+        unordered_set<int> vis{{state}};
         int ans = 0;
         vector<int> dirs = {0, -1, 0, 1, 0, 0};
         while (!q.empty()) {
@@ -185,7 +209,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minFlips(mat [][]int) int {
@@ -236,10 +260,8 @@ func minFlips(mat [][]int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

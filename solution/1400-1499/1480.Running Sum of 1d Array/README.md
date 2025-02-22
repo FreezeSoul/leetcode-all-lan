@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1480.Running%20Sum%20of%201d%20Array/README.md
+rating: 1104
+source: 第 193 场周赛 Q1
+tags:
+    - 数组
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [1480. 一维数组的动态和](https://leetcode.cn/problems/running-sum-of-1d-array)
 
 [English Version](/solution/1400-1499/1480.Running%20Sum%20of%201d%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组 <code>nums</code> 。数组「动态和」的计算公式为：<code>runningSum[i] = sum(nums[0]&hellip;nums[i])</code> 。</p>
 
@@ -39,11 +52,13 @@
 	<li><code>-10^6&nbsp;&lt;= nums[i] &lt;=&nbsp;10^6</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和**
+### 方法一：前缀和
 
 我们直接遍历数组，对于当前元素 $nums[i]$，我们将其与前缀和 $nums[i-1]$ 相加，即可得到当前元素的前缀和 $nums[i]$。
 
@@ -51,9 +66,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -61,9 +74,7 @@ class Solution:
         return list(accumulate(nums))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -76,7 +87,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -88,7 +99,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func runningSum(nums []int) []int {
@@ -99,7 +110,7 @@ func runningSum(nums []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function runningSum(nums: number[]): number[] {
@@ -110,7 +121,7 @@ function runningSum(nums: number[]): number[] {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -123,7 +134,7 @@ public class Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -132,17 +143,16 @@ class Solution {
      * @return Integer[]
      */
     function runningSum($nums) {
-        for ($i = 1; $i < count($nums); $i++)
+        for ($i = 1; $i < count($nums); $i++) {
             $nums[$i] += $nums[$i - 1];
+        }
         return $nums;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

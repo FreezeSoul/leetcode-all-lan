@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2453.Destroy%20Sequential%20Targets/README.md
+rating: 1761
+source: 第 90 场双周赛 Q3
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2453. 摧毁一系列目标](https://leetcode.cn/problems/destroy-sequential-targets)
 
 [English Version](/solution/2400-2499/2453.Destroy%20Sequential%20Targets/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的数组&nbsp;<code>nums</code>&nbsp;，它包含若干正整数，表示数轴上你需要摧毁的目标所在的位置。同时给你一个整数&nbsp;<code>space</code>&nbsp;。</p>
 
@@ -49,21 +63,21 @@
 	<li><code>1 &lt;= space &lt;=&nbsp;10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：取模 + 枚举**
+### 方法一：取模 + 枚举
 
-我们遍历数组 `nums`，用哈希表 `cnt` 统计每个数模 `space` 后的余数出现的次数。次数越多，意味着可以摧毁的目标越多。我们找到最多次数的组，取组中的最小值即可。
+我们遍历数组 $nums$，用哈希表 $cnt$ 统计每个数模 $space$ 后的余数出现的次数。次数越多，意味着可以摧毁的目标越多。我们找到最多次数的组，取组中的最小值即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -78,9 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func destroyTargets(nums []int, space int) int {
@@ -144,16 +156,8 @@ func destroyTargets(nums []int, space int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

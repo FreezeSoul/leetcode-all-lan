@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9809.%20%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 09. 用两个栈实现队列](https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>用两个栈实现一个队列。队列的声明如下，请实现它的两个函数 <code>appendTail</code> 和 <code>deleteHead</code> ，分别完成在队列尾部插入整数和在队列头部删除整数的功能。(若队列中没有元素，<code>deleteHead</code>&nbsp;操作返回 -1 )</p>
 
@@ -29,9 +39,13 @@
 	<li><code>最多会对&nbsp;appendTail、deleteHead 进行&nbsp;10000&nbsp;次调用</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：双栈**
+<!-- solution:start -->
+
+### 方法一：双栈
 
 我们可以使用两个栈来实现队列，其中一个栈 `stk1` 用来存储输入的元素，另一个栈 `stk2` 用来输出元素。
 
@@ -43,7 +57,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class CQueue:
@@ -67,7 +81,7 @@ class CQueue:
 # param_2 = obj.deleteHead()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class CQueue {
@@ -99,13 +113,12 @@ class CQueue {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class CQueue {
 public:
     CQueue() {
-
     }
 
     void appendTail(int value) {
@@ -139,7 +152,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type CQueue struct {
@@ -177,7 +190,79 @@ func (this *CQueue) DeleteHead() int {
  */
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+class CQueue {
+    private stk1: number[];
+    private stk2: number[];
+
+    constructor() {
+        this.stk1 = [];
+        this.stk2 = [];
+    }
+
+    appendTail(value: number): void {
+        this.stk1.push(value);
+    }
+
+    deleteHead(): number {
+        if (this.stk2.length == 0) {
+            while (this.stk1.length) {
+                this.stk2.push(this.stk1.pop());
+            }
+        }
+        return this.stk2.length == 0 ? -1 : this.stk2.pop();
+    }
+}
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * var obj = new CQueue()
+ * obj.appendTail(value)
+ * var param_2 = obj.deleteHead()
+ */
+```
+
+#### Rust
+
+```rust
+struct CQueue {
+    s1: Vec<i32>,
+    s2: Vec<i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl CQueue {
+    fn new() -> Self {
+        CQueue {
+            s1: Vec::new(),
+            s2: Vec::new(),
+        }
+    }
+
+    fn append_tail(&mut self, value: i32) {
+        self.s1.push(value);
+    }
+
+    fn delete_head(&mut self) -> i32 {
+        match self.s2.pop() {
+            Some(value) => value,
+            None => {
+                while !self.s1.is_empty() {
+                    self.s2.push(self.s1.pop().unwrap());
+                }
+                self.s2.pop().unwrap_or(-1)
+            }
+        }
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 var CQueue = function () {
@@ -213,88 +298,7 @@ CQueue.prototype.deleteHead = function () {
  */
 ```
 
-### **TypeScript**
-
-```ts
-class CQueue {
-    private stk1: number[];
-    private stk2: number[];
-
-    constructor() {
-        this.stk1 = [];
-        this.stk2 = [];
-    }
-
-    appendTail(value: number): void {
-        this.stk1.push(value);
-    }
-
-    deleteHead(): number {
-        if (this.stk2.length == 0) {
-            while (this.stk1.length) {
-                this.stk2.push(this.stk1.pop());
-            }
-        }
-        return this.stk2.length == 0 ? -1 : this.stk2.pop();
-    }
-}
-
-/**
- * Your CQueue object will be instantiated and called as such:
- * var obj = new CQueue()
- * obj.appendTail(value)
- * var param_2 = obj.deleteHead()
- */
-```
-
-### **Rust**
-
-```rust
-struct CQueue {
-    s1: Vec<i32>,
-    s2: Vec<i32>
-}
-
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl CQueue {
-
-    fn new() -> Self {
-        CQueue {
-            s1: Vec::new(),
-            s2: Vec::new(),
-        }
-    }
-
-    fn append_tail(&mut self, value: i32) {
-        self.s1.push(value);
-    }
-
-    fn delete_head(&mut self) -> i32 {
-        match self.s2.pop() {
-            Some(value) => value,
-            None => {
-                while !self.s1.is_empty() {
-                    self.s2.push(self.s1.pop().unwrap());
-                }
-                self.s2.pop().unwrap_or(-1)
-            }
-        }
-    }
-}
-
-/**
- * Your CQueue object will be instantiated and called as such:
- * let obj = CQueue::new();
- * obj.append_tail(value);
- * let ret_2: i32 = obj.delete_head();
- */
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class CQueue {
@@ -327,10 +331,40 @@ public class CQueue {
  */
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class CQueue {
+    private var stk1: [Int] = []
+    private var stk2: [Int] = []
 
+    init() {
+    }
+
+    func appendTail(_ value: Int) {
+        stk1.append(value)
+    }
+
+    func deleteHead() -> Int {
+        if stk2.isEmpty {
+            while !stk1.isEmpty {
+                stk2.append(stk1.removeLast())
+            }
+        }
+        return stk2.isEmpty ? -1 : stk2.removeLast()
+    }
+}
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * let obj = CQueue();
+ * obj.appendTail(value);
+ * let param_2 = obj.DeleteHead();
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

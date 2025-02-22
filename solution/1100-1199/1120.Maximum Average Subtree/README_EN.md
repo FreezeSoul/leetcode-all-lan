@@ -1,8 +1,24 @@
-# [1120. Maximum Average Subtree](https://leetcode.com/problems/maximum-average-subtree)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1120.Maximum%20Average%20Subtree/README_EN.md
+rating: 1361
+source: Biweekly Contest 4 Q3
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
+# [1120. Maximum Average Subtree 🔒](https://leetcode.com/problems/maximum-average-subtree)
 
 [中文文档](/solution/1100-1199/1120.Maximum%20Average%20Subtree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree, return <em>the maximum <strong>average</strong> value of a <strong>subtree</strong> of that tree</em>. Answers within <code>10<sup>-5</sup></code> of the actual answer will be accepted.</p>
 
@@ -38,11 +54,31 @@ So the answer is 6 which is the maximum.
 	<li><code>0 &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Recursion
+
+We can use a recursive method. For each node, we calculate the sum and count of the nodes in the subtree rooted at that node, then calculate the average, compare it with the current maximum, and update the maximum if necessary.
+
+Therefore, we design a function `dfs(root)` that represents the sum and count of nodes in the subtree rooted at `root`. The return value is an array of length 2, where the first element represents the sum of nodes, and the second element represents the count of nodes.
+
+The recursive process of the function `dfs(root)` is as follows:
+
+-   If `root` is null, return `[0, 0]`;
+-   Otherwise, calculate the sum and count of nodes in the left subtree of `root`, denoted as `[ls, ln]`; calculate the sum and count of nodes in the right subtree of `root`, denoted as `[rs, rn]`. The sum of nodes in the subtree rooted at `root` is `root.val + ls + rs`, and the count of nodes is `1 + ln + rn`. Calculate the average, compare it with the current maximum, and update the maximum if necessary;
+-   Return `[root.val + ls + rs, 1 + ln + rn]`.
+
+Finally, return the maximum value.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -69,7 +105,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -109,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -127,7 +163,7 @@ class Solution {
 public:
     double maximumAverageSubtree(TreeNode* root) {
         double ans = 0;
-        function<pair<int, int>(TreeNode*)> dfs = [&](TreeNode* root) -> pair<int, int> {
+        auto dfs = [&](this auto&& dfs, TreeNode* root) -> pair<int, int> {
             if (!root) {
                 return {0, 0};
             }
@@ -144,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -172,10 +208,8 @@ func maximumAverageSubtree(root *TreeNode) (ans float64) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

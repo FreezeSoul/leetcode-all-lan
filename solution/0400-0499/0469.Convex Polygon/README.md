@@ -1,10 +1,22 @@
-# [469. 凸多边形](https://leetcode.cn/problems/convex-polygon)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0469.Convex%20Polygon/README.md
+tags:
+    - 几何
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
+# [469. 凸多边形 🔒](https://leetcode.cn/problems/convex-polygon)
 
 [English Version](/solution/0400-0499/0469.Convex%20Polygon/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定 <strong>X-Y</strong> 平面上的一组点&nbsp;<code>points</code>&nbsp;，其中&nbsp;<code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code> 。这些点按顺序连成一个多边形。</p>
 
@@ -43,32 +55,121 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：数学（向量叉积）
+
+假设当前连续的三个顶点分别为 $p_1, p_2, p_3$，我们可以计算向量 $\overrightarrow{p_1p_2}$ 和 $\overrightarrow{p_1p_3}$ 的叉积，记为 $cur$。如果 $cur$ 的方向与之前的 $pre$ 方向不一致，说明多边形不是凸多边形 🔒。否则，我们更新 $pre = cur$，继续遍历下一个顶点。
+
+遍历结束，如果没有发现不一致的情况，说明多边形是凸多边形 🔒。
+
+时间复杂度 $O(n)$，其中 $n$ 是顶点的数量。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-
+class Solution:
+    def isConvex(self, points: List[List[int]]) -> bool:
+        n = len(points)
+        pre = cur = 0
+        for i in range(n):
+            x1 = points[(i + 1) % n][0] - points[i][0]
+            y1 = points[(i + 1) % n][1] - points[i][1]
+            x2 = points[(i + 2) % n][0] - points[i][0]
+            y2 = points[(i + 2) % n][1] - points[i][1]
+            cur = x1 * y2 - x2 * y1
+            if cur != 0:
+                if cur * pre < 0:
+                    return False
+                pre = cur
+        return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
+class Solution {
+    public boolean isConvex(List<List<Integer>> points) {
+        int n = points.size();
+        long pre = 0, cur = 0;
+        for (int i = 0; i < n; ++i) {
+            var p1 = points.get(i);
+            var p2 = points.get((i + 1) % n);
+            var p3 = points.get((i + 2) % n);
+            int x1 = p2.get(0) - p1.get(0);
+            int y1 = p2.get(1) - p1.get(1);
+            int x2 = p3.get(0) - p1.get(0);
+            int y2 = p3.get(1) - p1.get(1);
+            cur = x1 * y2 - x2 * y1;
+            if (cur != 0) {
+                if (cur * pre < 0) {
+                    return false;
+                }
+                pre = cur;
+            }
+        }
+        return true;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    bool isConvex(vector<vector<int>>& points) {
+        int n = points.size();
+        long long pre = 0, cur = 0;
+        for (int i = 0; i < n; ++i) {
+            int x1 = points[(i + 1) % n][0] - points[i][0];
+            int y1 = points[(i + 1) % n][1] - points[i][1];
+            int x2 = points[(i + 2) % n][0] - points[i][0];
+            int y2 = points[(i + 2) % n][1] - points[i][1];
+            cur = 1L * x1 * y2 - x2 * y1;
+            if (cur != 0) {
+                if (cur * pre < 0) {
+                    return false;
+                }
+                pre = cur;
+            }
+        }
+        return true;
+    }
+};
 ```
 
+#### Go
+
+```go
+func isConvex(points [][]int) bool {
+	n := len(points)
+	pre, cur := 0, 0
+	for i := range points {
+		x1 := points[(i+1)%n][0] - points[i][0]
+		y1 := points[(i+1)%n][1] - points[i][1]
+		x2 := points[(i+2)%n][0] - points[i][0]
+		y2 := points[(i+2)%n][1] - points[i][1]
+		cur = x1*y2 - x2*y1
+		if cur != 0 {
+			if cur*pre < 0 {
+				return false
+			}
+			pre = cur
+		}
+	}
+	return true
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

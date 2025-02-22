@@ -11,14 +11,14 @@
  */
 
 function preorder(root: Node | null): number[] {
-    const ans = [];
+    const ans: number[] = [];
     const dfs = (root: Node | null) => {
-        if (root == null) {
+        if (!root) {
             return;
         }
         ans.push(root.val);
-        for (const node of root.children) {
-            dfs(node);
+        for (const child of root.children) {
+            dfs(child);
         }
     };
     dfs(root);

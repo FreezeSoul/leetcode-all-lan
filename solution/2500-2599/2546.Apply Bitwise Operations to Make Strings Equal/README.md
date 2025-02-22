@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2546.Apply%20Bitwise%20Operations%20to%20Make%20Strings%20Equal/README.md
+rating: 1604
+source: 第 329 场周赛 Q3
+tags:
+    - 位运算
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2546. 执行逐位运算使字符串相等](https://leetcode.cn/problems/apply-bitwise-operations-to-make-strings-equal)
 
 [English Version](/solution/2500-2599/2546.Apply%20Bitwise%20Operations%20to%20Make%20Strings%20Equal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个下标从 <strong>0</strong> 开始的 <strong>二元</strong> 字符串 <code>s</code> 和 <code>target</code> ，两个字符串的长度均为 <code>n</code> 。你可以对 <code>s</code> 执行下述操作 <strong>任意</strong> 次：</p>
 
@@ -46,21 +59,21 @@
 	<li><code>s</code> 和 <code>target</code> 仅由数字 <code>0</code> 和 <code>1</code> 组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
-注意到 $1$ 其实是数字转换的“工具”，因此只要两个字符串中都有 $1$ 或者都没有 $1$，那么就可以通过操作使得两个字符串相等。
+我们注意到 $1$ 其实是数字转换的“工具”，因此只要两个字符串中都有 $1$ 或者都没有 $1$，那么就可以通过操作使得两个字符串相等。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串的长度。
+时间复杂度 $O(n)$，其中 $n$ 为字符串的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -68,9 +81,7 @@ class Solution:
         return ("1" in s) == ("1" in target)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +91,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -93,7 +104,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeStringsEqual(s string, target string) bool {
@@ -101,7 +112,7 @@ func makeStringsEqual(s string, target string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makeStringsEqual(s: string, target: string): boolean {
@@ -109,7 +120,7 @@ function makeStringsEqual(s: string, target: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -119,10 +130,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-bool makeStringsEqual(char *s, char *target) {
+bool makeStringsEqual(char* s, char* target) {
     int count = 0;
     for (int i = 0; s[i]; i++) {
         if (s[i] == '1') {
@@ -140,10 +151,8 @@ bool makeStringsEqual(char *s, char *target) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

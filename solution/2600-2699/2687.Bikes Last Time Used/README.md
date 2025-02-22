@@ -1,35 +1,42 @@
-# [2687. 自行车的最后使用时间](https://leetcode.cn/problems/bikes-last-time-used)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2687.Bikes%20Last%20Time%20Used/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2687. 自行车的最后使用时间 🔒](https://leetcode.cn/problems/bikes-last-time-used)
 
 [English Version](/solution/2600-2699/2687.Bikes%20Last%20Time%20Used/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p><code><font face="monospace">Bikes</font></code><font face="monospace">&nbsp;表：</font></p>
+<p>表：<code>Bikes</code>&nbsp;</p>
 
 <pre>
 +-------------+----------+ 
-| 列名         | 类型     | 
+| 列名        | 类型     | 
 +-------------+----------+ 
 | ride_id     | int      | 
 | bike_number | int      | 
 | start_time  | datetime |
 | end_time    | datetime |
 +-------------+----------+
+ride_id 是该表的主键。
+每行包含一个骑行信息，包括 ride_id、自行车编号、骑行的起始和结束时间。
+输入保证 start_time 和 end_time 是有效的日期值。
+</pre>
 
-ride_id是该表的主键。
-每行包含一个骑行信息，包括 ride_id、自行车编号、骑行的起始和结束时间。</pre>
+<p>编写一个解决方案，找出每辆自行车 <strong>最近一次被使用</strong> 的时间。</p>
 
-<p>编写一个 SQL 查询，以找出每辆自行车 <strong>最后一次使用</strong> 的时间。</p>
+<p>返回结果表按 <strong>最近被使用</strong>&nbsp;的自行车进行排序。</p>
 
-<p>&nbsp;</p>
-
-<p>返回结果表按 <strong>最近使用</strong>&nbsp;的自行车进行排序。</p>
-
-<p>&nbsp;</p>
-
-<p>查询结果的格式如下所示：</p>
+<p>返回结果的格式如下所示：</p>
 
 <p>&nbsp;</p>
 
@@ -48,7 +55,6 @@ ride_id是该表的主键。
 | 5       | W00576      | 2012-03-25 08:10:00 | 2012-03-25 09:10:00 |
 | 6       | W00576      | 2012-03-28 02:30:00 | 2012-03-28 02:50:00 |
 +---------+-------------+---------------------+---------------------+ 
-
 <b>输出：</b>
 +-------------+---------------------+ 
 | bike_number | end_time            |  
@@ -65,23 +71,30 @@ ride_id是该表的主键。
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT  bike_number
-       ,MAX(end_time) AS end_time
+SELECT
+    bike_number,
+    MAX(end_time) AS end_time
 FROM Bikes
-GROUP BY  bike_number
-ORDER BY end_time DESC
+GROUP BY bike_number
+ORDER BY end_time DESC;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

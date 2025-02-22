@@ -3,33 +3,25 @@
  * @return {string[]}
  */
 var permutation = function (S) {
-    let res = [];
-    let arr = [...S];
-    arr.sort();
-    let prev = [];
-    let record = new Array(S.length).fill(false);
-    dfs(arr, 0, prev, record, res);
-    return res;
+    const s = S.split('').sort();
+    const n = s.length;
+    const t = Array(n).fill('');
+    const vis = Array(n).fill(false);
+    const ans = [];
+    const dfs = i => {
+        if (i >= n) {
+            ans.push(t.join(''));
+            return;
+        }
+        for (let j = 0; j < n; ++j) {
+            if (!vis[j] && (j === 0 || s[j] !== s[j - 1] || vis[j - 1])) {
+                vis[j] = true;
+                t[i] = s[j];
+                dfs(i + 1);
+                vis[j] = false;
+            }
+        }
+    };
+    dfs(0);
+    return ans;
 };
-
-function dfs(arr, depth, prev, record, res) {
-    if (depth == arr.length) {
-        res.push(prev.join(''));
-        return;
-    }
-    for (let i = 0; i < arr.length; i++) {
-        if (record[i]) {
-            continue;
-        }
-        // 剪枝
-        if (i > 0 && arr[i] == arr[i - 1] && record[i - 1]) {
-            continue;
-        }
-        prev.push(arr[i]);
-        record[i] = true;
-        dfs(arr, depth + 1, prev, record, res);
-        // 回溯
-        prev.pop();
-        record[i] = false;
-    }
-}

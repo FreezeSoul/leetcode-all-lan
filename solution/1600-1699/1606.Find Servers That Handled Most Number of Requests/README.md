@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1606.Find%20Servers%20That%20Handled%20Most%20Number%20of%20Requests/README.md
+rating: 2275
+source: 第 36 场双周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 有序集合
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1606. 找到处理最多请求的服务器](https://leetcode.cn/problems/find-servers-that-handled-most-number-of-requests)
 
 [English Version](/solution/1600-1699/1606.Find%20Servers%20That%20Handled%20Most%20Number%20of%20Requests/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有 <code>k</code>&nbsp;个服务器，编号为 <code>0</code>&nbsp;到 <code>k-1</code>&nbsp;，它们可以同时处理多个请求组。每个服务器有无穷的计算能力但是 <strong>不能同时处理超过一个请求</strong>&nbsp;。请求分配到服务器的规则如下：</p>
 
@@ -81,11 +96,13 @@
 	<li><code>arrival</code>&nbsp;保证 <strong>严格递增</strong>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：有序集合 + 优先队列**
+### 方法一：有序集合 + 优先队列
 
 题目求的是最繁忙的服务器列表，因此可以想到用**哈希表**记录每个服务器处理的任务数，然后获取所有处理了最大任务数 mx 的服务器列表即可。关键的问题就在于，求出每个任务分配给了哪台服务器处理。
 
@@ -99,14 +116,9 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class Solution:
     def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
         free = SortedList(range(k))
@@ -130,9 +142,7 @@ class Solution:
         return [i for i, v in enumerate(cnt) if v == mx]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -175,10 +185,44 @@ class Solution {
 }
 ```
 
-### **Go**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> busiestServers(int k, vector<int>& arrival, vector<int>& load) {
+        set<int> free;
+        for (int i = 0; i < k; ++i) free.insert(i);
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> busy;
+        vector<int> cnt(k);
+        for (int i = 0; i < arrival.size(); ++i) {
+            int start = arrival[i], end = start + load[i];
+            while (!busy.empty() && busy.top().first <= start) {
+                free.insert(busy.top().second);
+                busy.pop();
+            }
+            if (free.empty()) continue;
+            auto p = free.lower_bound(i % k);
+            if (p == free.end()) p = free.begin();
+            int server = *p;
+            ++cnt[server];
+            busy.emplace(end, server);
+            free.erase(server);
+        }
+        int mx = *max_element(cnt.begin(), cnt.end());
+        vector<int> ans;
+        for (int i = 0; i < k; ++i)
+            if (cnt[i] == mx)
+                ans.push_back(i);
+        return ans;
+    }
+};
+```
+
+#### Go
 
 ```go
-func busiestServers(k int, arrival, load []int) []int {
+func busiestServers(k int, arrival, load []int) (ans []int) {
 	free := redblacktree.NewWithIntComparator()
 	for i := 0; i < k; i++ {
 		free.Put(i, nil)
@@ -202,35 +246,27 @@ func busiestServers(k int, arrival, load []int) []int {
 		heap.Push(&busy, pair{t + load[i], server})
 		free.Remove(server)
 	}
-	mx := 0
-	for _, v := range cnt {
-		if v > mx {
-			mx = v
-		}
-	}
-	var ans []int
+	mx := slices.Max(cnt)
 	for i, v := range cnt {
 		if v == mx {
 			ans = append(ans, i)
 		}
 	}
-	return ans
+	return
 }
 
 type pair struct{ end, server int }
 type hp []pair
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].end < h[j].end }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **...**
-
-```
-
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].end < h[j].end }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

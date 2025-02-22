@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1320.Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers/README_EN.md
+rating: 2027
+source: Weekly Contest 171 Q4
+tags:
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1320. Minimum Distance to Type a Word Using Two Fingers](https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers)
 
 [中文文档](/solution/1300-1399/1320.Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1300-1399/1320.Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers/images/leetcode_keyboard.png" style="width: 349px; height: 209px;" />
 <p>You have a keyboard layout as shown above in the <strong>X-Y</strong> plane, where each English uppercase letter is located at some coordinate.</p>
@@ -53,11 +68,36 @@ Total distance = 6
 	<li><code>word</code> consists of uppercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i][j][k]$ to represent the minimum distance after typing $\textit{word}[i]$, with finger 1 at position $j$ and finger 2 at position $k$. Here, positions $j$ and $k$ represent the numbers corresponding to the letters, ranging from $[0,..25]$. Initially, $f[i][j][k] = \infty$.
+
+We implement a function $\textit{dist}(a, b)$ to represent the distance between positions $a$ and $b$, i.e., $\textit{dist}(a, b) = |\frac{a}{6} - \frac{b}{6}| + |a \bmod 6 - b \bmod 6|$.
+
+Next, we consider typing $\textit{word}[0]$, i.e., the case with only one letter. There are two choices:
+
+-   Finger 1 is at the position of $\textit{word}[0]$, and finger 2 is at any position. In this case, $f[0][\textit{word}[0]][k] = 0$, where $k \in [0,..25]$.
+-   Finger 2 is at the position of $\textit{word}[0]$, and finger 1 is at any position. In this case, $f[0][k][\textit{word}[0]] = 0$, where $k \in [0,..25]$.
+
+Then we consider typing $\textit{word}[1,..n-1]$. Let the positions of the previous letter and the current letter be $a$ and $b$, respectively. Next, we discuss the following cases:
+
+If the current finger 1 is at position $b$, we enumerate the position $j$ of finger 2. If the previous position $a$ was also the position of finger 1, then $f[i][b][j] = \min(f[i][b][j], f[i-1][a][j] + \textit{dist}(a, b))$. If the position of finger 2 is the same as the previous position $a$, i.e., $j = a$, then we enumerate the position $k$ of finger 1 in the previous position. In this case, $f[i][b][j] = \min(f[i][b][j], f[i-1][k][a] + \textit{dist}(k, b))$.
+
+Similarly, if the current finger 2 is at position $b$, we enumerate the position $j$ of finger 1. If the previous position $a$ was also the position of finger 2, then $f[i][j][b] = \min(f[i][j][b], f[i-1][j][a] + \textit{dist}(a, b))$. If the position of finger 1 is the same as the previous position $a$, i.e., $j = a$, then we enumerate the position $k$ of finger 2 in the previous position. In this case, $f[i][j][b] = \min(f[i][j][b], f[i-1][a][k] + \textit{dist}(k, b))$.
+
+Finally, we enumerate the positions of finger 1 and finger 2 at the last position and take the minimum value as the answer.
+
+The time complexity is $O(n \times |\Sigma|^2)$, and the space complexity is $O(n \times |\Sigma|^2)$. Here, $n$ is the length of the string $\textit{word}$, and $|\Sigma|$ is the size of the alphabet, which is $26$ in this problem.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -88,7 +128,7 @@ class Solution:
         return int(min(a, b))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -137,7 +177,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -182,7 +222,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumDistance(word string) int {
@@ -228,13 +268,6 @@ func minimumDistance(word string) int {
 	return ans
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -243,10 +276,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

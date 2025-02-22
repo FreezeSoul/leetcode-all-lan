@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1735.Count%20Ways%20to%20Make%20Array%20With%20Product/README_EN.md
+rating: 2499
+source: Biweekly Contest 44 Q4
+tags:
+    - Array
+    - Math
+    - Dynamic Programming
+    - Combinatorics
+    - Number Theory
+---
+
+<!-- problem:start -->
+
 # [1735. Count Ways to Make Array With Product](https://leetcode.com/problems/count-ways-to-make-array-with-product)
 
 [中文文档](/solution/1700-1799/1735.Count%20Ways%20to%20Make%20Array%20With%20Product/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a 2D integer array, <code>queries</code>. For each <code>queries[i]</code>, where <code>queries[i] = [n<sub>i</sub>, k<sub>i</sub>]</code>, find the number of different ways you can place positive integers into an array of size <code>n<sub>i</sub></code> such that the product of the integers is <code>k<sub>i</sub></code>. As the number of ways may be too large, the answer to the <code>i<sup>th</sup></code> query is the number of ways <strong>modulo</strong> <code>10<sup>9</sup> + 7</code>.</p>
 
@@ -35,11 +53,31 @@
 	<li><code>1 &lt;= n<sub>i</sub>, k<sub>i</sub> &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prime Factorization + Combinatorial Mathematics
+
+We can perform prime factorization on $k$, i.e., $k = p_1^{x_1} \times p_2^{x_2} \times \cdots \times p_m^{x_m}$, where $p_i$ is a prime number, and $x_i$ is the exponent of $p_i$. The problem is equivalent to: placing $x_1$ $p_1$s, $x_2$ $p_2$s, $\cdots$, $x_m$ $p_m$s into $n$ positions respectively, where a single position can be empty. The question is how many schemes are there.
+
+According to combinatorial mathematics, there are two cases when we put $x$ balls into $n$ boxes:
+
+If the box cannot be empty, the number of schemes is $C_{x-1}^{n-1}$. This is using the partition method, i.e., there are a total of $x$ balls, and we insert $n-1$ partitions at $x-1$ positions, thereby dividing the $x$ balls into $n$ groups.
+
+If the box can be empty, we can add $n$ virtual balls, and then use the partition method, i.e., there are a total of $x+n$ balls, and we insert $n-1$ partitions at $x+n-1$ positions, thereby dividing the actual $x$ balls into $n$ groups and allowing the box to be empty. Therefore, the number of schemes is $C_{x+n-1}^{n-1}$.
+
+Therefore, for each query $queries[i]$, we can first perform prime factorization on $k$ to get the exponents $x_1, x_2, \cdots, x_m$, then calculate $C_{x_1+n-1}^{n-1}, C_{x_2+n-1}^{n-1}, \cdots, C_{x_m+n-1}^{n-1}$, and finally multiply all the scheme numbers.
+
+So, the problem is transformed into how to quickly calculate $C_m^n$. According to the formula $C_m^n = \frac{m!}{n!(m-n)!}$, we can pre-process $m!$, and then use the inverse element to quickly calculate $C_m^n$.
+
+The time complexity is $O(K \times \log \log K + N + m \times \log K)$, and the space complexity is $O(N)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 N = 10020
@@ -79,7 +117,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -145,7 +183,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 int N = 10020;
@@ -211,7 +249,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 const n = 1e4 + 20
@@ -272,10 +310,8 @@ func waysToFillArray(queries [][]int) (ans []int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

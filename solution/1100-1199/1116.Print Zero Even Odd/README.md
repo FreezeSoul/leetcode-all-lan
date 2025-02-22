@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1116.Print%20Zero%20Even%20Odd/README.md
+tags:
+    - 多线程
+---
+
+<!-- problem:start -->
+
 # [1116. 打印零与奇偶数](https://leetcode.cn/problems/print-zero-even-odd)
 
 [English Version](/solution/1100-1199/1116.Print%20Zero%20Even%20Odd/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现有函数 <code>printNumber</code> 可以用一个整数参数调用，并输出该整数到控制台。</p>
 
@@ -56,11 +66,13 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：多线程 + 信号量**
+### 方法一：多线程 + 信号量
 
 我们用三个信号量 $z$, $e$, $o$ 来控制三个线程的执行顺序，其中 $z$ 的初始值为 $1$，$e$ 和 $o$ 的初始值为 $0$。
 
@@ -72,12 +84,11 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 from threading import Semaphore
+
 
 class ZeroEvenOdd:
     def __init__(self, n):
@@ -86,7 +97,7 @@ class ZeroEvenOdd:
         self.e = Semaphore(0)
         self.o = Semaphore(0)
 
-	# printNumber(x) outputs "x", where x is an integer.
+    # printNumber(x) outputs "x", where x is an integer.
     def zero(self, printNumber: 'Callable[[int], None]') -> None:
         for i in range(self.n):
             self.z.acquire()
@@ -109,9 +120,7 @@ class ZeroEvenOdd:
             self.z.release()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class ZeroEvenOdd {
@@ -155,7 +164,7 @@ class ZeroEvenOdd {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 #include <semaphore.h>
@@ -204,10 +213,8 @@ public:
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

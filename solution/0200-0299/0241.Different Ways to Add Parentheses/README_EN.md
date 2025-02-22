@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0241.Different%20Ways%20to%20Add%20Parentheses/README_EN.md
+tags:
+    - Recursion
+    - Memoization
+    - Math
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [241. Different Ways to Add Parentheses](https://leetcode.com/problems/different-ways-to-add-parentheses)
 
 [中文文档](/solution/0200-0299/0241.Different%20Ways%20to%20Add%20Parentheses/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>expression</code> of numbers and operators, return <em>all possible results from computing all the different possible ways to group numbers and operators</em>. You may return the answer in <strong>any order</strong>.</p>
 
@@ -39,13 +55,20 @@
 	<li><code>1 &lt;= expression.length &lt;= 20</code></li>
 	<li><code>expression</code> consists of digits and the operator <code>&#39;+&#39;</code>, <code>&#39;-&#39;</code>, and <code>&#39;*&#39;</code>.</li>
 	<li>All the integer values in the input expression are in the range <code>[0, 99]</code>.</li>
+	<li>The integer values in the input expression do not have a leading <code>&#39;-&#39;</code> or <code>&#39;+&#39;</code> denoting the sign.</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +94,7 @@ class Solution:
         return dfs(expression)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +137,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -154,7 +177,7 @@ private:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 var memo = map[string][]int{}
@@ -193,10 +216,74 @@ func dfs(exp string) []int {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+using System.Collections.Generic;
 
+public class Solution {
+    public IList<int> DiffWaysToCompute(string input) {
+        var values = new List<int>();
+        var operators = new List<char>();
+        var sum = 0;
+        foreach (var ch in input)
+        {
+            if (ch == '+' || ch == '-' || ch == '*')
+            {
+                values.Add(sum);
+                operators.Add(ch);
+                sum = 0;
+            }
+            else
+            {
+                sum = sum * 10 + ch - '0';
+            }
+        }
+        values.Add(sum);
+
+        var f = new List<int>[values.Count, values.Count];
+        for (var i = 0; i < values.Count; ++i)
+        {
+            f[i, i] = new List<int> { values[i] };
+        }
+
+        for (var diff = 1; diff < values.Count; ++diff)
+        {
+            for (var left = 0; left + diff < values.Count; ++left)
+            {
+                var right = left + diff;
+                f[left, right] = new List<int>();
+                for (var i = left; i < right; ++i)
+                {
+                    foreach (var leftValue in f[left, i])
+                    {
+                        foreach (var rightValue in f[i + 1, right])
+                        {
+                            switch (operators[i])
+                            {
+                                case '+':
+                                    f[left, right].Add(leftValue + rightValue);
+                                    break;
+                                case '-':
+                                    f[left, right].Add(leftValue - rightValue);
+                                    break;
+                                case '*':
+                                    f[left, right].Add(leftValue * rightValue);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return f[0, values.Count - 1];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

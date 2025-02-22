@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1734.Decode%20XORed%20Permutation/README_EN.md
+rating: 2024
+source: Biweekly Contest 44 Q3
+tags:
+    - Bit Manipulation
+    - Array
+---
+
+<!-- problem:start -->
+
 # [1734. Decode XORed Permutation](https://leetcode.com/problems/decode-xored-permutation)
 
 [中文文档](/solution/1700-1799/1734.Decode%20XORed%20Permutation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an integer array <code>perm</code> that is a permutation of the first <code>n</code> positive integers, where <code>n</code> is always <strong>odd</strong>.</p>
 
@@ -35,11 +50,21 @@
 	<li><code>encoded.length == n - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Bitwise Operation
+
+We notice that the array $perm$ is a permutation of the first $n$ positive integers, so the XOR of all elements in $perm$ is $1 \oplus 2 \oplus \cdots \oplus n$, denoted as $a$. And $encode[i]=perm[i] \oplus perm[i+1]$, if we denote the XOR of all elements $encode[0],encode[2],\cdots,encode[n-3]$ as $b$, then $perm[n-1]=a \oplus b$. Knowing the last element of $perm$, we can find all elements of $perm$ by traversing the array $encode$ in reverse order.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $perm$. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +82,7 @@ class Solution:
         return perm
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func decode(encoded []int) []int {
@@ -125,10 +150,8 @@ func decode(encoded []int) []int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

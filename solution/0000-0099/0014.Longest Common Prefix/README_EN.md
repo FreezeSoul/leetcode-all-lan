@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0014.Longest%20Common%20Prefix/README_EN.md
+tags:
+    - Trie
+    - String
+---
+
+<!-- problem:start -->
+
 # [14. Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix)
 
 [中文文档](/solution/0000-0099/0014.Longest%20Common%20Prefix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write a function to find the longest common prefix string amongst an array of strings.</p>
 
@@ -30,22 +43,26 @@
 <ul>
 	<li><code>1 &lt;= strs.length &lt;= 200</code></li>
 	<li><code>0 &lt;= strs[i].length &lt;= 200</code></li>
-	<li><code>strs[i]</code> consists of only lowercase English letters.</li>
+	<li><code>strs[i]</code> consists of only lowercase English letters if it is non-empty.</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
-**Approach 1: Character Comparison**
+<!-- solution:start -->
 
-We take the first string $strs[0]$ as the benchmark, and compare the $i$th character of the string after it with the $i$th character of $strs[0]$. If it is the same, continue to compare the next character, otherwise return the first $i$ characters of $strs[0]$.
+### Solution 1: Character Comparison
 
-After the traversal is over, it means that the first $i$ characters of all strings are the same, and $strs[0]$ is returned.
+We use the first string $strs[0]$ as a benchmark, and compare whether the $i$-th character of the subsequent strings is the same as the $i$-th character of $strs[0]$. If they are the same, we continue to compare the next character. Otherwise, we return the first $i$ characters of $strs[0]$.
 
-Time complexity $(n \times m)$, where $n$ and $m$ are the length of the string array and the minimum length of the string respectively. The space complexity is $O(1)$.
+If the traversal ends, it means that the first $i$ characters of all strings are the same, and we return $strs[0]$.
+
+The time complexity is $O(n \times m)$, where $n$ and $m$ are the length of the string array and the minimum length of the strings, respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +74,7 @@ class Solution:
         return strs[0]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -75,7 +92,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -94,7 +111,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestCommonPrefix(strs []string) string {
@@ -110,7 +127,59 @@ func longestCommonPrefix(strs []string) string {
 }
 ```
 
-### **C#**
+#### TypeScript
+
+```ts
+function longestCommonPrefix(strs: string[]): string {
+    const len = strs.reduce((r, s) => Math.min(r, s.length), Infinity);
+    for (let i = len; i > 0; i--) {
+        const target = strs[0].slice(0, i);
+        if (strs.every(s => s.slice(0, i) === target)) {
+            return target;
+        }
+    }
+    return '';
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn longest_common_prefix(strs: Vec<String>) -> String {
+        let mut len = strs.iter().map(|s| s.len()).min().unwrap();
+        for i in (1..=len).rev() {
+            let mut is_equal = true;
+            let target = strs[0][0..i].to_string();
+            if strs.iter().all(|s| target == s[0..i]) {
+                return target;
+            }
+        }
+        String::new()
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string[]} strs
+ * @return {string}
+ */
+var longestCommonPrefix = function (strs) {
+    for (let j = 0; j < strs[0].length; j++) {
+        for (let i = 0; i < strs.length; i++) {
+            if (strs[0][j] !== strs[i][j]) {
+                return strs[0].substring(0, j);
+            }
+        }
+    }
+    return strs[0];
+};
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -128,7 +197,30 @@ public class Solution {
 }
 ```
 
-### **Ruby**
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param String[] $strs
+     * @return String
+     */
+    function longestCommonPrefix($strs) {
+        $rs = '';
+        for ($i = 0; $i < strlen($strs[0]); $i++) {
+            for ($j = 1; $j < count($strs); $j++) {
+                if ($strs[0][$i] != $strs[$j][$i]) {
+                    return $rs;
+                }
+            }
+            $rs = $rs . $strs[0][$i];
+        }
+        return $rs;
+    }
+}
+```
+
+#### Ruby
 
 ```rb
 # @param {String[]} strs
@@ -158,83 +250,8 @@ def longest_common_prefix(strs)
 end
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {string[]} strs
- * @return {string}
- */
-var longestCommonPrefix = function (strs) {
-    for (let j = 0; j < strs[0].length; j++) {
-        for (let i = 0; i < strs.length; i++) {
-            if (strs[0][j] !== strs[i][j]) {
-                return strs[0].substring(0, j);
-            }
-        }
-    }
-    return strs[0];
-};
-```
-
-### **TypeScript**
-
-```ts
-function longestCommonPrefix(strs: string[]): string {
-    const len = strs.reduce((r, s) => Math.min(r, s.length), Infinity);
-    for (let i = len; i > 0; i--) {
-        const target = strs[0].slice(0, i);
-        if (strs.every(s => s.slice(0, i) === target)) {
-            return target;
-        }
-    }
-    return '';
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn longest_common_prefix(strs: Vec<String>) -> String {
-        let mut len = strs.iter().map(|s| s.len()).min().unwrap();
-        for i in (1..=len).rev() {
-            let mut is_equal = true;
-            let target = strs[0][0..i].to_string();
-            if strs.iter().all(|s| target == s[0..i]) {
-                return target;
-            }
-        }
-        String::new()
-    }
-}
-```
-
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param String[] $strs
-     * @return String
-     */
-    function longestCommonPrefix($strs) {
-        $rs = "";
-        for ($i = 0; $i < strlen($strs[0]); $i++) {
-            for ($j = 1; $j < count($strs); $j++) {
-                if ($strs[0][$i] != $strs[$j][$i]) return $rs;
-            }
-            $rs = $rs.$strs[0][$i];
-        }
-        return $rs;
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

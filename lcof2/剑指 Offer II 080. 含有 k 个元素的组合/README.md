@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20080.%20%E5%90%AB%E6%9C%89%20k%20%E4%B8%AA%E5%85%83%E7%B4%A0%E7%9A%84%E7%BB%84%E5%90%88/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 080. 含有 k 个元素的组合](https://leetcode.cn/problems/uUsW3B)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个整数 <code>n</code> 和 <code>k</code>，返回 <code>1 ... n</code> 中所有可能的 <code>k</code> 个数的组合。</p>
 
@@ -41,17 +48,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 77&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/combinations/">https://leetcode.cn/problems/combinations/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-深度优先搜索 DFS。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +78,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func combine(n int, k int) [][]int {
@@ -135,9 +140,7 @@ func combine(n int, k int) [][]int {
 
 func dfs(i, n, k int, t []int, res *[][]int) {
 	if len(t) == k {
-		cp := make([]int, k)
-		copy(cp, t)
-		*res = append(*res, cp)
+		*res = append(*res, slices.Clone(t))
 		return
 	}
 	for j := i; j <= n; j++ {
@@ -148,10 +151,37 @@ func dfs(i, n, k int, t []int, res *[][]int) {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func combine(_ n: Int, _ k: Int) -> [[Int]] {
+        var res = [[Int]]()
+        dfs(1, n, k, [], &res)
+        return res
+    }
 
+    private func dfs(_ start: Int, _ n: Int, _ k: Int, _ current: [Int], _ res: inout [[Int]]) {
+        if current.count == k {
+            res.append(current)
+            return
+        }
+
+        if start > n {
+            return
+        }
+
+        for i in start...n {
+            var newCurrent = current
+            newCurrent.append(i)
+            dfs(i + 1, n, k, newCurrent, &res)
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

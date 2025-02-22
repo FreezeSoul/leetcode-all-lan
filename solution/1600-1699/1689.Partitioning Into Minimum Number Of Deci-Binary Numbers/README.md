@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1689.Partitioning%20Into%20Minimum%20Number%20Of%20Deci-Binary%20Numbers/README.md
+rating: 1355
+source: 第 219 场周赛 Q2
+tags:
+    - 贪心
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1689. 十-二进制数的最少数目](https://leetcode.cn/problems/partitioning-into-minimum-number-of-deci-binary-numbers)
 
 [English Version](/solution/1600-1699/1689.Partitioning%20Into%20Minimum%20Number%20Of%20Deci-Binary%20Numbers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果一个十进制数字不含任何前导零，且每一位上的数字不是 <code>0</code> 就是 <code>1</code> ，那么该数字就是一个 <strong>十-二进制数</strong> 。例如，<code>101</code> 和 <code>1100</code> 都是 <strong>十-二进制数</strong>，而 <code>112</code> 和 <code>3001</code> 不是。</p>
 
@@ -41,21 +54,21 @@
 	<li><code>n</code> 不含任何前导零并总是表示正整数</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
 题目等价于找字符串中的最大数。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串长度。
+时间复杂度 $O(n)$，其中 $n$ 为字符串长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -63,9 +76,7 @@ class Solution:
         return int(max(n))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -79,20 +90,22 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minPartitions(string n) {
         int ans = 0;
-        for (char& c : n) ans = max(ans, c - '0');
+        for (char& c : n) {
+            ans = max(ans, c - '0');
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minPartitions(n string) (ans int) {
@@ -105,17 +118,15 @@ func minPartitions(n string) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minPartitions(n: string): number {
-    let nums = n.split('').map(d => parseInt(d));
-    let ans = Math.max(...nums);
-    return ans;
+    return Math.max(...n.split('').map(d => parseInt(d)));
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -129,10 +140,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int minPartitions(char *n) {
+int minPartitions(char* n) {
     int ans = 0;
     for (int i = 0; n[i]; i++) {
         int v = n[i] - '0';
@@ -144,10 +155,8 @@ int minPartitions(char *n) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

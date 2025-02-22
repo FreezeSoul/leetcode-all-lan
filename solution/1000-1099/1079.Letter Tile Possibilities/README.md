@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1079.Letter%20Tile%20Possibilities/README.md
+rating: 1740
+source: 第 140 场周赛 Q2
+tags:
+    - 哈希表
+    - 字符串
+    - 回溯
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1079. 活字印刷](https://leetcode.cn/problems/letter-tile-possibilities)
 
 [English Version](/solution/1000-1099/1079.Letter%20Tile%20Possibilities/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一套活字字模&nbsp;<code>tiles</code>，其中每个字模上都刻有一个字母&nbsp;<code>tiles[i]</code>。返回你可以印出的非空字母序列的数目。</p>
 
@@ -42,11 +57,13 @@
 	<li><code>tiles</code> 由大写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 回溯**
+### 方法一：计数 + 回溯
 
 我们先用一个哈希表或数组 $cnt$ 统计每个字母出现的次数。
 
@@ -58,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +94,7 @@ class Solution:
         return dfs(cnt)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +148,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numTilePossibilities(tiles string) int {
@@ -159,7 +172,7 @@ func numTilePossibilities(tiles string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numTilePossibilities(tiles: string): number {
@@ -183,10 +196,8 @@ function numTilePossibilities(tiles: string): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

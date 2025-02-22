@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1172.Dinner%20Plate%20Stacks/README_EN.md
+rating: 2109
+source: Weekly Contest 151 Q4
+tags:
+    - Stack
+    - Design
+    - Hash Table
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1172. Dinner Plate Stacks](https://leetcode.com/problems/dinner-plate-stacks)
 
 [中文文档](/solution/1100-1199/1172.Dinner%20Plate%20Stacks/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have an infinite number of stacks arranged in a row and numbered (left to right) from <code>0</code>, each of the stacks has the same maximum capacity.</p>
 
@@ -70,16 +87,42 @@ D.pop()            // Returns -1.  There are still no stacks.
 	<li>At most <code>2 * 10<sup>5</sup></code> calls will be made to <code>push</code>, <code>pop</code>, and <code>popAtStack</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Stack Array + Ordered Set
+
+We define the following data structures or variables:
+
+-   `capacity`: The capacity of each stack;
+-   `stacks`: Stack array, used to store all stacks, each with a maximum capacity of `capacity`;
+-   `not_full`: Ordered set, used to store the indices of all non-full stacks in the stack array.
+
+For the `push(val)` operation:
+
+-   We first check if `not_full` is empty. If it is, it means there are no non-full stacks, so we need to create a new stack and push `val` into it. At this point, we check if the capacity `capacity` is greater than $1$. If it is, we add the index of this stack to `not_full`.
+-   If `not_full` is not empty, it means there are non-full stacks. We take out the smallest index `index` from `not_full`, and push `val` into `stacks[index]`. At this point, if the capacity of `stacks[index]` equals `capacity`, we remove `index` from `not_full`.
+
+For the `popAtStack(index)` operation:
+
+-   We first check if `index` is within the index range of `stacks`. If it is not, we directly return $-1$. If `stacks[index]` is empty, we also directly return $-1$.
+-   If `stacks[index]` is not empty, we pop the top element `val` from `stacks[index]`. If `index` equals the length of `stacks` minus $1$, it means `stacks[index]` is the last stack. If it is empty, we loop to remove the index of the last stack from `not_full`, and remove the last stack from the stack array `stacks`, until the last stack is not empty, or the stack array `stacks` is empty. Otherwise, if `stacks[index]` is not the last stack, we add `index` to `not_full`.
+-   Finally, return `val`.
+
+For the `pop()` operation:
+
+-   We directly call `popAtStack(stacks.length - 1)`.
+
+The time complexity is $(n \times \log n)$, and the space complexity is $O(n)$. Here, $n$ is the number of operations.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedSet
-
-
 class DinnerPlates:
     def __init__(self, capacity: int):
         self.capacity = capacity
@@ -120,7 +163,7 @@ class DinnerPlates:
 # param_3 = obj.popAtStack(index)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class DinnerPlates {
@@ -178,7 +221,7 @@ class DinnerPlates {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class DinnerPlates {
@@ -239,7 +282,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type DinnerPlates struct {
@@ -297,7 +340,7 @@ func (this *DinnerPlates) PopAtStack(index int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class DinnerPlates {
@@ -331,22 +374,12 @@ class DinnerPlates {
     }
 
     popAtStack(index: number): number {
-        if (
-            index < 0 ||
-            index >= this.stacks.length ||
-            this.stacks[index].length === 0
-        ) {
+        if (index < 0 || index >= this.stacks.length || this.stacks[index].length === 0) {
             return -1;
         }
         const val = this.stacks[index].pop()!;
-        if (
-            index === this.stacks.length - 1 &&
-            this.stacks[index].length === 0
-        ) {
-            while (
-                this.stacks.length > 0 &&
-                this.stacks[this.stacks.length - 1].length === 0
-            ) {
+        if (index === this.stacks.length - 1 && this.stacks[index].length === 0) {
+            while (this.stacks.length > 0 && this.stacks[this.stacks.length - 1].length === 0) {
                 this.notFull.delete(this.stacks.length - 1);
                 this.stacks.pop();
             }
@@ -393,9 +426,7 @@ class RBTreeNode<T = number> {
 class RBTree<T> {
     root: RBTreeNode<T> | null;
     lt: (l: T, r: T) => boolean;
-    constructor(
-        compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0),
-    ) {
+    constructor(compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0)) {
         this.root = null;
         this.lt = (l: T, r: T) => compare(l, r) < 0;
     }
@@ -703,9 +734,7 @@ class RBTree<T> {
         for (const v of this.inOrder(root.right!)) yield v;
     }
 
-    *reverseInOrder(
-        root: RBTreeNode<T> = this.root!,
-    ): Generator<T, undefined, void> {
+    *reverseInOrder(root: RBTreeNode<T> = this.root!): Generator<T, undefined, void> {
         if (!root) return;
         for (const v of this.reverseInOrder(root.right!)) yield v;
         yield root.data;
@@ -860,10 +889,8 @@ class TreeSet<T = number> {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

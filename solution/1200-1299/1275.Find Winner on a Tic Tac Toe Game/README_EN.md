@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1275.Find%20Winner%20on%20a%20Tic%20Tac%20Toe%20Game/README_EN.md
+rating: 1336
+source: Weekly Contest 165 Q1
+tags:
+    - Array
+    - Hash Table
+    - Matrix
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1275. Find Winner on a Tic Tac Toe Game](https://leetcode.com/problems/find-winner-on-a-tic-tac-toe-game)
 
 [中文文档](/solution/1200-1299/1275.Find%20Winner%20on%20a%20Tic%20Tac%20Toe%20Game/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p><strong>Tic-tac-toe</strong> is played by two players <code>A</code> and <code>B</code> on a <code>3 x 3</code> grid. The rules of Tic-Tac-Toe are:</p>
 
@@ -55,11 +72,25 @@
 	<li><code>moves</code> follow the rules of tic tac toe.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Determine if the last player to move can win
+
+Since all `moves` are valid, that is, there is no situation where a person continues to play after someone has won. Therefore, we only need to determine whether the last player to move can win.
+
+We use an array `cnt` of length $8$ to record the number of moves in rows, columns, and diagonals. Where $cnt[0, 1, 2]$ represent the number of moves in the $0, 1, 2$ rows respectively, and $cnt[3, 4, 5]$ represent the number of moves in the $0, 1, 2$ columns respectively. Additionally, $cnt[6]$ and $cnt[7]$ represent the number of moves on the two diagonals respectively. During the game, if a player makes $3$ moves in a row, column, or diagonal, that player wins.
+
+If the last player to move does not win, then we determine whether the board is full. If it is full, it is a draw; otherwise, the game is not over yet.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the length of `moves`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -79,7 +110,7 @@ class Solution:
         return "Draw" if n == 9 else "Pending"
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -132,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func tictactoe(moves [][]int) string {
@@ -162,7 +193,7 @@ func tictactoe(moves [][]int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function tictactoe(moves: number[][]): string {
@@ -186,10 +217,8 @@ function tictactoe(moves: number[][]): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

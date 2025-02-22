@@ -1,10 +1,28 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1687.Delivering%20Boxes%20from%20Storage%20to%20Ports/README.md
+rating: 2610
+source: 第 41 场双周赛 Q4
+tags:
+    - 线段树
+    - 队列
+    - 数组
+    - 动态规划
+    - 前缀和
+    - 单调队列
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1687. 从仓库到码头运输箱子](https://leetcode.cn/problems/delivering-boxes-from-storage-to-ports)
 
 [English Version](/solution/1600-1699/1687.Delivering%20Boxes%20from%20Storage%20to%20Ports/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一辆货运卡车，你需要用这一辆车把一些箱子从仓库运送到码头。这辆卡车每次运输有&nbsp;<strong>箱子数目的限制</strong>&nbsp;和 <strong>总重量的限制</strong>&nbsp;。</p>
 
@@ -91,11 +109,13 @@
 	<li><code>1 &lt;= weights<sub>i</sub> &lt;= maxWeight</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划 + 单调队列优化**
+### 方法一：动态规划 + 单调队列优化
 
 我们定义 $f[i]$ 表示把前 $i$ 个箱子从仓库运送到相应码头的最少行程数，那么答案就是 $f[n]$。
 
@@ -109,19 +129,25 @@
 状态转移方程为：
 
 $$
-f[i] = \min_{j \in [i - maxBoxes, i - 1]} \left(f[j] + \sum_{k = j + 1}^i \text{cost}(k)\right)
+f[i] = \min_{j \in [i - maxBoxes, i - 1]} \left(f[j] + \sum_{k = j + 1}^i \textit{cost}(k)\right)
 $$
 
-其中 $\sum_{k = j + 1}^i \text{cost}(k)$ 表示通过一次运输，把 $[j+1,..i]$ 这些箱子送往对应的码头所需要的行程数。这部分行程数可以通过前缀和快速计算出来。
+其中 $\sum_{k = j + 1}^i \textit{cost}(k)$ 表示通过一次运输，把 $[j+1,..i]$ 这些箱子送往对应的码头所需要的行程数。这部分行程数可以通过前缀和快速计算出来。
 
 简单举个例子，假设我们取出了 $1, 2, 3$ 这三个箱子，需要送往 $4, 4, 5$ 这三个码头，那么我们首先要从仓库到 $4$ 号码头，然后再从 $4$ 号码头到 $5$ 号码头，最后再从 $5$ 号码头回到仓库。可以发现，从仓库到码头，以及从码头到仓库，需要花费 $2$ 趟行程，而从码头到码头的行程数，取决于相邻两个码头是否相同，如果不相同，那么行程数会增加 $1$，否则不变。因此，我们可以通过前缀和，计算出码头之间的行程数，再加上首尾两趟行程，就能把 $[j+1,..i]$ 这些箱子送往对应的码头所需要的行程数计算出来。
 
 代码实现如下：
 
+<!-- tabs:start -->
+
+#### Python3
+
 ```python
 # 33/39 个通过测试用例，超出时间限制
 class Solution:
-    def boxDelivering(self, boxes: List[List[int]], portsCount: int, maxBoxes: int, maxWeight: int) -> int:
+    def boxDelivering(
+        self, boxes: List[List[int]], portsCount: int, maxBoxes: int, maxWeight: int
+    ) -> int:
         n = len(boxes)
         ws = list(accumulate((box[1] for box in boxes), initial=0))
         c = [int(a != b) for a, b in pairwise(box[0] for box in boxes)]
@@ -134,6 +160,8 @@ class Solution:
                     f[i] = min(f[i], f[j] + cs[i - 1] - cs[j] + 2)
         return f[n]
 ```
+
+#### Java
 
 ```java
 // 35/39 个通过测试用例，超出时间限制
@@ -164,6 +192,8 @@ class Solution {
 }
 ```
 
+#### C++
+
 ```cpp
 // 35/39 个通过测试用例，超出时间限制
 class Solution {
@@ -193,6 +223,8 @@ public:
 };
 ```
 
+#### Go
+
 ```go
 // 35/39 个通过测试用例，超出时间限制
 func boxDelivering(boxes [][]int, portsCount int, maxBoxes int, maxWeight int) int {
@@ -221,26 +253,14 @@ func boxDelivering(boxes [][]int, portsCount int, maxBoxes int, maxWeight int) i
 	}
 	return f[n]
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
+
+<!-- tabs:end -->
 
 本题数据规模达到 $10^5$，而以上代码的时间复杂度为 $O(n^2)$，会超出时间限制。我们仔细观察：
 
 $$
-f[i] = min(f[i], f[j] + cs[i - 1] - cs[j] + 2)
+f[i] = \min(f[i], f[j] + cs[i - 1] - cs[j] + 2)
 $$
 
 实际上我们是要在 $[i-maxBoxes,..i-1]$ 这个窗口内找到一个 $j$，使得 $f[j] - cs[j]$ 的值最小，求滑动窗口的最小值，一种常用的做法是使用单调队列，可以在 $O(1)$ 时间内获取到满足条件的最小值。
@@ -249,9 +269,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -276,9 +294,7 @@ class Solution:
         return f[n]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -316,7 +332,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -346,7 +362,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func boxDelivering(boxes [][]int, portsCount int, maxBoxes int, maxWeight int) int {
@@ -384,10 +400,8 @@ func boxDelivering(boxes [][]int, portsCount int, maxBoxes int, maxWeight int) i
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

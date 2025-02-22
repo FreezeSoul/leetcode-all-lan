@@ -1,8 +1,20 @@
-# [1635. Hopper Company Queries I](https://leetcode.com/problems/hopper-company-queries-i)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1635.Hopper%20Company%20Queries%20I/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1635. Hopper Company Queries I 🔒](https://leetcode.com/problems/hopper-company-queries-i)
 
 [中文文档](/solution/1600-1699/1635.Hopper%20Company%20Queries%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Drivers</code></p>
 
@@ -13,7 +25,7 @@
 | driver_id   | int     |
 | join_date   | date    |
 +-------------+---------+
-driver_id is the primary key for this table.
+driver_id is the primary key (column with unique values) for this table.
 Each row of this table contains the driver&#39;s ID and the date they joined the Hopper company.
 </pre>
 
@@ -29,7 +41,7 @@ Each row of this table contains the driver&#39;s ID and the date they joined the
 | user_id      | int     |
 | requested_at | date    |
 +--------------+---------+
-ride_id is the primary key for this table.
+ride_id is the primary key (column with unique values) for this table.
 Each row of this table contains the ID of a ride, the user&#39;s ID that requested it, and the day they requested it.
 There may be some ride requests in this table that were not accepted.
 </pre>
@@ -47,14 +59,14 @@ There may be some ride requests in this table that were not accepted.
 | ride_distance | int     |
 | ride_duration | int     |
 +---------------+---------+
-ride_id is the primary key for this table.
+ride_id is the primary key (column with unique values) for this table.
 Each row of this table contains some information about an accepted ride.
 It is guaranteed that each accepted ride exists in the Rides table.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the following statistics for each month of <strong>2020</strong>:</p>
+<p>Write a solution to report the following statistics for each month of <strong>2020</strong>:</p>
 
 <ul>
 	<li>The number of drivers currently with the Hopper company by the end of the month (<code>active_drivers</code>).</li>
@@ -63,7 +75,7 @@ It is guaranteed that each accepted ride exists in the Rides table.
 
 <p>Return the result table ordered by <code>month</code> in ascending order, where <code>month</code> is the month&#39;s number (January is <code>1</code>, February is <code>2</code>, etc.).</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -150,14 +162,53 @@ By the end of November --&gt; six active drivers (10, 8, 5, 7, 4, 1) and two acc
 By the end of December --&gt; six active drivers (10, 8, 5, 7, 4, 1) and one accepted ride (2).
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    recursive Months AS (
+        SELECT
+            1 AS month
+        UNION ALL
+        SELECT
+            month + 1
+        FROM Months
+        WHERE month < 12
+    ),
+    Ride AS (
+        SELECT MONTH(requested_at) AS month, COUNT(1) AS cnt
+        FROM
+            Rides AS r
+            JOIN AcceptedRides AS a
+                ON r.ride_id = a.ride_id AND YEAR(requested_at) = 2020
+        GROUP BY month
+    )
+SELECT
+    m.month,
+    COUNT(driver_id) AS active_drivers,
+    IFNULL(r.cnt, 0) AS accepted_rides
+FROM
+    Months AS m
+    LEFT JOIN Drivers AS d
+        ON (m.month >= MONTH(d.join_date) AND YEAR(d.join_date) = 2020)
+        OR YEAR(d.join_date) < 2020
+    LEFT JOIN Ride AS r ON m.month = r.month
+GROUP BY month;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

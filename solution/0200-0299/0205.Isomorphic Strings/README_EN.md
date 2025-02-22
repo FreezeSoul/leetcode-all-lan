@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0205.Isomorphic%20Strings/README_EN.md
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [205. Isomorphic Strings](https://leetcode.com/problems/isomorphic-strings)
 
 [中文文档](/solution/0200-0299/0205.Isomorphic%20Strings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>s</code> and <code>t</code>, <em>determine if they are isomorphic</em>.</p>
 
@@ -12,15 +25,42 @@
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
-<pre><strong>Input:</strong> s = "egg", t = "add"
-<strong>Output:</strong> true
-</pre><p><strong class="example">Example 2:</strong></p>
-<pre><strong>Input:</strong> s = "foo", t = "bar"
-<strong>Output:</strong> false
-</pre><p><strong class="example">Example 3:</strong></p>
-<pre><strong>Input:</strong> s = "paper", t = "title"
-<strong>Output:</strong> true
-</pre>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;egg&quot;, t = &quot;add&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">true</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p>The strings <code>s</code> and <code>t</code> can be made identical by:</p>
+
+<ul>
+	<li>Mapping <code>&#39;e&#39;</code> to <code>&#39;a&#39;</code>.</li>
+	<li>Mapping <code>&#39;g&#39;</code> to <code>&#39;d&#39;</code>.</li>
+</ul>
+</div>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;foo&quot;, t = &quot;bar&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">false</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<p>The strings <code>s</code> and <code>t</code> can not be made identical as <code>&#39;o&#39;</code> needs to be mapped to both <code>&#39;a&#39;</code> and <code>&#39;r&#39;</code>.</p>
+</div>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;paper&quot;, t = &quot;title&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">true</span></p>
+</div>
+
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
 
@@ -30,9 +70,13 @@
 	<li><code>s</code> and <code>t</code> consist of any valid ascii character.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Hash Table or Array**
+<!-- solution:start -->
+
+### Solution 1: Hash Table or Array
 
 We can use two hash tables or arrays $d_1$ and $d_2$ to record the character mapping relationship between $s$ and $t$.
 
@@ -42,7 +86,7 @@ The time complexity is $O(n)$ and the space complexity is $O(C)$. Where $n$ is t
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,19 +101,7 @@ class Solution:
         return True
 ```
 
-```python
-class Solution:
-    def isIsomorphic(self, s: str, t: str) -> bool:
-        d1, d2 = [0] * 256, [0] * 256
-        for i, (a, b) in enumerate(zip(s, t), 1):
-            a, b = ord(a), ord(b)
-            if d1[a] != d2[b]:
-                return False
-            d1[a] = d2[b] = i
-        return True
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -93,26 +125,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean isIsomorphic(String s, String t) {
-        int[] d1 = new int[256];
-        int[] d2 = new int[256];
-        int n = s.length();
-        for (int i = 0; i < n; ++i) {
-            char a = s.charAt(i), b = t.charAt(i);
-            if (d1[a] != d2[b]) {
-                return false;
-            }
-            d1[a] = i + 1;
-            d2[b] = i + 1;
-        }
-        return true;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +146,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isIsomorphic(s string, t string) bool {
@@ -150,28 +163,7 @@ func isIsomorphic(s string, t string) bool {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool IsIsomorphic(string s, string t) {
-        int[] d1 = new int[256];
-        int[] d2 = new int[256];
-        for (int i = 0; i < s.Length; ++i) {
-            var a = s[i];
-            var b = t[i];
-            if (d1[a] != d2[b]) {
-                return false;
-            }
-            d1[a] = i + 1;
-            d2[b] = i + 1;
-        }
-        return true;
-    }
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isIsomorphic(s: string, t: string): boolean {
@@ -190,7 +182,7 @@ function isIsomorphic(s: string, t: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -216,10 +208,74 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public bool IsIsomorphic(string s, string t) {
+        int[] d1 = new int[256];
+        int[] d2 = new int[256];
+        for (int i = 0; i < s.Length; ++i) {
+            var a = s[i];
+            var b = t[i];
+            if (d1[a] != d2[b]) {
+                return false;
+            }
+            d1[a] = i + 1;
+            d2[b] = i + 1;
+        }
+        return true;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        d1, d2 = [0] * 256, [0] * 256
+        for i, (a, b) in enumerate(zip(s, t), 1):
+            a, b = ord(a), ord(b)
+            if d1[a] != d2[b]:
+                return False
+            d1[a] = d2[b] = i
+        return True
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        int[] d1 = new int[256];
+        int[] d2 = new int[256];
+        int n = s.length();
+        for (int i = 0; i < n; ++i) {
+            char a = s.charAt(i), b = t.charAt(i);
+            if (d1[a] != d2[b]) {
+                return false;
+            }
+            d1[a] = i + 1;
+            d2[b] = i + 1;
+        }
+        return true;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

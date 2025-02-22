@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0652.Find%20Duplicate%20Subtrees/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 哈希表
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [652. 寻找重复的子树](https://leetcode.cn/problems/find-duplicate-subtrees)
 
 [English Version](/solution/0600-0699/0652.Find%20Duplicate%20Subtrees/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵二叉树的根节点 <code>root</code> ，返回所有 <strong>重复的子树 </strong>。</p>
 
@@ -47,19 +60,19 @@
 	<li><code>-200 &lt;= Node.val &lt;= 200</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：后序遍历**
+### 方法一：后序遍历
 
 后序遍历，序列化每个子树，用哈希表判断序列化的字符串出现次数是否等于 `2`，若是，说明这棵子树重复。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -87,9 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -132,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -166,7 +177,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -197,7 +208,7 @@ func findDuplicateSubtrees(root *TreeNode) []*TreeNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -234,7 +245,7 @@ function findDuplicateSubtrees(root: TreeNode | null): Array<TreeNode | null> {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -255,9 +266,9 @@ function findDuplicateSubtrees(root: TreeNode | null): Array<TreeNode | null> {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::HashMap;
+use std::rc::Rc;
 impl Solution {
     fn dfs(
         root: &Option<Rc<RefCell<TreeNode>>>,
@@ -295,10 +306,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

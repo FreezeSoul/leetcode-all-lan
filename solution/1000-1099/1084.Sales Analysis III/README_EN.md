@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1084.Sales%20Analysis%20III/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1084. Sales Analysis III](https://leetcode.com/problems/sales-analysis-iii)
 
 [中文文档](/solution/1000-1099/1084.Sales%20Analysis%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Product</code></p>
 
@@ -14,7 +26,7 @@
 | product_name | varchar |
 | unit_price   | int     |
 +--------------+---------+
-product_id is the primary key of this table.
+product_id is the primary key (column with unique values) of this table.
 Each row of this table indicates the name and the price of each product.
 </pre>
 
@@ -31,18 +43,18 @@ Each row of this table indicates the name and the price of each product.
 | quantity    | int     |
 | price       | int     |
 +-------------+---------+
-This table has no primary key, it can have repeated rows.
-product_id is a foreign key to the Product table.
+This table can have duplicate rows.
+product_id is a foreign key (reference column) to the Product table.
 Each row of this table contains some information about one sale.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query that reports the <strong>products</strong> that were <strong>only</strong> sold in the first quarter of <code>2019</code>. That is, between <code>2019-01-01</code> and <code>2019-03-31</code> inclusive.</p>
+<p>Write a solution to&nbsp;report&nbsp;the <strong>products</strong> that were <strong>only</strong> sold in the first quarter of <code>2019</code>. That is, between <code>2019-01-01</code> and <code>2019-03-31</code> inclusive.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -79,21 +91,30 @@ The product with id 3 was sold after spring 2019.
 We return only product 1 as it is the product that was only sold in the spring of 2019.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT  p.product_id
-       ,p.product_name
-FROM Product p
-JOIN Sales s
-ON p.product_id = s.product_id
-GROUP BY  p.product_id
-HAVING SUM(s.sale_date < '2019-01-01') = 0 AND SUM(s.sale_date > '2019-03-31') = 0;
+SELECT product_id, product_name
+FROM
+    Sales
+    JOIN Product USING (product_id)
+GROUP BY 1
+HAVING COUNT(1) = SUM(sale_date BETWEEN '2019-01-01' AND '2019-03-31');
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1752.Check%20if%20Array%20Is%20Sorted%20and%20Rotated/README.md
+rating: 1324
+source: 第 227 场周赛 Q1
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1752. 检查数组是否经排序和轮转得到](https://leetcode.cn/problems/check-if-array-is-sorted-and-rotated)
 
 [English Version](/solution/1700-1799/1752.Check%20if%20Array%20Is%20Sorted%20and%20Rotated/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组 <code>nums</code> 。<code>nums</code> 的源数组中，所有元素与 <code>nums</code> 相同，但按非递减顺序排列。</p>
 
@@ -12,7 +24,7 @@
 
 <p>源数组中可能存在 <strong>重复项</strong> 。</p>
 
-<p><strong>注意：</strong>我们称数组 <code>A</code> 在轮转 <code>x</code> 个位置后得到长度相同的数组 <code>B</code> ，当它们满足 <code>A[i] == B[(i+x) % A.length]</code> ，其中 <code>%</code> 为取余运算。</p>
+<p><strong>注意：</strong>数组 <code>A</code> 在轮转 <code>x</code> 个位置后得到长度相同的数组 <code>B</code> ，使得对于每一个有效的下标&nbsp;<code>i</code>，满足&nbsp;<code>B[i] == A[(i+x) % A.length]</code>。</p>
 
 <p>&nbsp;</p>
 
@@ -51,11 +63,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 要满足题目要求，那么数组 `nums` 中最多只能存在一个元素，其值大于下一个元素，即 $nums[i] \gt nums[i + 1]$。如果存在多个这样的元素，那么数组 `nums` 无法通过轮转得到。
 
@@ -65,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +87,7 @@ class Solution:
         return sum(nums[i - 1] > v for i, v in enumerate(nums)) <= 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +118,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func check(nums []int) bool {
@@ -122,18 +132,16 @@ func check(nums []int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function check(nums: number[]): boolean {
     const n = nums.length;
-    return (
-        nums.reduce((r, v, i) => r + (v > nums[(i + 1) % n] ? 1 : 0), 0) <= 1
-    );
+    return nums.reduce((r, v, i) => r + (v > nums[(i + 1) % n] ? 1 : 0), 0) <= 1;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -150,10 +158,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-bool check(int *nums, int numsSize) {
+bool check(int* nums, int numsSize) {
     int count = 0;
     for (int i = 0; i < numsSize; i++) {
         if (nums[i] > nums[(i + 1) % numsSize]) {
@@ -164,10 +172,8 @@ bool check(int *nums, int numsSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

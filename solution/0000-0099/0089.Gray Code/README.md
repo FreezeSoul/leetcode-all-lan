@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0089.Gray%20Code/README.md
+tags:
+    - 位运算
+    - 数学
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [89. 格雷编码](https://leetcode.cn/problems/gray-code)
 
 [English Version](/solution/0000-0099/0089.Gray%20Code/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <strong>n 位格雷码序列</strong> 是一个由 <code>2<sup>n</sup></code> 个整数组成的序列，其中：
 
@@ -53,11 +65,13 @@
 	<li><code>1 &lt;= n &lt;= 16</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二进制码转格雷码**
+### 方法一：二进制码转格雷码
 
 格雷码是我们在工程中常会遇到的一种编码方式，它的基本的特点就是任意两个相邻的代码只有一位二进制数不同。
 
@@ -79,9 +93,7 @@ int gray(x) {
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +101,7 @@ class Solution:
         return [i ^ (i >> 1) for i in range(1 << n)]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func grayCode(n int) (ans []int) {
@@ -131,7 +141,7 @@ func grayCode(n int) (ans []int) {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -147,10 +157,8 @@ var grayCode = function (n) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

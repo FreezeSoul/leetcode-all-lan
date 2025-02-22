@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1073.Adding%20Two%20Negabinary%20Numbers/README_EN.md
+rating: 1806
+source: Weekly Contest 139 Q3
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1073. Adding Two Negabinary Numbers](https://leetcode.com/problems/adding-two-negabinary-numbers)
 
 [中文文档](/solution/1000-1099/1073.Adding%20Two%20Negabinary%20Numbers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two numbers <code>arr1</code> and <code>arr2</code> in base <strong>-2</strong>, return the result of adding them together.</p>
 
@@ -42,11 +57,17 @@
 	<li><code>arr1</code> and <code>arr2</code> have no leading zeros</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +93,7 @@ class Solution:
         return ans[::-1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func addNegabinary(arr1 []int, arr2 []int) (ans []int) {
@@ -166,7 +187,7 @@ func addNegabinary(arr1 []int, arr2 []int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function addNegabinary(arr1: number[], arr2: number[]): number[] {
@@ -194,7 +215,7 @@ function addNegabinary(arr1: number[], arr2: number[]): number[] {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -224,10 +245,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

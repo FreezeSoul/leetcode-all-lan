@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2283.Check%20if%20Number%20Has%20Equal%20Digit%20Count%20and%20Digit%20Value/README.md
+rating: 1253
+source: 第 79 场双周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2283. 判断一个数的数字计数是否等于数位的值](https://leetcode.cn/problems/check-if-number-has-equal-digit-count-and-digit-value)
 
 [English Version](/solution/2200-2299/2283.Check%20if%20Number%20Has%20Equal%20Digit%20Count%20and%20Digit%20Value/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始长度为 <code>n</code>&nbsp;的字符串&nbsp;<code>num</code>&nbsp;，它只包含数字。</p>
 
@@ -47,32 +61,30 @@ num[2] = '0' 。数字 2 在 num 中出现了 0 次。
 	<li><code>num</code>&nbsp;只包含数字。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 枚举**
+### 方法一：计数 + 枚举
 
-统计字符串中每个数字出现的次数，然后枚举每个数字，判断其出现的次数是否与其值相等，若都相等则返回 `true`，否则返回 `false`。
+我们可以用一个长度为 $10$ 的数组 $\textit{cnt}$ 统计字符串 $\textit{num}$ 中每个数字出现的次数，然后再枚举字符串 $\textit{num}$ 中的每个数字，判断其出现的次数是否等于该数字本身。如果对于所有的数字都满足这个条件，那么返回 $\text{true}$，否则返回 $\text{false}$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(C)$。其中 $n$ 是字符串 `num` 的长度，而 $C$ 是数字的个数。本题中 $C=10$。
+时间复杂度 $O(n)$，空间复杂度 $O(|\Sigma|)$。其中 $n$ 是字符串 $\textit{num}$ 的长度，而 $|\Sigma|$ 是数字的取值范围，即 $10$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def digitCount(self, num: str) -> bool:
-        cnt = Counter(num)
-        return all(cnt[str(i)] == int(v) for i, v in enumerate(num))
+        cnt = Counter(int(x) for x in num)
+        return all(cnt[i] == int(x) for i, x in enumerate(num))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +95,7 @@ class Solution {
             ++cnt[num.charAt(i) - '0'];
         }
         for (int i = 0; i < n; ++i) {
-            if (cnt[i] != num.charAt(i) - '0') {
+            if (num.charAt(i) - '0' != cnt[i]) {
                 return false;
             }
         }
@@ -92,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,7 +124,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func digitCount(num string) bool {
@@ -120,8 +132,8 @@ func digitCount(num string) bool {
 	for _, c := range num {
 		cnt[c-'0']++
 	}
-	for i, v := range num {
-		if cnt[i] != int(v-'0') {
+	for i, c := range num {
+		if int(c-'0') != cnt[i] {
 			return false
 		}
 	}
@@ -129,54 +141,16 @@ func digitCount(num string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function digitCount(num: string): boolean {
-    const n = num.length;
-    const count = new Array(10).fill(0);
-    for (let i = 0; i < n; i++) {
-        count[i] = Number(num[i]);
-    }
+    const cnt: number[] = Array(10).fill(0);
     for (const c of num) {
-        count[c]--;
+        ++cnt[+c];
     }
-    return count.every(v => v === 0);
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn digit_count(num: String) -> bool {
-        let s = num.as_bytes();
-        let n = num.len();
-        let mut count = [0; 10];
-        for i in 0..n {
-            count[i] = s[i] - b'0';
-        }
-        for c in s {
-            count[(c - b'0') as usize] -= 1;
-        }
-        count.iter().all(|v| *v == 0)
-    }
-}
-```
-
-### **C**
-
-```c
-bool digitCount(char *num) {
-    int count[10] = {0};
-    for (int i = 0; num[i]; i++) {
-        count[i] = num[i] - '0';
-    }
-    for (int i = 0; num[i]; i++) {
-        count[num[i] - '0']--;
-    }
-    for (int i = 0; i < 10; i++) {
-        if (count[i] != 0) {
+    for (let i = 0; i < num.length; ++i) {
+        if (cnt[i] !== +num[i]) {
             return false;
         }
     }
@@ -184,10 +158,46 @@ bool digitCount(char *num) {
 }
 ```
 
-### **...**
+#### Rust
 
+```rust
+impl Solution {
+    pub fn digit_count(num: String) -> bool {
+        let mut cnt = vec![0; 10];
+        for c in num.chars() {
+            let x = c.to_digit(10).unwrap() as usize;
+            cnt[x] += 1;
+        }
+        for (i, c) in num.chars().enumerate() {
+            let x = c.to_digit(10).unwrap() as usize;
+            if cnt[i] != x {
+                return false;
+            }
+        }
+        true
+    }
+}
 ```
 
+#### C
+
+```c
+bool digitCount(char* num) {
+    int cnt[10] = {0};
+    for (int i = 0; num[i] != '\0'; ++i) {
+        ++cnt[num[i] - '0'];
+    }
+    for (int i = 0; num[i] != '\0'; ++i) {
+        if (cnt[i] != num[i] - '0') {
+            return false;
+        }
+    }
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

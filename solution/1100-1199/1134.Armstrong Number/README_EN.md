@@ -1,8 +1,22 @@
-# [1134. Armstrong Number](https://leetcode.com/problems/armstrong-number)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1134.Armstrong%20Number/README_EN.md
+rating: 1231
+source: Biweekly Contest 5 Q2
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
+# [1134. Armstrong Number 🔒](https://leetcode.com/problems/armstrong-number)
 
 [中文文档](/solution/1100-1199/1134.Armstrong%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code>, return <code>true</code> <em>if and only if it is an <strong>Armstrong number</strong></em>.</p>
 
@@ -32,11 +46,21 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can first calculate the number of digits $k$, then calculate the sum $s$ of the $k$th power of each digit, and finally check whether $s$ equals $n$.
+
+The time complexity is $O(\log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the given number.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -44,12 +68,12 @@ class Solution:
         k = len(str(n))
         s, x = 0, n
         while x:
-            s += (x % 10)**k
+            s += (x % 10) ** k
             x //= 10
         return s == n
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -64,7 +88,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -80,7 +104,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isArmstrong(n int) bool {
@@ -96,7 +120,20 @@ func isArmstrong(n int) bool {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function isArmstrong(n: number): boolean {
+    const k = String(n).length;
+    let s = 0;
+    for (let x = n; x; x = Math.floor(x / 10)) {
+        s += Math.pow(x % 10, k);
+    }
+    return s == n;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -113,23 +150,8 @@ var isArmstrong = function (n) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function isArmstrong(n: number): boolean {
-    const k = String(n).length;
-    let s = 0;
-    for (let x = n; x; x = Math.floor(x / 10)) {
-        s += Math.pow(x % 10, k);
-    }
-    return s == n;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

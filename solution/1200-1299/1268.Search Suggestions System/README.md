@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1268.Search%20Suggestions%20System/README.md
+rating: 1573
+source: 第 164 场周赛 Q3
+tags:
+    - 字典树
+    - 数组
+    - 字符串
+    - 二分查找
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1268. 搜索推荐系统](https://leetcode.cn/problems/search-suggestions-system)
 
 [English Version](/solution/1200-1299/1268.Search%20Suggestions%20System/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个产品数组&nbsp;<code>products</code>&nbsp;和一个字符串&nbsp;<code>searchWord</code>&nbsp;，<code>products</code>&nbsp; 数组中每个产品都是一个字符串。</p>
 
@@ -59,11 +76,13 @@
 	<li><code>searchWord</code>&nbsp;中所有字符都是小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 前缀树**
+### 方法一：排序 + 前缀树
 
 题目要求在输入 `searchWord` 的每一个字母后，推荐 `products` 数组中前缀与 `searchWord` 相同的最多三个产品。如果前缀相同的可推荐产品超过三个，按字典序返回最小的三个。
 
@@ -80,9 +99,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Trie:
@@ -123,9 +140,7 @@ class Solution:
         return [[products[i] for i in v] for v in trie.search(searchWord)]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Trie {
@@ -183,7 +198,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -243,7 +258,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -300,10 +315,8 @@ func suggestedProducts(products []string, searchWord string) (ans [][]string) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

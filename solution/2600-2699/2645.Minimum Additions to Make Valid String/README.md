@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2645.Minimum%20Additions%20to%20Make%20Valid%20String/README.md
+rating: 1477
+source: 第 341 场周赛 Q3
+tags:
+    - 栈
+    - 贪心
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2645. 构造有效字符串的最少插入数](https://leetcode.cn/problems/minimum-additions-to-make-valid-string)
 
 [English Version](/solution/2600-2699/2645.Minimum%20Additions%20to%20Make%20Valid%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>word</code> ，你可以向其中任何位置插入 "a"、"b" 或 "c" 任意次，返回使 <code>word</code> <strong>有效</strong> 需要插入的最少字母数。</p>
 
@@ -42,11 +57,13 @@
 	<li><code>word</code> 仅由字母 "a"、"b" 和 "c" 组成。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 双指针**
+### 方法一：贪心 + 双指针
 
 我们定义字符串 $s$ 为 `"abc"`，用指针 $i$ 和 $j$ 分别指向 $s$ 和 $word$。
 
@@ -60,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,9 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +141,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func addMinimum(word string) (ans int) {
@@ -150,7 +163,7 @@ func addMinimum(word string) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function addMinimum(word: string): number {
@@ -173,10 +186,8 @@ function addMinimum(word: string): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

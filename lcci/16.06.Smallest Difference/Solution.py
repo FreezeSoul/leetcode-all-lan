@@ -1,13 +1,12 @@
 class Solution:
     def smallestDifference(self, a: List[int], b: List[int]) -> int:
-        a.sort()
         b.sort()
-        i = j = 0
-        res = inf
-        while i < len(a) and j < len(b):
-            res = min(res, abs(a[i] - b[j]))
-            if a[i] > b[j]:
-                j += 1
-            else:
-                i += 1
-        return res
+        ans = inf
+        n = len(b)
+        for x in a:
+            j = bisect_left(b, x)
+            if j < n:
+                ans = min(ans, b[j] - x)
+            if j:
+                ans = min(ans, x - b[j - 1])
+        return ans

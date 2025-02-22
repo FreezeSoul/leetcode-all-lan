@@ -1,12 +1,28 @@
-# [2700. Differences Between Two Objects](https://leetcode.com/problems/differences-between-two-objects)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2700.Differences%20Between%20Two%20Objects/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2700. Differences Between Two Objects 🔒](https://leetcode.com/problems/differences-between-two-objects)
 
 [中文文档](/solution/2700-2799/2700.Differences%20Between%20Two%20Objects/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>Write a function that accepts two deeply nested objects or arrays&nbsp;<code>obj1</code> and&nbsp;<code>obj2</code>&nbsp;and returns a new&nbsp;object representing their differences.</p>
 
-<p>The function should compare the properties of the two objects and identify any changes.&nbsp;The returned object should only contains keys where the value is different from&nbsp;<code>obj1</code> to&nbsp;<code>obj2</code>. For each changed key, the value should be represented as an&nbsp;array <code>[obj1 value, obj2&nbsp;value]</code>. Keys that exist in one object but not in the other should not be included in the returned object. When comparing two arrays, the indices of the arrays are considered to be their keys.&nbsp;The end result should be a deeply nested object where each leaf value is a difference array.</p>
+<p>The function should compare the properties of the two objects and identify any changes.&nbsp;The returned object should only contains keys where the value is different from&nbsp;<code>obj1</code> to&nbsp;<code>obj2</code>.</p>
+
+<p>For each changed key, the value should be represented as an&nbsp;array <code>[obj1 value, obj2&nbsp;value]</code>. Keys that exist in one object but not in the other should not be included in the returned object.&nbsp;The end result should be a deeply nested object where each leaf value is a difference array.</p>
+
+<p>When comparing two arrays, the indices of the arrays are considered to be their keys.&nbsp;</p>
 
 <p>You may assume that both objects are the output of <code>JSON.parse</code>.</p>
 
@@ -52,7 +68,7 @@ obj2 = {
 &nbsp;   &quot;a&quot;: [null, 2]
 &nbsp; }
 }
-<strong>Explanation:</strong> The keys &quot;a&quot;, &quot;v&quot;, and &quot;z&quot; all had changes applied. &quot;a&quot; was chnaged from 1 to 2. &quot;v&quot; was changed from 3 to 4. &quot;z&quot; had a change applied to a child object. &quot;z.a&quot; was changed from null to 2.
+<strong>Explanation:</strong> The keys &quot;a&quot;, &quot;v&quot;, and &quot;z&quot; all had changes applied. &quot;a&quot; was changed from 1 to 2. &quot;v&quot; was changed from 3 to 4. &quot;z&quot; had a change applied to a child object. &quot;z.a&quot; was changed from null to 2.
 </pre>
 
 <p><strong>Example 3:</strong></p>
@@ -118,15 +134,22 @@ obj2 = { &nbsp;
 <p><strong>Constraints:</strong></p>
 
 <ul>
+	<li><code>obj1</code> and <code>obj2</code> are valid JSON objects or arrays</li>
 	<li><code>2 &lt;= JSON.stringify(obj1).length &lt;= 10<sup>4</sup></code></li>
 	<li><code>2 &lt;= JSON.stringify(obj2).length &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function objDiff(obj1: any, obj2: any): any {
@@ -151,3 +174,7 @@ function isObject(obj: unknown): obj is Record<string, unknown> {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1145.Binary%20Tree%20Coloring%20Game/README.md
+rating: 1741
+source: 第 148 场周赛 Q2
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1145. 二叉树着色游戏](https://leetcode.cn/problems/binary-tree-coloring-game)
 
 [English Version](/solution/1100-1199/1145.Binary%20Tree%20Coloring%20Game/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有两位极客玩家参与了一场「二叉树着色」的游戏。游戏中，给出二叉树的根节点&nbsp;<code>root</code>，树上总共有 <code>n</code> 个节点，且 <code>n</code> 为奇数，其中每个节点上的值从&nbsp;<code>1</code> 到&nbsp;<code>n</code>&nbsp;各不相同。</p>
 
@@ -52,11 +66,13 @@
 	<li>树中所有值 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们先通过 $DFS$，找到「一号」玩家着色点 $x$ 所在的节点，记为 $node$。
 
@@ -66,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -94,9 +108,7 @@ class Solution:
         return max(l, r, n - l - r - 1) > n // 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -139,7 +151,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -178,7 +190,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -214,16 +226,48 @@ func btreeGameWinningMove(root *TreeNode, n int, x int) bool {
 	l, r := count(node.Left), count(node.Right)
 	return max(max(l, r), n-l-r-1) > n/2
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function btreeGameWinningMove(root: TreeNode | null, n: number, x: number): boolean {
+    const dfs = (root: TreeNode | null): TreeNode | null => {
+        if (!root || root.val === x) {
+            return root;
+        }
+        return dfs(root.left) || dfs(root.right);
+    };
+
+    const count = (root: TreeNode | null): number => {
+        if (!root) {
+            return 0;
+        }
+        return 1 + count(root.left) + count(root.right);
+    };
+
+    const node = dfs(root);
+    const l = count(node.left);
+    const r = count(node.right);
+    return Math.max(l, r, n - l - r - 1) > n / 2;
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -262,53 +306,8 @@ var btreeGameWinningMove = function (root, n, x) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function btreeGameWinningMove(
-    root: TreeNode | null,
-    n: number,
-    x: number,
-): boolean {
-    const dfs = (root: TreeNode | null): TreeNode | null => {
-        if (!root || root.val === x) {
-            return root;
-        }
-        return dfs(root.left) || dfs(root.right);
-    };
-
-    const count = (root: TreeNode | null): number => {
-        if (!root) {
-            return 0;
-        }
-        return 1 + count(root.left) + count(root.right);
-    };
-
-    const node = dfs(root);
-    const l = count(node.left);
-    const r = count(node.right);
-    return Math.max(l, r, n - l - r - 1) > n / 2;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

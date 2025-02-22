@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0290.Word%20Pattern/README.md
+tags:
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [290. 单词规律](https://leetcode.cn/problems/word-pattern)
 
 [English Version](/solution/0200-0299/0290.Word%20Pattern/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一种规律 <code>pattern</code>&nbsp;和一个字符串&nbsp;<code>s</code>&nbsp;，判断 <code>s</code>&nbsp;是否遵循相同的规律。</p>
 
@@ -12,19 +23,19 @@
 
 <p>&nbsp;</p>
 
-<p><strong>示例1:</strong></p>
+<p><strong class="example">示例1:</strong></p>
 
 <pre>
 <strong>输入:</strong> pattern = <code>"abba"</code>, s = <code>"dog cat cat dog"</code>
 <strong>输出:</strong> true</pre>
 
-<p><strong>示例 2:</strong></p>
+<p><strong class="example">示例 2:</strong></p>
 
 <pre>
 <strong>输入:</strong>pattern = <code>"abba"</code>, s = <code>"dog cat cat fish"</code>
 <strong>输出:</strong> false</pre>
 
-<p><strong>示例 3:</strong></p>
+<p><strong class="example">示例 3:</strong></p>
 
 <pre>
 <strong>输入:</strong> pattern = <code>"aaaa"</code>, s = <code>"dog cat cat dog"</code>
@@ -43,11 +54,13 @@
 	<li><code>s</code>&nbsp;中每个单词都被 <strong>单个空格 </strong>分隔</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们先将字符串 $s$ 按照空格分割成单词数组 $ws$，如果 $pattern$ 和 $ws$ 的长度不相等，直接返回 `false`。否则，我们使用两个哈希表 $d_1$ 和 $d_2$，分别记录 $pattern$ 和 $ws$ 中每个字符和单词的对应关系。
 
@@ -59,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +90,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -136,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func wordPattern(pattern string, s string) bool {
@@ -161,7 +170,7 @@ func wordPattern(pattern string, s string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function wordPattern(pattern: string, s: string): boolean {
@@ -187,7 +196,40 @@ function wordPattern(pattern: string, s: string): boolean {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn word_pattern(pattern: String, s: String) -> bool {
+        let cs1: Vec<char> = pattern.chars().collect();
+        let cs2: Vec<&str> = s.split_whitespace().collect();
+        let n = cs1.len();
+        if n != cs2.len() {
+            return false;
+        }
+        let mut map1 = HashMap::new();
+        let mut map2 = HashMap::new();
+        for i in 0..n {
+            let c = cs1[i];
+            let s = cs2[i];
+            if !map1.contains_key(&c) {
+                map1.insert(c, i);
+            }
+            if !map2.contains_key(&s) {
+                map2.insert(s, i);
+            }
+            if map1.get(&c) != map2.get(&s) {
+                return false;
+            }
+        }
+        true
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -215,43 +257,40 @@ public class Solution {
 }
 ```
 
-### **Rust**
+<!-- tabs:end -->
 
-```rust
-use std::collections::HashMap;
+<!-- solution:end -->
 
-impl Solution {
-    pub fn word_pattern(pattern: String, s: String) -> bool {
-        let cs1: Vec<char> = pattern.chars().collect();
-        let cs2: Vec<&str> = s.split_whitespace().collect();
-        let n = cs1.len();
-        if n != cs2.len() {
+<!-- solution:start -->
+
+### 方法二：哈希表的另一种写法
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function wordPattern(pattern: string, s: string): boolean {
+    const hash: Record<string, string> = Object.create(null);
+    const arr = s.split(/\s+/);
+
+    if (pattern.length !== arr.length || new Set(pattern).size !== new Set(arr).size) {
+        return false;
+    }
+
+    for (let i = 0; i < pattern.length; i++) {
+        hash[pattern[i]] ??= arr[i];
+        if (hash[pattern[i]] !== arr[i]) {
             return false;
         }
-        let mut map1 = HashMap::new();
-        let mut map2 = HashMap::new();
-        for i in 0..n {
-            let c = cs1[i];
-            let s = cs2[i];
-            if !map1.contains_key(&c) {
-                map1.insert(c, i);
-            }
-            if !map2.contains_key(&s) {
-                map2.insert(s, i);
-            }
-            if map1.get(&c) != map2.get(&s) {
-                return false
-            }
-        }
-        true
     }
+
+    return true;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

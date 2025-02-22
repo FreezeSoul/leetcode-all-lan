@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0511.Game%20Play%20Analysis%20I/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [511. Game Play Analysis I](https://leetcode.com/problems/game-play-analysis-i)
 
 [中文文档](/solution/0500-0599/0511.Game%20Play%20Analysis%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Activity</code></p>
 
@@ -15,18 +27,18 @@
 | event_date   | date    |
 | games_played | int     |
 +--------------+---------+
-(player_id, event_date) is the primary key of this table.
+(player_id, event_date) is the primary key (combination of columns with unique values) of this table.
 This table shows the activity of players of some games.
 Each row is a record of a player who logged in and played a number of games (possibly 0) before logging out on someday using some device.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the <strong>first login date</strong> for each player.</p>
+<p>Write a solution to find the <strong>first login date</strong> for each player.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -53,20 +65,43 @@ Activity table:
 +-----------+-------------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Group By + Min Function
+
+We can use `GROUP BY` to group the `player_id` and then take the minimum `event_date` in each group as the date when the player first logged into the platform.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### Python3
+
+```python
+import pandas as pd
+
+
+def game_analysis(activity: pd.DataFrame) -> pd.DataFrame:
+    return (
+        activity.groupby("player_id")
+        .agg(first_login=("event_date", "min"))
+        .reset_index()
+    )
+```
+
+#### MySQL
 
 ```sql
-SELECT
-    player_id,
-    MIN(event_date) first_login
-FROM
-    Activity
-GROUP BY
-    player_id;
+# Write your MySQL query statement below
+SELECT player_id, MIN(event_date) AS first_login
+FROM Activity
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

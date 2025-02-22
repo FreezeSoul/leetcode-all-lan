@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1392.Longest%20Happy%20Prefix/README.md
+rating: 1876
+source: 第 181 场周赛 Q4
+tags:
+    - 字符串
+    - 字符串匹配
+    - 哈希函数
+    - 滚动哈希
+---
+
+<!-- problem:start -->
+
 # [1392. 最长快乐前缀](https://leetcode.cn/problems/longest-happy-prefix)
 
 [English Version](/solution/1300-1399/1392.Longest%20Happy%20Prefix/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>「快乐前缀」</strong>&nbsp;是在原字符串中既是&nbsp;<strong>非空</strong> 前缀也是后缀（不包括原字符串自身）的字符串。</p>
 
@@ -37,11 +52,13 @@
 	<li><code>s</code> 只含有小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：字符串哈希**
+### 方法一：字符串哈希
 
 **字符串哈希**是把一个任意长度的字符串映射成一个非负整数，并且其冲突的概率几乎为 0。字符串哈希用于计算字符串哈希值，快速判断两个字符串是否相等。
 
@@ -53,9 +70,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -66,9 +81,7 @@ class Solution:
         return ''
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 typedef unsigned long long ULL;
@@ -127,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestPrefix(s string) string {
@@ -150,7 +163,7 @@ func longestPrefix(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestPrefix(s: string): string {
@@ -164,7 +177,7 @@ function longestPrefix(s: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -180,10 +193,138 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：KMP 算法
+
+根据题目描述，我们需要找到一个字符串的最长快乐前缀，即找到一个字符串的最长前缀，使得这个前缀同时也是这个字符串的后缀。我们可以使用 KMP 算法来解决这个问题。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def longestPrefix(self, s: str) -> str:
+        s += "#"
+        n = len(s)
+        next = [0] * n
+        next[0] = -1
+        i, j = 2, 0
+        while i < n:
+            if s[i - 1] == s[j]:
+                j += 1
+                next[i] = j
+                i += 1
+            elif j:
+                j = next[j]
+            else:
+                next[i] = 0
+                i += 1
+        return s[: next[-1]]
 ```
 
+#### Java
+
+```java
+class Solution {
+    public String longestPrefix(String s) {
+        s += "#";
+        int n = s.length();
+        int[] next = new int[n];
+        next[0] = -1;
+        for (int i = 2, j = 0; i < n;) {
+            if (s.charAt(i - 1) == s.charAt(j)) {
+                next[i++] = ++j;
+            } else if (j > 0) {
+                j = next[j];
+            } else {
+                next[i++] = 0;
+            }
+        }
+        return s.substring(0, next[n - 1]);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    string longestPrefix(string s) {
+        s.push_back('#');
+        int n = s.size();
+        int next[n];
+        next[0] = -1;
+        next[1] = 0;
+        for (int i = 2, j = 0; i < n;) {
+            if (s[i - 1] == s[j]) {
+                next[i++] = ++j;
+            } else if (j > 0) {
+                j = next[j];
+            } else {
+                next[i++] = 0;
+            }
+        }
+        return s.substr(0, next[n - 1]);
+    }
+};
+```
+
+#### Go
+
+```go
+func longestPrefix(s string) string {
+	s += "#"
+	n := len(s)
+	next := make([]int, n)
+	next[0], next[1] = -1, 0
+	for i, j := 2, 0; i < n; {
+		if s[i-1] == s[j] {
+			j++
+			next[i] = j
+			i++
+		} else if j > 0 {
+			j = next[j]
+		} else {
+			next[i] = 0
+			i++
+		}
+	}
+	return s[:next[n-1]]
+}
+```
+
+#### TypeScript
+
+```ts
+function longestPrefix(s: string): string {
+    s += '#';
+    const n = s.length;
+    const next: number[] = Array(n).fill(0);
+    next[0] = -1;
+    for (let i = 2, j = 0; i < n; ) {
+        if (s[i - 1] === s[j]) {
+            next[i++] = ++j;
+        } else if (j > 0) {
+            j = next[j];
+        } else {
+            next[i++] = 0;
+        }
+    }
+    return s.slice(0, next[n - 1]);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

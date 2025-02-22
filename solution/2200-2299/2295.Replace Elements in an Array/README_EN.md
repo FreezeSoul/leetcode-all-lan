@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2295.Replace%20Elements%20in%20an%20Array/README_EN.md
+rating: 1445
+source: Weekly Contest 296 Q3
+tags:
+    - Array
+    - Hash Table
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2295. Replace Elements in an Array](https://leetcode.com/problems/replace-elements-in-an-array)
 
 [中文文档](/solution/2200-2299/2295.Replace%20Elements%20in%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array <code>nums</code> that consists of <code>n</code> <strong>distinct</strong> positive integers. Apply <code>m</code> operations to this array, where in the <code>i<sup>th</sup></code> operation you replace the number <code>operations[i][0]</code> with <code>operations[i][1]</code>.</p>
 
@@ -54,42 +70,55 @@ We return the array [2,1].
 	<li><code>operations[i][1]</code> will not exist in <code>nums</code> when applying the <code>i<sup>th</sup></code> operation.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+First, we use a hash table $d$ to record the indices of each number in the array $\textit{nums}$. Then, we iterate through the operation array $\textit{operations}$. For each operation $[x, y]$, we replace the number at index $d[x]$ in $\textit{nums}$ with $y$, and update the index of $y$ in $d$ to $d[x]$.
+
+Finally, we return $\textit{nums}$.
+
+The time complexity is $O(n + m)$, and the space complexity is $O(n)$. Here, $n$ and $m$ are the lengths of the array $\textit{nums}$ and the operation array $\textit{operations}$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def arrayChange(self, nums: List[int], operations: List[List[int]]) -> List[int]:
-        d = {v: i for i, v in enumerate(nums)}
-        for a, b in operations:
-            nums[d[a]] = b
-            d[b] = d[a]
+        d = {x: i for i, x in enumerate(nums)}
+        for x, y in operations:
+            nums[d[x]] = y
+            d[y] = d[x]
         return nums
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int[] arrayChange(int[] nums, int[][] operations) {
-        Map<Integer, Integer> d = new HashMap<>();
-        for (int i = 0; i < nums.length; ++i) {
+        int n = nums.length;
+        Map<Integer, Integer> d = new HashMap<>(n);
+        for (int i = 0; i < n; ++i) {
             d.put(nums[i], i);
         }
         for (var op : operations) {
-            int a = op[0], b = op[1];
-            nums[d.get(a)] = b;
-            d.put(b, d.get(a));
+            int x = op[0], y = op[1];
+            nums[d.get(x)] = y;
+            d.put(y, d.get(x));
         }
         return nums;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,49 +129,47 @@ public:
             d[nums[i]] = i;
         }
         for (auto& op : operations) {
-            int a = op[0], b = op[1];
-            nums[d[a]] = b;
-            d[b] = d[a];
+            int x = op[0], y = op[1];
+            nums[d[x]] = y;
+            d[y] = d[x];
         }
         return nums;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func arrayChange(nums []int, operations [][]int) []int {
 	d := map[int]int{}
-	for i, v := range nums {
-		d[v] = i
+	for i, x := range nums {
+		d[x] = i
 	}
 	for _, op := range operations {
-		a, b := op[0], op[1]
-		nums[d[a]] = b
-		d[b] = d[a]
+		x, y := op[0], op[1]
+		nums[d[x]] = y
+		d[y] = d[x]
 	}
 	return nums
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function arrayChange(nums: number[], operations: number[][]): number[] {
-    const d = new Map(nums.map((v, i) => [v, i]));
-    for (const [a, b] of operations) {
-        nums[d.get(a)] = b;
-        d.set(b, d.get(a));
+    const d: Map<number, number> = new Map(nums.map((x, i) => [x, i]));
+    for (const [x, y] of operations) {
+        nums[d.get(x)!] = y;
+        d.set(y, d.get(x)!);
     }
     return nums;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

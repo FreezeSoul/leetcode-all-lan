@@ -3,7 +3,7 @@ class Solution {
     private int[][] g;
     private int[] dist;
     private boolean[] vis;
-    private int inf = 1 << 30;
+    private final int inf = 1 << 30;
     private int distanceThreshold;
 
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
@@ -20,11 +20,11 @@ class Solution {
             g[f][t] = w;
             g[t][f] = w;
         }
-        int ans = n, t = inf;
+        int ans = n, cnt = inf;
         for (int i = n - 1; i >= 0; --i) {
-            int cnt = dijkstra(i);
-            if (t > cnt) {
-                t = cnt;
+            int t = dijkstra(i);
+            if (t < cnt) {
+                cnt = t;
                 ans = i;
             }
         }

@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0722.Remove%20Comments/README_EN.md
+tags:
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
 # [722. Remove Comments](https://leetcode.com/problems/remove-comments)
 
 [中文文档](/solution/0700-0799/0722.Remove%20Comments/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a C++ program, remove comments from it. The program source is an array of strings <code>source</code> where <code>source[i]</code> is the <code>i<sup>th</sup></code> line of the source code. This represents the result of splitting the original source code string by the newline character <code>&#39;\n&#39;</code>.</p>
 
@@ -83,26 +96,246 @@ a = b + c;
 	<li>There are no single-quote or&nbsp;double-quote in the input.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Case Analysis
+
+We use a variable $\textit{blockComment}$ to indicate whether we are currently in a block comment. Initially, $\textit{blockComment}$ is `false`. We use a variable $t$ to store the valid characters of the current line.
+
+Next, we traverse each line and discuss the following cases:
+
+If we are currently in a block comment, and the current character and the next character are `'*/'`, it means the block comment ends. We set $\textit{blockComment}$ to `false` and skip these two characters. Otherwise, we continue in the block comment state without doing anything.
+
+If we are not currently in a block comment, and the current character and the next character are `'/*'`, it means a block comment starts. We set $\textit{blockComment}$ to `true` and skip these two characters. If the current character and the next character are `'//'`, it means a line comment starts, and we exit the current line traversal. Otherwise, the current character is a valid character, and we add it to $t$.
+
+After traversing the current line, if $\textit{blockComment}$ is `false` and $t$ is not empty, it means the current line is valid. We add it to the answer array and clear $t$. Continue to traverse the next line.
+
+The time complexity is $O(L)$, and the space complexity is $O(L)$, where $L$ is the total length of the source code.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-
+class Solution:
+    def removeComments(self, source: List[str]) -> List[str]:
+        ans = []
+        t = []
+        block_comment = False
+        for s in source:
+            i, m = 0, len(s)
+            while i < m:
+                if block_comment:
+                    if i + 1 < m and s[i : i + 2] == "*/":
+                        block_comment = False
+                        i += 1
+                else:
+                    if i + 1 < m and s[i : i + 2] == "/*":
+                        block_comment = True
+                        i += 1
+                    elif i + 1 < m and s[i : i + 2] == "//":
+                        break
+                    else:
+                        t.append(s[i])
+                i += 1
+            if not block_comment and t:
+                ans.append("".join(t))
+                t.clear()
+        return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
-
+class Solution {
+    public List<String> removeComments(String[] source) {
+        List<String> ans = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        boolean blockComment = false;
+        for (String s : source) {
+            int m = s.length();
+            for (int i = 0; i < m; ++i) {
+                if (blockComment) {
+                    if (i + 1 < m && s.charAt(i) == '*' && s.charAt(i + 1) == '/') {
+                        blockComment = false;
+                        ++i;
+                    }
+                } else {
+                    if (i + 1 < m && s.charAt(i) == '/' && s.charAt(i + 1) == '*') {
+                        blockComment = true;
+                        ++i;
+                    } else if (i + 1 < m && s.charAt(i) == '/' && s.charAt(i + 1) == '/') {
+                        break;
+                    } else {
+                        sb.append(s.charAt(i));
+                    }
+                }
+            }
+            if (!blockComment && sb.length() > 0) {
+                ans.add(sb.toString());
+                sb.setLength(0);
+            }
+        }
+        return ans;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    vector<string> removeComments(vector<string>& source) {
+        vector<string> ans;
+        string t;
+        bool blockComment = false;
+        for (auto& s : source) {
+            int m = s.size();
+            for (int i = 0; i < m; ++i) {
+                if (blockComment) {
+                    if (i + 1 < m && s[i] == '*' && s[i + 1] == '/') {
+                        blockComment = false;
+                        ++i;
+                    }
+                } else {
+                    if (i + 1 < m && s[i] == '/' && s[i + 1] == '*') {
+                        blockComment = true;
+                        ++i;
+                    } else if (i + 1 < m && s[i] == '/' && s[i + 1] == '/') {
+                        break;
+                    } else {
+                        t.push_back(s[i]);
+                    }
+                }
+            }
+            if (!blockComment && !t.empty()) {
+                ans.emplace_back(t);
+                t.clear();
+            }
+        }
+        return ans;
+    }
+};
 ```
 
+#### Go
+
+```go
+func removeComments(source []string) (ans []string) {
+	t := []byte{}
+	blockComment := false
+	for _, s := range source {
+		m := len(s)
+		for i := 0; i < m; i++ {
+			if blockComment {
+				if i+1 < m && s[i] == '*' && s[i+1] == '/' {
+					blockComment = false
+					i++
+				}
+			} else {
+				if i+1 < m && s[i] == '/' && s[i+1] == '*' {
+					blockComment = true
+					i++
+				} else if i+1 < m && s[i] == '/' && s[i+1] == '/' {
+					break
+				} else {
+					t = append(t, s[i])
+				}
+			}
+		}
+		if !blockComment && len(t) > 0 {
+			ans = append(ans, string(t))
+			t = []byte{}
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function removeComments(source: string[]): string[] {
+    const ans: string[] = [];
+    const t: string[] = [];
+    let blockComment = false;
+    for (const s of source) {
+        const m = s.length;
+        for (let i = 0; i < m; ++i) {
+            if (blockComment) {
+                if (i + 1 < m && s.slice(i, i + 2) === '*/') {
+                    blockComment = false;
+                    ++i;
+                }
+            } else {
+                if (i + 1 < m && s.slice(i, i + 2) === '/*') {
+                    blockComment = true;
+                    ++i;
+                } else if (i + 1 < m && s.slice(i, i + 2) === '//') {
+                    break;
+                } else {
+                    t.push(s[i]);
+                }
+            }
+        }
+        if (!blockComment && t.length) {
+            ans.push(t.join(''));
+            t.length = 0;
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn remove_comments(source: Vec<String>) -> Vec<String> {
+        let mut ans: Vec<String> = Vec::new();
+        let mut t: Vec<String> = Vec::new();
+        let mut blockComment = false;
+
+        for s in &source {
+            let m = s.len();
+            let mut i = 0;
+            while i < m {
+                if blockComment {
+                    if i + 1 < m && &s[i..i + 2] == "*/" {
+                        blockComment = false;
+                        i += 2;
+                    } else {
+                        i += 1;
+                    }
+                } else {
+                    if i + 1 < m && &s[i..i + 2] == "/*" {
+                        blockComment = true;
+                        i += 2;
+                    } else if i + 1 < m && &s[i..i + 2] == "//" {
+                        break;
+                    } else {
+                        t.push(s.chars().nth(i).unwrap().to_string());
+                        i += 1;
+                    }
+                }
+            }
+            if !blockComment && !t.is_empty() {
+                ans.push(t.join(""));
+                t.clear();
+            }
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

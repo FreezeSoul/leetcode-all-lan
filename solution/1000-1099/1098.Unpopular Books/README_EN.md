@@ -1,8 +1,20 @@
-# [1098. Unpopular Books](https://leetcode.com/problems/unpopular-books)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1098.Unpopular%20Books/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1098. Unpopular Books 🔒](https://leetcode.com/problems/unpopular-books)
 
 [中文文档](/solution/1000-1099/1098.Unpopular%20Books/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Books</code></p>
 
@@ -14,7 +26,7 @@
 | name           | varchar |
 | available_from | date    |
 +----------------+---------+
-book_id is the primary key of this table.
+book_id is the primary key (column with unique values) of this table.
 </pre>
 
 <p>&nbsp;</p>
@@ -30,17 +42,17 @@ book_id is the primary key of this table.
 | quantity       | int     |
 | dispatch_date  | date    |
 +----------------+---------+
-order_id is the primary key of this table.
-book_id is a foreign key to the Books table.
+order_id is the primary key (column with unique values) of this table.
+book_id is a foreign key (reference column) to the Books table.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query that reports the <strong>books</strong> that have sold <strong>less than </strong><code>10</code> copies in the last year, excluding books that have been available for less than one month from today. <strong>Assume today is </strong><code>2019-06-23</code>.</p>
+<p>Write a solution to report&nbsp;the <strong>books</strong> that have sold <strong>less than </strong><code>10</code> copies in the last year, excluding books that have been available for less than one month from today. <strong>Assume today is </strong><code>2019-06-23</code>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -79,28 +91,31 @@ Orders table:
 +-----------+--------------------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT
-	b.book_id,
-	b.NAME
+SELECT book_id, name
 FROM
-	books b
-	LEFT JOIN orders o ON b.book_id = o.book_id
-WHERE
-	b.available_from < '2019-05-23'
-GROUP BY
-	b.book_id
-HAVING
-	ifnull( sum( IF ( o.dispatch_date < '2018-06-23', 0, quantity )), 0 )< 10
-ORDER BY
-	b.book_id
+    Books
+    LEFT JOIN Orders USING (book_id)
+WHERE available_from < '2019-05-23'
+GROUP BY 1
+HAVING SUM(IF(dispatch_date >= '2018-06-23', quantity, 0)) < 10;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

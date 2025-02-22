@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2062.Count%20Vowel%20Substrings%20of%20a%20String/README.md
+rating: 1458
+source: 第 266 场周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2062. 统计字符串中的元音子字符串](https://leetcode.cn/problems/count-vowel-substrings-of-a-string)
 
 [English Version](/solution/2000-2099/2062.Count%20Vowel%20Substrings%20of%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>子字符串</strong> 是字符串中的一个连续（非空）的字符序列。</p>
 
@@ -63,11 +76,13 @@
 	<li><code>word</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举 + 哈希表**
+### 方法一：暴力枚举 + 哈希表
 
 我们可以枚举子字符串的左端点 $i$，对于当前左端点，维护一个哈希表，记录当前子字符串中出现的元音字母，然后枚举右端点 $j$，如果当前右端点对应的字母不是元音字母，则跳出循环，否则将当前右端点对应的字母加入哈希表，如果哈希表中的元素个数为 $5$，则说明当前子字符串是一个元音子字符串，将结果加 $1$。
 
@@ -75,22 +90,12 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def countVowelSubstrings(self, word: str) -> int:
-        n = len(word)
-        s = set('aeiou')
-        return sum(set(word[i:j]) == s for i in range(n) for j in range(i + 1, n + 1))
-```
-
-```python
-class Solution:
-    def countVowelSubstrings(self, word: str) -> int:
-        s = set('aeiou')
+        s = set("aeiou")
         ans, n = 0, len(word)
         for i in range(n):
             t = set()
@@ -102,9 +107,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -133,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -159,7 +162,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countVowelSubstrings(word string) int {
@@ -181,7 +184,7 @@ func countVowelSubstrings(word string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countVowelSubstrings(word: string): number {
@@ -191,9 +194,7 @@ function countVowelSubstrings(word: string): number {
         const t = new Set<string>();
         for (let j = i; j < n; ++j) {
             const c = word[j];
-            if (
-                !(c === 'a' || c === 'e' || c === 'i' || c === 'o' || c === 'u')
-            ) {
+            if (!(c === 'a' || c === 'e' || c === 'i' || c === 'o' || c === 'u')) {
                 break;
             }
             t.add(c);
@@ -206,10 +207,8 @@ function countVowelSubstrings(word: string): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

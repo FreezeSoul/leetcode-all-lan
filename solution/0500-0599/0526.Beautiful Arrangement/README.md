@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0526.Beautiful%20Arrangement/README.md
+tags:
+    - 位运算
+    - 数组
+    - 动态规划
+    - 回溯
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [526. 优美的排列](https://leetcode.cn/problems/beautiful-arrangement)
 
 [English Version](/solution/0500-0599/0526.Beautiful%20Arrangement/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>假设有从 1 到 n 的 n 个整数。用这些整数构造一个数组 <code>perm</code>（<strong>下标从 1 开始</strong>），只要满足下述条件 <strong>之一</strong> ，该数组就是一个 <strong>优美的排列</strong> ：</p>
 
@@ -46,17 +60,17 @@
 	<li><code>1 &lt;= n &lt;= 15</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-DFS 回溯，或者状态压缩。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +98,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -130,29 +142,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countArrangement(int N) {
-        int maxn = 1 << N;
-        int[] f = new int[maxn];
-        f[0] = 1;
-        for (int i = 0; i < maxn; ++i) {
-            int s = 1;
-            for (int j = 0; j < N; ++j) {
-                s += (i >> j) & 1;
-            }
-            for (int j = 1; j <= N; ++j) {
-                if (((i >> (j - 1) & 1) == 0) && (s % j == 0 || j % s == 0)) {
-                    f[i | (1 << (j - 1))] += f[i];
-                }
-            }
-        }
-        return f[maxn - 1];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -190,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countArrangement(n int) int {
@@ -225,7 +215,7 @@ func countArrangement(n int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countArrangement(n: number): number {
@@ -258,7 +248,7 @@ function countArrangement(n: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -295,10 +285,42 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public int countArrangement(int N) {
+        int maxn = 1 << N;
+        int[] f = new int[maxn];
+        f[0] = 1;
+        for (int i = 0; i < maxn; ++i) {
+            int s = 1;
+            for (int j = 0; j < N; ++j) {
+                s += (i >> j) & 1;
+            }
+            for (int j = 1; j <= N; ++j) {
+                if (((i >> (j - 1) & 1) == 0) && (s % j == 0 || j % s == 0)) {
+                    f[i | (1 << (j - 1))] += f[i];
+                }
+            }
+        }
+        return f[maxn - 1];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

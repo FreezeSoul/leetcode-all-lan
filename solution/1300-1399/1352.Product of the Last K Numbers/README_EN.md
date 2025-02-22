@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1352.Product%20of%20the%20Last%20K%20Numbers/README_EN.md
+rating: 1473
+source: Weekly Contest 176 Q2
+tags:
+    - Design
+    - Array
+    - Math
+    - Data Stream
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [1352. Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers)
 
 [中文文档](/solution/1300-1399/1352.Product%20of%20the%20Last%20K%20Numbers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design an algorithm that accepts a stream of integers and retrieves the product of the last <code>k</code> integers of the stream.</p>
 
@@ -51,15 +69,31 @@ productOfNumbers.getProduct(2); // return 32. The product of the last 2 numbers 
 	<li>The product of the stream at any point in time will fit in a <strong>32-bit</strong> integer.</li>
 </ul>
 
+<p>&nbsp;</p>
+<strong>Follow-up: </strong>Can you implement <strong>both</strong> <code>GetProduct</code> and <code>Add</code> to work in <code>O(1)</code> time complexity instead of <code>O(k)</code> time complexity?
+
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Product
+
+We initialize an array $s$, where $s[i]$ represents the product of the first $i$ numbers.
+
+When calling `add(num)`, we judge whether `num` is $0$. If it is, we set $s$ to `[1]`. Otherwise, we multiply the last element of $s$ by `num` and add the result to the end of $s$.
+
+When calling `getProduct(k)`, we now judge whether the length of $s$ is less than or equal to $k$. If it is, we return $0$. Otherwise, we return the last element of $s$ divided by the $k + 1$th element from the end of $s$. That is, $s[-1] / s[-k - 1]$.
+
+The time complexity is $O(1)$, and the space complexity is $O(n)$. Where $n$ is the number of times `add` is called.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class ProductOfNumbers:
-
     def __init__(self):
         self.s = [1]
 
@@ -79,7 +113,7 @@ class ProductOfNumbers:
 # param_2 = obj.getProduct(k)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class ProductOfNumbers {
@@ -112,7 +146,7 @@ class ProductOfNumbers {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class ProductOfNumbers {
@@ -147,7 +181,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type ProductOfNumbers struct {
@@ -182,10 +216,54 @@ func (this *ProductOfNumbers) GetProduct(k int) int {
  */
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+class ProductOfNumbers {
+    s = [1];
+
+    add(num: number): void {
+        if (num === 0) {
+            this.s = [1];
+        } else {
+            const i = this.s.length;
+            this.s[i] = this.s[i - 1] * num;
+        }
+    }
+
+    getProduct(k: number): number {
+        const i = this.s.length;
+        if (k > i - 1) return 0;
+        return this.s[i - 1] / this.s[i - k - 1];
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+class ProductOfNumbers {
+    s = [1];
+
+    add(num) {
+        if (num === 0) {
+            this.s = [1];
+        } else {
+            const i = this.s.length;
+            this.s[i] = this.s[i - 1] * num;
+        }
+    }
+
+    getProduct(k) {
+        const i = this.s.length;
+        if (k > i - 1) return 0;
+        return this.s[i - 1] / this.s[i - k - 1];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

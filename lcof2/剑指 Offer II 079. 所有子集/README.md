@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20079.%20%E6%89%80%E6%9C%89%E5%AD%90%E9%9B%86/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 079. 所有子集](https://leetcode.cn/problems/TVdhkn)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数数组&nbsp;<code>nums</code> ，数组中的元素 <strong>互不相同</strong> 。返回该数组所有可能的子集（幂集）。</p>
 
@@ -38,32 +45,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 78&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/subsets/">https://leetcode.cn/problems/subsets/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-回溯法的基本模板：
-
-```py
-res = []
-path = []
-
-def backtrack(未探索区域, res, path):
-    if path 满足条件:
-        res.add(path) # 深度拷贝
-        # return  # 如果不用继续搜索需要 return
-    for 选择 in 未探索区域当前可能的选择:
-        if 当前选择符合要求:
-            path.add(当前选择)
-            backtrack(新的未探索区域, res, path)
-            path.pop()
-```
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +75,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func subsets(nums []int) [][]int {
@@ -144,9 +134,7 @@ func subsets(nums []int) [][]int {
 }
 
 func dfs(i int, nums, t []int, res *[][]int) {
-	cp := make([]int, len(t))
-	copy(cp, t)
-	*res = append(*res, cp)
+	*res = append(*res, slices.Clone(t))
 	if i == len(nums) {
 		return
 	}
@@ -158,7 +146,7 @@ func dfs(i int, nums, t []int, res *[][]int) {
 }
 ```
 
-### **TypeScipt**
+#### TypeScript
 
 ```ts
 function subsets(nums: number[]): number[][] {
@@ -177,7 +165,7 @@ function subsets(nums: number[]): number[][] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -200,10 +188,29 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func subsets(_ nums: [Int]) -> [[Int]] {
+        var res = [[Int]]()
+        dfs(0, nums, [], &res)
+        return res
+    }
 
+    private func dfs(_ i: Int, _ nums: [Int], _ current: [Int], _ res: inout [[Int]]) {
+        res.append(current)
+        for j in i..<nums.count {
+            var newCurrent = current
+            newCurrent.append(nums[j])
+            dfs(j + 1, nums, newCurrent, &res)
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

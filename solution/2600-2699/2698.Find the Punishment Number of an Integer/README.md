@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2698.Find%20the%20Punishment%20Number%20of%20an%20Integer/README.md
+rating: 1678
+source: 第 346 场周赛 Q3
+tags:
+    - 数学
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [2698. 求一个整数的惩罚数](https://leetcode.cn/problems/find-the-punishment-number-of-an-integer)
 
 [English Version](/solution/2600-2699/2698.Find%20the%20Punishment%20Number%20of%20an%20Integer/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数&nbsp;<code>n</code>&nbsp;，请你返回&nbsp;<code>n</code>&nbsp;的&nbsp;<strong>惩罚数</strong>&nbsp;。</p>
 
@@ -22,7 +35,7 @@
 <pre>
 <b>输入：</b>n = 10
 <b>输出：</b>182
-<b>解释：</b>总共有 3 个整数 i 满足要求：
+<b>解释：</b>总共有 3 个范围在 [1, 10] 的整数 i 满足要求：
 - 1 ，因为 1 * 1 = 1
 - 9 ，因为 9 * 9 = 81 ，且 81 可以分割成 8 + 1 。
 - 10 ，因为 10 * 10 = 100 ，且 100 可以分割成 10 + 0 。
@@ -34,7 +47,7 @@
 <pre>
 <b>输入：</b>n = 37
 <b>输出：</b>1478
-<b>解释：</b>总共有 4 个整数 i 满足要求：
+<b>解释：</b>总共有 4 个范围在 [1, 37] 的整数 i 满足要求：
 - 1 ，因为 1 * 1 = 1
 - 9 ，因为 9 * 9 = 81 ，且 81 可以分割成 8 + 1 。
 - 10 ，因为 10 * 10 = 100 ，且 100 可以分割成 10 + 0 。
@@ -50,23 +63,23 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举 + DFS**
+### 方法一：枚举 + DFS
 
 我们枚举 $i$，其中 $1 \leq i \leq n$，对于每个 $i$，我们将 $x = i^2$ 的十进制表示的字符串进行分割，然后判断是否满足题目要求。如果满足，我们就将 $x$ 累加到答案中。
 
 枚举结束，返回答案即可。
 
-时间复杂度 $O(n \times \log^2 n)$，空间复杂度 $O(\log n)$。其中 $n$ 为给定的正整数。
+时间复杂度 $O(n^{1 + 2 \log_{10}^2})$，空间复杂度 $O(\log n)$。其中 $n$ 为给定的正整数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +105,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -129,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -166,7 +177,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func punishmentNumber(n int) (ans int) {
@@ -199,7 +210,7 @@ func punishmentNumber(n int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function punishmentNumber(n: number): number {
@@ -232,10 +243,8 @@ function punishmentNumber(n: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

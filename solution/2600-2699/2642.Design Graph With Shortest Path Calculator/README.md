@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2642.Design%20Graph%20With%20Shortest%20Path%20Calculator/README.md
+rating: 1810
+source: 第 102 场双周赛 Q4
+tags:
+    - 图
+    - 设计
+    - 最短路
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2642. 设计可以求最短路径的图类](https://leetcode.cn/problems/design-graph-with-shortest-path-calculator)
 
 [English Version](/solution/2600-2699/2642.Design%20Graph%20With%20Shortest%20Path%20Calculator/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个有&nbsp;<code>n</code>&nbsp;个节点的&nbsp;<strong>有向带权</strong>&nbsp;图，节点编号为&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;。图中的初始边用数组&nbsp;<code>edges</code>&nbsp;表示，其中&nbsp;<code>edges[i] = [from<sub>i</sub>, to<sub>i</sub>, edgeCost<sub>i</sub>]</code>&nbsp;表示从&nbsp;<code>from<sub>i</sub></code>&nbsp;到&nbsp;<code>to<sub>i</sub></code>&nbsp;有一条代价为&nbsp;<code>edgeCost<sub>i</sub></code>&nbsp;的边。</p>
 
@@ -51,11 +66,13 @@ g.shortestPath(0, 3); // 返回 6 。从 0 到 3 的最短路径为 0 -&gt; 1 -&
 	<li>调用 <code>shortestPath</code>&nbsp;至多&nbsp;<code>100</code>&nbsp;次。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：Dijsktra 算法**
+### 方法一：Dijsktra 算法
 
 在初始化函数中，我们先用邻接矩阵 $g$ 存储图的边权，其中 $g_{ij}$ 表示从节点 $i$ 到节点 $j$ 的边权，如果 $i$ 和 $j$ 之间没有边，则 $g_{ij}$ 的值为 $\infty$。
 
@@ -67,13 +84,10 @@ g.shortestPath(0, 3); // 返回 6 。从 0 到 3 的最短路径为 0 -&gt; 1 -&
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Graph:
-
     def __init__(self, n: int, edges: List[List[int]]):
         self.n = n
         self.g = [[inf] * n for _ in range(n)]
@@ -105,9 +119,7 @@ class Graph:
 # param_2 = obj.shortestPath(node1,node2)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Graph {
@@ -161,7 +173,7 @@ class Graph {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Graph {
@@ -213,7 +225,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 const inf = 1 << 29
@@ -268,13 +280,6 @@ func (this *Graph) ShortestPath(node1 int, node2 int) int {
 	return dist[node2]
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 /**
  * Your Graph object will be instantiated and called as such:
  * obj := Constructor(n, edges);
@@ -283,7 +288,7 @@ func min(a, b int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class Graph {
@@ -331,10 +336,64 @@ class Graph {
  */
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+public class Graph {
+    private int n;
+    private int[,] g;
+    private readonly int inf = 1 << 29;
 
+    public Graph(int n, int[][] edges) {
+        this.n = n;
+        g = new int[n, n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                g[i, j] = inf;
+            }
+        }
+        foreach (var e in edges) {
+            int f = e[0], t = e[1], c = e[2];
+            g[f, t] = c;
+        }
+    }
+
+    public void AddEdge(int[] edge) {
+        int f = edge[0], t = edge[1], c = edge[2];
+        g[f, t] = c;
+    }
+
+    public int ShortestPath(int node1, int node2) {
+        int[] dist = new int[n];
+        bool[] vis = new bool[n];
+        Array.Fill(dist, inf);
+        dist[node1] = 0;
+        for (int i = 0; i < n; ++i) {
+            int t = -1;
+            for (int j = 0; j < n; ++j) {
+                if (!vis[j] && (t == -1 || dist[t] > dist[j])) {
+                    t = j;
+                }
+            }
+            vis[t] = true;
+            for (int j = 0; j < n; ++j) {
+                dist[j] = Math.Min(dist[j], dist[t] + g[t, j]);
+            }
+        }
+        return dist[node2] >= inf ? -1 : dist[node2];
+    }
+}
+
+/**
+ * Your Graph object will be instantiated and called as such:
+ * Graph obj = new Graph(n, edges);
+ * obj.AddEdge(edge);
+ * int param_2 = obj.ShortestPath(node1,node2);
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

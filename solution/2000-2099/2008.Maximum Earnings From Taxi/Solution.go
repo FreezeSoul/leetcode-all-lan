@@ -7,21 +7,12 @@ func maxTaxiEarnings(n int, rides [][]int) int64 {
 		if i >= m {
 			return 0
 		}
-		if f[i] != 0 {
-			return f[i]
+		if f[i] == 0 {
+			st, ed, tip := rides[i][0], rides[i][1], rides[i][2]
+			j := sort.Search(m, func(j int) bool { return rides[j][0] >= ed })
+			f[i] = max(dfs(i+1), int64(ed-st+tip)+dfs(j))
 		}
-		s, e, t := rides[i][0], rides[i][1], rides[i][2]
-		j := sort.Search(m, func(k int) bool { return rides[k][0] >= e })
-		ans := max(dfs(i+1), dfs(j)+int64(e-s+t))
-		f[i] = ans
-		return ans
+		return f[i]
 	}
 	return dfs(0)
-}
-
-func max(a, b int64) int64 {
-	if a > b {
-		return a
-	}
-	return b
 }

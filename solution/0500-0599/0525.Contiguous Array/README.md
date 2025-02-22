@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0525.Contiguous%20Array/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [525. 连续数组](https://leetcode.cn/problems/contiguous-array)
 
 [English Version](/solution/0500-0599/0525.Contiguous%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个二进制数组 <code>nums</code> , 找到含有相同数量的 <code>0</code> 和 <code>1</code> 的最长连续子数组，并返回该子数组的长度。</p>
 
@@ -33,56 +45,54 @@
 	<li><code>nums[i]</code> 不是 <code>0</code> 就是 <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-前缀和 + 哈希表，把 0 当作 -1 处理，题目变成求和为 0 的子数组。
+### 方法一：前缀和 + 哈希表
 
-遍历数组，用哈希表 mp 记录某个前缀和第一次出现的位置。初始值 `mp[0] = -1`。
+根据题目描述，我们可以将数组中的 $0$ 视作 $-1$，这样当遇到 $0$ 时，前缀和 $s$ 就会减一，当遇到 $1$ 时，前缀和 $s$ 就会加一。因此，假设前缀和 $s$ 在下标 $j$ 和 $i$ 处的值相等，其中 $j < i$，那么从下标 $j + 1$ 到 $i$ 的子数组中 $0$ 和 $1$ 的数量就是相等的。
 
-当前缀和 s 在此前出现过，说明这两个前缀和区间差构成的所有元素和为 0，满足条件，更新 ans 值。否则将 s 记录到 mp 中。
+我们使用哈希表存储所有的前缀和以及它们第一次出现的下标，初始时，我们将 $0$ 的前缀和映射到 $-1$。
 
-最后返回 ans。
+遍历数组，计算前缀和 $s$，如果 $s$ 已经在哈希表中，那么我们就找到了一个和为 $0$ 的子数组，其长度为 $i - d[s]$，其中 $d[s]$ 是哈希表中保存的 $s$ 第一次出现的下标。如果 $s$ 不在哈希表中，我们将 $s$ 与它的下标 $i$ 存入哈希表。
 
-> 这里初始化 `mp[0] = -1`，是为了统一操作。当数组从第一个元素开始的前 n 个元素的和为 0 时，也可以用 `ans = max(ans, i - mp[s])`。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findMaxLength(self, nums: List[int]) -> int:
-        s = ans = 0
-        mp = {0: -1}
-        for i, v in enumerate(nums):
-            s += 1 if v == 1 else -1
-            if s in mp:
-                ans = max(ans, i - mp[s])
+        d = {0: -1}
+        ans = s = 0
+        for i, x in enumerate(nums):
+            s += 1 if x else -1
+            if s in d:
+                ans = max(ans, i - d[s])
             else:
-                mp[s] = i
+                d[s] = i
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int findMaxLength(int[] nums) {
-        Map<Integer, Integer> mp = new HashMap<>();
-        mp.put(0, -1);
-        int s = 0, ans = 0;
+        Map<Integer, Integer> d = new HashMap<>();
+        d.put(0, -1);
+        int ans = 0, s = 0;
         for (int i = 0; i < nums.length; ++i) {
             s += nums[i] == 1 ? 1 : -1;
-            if (mp.containsKey(s)) {
-                ans = Math.max(ans, i - mp.get(s));
+            if (d.containsKey(s)) {
+                ans = Math.max(ans, i - d.get(s));
             } else {
-                mp.put(s, i);
+                d.put(s, i);
             }
         }
         return ans;
@@ -90,56 +100,68 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findMaxLength(vector<int>& nums) {
-        unordered_map<int, int> mp;
-        int s = 0, ans = 0;
-        mp[0] = -1;
+        unordered_map<int, int> d{{0, -1}};
+        int ans = 0, s = 0;
         for (int i = 0; i < nums.size(); ++i) {
-            s += nums[i] == 1 ? 1 : -1;
-            if (mp.count(s))
-                ans = max(ans, i - mp[s]);
-            else
-                mp[s] = i;
+            s += nums[i] ? 1 : -1;
+            if (d.contains(s)) {
+                ans = max(ans, i - d[s]);
+            } else {
+                d[s] = i;
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findMaxLength(nums []int) int {
-	mp := map[int]int{0: -1}
-	s, ans := 0, 0
-	for i, v := range nums {
-		if v == 0 {
-			v = -1
+	d := map[int]int{0: -1}
+	ans, s := 0, 0
+	for i, x := range nums {
+		if x == 0 {
+			x = -1
 		}
-		s += v
-		if j, ok := mp[s]; ok {
+		s += x
+		if j, ok := d[s]; ok {
 			ans = max(ans, i-j)
 		} else {
-			mp[s] = i
+			d[s] = i
 		}
 	}
 	return ans
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function findMaxLength(nums: number[]): number {
+    const d: Record<number, number> = { 0: -1 };
+    let ans = 0;
+    let s = 0;
+    for (let i = 0; i < nums.length; ++i) {
+        s += nums[i] ? 1 : -1;
+        if (d.hasOwnProperty(s)) {
+            ans = Math.max(ans, i - d[s]);
+        } else {
+            d[s] = i;
+        }
+    }
+    return ans;
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -147,23 +169,23 @@ func max(a, b int) int {
  * @return {number}
  */
 var findMaxLength = function (nums) {
-    const mp = new Map();
-    mp.set(0, -1);
-    let s = 0;
+    const d = { 0: -1 };
     let ans = 0;
+    let s = 0;
     for (let i = 0; i < nums.length; ++i) {
-        s += nums[i] == 0 ? -1 : 1;
-        if (mp.has(s)) ans = Math.max(ans, i - mp.get(s));
-        else mp.set(s, i);
+        s += nums[i] ? 1 : -1;
+        if (d.hasOwnProperty(s)) {
+            ans = Math.max(ans, i - d[s]);
+        } else {
+            d[s] = i;
+        }
     }
     return ans;
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

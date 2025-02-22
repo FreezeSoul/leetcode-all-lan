@@ -1,10 +1,23 @@
-# [2021. 街上最亮的位置](https://leetcode.cn/problems/brightest-position-on-street)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2021.Brightest%20Position%20on%20Street/README.md
+tags:
+    - 数组
+    - 有序集合
+    - 前缀和
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [2021. 街上最亮的位置 🔒](https://leetcode.cn/problems/brightest-position-on-street)
 
 [English Version](/solution/2000-2099/2021.Brightest%20Position%20on%20Street/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一条街上有很多的路灯，路灯的坐标由数组&nbsp;<code>lights&nbsp;</code>的形式给出。&nbsp;每个&nbsp;<code>lights[i] = [position<sub>i</sub>, range<sub>i</sub>]</code>&nbsp;代表坐标为&nbsp;<code>position<sub>i</sub></code>&nbsp;的路灯照亮的范围为&nbsp;<code>[position<sub>i</sub> - range<sub>i</sub>, position<sub>i</sub> + range<sub>i</sub>]</code>&nbsp;<strong>（包括顶点）。</strong></p>
 
@@ -23,9 +36,9 @@
 第二个路灯照亮的范围是 [1 - 2, 1 + 2] = [-1, 3].
 第三个路灯照亮的范围是 [3 - 3, 3 + 3] = [0, 6].
 
-坐标-1 被第一个和第二个路灯照亮，亮度为 2
-坐标 0，1，2 都被第二个和第三个路灯照亮，亮度为 2.
-对于以上坐标，-1 最小，所以返回-1</pre>
+坐标-1被第一个和第二个路灯照亮，亮度为2
+坐标0，1，2都被第二个和第三个路灯照亮，亮度为2.
+对于以上坐标，-1最小，所以返回-1</pre>
 
 <p><strong>示例 2：</strong></p>
 
@@ -50,11 +63,13 @@
 	<li><code>0 &lt;= range<sub>i</sub> &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：差分数组 + 哈希表 + 排序**
+### 方法一：差分数组 + 哈希表 + 排序
 
 我们可以将每个路灯照亮的范围看作是一个区间，区间左端点 $l = position_i - range_i$，区间右端点 $r = position_i + range_i$。我们可以利用差分数组的思想，对于每个区间 $[l, r]$，将位置 $l$ 的值加 $1$，将位置 $r + 1$ 的值减 $1$，用哈希表维护每个位置的变化值。
 
@@ -66,9 +81,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -139,7 +150,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func brightestPosition(lights [][]int) (ans int) {
@@ -166,7 +177,7 @@ func brightestPosition(lights [][]int) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -200,10 +211,8 @@ var brightestPosition = function (lights) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

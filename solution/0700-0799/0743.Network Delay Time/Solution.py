@@ -1,17 +1,18 @@
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        INF = 0x3F3F
-        g = defaultdict(list)
+        g = [[inf] * n for _ in range(n)]
         for u, v, w in times:
-            g[u - 1].append((v - 1, w))
-        dist = [INF] * n
+            g[u - 1][v - 1] = w
+        dist = [inf] * n
         dist[k - 1] = 0
-        q = [(0, k - 1)]
-        while q:
-            _, u = heappop(q)
-            for v, w in g[u]:
-                if dist[v] > dist[u] + w:
-                    dist[v] = dist[u] + w
-                    heappush(q, (dist[v], v))
+        vis = [False] * n
+        for _ in range(n):
+            t = -1
+            for j in range(n):
+                if not vis[j] and (t == -1 or dist[t] > dist[j]):
+                    t = j
+            vis[t] = True
+            for j in range(n):
+                dist[j] = min(dist[j], dist[t] + g[t][j])
         ans = max(dist)
-        return -1 if ans == INF else ans
+        return -1 if ans == inf else ans

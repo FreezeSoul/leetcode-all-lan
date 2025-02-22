@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2491.Divide%20Players%20Into%20Teams%20of%20Equal%20Skill/README_EN.md
+rating: 1323
+source: Weekly Contest 322 Q2
+tags:
+    - Array
+    - Hash Table
+    - Two Pointers
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2491. Divide Players Into Teams of Equal Skill](https://leetcode.com/problems/divide-players-into-teams-of-equal-skill)
 
 [中文文档](/solution/2400-2499/2491.Divide%20Players%20Into%20Teams%20of%20Equal%20Skill/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a positive integer array <code>skill</code> of <strong>even</strong> length <code>n</code> where <code>skill[i]</code> denotes the skill of the <code>i<sup>th</sup></code> player. Divide the players into <code>n / 2</code> teams of size <code>2</code> such that the total skill of each team is <strong>equal</strong>.</p>
 
@@ -49,11 +66,25 @@ There is no way to divide the players into teams such that the total skill of ea
 	<li><code>1 &lt;= skill[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting
+
+To make all 2-person teams have equal skill points, the minimum value must match the maximum value. Therefore, we sort the `skill` array, and then use two pointers $i$ and $j$ to point to the beginning and end of the array respectively, match them in pairs, and judge whether their sum is the same number.
+
+If not, it means that the skill points cannot be equal, and we directly return $-1$. Otherwise, we add the chemical reaction to the answer.
+
+At the end of the traversal, we return the answer.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Where $n$ is the length of the `skill` array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,6 +100,133 @@ class Solution:
             i, j = i + 1, j - 1
         return ans
 ```
+
+#### Java
+
+```java
+class Solution {
+    public long dividePlayers(int[] skill) {
+        Arrays.sort(skill);
+        int n = skill.length;
+        int t = skill[0] + skill[n - 1];
+        long ans = 0;
+        for (int i = 0, j = n - 1; i < j; ++i, --j) {
+            if (skill[i] + skill[j] != t) {
+                return -1;
+            }
+            ans += (long) skill[i] * skill[j];
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    long long dividePlayers(vector<int>& skill) {
+        sort(skill.begin(), skill.end());
+        int n = skill.size();
+        int t = skill[0] + skill[n - 1];
+        long long ans = 0;
+        for (int i = 0, j = n - 1; i < j; ++i, --j) {
+            if (skill[i] + skill[j] != t) return -1;
+            ans += 1ll * skill[i] * skill[j];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func dividePlayers(skill []int) (ans int64) {
+	sort.Ints(skill)
+	n := len(skill)
+	t := skill[0] + skill[n-1]
+	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
+		if skill[i]+skill[j] != t {
+			return -1
+		}
+		ans += int64(skill[i] * skill[j])
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function dividePlayers(skill: number[]): number {
+    const n = skill.length;
+    skill.sort((a, b) => a - b);
+    const target = skill[0] + skill[n - 1];
+    let ans = 0;
+    for (let i = 0; i < n >> 1; i++) {
+        if (target !== skill[i] + skill[n - 1 - i]) {
+            return -1;
+        }
+        ans += skill[i] * skill[n - 1 - i];
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn divide_players(mut skill: Vec<i32>) -> i64 {
+        let n = skill.len();
+        skill.sort();
+        let target = skill[0] + skill[n - 1];
+        let mut ans = 0;
+        for i in 0..n >> 1 {
+            if skill[i] + skill[n - 1 - i] != target {
+                return -1;
+            }
+            ans += (skill[i] * skill[n - 1 - i]) as i64;
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
+
+```js
+var dividePlayers = function (skill) {
+    const n = skill.length,
+        m = n / 2;
+    skill.sort((a, b) => a - b);
+    const sum = skill[0] + skill[n - 1];
+    let ans = 0;
+    for (let i = 0; i < m; i++) {
+        const x = skill[i],
+            y = skill[n - 1 - i];
+        if (x + y != sum) return -1;
+        ans += x * y;
+    }
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Counting
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the length of the `skill` array.
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -90,25 +248,7 @@ class Solution:
         return -1 if m else ans
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public long dividePlayers(int[] skill) {
-        Arrays.sort(skill);
-        int n = skill.length;
-        int t = skill[0] + skill[n - 1];
-        long ans = 0;
-        for (int i = 0, j = n - 1; i < j; ++i, --j) {
-            if (skill[i] + skill[j] != t) {
-                return -1;
-            }
-            ans += (long) skill[i] * skill[j];
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -135,24 +275,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    long long dividePlayers(vector<int>& skill) {
-        sort(skill.begin(), skill.end());
-        int n = skill.size();
-        int t = skill[0] + skill[n - 1];
-        long long ans = 0;
-        for (int i = 0, j = n - 1; i < j; ++i, --j) {
-            if (skill[i] + skill[j] != t) return -1;
-            ans += 1ll * skill[i] * skill[j];
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -178,22 +301,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func dividePlayers(skill []int) (ans int64) {
-	sort.Ints(skill)
-	n := len(skill)
-	t := skill[0] + skill[n-1]
-	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
-		if skill[i]+skill[j] != t {
-			return -1
-		}
-		ans += int64(skill[i] * skill[j])
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func dividePlayers(skill []int) int64 {
@@ -224,67 +332,60 @@ func dividePlayers(skill []int) int64 {
 }
 ```
 
-### **JavaScript**
-
-```js
-var dividePlayers = function (skill) {
-    const n = skill.length,
-        m = n / 2;
-    skill.sort((a, b) => a - b);
-    const sum = skill[0] + skill[n - 1];
-    let ans = 0;
-    for (let i = 0; i < m; i++) {
-        const x = skill[i],
-            y = skill[n - 1 - i];
-        if (x + y != sum) return -1;
-        ans += x * y;
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function dividePlayers(skill: number[]): number {
-    const n = skill.length;
-    skill.sort((a, b) => a - b);
-    const target = skill[0] + skill[n - 1];
-    let ans = 0;
-    for (let i = 0; i < n >> 1; i++) {
-        if (target !== skill[i] + skill[n - 1 - i]) {
-            return -1;
-        }
-        ans += skill[i] * skill[n - 1 - i];
+    let [sum, res, map] = [0, 0, new Map<number, number>()];
+
+    for (const x of skill) {
+        sum += x;
+        map.set(x, (map.get(x) || 0) + 1);
     }
-    return ans;
+    sum /= skill.length / 2;
+
+    for (let [x, c] of map) {
+        const complement = sum - x;
+        if ((map.get(complement) ?? 0) !== c) return -1;
+        if (x === complement) c /= 2;
+
+        res += x * complement * c;
+        map.delete(x);
+        map.delete(complement);
+    }
+
+    return res;
 }
 ```
 
-### **Rust**
+#### JavaScript
 
-```rust
-impl Solution {
-    pub fn divide_players(mut skill: Vec<i32>) -> i64 {
-        let n = skill.len();
-        skill.sort();
-        let target = skill[0] + skill[n - 1];
-        let mut ans = 0;
-        for i in 0..n >> 1 {
-            if skill[i] + skill[n - 1 - i] != target {
-                return -1;
-            }
-            ans += (skill[i] * skill[n - 1 - i]) as i64;
-        }
-        ans
+```js
+function dividePlayers(skill) {
+    let [sum, res, map] = [0, 0, new Map()];
+
+    for (const x of skill) {
+        sum += x;
+        map.set(x, (map.get(x) || 0) + 1);
     }
+    sum /= skill.length / 2;
+
+    for (let [x, c] of map) {
+        const complement = sum - x;
+        if ((map.get(complement) ?? 0) !== c) return -1;
+        if (x === complement) c /= 2;
+
+        res += x * complement * c;
+        map.delete(x);
+        map.delete(complement);
+    }
+
+    return res;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

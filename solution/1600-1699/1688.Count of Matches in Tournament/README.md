@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1688.Count%20of%20Matches%20in%20Tournament/README.md
+rating: 1203
+source: 第 219 场周赛 Q1
+tags:
+    - 数学
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [1688. 比赛中的配对次数](https://leetcode.cn/problems/count-of-matches-in-tournament)
 
 [English Version](/solution/1600-1699/1688.Count%20of%20Matches%20in%20Tournament/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>n</code> ，表示比赛中的队伍数。比赛遵循一种独特的赛制：</p>
 
@@ -48,11 +61,13 @@
 	<li><code>1 &lt;= n &lt;= 200</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
 根据题目描述我们知道，一共有 $n$ 支队伍，每一次的配对，都会淘汰一支队伍，所以配对次数就是淘汰的队伍数，即 $n - 1$。
 
@@ -60,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,9 +83,7 @@ class Solution:
         return n - 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -93,7 +104,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfMatches(n int) int {
@@ -101,7 +112,15 @@ func numberOfMatches(n int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function numberOfMatches(n: number): number {
+    return n - 1;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -113,18 +132,8 @@ var numberOfMatches = function (n) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function numberOfMatches(n: number): number {
-    return n - 1;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

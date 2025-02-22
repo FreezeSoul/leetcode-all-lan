@@ -1,12 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0553.Optimal%20Division/README.md
+tags:
+    - 数组
+    - 数学
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [553. 最优除法](https://leetcode.cn/problems/optimal-division)
 
 [English Version](/solution/0500-0599/0553.Optimal%20Division/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给定一正整数数组<strong> </strong><code>nums</code><strong>，</strong><code>nums</code> 中的相邻整数将进行浮点除法。例如，&nbsp;[2,3,4] -&gt; 2 / 3 / 4 。</p>
+<p>给定一正整数数组<strong> </strong><code>nums</code><strong>，</strong><code>nums</code> 中的相邻整数将进行浮点除法。</p>
 
 <ul>
 	<li>例如，<code>nums = [2,3,4]</code>，我们将求表达式的值&nbsp;<code>"2/3/4"</code>。</li>
@@ -57,21 +69,17 @@
 	<li>对于给定的输入只有一种最优除法。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-贪心。
-
-要使得除法的结果最大，分子应该尽可能大，而分母应该尽可能小。
-
-分子最大应该是 `nums[0]`，而分母最大是 `nums[1] / nums[2] / ... / nums[n - 1]`，此时的除法结果最大。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +92,7 @@ class Solution:
         return f'{nums[0]}/({"/".join(map(str, nums[1:]))})'
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func optimalDivision(nums []int) string {
@@ -147,7 +153,7 @@ func optimalDivision(nums []int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function optimalDivision(nums: number[]): string {
@@ -161,7 +167,7 @@ function optimalDivision(nums: number[]): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -186,10 +192,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

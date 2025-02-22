@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1321.Restaurant%20Growth/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1321. Restaurant Growth](https://leetcode.com/problems/restaurant-growth)
 
 [中文文档](/solution/1300-1399/1321.Restaurant%20Growth/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Customer</code></p>
 
@@ -15,7 +27,7 @@
 | visited_on    | date    |
 | amount        | int     |
 +---------------+---------+
-(customer_id, visited_on) is the primary key for this table.
+In SQL,(customer_id, visited_on) is the primary key for this table.
 This table contains data about customer transactions in a restaurant.
 visited_on is the date on which the customer with ID (customer_id) has visited the restaurant.
 amount is the total paid by a customer.
@@ -25,11 +37,11 @@ amount is the total paid by a customer.
 
 <p>You are the restaurant owner and you want to analyze a possible expansion (there will be at least one customer every day).</p>
 
-<p>Write an SQL query to compute the moving average of how much the customer paid in a seven days window (i.e., current day + 6 days before). <code>average_amount</code> should be <strong>rounded to two decimal places</strong>.</p>
+<p>Compute the moving average of how much the customer paid in a seven days window (i.e., current day + 6 days before). <code>average_amount</code> should be <strong>rounded to two decimal places</strong>.</p>
 
-<p>Return result table ordered by <code>visited_on</code> <strong>in ascending order</strong>.</p>
+<p>Return the result table ordered by <code>visited_on</code> <strong>in ascending order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -68,14 +80,72 @@ Customer table:
 4th moving average from 2019-01-04 to 2019-01-10 has an average_amount of (130 + 110 + 140 + 150 + 80 + 110 + 130 + 150)/7 = 142.86
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            visited_on,
+            SUM(amount) OVER (
+                ORDER BY visited_on
+                ROWS 6 PRECEDING
+            ) AS amount,
+            RANK() OVER (
+                ORDER BY visited_on
+                ROWS 6 PRECEDING
+            ) AS rk
+        FROM
+            (
+                SELECT visited_on, SUM(amount) AS amount
+                FROM Customer
+                GROUP BY visited_on
+            ) AS tt
+    )
+SELECT visited_on, amount, ROUND(amount / 7, 2) AS average_amount
+FROM t
+WHERE rk > 6;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+SELECT
+    a.visited_on,
+    SUM(b.amount) AS amount,
+    ROUND(SUM(b.amount) / 7, 2) AS average_amount
+FROM
+    (SELECT DISTINCT visited_on FROM customer) AS a
+    JOIN customer AS b ON DATEDIFF(a.visited_on, b.visited_on) BETWEEN 0 AND 6
+WHERE a.visited_on >= (SELECT MIN(visited_on) FROM customer) + 6
+GROUP BY 1
+ORDER BY 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

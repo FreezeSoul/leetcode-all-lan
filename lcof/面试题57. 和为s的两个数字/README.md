@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9857.%20%E5%92%8C%E4%B8%BAs%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%95%B0%E5%AD%97/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 57. 和为 s 的两个数字](https://leetcode.cn/problems/he-wei-sde-liang-ge-shu-zi-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。</p>
 
@@ -27,15 +37,21 @@
 	<li><code>1 &lt;= nums[i]&nbsp;&lt;= 10<sup>6</sup></code></li>
 </ul>
 
-**方法一：双指针**
+<!-- description:end -->
+
+## 解法
 
 我们用双指针 $l$ 和 $r$ 分别指向数组的左右两端，然后不断移动指针，直到找到一组和为 $target$ 的连续正整数序列。
 
 时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组的长度。
 
+<!-- solution:start -->
+
+### 方法一：双指针
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -50,7 +66,7 @@ class Solution:
                 l += 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -70,7 +86,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -91,7 +107,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func twoSum(nums []int, target int) []int {
@@ -109,7 +125,7 @@ func twoSum(nums []int, target int) []int {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -133,7 +149,7 @@ var twoSum = function (nums, target) {
 };
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function twoSum(nums: number[], target: number): number[] {
@@ -150,7 +166,7 @@ function twoSum(nums: number[], target: number): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::cmp::Ordering;
@@ -161,16 +177,22 @@ impl Solution {
         let mut r = nums.len() - 1;
         loop {
             match target.cmp(&(nums[l] + nums[r])) {
-                Ordering::Less => r -= 1,
-                Ordering::Greater => l += 1,
-                Ordering::Equal => break vec![nums[l], nums[r]],
+                Ordering::Less => {
+                    r -= 1;
+                }
+                Ordering::Greater => {
+                    l += 1;
+                }
+                Ordering::Equal => {
+                    break vec![nums[l], nums[r]];
+                }
             }
         }
     }
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -190,10 +212,32 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        var l = 0
+        var r = nums.count - 1
 
+        while l < r {
+            let sum = nums[l] + nums[r]
+            if sum == target {
+                return [nums[l], nums[r]]
+            } else if sum > target {
+                r -= 1
+            } else {
+                l += 1
+            }
+        }
+
+        return []
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

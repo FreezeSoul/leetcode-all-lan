@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0767.Reorganize%20String/README_EN.md
+tags:
+    - Greedy
+    - Hash Table
+    - String
+    - Counting
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [767. Reorganize String](https://leetcode.com/problems/reorganize-string)
 
 [中文文档](/solution/0700-0799/0767.Reorganize%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, rearrange the characters of <code>s</code> so that any two adjacent characters are not the same.</p>
 
@@ -24,11 +41,17 @@
 	<li><code>s</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -50,29 +73,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-```python
-class Solution:
-    def reorganizeString(self, s: str) -> str:
-        return self.rearrangeString(s, 2)
-
-    def rearrangeString(self, s: str, k: int) -> str:
-        h = [(-v, c) for c, v in Counter(s).items()]
-        heapify(h)
-        q = deque()
-        ans = []
-        while h:
-            v, c = heappop(h)
-            v *= -1
-            ans.append(c)
-            q.append((v - 1, c))
-            if len(q) >= k:
-                w, c = q.popleft()
-                if w:
-                    heappush(h, (-w, c))
-        return "" if len(ans) != len(s) else "".join(ans)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -119,6 +120,167 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    string reorganizeString(string s) {
+        vector<int> cnt(26);
+        for (char& c : s) ++cnt[c - 'a'];
+        int mx = *max_element(cnt.begin(), cnt.end());
+        int n = s.size();
+        if (mx > (n + 1) / 2) return "";
+        vector<vector<int>> m;
+        for (int i = 0; i < 26; ++i) {
+            if (cnt[i]) m.push_back({cnt[i], i});
+        }
+        sort(m.begin(), m.end());
+        reverse(m.begin(), m.end());
+        string ans = s;
+        int k = 0;
+        for (auto& e : m) {
+            int v = e[0], i = e[1];
+            while (v--) {
+                ans[k] = 'a' + i;
+                k += 2;
+                if (k >= n) k = 1;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func reorganizeString(s string) string {
+	cnt := make([]int, 26)
+	for _, c := range s {
+		t := c - 'a'
+		cnt[t]++
+	}
+	mx := slices.Max(cnt)
+	n := len(s)
+	if mx > (n+1)/2 {
+		return ""
+	}
+	m := [][]int{}
+	for i, v := range cnt {
+		if v > 0 {
+			m = append(m, []int{v, i})
+		}
+	}
+	sort.Slice(m, func(i, j int) bool {
+		return m[i][0] > m[j][0]
+	})
+	ans := make([]byte, n)
+	k := 0
+	for _, e := range m {
+		v, i := e[0], e[1]
+		for v > 0 {
+			ans[k] = byte('a' + i)
+			k += 2
+			if k >= n {
+				k = 1
+			}
+			v--
+		}
+	}
+	return string(ans)
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::{BinaryHeap, HashMap, VecDeque};
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn reorganize_string(s: String) -> String {
+        let mut map = HashMap::new();
+        let mut pq = BinaryHeap::new();
+        let mut ret = String::new();
+        let mut queue = VecDeque::new();
+        let n = s.len();
+
+        // Initialize the HashMap
+        for c in s.chars() {
+            map.entry(c)
+                .and_modify(|e| {
+                    *e += 1;
+                })
+                .or_insert(1);
+        }
+
+        // Initialize the binary heap
+        for (k, v) in map.iter() {
+            if 2 * *v - 1 > n {
+                return "".to_string();
+            } else {
+                pq.push((*v, *k));
+            }
+        }
+
+        while !pq.is_empty() {
+            let (v, k) = pq.pop().unwrap();
+            ret.push(k);
+            queue.push_back((v - 1, k));
+            if queue.len() == 2 {
+                let (v, k) = queue.pop_front().unwrap();
+                if v != 0 {
+                    pq.push((v, k));
+                }
+            }
+        }
+
+        if ret.len() == n {
+            ret
+        } else {
+            "".to_string()
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def reorganizeString(self, s: str) -> str:
+        return self.rearrangeString(s, 2)
+
+    def rearrangeString(self, s: str, k: int) -> str:
+        h = [(-v, c) for c, v in Counter(s).items()]
+        heapify(h)
+        q = deque()
+        ans = []
+        while h:
+            v, c = heappop(h)
+            v *= -1
+            ans.append(c)
+            q.append((v - 1, c))
+            if len(q) >= k:
+                w, c = q.popleft()
+                if w:
+                    heappush(h, (-w, c))
+        return "" if len(ans) != len(s) else "".join(ans)
+```
+
+#### Java
+
 ```java
 class Solution {
     public String reorganizeString(String s) {
@@ -156,37 +318,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    string reorganizeString(string s) {
-        vector<int> cnt(26);
-        for (char& c : s) ++cnt[c - 'a'];
-        int mx = *max_element(cnt.begin(), cnt.end());
-        int n = s.size();
-        if (mx > (n + 1) / 2) return "";
-        vector<vector<int>> m;
-        for (int i = 0; i < 26; ++i) {
-            if (cnt[i]) m.push_back({cnt[i], i});
-        }
-        sort(m.begin(), m.end());
-        reverse(m.begin(), m.end());
-        string ans = s;
-        int k = 0;
-        for (auto& e : m) {
-            int v = e[0], i = e[1];
-            while (v--) {
-                ans[k] = 'a' + i;
-                k += 2;
-                if (k >= n) k = 1;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -220,53 +352,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func reorganizeString(s string) string {
-	cnt := make([]int, 26)
-	mx := 0
-	for _, c := range s {
-		t := c - 'a'
-		cnt[t]++
-		mx = max(mx, cnt[t])
-	}
-	n := len(s)
-	if mx > (n+1)/2 {
-		return ""
-	}
-	m := [][]int{}
-	for i, v := range cnt {
-		if v > 0 {
-			m = append(m, []int{v, i})
-		}
-	}
-	sort.Slice(m, func(i, j int) bool {
-		return m[i][0] > m[j][0]
-	})
-	ans := make([]byte, n)
-	k := 0
-	for _, e := range m {
-		v, i := e[0], e[1]
-		for v > 0 {
-			ans[k] = byte('a' + i)
-			k += 2
-			if k >= n {
-				k = 1
-			}
-			v--
-		}
-	}
-	return string(ans)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func reorganizeString(s string) string {
@@ -315,15 +401,13 @@ func (h hp) Less(i, j int) bool {
 	a, b := h[i], h[j]
 	return a.v > b.v
 }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **...**
-
-```
-
+func (h hp) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)   { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

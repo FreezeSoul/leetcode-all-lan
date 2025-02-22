@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0738.Monotone%20Increasing%20Digits/README.md
+tags:
+    - 贪心
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [738. 单调递增的数字](https://leetcode.cn/problems/monotone-increasing-digits)
 
 [English Version](/solution/0700-0799/0738.Monotone%20Increasing%20Digits/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>当且仅当每个相邻位数上的数字&nbsp;<code>x</code>&nbsp;和&nbsp;<code>y</code>&nbsp;满足&nbsp;<code>x &lt;= y</code>&nbsp;时，我们称这个整数是<strong>单调递增</strong>的。</p>
 
@@ -41,11 +52,13 @@
 	<li><code>0 &lt;= n &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 从数字 `n` 的高位开始，找到第一个不满足 $n_{i-1} \le n_i$ 的位置 $i$。
 
@@ -57,9 +70,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +90,7 @@ class Solution:
         return int(''.join(s))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,7 +121,8 @@ public:
     int monotoneIncreasingDigits(int n) {
         string s = to_string(n);
         int i = 1;
-        for (; i < s.size() && s[i - 1] <= s[i]; ++i);
+        for (; i < s.size() && s[i - 1] <= s[i]; ++i)
+            ;
         if (i < s.size()) {
             for (; i > 0 && s[i - 1] > s[i]; --i) {
                 --s[i - 1];
@@ -127,7 +137,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func monotoneIncreasingDigits(n int) int {
@@ -149,10 +159,8 @@ func monotoneIncreasingDigits(n int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

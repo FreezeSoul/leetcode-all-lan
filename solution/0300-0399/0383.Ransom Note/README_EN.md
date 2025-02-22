@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0383.Ransom%20Note/README_EN.md
+tags:
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [383. Ransom Note](https://leetcode.com/problems/ransom-note)
 
 [中文文档](/solution/0300-0399/0383.Ransom%20Note/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>ransomNote</code> and <code>magazine</code>, return <code>true</code><em> if </em><code>ransomNote</code><em> can be constructed by using the letters from </em><code>magazine</code><em> and </em><code>false</code><em> otherwise</em>.</p>
 
@@ -27,9 +41,13 @@
 	<li><code>ransomNote</code> and <code>magazine</code> consist of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Hash Table or Array**
+<!-- solution:start -->
+
+### Solution 1: Hash Table or Array
 
 We can use a hash table or an array $cnt$ of length $26$ to record the number of times each character appears in the string `magazine`. Then traverse the string `ransomNote`, for each character $c$ in it, we decrease the number of $c$ by $1$ in $cnt$. If the number of $c$ is less than $0$ after the decrease, it means that the number of $c$ in `magazine` is not enough, so it cannot be composed of `ransomNote`, just return $false$.
 
@@ -39,7 +57,7 @@ The time complexity is $O(m + n)$, and the space complexity is $O(C)$. Where $m$
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,7 +70,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -71,7 +89,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -91,7 +109,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canConstruct(ransomNote string, magazine string) bool {
@@ -109,11 +127,11 @@ func canConstruct(ransomNote string, magazine string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canConstruct(ransomNote: string, magazine: string): boolean {
-    const cnt = new Array(26).fill(0);
+    const cnt: number[] = Array(26).fill(0);
     for (const c of magazine) {
         ++cnt[c.charCodeAt(0) - 97];
     }
@@ -126,7 +144,7 @@ function canConstruct(ransomNote: string, magazine: string): boolean {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -145,7 +163,7 @@ public class Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -160,18 +178,19 @@ class Solution {
             $hashtable[$arrM[$i]] += 1;
         }
         for ($j = 0; $j < strlen($ransomNote); $j++) {
-            if (!isset($hashtable[$ransomNote[$j]]) || $hashtable[$ransomNote[$j]] == 0) return false;
-            else $hashtable[$ransomNote[$j]] -= 1;
+            if (!isset($hashtable[$ransomNote[$j]]) || $hashtable[$ransomNote[$j]] == 0) {
+                return false;
+            } else {
+                $hashtable[$ransomNote[$j]] -= 1;
+            }
         }
         return true;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,14 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0592.Fraction%20Addition%20and%20Subtraction/README.md
+tags:
+    - 数学
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [592. 分数加减运算](https://leetcode.cn/problems/fraction-addition-and-subtraction)
 
 [English Version](/solution/0500-0599/0592.Fraction%20Addition%20and%20Subtraction/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个表示分数加减运算的字符串&nbsp;<code>expression</code>&nbsp;，你需要返回一个字符串形式的计算结果。&nbsp;</p>
 
-<p>这个结果应该是不可约分的分数，即<a href="https://baike.baidu.com/item/%E6%9C%80%E7%AE%80%E5%88%86%E6%95%B0" target="_blank">最简分数</a>。&nbsp;如果最终结果是一个整数，例如&nbsp;<code>2</code>，你需要将它转换成分数形式，其分母为&nbsp;<code>1</code>。所以在上述例子中, <code>2</code>&nbsp;应该被转换为&nbsp;<code>2/1</code>。</p>
+<p>这个结果应该是不可约分的分数，即&nbsp;<a href="https://baike.baidu.com/item/%E6%9C%80%E7%AE%80%E5%88%86%E6%95%B0" target="_blank">最简分数</a>。&nbsp;如果最终结果是一个整数，例如&nbsp;<code>2</code>，你需要将它转换成分数形式，其分母为&nbsp;<code>1</code>。所以在上述例子中, <code>2</code>&nbsp;应该被转换为&nbsp;<code>2/1</code>。</p>
 
 <p>&nbsp;</p>
 
@@ -40,22 +52,22 @@
 <ul>
 	<li>输入和输出字符串只包含&nbsp;<code>'0'</code> 到&nbsp;<code>'9'</code>&nbsp;的数字，以及&nbsp;<code>'/'</code>, <code>'+'</code> 和&nbsp;<code>'-'</code>。&nbsp;</li>
 	<li>输入和输出分数格式均为&nbsp;<code>±分子/分母</code>。如果输入的第一个分数或者输出的分数是正数，则&nbsp;<code>'+'</code>&nbsp;会被省略掉。</li>
-	<li>输入只包含合法的<strong>最简分数</strong>，每个分数的<strong>分子</strong>与<strong>分母</strong>的范围是&nbsp;&nbsp;[1,10]。&nbsp;如果分母是1，意味着这个分数实际上是一个整数。</li>
+	<li>输入只包含合法的&nbsp;<strong>最简分数</strong>，每个分数的<strong>分子</strong>与<strong>分母</strong>的范围是&nbsp;<code>[1,10]</code>。&nbsp;如果分母是 1，意味着这个分数实际上是一个整数。</li>
 	<li>输入的分数个数范围是 [1,10]。</li>
-	<li><strong>最终结果</strong>的分子与分母保证是 32 位整数范围内的有效整数。</li>
+	<li><strong>最终结果&nbsp;</strong>的分子与分母保证是 32 位整数范围内的有效整数。</li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,9 +92,7 @@ class Solution:
         return f'{x}/{y}'
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +127,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 func fractionAddition(expression string) string {
@@ -164,10 +174,56 @@ func gcd(a, b int) int {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {string} expression
+ * @return {string}
+ */
+var fractionAddition = function (expression) {
+    let x = 0,
+        y = 1;
 
+    if (!expression.startsWith('-') && !expression.startsWith('+')) {
+        expression = '+' + expression;
+    }
+
+    let i = 0;
+    const n = expression.length;
+
+    while (i < n) {
+        const sign = expression[i] === '-' ? -1 : 1;
+        i++;
+
+        let j = i;
+        while (j < n && expression[j] !== '+' && expression[j] !== '-') {
+            j++;
+        }
+
+        const [a, b] = expression.slice(i, j).split('/').map(Number);
+        x = x * b + sign * a * y;
+        y *= b;
+        i = j;
+    }
+
+    const gcd = (a, b) => {
+        while (b !== 0) {
+            [a, b] = [b, a % b];
+        }
+        return Math.abs(a);
+    };
+
+    const z = gcd(x, y);
+    x = Math.floor(x / z);
+    y = Math.floor(y / z);
+
+    return `${x}/${y}`;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

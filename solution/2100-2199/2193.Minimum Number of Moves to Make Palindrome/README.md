@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2193.Minimum%20Number%20of%20Moves%20to%20Make%20Palindrome/README.md
+rating: 2090
+source: 第 73 场双周赛 Q4
+tags:
+    - 贪心
+    - 树状数组
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2193. 得到回文串的最少操作次数](https://leetcode.cn/problems/minimum-number-of-moves-to-make-palindrome)
 
 [English Version](/solution/2100-2199/2193.Minimum%20Number%20of%20Moves%20to%20Make%20Palindrome/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个只包含小写英文字母的字符串&nbsp;<code>s</code>&nbsp;。</p>
 
@@ -48,11 +63,13 @@
 	<li><code>s</code>&nbsp;可以通过有限次操作得到一个回文串。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 由于题目保证原串一定可以变成回文串，那么原串中最多只有一种字母出现奇数次。如果有一种字母出现奇数次，那么将该字母中排在最中间的字符移动到字符串中间，剩下的字符可以转化为所有字母均出现偶数次的情况。
 
@@ -64,9 +81,9 @@
 
 构造回文串的过程，实际上是每次选择一对字母并把它们交换到字符串头尾的过程。考虑字母 $x$ 和字母 $y$ 哪个先选，分以下情况讨论：
 
--   字母 $x$ 和 $y$ 的位置满足 $\underbrace{\cdots}_{a\text{ 个}}x\underbrace{\cdots}_{b\text{ 个}}y\underbrace{\cdots}_{c\text{ 个}}y\underbrace{\cdots}_{d\text{ 个}}x\underbrace{\cdots}_{e\text{ 个}}$。如果先把 $x$ 换到头尾，再把 $y$ 换到头尾，那么需要 $(a + e) + (b + d)$ 次交换；如果先换 $y$ 再换 $x$，那么需要 $(a + b + 1 + d + e + 1) + (a + e)$ 次交换。显然先换 $x$ 更优。
--   字母 $x$ 和 $y$ 的位置满足 $\underbrace{\cdots}_{a\text{ 个}}x\underbrace{\cdots}_{b\text{ 个}}y\underbrace{\cdots}_{c\text{ 个}}x\underbrace{\cdots}_{d\text{ 个}}y\underbrace{\cdots}_{e\text{ 个}}$。如果先换 $x$ 再换 $y$，那么需要 $(a + d + e + 1) + (a + b + e)$ 次交换；如果先换 $y$ 再换 $x$，那么需要 $(a + b + 1 + e) + (a + d + e)$ 次交换。先换哪个都一样。
--   字母 $x$ 和 $y$ 的位置满足 $\underbrace{\cdots}_{a\text{ 个}}x\underbrace{\cdots}_{b\text{ 个}}x\underbrace{\cdots}_{c\text{ 个}}y\underbrace{\cdots}_{d\text{ 个}}y\underbrace{\cdots}_{e\text{ 个}}$。如果先换 $x$ 再换 $y$，那么需要 $(a + c + d + e + 2) + (a + b + c + e)$ 次交换；如果先换 $y$ 再换 $x$，那么需要 $(a + b + c + 2 + e) + (a + c + d + e)$ 次交换。先换哪个都一样。
+-   字母 $x$ 和 $y$ 的位置满足 $\underbrace{\cdots}_{a\textit{ 个}}x\underbrace{\cdots}_{b\textit{ 个}}y\underbrace{\cdots}_{c\textit{ 个}}y\underbrace{\cdots}_{d\textit{ 个}}x\underbrace{\cdots}_{e\textit{ 个}}$。如果先把 $x$ 换到头尾，再把 $y$ 换到头尾，那么需要 $(a + e) + (b + d)$ 次交换；如果先换 $y$ 再换 $x$，那么需要 $(a + b + 1 + d + e + 1) + (a + e)$ 次交换。显然先换 $x$ 更优。
+-   字母 $x$ 和 $y$ 的位置满足 $\underbrace{\cdots}_{a\textit{ 个}}x\underbrace{\cdots}_{b\textit{ 个}}y\underbrace{\cdots}_{c\textit{ 个}}x\underbrace{\cdots}_{d\textit{ 个}}y\underbrace{\cdots}_{e\textit{ 个}}$。如果先换 $x$ 再换 $y$，那么需要 $(a + d + e + 1) + (a + b + e)$ 次交换；如果先换 $y$ 再换 $x$，那么需要 $(a + b + 1 + e) + (a + d + e)$ 次交换。先换哪个都一样。
+-   字母 $x$ 和 $y$ 的位置满足 $\underbrace{\cdots}_{a\textit{ 个}}x\underbrace{\cdots}_{b\textit{ 个}}x\underbrace{\cdots}_{c\textit{ 个}}y\underbrace{\cdots}_{d\textit{ 个}}y\underbrace{\cdots}_{e\textit{ 个}}$。如果先换 $x$ 再换 $y$，那么需要 $(a + c + d + e + 2) + (a + b + c + e)$ 次交换；如果先换 $y$ 再换 $x$，那么需要 $(a + b + c + 2 + e) + (a + c + d + e)$ 次交换。先换哪个都一样。
 
 上述讨论可以得到结论：每次交换最外边出现的字母不劣。因此贪心解法成立。
 
@@ -74,9 +91,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -101,9 +116,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -135,7 +148,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -163,7 +176,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minMovesToMakePalindrome(s string) int {
@@ -190,16 +203,8 @@ func minMovesToMakePalindrome(s string) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

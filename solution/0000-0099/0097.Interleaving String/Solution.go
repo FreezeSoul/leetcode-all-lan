@@ -4,23 +4,18 @@ func isInterleave(s1 string, s2 string, s3 string) bool {
 		return false
 	}
 
-	memo := make(map[int]bool)
-
+	f := map[int]bool{}
 	var dfs func(int, int) bool
 	dfs = func(i, j int) bool {
-		if i == m && j == n {
+		if i >= m && j >= n {
 			return true
 		}
-		if v, ok := memo[i*100+j]; ok {
+		if v, ok := f[i*200+j]; ok {
 			return v
 		}
-
-		ret := (i < m && s1[i] == s3[i+j] && dfs(i+1, j)) ||
-			(j < n && s2[j] == s3[i+j] && dfs(i, j+1))
-
-		memo[i*100+j] = ret
-		return ret
+		k := i + j
+		f[i*200+j] = (i < m && s1[i] == s3[k] && dfs(i+1, j)) || (j < n && s2[j] == s3[k] && dfs(i, j+1))
+		return f[i*200+j]
 	}
-
 	return dfs(0, 0)
 }

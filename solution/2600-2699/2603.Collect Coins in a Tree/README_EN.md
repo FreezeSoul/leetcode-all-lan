@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2603.Collect%20Coins%20in%20a%20Tree/README_EN.md
+rating: 2711
+source: Weekly Contest 338 Q4
+tags:
+    - Tree
+    - Graph
+    - Topological Sort
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2603. Collect Coins in a Tree](https://leetcode.com/problems/collect-coins-in-a-tree)
 
 [中文文档](/solution/2600-2699/2603.Collect%20Coins%20in%20a%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There exists an undirected and unrooted tree with <code>n</code> nodes indexed from <code>0</code> to <code>n - 1</code>. You are given an integer <code>n</code> and a 2D integer array edges of length <code>n - 1</code>, where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that there is an edge between nodes <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code> in the tree. You are also given&nbsp;an array <code>coins</code> of size <code>n</code> where <code>coins[i]</code> can be either <code>0</code> or <code>1</code>, where <code>1</code> indicates the presence of a coin in the vertex <code>i</code>.</p>
 
@@ -48,9 +65,13 @@
 	<li><code>edges</code> represents a valid tree.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Topological sorting**
+<!-- solution:start -->
+
+### Solution 1: Topological sorting
 
 We first convert the edges in $edges$ to the adjacency list $g$, where $g[i]$ represents all the adjacent nodes of node $i$, represented by a set.
 
@@ -62,11 +83,15 @@ After the above operation, we get a new tree, and the leaf nodes of the tree are
 
 Then, we delete the remaining two layers of leaf nodes, and finally get a tree where all nodes need to be visited. We only need to count the number of edges and multiply it by $2$ to get the answer.
 
-The time complexity is $O(n)$ and the space complexity is $O(n)$, where $n$ is the number of nodes
+The time complexity is $O(n)$ and the space complexity is $O(n)$, where $n$ is the number of nodes.
+
+Similar problems:
+
+-   [2204. Distance to a Cycle in Undirected Graph](https://github.com/doocs/leetcode/blob/main/solution/2200-2299/2204.Distance%20to%20a%20Cycle%20in%20Undirected%20Graph/README_EN.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -93,7 +118,7 @@ class Solution:
         return sum(len(g[a]) > 0 and len(g[b]) > 0 for a, b in edges) * 2
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -148,7 +173,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -204,7 +229,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func collectTheCoins(coins []int, edges [][]int) int {
@@ -260,7 +285,7 @@ func collectTheCoins(coins []int, edges [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function collectTheCoins(coins: number[], edges: number[][]): number {
@@ -310,10 +335,8 @@ function collectTheCoins(coins: number[], edges: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

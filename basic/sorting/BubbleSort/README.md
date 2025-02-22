@@ -8,7 +8,38 @@
 
 <!-- tabs:start -->
 
-### **Java**
+#### Python3
+
+```python
+def bubbleSort(arr):
+    n = len(arr)
+    # Iterate over all array elements
+    for i in range(n):
+        # Last i elements are already in place
+        for j in range(n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+
+
+# 改进版本
+def bubbleSort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        has_change = False
+        for j in range(n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                has_change = True
+        if not has_change:
+            break
+
+
+arr = [64, 34, 25, 12, 22, 11, 90]
+bubbleSort(arr)
+print(arr)
+```
+
+#### Java
 
 ```java
 import java.util.Arrays;
@@ -42,61 +73,7 @@ public class BubbleSort {
 }
 ```
 
-### **JavaScript**
-
-```js
-function bubbleSort(inputArr) {
-    for (let i = inputArr.length - 1; i > 0; i--) {
-        let hasChange = false;
-        for (let j = 0; j < i; j++) {
-            if (inputArr[j] > inputArr[j + 1]) {
-                const temp = inputArr[j];
-                inputArr[j] = inputArr[j + 1];
-                inputArr[j + 1] = temp;
-                hasChange = true;
-            }
-        }
-
-        if (!hasChange) {
-            break;
-        }
-    }
-
-    return inputArr;
-}
-
-const arr = [6, 3, 2, 1, 5];
-console.log(bubbleSort(arr));
-```
-
-### **Go**
-
-```go
-package main
-
-import "fmt"
-
-func bubbleSort(nums []int) {
-	hasChange := true
-	for i, n := 0, len(nums); i < n-1 && hasChange; i++ {
-		hasChange = false
-		for j := 0; j < n-i-1; j++ {
-			if nums[j] > nums[j+1] {
-				nums[j], nums[j+1] = nums[j+1], nums[j]
-				hasChange = true
-			}
-		}
-	}
-}
-
-func main() {
-	nums := []int{1, 2, 7, 9, 5, 8}
-	bubbleSort(nums)
-	fmt.Println(nums)
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 #include <iostream>
@@ -126,7 +103,34 @@ int main() {
 }
 ```
 
-### **Rust**
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func bubbleSort(nums []int) {
+	hasChange := true
+	for i, n := 0, len(nums); i < n-1 && hasChange; i++ {
+		hasChange = false
+		for j := 0; j < n-i-1; j++ {
+			if nums[j] > nums[j+1] {
+				nums[j], nums[j+1] = nums[j+1], nums[j]
+				hasChange = true
+			}
+		}
+	}
+}
+
+func main() {
+	nums := []int{1, 2, 7, 9, 5, 8}
+	bubbleSort(nums)
+	fmt.Println(nums)
+}
+```
+
+#### Rust
 
 ```rust
 fn bubble_sort(nums: &mut Vec<i32>) {
@@ -149,7 +153,34 @@ fn main() {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+function bubbleSort(inputArr) {
+    for (let i = inputArr.length - 1; i > 0; i--) {
+        let hasChange = false;
+        for (let j = 0; j < i; j++) {
+            if (inputArr[j] > inputArr[j + 1]) {
+                const temp = inputArr[j];
+                inputArr[j] = inputArr[j + 1];
+                inputArr[j + 1] = temp;
+                hasChange = true;
+            }
+        }
+
+        if (!hasChange) {
+            break;
+        }
+    }
+
+    return inputArr;
+}
+
+const arr = [6, 3, 2, 1, 5];
+console.log(bubbleSort(arr));
+```
+
+#### C#
 
 ```cs
 using static System.Console;
@@ -199,49 +230,4 @@ public class Program
 }
 ```
 
-### **Python3**
-
-```python
-def bubbleSort(arr):
-    n = len(arr)
-    # Iterate over all array elements
-    for i in range(n):
-        # Last i elements are already in place
-        for j in range(n - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-
-
-# 改进版本
-def bubbleSort(arr):
-    n = len(arr)
-    for i in range(n - 1):
-        has_change = False
-        for j in range(n - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-                has_change = True
-        if not has_change:
-            break
-
-
-arr = [64, 34, 25, 12, 22, 11, 90]
-bubbleSort(arr)
-print(arr)
-```
-
 <!-- tabs:end -->
-
-## 算法分析
-
-空间复杂度 $O(1)$、时间复杂度 $O(n^2)$。
-
-分情况讨论：
-
-1. 给定的数组按照顺序已经排好：只需要进行 $n-1$ 次比较，两两交换次数为 0，时间复杂度为 $O(n)$，这是最好的情况。
-2. 给定的数组按照逆序排列：需要进行 $\frac{n\times (n-1)}{2}$ 次比较，时间复杂度为 $O(n^2)$，这是最坏的情况。
-3. 给定的数组杂乱无章。在这种情况下，平均时间复杂度 $O(n^2)$。
-
-因此，时间复杂度是 $O(n^2)$，这是一种稳定的排序算法。
-
-> 稳定是指，两个相等的数，在排序过后，相对位置保持不变。

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1539.Kth%20Missing%20Positive%20Number/README.md
+rating: 1295
+source: 第 32 场双周赛 Q1
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [1539. 第 k 个缺失的正整数](https://leetcode.cn/problems/kth-missing-positive-number)
 
 [English Version](/solution/1500-1599/1539.Kth%20Missing%20Positive%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>严格升序排列</strong>&nbsp;的正整数数组 <code>arr</code>&nbsp;和一个整数&nbsp;<code>k</code>&nbsp;。</p>
 
@@ -45,17 +58,17 @@
 
 <p>你可以设计一个时间复杂度小于 O(n) 的算法解决此问题吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,9 +85,7 @@ class Solution:
         return arr[left - 1] + k - (arr[left - 1] - (left - 1) - 1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +127,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findKthPositive(arr []int, k int) int {
@@ -136,10 +147,8 @@ func findKthPositive(arr []int, k int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

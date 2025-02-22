@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0430.Flatten%20a%20Multilevel%20Doubly%20Linked%20List/README_EN.md
+tags:
+    - Depth-First Search
+    - Linked List
+    - Doubly-Linked List
+---
+
+<!-- problem:start -->
+
 # [430. Flatten a Multilevel Doubly Linked List](https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list)
 
 [中文文档](/solution/0400-0499/0430.Flatten%20a%20Multilevel%20Doubly%20Linked%20List/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a doubly linked list, which contains nodes that have a next pointer, a previous pointer, and an additional <strong>child pointer</strong>. This child pointer may or may not point to a separate doubly linked list, also containing these special nodes. These child lists may have one or more children of their own, and so on, to produce a <strong>multilevel data structure</strong> as shown in the example below.</p>
 
@@ -50,7 +64,7 @@ After flattening the multilevel linked list it becomes:
 <p>&nbsp;</p>
 <p><strong>How the multilevel linked list is represented in test cases:</strong></p>
 
-<p>We use the multilevel linked list from <strong class="example">Example 1</strong> above:</p>
+<p>We use the multilevel linked list from <strong>Example 1</strong> above:</p>
 
 <pre>
  1---2---3---4---5---6--NULL
@@ -83,11 +97,17 @@ After flattening the multilevel linked list it becomes:
 [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 """
@@ -122,7 +142,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
+#### Java
 
 ```java
 /*
@@ -162,7 +182,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -214,10 +234,8 @@ public:
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

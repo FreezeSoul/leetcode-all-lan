@@ -1,8 +1,23 @@
-# [1228. Missing Number In Arithmetic Progression](https://leetcode.com/problems/missing-number-in-arithmetic-progression)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1228.Missing%20Number%20In%20Arithmetic%20Progression/README_EN.md
+rating: 1244
+source: Biweekly Contest 11 Q1
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
+# [1228. Missing Number In Arithmetic Progression 🔒](https://leetcode.com/problems/missing-number-in-arithmetic-progression)
 
 [中文文档](/solution/1200-1299/1228.Missing%20Number%20In%20Arithmetic%20Progression/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>In some array <code>arr</code>, the values were in arithmetic progression: the values <code>arr[i + 1] - arr[i]</code> are all equal for every <code>0 &lt;= i &lt; arr.length - 1</code>.</p>
 
@@ -35,17 +50,102 @@
 	<li>The given array is <strong>guaranteed</strong> to be a valid array.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Arithmetic Series Sum Formula
+
+The sum formula for an arithmetic series is $\frac{(a_1 + a_n)n}{2}$, where $n$ is the number of terms in the arithmetic series, the first term is $a_1$, and the last term is $a_n$.
+
+Since the array given in the problem is an arithmetic series with one missing number, the number of terms in the array is $n + 1$, the first term is $a_1$, and the last term is $a_n$. Therefore, the sum of the array is $\frac{(a_1 + a_n)(n + 1)}{2}$.
+
+Thus, the missing number is $\frac{(a_1 + a_n)(n + 1)}{2} - \sum_{i = 0}^n a_i$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def missingNumber(self, arr: List[int]) -> int:
         return (arr[0] + arr[-1]) * (len(arr) + 1) // 2 - sum(arr)
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int missingNumber(int[] arr) {
+        int n = arr.length;
+        int x = (arr[0] + arr[n - 1]) * (n + 1) / 2;
+        int y = Arrays.stream(arr).sum();
+        return x - y;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int missingNumber(vector<int>& arr) {
+        int n = arr.size();
+        int x = (arr[0] + arr[n - 1]) * (n + 1) / 2;
+        int y = accumulate(arr.begin(), arr.end(), 0);
+        return x - y;
+    }
+};
+```
+
+#### Go
+
+```go
+func missingNumber(arr []int) int {
+	n := len(arr)
+	x := (arr[0] + arr[n-1]) * (n + 1) / 2
+	y := 0
+	for _, v := range arr {
+		y += v
+	}
+	return x - y
+}
+```
+
+#### TypeScript
+
+```ts
+function missingNumber(arr: number[]): number {
+    const x = ((arr[0] + arr.at(-1)!) * (arr.length + 1)) >> 1;
+    const y = arr.reduce((acc, cur) => acc + cur, 0);
+    return x - y;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Find Common Difference + Traverse
+
+Since the array given in the problem is an arithmetic series with one missing number, the first term is $a_1$, and the last term is $a_n$. The common difference $d$ is $\frac{a_n - a_1}{n}$.
+
+Traverse the array, and if $a_i \neq a_{i - 1} + d$, then return $a_{i - 1} + d$.
+
+If the traversal completes without finding the missing number, it means all numbers in the array are equal. In this case, directly return the first number of the array.
+
+The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -58,18 +158,7 @@ class Solution:
         return arr[0]
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public int missingNumber(int[] arr) {
-        int n = arr.length;
-        int x = (arr[0] + arr[n - 1]) * (n + 1) / 2;
-        int y = Arrays.stream(arr).sum();
-        return x - y;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -86,19 +175,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int missingNumber(vector<int>& arr) {
-        int n = arr.size();
-        int x = (arr[0] + arr[n - 1]) * (n + 1) / 2;
-        int y = accumulate(arr.begin(), arr.end(), 0);
-        return x - y;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -106,26 +183,17 @@ public:
     int missingNumber(vector<int>& arr) {
         int n = arr.size();
         int d = (arr[n - 1] - arr[0]) / n;
-        for (int i = 1; i < n; ++i)
-            if (arr[i] != arr[i - 1] + d) return arr[i - 1] + d;
+        for (int i = 1; i < n; ++i) {
+            if (arr[i] != arr[i - 1] + d) {
+                return arr[i - 1] + d;
+            }
+        }
         return arr[0];
     }
 };
 ```
 
-### **Go**
-
-```go
-func missingNumber(arr []int) int {
-	n := len(arr)
-	x := (arr[0] + arr[n-1]) * (n + 1) / 2
-	y := 0
-	for _, v := range arr {
-		y += v
-	}
-	return x - y
-}
-```
+#### Go
 
 ```go
 func missingNumber(arr []int) int {
@@ -140,10 +208,22 @@ func missingNumber(arr []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function missingNumber(arr: number[]): number {
+    const d = ((arr.at(-1)! - arr[0]) / arr.length) | 0;
+    for (let i = 1; i < arr.length; ++i) {
+        if (arr[i] - arr[i - 1] !== d) {
+            return arr[i - 1] + d;
+        }
+    }
+    return arr[0];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20042.%20%E6%9C%80%E8%BF%91%E8%AF%B7%E6%B1%82%E6%AC%A1%E6%95%B0/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 042. 最近请求次数](https://leetcode.cn/problems/H8086Q)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>写一个&nbsp;<code>RecentCounter</code>&nbsp;类来计算特定时间范围内最近的请求。</p>
 
@@ -48,19 +55,17 @@ recentCounter.ping(3002);  // requests = [1, <strong>100</strong>, <strong>3001<
 
 <p><meta charset="UTF-8" />注意：本题与主站 933&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/number-of-recent-calls/">https://leetcode.cn/problems/number-of-recent-calls/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-在第 1、100、3001、3002 这四个时间点分别进行了 ping 请求， 在 3001 秒的时候， 它前面的 3000 秒指的是区间 `[1,3001]`， 所以一共是有 `1、100、3001` 三个请求， t = 3002 的前 3000 秒指的是区间 `[2,3002]`, 所以有 `100、3001、3002` 三次请求。
-
-可以用队列实现。每次将 t 进入队尾，同时从队头开始依次移除小于 `t-3000` 的元素。然后返回队列的大小 `q.size()` 即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class RecentCounter:
@@ -79,9 +84,7 @@ class RecentCounter:
 # param_1 = obj.ping(t)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class RecentCounter {
@@ -107,7 +110,7 @@ class RecentCounter {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class RecentCounter {
@@ -133,7 +136,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type RecentCounter struct {
@@ -161,7 +164,30 @@ func (this *RecentCounter) Ping(t int) int {
  */
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+class RecentCounter {
+    stack: Array<number>;
+    cnt: number;
+    constructor() {
+        this.stack = [];
+        this.cnt = 0;
+    }
+
+    ping(t: number): number {
+        while (this.stack.length && this.stack[0] + 3000 < t) {
+            this.cnt--;
+            this.stack.shift();
+        }
+        this.cnt++;
+        this.stack.push(t);
+        return this.cnt;
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 var RecentCounter = function () {
@@ -187,10 +213,34 @@ RecentCounter.prototype.ping = function (t) {
  */
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class RecentCounter {
+    private var q: [Int]
 
+    init() {
+        q = []
+    }
+
+    func ping(_ t: Int) -> Int {
+        q.append(t)
+        while q.first! < t - 3000 {
+            q.removeFirst()
+        }
+        return q.count
+    }
+}
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * let obj = RecentCounter()
+ * let param_1 = obj.ping(t)
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

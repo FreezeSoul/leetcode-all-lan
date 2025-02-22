@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1414.Find%20the%20Minimum%20Number%20of%20Fibonacci%20Numbers%20Whose%20Sum%20Is%20K/README_EN.md
+rating: 1465
+source: Biweekly Contest 24 Q2
+tags:
+    - Greedy
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1414. Find the Minimum Number of Fibonacci Numbers Whose Sum Is K](https://leetcode.com/problems/find-the-minimum-number-of-fibonacci-numbers-whose-sum-is-k)
 
 [中文文档](/solution/1400-1499/1414.Find%20the%20Minimum%20Number%20of%20Fibonacci%20Numbers%20Whose%20Sum%20Is%20K/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer&nbsp;<code>k</code>, <em>return the minimum number of Fibonacci numbers whose sum is equal to </em><code>k</code>. The same Fibonacci number can be used multiple times.</p>
 
@@ -46,11 +61,17 @@ For k = 7 we can use 2 + 5 = 7.</pre>
 	<li><code>1 &lt;= k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,7 +87,7 @@ class Solution:
         return dfs(k)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,15 +106,46 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int findMinFibonacciNumbers(int k) {
+        if (k < 2) return k;
+        int a = 1, b = 1;
+        while (b <= k) {
+            b = a + b;
+            a = b - a;
+        }
+        return 1 + findMinFibonacciNumbers(k - a);
+    }
+};
+```
+
+#### Go
+
+```go
+func findMinFibonacciNumbers(k int) int {
+	if k < 2 {
+		return k
+	}
+	a, b := 1, 1
+	for b <= k {
+		a, b = b, a+b
+	}
+	return 1 + findMinFibonacciNumbers(k-a)
+}
+```
+
+#### TypeScript
 
 ```ts
 const arr = [
-    1836311903, 1134903170, 701408733, 433494437, 267914296, 165580141,
-    102334155, 63245986, 39088169, 24157817, 14930352, 9227465, 5702887,
-    3524578, 2178309, 1346269, 832040, 514229, 317811, 196418, 121393, 75025,
-    46368, 28657, 17711, 10946, 6765, 4181, 2584, 1597, 987, 610, 377, 233, 144,
-    89, 55, 34, 21, 13, 8, 5, 3, 2, 1,
+    1836311903, 1134903170, 701408733, 433494437, 267914296, 165580141, 102334155, 63245986,
+    39088169, 24157817, 14930352, 9227465, 5702887, 3524578, 2178309, 1346269, 832040, 514229,
+    317811, 196418, 121393, 75025, 46368, 28657, 17711, 10946, 6765, 4181, 2584, 1597, 987, 610,
+    377, 233, 144, 89, 55, 34, 21, 13, 8, 5, 3, 2, 1,
 ];
 
 function findMinFibonacciNumbers(k: number): number {
@@ -111,7 +163,7 @@ function findMinFibonacciNumbers(k: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 const FIB: [i32; 45] = [
@@ -138,42 +190,8 @@ impl Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int findMinFibonacciNumbers(int k) {
-        if (k < 2) return k;
-        int a = 1, b = 1;
-        while (b <= k) {
-            b = a + b;
-            a = b - a;
-        }
-        return 1 + findMinFibonacciNumbers(k - a);
-    }
-};
-```
-
-### **Go**
-
-```go
-func findMinFibonacciNumbers(k int) int {
-	if k < 2 {
-		return k
-	}
-	a, b := 1, 1
-	for b <= k {
-		a, b = b, a+b
-	}
-	return 1 + findMinFibonacciNumbers(k-a)
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

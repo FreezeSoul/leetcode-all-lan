@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1633.Percentage%20of%20Users%20Attended%20a%20Contest/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1633. 各赛事的用户注册率](https://leetcode.cn/problems/percentage-of-users-attended-a-contest)
 
 [English Version](/solution/1600-1699/1633.Percentage%20of%20Users%20Attended%20a%20Contest/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>用户表：&nbsp;<code>Users</code></p>
 
@@ -15,7 +25,7 @@
 | user_id     | int     |
 | user_name   | varchar |
 +-------------+---------+
-user_id 是该表的主键。
+user_id 是该表的主键(具有唯一值的列)。
 该表中的每行包括用户 ID 和用户名。</pre>
 
 <p>&nbsp;</p>
@@ -29,16 +39,16 @@ user_id 是该表的主键。
 | contest_id  | int     |
 | user_id     | int     |
 +-------------+---------+
-(contest_id, user_id) 是该表的主键。
+(contest_id, user_id) 是该表的主键(具有唯一值的列的组合)。
 该表中的每行包含用户的 ID 和他们注册的赛事。</pre>
 
 <p>&nbsp;</p>
 
-<p>写一条 SQL 语句，查询各赛事的用户注册百分率，保留两位小数。</p>
+<p>编写解决方案统计出各赛事的用户注册百分率，保留两位小数。</p>
 
 <p>返回的结果表按&nbsp;<code>percentage</code>&nbsp;的&nbsp;<strong>降序&nbsp;</strong>排序，若相同则按&nbsp;<code>contest_id</code>&nbsp;的&nbsp;<strong>升序&nbsp;</strong>排序。</p>
 
-<p>查询结果如下示例所示。</p>
+<p>返回结果如下示例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -87,16 +97,32 @@ Users</code> 表：
 Alice 和 Alex 注册了 215 赛事，注册率为 ((2/3) * 100) = 66.67%
 Bob 注册了 207 赛事，注册率为 ((1/3) * 100) = 33.33%</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分组统计 + 子查询
+
+我们可以将 `Register` 表按照 `contest_id` 分组，统计每个赛事的注册人数，每个赛事的注册人数除以总注册人数即为该赛事的注册率。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    contest_id,
+    ROUND(COUNT(1) * 100 / (SELECT COUNT(1) FROM Users), 2) AS percentage
+FROM Register
+GROUP BY 1
+ORDER BY 2 DESC, 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

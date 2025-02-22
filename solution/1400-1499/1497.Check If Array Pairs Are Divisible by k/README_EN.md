@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1497.Check%20If%20Array%20Pairs%20Are%20Divisible%20by%20k/README_EN.md
+rating: 1787
+source: Weekly Contest 195 Q2
+tags:
+    - Array
+    - Hash Table
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [1497. Check If Array Pairs Are Divisible by k](https://leetcode.com/problems/check-if-array-pairs-are-divisible-by-k)
 
 [中文文档](/solution/1400-1499/1497.Check%20If%20Array%20Pairs%20Are%20Divisible%20by%20k/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of integers <code>arr</code> of even length <code>n</code> and an integer <code>k</code>.</p>
 
@@ -46,11 +62,17 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +81,7 @@ class Solution:
         return cnt[0] % 2 == 0 and all(cnt[i] == cnt[k - i] for i in range(1, k))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +120,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canArrange(arr []int, k int) bool {
@@ -115,10 +137,44 @@ func canArrange(arr []int, k int) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function canArrange(arr: number[], k: number): boolean {
+    const cnt = Array(k).fill(0);
+
+    for (const x of arr) {
+        cnt[((x % k) + k) % k]++;
+    }
+
+    for (let i = 1; i < k; i++) {
+        if (cnt[i] !== cnt[k - i]) return false;
+    }
+
+    return cnt[0] % 2 === 0;
+}
 ```
 
+#### JavaScript
+
+```js
+function canArrange(arr, k) {
+    const cnt = Array(k).fill(0);
+
+    for (const x of arr) {
+        cnt[((x % k) + k) % k]++;
+    }
+
+    for (let i = 1; i < k; i++) {
+        if (cnt[i] !== cnt[k - i]) return false;
+    }
+
+    return cnt[0] % 2 === 0;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2194.Cells%20in%20a%20Range%20on%20an%20Excel%20Sheet/README_EN.md
+rating: 1253
+source: Weekly Contest 283 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2194. Cells in a Range on an Excel Sheet](https://leetcode.com/problems/cells-in-a-range-on-an-excel-sheet)
 
 [中文文档](/solution/2100-2199/2194.Cells%20in%20a%20Range%20on%20an%20Excel%20Sheet/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A cell <code>(r, c)</code> of an excel sheet is represented as a string <code>&quot;&lt;col&gt;&lt;row&gt;&quot;</code> where:</p>
 
@@ -52,11 +66,21 @@ The red arrow denotes the order in which the cells should be presented.
 	<li><code>s</code> consists of uppercase English letters, digits and <code>&#39;:&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We directly traverse all the cells within the range and add them to the answer array.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$, where $m$ and $n$ are the range of rows and columns, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +92,7 @@ class Solution:
         ]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,45 +108,52 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> cellsInRange(string s) {
         vector<string> ans;
-        for (char i = s[0]; i <= s[3]; ++i)
-            for (char j = s[1]; j <= s[4]; ++j)
+        for (char i = s[0]; i <= s[3]; ++i) {
+            for (char j = s[1]; j <= s[4]; ++j) {
                 ans.push_back({i, j});
+            }
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func cellsInRange(s string) []string {
-	var ans []string
+func cellsInRange(s string) (ans []string) {
 	for i := s[0]; i <= s[3]; i++ {
 		for j := s[1]; j <= s[4]; j++ {
 			ans = append(ans, string(i)+string(j))
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function cellsInRange(s: string): string[] {
+    const ans: string[] = [];
+    for (let i = s.charCodeAt(0); i <= s.charCodeAt(3); ++i) {
+        for (let j = s.charCodeAt(1); j <= s.charCodeAt(4); ++j) {
+            ans.push(String.fromCharCode(i) + String.fromCharCode(j));
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,25 +1,61 @@
-# [579. 查询员工的累计薪水](https://leetcode.cn/problems/find-cumulative-salary-of-an-employee)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0579.Find%20Cumulative%20Salary%20of%20an%20Employee/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [579. 查询员工的累计薪水 🔒](https://leetcode.cn/problems/find-cumulative-salary-of-an-employee)
 
 [English Version](/solution/0500-0599/0579.Find%20Cumulative%20Salary%20of%20an%20Employee/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p><strong>Employee</strong> 表保存了一年内的薪水信息。</p>
-
-<p>请你编写 SQL 语句，对于每个员工，查询他除最近一个月（即最大月）之外，剩下每个月的近三个月的累计薪水（不足三个月也要计算）。</p>
-
-<p>结果请按 <code>Id</code> 升序，然后按 <code>Month</code> 降序显示。</p>
-
-<p> </p>
-
-<p><strong>示例：</strong><br />
-<strong>输入：</strong></p>
+<p>表：<code>Employee</code></p>
 
 <pre>
-| Id | Month | Salary |
-|----|-------|--------|
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| month       | int  |
+| salary      | int  |
++-------------+------+
+(id, month) 是该表的主键(具有唯一值的列的组合)。
+表中的每一行表示 2020 年期间员工一个月的工资。
+</pre>
+
+<p>&nbsp;</p>
+
+<p>编写一个解决方案，在一个统一的表中计算出每个员工的 <strong>累计工资汇总</strong> 。</p>
+
+<p>员工的 <strong>累计工资汇总</strong> 可以计算如下:</p>
+
+<ul>
+	<li>对于该员工工作的每个月，将 <strong>该月</strong> 和 <strong>前两个月</strong> 的工资 <strong>加</strong> 起来。这是他们当月的 <strong>3 个月总工资</strong><strong>和</strong> 。如果员工在前几个月没有为公司工作，那么他们在前几个月的有效工资为 <code>0</code> 。</li>
+	<li><strong>不要</strong> 在摘要中包括员工 <strong>最近一个月</strong> 的 3 个月总工资和。</li>
+	<li><strong>不要</strong> 包括雇员 <strong>没有工作</strong> 的任何一个月的 3 个月总工资和。</li>
+</ul>
+
+<p>返回按 <code>id</code> <strong>升序排序&nbsp;</strong>的结果表。如果 <code>id</code> 相等，请按 <code>month</code> <strong>降序排序</strong>。</p>
+
+<p>结果格式如下所示。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例 1</strong></p>
+
+<pre>
+<b>输入：</b>
+Employee table:
++----+-------+--------+
+| id | month | salary |
++----+-------+--------+
 | 1  | 1     | 20     |
 | 2  | 1     | 20     |
 | 1  | 2     | 30     |
@@ -29,89 +65,131 @@
 | 3  | 3     | 60     |
 | 1  | 4     | 60     |
 | 3  | 4     | 70     |
-</pre>
-
-<p><strong>输出：</strong></p>
-
-<pre>
-| Id | Month | Salary |
-|----|-------|--------|
+| 1  | 7     | 90     |
+| 1  | 8     | 90     |
++----+-------+--------+
+<b>输出：</b>
++----+-------+--------+
+| id | month | Salary |
++----+-------+--------+
+| 1  | 7     | 90     |
+| 1  | 4     | 130    |
 | 1  | 3     | 90     |
 | 1  | 2     | 50     |
 | 1  | 1     | 20     |
 | 2  | 1     | 20     |
 | 3  | 3     | 100    |
 | 3  | 2     | 40     |
-</pre>
++----+-------+--------+
+<b>解释：</b>
+员工 “1” 有 5 条工资记录，不包括最近一个月的 “8”:
+- 第 '7' 个月为 90。
+- 第 '4' 个月为 60。
+- 第 '3' 个月是 40。
+- 第 '2' 个月为 30。
+- 第 '1' 个月为 20。
+因此，该员工的累计工资汇总为:
++----+-------+--------+
+| id | month | salary |
++----+-------+--------+
+| 1  | 7     | 90     |  (90 + 0 + 0)
+| 1  | 4     | 130    |  (60 + 40 + 30)
+| 1  | 3     | 90     |  (40 + 30 + 20)
+| 1  | 2     | 50     |  (30 + 20 + 0)
+| 1  | 1     | 20     |  (20 + 0 + 0)
++----+-------+--------+
+请注意，'7' 月的 3 个月的总和是 90，因为他们没有在 '6' 月或 '5' 月工作。
 
-<p> </p>
+员工 '2' 只有一个工资记录('1' 月)，不包括最近的 '2' 月。
++----+-------+--------+
+| id | month | salary |
++----+-------+--------+
+| 2  | 1     | 20     |  (20 + 0 + 0)
++----+-------+--------+
 
-<p><strong>解释：</strong></p>
+员工 '3' 有两个工资记录，不包括最近一个月的 '4' 月:
+- 第 '3' 个月为 60 。
+- 第 '2' 个月是 40。
+因此，该员工的累计工资汇总为:
++----+-------+--------+
+| id | month | salary |
++----+-------+--------+
+| 3  | 3     | 100    |  (60 + 40 + 0)
+| 3  | 2     | 40     |  (40 + 0 + 0)
++----+-------+--------+</pre>
 
-<p>员工 '1' 除去最近一个月（月份 '4'），有三个月的薪水记录：月份 '3' 薪水为 40，月份 '2' 薪水为 30，月份 '1' 薪水为 20。</p>
-
-<p>所以近 3 个月的薪水累计分别为 (40 + 30 + 20) = 90，(30 + 20) = 50 和 20。</p>
-
-<pre>
-| Id | Month | Salary |
-|----|-------|--------|
-| 1  | 3     | 90     |
-| 1  | 2     | 50     |
-| 1  | 1     | 20     |
-</pre>
-
-<p>员工 '2' 除去最近的一个月（月份 '2'）的话，只有月份 '1' 这一个月的薪水记录。</p>
-
-<pre>
-| Id | Month | Salary |
-|----|-------|--------|
-| 2  | 1     | 20     |
-</pre>
-
-<p>员工 '3' 除去最近一个月（月份 '4'）后有两个月，分别为：月份 '3' 薪水为 60 和 月份 '2' 薪水为 40。所以各月的累计情况如下：</p>
-
-<pre>
-| Id | Month | Salary |
-|----|-------|--------|
-| 3  | 3     | 100    |
-| 3  | 2     | 40     |
-</pre>
-
-<p> </p>
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
+SELECT
     id,
     month,
-    sum(salary) over (
-        partition by id
-        order by
-            month range 2 preceding
-    ) as Salary
-from
-    employee
-where
-    (id, month) not in (
-        select
+    SUM(salary) OVER (
+        PARTITION BY id
+        ORDER BY month
+        RANGE 2 PRECEDING
+    ) AS Salary
+FROM employee
+WHERE
+    (id, month) NOT IN (
+        SELECT
             id,
-            max(month)
-        from
-            Employee
-        group by
-            id
+            MAX(month)
+        FROM Employee
+        GROUP BY id
     )
-order by
-    id,
-    month desc
+ORDER BY id, month DESC;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            id,
+            month,
+            SUM(salary) OVER (
+                PARTITION BY id
+                ORDER BY month
+                RANGE 2 PRECEDING
+            ) AS salary,
+            RANK() OVER (
+                PARTITION BY id
+                ORDER BY month DESC
+            ) AS rk
+        FROM Employee
+    )
+SELECT id, month, salary
+FROM T
+WHERE rk > 1
+ORDER BY 1, 2 DESC;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

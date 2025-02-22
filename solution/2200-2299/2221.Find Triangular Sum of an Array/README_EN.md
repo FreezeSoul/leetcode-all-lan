@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2221.Find%20Triangular%20Sum%20of%20an%20Array/README_EN.md
+rating: 1317
+source: Biweekly Contest 75 Q2
+tags:
+    - Array
+    - Math
+    - Combinatorics
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2221. Find Triangular Sum of an Array](https://leetcode.com/problems/find-triangular-sum-of-an-array)
 
 [中文文档](/solution/2200-2299/2221.Find%20Triangular%20Sum%20of%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>, where <code>nums[i]</code> is a digit between <code>0</code> and <code>9</code> (<strong>inclusive</strong>).</p>
 
@@ -42,31 +59,39 @@ Since there is only one element in nums, the triangular sum is the value of that
 	<li><code>0 &lt;= nums[i] &lt;= 9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can directly simulate the operations described in the problem. Perform $n - 1$ rounds of operations on the array $\textit{nums}$, updating the array $\textit{nums}$ according to the rules described in the problem for each round. Finally, return the only remaining element in the array $\textit{nums}$.
+
+The time complexity is $O(n^2)$, where $n$ is the length of the array $\textit{nums}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def triangularSum(self, nums: List[int]) -> int:
-        n = len(nums)
-        for i in range(n, 0, -1):
-            for j in range(i - 1):
-                nums[j] = (nums[j] + nums[j + 1]) % 10
+        for k in range(len(nums) - 1, 0, -1):
+            for i in range(k):
+                nums[i] = (nums[i] + nums[i + 1]) % 10
         return nums[0]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int triangularSum(int[] nums) {
-        int n = nums.length;
-        for (int i = n; i >= 0; --i) {
-            for (int j = 0; j < i - 1; ++j) {
-                nums[j] = (nums[j] + nums[j + 1]) % 10;
+        for (int k = nums.length - 1; k > 0; --k) {
+            for (int i = 0; i < k; ++i) {
+                nums[i] = (nums[i] + nums[i + 1]) % 10;
             }
         }
         return nums[0];
@@ -74,45 +99,50 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int triangularSum(vector<int>& nums) {
-        int n = nums.size();
-        for (int i = n; i >= 0; --i)
-            for (int j = 0; j < i - 1; ++j)
-                nums[j] = (nums[j] + nums[j + 1]) % 10;
+        for (int k = nums.size() - 1; k; --k) {
+            for (int i = 0; i < k; ++i) {
+                nums[i] = (nums[i] + nums[i + 1]) % 10;
+            }
+        }
         return nums[0];
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func triangularSum(nums []int) int {
-	n := len(nums)
-	for i := n; i >= 0; i-- {
-		for j := 0; j < i-1; j++ {
-			nums[j] = (nums[j] + nums[j+1]) % 10
+	for k := len(nums) - 1; k > 0; k-- {
+		for i := 0; i < k; i++ {
+			nums[i] = (nums[i] + nums[i+1]) % 10
 		}
 	}
 	return nums[0]
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function triangularSum(nums: number[]): number {
+    for (let k = nums.length - 1; k; --k) {
+        for (let i = 0; i < k; ++i) {
+            nums[i] = (nums[i] + nums[i + 1]) % 10;
+        }
+    }
+    return nums[0];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

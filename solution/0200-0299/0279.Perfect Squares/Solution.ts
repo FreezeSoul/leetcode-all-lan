@@ -1,11 +1,16 @@
 function numSquares(n: number): number {
-    let dp = new Array(n + 1).fill(0);
-    for (let i = 1; i <= n; ++i) {
-        let min = Infinity;
-        for (let j = 1; j * j <= i; ++j) {
-            min = Math.min(min, dp[i - j * j]);
+    const m = Math.floor(Math.sqrt(n));
+    const f: number[][] = Array(m + 1)
+        .fill(0)
+        .map(() => Array(n + 1).fill(1 << 30));
+    f[0][0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 0; j <= n; ++j) {
+            f[i][j] = f[i - 1][j];
+            if (j >= i * i) {
+                f[i][j] = Math.min(f[i][j], f[i][j - i * i] + 1);
+            }
         }
-        dp[i] = min + 1;
     }
-    return dp.pop();
+    return f[m][n];
 }

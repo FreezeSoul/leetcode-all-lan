@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20101.%20%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E4%B8%B2/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 101. 分割等和子串](https://leetcode.cn/problems/NUPfPr)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个非空的正整数数组 <code>nums</code> ，请判断能否将这些数字分成元素和相等的两部分。</p>
 
@@ -38,19 +45,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 416&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/partition-equal-subset-sum/">https://leetcode.cn/problems/partition-equal-subset-sum/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-题目可以转换为 `0-1` 背包问题，在 m 个数字中选出一些数字（每个数字只能使用一次），这些数字之和恰好等于 `s / 2`（s 表示所有数字之和）。
-
-也可以用 DFS + 记忆化搜索。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,52 +79,7 @@ class Solution:
         return dp[-1][-1]
 ```
 
-空间优化：
-
-```python
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        s = sum(nums)
-        if s % 2 != 0:
-            return False
-
-        m, n = len(nums), (s >> 1) + 1
-        dp = [False] * n
-        dp[0] = True
-        if nums[0] < n:
-            dp[nums[0]] = True
-
-        for i in range(1, m):
-            for j in range(n - 1, nums[i] - 1, -1):
-                dp[j] = dp[j] or dp[j - nums[i]]
-        return dp[-1]
-```
-
-DFS + 记忆化搜索：
-
-```python
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        s = sum(nums)
-        if s % 2 != 0:
-            return False
-        target = s >> 1
-
-        @cache
-        def dfs(i, s):
-            nonlocal target
-            if s > target or i >= len(nums):
-                return False
-            if s == target:
-                return True
-            return dfs(i + 1, s) or dfs(i + 1, s + nums[i])
-
-        return dfs(0, 0)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -147,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -170,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canPartition(nums []int) bool {
@@ -196,10 +156,93 @@ func canPartition(nums []int) bool {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func canPartition(_ nums: [Int]) -> Bool {
+        let s = nums.reduce(0, +)
+        if s % 2 != 0 { return false }
+        let target = s / 2
+        var dp = Array(repeating: false, count: target + 1)
+        dp[0] = true
 
+        for num in nums {
+            for j in stride(from: target, through: num, by: -1) {
+                dp[j] = dp[j] || dp[j - num]
+            }
+        }
+
+        return dp[target]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        s = sum(nums)
+        if s % 2 != 0:
+            return False
+
+        m, n = len(nums), (s >> 1) + 1
+        dp = [False] * n
+        dp[0] = True
+        if nums[0] < n:
+            dp[nums[0]] = True
+
+        for i in range(1, m):
+            for j in range(n - 1, nums[i] - 1, -1):
+                dp[j] = dp[j] or dp[j - nums[i]]
+        return dp[-1]
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法三
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        s = sum(nums)
+        if s % 2 != 0:
+            return False
+        target = s >> 1
+
+        @cache
+        def dfs(i, s):
+            nonlocal target
+            if s > target or i >= len(nums):
+                return False
+            if s == target:
+                return True
+            return dfs(i + 1, s) or dfs(i + 1, s + nums[i])
+
+        return dfs(0, 0)
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1484.Group%20Sold%20Products%20By%20The%20Date/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1484. Group Sold Products By The Date](https://leetcode.com/problems/group-sold-products-by-the-date)
 
 [中文文档](/solution/1400-1499/1484.Group%20Sold%20Products%20By%20The%20Date/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table <code>Activities</code>:</p>
 
@@ -13,19 +25,19 @@
 | sell_date   | date    |
 | product     | varchar |
 +-------------+---------+
-There is no primary key for this table, it may contain duplicates.
+There is no primary key (column with unique values) for this table. It may contain duplicates.
 Each row of this table contains the product name and the date it was sold in a market.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find for each date the number of different products sold and their names.</p>
+<p>Write a solution to find for each date the number of different products sold and their names.</p>
 
 <p>The sold products names for each date should be sorted lexicographically.</p>
 
 <p>Return the result table ordered by <code>sell_date</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -58,23 +70,30 @@ For 2020-06-01, Sold items were (Pencil, Bible), we sort them lexicographically 
 For 2020-06-02, the Sold item is (Mask), we just return it.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 SELECT
     sell_date,
     COUNT(DISTINCT product) AS num_sold,
-    GROUP_CONCAT(DISTINCT product
-        ORDER BY product ASC
-        SEPARATOR ',') AS products
-FROM
-    Activities
+    GROUP_CONCAT(DISTINCT product) AS products
+FROM Activities
 GROUP BY sell_date
-ORDER BY sell_date ASC;
+ORDER BY sell_date;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

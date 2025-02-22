@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2063.%20%E5%BC%B9%E7%8F%A0%E6%B8%B8%E6%88%8F/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 63. 弹珠游戏](https://leetcode.cn/problems/EXvqDp)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 欢迎各位来到「力扣嘉年华」，接下来将为各位介绍在活动中广受好评的弹珠游戏。
 
@@ -28,7 +36,7 @@
 >
 > 解释：
 > 在 `[2,1]` 处打入弹珠，弹珠前进 1 步后遇到转向器，前进方向顺时针旋转 90 度，再前进 1 步进入洞中。
-> ![b054955158a99167b8d51da0e22a54da.gif](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2063.%20%E5%BC%B9%E7%8F%A0%E6%B8%B8%E6%88%8F/images/1630392649-BoQncz-b054955158a99167b8d51da0e22a54da.gif)
+> ![b054955158a99167b8d51da0e22a54da.gif](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2063.%20%E5%BC%B9%E7%8F%A0%E6%B8%B8%E6%88%8F/images/1630392649-BoQncz-b054955158a99167b8d51da0e22a54da.gif){:width="300px"}
 
 **示例 2：**
 
@@ -42,7 +50,7 @@
 > 在 `[1,0]` 处打入弹珠，弹珠前进 2 步，遇到转向器后前进方向顺时针旋转 90 度，再前进 1 步进入洞中。
 > 在 `[2,4]` 处打入弹珠，弹珠前进 2 步后进入洞中。
 > 在 `[3,2]` 处打入弹珠，弹珠前进 1 步后进入洞中。
-> ![b44e9963239ae368badf3d00b7563087.gif](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2063.%20%E5%BC%B9%E7%8F%A0%E6%B8%B8%E6%88%8F/images/1630392625-rckbdy-b44e9963239ae368badf3d00b7563087.gif)
+> ![b44e9963239ae368badf3d00b7563087.gif](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2063.%20%E5%BC%B9%E7%8F%A0%E6%B8%B8%E6%88%8F/images/1630392625-rckbdy-b44e9963239ae368badf3d00b7563087.gif){:width="350px"}
 
 **示例 3：**
 
@@ -60,11 +68,13 @@
 -   `1 <= plate.length, plate[i].length <= 1000`
 -   `plate[i][j]` 仅包含 `"O"`、`"W"`、`"E"`、`"."`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们注意到，从不同的位置打入弹珠，弹珠的前进路线不会重叠。因此，我们可以枚举所有可能的打入位置，然后模拟弹珠的前进过程，判断是否能够入洞，是则将该位置加入答案。
 
@@ -74,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -112,9 +120,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -172,7 +178,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -222,7 +228,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func ballGame(num int, plate []string) (ans [][]int) {
@@ -268,10 +274,82 @@ func ballGame(num int, plate []string) (ans [][]int) {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    private var plate: [String] = []
+    private var num: Int = 0
+    private var m: Int = 0
+    private var n: Int = 0
+    private let dirs = [0, 1, 0, -1, 0]
 
+    func ballGame(_ num: Int, _ plate: [String]) -> [[Int]] {
+        self.num = num
+        self.plate = plate
+        self.m = plate.count
+        self.n = plate[0].count
+        var ans: [[Int]] = []
+
+        for i in 1..<m - 1 {
+            if plate[i][0] == "." && check(i, 0, 0) {
+                ans.append([i, 0])
+            }
+            if plate[i][n - 1] == "." && check(i, n - 1, 2) {
+                ans.append([i, n - 1])
+            }
+        }
+
+        for j in 1..<n - 1 {
+            if plate[0][j] == "." && check(0, j, 1) {
+                ans.append([0, j])
+            }
+            if plate[m - 1][j] == "." && check(m - 1, j, 3) {
+                ans.append([m - 1, j])
+            }
+        }
+
+        return ans
+    }
+
+    private func check(_ i: Int, _ j: Int, _ d: Int) -> Bool {
+        var k = num
+        var i = i, j = j, d = d
+
+        while plate[i][j] != "O" {
+            if k == 0 {
+                return false
+            }
+
+            if plate[i][j] == "W" {
+                d = (d + 3) % 4
+            } else if plate[i][j] == "E" {
+                d = (d + 1) % 4
+            }
+
+            i += dirs[d]
+            j += dirs[d + 1]
+
+            if i < 0 || i >= m || j < 0 || j >= n {
+                return false
+            }
+
+            k -= 1
+        }
+
+        return true
+    }
+}
+
+private extension String {
+    subscript(_ index: Int) -> Character {
+        return self[self.index(self.startIndex, offsetBy: index)]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

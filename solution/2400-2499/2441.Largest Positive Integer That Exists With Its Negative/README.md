@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2441.Largest%20Positive%20Integer%20That%20Exists%20With%20Its%20Negative/README.md
+rating: 1167
+source: 第 315 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2441. 与对应负数同时存在的最大正整数](https://leetcode.cn/problems/largest-positive-integer-that-exists-with-its-negative)
 
 [English Version](/solution/2400-2499/2441.Largest%20Positive%20Integer%20That%20Exists%20With%20Its%20Negative/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>不包含</strong> 任何零的整数数组 <code>nums</code> ，找出自身与对应的负数都在数组中存在的最大正整数 <code>k</code> 。</p>
 
@@ -46,11 +61,13 @@
 	<li><code>nums[i] != 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们可以用哈希表 $s$ 记录数组中出现的所有元素，用一个变量 $ans$ 记录满足题目要求的最大正整数，初始时 $ans = -1$。
 
@@ -62,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -73,9 +88,7 @@ class Solution:
         return max((x for x in s if -x in s), default=-1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findMaxK(nums []int) int {
@@ -131,7 +144,7 @@ func findMaxK(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findMaxK(nums: number[]): number {
@@ -146,7 +159,7 @@ function findMaxK(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -155,7 +168,7 @@ impl Solution {
         let s = nums.into_iter().collect::<HashSet<i32>>();
         let mut ans = -1;
         for &x in s.iter() {
-            if s.contains(&(-x)) {
+            if s.contains(&-x) {
                 ans = ans.max(x);
             }
         }
@@ -164,10 +177,43 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+use std::collections::HashSet;
+
+impl Solution {
+    pub fn find_max_k(nums: Vec<i32>) -> i32 {
+        let mut ans = -1;
+        let mut h = HashSet::new();
+
+        for &n in &nums {
+            h.insert(n);
+        }
+
+        for &n in &nums {
+            if h.contains(&-n) && n > ans {
+                ans = n;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

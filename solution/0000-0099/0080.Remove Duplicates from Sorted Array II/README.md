@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0080.Remove%20Duplicates%20from%20Sorted%20Array%20II/README.md
+tags:
+    - 数组
+    - 双指针
+---
+
+<!-- problem:start -->
+
 # [80. 删除有序数组中的重复项 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii)
 
 [English Version](/solution/0000-0099/0080.Remove%20Duplicates%20from%20Sorted%20Array%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个有序数组 <code>nums</code> ，请你<strong><a href="http://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95" target="_blank"> 原地</a></strong> 删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
 
@@ -38,7 +49,7 @@ for (int i = 0; i &lt; len; i++) {
 <pre>
 <strong>输入：</strong>nums = [1,1,1,2,2,3]
 <strong>输出：</strong>5, nums = [1,1,2,2,3]
-<strong>解释：</strong>函数应返回新长度 length = <strong><code>5</code></strong>, 并且原数组的前五个元素被修改为 <strong><code>1, 1, 2, 2,</code></strong> <strong>3 </strong>。 不需要考虑数组中超出新长度后面的元素。
+<strong>解释：</strong>函数应返回新长度 length = <strong><code>5</code></strong>, 并且原数组的前五个元素被修改为 <strong><code>1, 1, 2, 2, 3</code></strong>。 不需要考虑数组中超出新长度后面的元素。
 </pre>
 
 <p><strong>示例 2：</strong></p>
@@ -46,7 +57,7 @@ for (int i = 0; i &lt; len; i++) {
 <pre>
 <strong>输入：</strong>nums = [0,0,1,1,1,1,2,3,3]
 <strong>输出：</strong>7, nums = [0,0,1,1,2,3,3]
-<strong>解释：</strong>函数应返回新长度 length = <strong><code>7</code></strong>, 并且原数组的前五个元素被修改为&nbsp;<strong><code>0</code></strong>, <strong>0</strong>, <strong>1</strong>, <strong>1</strong>, <strong>2</strong>, <strong>3</strong>, <strong>3 。</strong> 不需要考虑数组中超出新长度后面的元素。
+<strong>解释：</strong>函数应返回新长度 length = <strong><code>7</code></strong>, 并且原数组的前七个元素被修改为&nbsp;<strong><code>0, 0, 1, 1, 2, 3, 3</code></strong>。不需要考虑数组中超出新长度后面的元素。
 </pre>
 
 <p>&nbsp;</p>
@@ -59,11 +70,13 @@ for (int i = 0; i &lt; len; i++) {
 	<li><code>nums</code> 已按升序排列</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 我们用一个变量 $k$ 记录当前已经处理好的数组的长度，初始时 $k=0$，表示空数组。
 
@@ -80,13 +93,13 @@ for (int i = 0; i &lt; len; i++) {
 -   由于相同的数字最多保留 $k$ 个，那么原数组的前 $k$ 个元素我们可以直接保留；
 -   对于后面的数字，能够保留的前提是：当前数字 $x$ 与前面已保留的数字的倒数第 $k$ 个元素比较，不同则保留，相同则跳过。
 
-相似题目：[26. 删除有序数组中的重复项](/solution/0000-0099/0026.Remove%20Duplicates%20from%20Sorted%20Array/README.md)
+相似题目：
+
+-   [26. 删除有序数组中的重复项](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0026.Remove%20Duplicates%20from%20Sorted%20Array/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,9 +112,7 @@ class Solution:
         return k
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -134,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeDuplicates(nums []int) int {
@@ -149,7 +160,7 @@ func removeDuplicates(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function removeDuplicates(nums: number[]): number {
@@ -163,23 +174,24 @@ function removeDuplicates(nums: number[]): number {
 }
 ```
 
-### **C#**
+#### Rust
 
-```cs
-public class Solution {
-    public int RemoveDuplicates(int[] nums) {
-        int k = 0;
-        foreach (int x in nums) {
-            if (k < 2 || x != nums[k - 2]) {
-                nums[k++] = x;
+```rust
+impl Solution {
+    pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
+        let mut k = 0;
+        for i in 0..nums.len() {
+            if k < 2 || nums[i] != nums[k - 2] {
+                nums[k] = nums[i];
+                k += 1;
             }
         }
-        return k;
+        k as i32
     }
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -197,27 +209,24 @@ var removeDuplicates = function (nums) {
 };
 ```
 
-### **Rust**
+#### C#
 
-```rust
-impl Solution {
-    pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
-        let mut k = 0;
-        for i in 0..nums.len() {
-            if k < 2 || nums[i] != nums[k - 2] {
-                nums[k] = nums[i];
-                k += 1;
+```cs
+public class Solution {
+    public int RemoveDuplicates(int[] nums) {
+        int k = 0;
+        foreach (int x in nums) {
+            if (k < 2 || x != nums[k - 2]) {
+                nums[k++] = x;
             }
         }
-        k as i32
+        return k;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

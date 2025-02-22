@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2023.Number%20of%20Pairs%20of%20Strings%20With%20Concatenation%20Equal%20to%20Target/README.md
+rating: 1341
+source: 第 62 场双周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2023. 连接后等于目标字符串的字符串对](https://leetcode.cn/problems/number-of-pairs-of-strings-with-concatenation-equal-to-target)
 
 [English Version](/solution/2000-2099/2023.Number%20of%20Pairs%20of%20Strings%20With%20Concatenation%20Equal%20to%20Target/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>数字</strong>&nbsp;字符串数组 <code>nums</code>&nbsp;和一个 <strong>数字</strong>&nbsp;字符串 <code>target</code>&nbsp;，请你返回 <code>nums[i] + nums[j]</code>&nbsp;（两个字符串连接）结果等于 <code>target</code>&nbsp;的下标 <code>(i, j)</code>&nbsp;（需满足 <code>i != j</code>）的数目。</p>
 
@@ -55,27 +70,21 @@
 	<li><code>nums[i]</code>&nbsp;和&nbsp;<code>target</code>&nbsp;不含有任何前导 0 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 遍历数组 `nums`，对于每个 $i$，枚举所有 $j$，如果 $i \neq j$ 且 $nums[i] + nums[j] = target$，则答案加一。
 
-时间复杂度 $O(n^2 \times m)$，空间复杂度 $O(1)$。其中 $n$ 和 $m$ 分别为数组 `nums` 和字符串 `target` 的长度。
-
-**方法二：哈希表**
-
-我们可以用哈希表统计数组 `nums` 中每个字符串出现的次数，然后遍历字符串 `target` 的所有前缀和后缀，如果前缀和后缀都在哈希表中，则答案加上它们出现的次数的乘积。
-
-时间复杂度 $O(n + m^2)$，空间复杂度 $O(n)$。其中 $n$ 和 $m$ 分别为数组 `nums` 和字符串 `target` 的长度。
+时间复杂度 $O(n^2 \times m)$，其中 $n$ 和 $m$ 分别为数组 `nums` 和字符串 `target` 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,23 +95,7 @@ class Solution:
         )
 ```
 
-```python
-class Solution:
-    def numOfPairs(self, nums: List[str], target: str) -> int:
-        cnt = Counter(nums)
-        ans = 0
-        for i in range(1, len(target)):
-            a, b = target[:i], target[i:]
-            if a != b:
-                ans += cnt[a] * cnt[b]
-            else:
-                ans += cnt[a] * (cnt[a] - 1)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -121,12 +114,77 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numOfPairs(vector<string>& nums, string target) {
+        int n = nums.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (i != j && nums[i] + nums[j] == target) ++ans;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func numOfPairs(nums []string, target string) (ans int) {
+	for i, a := range nums {
+		for j, b := range nums {
+			if i != j && a+b == target {
+				ans++
+			}
+		}
+	}
+	return ans
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：哈希表
+
+我们可以用哈希表统计数组 `nums` 中每个字符串出现的次数，然后遍历字符串 `target` 的所有前缀和后缀，如果前缀和后缀都在哈希表中，则答案加上它们出现的次数的乘积。
+
+时间复杂度 $O(n + m^2)$，空间复杂度 $O(n)$。其中 $n$ 和 $m$ 分别为数组 `nums` 和字符串 `target` 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numOfPairs(self, nums: List[str], target: str) -> int:
+        cnt = Counter(nums)
+        ans = 0
+        for i in range(1, len(target)):
+            a, b = target[:i], target[i:]
+            if a != b:
+                ans += cnt[a] * cnt[b]
+            else:
+                ans += cnt[a] * (cnt[a] - 1)
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int numOfPairs(String[] nums, String target) {
         Map<String, Integer> cnt = new HashMap<>();
         for (String x : nums) {
-            cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+            cnt.merge(x, 1, Integer::sum);
         }
         int ans = 0;
         for (int i = 1; i < target.length(); ++i) {
@@ -145,23 +203,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int numOfPairs(vector<string>& nums, string target) {
-        int n = nums.size();
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (i != j && nums[i] + nums[j] == target) ++ans;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -185,20 +227,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func numOfPairs(nums []string, target string) (ans int) {
-	for i, a := range nums {
-		for j, b := range nums {
-			if i != j && a+b == target {
-				ans++
-			}
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func numOfPairs(nums []string, target string) (ans int) {
@@ -218,10 +247,8 @@ func numOfPairs(nums []string, target string) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

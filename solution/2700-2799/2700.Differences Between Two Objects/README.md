@@ -1,14 +1,26 @@
-# [2700. 两个对象之间的差异](https://leetcode.cn/problems/differences-between-two-objects)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2700.Differences%20Between%20Two%20Objects/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2700. 两个对象之间的差异 🔒](https://leetcode.cn/problems/differences-between-two-objects)
 
 [English Version](/solution/2700-2799/2700.Differences%20Between%20Two%20Objects/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你编写一个函数，它接收两个深度嵌套的对象或数组 <code>obj1</code> 和 <code>obj2</code> ，并返回一个新对象表示它们之间差异。</p>
 
-<p>该函数应该比较这两个对象的属性，并识别任何变化。返回的对象应仅包含从 <code>obj1</code> 到 <code>obj2</code> 的值不同的键。对于每个变化的键，值应表示为一个数组 <code>[obj1 value, obj2 value]</code> 。不存在于一个对象中但存在于另一个对象中的键不应包含在返回的对象中。在比较两个数组时，数组的索引被视为它们的键。最终结果应是一个深度嵌套的对象，其中每个叶子的值都是一个差异数组。</p>
+<p>该函数应该比较这两个对象的属性，并识别任何变化。返回的对象应仅包含从 <code>obj1</code> 到 <code>obj2</code> 的值不同的键。</p>
+
+<p>对于每个变化的键，值应表示为一个数组 <code>[obj1 value, obj2 value]</code> 。不存在于一个对象中但存在于另一个对象中的键不应包含在返回的对象中。在比较两个数组时，数组的索引被视为它们的键。最终结果应是一个深度嵌套的对象，其中每个叶子的值都是一个差异数组。</p>
 
 <p>你可以假设这两个对象都是 <code>JSON.parse</code> 的输出结果。</p>
 
@@ -122,19 +134,22 @@ obj2 = { &nbsp;
 <p><strong>提示：</strong></p>
 
 <ul>
+	<li><code>obj1</code> 和 <code>obj2</code> 都是有效的 JSON 对象或数组</li>
 	<li><code>2 &lt;= JSON.stringify(obj1).length &lt;= 10<sup>4</sup></code></li>
 	<li><code>2 &lt;= JSON.stringify(obj2).length &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 function objDiff(obj1: any, obj2: any): any {
@@ -159,3 +174,7 @@ function isObject(obj: unknown): obj is Record<string, unknown> {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

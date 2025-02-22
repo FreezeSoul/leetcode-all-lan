@@ -1,8 +1,25 @@
-# [1065. Index Pairs of a String](https://leetcode.com/problems/index-pairs-of-a-string)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1065.Index%20Pairs%20of%20a%20String/README_EN.md
+rating: 1389
+source: Biweekly Contest 1 Q2
+tags:
+    - Trie
+    - Array
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [1065. Index Pairs of a String 🔒](https://leetcode.com/problems/index-pairs-of-a-string)
 
 [中文文档](/solution/1000-1099/1065.Index%20Pairs%20of%20a%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>text</code> and an array of strings <code>words</code>, return <em>an array of all index pairs </em><code>[i, j]</code><em> so that the substring </em><code>text[i...j]</code><em> is in <code>words</code></em>.</p>
 
@@ -35,11 +52,17 @@
 	<li>All the strings of <code>words</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -51,42 +74,7 @@ class Solution:
         ]
 ```
 
-```python
-class Trie:
-    def __init__(self):
-        self.children = [None] * 26
-        self.is_end = False
-
-    def insert(self, word):
-        node = self
-        for c in word:
-            idx = ord(c) - ord('a')
-            if node.children[idx] is None:
-                node.children[idx] = Trie()
-            node = node.children[idx]
-        node.is_end = True
-
-
-class Solution:
-    def indexPairs(self, text: str, words: List[str]) -> List[List[int]]:
-        trie = Trie()
-        for w in words:
-            trie.insert(w)
-        n = len(text)
-        ans = []
-        for i in range(n):
-            node = trie
-            for j in range(i, n):
-                idx = ord(text[j]) - ord('a')
-                if node.children[idx] is None:
-                    break
-                node = node.children[idx]
-                if node.is_end:
-                    ans.append([i, j])
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Trie {
@@ -132,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -176,7 +164,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -224,10 +212,55 @@ func indexPairs(text string, words []string) [][]int {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Trie:
+    def __init__(self):
+        self.children = [None] * 26
+        self.is_end = False
+
+    def insert(self, word):
+        node = self
+        for c in word:
+            idx = ord(c) - ord('a')
+            if node.children[idx] is None:
+                node.children[idx] = Trie()
+            node = node.children[idx]
+        node.is_end = True
+
+
+class Solution:
+    def indexPairs(self, text: str, words: List[str]) -> List[List[int]]:
+        trie = Trie()
+        for w in words:
+            trie.insert(w)
+        n = len(text)
+        ans = []
+        for i in range(n):
+            node = trie
+            for j in range(i, n):
+                idx = ord(text[j]) - ord('a')
+                if node.children[idx] is None:
+                    break
+                node = node.children[idx]
+                if node.is_end:
+                    ans.append([i, j])
+        return ans
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

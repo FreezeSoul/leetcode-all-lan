@@ -1,10 +1,20 @@
-# [2173. 最多连胜的次数](https://leetcode.cn/problems/longest-winning-streak)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2173.Longest%20Winning%20Streak/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2173. 最多连胜的次数 🔒](https://leetcode.cn/problems/longest-winning-streak)
 
 [English Version](/solution/2100-2199/2173.Longest%20Winning%20Streak/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Matches</code></p>
 
@@ -16,7 +26,7 @@
 | match_day   | date |
 | result      | enum |
 +-------------+------+
-(player_id, match_day) 是该表的主键。
+(player_id, match_day) 是该表的主键（具有唯一值的列的组合）。
 每一行包括了：参赛选手 id、 比赛时间、 比赛结果。
 比赛结果（result）的枚举类型为 ('Win', 'Draw', 'Lose')。</pre>
 
@@ -24,9 +34,9 @@
 
 <p>选手的&nbsp;<strong>连胜数</strong> 是指连续获胜的次数，且没有被平局或输球中断。</p>
 
-<p>写一个SQL 语句来计算每个参赛选手最多的<strong>连胜数</strong>。</p>
+<p>编写解决方案来计算每个参赛选手最多的<strong>连胜数</strong>。</p>
 
-<p>结果可以以任何顺序返回。</p>
+<p>结果可以以 <strong>任何顺序</strong> 返回。</p>
 
 <p>结果格式如下例所示：</p>
 
@@ -77,18 +87,45 @@ Player 3:
 
 <p><strong>进阶:</strong> 如果我们想计算最长的连续不输的次数（即获胜或平局），你将如何调整？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY player_id
+                ORDER BY match_day
+            ) - ROW_NUMBER() OVER (
+                PARTITION BY player_id, result
+                ORDER BY match_day
+            ) AS rk
+        FROM Matches
+    ),
+    T AS (
+        SELECT player_id, SUM(result = 'Win') AS s
+        FROM S
+        GROUP BY player_id, rk
+    )
+SELECT player_id, MAX(s) AS longest_streak
+FROM T
+GROUP BY player_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

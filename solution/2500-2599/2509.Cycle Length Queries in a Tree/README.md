@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2509.Cycle%20Length%20Queries%20in%20a%20Tree/README.md
+rating: 1948
+source: 第 324 场周赛 Q4
+tags:
+    - 树
+    - 数组
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [2509. 查询树中环的长度](https://leetcode.cn/problems/cycle-length-queries-in-a-tree)
 
 [English Version](/solution/2500-2599/2509.Cycle%20Length%20Queries%20in%20a%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数&nbsp;<code>n</code>&nbsp;，表示你有一棵含有&nbsp;<code>2<sup>n</sup> - 1</code>&nbsp;个节点的 <strong>完全二叉树</strong>&nbsp;。根节点的编号是&nbsp;<code>1</code>&nbsp;，树中编号在<code>[1, 2<sup>n - 1</sup> - 1]</code>&nbsp;之间，编号为&nbsp;<code>val</code>&nbsp;的节点都有两个子节点，满足：</p>
 
@@ -70,11 +84,13 @@
 	<li><code>a<sub>i</sub> != b<sub>i</sub></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：求最近公共祖先**
+### 方法一：求最近公共祖先
 
 对于每次查询，我们找出 $a$, $b$ 两个节点的最近公共祖先，并且记录向上走的步数，那么此次查询的答案就是步数加一。
 
@@ -84,9 +100,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +118,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -131,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,7 +168,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func cycleLengthQueries(n int, queries [][]int) []int {
@@ -178,10 +190,8 @@ func cycleLengthQueries(n int, queries [][]int) []int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

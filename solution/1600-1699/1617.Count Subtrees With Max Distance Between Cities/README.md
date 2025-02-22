@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1617.Count%20Subtrees%20With%20Max%20Distance%20Between%20Cities/README.md
+rating: 2308
+source: 第 210 场周赛 Q4
+tags:
+    - 位运算
+    - 树
+    - 动态规划
+    - 状态压缩
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [1617. 统计子树中城市之间最大距离](https://leetcode.cn/problems/count-subtrees-with-max-distance-between-cities)
 
 [English Version](/solution/1600-1699/1617.Count%20Subtrees%20With%20Max%20Distance%20Between%20Cities/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你 <code>n</code> 个城市，编号为从 <code>1</code> 到 <code>n</code> 。同时给你一个大小为 <code>n-1</code> 的数组 <code>edges</code> ，其中 <code>edges[i] = [u<sub>i</sub>, v<sub>i</sub>]</code> 表示城市 <code>u<sub>i</sub></code> 和 <code>v<sub>i</sub></code><sub> </sub>之间有一条双向边。题目保证任意城市之间只有唯一的一条路径。换句话说，所有城市形成了一棵 <strong>树</strong> 。</p>
 
@@ -57,11 +73,13 @@
 	<li>题目保证 <code>(u<sub>i</sub>, v<sub>i</sub>)</code> 所表示的边互不相同。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二进制枚举 + BFS 或 DFS**
+### 方法一：二进制枚举 + BFS 或 DFS
 
 我们注意到 $n \leq 15$，因此可以考虑使用二进制枚举的方法枚举所有的子树。而子树中节点的最大距离，其实就是子树中两个节点之间的最长路径，也即是树的直径，求解树的直径一般可以使用 DFS 或 BFS，先找到树直径的一个端点，然后再从该端点出发，找到树的另一个端点，这两个端点之间的路径长度就是树的直径。
 
@@ -85,13 +103,13 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def countSubgraphsForEachDiameter(self, n: int, edges: List[List[int]]) -> List[int]:
+    def countSubgraphsForEachDiameter(
+        self, n: int, edges: List[List[int]]
+    ) -> List[int]:
         def dfs(u: int, d: int = 0):
             nonlocal mx, nxt, msk
             if mx < d:
@@ -121,47 +139,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def countSubgraphsForEachDiameter(self, n: int, edges: List[List[int]]) -> List[int]:
-        def bfs(u: int) -> int:
-            d = -1
-            q = deque([u])
-            nonlocal msk, nxt
-            msk ^= 1 << u
-            while q:
-                d += 1
-                for _ in range(len(q)):
-                    nxt = u = q.popleft()
-                    for v in g[u]:
-                        if msk >> v & 1:
-                            msk ^= 1 << v
-                            q.append(v)
-            return d
-
-        g = defaultdict(list)
-        for u, v in edges:
-            u, v = u - 1, v - 1
-            g[u].append(v)
-            g[v].append(u)
-        ans = [0] * (n - 1)
-        nxt = 0
-        for mask in range(1, 1 << n):
-            if mask & (mask - 1) == 0:
-                continue
-            msk = mask
-            cur = msk.bit_length() - 1
-            bfs(cur)
-            if msk == 0:
-                msk = mask
-                mx = bfs(nxt)
-                ans[mx - 1] += 1
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -212,61 +190,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    private List<Integer>[] g;
-    private int msk;
-    private int nxt;
-
-    public int[] countSubgraphsForEachDiameter(int n, int[][] edges) {
-        g = new List[n];
-        Arrays.setAll(g, k -> new ArrayList<>());
-        for (int[] e : edges) {
-            int u = e[0] - 1, v = e[1] - 1;
-            g[u].add(v);
-            g[v].add(u);
-        }
-        int[] ans = new int[n - 1];
-        for (int mask = 1; mask < 1 << n; ++mask) {
-            if ((mask & (mask - 1)) == 0) {
-                continue;
-            }
-            msk = mask;
-            int cur = 31 - Integer.numberOfLeadingZeros(msk);
-            bfs(cur);
-            if (msk == 0) {
-                msk = mask;
-                int mx = bfs(nxt);
-                ++ans[mx - 1];
-            }
-        }
-        return ans;
-    }
-
-    private int bfs(int u) {
-        int d = -1;
-        Deque<Integer> q = new ArrayDeque<>();
-        q.offer(u);
-        msk ^= 1 << u;
-        while (!q.isEmpty()) {
-            ++d;
-            for (int k = q.size(); k > 0; --k) {
-                u = q.poll();
-                nxt = u;
-                for (int v : g[u]) {
-                    if ((msk >> v & 1) == 1) {
-                        msk ^= 1 << v;
-                        q.offer(v);
-                    }
-                }
-            }
-        }
-        return d;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -312,57 +236,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<int> countSubgraphsForEachDiameter(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> g(n);
-        for (auto& e : edges) {
-            int u = e[0] - 1, v = e[1] - 1;
-            g[u].emplace_back(v);
-            g[v].emplace_back(u);
-        }
-        vector<int> ans(n - 1);
-        int nxt = 0, msk = 0;
-        auto bfs = [&](int u) -> int {
-            int d = -1;
-            msk ^= 1 << u;
-            queue<int> q{{u}};
-            while (!q.empty()) {
-                ++d;
-                for (int k = q.size(); k; --k) {
-                    u = q.front();
-                    nxt = u;
-                    q.pop();
-                    for (int& v : g[u]) {
-                        if (msk >> v & 1) {
-                            msk ^= 1 << v;
-                            q.push(v);
-                        }
-                    }
-                }
-            }
-            return d;
-        };
-        for (int mask = 1; mask < 1 << n; ++mask) {
-            if ((mask & (mask - 1)) == 0) {
-                continue;
-            }
-            msk = mask;
-            int cur = 31 - __builtin_clz(msk);
-            bfs(cur);
-            if (msk == 0) {
-                msk = mask;
-                int mx = bfs(nxt);
-                ++ans[mx - 1];
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countSubgraphsForEachDiameter(n int, edges [][]int) []int {
@@ -403,54 +277,7 @@ func countSubgraphsForEachDiameter(n int, edges [][]int) []int {
 }
 ```
 
-```go
-func countSubgraphsForEachDiameter(n int, edges [][]int) []int {
-	g := make([][]int, n)
-	for _, e := range edges {
-		u, v := e[0]-1, e[1]-1
-		g[u] = append(g[u], v)
-		g[v] = append(g[v], u)
-	}
-	ans := make([]int, n-1)
-	var msk, nxt int
-	bfs := func(u int) int {
-		d := -1
-		q := []int{u}
-		msk ^= 1 << u
-		for len(q) > 0 {
-			d++
-			for k := len(q); k > 0; k-- {
-				u = q[0]
-				q = q[1:]
-				nxt = u
-				for _, v := range g[u] {
-					if msk>>v&1 == 1 {
-						msk ^= 1 << v
-						q = append(q, v)
-					}
-				}
-			}
-		}
-		return d
-	}
-	for mask := 1; mask < 1<<n; mask++ {
-		if mask&(mask-1) == 0 {
-			continue
-		}
-		msk = mask
-		cur := bits.Len(uint(msk)) - 1
-		bfs(cur)
-		if msk == 0 {
-			msk = mask
-			mx := bfs(nxt)
-			ans[mx-1]++
-		}
-	}
-	return ans
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countSubgraphsForEachDiameter(n: number, edges: number[][]): number[] {
@@ -514,6 +341,217 @@ function numberOfLeadingZeros(i: number): number {
     return n;
 }
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countSubgraphsForEachDiameter(
+        self, n: int, edges: List[List[int]]
+    ) -> List[int]:
+        def bfs(u: int) -> int:
+            d = -1
+            q = deque([u])
+            nonlocal msk, nxt
+            msk ^= 1 << u
+            while q:
+                d += 1
+                for _ in range(len(q)):
+                    nxt = u = q.popleft()
+                    for v in g[u]:
+                        if msk >> v & 1:
+                            msk ^= 1 << v
+                            q.append(v)
+            return d
+
+        g = defaultdict(list)
+        for u, v in edges:
+            u, v = u - 1, v - 1
+            g[u].append(v)
+            g[v].append(u)
+        ans = [0] * (n - 1)
+        nxt = 0
+        for mask in range(1, 1 << n):
+            if mask & (mask - 1) == 0:
+                continue
+            msk = mask
+            cur = msk.bit_length() - 1
+            bfs(cur)
+            if msk == 0:
+                msk = mask
+                mx = bfs(nxt)
+                ans[mx - 1] += 1
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    private List<Integer>[] g;
+    private int msk;
+    private int nxt;
+
+    public int[] countSubgraphsForEachDiameter(int n, int[][] edges) {
+        g = new List[n];
+        Arrays.setAll(g, k -> new ArrayList<>());
+        for (int[] e : edges) {
+            int u = e[0] - 1, v = e[1] - 1;
+            g[u].add(v);
+            g[v].add(u);
+        }
+        int[] ans = new int[n - 1];
+        for (int mask = 1; mask < 1 << n; ++mask) {
+            if ((mask & (mask - 1)) == 0) {
+                continue;
+            }
+            msk = mask;
+            int cur = 31 - Integer.numberOfLeadingZeros(msk);
+            bfs(cur);
+            if (msk == 0) {
+                msk = mask;
+                int mx = bfs(nxt);
+                ++ans[mx - 1];
+            }
+        }
+        return ans;
+    }
+
+    private int bfs(int u) {
+        int d = -1;
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(u);
+        msk ^= 1 << u;
+        while (!q.isEmpty()) {
+            ++d;
+            for (int k = q.size(); k > 0; --k) {
+                u = q.poll();
+                nxt = u;
+                for (int v : g[u]) {
+                    if ((msk >> v & 1) == 1) {
+                        msk ^= 1 << v;
+                        q.offer(v);
+                    }
+                }
+            }
+        }
+        return d;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> countSubgraphsForEachDiameter(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> g(n);
+        for (auto& e : edges) {
+            int u = e[0] - 1, v = e[1] - 1;
+            g[u].emplace_back(v);
+            g[v].emplace_back(u);
+        }
+        vector<int> ans(n - 1);
+        int nxt = 0, msk = 0;
+        auto bfs = [&](int u) -> int {
+            int d = -1;
+            msk ^= 1 << u;
+            queue<int> q{{u}};
+            while (!q.empty()) {
+                ++d;
+                for (int k = q.size(); k; --k) {
+                    u = q.front();
+                    nxt = u;
+                    q.pop();
+                    for (int& v : g[u]) {
+                        if (msk >> v & 1) {
+                            msk ^= 1 << v;
+                            q.push(v);
+                        }
+                    }
+                }
+            }
+            return d;
+        };
+        for (int mask = 1; mask < 1 << n; ++mask) {
+            if ((mask & (mask - 1)) == 0) {
+                continue;
+            }
+            msk = mask;
+            int cur = 31 - __builtin_clz(msk);
+            bfs(cur);
+            if (msk == 0) {
+                msk = mask;
+                int mx = bfs(nxt);
+                ++ans[mx - 1];
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countSubgraphsForEachDiameter(n int, edges [][]int) []int {
+	g := make([][]int, n)
+	for _, e := range edges {
+		u, v := e[0]-1, e[1]-1
+		g[u] = append(g[u], v)
+		g[v] = append(g[v], u)
+	}
+	ans := make([]int, n-1)
+	var msk, nxt int
+	bfs := func(u int) int {
+		d := -1
+		q := []int{u}
+		msk ^= 1 << u
+		for len(q) > 0 {
+			d++
+			for k := len(q); k > 0; k-- {
+				u = q[0]
+				q = q[1:]
+				nxt = u
+				for _, v := range g[u] {
+					if msk>>v&1 == 1 {
+						msk ^= 1 << v
+						q = append(q, v)
+					}
+				}
+			}
+		}
+		return d
+	}
+	for mask := 1; mask < 1<<n; mask++ {
+		if mask&(mask-1) == 0 {
+			continue
+		}
+		msk = mask
+		cur := bits.Len(uint(msk)) - 1
+		bfs(cur)
+		if msk == 0 {
+			msk = mask
+			mx := bfs(nxt)
+			ans[mx-1]++
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
 
 ```ts
 function countSubgraphsForEachDiameter(n: number, edges: number[][]): number[] {
@@ -583,10 +621,8 @@ function numberOfLeadingZeros(i: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

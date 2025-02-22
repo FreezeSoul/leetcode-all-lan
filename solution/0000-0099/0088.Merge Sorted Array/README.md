@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0088.Merge%20Sorted%20Array/README.md
+tags:
+    - 数组
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array)
 
 [English Version](/solution/0000-0099/0088.Merge%20Sorted%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个按 <strong>非递减顺序</strong> 排列的整数数组&nbsp;<code>nums1</code><em> </em>和 <code>nums2</code>，另有两个整数 <code>m</code> 和 <code>n</code> ，分别表示 <code>nums1</code> 和 <code>nums2</code> 中的元素数目。</p>
 
@@ -58,23 +70,23 @@
 
 <p><strong>进阶：</strong>你可以设计实现一个时间复杂度为 <code>O(m + n)</code> 的算法解决此问题吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
-我们用两个指针 $i$ 和 $j$ 分别指向两个数组的末尾，用一个指针 $k$ 指向合并后的数组的末尾。
+我们注意到数组的有序性，可以使用双指针的方法，从后向前遍历两个数组，每次取两个数组中较大的一个放进合并后的数组的最后面。
 
-每次比较两个数组的末尾元素，将较大的元素放在合并后的数组的末尾，然后将指针向前移动一位，重复这个过程，直到两个数组的指针都指向了数组的开头。
+具体地，我们用两个指针 $i$ 和 $j$ 分别指向两个数组的末尾，用一个指针 $k$ 指向合并后的数组的末尾。每次比较两个数组的末尾元素，将较大的元素放在合并后的数组的末尾，然后将指针向前移动一位，重复这个过程，直到两个数组的指针都指向了数组的开头。
 
 时间复杂度 $O(m + n)$，其中 $m$ 和 $n$ 分别是两个数组的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +103,7 @@ class Solution:
             k -= 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func merge(nums1 []int, m int, nums2 []int, n int) {
@@ -134,7 +144,7 @@ func merge(nums1 []int, m int, nums2 []int, n int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -147,7 +157,30 @@ function merge(nums1: number[], m: number, nums2: number[], n: number): void {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
+        let mut k = (m + n - 1) as usize;
+        let mut i = (m - 1) as isize;
+        let mut j = (n - 1) as isize;
+
+        while j >= 0 {
+            if i >= 0 && nums1[i as usize] > nums2[j as usize] {
+                nums1[k] = nums1[i as usize];
+                i -= 1;
+            } else {
+                nums1[k] = nums2[j as usize];
+                j -= 1;
+            }
+            k -= 1;
+        }
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -164,38 +197,7 @@ var merge = function (nums1, m, nums2, n) {
 };
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
-        let (mut m, mut n) = (m as usize, n as usize);
-        for i in (0..m + n).rev() {
-            nums1[i] = match (m == 0, n == 0) {
-                (true, false) => {
-                    n -= 1;
-                    nums2[n]
-                }
-                (false, true) => {
-                    m -= 1;
-                    nums1[m]
-                }
-                (_, _) => {
-                    if nums1[m - 1] > nums2[n - 1] {
-                        m -= 1;
-                        nums1[m]
-                    } else {
-                        n -= 1;
-                        nums2[n]
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -218,10 +220,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
-# [1135. 最低成本联通所有城市](https://leetcode.cn/problems/connecting-cities-with-minimum-cost)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1135.Connecting%20Cities%20With%20Minimum%20Cost/README.md
+rating: 1752
+source: 第 5 场双周赛 Q3
+tags:
+    - 并查集
+    - 图
+    - 最小生成树
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
+# [1135. 最低成本连通所有城市 🔒](https://leetcode.cn/problems/connecting-cities-with-minimum-cost)
 
 [English Version](/solution/1100-1199/1135.Connecting%20Cities%20With%20Minimum%20Cost/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>想象一下你是个城市基建规划者，地图上有&nbsp;<code>n</code>&nbsp;座城市，它们按以&nbsp;<code>1</code> 到&nbsp;<code>n</code>&nbsp;的次序编号。</p>
 
@@ -49,11 +64,13 @@
 	<li><code>0 &lt;= cost<sub>i</sub>&nbsp;&lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：Kruskal 算法**
+### 方法一：Kruskal 算法
 
 Kruskal 算法是一种贪心算法，用于计算最小生成树。
 
@@ -65,9 +82,7 @@ Kruskal 算法的基本思想是，每次从边集中选择一条最小的边，
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +107,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -130,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +175,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumCost(n int, connections [][]int) (ans int) {
@@ -194,14 +207,11 @@ func minimumCost(n int, connections [][]int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumCost(n: number, connections: number[][]): number {
-    const p = new Array(n);
-    for (let i = 0; i < n; ++i) {
-        p[i] = i;
-    }
+    const p: number[] = Array.from({ length: n }, (_, i) => i);
     const find = (x: number): number => {
         if (p[x] !== x) {
             p[x] = find(p[x]);
@@ -211,12 +221,12 @@ function minimumCost(n: number, connections: number[][]): number {
     connections.sort((a, b) => a[2] - b[2]);
     let ans = 0;
     for (const [x, y, cost] of connections) {
-        if (find(x - 1) == find(y - 1)) {
+        if (find(x - 1) === find(y - 1)) {
             continue;
         }
         p[find(x - 1)] = find(y - 1);
         ans += cost;
-        if (--n == 1) {
+        if (--n === 1) {
             return ans;
         }
     }
@@ -224,10 +234,8 @@ function minimumCost(n: number, connections: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0747.Largest%20Number%20At%20Least%20Twice%20of%20Others/README.md
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [747. 至少是其他数字两倍的最大数](https://leetcode.cn/problems/largest-number-at-least-twice-of-others)
 
 [English Version](/solution/0700-0799/0747.Largest%20Number%20At%20Least%20Twice%20of%20Others/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，其中总是存在 <strong>唯一的</strong> 一个最大整数 。</p>
 
@@ -25,14 +36,7 @@
 <pre>
 <strong>输入：</strong>nums = [1,2,3,4]
 <strong>输出：</strong>-1
-<strong>解释：</strong>4 没有超过 3 的两倍大，所以返回 -1 。</pre>
-
-<p><strong>示例 3：</strong></p>
-
-<pre>
-<strong>输入：</strong>nums = [1]
-<strong>输出：</strong>0
-<strong>解释：</strong>因为不存在其他数字，所以认为现有数字 1 至少是其他数字的两倍。
+<strong>解释：</strong>4 没有超过 3 的两倍大，所以返回 -1 。
 </pre>
 
 <p>&nbsp;</p>
@@ -40,103 +44,120 @@
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 &lt;= nums.length &lt;= 50</code></li>
+	<li><code>2 &lt;= nums.length &lt;= 50</code></li>
 	<li><code>0 &lt;= nums[i] &lt;= 100</code></li>
 	<li><code>nums</code> 中的最大元素是唯一的</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-遍历数组找到最大值和次大值，最后判断是否满足条件即可。
+### 方法一：遍历
+
+我们可以遍历数组 $nums$，找到数组中的最大值 $x$ 和第二大的值 $y$，如果 $x \ge 2y$，则返回 $x$ 的下标，否则返回 $-1$。
+
+我们也可以先找到数组中的最大值 $x$，同时找到最大值 $x$ 的下标 $k$。然后再遍历一次数组，如果发现 $k$ 以外的元素 $y$ 满足 $x < 2y$，则返回 $-1$。否则遍历结束后返回 $k$。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def dominantIndex(self, nums: List[int]) -> int:
-        mx = mid = 0
-        ans = -1
-        for i, v in enumerate(nums):
-            if v > mx:
-                mid, mx = mx, v
-                ans = i
-            elif v > mid:
-                mid = v
-        return ans if mx >= 2 * mid else -1
+        x, y = nlargest(2, nums)
+        return nums.index(x) if x >= 2 * y else -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int dominantIndex(int[] nums) {
-        int mx = 0, mid = 0;
-        int ans = -1;
-        for (int i = 0; i < nums.length; ++i) {
-            if (nums[i] > mx) {
-                mid = mx;
-                mx = nums[i];
-                ans = i;
-            } else if (nums[i] > mid) {
-                mid = nums[i];
+        int n = nums.length;
+        int k = 0;
+        for (int i = 0; i < n; ++i) {
+            if (nums[k] < nums[i]) {
+                k = i;
             }
         }
-        return mx >= mid * 2 ? ans : -1;
+        for (int i = 0; i < n; ++i) {
+            if (k != i && nums[k] < nums[i] * 2) {
+                return -1;
+            }
+        }
+        return k;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int dominantIndex(vector<int>& nums) {
-        int mx = 0, mid = 0;
-        int ans = 0;
-        for (int i = 0; i < nums.size(); ++i) {
-            if (nums[i] > mx) {
-                mid = mx;
-                mx = nums[i];
-                ans = i;
-            } else if (nums[i] > mid)
-                mid = nums[i];
+        int n = nums.size();
+        int k = 0;
+        for (int i = 0; i < n; ++i) {
+            if (nums[k] < nums[i]) {
+                k = i;
+            }
         }
-        return mx >= mid * 2 ? ans : -1;
+        for (int i = 0; i < n; ++i) {
+            if (k != i && nums[k] < nums[i] * 2) {
+                return -1;
+            }
+        }
+        return k;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func dominantIndex(nums []int) int {
-	mx, mid := 0, 0
-	ans := 0
-	for i, v := range nums {
-		if v > mx {
-			mid, mx = mx, v
-			ans = i
-		} else if v > mid {
-			mid = v
+	k := 0
+	for i, x := range nums {
+		if nums[k] < x {
+			k = i
 		}
 	}
-	if mx >= mid*2 {
-		return ans
+	for i, x := range nums {
+		if k != i && nums[k] < x*2 {
+			return -1
+		}
 	}
-	return -1
+	return k
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function dominantIndex(nums: number[]): number {
+    let k = 0;
+    for (let i = 0; i < nums.length; ++i) {
+        if (nums[i] > nums[k]) {
+            k = i;
+        }
+    }
+    for (let i = 0; i < nums.length; ++i) {
+        if (i !== k && nums[k] < nums[i] * 2) {
+            return -1;
+        }
+    }
+    return k;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -144,26 +165,23 @@ func dominantIndex(nums []int) int {
  * @return {number}
  */
 var dominantIndex = function (nums) {
-    let mx = 0,
-        mid = 0;
-    let ans = 0;
+    let k = 0;
     for (let i = 0; i < nums.length; ++i) {
-        if (nums[i] > mx) {
-            mid = mx;
-            mx = nums[i];
-            ans = i;
-        } else if (nums[i] > mid) {
-            mid = nums[i];
+        if (nums[i] > nums[k]) {
+            k = i;
         }
     }
-    return mx >= mid * 2 ? ans : -1;
+    for (let i = 0; i < nums.length; ++i) {
+        if (i !== k && nums[k] < nums[i] * 2) {
+            return -1;
+        }
+    }
+    return k;
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

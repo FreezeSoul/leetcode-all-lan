@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1834.Single-Threaded%20CPU/README_EN.md
+rating: 1797
+source: Weekly Contest 237 Q3
+tags:
+    - Array
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1834. Single-Threaded CPU](https://leetcode.com/problems/single-threaded-cpu)
 
 [中文文档](/solution/1800-1899/1834.Single-Threaded%20CPU/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given <code>n</code>​​​​​​ tasks labeled from <code>0</code> to <code>n - 1</code> represented by a 2D integer array <code>tasks</code>, where <code>tasks[i] = [enqueueTime<sub>i</sub>, processingTime<sub>i</sub>]</code> means that the <code>i<sup>​​​​​​th</sup></code>​​​​ task will be available to process at <code>enqueueTime<sub>i</sub></code> and will take <code>processingTime<sub>i</sub></code><sub> </sub>to finish processing.</p>
 
@@ -59,11 +75,29 @@
 	<li><code>1 &lt;= enqueueTime<sub>i</sub>, processingTime<sub>i</sub> &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Priority Queue (Min Heap)
+
+First, we sort the tasks by `enqueueTime` in ascending order. Next, we use a priority queue (min heap) to maintain the currently executable tasks. The elements in the queue are `(processingTime, index)`, which represent the execution time and the index of the task. We also use a variable $t$ to represent the current time, initially set to $0$.
+
+Next, we simulate the execution process of the tasks.
+
+If the current queue is empty, it means there are no executable tasks at the moment. We update $t$ to the larger value between the `enqueueTime` of the next task and the current time $t$. Then, we add all tasks with `enqueueTime` less than or equal to $t$ to the queue.
+
+Then, we take out a task from the queue, add its index to the answer array, and update $t$ to the sum of the current time $t$ and the execution time of the current task.
+
+We repeat the above process until the queue is empty and all tasks have been added to the queue.
+
+The time complexity is $O(n \times \log n)$, where $n$ is the number of tasks.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -87,7 +121,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +153,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -149,7 +183,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getOrder(tasks [][]int) (ans []int) {
@@ -174,27 +208,18 @@ func getOrder(tasks [][]int) (ans []int) {
 	return
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 type pair struct{ t, i int }
 type hp []pair
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].t < h[j].t || (h[i].t == h[j].t && h[i].i < h[j].i) }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **...**
-
-```
-
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].t < h[j].t || (h[i].t == h[j].t && h[i].i < h[j].i) }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

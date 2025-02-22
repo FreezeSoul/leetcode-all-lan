@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1837.Sum%20of%20Digits%20in%20Base%20K/README.md
+rating: 1282
+source: 第 238 场周赛 Q1
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1837. K 进制表示下的各位数字总和](https://leetcode.cn/problems/sum-of-digits-in-base-k)
 
 [English Version](/solution/1800-1899/1837.Sum%20of%20Digits%20in%20Base%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>n</code>（<code>10</code> 进制）和一个基数 <code>k</code> ，请你将 <code>n</code> 从 <code>10</code> 进制表示转换为 <code>k</code> 进制表示，计算并返回转换后各位数字的 <strong>总和</strong> 。</p>
 
@@ -37,11 +49,13 @@
 	<li><code>2 <= k <= 10</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 我们将 $n$ 除 $k$ 取余，直至为 $0$，余数相加即可得到结果。
 
@@ -49,9 +63,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -63,9 +75,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +90,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -96,7 +106,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sumBase(n int, k int) (ans int) {
@@ -108,7 +118,35 @@ func sumBase(n int, k int) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function sumBase(n: number, k: number): number {
+    let ans = 0;
+    while (n) {
+        ans += n % k;
+        n = Math.floor(n / k);
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn sum_base(mut n: i32, k: i32) -> i32 {
+        let mut ans = 0;
+        while n != 0 {
+            ans += n % k;
+            n /= k;
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -126,35 +164,7 @@ var sumBase = function (n, k) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function sumBase(n: number, k: number): number {
-    let ans = 0;
-    while (n) {
-        ans += n % k;
-        n = Math.floor(n / k);
-    }
-    return ans;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn sum_base(mut n: i32, k: i32) -> i32 {
-        let mut ans = 0;
-        while n != 0 {
-            ans += n % k;
-            n /= k;
-        }
-        ans
-    }
-}
-```
-
-### **C**
+#### C
 
 ```c
 int sumBase(int n, int k) {
@@ -167,10 +177,8 @@ int sumBase(int n, int k) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

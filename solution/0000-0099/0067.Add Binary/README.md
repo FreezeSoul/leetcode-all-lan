@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0067.Add%20Binary/README.md
+tags:
+    - 位运算
+    - 数学
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [67. 二进制求和](https://leetcode.cn/problems/add-binary)
 
 [English Version](/solution/0000-0099/0067.Add%20Binary/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个二进制字符串 <code>a</code> 和 <code>b</code> ，以二进制字符串的形式返回它们的和。</p>
 
@@ -32,21 +45,155 @@
 	<li>字符串如果不是 <code>"0"</code> ，就不含前导零</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：模拟
+
+我们用一个变量 $carry$ 记录当前的进位，用两个指针 $i$ 和 $j$ 分别指向 $a$ 和 $b$ 的末尾，从末尾到开头逐位相加即可。
+
+时间复杂度 $O(\max(m, n))$，其中 $m$ 和 $n$ 分别为字符串 $a$ 和 $b$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def addBinary(self, a: str, b: str) -> str:
         return bin(int(a, 2) + int(b, 2))[2:]
 ```
+
+#### Java
+
+```java
+class Solution {
+    public String addBinary(String a, String b) {
+        var sb = new StringBuilder();
+        int i = a.length() - 1, j = b.length() - 1;
+        for (int carry = 0; i >= 0 || j >= 0 || carry > 0; --i, --j) {
+            carry += (i >= 0 ? a.charAt(i) - '0' : 0) + (j >= 0 ? b.charAt(j) - '0' : 0);
+            sb.append(carry % 2);
+            carry /= 2;
+        }
+        return sb.reverse().toString();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        string ans;
+        int i = a.size() - 1, j = b.size() - 1;
+        for (int carry = 0; i >= 0 || j >= 0 || carry; --i, --j) {
+            carry += (i >= 0 ? a[i] - '0' : 0) + (j >= 0 ? b[j] - '0' : 0);
+            ans.push_back((carry % 2) + '0');
+            carry /= 2;
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func addBinary(a string, b string) string {
+	i, j := len(a)-1, len(b)-1
+	ans := []byte{}
+	for carry := 0; i >= 0 || j >= 0 || carry > 0; i, j = i-1, j-1 {
+		if i >= 0 {
+			carry += int(a[i] - '0')
+		}
+		if j >= 0 {
+			carry += int(b[j] - '0')
+		}
+		ans = append(ans, byte(carry%2+'0'))
+		carry /= 2
+	}
+	for i, j := 0, len(ans)-1; i < j; i, j = i+1, j-1 {
+		ans[i], ans[j] = ans[j], ans[i]
+	}
+	return string(ans)
+}
+```
+
+#### TypeScript
+
+```ts
+function addBinary(a: string, b: string): string {
+    return (BigInt('0b' + a) + BigInt('0b' + b)).toString(2);
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn add_binary(a: String, b: String) -> String {
+        let mut i = (a.len() as i32) - 1;
+        let mut j = (b.len() as i32) - 1;
+        let mut carry = 0;
+        let mut ans = String::new();
+        let a = a.as_bytes();
+        let b = b.as_bytes();
+        while i >= 0 || j >= 0 || carry > 0 {
+            if i >= 0 {
+                carry += a[i as usize] - b'0';
+                i -= 1;
+            }
+            if j >= 0 {
+                carry += b[j as usize] - b'0';
+                j -= 1;
+            }
+            ans.push_str(&(carry % 2).to_string());
+            carry /= 2;
+        }
+        ans.chars().rev().collect()
+    }
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public string AddBinary(string a, string b) {
+        int i = a.Length - 1;
+        int j = b.Length - 1;
+        var sb = new StringBuilder();
+        for (int carry = 0; i >= 0 || j >= 0 || carry > 0; --i, --j) {
+            carry += i >= 0 ? a[i] - '0' : 0;
+            carry += j >= 0 ? b[j] - '0' : 0;
+            sb.Append(carry % 2);
+            carry /= 2;
+        }
+        var ans = sb.ToString().ToCharArray();
+        Array.Reverse(ans);
+        return new string(ans);
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -61,177 +208,25 @@ class Solution:
         return ''.join(ans[::-1])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public String addBinary(String a, String b) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = a.length() - 1, j = b.length() - 1, carry = 0; i >= 0 || j >= 0 || carry > 0;
-             --i, --j) {
-            carry += (i >= 0 ? a.charAt(i) - '0' : 0) + (j >= 0 ? b.charAt(j) - '0' : 0);
-            sb.append(carry % 2);
-            carry /= 2;
-        }
-        return sb.reverse().toString();
-    }
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    string addBinary(string a, string b) {
-        string res;
-        int carry = 0;
-
-        int i = a.size() - 1;
-        int j = b.size() - 1;
-
-        while (i >= 0 || j >= 0) {
-            int digitA = i >= 0 ? a.at(i--) - '0' : 0;
-            int digitB = j >= 0 ? b.at(j--) - '0' : 0;
-            int sum = digitA + digitB + carry;
-            carry = sum >= 2 ? 1 : 0;
-            sum = sum >= 2 ? sum - 2 : sum;
-            res += to_string(sum);
-        }
-
-        if (carry == 1) res.push_back('1');
-        reverse(res.begin(), res.end());
-        return res;
-    }
-};
-```
-
-### **C#**
-
-```cs
-using System;
-using System.Collections.Generic;
-
-public class Solution {
-    public string AddBinary(string a, string b) {
-        var list = new List<char>(Math.Max(a.Length, b.Length) + 1);
-        var i = a.Length - 1;
-        var j = b.Length - 1;
-        var carry = 0;
-        while (i >= 0 || j >= 0)
-        {
-            if (i >= 0)
-            {
-                carry += a[i] - '0';
-            }
-            if (j >= 0)
-            {
-                carry += b[j] - '0';
-            }
-            list.Add((char)((carry % 2) + '0'));
-            carry /= 2;
-            --i;
-            --j;
-        }
-        if (carry > 0) list.Add((char) (carry + '0'));
-        list.Reverse();
-        return new string(list.ToArray());
-    }
-}
-```
-
-### **Go**
-
-```go
-func addBinary(a string, b string) string {
-	for len(a) > len(b) {
-		b = "0" + b
-	}
-	for len(a) < len(b) {
-		a = "0" + a
-	}
-	zero := []byte("0")[0]
-	ret := make([]byte, len(a))
-	for right := len(a) - 1; right > 0; right-- {
-		t := ret[right] + a[right] + b[right] - zero*2
-		ret[right] = t%2 + zero
-		if t >= 2 {
-			ret[right-1] = 1
-		}
-	}
-	t := ret[0] + a[0] + b[0] - zero*2
-	ret[0] = t%2 + zero
-	if t >= 2 {
-		ret = append([]byte("1"), ret...)
-	}
-
-	return string(ret)
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function addBinary(a: string, b: string): string {
-    const n = Math.max(a.length, b.length);
-    const res = [];
-    let isOver = false;
-    for (let i = 0; i < n || isOver; i++) {
-        let val = isOver ? 1 : 0;
-        isOver = false;
-        if (a[a.length - i - 1] === '1') {
-            val++;
-        }
-        if (b[b.length - i - 1] === '1') {
-            val++;
-        }
-        if (val > 1) {
-            isOver = true;
-            val -= 2;
-        }
-        res.push(val);
+    let i = a.length - 1;
+    let j = b.length - 1;
+    let ans: number[] = [];
+    for (let carry = 0; i >= 0 || j >= 0 || carry; --i, --j) {
+        carry += (i >= 0 ? a[i] : '0').charCodeAt(0) - '0'.charCodeAt(0);
+        carry += (j >= 0 ? b[j] : '0').charCodeAt(0) - '0'.charCodeAt(0);
+        ans.push(carry % 2);
+        carry >>= 1;
     }
-    return res.reverse().join('');
+    return ans.reverse().join('');
 }
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn add_binary(a: String, b: String) -> String {
-        let n = a.len().max(b.len());
-        let (a, b) = (a.as_bytes(), b.as_bytes());
-        let mut res = vec![];
-        let mut is_over = false;
-        let mut i = 0;
-        while i < n || is_over {
-            let mut val = if is_over { 1 } else { 0 };
-            is_over = false;
-            if a.get(a.len() - i - 1).unwrap_or(&b'0') == &b'1' {
-                val += 1;
-            }
-            if b.get(b.len() - i - 1).unwrap_or(&b'0') == &b'1' {
-                val += 1;
-            }
-            if val > 1 {
-                is_over = true;
-                val -= 2;
-            }
-            i += 1;
-            res.push(char::from(b'0' + val));
-        }
-        res.iter().rev().collect()
-    }
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

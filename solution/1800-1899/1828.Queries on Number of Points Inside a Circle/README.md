@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1828.Queries%20on%20Number%20of%20Points%20Inside%20a%20Circle/README.md
+rating: 1380
+source: 第 50 场双周赛 Q2
+tags:
+    - 几何
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1828. 统计一个圆中点的数目](https://leetcode.cn/problems/queries-on-number-of-points-inside-a-circle)
 
 [English Version](/solution/1800-1899/1828.Queries%20on%20Number%20of%20Points%20Inside%20a%20Circle/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组 <code>points</code> ，其中 <code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code> ，表示第 <code>i</code> 个点在二维平面上的坐标。多个点可能会有 <strong>相同</strong> 的坐标。</p>
 
@@ -47,11 +61,13 @@ queries[0] 是绿色的圆，queries[1] 是红色的圆，queries[2] 是蓝色�
 	<li>所有的坐标都是整数。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 枚举所有的圆点 $(x, y, r)$，对于每个圆点，计算在圆内的点的个数，即可得到答案。
 
@@ -59,9 +75,7 @@ queries[0] 是绿色的圆，queries[1] 是红色的圆，queries[2] 是蓝色�
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -78,9 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPoints(points [][]int, queries [][]int) (ans []int) {
@@ -144,7 +156,7 @@ func countPoints(points [][]int, queries [][]int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countPoints(points: number[][], queries: number[][]): number[] {
@@ -160,7 +172,7 @@ function countPoints(points: number[][], queries: number[][]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -173,7 +185,7 @@ impl Solution {
                 let r = v[2].pow(2);
                 let mut count = 0;
                 for p in points.iter() {
-                    if ((p[0] - cx).pow(2) + (p[1] - cy).pow(2)) <= r {
+                    if (p[0] - cx).pow(2) + (p[1] - cy).pow(2) <= r {
                         count += 1;
                     }
                 }
@@ -184,15 +196,15 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *countPoints(int **points, int pointsSize, int *pointsColSize, int **queries, int queriesSize, int *queriesColSize,
-                 int *returnSize) {
-    int *ans = malloc(sizeof(int) * queriesSize);
+int* countPoints(int** points, int pointsSize, int* pointsColSize, int** queries, int queriesSize, int* queriesColSize,
+    int* returnSize) {
+    int* ans = malloc(sizeof(int) * queriesSize);
     for (int i = 0; i < queriesSize; i++) {
         int cx = queries[i][0];
         int cy = queries[i][1];
@@ -210,10 +222,8 @@ int *countPoints(int **points, int pointsSize, int *pointsColSize, int **queries
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

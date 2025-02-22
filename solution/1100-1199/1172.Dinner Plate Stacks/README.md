@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1172.Dinner%20Plate%20Stacks/README.md
+rating: 2109
+source: 第 151 场周赛 Q4
+tags:
+    - 栈
+    - 设计
+    - 哈希表
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1172. 餐盘栈](https://leetcode.cn/problems/dinner-plate-stacks)
 
 [English Version](/solution/1100-1199/1172.Dinner%20Plate%20Stacks/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们把无限数量 &infin; 的栈排成一行，按从左到右的次序从 0 开始编号。每个栈的的最大容量&nbsp;<code>capacity</code> 都相同。</p>
 
@@ -73,11 +88,13 @@ D.pop()            // 返回 -1。仍然没有栈。
 	<li>最多会对&nbsp;<code>push</code>，<code>pop</code>，和&nbsp;<code>popAtStack</code>&nbsp;进行 <code>200000</code> 次调用。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：栈数组 + 有序集合**
+### 方法一：栈数组 + 有序集合
 
 我们定义以下数据结构或变量：
 
@@ -104,14 +121,9 @@ D.pop()            // 返回 -1。仍然没有栈。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedSet
-
-
 class DinnerPlates:
     def __init__(self, capacity: int):
         self.capacity = capacity
@@ -152,9 +164,7 @@ class DinnerPlates:
 # param_3 = obj.popAtStack(index)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class DinnerPlates {
@@ -212,7 +222,7 @@ class DinnerPlates {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class DinnerPlates {
@@ -273,7 +283,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type DinnerPlates struct {
@@ -331,7 +341,7 @@ func (this *DinnerPlates) PopAtStack(index int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class DinnerPlates {
@@ -365,22 +375,12 @@ class DinnerPlates {
     }
 
     popAtStack(index: number): number {
-        if (
-            index < 0 ||
-            index >= this.stacks.length ||
-            this.stacks[index].length === 0
-        ) {
+        if (index < 0 || index >= this.stacks.length || this.stacks[index].length === 0) {
             return -1;
         }
         const val = this.stacks[index].pop()!;
-        if (
-            index === this.stacks.length - 1 &&
-            this.stacks[index].length === 0
-        ) {
-            while (
-                this.stacks.length > 0 &&
-                this.stacks[this.stacks.length - 1].length === 0
-            ) {
+        if (index === this.stacks.length - 1 && this.stacks[index].length === 0) {
+            while (this.stacks.length > 0 && this.stacks[this.stacks.length - 1].length === 0) {
                 this.notFull.delete(this.stacks.length - 1);
                 this.stacks.pop();
             }
@@ -427,9 +427,7 @@ class RBTreeNode<T = number> {
 class RBTree<T> {
     root: RBTreeNode<T> | null;
     lt: (l: T, r: T) => boolean;
-    constructor(
-        compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0),
-    ) {
+    constructor(compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0)) {
         this.root = null;
         this.lt = (l: T, r: T) => compare(l, r) < 0;
     }
@@ -737,9 +735,7 @@ class RBTree<T> {
         for (const v of this.inOrder(root.right!)) yield v;
     }
 
-    *reverseInOrder(
-        root: RBTreeNode<T> = this.root!,
-    ): Generator<T, undefined, void> {
+    *reverseInOrder(root: RBTreeNode<T> = this.root!): Generator<T, undefined, void> {
         if (!root) return;
         for (const v of this.reverseInOrder(root.right!)) yield v;
         yield root.data;
@@ -894,10 +890,8 @@ class TreeSet<T = number> {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

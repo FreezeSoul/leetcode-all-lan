@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0908.Smallest%20Range%20I/README_EN.md
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [908. Smallest Range I](https://leetcode.com/problems/smallest-range-i)
 
 [中文文档](/solution/0900-0999/0908.Smallest%20Range%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> and an integer <code>k</code>.</p>
 
@@ -46,11 +59,23 @@
 	<li><code>0 &lt;= k &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Mathematics
+
+According to the problem description, we can subtract $k$ from the maximum value in the array and add $k$ to the minimum value in the array, which can reduce the difference between the maximum and minimum values in the array.
+
+Therefore, the final answer is the larger value between $\max(\textit{nums}) - \min(\textit{nums}) - 2 \times k$ and $0$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{nums}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +84,7 @@ class Solution:
         return max(0, mx - mi - k * 2)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -75,72 +100,51 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int smallestRangeI(vector<int>& nums, int k) {
-        int mx = *max_element(nums.begin(), nums.end());
-        int mi = *min_element(nums.begin(), nums.end());
-        return max(0, mx - mi - k * 2);
+        auto [mi, mx] = minmax_element(nums.begin(), nums.end());
+        return max(0, *mx - *mi - k * 2);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestRangeI(nums []int, k int) int {
-	mx, mi := 0, 10000
-	for _, v := range nums {
-		mx = max(mx, v)
-		mi = min(mi, v)
-	}
+	mi, mx := slices.Min(nums), slices.Max(nums)
 	return max(0, mx-mi-k*2)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function smallestRangeI(nums: number[], k: number): number {
-    const max = nums.reduce((r, v) => Math.max(r, v));
-    const min = nums.reduce((r, v) => Math.min(r, v));
-    return Math.max(max - min - k * 2, 0);
+    const mx = Math.max(...nums);
+    const mi = Math.min(...nums);
+    return Math.max(mx - mi - k * 2, 0);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn smallest_range_i(nums: Vec<i32>, k: i32) -> i32 {
         let max = nums.iter().max().unwrap();
         let min = nums.iter().min().unwrap();
-        0.max(max - min - k * 2)
+        (0).max(max - min - k * 2)
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

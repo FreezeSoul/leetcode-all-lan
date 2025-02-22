@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0501.Find%20Mode%20in%20Binary%20Search%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉搜索树
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [501. 二叉搜索树中的众数](https://leetcode.cn/problems/find-mode-in-binary-search-tree)
 
 [English Version](/solution/0500-0599/0501.Find%20Mode%20in%20Binary%20Search%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个含重复值的二叉搜索树（BST）的根节点 <code>root</code> ，找出并返回 BST 中的所有 <a href="https://baike.baidu.com/item/%E4%BC%97%E6%95%B0/44796" target="_blank">众数</a>（即，出现频率最高的元素）。</p>
 
@@ -47,17 +60,17 @@
 
 <p><strong>进阶：</strong>你可以不使用额外的空间吗？（假设由递归产生的隐式调用栈的开销不被计算在内）</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-中序遍历。其中，mx 表示最大频数，cnt 表示上一个元素出现的次数，prev 表示上一个元素，ans 表示结果列表。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -89,9 +102,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -143,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -184,7 +195,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -224,10 +235,45 @@ func findMode(root *TreeNode) []int {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+public class Solution {
+    private int mx;
+    private int cnt;
+    private TreeNode prev;
+    private List<int> res;
 
+    public int[] FindMode(TreeNode root) {
+        res = new List<int>();
+        Dfs(root);
+        int[] ans = new int[res.Count];
+        for (int i = 0; i < res.Count; ++i) {
+            ans[i] = res[i];
+        }
+        return ans;
+    }
+
+    private void Dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        Dfs(root.left);
+        cnt = prev != null && prev.val == root.val ? cnt + 1 : 1;
+        if (cnt > mx) {
+            res = new List<int>(new int[] { root.val });
+            mx = cnt;
+        } else if (cnt == mx) {
+            res.Add(root.val);
+        }
+        prev = root;
+        Dfs(root.right);
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

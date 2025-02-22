@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2594.Minimum%20Time%20to%20Repair%20Cars/README_EN.md
+rating: 1915
+source: Biweekly Contest 100 Q4
+tags:
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [2594. Minimum Time to Repair Cars](https://leetcode.com/problems/minimum-time-to-repair-cars)
 
 [中文文档](/solution/2500-2599/2594.Minimum%20Time%20to%20Repair%20Cars/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>ranks</code> representing the <strong>ranks</strong> of some mechanics. <font face="monospace">ranks<sub>i</sub></font> is the rank of the <font face="monospace">i<sup>th</sup></font> mechanic<font face="monospace">.</font> A mechanic with a rank <code>r</code> can repair <font face="monospace">n</font> cars in <code>r * n<sup>2</sup></code> minutes.</p>
 
@@ -47,32 +62,36 @@ It can be proved that the cars cannot be repaired in less than 16 minutes.​​
 	<li><code>1 &lt;= cars &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Binary Search**
+<!-- solution:start -->
 
-We notice that the longer the repair time, the more repaired cars. Therefore, we can use binary search to find the minimum repair time.
+### Solution 1: Binary Search
 
-We define the left and right boundaries of binary search as $left=0$, $right=ranks[0] \times cars \times cars$. Next, we enumerate the repair time $mid$ in binary search. The number of cars that each mechanic can repair is $\lfloor \sqrt{\frac{mid}{r}} \rfloor$, where $\lfloor x \rfloor$ represents the floor function. If the number of cars repaired is greater than or equal to $cars$, then the repair time $mid$ is feasible, and we shrink the right boundary to $mid$, otherwise we increase the left boundary to $mid+1$.
+We notice that the longer the repair time, the more cars are repaired. Therefore, we can use the repair time as the target of binary search, and binary search for the minimum repair time.
+
+We define the left and right boundaries of the binary search as $left=0$, $right=ranks[0] \times cars \times cars$. Next, we binary search for the repair time $mid$, and the number of cars each mechanic can repair is $\lfloor \sqrt{\frac{mid}{r}} \rfloor$, where $\lfloor x \rfloor$ represents rounding down. If the number of cars repaired is greater than or equal to $cars$, it means that the repair time $mid$ is feasible, we reduce the right boundary to $mid$, otherwise we increase the left boundary to $mid+1$.
 
 Finally, we return the left boundary.
 
-Time complexity $(n \times \log n)$, space complexity $O(1)$. Where $n$ is the number of mechanics.
+The time complexity is $O(n \times \log M)$, and the space complexity is $O(1)$. Here, $n$ is the number of mechanics, and $M$ is the upper bound of the binary search.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def repairCars(self, ranks: List[int], cars: int) -> int:
-        def check(t):
+        def check(t: int) -> bool:
             return sum(int(sqrt(t // r)) for r in ranks) >= cars
 
         return bisect_left(range(ranks[0] * cars * cars), True, key=check)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -119,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func repairCars(ranks []int, cars int) int64 {
@@ -133,7 +152,7 @@ func repairCars(ranks []int, cars int) int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function repairCars(ranks: number[], cars: number): number {
@@ -155,10 +174,8 @@ function repairCars(ranks: number[], cars: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

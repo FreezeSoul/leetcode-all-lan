@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1859.Sorting%20the%20Sentence/README.md
+rating: 1290
+source: 第 52 场双周赛 Q1
+tags:
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1859. 将句子排序](https://leetcode.cn/problems/sorting-the-sentence)
 
 [English Version](/solution/1800-1899/1859.Sorting%20the%20Sentence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个 <strong>句子</strong> 指的是一个序列的单词用单个空格连接起来，且开头和结尾没有任何空格。每个单词都只包含小写或大写英文字母。</p>
 
@@ -45,70 +58,65 @@
 	<li><code>s</code> 不包含任何前导或者后缀空格。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：字符串分割**
+### 方法一：字符串分割
 
-先将字符串 `s` 按照空格分割，得到字符串数组 `words`。
+我们先将字符串 $s$ 按照空格分割，得到字符串数组 $\textit{ws}$，然后遍历数组 $\textit{ws}$，将每个单词的最后一个字符减去字符 '1'，得到的结果作为单词的索引，将单词的前缀作为单词的内容，最后将单词按照索引顺序拼接起来即可。
 
-遍历字符串数组 `words`，提取 `words[i]` 中最后一位字符，将其转换为数字，得到 `words[i][0:len(words[i])-1]` 的实际位置。
-
-时间复杂度 $O(n)$，其中 $n$ 是字符串长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串 $s$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def sortSentence(self, s: str) -> str:
-        words = s.split()
-        ans = [None] * len(words)
-        for w in words:
-            i = int(w[-1]) - 1
-            ans[i] = w[:-1]
-        return ' '.join(ans)
+        ws = [(w[:-1], int(w[-1])) for w in s.split()]
+        ws.sort(key=lambda x: x[1])
+        return ' '.join(w for w, _ in ws)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public String sortSentence(String s) {
-        String[] words = s.split(" ");
-        String[] ans = new String[words.length];
-        for (String w : words) {
-            int i = w.charAt(w.length() - 1) - '1';
-            ans[i] = w.substring(0, w.length() - 1);
+        String[] ws = s.split(" ");
+        int n = ws.length;
+        String[] ans = new String[n];
+        for (int i = 0; i < n; ++i) {
+            String w = ws[i];
+            ans[w.charAt(w.length() - 1) - '1'] = w.substring(0, w.length() - 1);
         }
         return String.join(" ", ans);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string sortSentence(string s) {
-        istringstream is(s);
-        string t;
-        vector<string> words;
-        while (is >> t) words.push_back(t);
-        vector<string> res(words.size());
-        for (auto& w : words) {
-            int i = w[w.size() - 1] - '1';
-            res[i] = w.substr(0, w.size() - 1);
+        istringstream iss(s);
+        string w;
+        vector<string> ws;
+        while (iss >> w) {
+            ws.push_back(w);
+        }
+        vector<string> ss(ws.size());
+        for (auto& w : ws) {
+            ss[w.back() - '1'] = w.substr(0, w.size() - 1);
         }
         string ans;
-        for (auto& w : res) {
+        for (auto& w : ss) {
             ans += w + " ";
         }
         ans.pop_back();
@@ -117,21 +125,33 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortSentence(s string) string {
-	words := strings.Split(s, " ")
-	ans := make([]string, len(words))
-	for _, w := range words {
-		i := w[len(w)-1] - '1'
-		ans[i] = w[:len(w)-1]
+	ws := strings.Split(s, " ")
+	ans := make([]string, len(ws))
+	for _, w := range ws {
+		ans[w[len(w)-1]-'1'] = w[:len(w)-1]
 	}
 	return strings.Join(ans, " ")
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function sortSentence(s: string): string {
+    const ws = s.split(' ');
+    const ans = Array(ws.length);
+    for (const w of ws) {
+        ans[w.charCodeAt(w.length - 1) - '1'.charCodeAt(0)] = w.slice(0, -1);
+    }
+    return ans.join(' ');
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -139,34 +159,17 @@ func sortSentence(s string) string {
  * @return {string}
  */
 var sortSentence = function (s) {
-    const words = s.split(' ');
-    const ans = new Array(words.length);
-    for (const w of words) {
-        const i = w.charCodeAt(w.length - 1) - '1'.charCodeAt(0);
-        ans[i] = w.slice(0, w.length - 1);
+    const ws = s.split(' ');
+    const ans = Array(ws.length);
+    for (const w of ws) {
+        ans[w.charCodeAt(w.length - 1) - '1'.charCodeAt(0)] = w.slice(0, -1);
     }
     return ans.join(' ');
 };
 ```
 
-### **TypeScript**
-
-```ts
-function sortSentence(s: string): string {
-    const words = s.split(' ');
-    const ans = new Array(words.length);
-    for (const w of words) {
-        const i = w.charCodeAt(w.length - 1) - '1'.charCodeAt(0);
-        ans[i] = w.slice(0, w.length - 1);
-    }
-    return ans.join(' ');
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

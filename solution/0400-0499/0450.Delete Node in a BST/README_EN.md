@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0450.Delete%20Node%20in%20a%20BST/README_EN.md
+tags:
+    - Tree
+    - Binary Search Tree
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [450. Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst)
 
 [中文文档](/solution/0400-0499/0450.Delete%20Node%20in%20a%20BST/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a root node reference of a BST and a key, delete the node with the given key in the BST. Return <em>the <strong>root node reference</strong> (possibly updated) of the BST</em>.</p>
 
@@ -54,11 +68,17 @@ Please notice that another valid answer is [5,2,6,null,4,null,7] and it&#39;s al
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you solve it with time complexity <code>O(height of tree)</code>?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -89,7 +109,7 @@ class Solution:
         return root
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -137,7 +157,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -174,7 +194,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -213,7 +233,7 @@ func deleteNode(root *TreeNode, key int) *TreeNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -263,7 +283,7 @@ function deleteNode(root: TreeNode | null, key: number): TreeNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -284,8 +304,8 @@ function deleteNode(root: TreeNode | null, key: number): TreeNode | null {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn dfs(root: &Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let node = root.as_ref().unwrap().borrow();
@@ -310,9 +330,15 @@ impl Solution {
                 }
                 std::cmp::Ordering::Equal => {
                     match (node.left.is_some(), node.right.is_some()) {
-                        (false, false) => return None,
-                        (true, false) => return node.left.take(),
-                        (false, true) => return node.right.take(),
+                        (false, false) => {
+                            return None;
+                        }
+                        (true, false) => {
+                            return node.left.take();
+                        }
+                        (false, true) => {
+                            return node.right.take();
+                        }
                         (true, true) => {
                             if node.right.as_ref().unwrap().borrow().left.is_none() {
                                 let mut r = node.right.take();
@@ -333,10 +359,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

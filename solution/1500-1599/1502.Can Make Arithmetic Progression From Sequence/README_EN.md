@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1502.Can%20Make%20Arithmetic%20Progression%20From%20Sequence/README_EN.md
+rating: 1154
+source: Weekly Contest 196 Q1
+tags:
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1502. Can Make Arithmetic Progression From Sequence](https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence)
 
 [中文文档](/solution/1500-1599/1502.Can%20Make%20Arithmetic%20Progression%20From%20Sequence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A sequence of numbers is called an <strong>arithmetic progression</strong> if the difference between any two consecutive elements is the same.</p>
 
@@ -33,11 +48,21 @@
 	<li><code>-10<sup>6</sup> &lt;= arr[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Traversal
+
+We can first sort the array `arr`, then traverse the array, and check whether the difference between adjacent items is equal.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array `arr`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -47,7 +72,7 @@ class Solution:
         return all(b - a == d for a, b in pairwise(arr))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -64,7 +89,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -82,7 +107,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canMakeArithmeticProgression(arr []int) bool {
@@ -97,23 +122,7 @@ func canMakeArithmeticProgression(arr []int) bool {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} arr
- * @return {boolean}
- */
-var canMakeArithmeticProgression = function (arr) {
-    arr.sort((a, b) => a - b);
-    for (let i = 1; i < arr.length - 1; i++) {
-        if (arr[i] << 1 != arr[i - 1] + arr[i + 1]) return false;
-    }
-    return true;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canMakeArithmeticProgression(arr: number[]): boolean {
@@ -127,6 +136,165 @@ function canMakeArithmeticProgression(arr: number[]): boolean {
     return true;
 }
 ```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn can_make_arithmetic_progression(mut arr: Vec<i32>) -> bool {
+        arr.sort();
+        let n = arr.len();
+        for i in 2..n {
+            if arr[i - 2] - arr[i - 1] != arr[i - 1] - arr[i] {
+                return false;
+            }
+        }
+        true
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} arr
+ * @return {boolean}
+ */
+var canMakeArithmeticProgression = function (arr) {
+    arr.sort((a, b) => a - b);
+    for (let i = 1; i < arr.length - 1; i++) {
+        if (arr[i] << 1 != arr[i - 1] + arr[i + 1]) {
+            return false;
+        }
+    }
+    return true;
+};
+```
+
+#### C
+
+```c
+int cmp(const void* a, const void* b) {
+    return *(int*) a - *(int*) b;
+}
+
+bool canMakeArithmeticProgression(int* arr, int arrSize) {
+    qsort(arr, arrSize, sizeof(int), cmp);
+    for (int i = 2; i < arrSize; i++) {
+        if (arr[i - 2] - arr[i - 1] != arr[i - 1] - arr[i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Hash Table + Mathematics
+
+We first find the minimum value $a$ and the maximum value $b$ in the array $arr$. If the array $arr$ can be rearranged into an arithmetic sequence, then the common difference $d = \frac{b - a}{n - 1}$ must be an integer.
+
+We can use a hash table to record all elements in the array $arr$, then traverse $i \in [0, n)$, and check whether $a + d \times i$ is in the hash table. If not, it means that the array $arr$ cannot be rearranged into an arithmetic sequence, and we return `false`. Otherwise, after traversing the array, we return `true`.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array `arr`.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def canMakeArithmeticProgression(self, arr: List[int]) -> bool:
+        a = min(arr)
+        b = max(arr)
+        n = len(arr)
+        if (b - a) % (n - 1):
+            return False
+        d = (b - a) // (n - 1)
+        s = set(arr)
+        return all(a + d * i in s for i in range(n))
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean canMakeArithmeticProgression(int[] arr) {
+        int n = arr.length;
+        int a = arr[0], b = arr[0];
+        Set<Integer> s = new HashSet<>();
+        for (int x : arr) {
+            a = Math.min(a, x);
+            b = Math.max(b, x);
+            s.add(x);
+        }
+        if ((b - a) % (n - 1) != 0) {
+            return false;
+        }
+        int d = (b - a) / (n - 1);
+        for (int i = 0; i < n; ++i) {
+            if (!s.contains(a + d * i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool canMakeArithmeticProgression(vector<int>& arr) {
+        auto [a, b] = minmax_element(arr.begin(), arr.end());
+        int n = arr.size();
+        if ((*b - *a) % (n - 1) != 0) {
+            return false;
+        }
+        int d = (*b - *a) / (n - 1);
+        unordered_set<int> s(arr.begin(), arr.end());
+        for (int i = 0; i < n; ++i) {
+            if (!s.count(*a + d * i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+#### Go
+
+```go
+func canMakeArithmeticProgression(arr []int) bool {
+	a, b := slices.Min(arr), slices.Max(arr)
+	n := len(arr)
+	if (b-a)%(n-1) != 0 {
+		return false
+	}
+	d := (b - a) / (n - 1)
+	s := map[int]bool{}
+	for _, x := range arr {
+		s[x] = true
+	}
+	for i := 0; i < n; i++ {
+		if !s[a+i*d] {
+			return false
+		}
+	}
+	return true
+}
+```
+
+#### TypeScript
 
 ```ts
 function canMakeArithmeticProgression(arr: number[]): boolean {
@@ -155,22 +323,7 @@ function canMakeArithmeticProgression(arr: number[]): boolean {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn can_make_arithmetic_progression(mut arr: Vec<i32>) -> bool {
-        arr.sort();
-        let n = arr.len();
-        for i in 2..n {
-            if arr[i - 2] - arr[i - 1] != arr[i - 1] - arr[i] {
-                return false;
-            }
-        }
-        true
-    }
-}
-```
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -204,28 +357,8 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-int cmp(const void *a, const void *b) {
-    return *(int *) a - *(int *) b;
-}
-
-bool canMakeArithmeticProgression(int *arr, int arrSize) {
-    qsort(arr, arrSize, sizeof(int), cmp);
-    for (int i = 2; i < arrSize; i++) {
-        if (arr[i - 2] - arr[i - 1] != arr[i - 1] - arr[i]) {
-            return 0;
-        }
-    }
-    return 1;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

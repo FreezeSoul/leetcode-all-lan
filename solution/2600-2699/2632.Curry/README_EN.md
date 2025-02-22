@@ -1,8 +1,20 @@
-# [2632. Curry](https://leetcode.com/problems/curry)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2632.Curry/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2632. Curry 🔒](https://leetcode.com/problems/curry)
 
 [中文文档](/solution/2600-2699/2632.Curry/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a function&nbsp;<code>fn</code>,&nbsp;return&nbsp;a&nbsp;<strong>curried</strong>&nbsp;version of that function.</p>
 
@@ -67,26 +79,30 @@ curriedLife() === 42
 	<li><code>0 &lt;= inputs[i][j] &lt;= 10<sup>5</sup></code></li>
 	<li><code>0 &lt;= fn.length &lt;= 1000</code></li>
 	<li><code>inputs.flat().length == fn.length</code></li>
-	<li><code>function parameters explicitly defined</code></li>
+	<li>function parameters explicitly defined</li>
+	<li>If <code>fn.length &gt; 0</code>&nbsp;then the last array in <code>inputs</code> is not empty</li>
+	<li>If&nbsp;<code>fn.length === 0</code> then <code>inputs.length === 1</code>&nbsp;</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function curry(fn: Function): Function {
-    const n = fn.length;
-    const allArgs: any[] = [];
-
-    return function curried(...args: any[]) {
-        allArgs.push(...args);
-        if (allArgs.length < n) {
-            return curried;
+    return function curried(...args) {
+        if (args.length >= fn.length) {
+            return fn(...args);
         }
-        return fn(...allArgs);
+        return (...nextArgs) => curried(...args, ...nextArgs);
     };
 }
 
@@ -97,10 +113,8 @@ function curry(fn: Function): Function {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

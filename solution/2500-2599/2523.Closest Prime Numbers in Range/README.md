@@ -1,22 +1,33 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2523.Closest%20Prime%20Numbers%20in%20Range/README.md
+rating: 1649
+source: 第 326 场周赛 Q4
+tags:
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [2523. 范围内最接近的两个质数](https://leetcode.cn/problems/closest-prime-numbers-in-range)
 
 [English Version](/solution/2500-2599/2523.Closest%20Prime%20Numbers%20in%20Range/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个正整数&nbsp;<code>left</code> 和&nbsp;<code>right</code>&nbsp;，请你找到两个整数&nbsp;<code>num1</code> 和&nbsp;<code>num2</code>&nbsp;，它们满足：</p>
 
 <ul>
 	<li><code>left &lt;= nums1 &lt; nums2 &lt;= right&nbsp;</code>&nbsp;。</li>
-	<li><code>nums1</code> 和&nbsp;<code>nums2</code>&nbsp;都是 <strong>质数</strong>&nbsp;。</li>
+	<li><code>nums1</code> 和&nbsp;<code>nums2</code>&nbsp;都是 <strong><span data-keyword="prime-number">质数</span></strong>&nbsp;。</li>
 	<li><code>nums2 - nums1</code>&nbsp;是满足上述条件的质数对中的 <strong>最小值</strong>&nbsp;。</li>
 </ul>
 
 <p>请你返回正整数数组&nbsp;<code>ans = [nums1, nums2]</code>&nbsp;。如果有多个整数对满足上述条件，请你返回&nbsp;<code>nums1</code>&nbsp;最小的质数对。如果不存在符合题意的质数对，请你返回&nbsp;<code>[-1, -1]</code>&nbsp;。</p>
-
-<p>如果一个整数大于&nbsp;<code>1</code>&nbsp;，且只能被&nbsp;<code>1</code> 和它自己整除，那么它是一个质数。</p>
 
 <p>&nbsp;</p>
 
@@ -46,21 +57,21 @@
 	<li><code>1 &lt;= left &lt;= right &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：线性筛**
+### 方法一：线性筛
 
-对于给定的范围 $[left, right]$，我们可以使用线性筛求出所有质数，然后从小到大遍历质数，找到相邻的两个质数，其差值最小的质数对即为答案。
+对于给定的范围 $[\textit{left}, \textit{right}]$，我们可以使用线性筛求出所有质数，然后从小到大遍历质数，找到相邻的两个质数，其差值最小的质数对即为答案。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n = right$。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n = \textit{right}$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,9 +99,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -136,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -182,7 +191,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func closestPrimes(left int, right int) []int {
@@ -226,10 +235,8 @@ func closestPrimes(left int, right int) []int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

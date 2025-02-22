@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0398.Random%20Pick%20Index/README.md
+tags:
+    - 水塘抽样
+    - 哈希表
+    - 数学
+    - 随机化
+---
+
+<!-- problem:start -->
+
 # [398. 随机数索引](https://leetcode.cn/problems/random-pick-index)
 
 [English Version](/solution/0300-0399/0398.Random%20Pick%20Index/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个可能含有 <strong>重复元素</strong> 的整数数组&nbsp;<code>nums</code> ，请你随机输出给定的目标数字&nbsp;<code>target</code> 的索引。你可以假设给定的数字一定存在于数组中。</p>
 
@@ -52,25 +65,17 @@ solution.pick(3); // 随机返回索引 2, 3 或者 4 之一。每个索引的�
 
 <div class="fullscreen-btn-layer__2kn7">&nbsp;</div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-蓄水池抽样问题。即从一个包含 n 个对象的列表 S 中随机选取 k 个对象，n 为一个非常大或者不知道的值。通常情况下，n 是一个非常大的值，大到无法一次性把所有列表 S 中的对象都放到内存中。我们这个问题是蓄水池抽样问题的一个特例，即 k=1。
-
-**解法**：我们总是选择第一个对象，以 1/2 的概率选择第二个，以 1/3 的概率选择第三个，以此类推，以 1/m 的概率选择第 m 个对象。当该过程结束时，每一个对象具有相同的选中概率，即 1/n。
-
-**证明**：第 m 个对象最终被选中的概率 P = `选择 m 的概率 × 其后面所有对象不被选择的概率`，即：
-
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0300-0399/0398.Random%20Pick%20Index/images/demo.gif"/>
-
-思路同：[382. 链表随机节点](/solution/0300-0399/0382.Linked%20List%20Random%20Node/README.md)
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,9 +98,7 @@ class Solution:
 # param_1 = obj.pick(target)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -128,7 +131,7 @@ class Solution {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -159,7 +162,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Solution struct {
@@ -191,10 +194,8 @@ func (this *Solution) Pick(target int) int {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

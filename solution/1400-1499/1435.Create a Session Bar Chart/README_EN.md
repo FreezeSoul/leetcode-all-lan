@@ -1,8 +1,20 @@
-# [1435. Create a Session Bar Chart](https://leetcode.com/problems/create-a-session-bar-chart)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1435.Create%20a%20Session%20Bar%20Chart/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1435. Create a Session Bar Chart 🔒](https://leetcode.com/problems/create-a-session-bar-chart)
 
 [中文文档](/solution/1400-1499/1435.Create%20a%20Session%20Bar%20Chart/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Sessions</code></p>
 
@@ -13,7 +25,7 @@
 | session_id          | int     |
 | duration            | int     |
 +---------------------+---------+
-session_id is the primary key for this table.
+session_id is the column of unique values for this table.
 duration is the time in seconds that a user has visited the application.
 </pre>
 
@@ -21,11 +33,11 @@ duration is the time in seconds that a user has visited the application.
 
 <p>You want to know how long a user visits your application. You decided to create bins of <code>&quot;[0-5&gt;&quot;</code>, <code>&quot;[5-10&gt;&quot;</code>, &quot;[10-15&gt;&quot;, and <code>&quot;15 minutes or more&quot;</code> and count the number of sessions on it.</p>
 
-<p>Write an SQL query to report the <code>(bin, total)</code>.</p>
+<p>Write a solution to report the <code>(bin, total)</code>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -58,50 +70,30 @@ There is no session with a duration greater than or equal to 10 minutes and less
 For session_id 5 has a duration greater than or equal to 15 minutes.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-(SELECT
-    '[0-5>' bin,
-    SUM(CASE
-        WHEN duration / 60 < 5 THEN 1
-        ELSE 0
-    END) total
-FROM
-    Sessions) UNION (SELECT
-    '[5-10>' bin,
-    SUM(CASE
-        WHEN
-            (duration / 60 >= 5
-                AND duration / 60 < 10)
-        THEN
-            1
-        ELSE 0
-    END) total
-FROM
-    Sessions) UNION (SELECT
-    '[10-15>' bin,
-    SUM(CASE
-        WHEN
-            (duration / 60 >= 10
-                AND duration / 60 < 15)
-        THEN
-            1
-        ELSE 0
-    END) total
-FROM
-    Sessions) UNION (SELECT
-    '15 or more' bin,
-    SUM(CASE
-        WHEN duration / 60 >= 15 THEN 1
-        ELSE 0
-    END) total
-FROM
-    Sessions);
+SELECT '[0-5>' AS bin, COUNT(1) AS total FROM Sessions WHERE duration < 300
+UNION
+SELECT '[5-10>' AS bin, COUNT(1) AS total FROM Sessions WHERE 300 <= duration AND duration < 600
+UNION
+SELECT '[10-15>' AS bin, COUNT(1) AS total FROM Sessions WHERE 600 <= duration AND duration < 900
+UNION
+SELECT '15 or more' AS bin, COUNT(1) AS total FROM Sessions WHERE 900 <= duration;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

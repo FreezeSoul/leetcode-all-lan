@@ -1,8 +1,20 @@
-# [2377. Sort the Olympic Table](https://leetcode.com/problems/sort-the-olympic-table)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2377.Sort%20the%20Olympic%20Table/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2377. Sort the Olympic Table 🔒](https://leetcode.com/problems/sort-the-olympic-table)
 
 [中文文档](/solution/2300-2399/2377.Sort%20the%20Olympic%20Table/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Olympic</code></p>
 
@@ -15,7 +27,7 @@
 | silver_medals | int     |
 | bronze_medals | int     |
 +---------------+---------+
-country is the primary key for this table.
+In SQL, country is the primary key for this table.
 Each row in this table shows a country name and the number of gold, silver, and bronze medals it won in the Olympic games.
 </pre>
 
@@ -30,9 +42,9 @@ Each row in this table shows a country name and the number of gold, silver, and 
 	<li>If there is a tie in the bronze medals, the countries with the tie are sorted in ascending order lexicographically.</li>
 </ul>
 
-<p>Write an SQL query to sort the Olympic table</p>
+<p>Write a solution to sort the Olympic table.</p>
 
-<p>The query result format is shown in the following example.</p>
+<p>The result format is shown in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -64,14 +76,27 @@ The tie between China and USA is broken by their lexicographical names. Since &q
 Israel comes before Egypt because it has more bronze medals.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT *
+FROM Olympic
+ORDER BY 2 DESC, 3 DESC, 4 DESC, 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

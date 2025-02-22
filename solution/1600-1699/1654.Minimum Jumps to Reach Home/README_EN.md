@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1654.Minimum%20Jumps%20to%20Reach%20Home/README_EN.md
+rating: 2124
+source: Biweekly Contest 39 Q3
+tags:
+    - Breadth-First Search
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1654. Minimum Jumps to Reach Home](https://leetcode.com/problems/minimum-jumps-to-reach-home)
 
 [中文文档](/solution/1600-1699/1654.Minimum%20Jumps%20to%20Reach%20Home/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A certain bug&#39;s home is on the x-axis at position <code>x</code>. Help them get there from position <code>0</code>.</p>
 
@@ -54,13 +70,36 @@
 	<li>Position <code>x</code> is not forbidden.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-BFS.
+<!-- solution:start -->
+
+### Solution 1: BFS
+
+We can use the position and jumping direction of the flea as the state, and use BFS to search for the shortest path. The key point of this problem is to determine the right boundary, that is, how far the flea can jump.
+
+If $a \geq b$, that is, the distance to jump forward is greater than the distance to jump backward, then if the flea is in a position greater than $x+b$, it can no longer jump forward, because the flea cannot jump backward consecutively. If it continues to jump forward, it will never be able to jump to the position $x$. Therefore, if $a \geq b$, the right boundary can be $x+b$.
+
+If $a < b$, that is, the distance to jump forward is less than the distance to jump backward, then if the position of the flea minus $b$ exceeds $2000$, choose to jump backward, otherwise jump forward. Therefore, if $a < b$, the right boundary does not exceed $6000$.
+
+In summary, we can set the right boundary to $6000$.
+
+Next, we use BFS to search for the shortest path. We use a queue, initially adding the position and jumping direction of the flea as the state to the queue. Each time we take a state from the queue, if the position of this state is equal to $x$, then we have found a path from the initial state to the target state, and we can return the current number of steps. Otherwise, we add the next state of the current state to the queue. There are two cases for the next state:
+
+-   Jump forward, the jumping direction is $1$;
+-   When the current jumping direction is $1$, jump backward, the jumping direction is $0$.
+
+Note that we need to judge whether the next state is legal, that is, the position of the next state does not exceed the right boundary, is not in the forbidden position, and has not been visited.
+
+If the queue is empty, it means that the target position cannot be reached, return $-1$.
+
+The time complexity is $O(M)$, and the space complexity is $O(M)$. Here, $M$ is the right boundary, and in this problem, $M \leq 6000$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -85,7 +124,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,8 +138,7 @@ class Solution {
         final int n = 6000;
         boolean[][] vis = new boolean[n][2];
         vis[0][1] = true;
-        int ans = 0;
-        while (!q.isEmpty()) {
+        for (int ans = 0; !q.isEmpty(); ++ans) {
             for (int t = q.size(); t > 0; --t) {
                 var p = q.poll();
                 int i = p[0], k = p[1];
@@ -121,14 +159,13 @@ class Solution {
                     }
                 }
             }
-            ++ans;
         }
         return -1;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -141,8 +178,7 @@ public:
         bool vis[n][2];
         memset(vis, false, sizeof(vis));
         vis[0][1] = true;
-        int ans = 0;
-        while (!q.empty()) {
+        for (int ans = 0; q.size(); ++ans) {
             for (int t = q.size(); t; --t) {
                 auto [i, k] = q.front();
                 q.pop();
@@ -160,14 +196,13 @@ public:
                     }
                 }
             }
-            ++ans;
         }
         return -1;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumJumps(forbidden []int, a int, b int, x int) (ans int) {
@@ -179,7 +214,7 @@ func minimumJumps(forbidden []int, a int, b int, x int) (ans int) {
 	const n = 6000
 	vis := make([][2]bool, n)
 	vis[0][1] = true
-	for len(q) > 0 {
+	for ; len(q) > 0; ans++ {
 		for t := len(q); t > 0; t-- {
 			p := q[0]
 			q = q[1:]
@@ -199,16 +234,44 @@ func minimumJumps(forbidden []int, a int, b int, x int) (ans int) {
 				}
 			}
 		}
-		ans++
 	}
 	return -1
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minimumJumps(forbidden: number[], a: number, b: number, x: number): number {
+    const s: Set<number> = new Set(forbidden);
+    const q: [number, number][] = [[0, 1]];
+    const n = 6000;
+    const vis: boolean[][] = Array.from({ length: n }, () => [false, false]);
+    vis[0][1] = true;
+    for (let ans = 0; q.length; ++ans) {
+        for (let t = q.length; t; --t) {
+            const [i, k] = q.shift()!;
+            if (i === x) {
+                return ans;
+            }
+            const nxt: [number, number][] = [[i + a, 1]];
+            if (k & 1) {
+                nxt.push([i - b, 0]);
+            }
+            for (const [j, k] of nxt) {
+                if (j >= 0 && j < n && !s.has(j) && !vis[j][k]) {
+                    vis[j][k] = true;
+                    q.push([j, k]);
+                }
+            }
+        }
+    }
+    return -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

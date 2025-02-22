@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2208.Minimum%20Operations%20to%20Halve%20Array%20Sum/README_EN.md
+rating: 1550
+source: Biweekly Contest 74 Q3
+tags:
+    - Greedy
+    - Array
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [2208. Minimum Operations to Halve Array Sum](https://leetcode.com/problems/minimum-operations-to-halve-array-sum)
 
 [中文文档](/solution/2200-2299/2208.Minimum%20Operations%20to%20Halve%20Array%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>nums</code> of positive integers. In one operation, you can choose <strong>any</strong> number from <code>nums</code> and reduce it to <strong>exactly</strong> half the number. (Note that you may choose this reduced number in future operations.)</p>
 
@@ -49,45 +65,57 @@ It can be shown that we cannot reduce the sum by at least half in less than 3 op
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Priority Queue (Max Heap)
+
+According to the problem description, each operation will halve a number in the array. To minimize the number of operations that reduce the array sum by at least half, each operation should halve the current maximum value in the array.
+
+Therefore, we first calculate the total sum $s$ that the array needs to reduce, and then use a priority queue (max heap) to maintain all the numbers in the array. Each time we take the maximum value $t$ from the priority queue, halve it, and then put the halved number back into the priority queue, while updating $s$, until $s \le 0$. The number of operations at this time is the answer.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$. Where $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def halveArray(self, nums: List[int]) -> int:
         s = sum(nums) / 2
-        h = []
-        for v in nums:
-            heappush(h, -v)
+        pq = []
+        for x in nums:
+            heappush(pq, -x)
         ans = 0
         while s > 0:
-            t = -heappop(h) / 2
+            t = -heappop(pq) / 2
             s -= t
-            heappush(h, -t)
+            heappush(pq, -t)
             ans += 1
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int halveArray(int[] nums) {
-        long s = 0;
-        PriorityQueue<Double> q = new PriorityQueue<>(Collections.reverseOrder());
-        for (int v : nums) {
-            q.offer(v * 1.0);
-            s += v;
+        PriorityQueue<Double> pq = new PriorityQueue<>(Collections.reverseOrder());
+        double s = 0;
+        for (int x : nums) {
+            s += x;
+            pq.offer((double) x);
         }
-        double d = s / 2.0;
+        s /= 2.0;
         int ans = 0;
-        while (d > 0) {
-            double t = q.poll();
-            d -= t / 2.0;
-            q.offer(t / 2.0);
+        while (s > 0) {
+            double t = pq.poll() / 2.0;
+            s -= t;
+            pq.offer(t);
             ++ans;
         }
         return ans;
@@ -95,25 +123,25 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int halveArray(vector<int>& nums) {
-        priority_queue<double> q;
-        long long s = 0;
-        for (int& v : nums) {
-            s += v;
-            q.push(v);
+        priority_queue<double> pq;
+        double s = 0;
+        for (int x : nums) {
+            s += x;
+            pq.push((double) x);
         }
-        double d = s / 2.0;
+        s /= 2.0;
         int ans = 0;
-        while (d > 0) {
-            double t = q.top() / 2;
-            q.pop();
-            d -= t;
-            q.push(t);
+        while (s > 0) {
+            double t = pq.top() / 2.0;
+            pq.pop();
+            s -= t;
+            pq.push(t);
             ++ans;
         }
         return ans;
@@ -121,42 +149,60 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func halveArray(nums []int) (ans int) {
-    half := 0
-    for i := range nums {
-        nums[i] <<= 20
-        half += nums[i]
-    }
-    h := hp{nums}
-    heap.Init(&h)
-    for half >>= 1; half > 0; ans++ {
-        half -= h.IntSlice[0] >> 1
-        h.IntSlice[0] >>= 1
-        heap.Fix(&h, 0)
-    }
-    return
+	var s float64
+	pq := &hp{}
+	for _, x := range nums {
+		s += float64(x)
+		heap.Push(pq, float64(x))
+	}
+	s /= 2
+	for s > 0 {
+		t := heap.Pop(pq).(float64) / 2
+		s -= t
+		ans++
+		heap.Push(pq, t)
+	}
+	return
 }
 
-type hp struct{ sort.IntSlice }
+type hp struct{ sort.Float64Slice }
 
-func (h hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
-func (hp) Push(interface{})     {}
-func (hp) Pop() (_ interface{}) { return }
+func (h hp) Less(i, j int) bool { return h.Float64Slice[i] > h.Float64Slice[j] }
+func (h *hp) Push(v any)        { h.Float64Slice = append(h.Float64Slice, v.(float64)) }
+func (h *hp) Pop() any {
+	a := h.Float64Slice
+	v := a[len(a)-1]
+	h.Float64Slice = a[:len(a)-1]
+	return v
+}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function halveArray(nums: number[]): number {
+    let s: number = nums.reduce((a, b) => a + b) / 2;
+    const pq = new MaxPriorityQueue();
+    for (const x of nums) {
+        pq.enqueue(x, x);
+    }
+    let ans = 0;
+    while (s > 0) {
+        const t = pq.dequeue().element / 2;
+        s -= t;
+        ++ans;
+        pq.enqueue(t, t);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

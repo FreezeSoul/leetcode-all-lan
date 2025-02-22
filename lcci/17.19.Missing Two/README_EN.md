@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.19.Missing%20Two/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [17.19. Missing Two](https://leetcode.cn/problems/missing-two-lcci)
 
 [中文文档](/lcci/17.19.Missing%20Two/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array with all the numbers from 1 to N appearing exactly once, except for two number that is missing. How can you find the missing number in O(N) time and 0(1) space?</p>
 
@@ -30,11 +40,17 @@
 	<li><code>nums.length &lt;=&nbsp;30000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +74,7 @@ class Solution:
         return [a, b]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -102,15 +118,17 @@ public:
 
         int diff = eor & -eor;
         int a = 0;
-        for (int v : nums) if (v & diff) a ^= v;
-        for (int i = 1; i <= n; ++i) if (i & diff) a ^= i;
+        for (int v : nums)
+            if (v & diff) a ^= v;
+        for (int i = 1; i <= n; ++i)
+            if (i & diff) a ^= i;
         int b = eor ^ a;
         return {a, b};
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func missingTwo(nums []int) []int {
@@ -139,10 +157,46 @@ func missingTwo(nums []int) []int {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func missingTwo(_ nums: [Int]) -> [Int] {
+        let n = nums.count + 2
+        var xor = 0
 
+        for num in nums {
+            xor ^= num
+        }
+
+        for i in 1...n {
+            xor ^= i
+        }
+
+        let diff = xor & (-xor)
+
+        var a = 0
+
+        for num in nums {
+            if (num & diff) != 0 {
+                a ^= num
+            }
+        }
+
+        for i in 1...n {
+            if (i & diff) != 0 {
+                a ^= i
+            }
+        }
+
+        let b = xor ^ a
+        return [a, b]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

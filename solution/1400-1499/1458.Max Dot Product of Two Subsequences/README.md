@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1458.Max%20Dot%20Product%20of%20Two%20Subsequences/README.md
+rating: 1823
+source: 第 190 场周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1458. 两个子序列的最大点积](https://leetcode.cn/problems/max-dot-product-of-two-subsequences)
 
 [English Version](/solution/1400-1499/1458.Max%20Dot%20Product%20of%20Two%20Subsequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个数组&nbsp;<code>nums1</code>&nbsp;和&nbsp;<code>nums2</code>&nbsp;。</p>
 
@@ -59,121 +72,149 @@
 这里的 <strong>Σ</strong> 指示总和符号。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-定义 $dp[i][j]$ 表示 $nums1$ 前 $i$ 个元素和 $nums2$ 前 $j$ 个元素得到的最大点积。
+我们定义 $f[i][j]$ 表示 $\textit{nums1}$ 的前 $i$ 个元素和 $\textit{nums2}$ 的前 $j$ 个元素构成的两个子序列的最大点积。初始时 $f[i][j] = -\infty$。
 
-那么有：
+对于 $f[i][j]$，我们有以下几种情况：
 
-$$
-dp[i][j]=max(dp[i-1][j], dp[i][j - 1], max(dp[i - 1][j - 1], 0) + nums1[i] \times nums2[j])
-$$
+1. 不选 $\textit{nums1}[i-1]$ 或者不选 $\textit{nums2}[j-1]$，即 $f[i][j] = \max(f[i-1][j], f[i][j-1])$；
+2. 选 $\textit{nums1}[i-1]$ 和 $\textit{nums2}[j-1]$，即 $f[i][j] = \max(f[i][j], \max(0, f[i-1][j-1]) + \textit{nums1}[i-1] \times \textit{nums2}[j-1])$。
 
-答案为 $dp[m][n]$。
+最终答案即为 $f[m][n]$。
 
-时间复杂度 $O(m \times n)$，空间复杂度 $O(m \times n)$。其中 $m$ 和 $n$ 分别是数组 $nums1$ 和 $nums2$ 的长度。
+时间复杂度 $O(m \times n)$，空间复杂度 $O(m \times n)$。其中 $m$ 和 $n$ 分别是数组 $\textit{nums1}$ 和 $\textit{nums2}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxDotProduct(self, nums1: List[int], nums2: List[int]) -> int:
         m, n = len(nums1), len(nums2)
-        dp = [[-inf] * (n + 1) for _ in range(m + 1)]
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                v = nums1[i - 1] * nums2[j - 1]
-                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1],
-                               max(dp[i - 1][j - 1], 0) + v)
-        return dp[-1][-1]
+        f = [[-inf] * (n + 1) for _ in range(m + 1)]
+        for i, x in enumerate(nums1, 1):
+            for j, y in enumerate(nums2, 1):
+                v = x * y
+                f[i][j] = max(f[i - 1][j], f[i][j - 1], max(0, f[i - 1][j - 1]) + v)
+        return f[m][n]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int maxDotProduct(int[] nums1, int[] nums2) {
         int m = nums1.length, n = nums2.length;
-        int[][] dp = new int[m + 1][n + 1];
-        for (int[] e : dp) {
-            Arrays.fill(e, Integer.MIN_VALUE);
+        int[][] f = new int[m + 1][n + 1];
+        for (var g : f) {
+            Arrays.fill(g, Integer.MIN_VALUE);
         }
         for (int i = 1; i <= m; ++i) {
             for (int j = 1; j <= n; ++j) {
-                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
-                dp[i][j] = Math.max(
-                    dp[i][j], Math.max(0, dp[i - 1][j - 1]) + nums1[i - 1] * nums2[j - 1]);
+                int v = nums1[i - 1] * nums2[j - 1];
+                f[i][j] = Math.max(f[i - 1][j], f[i][j - 1]);
+                f[i][j] = Math.max(f[i][j], Math.max(f[i - 1][j - 1], 0) + v);
             }
         }
-        return dp[m][n];
+        return f[m][n];
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
         int m = nums1.size(), n = nums2.size();
-        vector<vector<int>> dp(m + 1, vector<int>(n + 1, INT_MIN));
+        int f[m + 1][n + 1];
+        memset(f, 0xc0, sizeof f);
         for (int i = 1; i <= m; ++i) {
             for (int j = 1; j <= n; ++j) {
                 int v = nums1[i - 1] * nums2[j - 1];
-                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
-                dp[i][j] = max(dp[i][j], max(0, dp[i - 1][j - 1]) + v);
+                f[i][j] = max(f[i - 1][j], f[i][j - 1]);
+                f[i][j] = max(f[i][j], max(0, f[i - 1][j - 1]) + v);
             }
         }
-        return dp[m][n];
+        return f[m][n];
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxDotProduct(nums1 []int, nums2 []int) int {
 	m, n := len(nums1), len(nums2)
-	dp := make([][]int, m+1)
-	for i := range dp {
-		dp[i] = make([]int, n+1)
-		for j := range dp[i] {
-			dp[i][j] = math.MinInt32
+	f := make([][]int, m+1)
+	for i := range f {
+		f[i] = make([]int, n+1)
+		for j := range f[i] {
+			f[i][j] = math.MinInt32
 		}
 	}
 	for i := 1; i <= m; i++ {
 		for j := 1; j <= n; j++ {
 			v := nums1[i-1] * nums2[j-1]
-			dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-			dp[i][j] = max(dp[i][j], max(0, dp[i-1][j-1])+v)
+			f[i][j] = max(f[i-1][j], f[i][j-1])
+			f[i][j] = max(f[i][j], max(0, f[i-1][j-1])+v)
 		}
 	}
-	return dp[m][n]
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return f[m][n]
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function maxDotProduct(nums1: number[], nums2: number[]): number {
+    const m = nums1.length;
+    const n = nums2.length;
+    const f = Array.from({ length: m + 1 }, () => Array.from({ length: n + 1 }, () => -Infinity));
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 1; j <= n; ++j) {
+            const v = nums1[i - 1] * nums2[j - 1];
+            f[i][j] = Math.max(f[i - 1][j], f[i][j - 1]);
+            f[i][j] = Math.max(f[i][j], Math.max(0, f[i - 1][j - 1]) + v);
+        }
+    }
+    return f[m][n];
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_dot_product(nums1: Vec<i32>, nums2: Vec<i32>) -> i32 {
+        let m = nums1.len();
+        let n = nums2.len();
+        let mut f = vec![vec![i32::MIN; n + 1]; m + 1];
+
+        for i in 1..=m {
+            for j in 1..=n {
+                let v = nums1[i - 1] * nums2[j - 1];
+                f[i][j] = f[i][j].max(f[i - 1][j]).max(f[i][j - 1]);
+                f[i][j] = f[i][j].max(f[i - 1][j - 1].max(0) + v);
+            }
+        }
+
+        f[m][n]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

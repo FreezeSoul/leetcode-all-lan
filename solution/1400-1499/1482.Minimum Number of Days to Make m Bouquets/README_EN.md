@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1482.Minimum%20Number%20of%20Days%20to%20Make%20m%20Bouquets/README_EN.md
+rating: 1945
+source: Weekly Contest 193 Q3
+tags:
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [1482. Minimum Number of Days to Make m Bouquets](https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets)
 
 [中文文档](/solution/1400-1499/1482.Minimum%20Number%20of%20Days%20to%20Make%20m%20Bouquets/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>bloomDay</code>, an integer <code>m</code> and an integer <code>k</code>.</p>
 
@@ -57,108 +72,77 @@ It is obvious that we can make two bouquets in different ways.
 	<li><code>1 &lt;= k &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Quickly locate using binary search.
+<!-- solution:start -->
+
+### Solution 1: Binary Search
+
+According to the problem description, if a day $t$ can satisfy making $m$ bouquets, then for any $t' > t$, it can also satisfy making $m$ bouquets. Therefore, we can use binary search to find the minimum day that satisfies making $m$ bouquets.
+
+Let $mx$ be the maximum blooming day in the garden. Next, we define the left boundary of the binary search as $l = 1$ and the right boundary as $r = mx + 1$.
+
+Then, we perform binary search. For each middle value $\textit{mid} = \frac{l + r}{2}$, we check if it is possible to make $m$ bouquets. If it is possible, we update the right boundary $r$ to $\textit{mid}$; otherwise, we update the left boundary $l$ to $\textit{mid} + 1$.
+
+Finally, when $l = r$, the binary search ends. At this point, if $l > mx$, it means it is not possible to make $m$ bouquets, and we return $-1$; otherwise, we return $l$.
+
+Therefore, the problem is reduced to checking if a day $\textit{days}$ can make $m$ bouquets.
+
+We can use a function $\text{check}(\textit{days})$ to determine if it is possible to make $m$ bouquets. Specifically, we traverse each flower in the garden from left to right. If the blooming day of the current flower is less than or equal to $\textit{days}$, we add the current flower to the current bouquet; otherwise, we clear the current bouquet. When the number of flowers in the current bouquet equals $k$, we increment the bouquet count and clear the current bouquet. Finally, we check if the bouquet count is greater than or equal to $m$. If it is, it means it is possible to make $m$ bouquets; otherwise, it is not possible.
+
+The time complexity is $O(n \times \log M)$, where $n$ and $M$ are the number of flowers in the garden and the maximum blooming day, respectively. In this problem, $M \leq 10^9$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minDays(self, bloomDay: List[int], m: int, k: int) -> int:
-        if m * k > len(bloomDay):
-            return -1
-
-        def check(day: int) -> bool:
+        def check(days: int) -> int:
             cnt = cur = 0
-            for bd in bloomDay:
-                cur = cur + 1 if bd <= day else 0
+            for x in bloomDay:
+                cur = cur + 1 if x <= days else 0
                 if cur == k:
                     cnt += 1
                     cur = 0
             return cnt >= m
 
-        left, right = min(bloomDay), max(bloomDay)
-        while left < right:
-            mid = (left + right) >> 1
-            if check(mid):
-                right = mid
-            else:
-                left = mid + 1
-        return left
+        mx = max(bloomDay)
+        l = bisect_left(range(mx + 2), True, key=check)
+        return -1 if l > mx else l
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
+    private int[] bloomDay;
+    private int m, k;
+
     public int minDays(int[] bloomDay, int m, int k) {
-        if (m * k > bloomDay.length) {
-            return -1;
-        }
-        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
-        for (int bd : bloomDay) {
-            min = Math.min(min, bd);
-            max = Math.max(max, bd);
-        }
-        int left = min, right = max;
-        while (left < right) {
-            int mid = (left + right) >>> 1;
-            if (check(bloomDay, m, k, mid)) {
-                right = mid;
+        this.bloomDay = bloomDay;
+        this.m = m;
+        this.k = k;
+        final int mx = (int) 1e9;
+        int l = 1, r = mx + 1;
+        while (l < r) {
+            int mid = (l + r) >> 1;
+            if (check(mid)) {
+                r = mid;
             } else {
-                left = mid + 1;
+                l = mid + 1;
             }
         }
-        return left;
+        return l > mx ? -1 : l;
     }
 
-    private boolean check(int[] bloomDay, int m, int k, int day) {
+    private boolean check(int days) {
         int cnt = 0, cur = 0;
-        for (int bd : bloomDay) {
-            cur = bd <= day ? cur + 1 : 0;
-            if (cur == k) {
-                cnt++;
-                cur = 0;
-            }
-        }
-        return cnt >= m;
-    }
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minDays(vector<int>& bloomDay, int m, int k) {
-        if (m * k > bloomDay.size()) {
-            return -1;
-        }
-        int mi = INT_MIN, mx = INT_MAX;
-        for (int& bd : bloomDay) {
-            mi = min(mi, bd);
-            mx = max(mx, bd);
-        }
-        int left = mi, right = mx;
-        while (left < right) {
-            int mid = left + right >> 1;
-            if (check(bloomDay, m, k, mid)) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return left;
-    }
-
-    bool check(vector<int>& bloomDay, int m, int k, int day) {
-        int cnt = 0, cur = 0;
-        for (int& bd : bloomDay) {
-            cur = bd <= day ? cur + 1 : 0;
+        for (int x : bloomDay) {
+            cur = x <= days ? cur + 1 : 0;
             if (cur == k) {
                 ++cnt;
                 cur = 0;
@@ -166,68 +150,99 @@ public:
         }
         return cnt >= m;
     }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int mx = ranges::max(bloomDay);
+        int l = 1, r = mx + 1;
+        auto check = [&](int days) {
+            int cnt = 0, cur = 0;
+            for (int x : bloomDay) {
+                cur = x <= days ? cur + 1 : 0;
+                if (cur == k) {
+                    cnt++;
+                    cur = 0;
+                }
+            }
+            return cnt >= m;
+        };
+        while (l < r) {
+            int mid = (l + r) >> 1;
+            if (check(mid)) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l > mx ? -1 : l;
+    }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDays(bloomDay []int, m int, k int) int {
-	if m*k > len(bloomDay) {
-		return -1
-	}
-	mi, mx := 0, 1000000000
-	for _, bd := range bloomDay {
-		mi = min(mi, bd)
-		mx = max(mx, bd)
-	}
-	left, right := mi, mx
-	for left < right {
-		mid := (left + right) >> 1
-		if check(bloomDay, m, k, mid) {
-			right = mid
-		} else {
-			left = mid + 1
+	mx := slices.Max(bloomDay)
+	if l := sort.Search(mx+2, func(days int) bool {
+		cnt, cur := 0, 0
+		for _, x := range bloomDay {
+			if x <= days {
+				cur++
+				if cur == k {
+					cnt++
+					cur = 0
+				}
+			} else {
+				cur = 0
+			}
 		}
+		return cnt >= m
+	}); l <= mx {
+		return l
 	}
-	return left
-}
+	return -1
 
-func check(bloomDay []int, m, k, day int) bool {
-	cnt, cur := 0, 0
-	for _, bd := range bloomDay {
-		if bd <= day {
-			cur++
-		} else {
-			cur = 0
-		}
-		if cur == k {
-			cnt++
-			cur = 0
-		}
-	}
-	return cnt >= m
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minDays(bloomDay: number[], m: number, k: number): number {
+    const mx = Math.max(...bloomDay);
+    let [l, r] = [1, mx + 1];
+    const check = (days: number): boolean => {
+        let [cnt, cur] = [0, 0];
+        for (const x of bloomDay) {
+            cur = x <= days ? cur + 1 : 0;
+            if (cur === k) {
+                cnt++;
+                cur = 0;
+            }
+        }
+        return cnt >= m;
+    };
+    while (l < r) {
+        const mid = (l + r) >> 1;
+        if (check(mid)) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    return l > mx ? -1 : l;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

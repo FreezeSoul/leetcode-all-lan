@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1164.Product%20Price%20at%20a%20Given%20Date/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1164. 指定日期的产品价格](https://leetcode.cn/problems/product-price-at-a-given-date)
 
 [English Version](/solution/1100-1199/1164.Product%20Price%20at%20a%20Given%20Date/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>产品数据表: <code>Products</code></p>
 
@@ -16,24 +26,24 @@
 | new_price     | int     |
 | change_date   | date    |
 +---------------+---------+
-这张表的主键是 (product_id, change_date)。
+(product_id, change_date) 是此表的主键（具有唯一值的列组合）。
 这张表的每一行分别记录了 某产品 在某个日期 更改后 的新价格。</pre>
 
 <p>&nbsp;</p>
 
-<p>写一段 SQL来查找在&nbsp;<code>2019-08-16</code><strong> </strong>时全部产品的价格，假设所有产品在修改前的价格都是&nbsp;<code>10</code><strong> 。</strong></p>
+<p>编写一个解决方案，找出在&nbsp;<code>2019-08-16</code><strong> </strong>时全部产品的价格，假设所有产品在修改前的价格都是&nbsp;<code>10</code><strong> 。</strong></p>
 
 <p>以 <strong>任意顺序 </strong>返回结果表。</p>
 
-<p>查询结果格式如下例所示。</p>
+<p>结果格式如下例所示。</p>
 
 <p>&nbsp;</p>
 
 <p><strong>示例 1:</strong></p>
 
 <pre>
-<code><strong>输入：</strong>
-Products</code> 表:
+<strong>输入：</strong>
+Products 表:
 +------------+-----------+-------------+
 | product_id | new_price | change_date |
 +------------+-----------+-------------+
@@ -53,45 +63,82 @@ Products</code> 表:
 | 3          | 10    |
 +------------+-------+</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：子查询 + 连接
+
+我们可以使用子查询，找出每个产品在给定日期之前最后一次价格变更的价格，记录在 `P` 表中。然后，我们再找出所有产品的 `product_id`，记录在 `T` 表中。最后，我们将 `T` 表和 `P` 表按照 `product_id` 进行左连接，即可得到最终结果。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    p1.product_id product_id,
-    ifnull(p2.price, 10) price
-from
-    (
-        select
-            distinct(product_id) product_id
-        from
-            Products
-    ) p1
-    left join (
-        select
-            t1.product_id,
-            t1.new_price price
-        from
-            Products t1
-            join (
-                select
-                    product_id,
-                    max(change_date) change_date
-                from
-                    Products
-                where
-                    change_date <= '2019-08-16'
-                group by
-                    product_id
-            ) t2 on t1.product_id = t2.product_id
-            and t1.change_date = t2.change_date
-    ) p2 on p1.product_id = p2.product_id;
+WITH
+    T AS (SELECT DISTINCT product_id FROM Products),
+    P AS (
+        SELECT product_id, new_price AS price
+        FROM Products
+        WHERE
+            (product_id, change_date) IN (
+                SELECT product_id, MAX(change_date) AS change_date
+                FROM Products
+                WHERE change_date <= '2019-08-16'
+                GROUP BY 1
+            )
+    )
+SELECT product_id, IFNULL(price, 10) AS price
+FROM
+    T
+    LEFT JOIN P USING (product_id);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    P AS (
+        SELECT p1.product_id, new_price, change_date
+        FROM
+            (
+                SELECT DISTINCT product_id
+                FROM Products
+            ) AS p1
+            LEFT JOIN Products AS p2
+                ON p1.product_id = p2.product_id AND p2.change_date <= '2019-08-16'
+    ),
+    T AS (
+        SELECT
+            *,
+            RANK() OVER (
+                PARTITION BY product_id
+                ORDER BY change_date DESC
+            ) AS rk
+        FROM P
+    )
+SELECT product_id, IFNULL(new_price, 10) AS price
+FROM T
+WHERE rk = 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

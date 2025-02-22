@@ -1,10 +1,20 @@
-# [1843. 可疑银行账户](https://leetcode.cn/problems/suspicious-bank-accounts)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1843.Suspicious%20Bank%20Accounts/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1843. 可疑银行账户 🔒](https://leetcode.cn/problems/suspicious-bank-accounts)
 
 [English Version](/solution/1800-1899/1843.Suspicious%20Bank%20Accounts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Accounts</code></p>
 
@@ -15,7 +25,7 @@
 | account_id     | int  |
 | max_income     | int  |
 +----------------+------+
-account_id 是表主键。
+account_id 是这张表具有唯一值的列。
 每行包含一个银行账户每月最大收入的信息。
 </pre>
 
@@ -33,23 +43,21 @@ account_id 是表主键。
 | amount         | int      |
 | day            | datetime |
 +----------------+----------+
-transaction_id 是表的主键。
-每行包含转账信息。
-type 是枚举类型（包含'Creditor','Debtor'），其中'Creditor'表示用户向其账户存入资金，'Debtor'表示用户从其账户取出资金。
-amount 是转账的存取金额。
+transaction_id 是这张表具有唯一值的列。
+每行包含一条转账信息。
+type 是枚举类型（包含'Creditor','Debtor'），其中 'Creditor' 表示用户向其账户存入资金，'Debtor' 表示用户从其账户取出资金。
+amount 是交易过程中的存入/取出的金额。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>&nbsp;</p>
+<p>如果一个账户在&nbsp;<strong>连续两个及以上&nbsp;</strong>月份的&nbsp;<strong>总收入&nbsp;</strong>超过最大收入（<code>max_income</code>），那么认为这个账户&nbsp;<strong>可疑</strong>。&nbsp; 账户当月&nbsp;<strong>总收入&nbsp;</strong>是当月存入资金总数（即 transactions 表中 type 字段的&nbsp;<code>'Creditor'</code>）。</p>
 
-<p>写一个SQL查询语句列示所有的<strong>可疑</strong>账户。</p>
+<p>编写一个解决方案，报告所有的&nbsp;<strong>可疑&nbsp;</strong>账户。</p>
 
-<p>如果一个账户在<strong>连续两个及以上</strong>月份中<strong>总收入</strong>超过最大收入（<code>max_income</code>&nbsp;），那么这个账户<strong>可疑</strong>。&nbsp; 账户当月<strong>总收入</strong>是当月存入资金总数（即transactions 表中type字段的<code>'Creditor'</code>）。</p>
+<p>以 <strong>任意顺序</strong> 返回结果表</p>
 
-<p>返回的结果表以<code>transaction_id</code>&nbsp;排序。&nbsp;</p>
-
-<p>查询结果格式如下。</p>
+<p>返回结果格式如下示例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -97,18 +105,77 @@ Transactions 表:
 - 在 2021年7月，用户收入为 56300。
 可见收入在5月与7月超过了最大收入，但6月没有。因为账户没有没有连续两月超过最大收入，账户4不列入结果表中。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT DISTINCT
+            t.account_id,
+            DATE_FORMAT(day, '%Y-%m-01') AS day,
+            transaction_id AS tx,
+            SUM(amount) OVER (
+                PARTITION BY account_id, DATE_FORMAT(day, '%Y-%m-01')
+            ) > max_income AS marked
+        FROM
+            Transactions AS t
+            LEFT JOIN Accounts AS a ON t.account_id = a.account_id
+        WHERE type = 'Creditor'
+    )
+SELECT DISTINCT s1.account_id
+FROM
+    S AS s1
+    LEFT JOIN S AS s2 ON s1.account_id = s2.account_id AND TIMESTAMPDIFF(Month, s1.day, s2.day) = 1
+WHERE s1.marked = 1 AND s2.marked = 1
+ORDER BY s1.tx;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT
+            account_id,
+            DATE_FORMAT(day, '%Y%m') AS yearmonth,
+            transaction_id AS tx
+        FROM
+            Transactions
+            JOIN Accounts USING (account_id)
+        WHERE type = 'Creditor'
+        GROUP BY account_id, yearmonth
+        HAVING SUM(amount) > AVG(max_income)
+    )
+SELECT DISTINCT account_id
+FROM S
+WHERE (account_id, PERIOD_ADD(yearmonth, 1)) IN (SELECT account_id, yearmonth FROM S)
+ORDER BY tx;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

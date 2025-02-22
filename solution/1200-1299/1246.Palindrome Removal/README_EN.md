@@ -1,8 +1,23 @@
-# [1246. Palindrome Removal](https://leetcode.com/problems/palindrome-removal)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1246.Palindrome%20Removal/README_EN.md
+rating: 2203
+source: Biweekly Contest 12 Q4
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
+# [1246. Palindrome Removal 🔒](https://leetcode.com/problems/palindrome-removal)
 
 [中文文档](/solution/1200-1299/1246.Palindrome%20Removal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>arr</code>.</p>
 
@@ -34,11 +49,27 @@
 	<li><code>1 &lt;= arr[i] &lt;= 20</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming (Interval DP)
+
+We define $f[i][j]$ as the minimum number of operations required to delete all numbers in the index range $[i,..j]$. Initially, $f[i][i] = 1$, which means that when there is only one number, one deletion operation is needed.
+
+For $f[i][j]$, if $i + 1 = j$, i.e., there are only two numbers, if $arr[i]=arr[j]$, then $f[i][j] = 1$, otherwise $f[i][j] = 2$.
+
+For the case of more than two numbers, if $arr[i]=arr[j]$, then $f[i][j]$ can be $f[i + 1][j - 1]$, or we can enumerate $k$ in the index range $[i,..j-1]$, take the minimum value of $f[i][k] + f[k + 1][j]$. Assign the minimum value to $f[i][j]$.
+
+The answer is $f[0][n - 1]$.
+
+The time complexity is $O(n^3)$, and the space complexity is $O(n^2)$. Where $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +90,7 @@ class Solution:
         return f[0][n - 1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +148,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumMoves(arr []int) int {
@@ -148,19 +179,39 @@ func minimumMoves(arr []int) int {
 	}
 	return f[0][n-1]
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minimumMoves(arr: number[]): number {
+    const n = arr.length;
+    const f: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
+
+    for (let i = 0; i < n; ++i) {
+        f[i][i] = 1;
+    }
+
+    for (let i = n - 2; i >= 0; --i) {
+        for (let j = i + 1; j < n; ++j) {
+            if (i + 1 === j) {
+                f[i][j] = arr[i] === arr[j] ? 1 : 2;
+            } else {
+                let t = arr[i] === arr[j] ? f[i + 1][j - 1] : Infinity;
+                for (let k = i; k < j; ++k) {
+                    t = Math.min(t, f[i][k] + f[k + 1][j]);
+                }
+                f[i][j] = t;
+            }
+        }
+    }
+
+    return f[0][n - 1];
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

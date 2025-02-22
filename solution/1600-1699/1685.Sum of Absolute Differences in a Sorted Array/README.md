@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1685.Sum%20of%20Absolute%20Differences%20in%20a%20Sorted%20Array/README.md
+rating: 1495
+source: 第 41 场双周赛 Q2
+tags:
+    - 数组
+    - 数学
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [1685. 有序数组中差绝对值之和](https://leetcode.cn/problems/sum-of-absolute-differences-in-a-sorted-array)
 
 [English Version](/solution/1600-1699/1685.Sum%20of%20Absolute%20Differences%20in%20a%20Sorted%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>非递减 </strong>有序整数数组 <code>nums</code> 。</p>
 
@@ -41,23 +55,23 @@ result[2] = |5-2| + |5-3| + |5-5| = 3 + 2 + 0 = 5。
 	<li><code>1 <= nums[i] <= nums[i + 1] <= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：求和 + 枚举**
+### 方法一：求和 + 枚举
 
-我们先求出数组 `nums` 所有元素的和，记为 $s$，用变量 $t$ 记录当前已经枚举过的元素之和。
+我们先求出数组 $nums$ 所有元素的和，记为 $s$，用变量 $t$ 记录当前已经枚举过的元素之和。
 
 接下来枚举 $nums[i]$，那么 $ans[i] = nums[i] \times i - t + s - t - nums[i] \times (n - i)$，然后我们更新 $t$，即 $t = t + nums[i]$。继续枚举下一个元素，直到枚举完所有元素。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +85,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getSumAbsoluteDifferences(nums []int) (ans []int) {
@@ -131,7 +143,7 @@ func getSumAbsoluteDifferences(nums []int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function getSumAbsoluteDifferences(nums: number[]): number[] {
@@ -148,28 +160,7 @@ function getSumAbsoluteDifferences(nums: number[]): number[] {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int[] GetSumAbsoluteDifferences(int[] nums) {
-        int s = 0, t = 0;
-        foreach (int x in nums) {
-            s += x;
-        }
-        int n = nums.Length;
-        int[] ans = new int[n];
-        for (int i = 0; i < n; ++i) {
-            int v = nums[i] * i - t + s - t - nums[i] * (n - i);
-            ans[i] = v;
-            t += nums[i];
-        }
-        return ans;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -190,10 +181,29 @@ var getSumAbsoluteDifferences = function (nums) {
 };
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public int[] GetSumAbsoluteDifferences(int[] nums) {
+        int s = 0, t = 0;
+        foreach (int x in nums) {
+            s += x;
+        }
+        int n = nums.Length;
+        int[] ans = new int[n];
+        for (int i = 0; i < n; ++i) {
+            int v = nums[i] * i - t + s - t - nums[i] * (n - i);
+            ans[i] = v;
+            t += nums[i];
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

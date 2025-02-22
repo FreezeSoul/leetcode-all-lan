@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0672.Bulb%20Switcher%20II/README_EN.md
+tags:
+    - Bit Manipulation
+    - Depth-First Search
+    - Breadth-First Search
+    - Math
+---
+
+<!-- problem:start -->
+
 # [672. Bulb Switcher II](https://leetcode.com/problems/bulb-switcher-ii)
 
 [中文文档](/solution/0600-0699/0672.Bulb%20Switcher%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a room with <code>n</code> bulbs labeled from <code>1</code> to <code>n</code> that all are turned on initially, and <strong>four buttons</strong> on the wall. Each of the four buttons has a different functionality where:</p>
 
@@ -59,11 +74,17 @@
 	<li><code>0 &lt;= presses &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +105,7 @@ class Solution:
         return len(vis)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -138,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func flipLights(n int, presses int) int {
@@ -165,10 +186,8 @@ func flipLights(n int, presses int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

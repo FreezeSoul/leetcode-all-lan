@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0151.Reverse%20Words%20in%20a%20String/README.md
+tags:
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [151. 反转字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string)
 
 [English Version](/solution/0100-0199/0151.Reverse%20Words%20in%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>s</code> ，请你反转字符串中 <strong>单词</strong> 的顺序。</p>
 
@@ -19,8 +30,8 @@
 <p><strong>示例 1：</strong></p>
 
 <pre>
-<strong>输入：</strong>s = "<code>the sky is blue</code>"
-<strong>输出：</strong>"<code>blue is sky the</code>"
+<strong>输入：</strong>s = "the sky is blue"
+<strong>输出：</strong>"blue is sky the"
 </pre>
 
 <p><strong>示例 2：</strong></p>
@@ -56,17 +67,13 @@
 
 <p><strong>进阶：</strong>如果字符串在你使用的编程语言中是一种可变数据类型，请尝试使用&nbsp;<code>O(1)</code> 额外空间复杂度的 <strong>原地</strong> 解法。</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：使用语言自带的函数**
-
-我们将字符串按照空格分割成字符串列表，然后将列表反转，最后将列表拼接成以空格分割的字符串即可。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串的长度。
-
-**方法二：双指针**
+### 方法一：双指针
 
 我们可以使用双指针 $i$ 和 $j$，每次找到一个单词，将其添加到结果列表中，最后将结果列表反转，再拼接成字符串即可。
 
@@ -74,46 +81,26 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def reverseWords(self, s: str) -> str:
-        return ' '.join(reversed(s.split()))
-```
-
-```python
-class Solution:
-    def reverseWords(self, s: str) -> str:
-        ans = []
+        words = []
         i, n = 0, len(s)
         while i < n:
-            while i < n and s[i] == ' ':
+            while i < n and s[i] == " ":
                 i += 1
             if i < n:
                 j = i
-                while j < n and s[j] != ' ':
+                while j < n and s[j] != " ":
                     j += 1
-                ans.append(s[i: j])
+                words.append(s[i:j])
                 i = j
-        return ' '.join(ans[::-1])
+        return " ".join(words[::-1])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public String reverseWords(String s) {
-        List<String> words = Arrays.asList(s.trim().split("\\s+"));
-        Collections.reverse(words);
-        return String.join(" ", words);
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -140,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -172,32 +159,162 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func reverseWords(s string) string {
-	words := strings.Split(s, " ")
-	var ans []string
-	for i := len(words) - 1; i >= 0; i-- {
-		if words[i] != "" {
-			ans = append(ans, words[i])
+	words := []string{}
+	i, n := 0, len(s)
+	for i < n {
+		for i < n && s[i] == ' ' {
+			i++
+		}
+		if i < n {
+			j := i
+			t := []byte{}
+			for j < n && s[j] != ' ' {
+				t = append(t, s[j])
+				j++
+			}
+			words = append(words, string(t))
+			i = j
 		}
 	}
-	return strings.Join(ans, " ")
+	for i, j := 0, len(words)-1; i < j; i, j = i+1, j-1 {
+		words[i], words[j] = words[j], words[i]
+	}
+	return strings.Join(words, " ")
 }
 ```
 
-### **C#**
+#### TypeScript
 
-```cs
-public class Solution {
-    public string ReverseWords(string s) {
-         return string.Join(" ", s.Trim().Split(" ").Where(word => !string.IsNullOrEmpty(word) && !string.IsNullOrEmpty(word.Trim())).Reverse());
+```ts
+function reverseWords(s: string): string {
+    const words: string[] = [];
+    const n = s.length;
+    let i = 0;
+    while (i < n) {
+        while (i < n && s[i] === ' ') {
+            i++;
+        }
+        if (i < n) {
+            let j = i;
+            while (j < n && s[j] !== ' ') {
+                j++;
+            }
+            words.push(s.slice(i, j));
+            i = j;
+        }
+    }
+    return words.reverse().join(' ');
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn reverse_words(s: String) -> String {
+        let mut words = Vec::new();
+        let s: Vec<char> = s.chars().collect();
+        let mut i = 0;
+        let n = s.len();
+
+        while i < n {
+            while i < n && s[i] == ' ' {
+                i += 1;
+            }
+            if i < n {
+                let mut j = i;
+                while j < n && s[j] != ' ' {
+                    j += 1;
+                }
+                words.push(s[i..j].iter().collect::<String>());
+                i = j;
+            }
+        }
+
+        words.reverse();
+        words.join(" ")
     }
 }
 ```
 
-### **TypeScript**
+#### C#
+
+```cs
+public class Solution {
+    public string ReverseWords(string s) {
+        List<string> words = new List<string>();
+        int n = s.Length;
+        for (int i = 0; i < n;) {
+            while (i < n && s[i] == ' ') {
+                ++i;
+            }
+            if (i < n) {
+                System.Text.StringBuilder t = new System.Text.StringBuilder();
+                int j = i;
+                while (j < n && s[j] != ' ') {
+                    t.Append(s[j++]);
+                }
+                words.Add(t.ToString());
+                i = j;
+            }
+        }
+        words.Reverse();
+        return string.Join(" ", words);
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：字符串分割
+
+我们可以使用语言内置的字符串分割函数，将字符串按空格分割成单词列表，然后将列表反转，再拼接成字符串即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        return " ".join(reversed(s.split()))
+```
+
+#### Java
+
+```java
+class Solution {
+    public String reverseWords(String s) {
+        List<String> words = Arrays.asList(s.trim().split("\\s+"));
+        Collections.reverse(words);
+        return String.join(" ", words);
+    }
+}
+```
+
+#### Go
+
+```go
+func reverseWords(s string) string {
+	words := strings.Fields(s)
+	for i, j := 0, len(words)-1; i < j; i, j = i+1, j-1 {
+		words[i], words[j] = words[j], words[i]
+	}
+	return strings.Join(words, " ")
+}
+```
+
+#### TypeScript
 
 ```ts
 function reverseWords(s: string): string {
@@ -205,7 +322,7 @@ function reverseWords(s: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -215,10 +332,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

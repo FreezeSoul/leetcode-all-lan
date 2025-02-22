@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1846.Maximum%20Element%20After%20Decreasing%20and%20Rearranging/README_EN.md
+rating: 1454
+source: Biweekly Contest 51 Q3
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1846. Maximum Element After Decreasing and Rearranging](https://leetcode.com/problems/maximum-element-after-decreasing-and-rearranging)
 
 [中文文档](/solution/1800-1899/1846.Maximum%20Element%20After%20Decreasing%20and%20Rearranging/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array of positive integers <code>arr</code>. Perform some operations (possibly none) on <code>arr</code> so that it satisfies these conditions:</p>
 
@@ -41,7 +57,7 @@ One possible way to satisfy the conditions is by doing the following:
 1. Rearrange <code>arr</code> so it becomes <code>[1,100,1000]</code>.
 2. Decrease the value of the second element to 2.
 3. Decrease the value of the third element to 3.
-Now <code>arr = [1,2,3], which </code>satisfies the conditions.
+Now <code>arr = [1,2,3]</code>, which<code> </code>satisfies the conditions.
 The largest element in <code>arr is 3.</code>
 </pre>
 
@@ -61,11 +77,25 @@ The largest element in <code>arr is 3.</code>
 	<li><code>1 &lt;= arr[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Greedy Algorithm
+
+First, we sort the array and then set the first element of the array to $1$.
+
+Next, we start traversing the array from the second element. If the difference between the current element and the previous one is more than $1$, we greedily reduce the current element to the previous element plus $1$.
+
+Finally, we return the maximum element in the array.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Where $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -78,7 +108,7 @@ class Solution:
         return max(arr)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +126,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -115,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumElementAfterDecrementingAndRearranging(arr []int) int {
@@ -129,19 +159,42 @@ func maximumElementAfterDecrementingAndRearranging(arr []int) int {
 	}
 	return ans
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maximumElementAfterDecrementingAndRearranging(arr: number[]): number {
+    arr.sort((a, b) => a - b);
+    arr[0] = 1;
+    let ans = 1;
+    for (let i = 1; i < arr.length; ++i) {
+        const d = Math.max(0, arr[i] - arr[i - 1] - 1);
+        arr[i] -= d;
+        ans = Math.max(ans, arr[i]);
+    }
+    return ans;
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public int MaximumElementAfterDecrementingAndRearranging(int[] arr) {
+        Array.Sort(arr);
+        int n = arr.Length;
+        arr[0] = 1;
+        for (int i = 1; i < n; ++i) {
+            arr[i] = Math.Min(arr[i], arr[i - 1] + 1);
+        }
+        return arr[n - 1];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

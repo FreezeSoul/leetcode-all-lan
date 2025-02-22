@@ -1,8 +1,24 @@
-# [1215. Stepping Numbers](https://leetcode.com/problems/stepping-numbers)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1215.Stepping%20Numbers/README_EN.md
+rating: 1674
+source: Biweekly Contest 10 Q3
+tags:
+    - Breadth-First Search
+    - Math
+    - Backtracking
+---
+
+<!-- problem:start -->
+
+# [1215. Stepping Numbers 🔒](https://leetcode.com/problems/stepping-numbers)
 
 [中文文档](/solution/1200-1299/1215.Stepping%20Numbers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>stepping number</strong> is an integer such that all of its adjacent digits have an absolute difference of exactly <code>1</code>.</p>
 
@@ -34,11 +50,23 @@
 	<li><code>0 &lt;= low &lt;= high &lt;= 2 * 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: BFS
+
+First, if $low$ is $0$, we need to add $0$ to the answer.
+
+Next, we create a queue $q$ and add $1 \sim 9$ to the queue. Then, we repeatedly take out elements from the queue. Let the current element be $v$. If $v$ is greater than $high$, we stop searching. If $v$ is in the range $[low, high]$, we add $v$ to the answer. Then, we need to record the last digit of $v$ as $x$. If $x \gt 0$, we add $v \times 10 + x - 1$ to the queue. If $x \lt 9$, we add $v \times 10 + x + 1$ to the queue. Repeat the above steps until the queue is empty.
+
+The time complexity is $O(10 \times 2^{\log M})$, and the space complexity is $O(2^{\log M})$, where $M$ is the number of digits in $high$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +89,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,31 +123,43 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> countSteppingNumbers(int low, int high) {
         vector<int> ans;
-        if (low == 0) ans.push_back(0);
+        if (low == 0) {
+            ans.push_back(0);
+        }
         queue<long long> q;
-        for (int i = 1; i < 10; ++i) q.push(i);
+        for (int i = 1; i < 10; ++i) {
+            q.push(i);
+        }
         while (!q.empty()) {
-            int v = q.front();
+            long long v = q.front();
             q.pop();
-            if (v > high) break;
-            if (v >= low) ans.push_back(v);
+            if (v > high) {
+                break;
+            }
+            if (v >= low) {
+                ans.push_back(v);
+            }
             int x = v % 10;
-            if (x) q.push(1ll * v * 10 + x - 1);
-            if (x < 9) q.push(1ll * v * 10 + x + 1);
+            if (x > 0) {
+                q.push(v * 10 + x - 1);
+            }
+            if (x < 9) {
+                q.push(v * 10 + x + 1);
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countSteppingNumbers(low int, high int) []int {
@@ -149,10 +189,40 @@ func countSteppingNumbers(low int, high int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function countSteppingNumbers(low: number, high: number): number[] {
+    const ans: number[] = [];
+    if (low === 0) {
+        ans.push(0);
+    }
+    const q: number[] = [];
+    for (let i = 1; i < 10; ++i) {
+        q.push(i);
+    }
+    while (q.length) {
+        const v = q.shift()!;
+        if (v > high) {
+            break;
+        }
+        if (v >= low) {
+            ans.push(v);
+        }
+        const x = v % 10;
+        if (x > 0) {
+            q.push(v * 10 + x - 1);
+        }
+        if (x < 9) {
+            q.push(v * 10 + x + 1);
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

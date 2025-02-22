@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0456.132%20Pattern/README_EN.md
+tags:
+    - Stack
+    - Array
+    - Binary Search
+    - Ordered Set
+    - Monotonic Stack
+---
+
+<!-- problem:start -->
+
 # [456. 132 Pattern](https://leetcode.com/problems/132-pattern)
 
 [中文文档](/solution/0400-0499/0456.132%20Pattern/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of <code>n</code> integers <code>nums</code>, a <strong>132 pattern</strong> is a subsequence of three integers <code>nums[i]</code>, <code>nums[j]</code> and <code>nums[k]</code> such that <code>i &lt; j &lt; k</code> and <code>nums[i] &lt; nums[k] &lt; nums[j]</code>.</p>
 
@@ -42,11 +58,17 @@
 	<li><code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,6 +83,123 @@ class Solution:
             stk.append(x)
         return False
 ```
+
+#### Java
+
+```java
+class Solution {
+    public boolean find132pattern(int[] nums) {
+        int vk = -(1 << 30);
+        Deque<Integer> stk = new ArrayDeque<>();
+        for (int i = nums.length - 1; i >= 0; --i) {
+            if (nums[i] < vk) {
+                return true;
+            }
+            while (!stk.isEmpty() && stk.peek() < nums[i]) {
+                vk = stk.pop();
+            }
+            stk.push(nums[i]);
+        }
+        return false;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool find132pattern(vector<int>& nums) {
+        int vk = INT_MIN;
+        stack<int> stk;
+        for (int i = nums.size() - 1; ~i; --i) {
+            if (nums[i] < vk) {
+                return true;
+            }
+            while (!stk.empty() && stk.top() < nums[i]) {
+                vk = stk.top();
+                stk.pop();
+            }
+            stk.push(nums[i]);
+        }
+        return false;
+    }
+};
+```
+
+#### Go
+
+```go
+func find132pattern(nums []int) bool {
+	vk := -(1 << 30)
+	stk := []int{}
+	for i := len(nums) - 1; i >= 0; i-- {
+		if nums[i] < vk {
+			return true
+		}
+		for len(stk) > 0 && stk[len(stk)-1] < nums[i] {
+			vk = stk[len(stk)-1]
+			stk = stk[:len(stk)-1]
+		}
+		stk = append(stk, nums[i])
+	}
+	return false
+}
+```
+
+#### TypeScript
+
+```ts
+function find132pattern(nums: number[]): boolean {
+    let vk = -Infinity;
+    const stk: number[] = [];
+    for (let i = nums.length - 1; i >= 0; --i) {
+        if (nums[i] < vk) {
+            return true;
+        }
+        while (stk.length && stk[stk.length - 1] < nums[i]) {
+            vk = stk.pop()!;
+        }
+        stk.push(nums[i]);
+    }
+    return false;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find132pattern(nums: Vec<i32>) -> bool {
+        let n = nums.len();
+        let mut vk = i32::MIN;
+        let mut stk = vec![];
+        for i in (0..n).rev() {
+            if nums[i] < vk {
+                return true;
+            }
+            while !stk.is_empty() && stk.last().unwrap() < &nums[i] {
+                vk = stk.pop().unwrap();
+            }
+            stk.push(nums[i]);
+        }
+        false
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class BinaryIndexedTree:
@@ -98,26 +237,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public boolean find132pattern(int[] nums) {
-        int vk = -(1 << 30);
-        Deque<Integer> stk = new ArrayDeque<>();
-        for (int i = nums.length - 1; i >= 0; --i) {
-            if (nums[i] < vk) {
-                return true;
-            }
-            while (!stk.isEmpty() && stk.peek() < nums[i]) {
-                vk = stk.pop();
-            }
-            stk.push(nums[i]);
-        }
-        return false;
-    }
-}
-```
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -187,28 +307,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool find132pattern(vector<int>& nums) {
-        int vk = INT_MIN;
-        stack<int> stk;
-        for (int i = nums.size() - 1; ~i; --i) {
-            if (nums[i] < vk) {
-                return true;
-            }
-            while (!stk.empty() && stk.top() < nums[i]) {
-                vk = stk.top();
-                stk.pop();
-            }
-            stk.push(nums[i]);
-        }
-        return false;
-    }
-};
-```
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
@@ -265,25 +364,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func find132pattern(nums []int) bool {
-	vk := -(1 << 30)
-	stk := []int{}
-	for i := len(nums) - 1; i >= 0; i-- {
-		if nums[i] < vk {
-			return true
-		}
-		for len(stk) > 0 && stk[len(stk)-1] < nums[i] {
-			vk = stk[len(stk)-1]
-			stk = stk[:len(stk)-1]
-		}
-		stk = append(stk, nums[i])
-	}
-	return false
-}
-```
+#### Go
 
 ```go
 type BinaryIndexedTree struct {
@@ -339,33 +420,9 @@ func find132pattern(nums []int) bool {
 	}
 	return false
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function find132pattern(nums: number[]): boolean {
-    let vk = -Infinity;
-    const stk: number[] = [];
-    for (let i = nums.length - 1; i >= 0; --i) {
-        if (nums[i] < vk) {
-            return true;
-        }
-        while (stk.length && stk[stk.length - 1] < nums[i]) {
-            vk = stk.pop()!;
-        }
-        stk.push(nums[i]);
-    }
-    return false;
-}
-```
+#### TypeScript
 
 ```ts
 class BinaryIndextedTree {
@@ -434,32 +491,8 @@ function search(nums: number[], x: number): number {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn find132pattern(nums: Vec<i32>) -> bool {
-        let n = nums.len();
-        let mut vk = i32::MIN;
-        let mut stk = vec![];
-        for i in (0..n).rev() {
-            if nums[i] < vk {
-                return true;
-            }
-            while !stk.is_empty() && stk.last().unwrap() < &nums[i] {
-                vk = stk.pop().unwrap();
-            }
-            stk.push(nums[i])
-        }
-        false
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

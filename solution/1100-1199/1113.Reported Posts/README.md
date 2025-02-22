@@ -1,14 +1,25 @@
-# [1113. 报告的记录](https://leetcode.cn/problems/reported-posts)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1113.Reported%20Posts/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1113. 报告的记录 🔒](https://leetcode.cn/problems/reported-posts)
 
 [English Version](/solution/1100-1199/1113.Reported%20Posts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>动作表：<code>Actions</code></p>
 
-<pre>+---------------+---------+
+<pre>
++---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
 | user_id       | int     |
@@ -17,18 +28,27 @@
 | action        | enum    |
 | extra         | varchar |
 +---------------+---------+
-此表没有主键，所以可能会有重复的行。
-action 字段是 ENUM 类型的，包含:(&#39;view&#39;, &#39;like&#39;, &#39;reaction&#39;, &#39;comment&#39;, <em><strong>&#39;report&#39;</strong></em>, &#39;share&#39;)
-extra 字段是可选的信息（可能为 null），其中的信息例如有：<em><strong>1.报告理由(a reason for report)</strong></em> 2.反应类型(a type of reaction)
+此表可能会有重复的行。
+action 字段是 ENUM 类型的，包含:('view', 'like', 'reaction', 'comment', <em><strong>'</strong></em>report<em><strong>'</strong></em>, 'share')
+extra 包含关于 action 的可选信息，例如举报的原因或反馈的类型。
+当 action 为 'report' 时 extra 不会为 NULL。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一条SQL，查询每种&nbsp;<em><strong>报告理由</strong></em>（report reason）在昨天的不同报告数量（post_id）。假设今天是&nbsp;<strong>2019-07-05</strong>。</p>
+<p>编写解决方案，针对每个举报原因统计昨天的举报帖子数量。假设今天是&nbsp;<code>2019-07-05</code>&nbsp;。</p>
 
-<p>查询及结果的格式示例：</p>
+<p>返回结果表 <strong>无顺序要求 </strong>。</p>
 
-<pre>Actions table:
+<p>结果格式如下示例所示。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例 1：</strong></p>
+
+<pre>
+<strong>输入：</strong>
+Actions table:
 +---------+---------+-------------+--------+--------+
 | user_id | post_id | action_date | action | extra  |
 +---------+---------+-------------+--------+--------+
@@ -46,38 +66,38 @@ extra 字段是可选的信息（可能为 null），其中的信息例如有：
 | 5       | 5       | 2019-07-04  | view   | null   |
 | 5       | 5       | 2019-07-04  | report | racism |
 +---------+---------+-------------+--------+--------+
-
-Result table:
+<strong>输出：</strong>
 +---------------+--------------+
 | report_reason | report_count |
 +---------------+--------------+
 | spam          | 1            |
 | racism        | 2            |
 +---------------+--------------+ 
-注意，我们只关心报告数量非零的结果。
+<strong>解释：</strong>注意，我们只关心举报帖数量非零的举报原因。
 </pre>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT
-	extra report_reason,
-	count(
-	DISTINCT ( post_id )) report_count
-FROM
-	Actions
-WHERE
-	action_date = '2019-07-04'
-	AND action = 'report'
-GROUP BY
-	extra
+SELECT extra AS report_reason, COUNT(DISTINCT post_id) AS report_count
+FROM Actions
+WHERE action_date = '2019-07-04' AND action = 'report'
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

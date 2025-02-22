@@ -1,10 +1,20 @@
-# [1972. 同一天的第一个电话和最后一个电话](https://leetcode.cn/problems/first-and-last-call-on-the-same-day)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1972.First%20and%20Last%20Call%20On%20the%20Same%20Day/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1972. 同一天的第一个电话和最后一个电话 🔒](https://leetcode.cn/problems/first-and-last-call-on-the-same-day)
 
 [English Version](/solution/1900-1999/1972.First%20and%20Last%20Call%20On%20the%20Same%20Day/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Calls</code></p>
 
@@ -56,18 +66,62 @@ Calls table:
 在 2021-08-11，user 1和5有一个电话。这个电话是他们彼此当天的唯一一个电话。因此这个电话是他们当天的第一个电话也是最后一个电话，他们都应该被包含在答案中。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+with s as (
+    select
+        *
+    from
+        Calls
+    union
+    all
+    select
+        recipient_id,
+        caller_id,
+        call_time
+    from
+        Calls
+),
+t as (
+    select
+        caller_id user_id,
+        FIRST_VALUE(recipient_id) over(
+            partition by DATE_FORMAT(call_time, '%Y-%m-%d'),
+            caller_id
+            order by
+                call_time asc
+        ) first,
+        FIRST_VALUE(recipient_id) over(
+            partition by DATE_FORMAT(call_time, '%Y-%m-%d'),
+            caller_id
+            order by
+                call_time desc
+        ) last
+    from
+        s
+)
+select
+    distinct user_id
+from
+    t
+where
+    first = last
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

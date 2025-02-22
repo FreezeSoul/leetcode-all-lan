@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0140.Word%20Break%20II/README.md
+tags:
+    - 字典树
+    - 记忆化搜索
+    - 数组
+    - 哈希表
+    - 字符串
+    - 动态规划
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii)
 
 [English Version](/solution/0100-0199/0140.Word%20Break%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串 <code>s</code> 和一个字符串字典<meta charset="UTF-8" />&nbsp;<code>wordDict</code>&nbsp;，在字符串<meta charset="UTF-8" />&nbsp;<code>s</code>&nbsp;中增加空格来构建一个句子，使得句子中所有的单词都在词典中。<strong>以任意顺序</strong> 返回所有这些可能的句子。</p>
 
@@ -15,8 +31,8 @@
 <p><strong class="example">示例 1：</strong></p>
 
 <pre>
-<strong>输入:</strong>s = "<code>catsanddog</code>", wordDict = <code>["cat","cats","and","sand","dog"]</code>
-<strong>输出:</strong><code>["cats and dog","cat sand dog"]</code>
+<strong>输入:</strong>s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]
+<strong>输出:</strong>["cats and dog","cat sand dog"]
 </pre>
 
 <p><strong class="example">示例 2：</strong></p>
@@ -48,17 +64,17 @@
 	<li><code>wordDict</code>&nbsp;中所有字符串都 <strong>不同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀树 + DFS**
+### 方法一：前缀树 + DFS
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Trie:
@@ -104,9 +120,7 @@ class Solution:
         return [' '.join(v) for v in ans]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Trie {
@@ -168,7 +182,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -233,10 +247,90 @@ func wordBreak(s string, wordDict []string) []string {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
+class Node
+{
+    public int Index1 { get; set; }
+    public int Index2 { get; set; }
+}
+
+public class Solution {
+    public IList<string> WordBreak(string s, IList<string> wordDict) {
+        var paths = new List<Tuple<int, string>>[s.Length + 1];
+        paths[s.Length] = new List<Tuple<int, string>> { Tuple.Create(-1, (string)null) };
+        var wordDictGroup = wordDict.GroupBy(word => word.Length);
+        for (var i = s.Length - 1; i >= 0; --i)
+        {
+            paths[i] = new List<Tuple<int, string>>();
+            foreach (var wordGroup in wordDictGroup)
+            {
+                var wordLength = wordGroup.Key;
+                if (i + wordLength <= s.Length && paths[i + wordLength].Count > 0)
+                {
+                    foreach (var word in wordGroup)
+                    {
+                        if (s.Substring(i, wordLength) == word)
+                        {
+                            paths[i].Add(Tuple.Create(i + wordLength, word));
+                        }
+                    }
+                }
+            }
+        }
+
+        return GenerateResults(paths);
+    }
+
+    private IList<string> GenerateResults(List<Tuple<int, string>>[] paths)
+    {
+        var results = new List<string>();
+        var sb = new StringBuilder();
+        var stack = new Stack<Node>();
+        stack.Push(new Node());
+        while (stack.Count > 0)
+        {
+            var node = stack.Peek();
+            if (node.Index1 == paths.Length - 1 || node.Index2 == paths[node.Index1].Count)
+            {
+                if (node.Index1 == paths.Length - 1)
+                {
+                    results.Add(sb.ToString());
+                }
+                stack.Pop();
+                if (stack.Count > 0)
+                {
+                    var parent = stack.Peek();
+                    var length = paths[parent.Index1][parent.Index2 - 1].Item2.Length;
+                    if (length < sb.Length) ++length;
+                    sb.Remove(sb.Length - length, length);
+                }
+            }
+            else
+            {
+                var newNode = new Node { Index1 = paths[node.Index1][node.Index2].Item1, Index2 = 0 };
+                if (sb.Length != 0)
+                {
+                    sb.Append(' ');
+                }
+                sb.Append(paths[node.Index1][node.Index2].Item2);
+                stack.Push(newNode);
+                ++node.Index2;
+            }
+        }
+        return results;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

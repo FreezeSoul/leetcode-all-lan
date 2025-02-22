@@ -1,8 +1,20 @@
-# [1543. Fix Product Name Format](https://leetcode.com/problems/fix-product-name-format)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1543.Fix%20Product%20Name%20Format/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1543. Fix Product Name Format 🔒](https://leetcode.com/problems/fix-product-name-format)
 
 [中文文档](/solution/1500-1599/1543.Fix%20Product%20Name%20Format/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Sales</code></p>
 
@@ -14,7 +26,7 @@
 | product_name | varchar |
 | sale_date    | date    |
 +--------------+---------+
-sale_id is the primary key for this table.
+sale_id is the column with unique values for this table.
 Each row of this table contains the product name and the date it was sold.
 </pre>
 
@@ -22,7 +34,7 @@ Each row of this table contains the product name and the date it was sold.
 
 <p>Since table Sales was filled manually in the year <code>2000</code>, <code>product_name</code> may contain leading and/or trailing white spaces, also they are case-insensitive.</p>
 
-<p>Write an SQL query to report</p>
+<p>Write a solution to report</p>
 
 <ul>
 	<li><code>product_name</code> in lowercase without leading or trailing white spaces.</li>
@@ -32,7 +44,7 @@ Each row of this table contains the product name and the date it was sold.
 
 <p>Return the result table ordered by <code>product_name</code> in <strong>ascending order</strong>. In case of a tie, order it by <code>sale_date</code> in <strong>ascending order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -65,14 +77,35 @@ In February, 2 LCKeychains and 1 LCPhone were sold.
 In March, one matryoshka was sold.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            LOWER(TRIM(product_name)) AS product_name,
+            DATE_FORMAT(sale_date, '%Y-%m') AS sale_date
+        FROM Sales
+    )
+SELECT product_name, sale_date, COUNT(1) AS total
+FROM t
+GROUP BY 1, 2
+ORDER BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,12 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0785.Is%20Graph%20Bipartite/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 并查集
+    - 图
+---
+
+<!-- problem:start -->
+
 # [785. 判断二分图](https://leetcode.cn/problems/is-graph-bipartite)
 
 [English Version](/solution/0700-0799/0785.Is%20Graph%20Bipartite/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-存在一个 <strong>无向图</strong> ，图中有 <code>n</code> 个节点。其中每个节点都有一个介于 <code>0</code> 到 <code>n - 1</code> 之间的唯一编号。给你一个二维数组 <code>graph</code> ，其中 <code>graph[u]</code> 是一个节点数组，由节点 <code>u</code> 的邻接节点组成。形式上，对于  <code>graph[u]</code> 中的每个 <code>v</code> ，都存在一条位于节点 <code>u</code> 和节点 <code>v</code> 之间的无向边。该无向图同时具有以下属性：
+存在一个 <strong>无向图</strong> ，图中有 <code>n</code> 个节点。其中每个节点都有一个介于 <code>0</code> 到 <code>n - 1</code> 之间的唯一编号。给你一个二维数组 <code>graph</code> ，其中 <code>graph[u]</code> 是一个节点数组，由节点 <code>u</code> 的邻接节点组成。形式上，对于 <code>graph[u]</code> 中的每个 <code>v</code> ，都存在一条位于节点 <code>u</code> 和节点 <code>v</code> 之间的无向边。该无向图同时具有以下属性：
 
 <ul>
 	<li>不存在自环（<code>graph[u]</code> 不包含 <code>u</code>）。</li>
@@ -49,129 +62,41 @@
 	<li>如果 <code>graph[u]</code> 包含 <code>v</code>，那么 <code>graph[v]</code> 也会包含 <code>u</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：染色法判定二分图**
+### 方法一：染色法判定二分图
 
 遍历所有节点进行染色，比如初始为白色，DFS 对节点相邻的点染上另外一种颜色。如果要染色某节点时，要染的目标颜色和该节点的已经染过的颜色不同，则说明不能构成二分图。
 
-**方法二：并查集**
-
-对于本题，如果是二分图，那么图中每个顶点的所有邻接点都应该属于同一集合，且不与顶点处于同一集合，因此我们可以使用并查集。遍历图中每个顶点，如果发现存在当前顶点与对应的邻接点处于同一个集合，说明不是二分图。否则将当前节点的邻接点相互进行合并。以下是并查集模板。
-
-模板 1——朴素并查集：
-
-```python
-# 初始化，p存储每个点的父节点
-p = list(range(n))
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-```
-
-模板 2——维护 size 的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，size只有当节点是祖宗节点时才有意义，表示祖宗节点所在集合中，点的数量
-p = list(range(n))
-size = [1] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-# 合并a和b所在的两个集合
-if find(a) != find(b):
-    size[find(b)] += size[find(a)]
-    p[find(a)] = find(b)
-```
-
-模板 3——维护到祖宗节点距离的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，d[x]存储x到p[x]的距离
-p = list(range(n))
-d = [0] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        t = find(p[x])
-        d[x] += d[p[x]]
-        p[x] = t
-    return p[x]
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-d[find(a)] = distance
-```
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为节点数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-染色法：
+#### Python3
 
 ```python
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
-        def dfs(u, c):
-            color[u] = c
-            for v in graph[u]:
-                if not color[v]:
-                    if not dfs(v, 3 - c):
-                        return False
-                elif color[v] == c:
+        def dfs(a: int, c: int) -> bool:
+            color[a] = c
+            for b in graph[a]:
+                if color[b] == c or (color[b] == 0 and not dfs(b, -c)):
                     return False
             return True
 
         n = len(graph)
         color = [0] * n
         for i in range(n):
-            if not color[i] and not dfs(i, 1):
+            if color[i] == 0 and not dfs(i, 1):
                 return False
         return True
 ```
 
-并查集：
-
-```python
-class Solution:
-    def isBipartite(self, graph: List[List[int]]) -> bool:
-        def find(x):
-            if p[x] != x:
-                p[x] = find(p[x])
-            return p[x]
-
-        p = list(range(len(graph)))
-        for u, g in enumerate(graph):
-            for v in g:
-                if find(u) == find(v):
-                    return False
-                p[find(v)] = find(g[0])
-        return True
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-染色法：
+#### Java
 
 ```java
 class Solution {
@@ -190,14 +115,10 @@ class Solution {
         return true;
     }
 
-    private boolean dfs(int u, int c) {
-        color[u] = c;
-        for (int v : g[u]) {
-            if (color[v] == 0) {
-                if (!dfs(v, 3 - c)) {
-                    return false;
-                }
-            } else if (color[v] == c) {
+    private boolean dfs(int a, int c) {
+        color[a] = c;
+        for (int b : g[a]) {
+            if (color[b] == c || (color[b] == 0 && !dfs(b, -c))) {
                 return false;
             }
         }
@@ -206,42 +127,7 @@ class Solution {
 }
 ```
 
-并查集：
-
-```java
-class Solution {
-    private int[] p;
-
-    public boolean isBipartite(int[][] graph) {
-        int n = graph.length;
-        p = new int[n];
-        for (int i = 0; i < n; ++i) {
-            p[i] = i;
-        }
-        for (int u = 0; u < n; ++u) {
-            int[] g = graph[u];
-            for (int v : g) {
-                if (find(u) == find(v)) {
-                    return false;
-                }
-                p[find(v)] = find(g[0]);
-            }
-        }
-        return true;
-    }
-
-    private int find(int x) {
-        if (p[x] != x) {
-            p[x] = find(p[x]);
-        }
-        return p[x];
-    }
-}
-```
-
-### **C++**
-
-染色法：
+#### C++
 
 ```cpp
 class Solution {
@@ -249,72 +135,36 @@ public:
     bool isBipartite(vector<vector<int>>& graph) {
         int n = graph.size();
         vector<int> color(n);
-        for (int i = 0; i < n; ++i)
-            if (!color[i] && !dfs(i, 1, color, graph))
+        auto dfs = [&](this auto&& dfs, int a, int c) -> bool {
+            color[a] = c;
+            for (int b : graph[a]) {
+                if (color[b] == c || (color[b] == 0 && !dfs(b, -c))) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        for (int i = 0; i < n; ++i) {
+            if (color[i] == 0 && !dfs(i, 1)) {
                 return false;
-        return true;
-    }
-
-    bool dfs(int u, int c, vector<int>& color, vector<vector<int>>& g) {
-        color[u] = c;
-        for (int& v : g[u]) {
-            if (!color[v]) {
-                if (!dfs(v, 3 - c, color, g)) return false;
-            } else if (color[v] == c)
-                return false;
-        }
-        return true;
-    }
-};
-```
-
-并查集：
-
-```cpp
-class Solution {
-public:
-    vector<int> p;
-
-    bool isBipartite(vector<vector<int>>& graph) {
-        int n = graph.size();
-        p.resize(n);
-        for (int i = 0; i < n; ++i) p[i] = i;
-        for (int u = 0; u < n; ++u)
-        {
-            auto& g = graph[u];
-            for (int v : g)
-            {
-                if (find(u) == find(v)) return 0;
-                p[find(v)] = find(g[0]);
             }
         }
-        return 1;
-    }
-
-    int find(int x) {
-        if (p[x] != x) p[x] = find(p[x]);
-        return p[x];
+        return true;
     }
 };
 ```
 
-### **Go**
-
-染色法：
+#### Go
 
 ```go
 func isBipartite(graph [][]int) bool {
 	n := len(graph)
 	color := make([]int, n)
-	var dfs func(u, c int) bool
-	dfs = func(u, c int) bool {
-		color[u] = c
-		for _, v := range graph[u] {
-			if color[v] == 0 {
-				if !dfs(v, 3-c) {
-					return false
-				}
-			} else if color[v] == c {
+	var dfs func(int, int) bool
+	dfs = func(a, c int) bool {
+		color[a] = c
+		for _, b := range graph[a] {
+			if color[b] == c || (color[b] == 0 && !dfs(b, -c)) {
 				return false
 			}
 		}
@@ -329,7 +179,157 @@ func isBipartite(graph [][]int) bool {
 }
 ```
 
-并查集：
+#### TypeScript
+
+```ts
+function isBipartite(graph: number[][]): boolean {
+    const n = graph.length;
+    const color: number[] = Array(n).fill(0);
+    const dfs = (a: number, c: number): boolean => {
+        color[a] = c;
+        for (const b of graph[a]) {
+            if (color[b] === c || (color[b] === 0 && !dfs(b, -c))) {
+                return false;
+            }
+        }
+        return true;
+    };
+    for (let i = 0; i < n; i++) {
+        if (color[i] === 0 && !dfs(i, 1)) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn is_bipartite(graph: Vec<Vec<i32>>) -> bool {
+        let n = graph.len();
+        let mut color = vec![0; n];
+
+        fn dfs(a: usize, c: i32, graph: &Vec<Vec<i32>>, color: &mut Vec<i32>) -> bool {
+            color[a] = c;
+            for &b in &graph[a] {
+                if color[b as usize] == c
+                    || (color[b as usize] == 0 && !dfs(b as usize, -c, graph, color))
+                {
+                    return false;
+                }
+            }
+            true
+        }
+
+        for i in 0..n {
+            if color[i] == 0 && !dfs(i, 1, &graph, &mut color) {
+                return false;
+            }
+        }
+        true
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：并查集
+
+对于本题，如果是二分图，那么图中每个顶点的所有邻接点都应该属于同一集合，且不与顶点处于同一集合，因此我们可以使用并查集。遍历图中每个顶点，如果发现存在当前顶点与对应的邻接点处于同一个集合，说明不是二分图。否则将当前节点的邻接点相互进行合并。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为节点数。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+        def find(x: int) -> int:
+            if p[x] != x:
+                p[x] = find(p[x])
+            return p[x]
+
+        p = list(range(len(graph)))
+        for a, bs in enumerate(graph):
+            for b in bs:
+                pa, pb = find(a), find(b)
+                if pa == pb:
+                    return False
+                p[pb] = find(bs[0])
+        return True
+```
+
+#### Java
+
+```java
+class Solution {
+    private int[] p;
+
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        p = new int[n];
+        for (int i = 0; i < n; ++i) {
+            p[i] = i;
+        }
+        for (int a = 0; a < n; ++a) {
+            for (int b : graph[a]) {
+                int pa = find(a), pb = find(b);
+                if (pa == pb) {
+                    return false;
+                }
+                p[pb] = find(graph[a][0]);
+            }
+        }
+        return true;
+    }
+
+    private int find(int x) {
+        if (p[x] != x) {
+            p[x] = find(p[x]);
+        }
+        return p[x];
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<int> p(n);
+        iota(p.begin(), p.end(), 0);
+        auto find = [&](this auto&& find, int x) -> int {
+            if (p[x] != x) {
+                p[x] = find(p[x]);
+            }
+            return p[x];
+        };
+        for (int a = 0; a < n; ++a) {
+            for (int b : graph[a]) {
+                int pa = find(a), pb = find(b);
+                if (pa == pb) {
+                    return false;
+                }
+                p[pb] = find(graph[a][0]);
+            }
+        }
+        return true;
+    }
+};
+```
+
+#### Go
 
 ```go
 func isBipartite(graph [][]int) bool {
@@ -345,82 +345,76 @@ func isBipartite(graph [][]int) bool {
 		}
 		return p[x]
 	}
-	for u, g := range graph {
-		for _, v := range g {
-			if find(u) == find(v) {
+	for a, bs := range graph {
+		for _, b := range bs {
+			pa, pb := find(a), find(b)
+			if pa == pb {
 				return false
 			}
-			p[find(v)] = find(g[0])
+			p[pb] = find(bs[0])
 		}
 	}
 	return true
 }
 ```
 
-### **TypeScript**
-
-染色法：
+#### TypeScript
 
 ```ts
 function isBipartite(graph: number[][]): boolean {
     const n = graph.length;
-    let valid = true;
-    // 0 未遍历， 1 红色标记， 2 绿色标记
-    let colors = new Array(n).fill(0);
-    function dfs(idx: number, color: number, graph: number[][]) {
-        colors[idx] = color;
-        const nextColor = 3 - color;
-        for (let j of graph[idx]) {
-            if (!colors[j]) {
-                dfs(j, nextColor, graph);
-                if (!valid) return;
-            } else if (colors[j] != nextColor) {
-                valid = false;
-                return;
-            }
-        }
-    }
-
-    for (let i = 0; i < n && valid; i++) {
-        if (!colors[i]) {
-            dfs(i, 1, graph);
-        }
-    }
-    return valid;
-}
-```
-
-并查集：
-
-```ts
-function isBipartite(graph: number[][]): boolean {
-    const n = graph.length;
-    let p = new Array(n);
-    for (let i = 0; i < n; ++i) {
-        p[i] = i;
-    }
-    function find(x) {
-        if (p[x] != x) {
+    const p: number[] = Array.from({ length: n }, (_, i) => i);
+    const find = (x: number): number => {
+        if (x !== p[x]) {
             p[x] = find(p[x]);
         }
         return p[x];
-    }
-    for (let u = 0; u < n; ++u) {
-        for (let v of graph[u]) {
-            if (find(u) == find(v)) {
+    };
+    for (let a = 0; a < n; ++a) {
+        for (const b of graph[a]) {
+            const [pa, pb] = [find(a), find(b)];
+            if (pa === pb) {
                 return false;
             }
-            p[find(v)] = find(graph[u][0]);
+            p[pb] = find(graph[a][0]);
         }
     }
     return true;
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn is_bipartite(graph: Vec<Vec<i32>>) -> bool {
+        let n = graph.len();
+        let mut p: Vec<usize> = (0..n).collect();
 
+        fn find(x: usize, p: &mut Vec<usize>) -> usize {
+            if p[x] != x {
+                p[x] = find(p[x], p);
+            }
+            p[x]
+        }
+
+        for a in 0..n {
+            for &b in &graph[a] {
+                let pa = find(a, &mut p);
+                let pb = find(b as usize, &mut p);
+                if pa == pb {
+                    return false;
+                }
+                p[pb] = find(graph[a][0] as usize, &mut p);
+            }
+        }
+        true
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

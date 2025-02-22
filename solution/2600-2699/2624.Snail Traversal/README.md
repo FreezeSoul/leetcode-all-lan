@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2624.Snail%20Traversal/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2624. 蜗牛排序](https://leetcode.cn/problems/snail-traversal)
 
 [English Version](/solution/2600-2699/2624.Snail%20Traversal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你编写一段代码为所有数组实现&nbsp;&nbsp;<code>snail(rowsCount，colsCount)</code> 方法，该方法将 1D 数组转换为以蜗牛排序的模式的 2D 数组。无效的输入值应该输出一个空数组。当 <code>rowsCount * colsCount&nbsp;!==</code><code>nums.length</code>&nbsp;时。这个输入被认为是无效的。</p>
 
@@ -65,11 +75,13 @@ colsCount = 2
 	<li><code>1 &lt;= colsCount &lt;= 250</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们首先判断数组的长度是否等于行数与列数的乘积，如果不等，说明输入是无效的，返回空数组。
 
@@ -79,9 +91,7 @@ colsCount = 2
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 declare global {
@@ -90,16 +100,11 @@ declare global {
     }
 }
 
-Array.prototype.snail = function (
-    rowsCount: number,
-    colsCount: number,
-): number[][] {
+Array.prototype.snail = function (rowsCount: number, colsCount: number): number[][] {
     if (rowsCount * colsCount !== this.length) {
         return [];
     }
-    const ans: number[][] = Array.from({ length: rowsCount }, () =>
-        Array(colsCount),
-    );
+    const ans: number[][] = Array.from({ length: rowsCount }, () => Array(colsCount));
     for (let h = 0, i = 0, j = 0, k = 1; h < this.length; ++h) {
         ans[i][j] = this[h];
         i += k;
@@ -118,10 +123,8 @@ Array.prototype.snail = function (
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

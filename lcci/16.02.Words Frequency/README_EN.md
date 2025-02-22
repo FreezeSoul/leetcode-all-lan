@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/16.02.Words%20Frequency/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [16.02. Words Frequency](https://leetcode.cn/problems/words-frequency-lcci)
 
 [中文文档](/lcci/16.02.Words%20Frequency/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a method to find the frequency of occurrences of any given word in a book. What if we were running this algorithm multiple times?</p>
 
@@ -40,11 +50,23 @@ wordsFrequency.get(&quot;pen&quot;); //returns 1
     <li><code>get</code>&nbsp;function will not be called more than&nbsp;100000 times.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We use a hash table $cnt$ to count the number of occurrences of each word in $book$.
+
+When calling the `get` function, we only need to return the number of occurrences of the corresponding word in $cnt$.
+
+In terms of time complexity, the time complexity of initializing the hash table $cnt$ is $O(n)$, where $n$ is the length of $book$. The time complexity of the `get` function is $O(1)$. The space complexity is $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class WordsFrequency:
@@ -60,7 +82,7 @@ class WordsFrequency:
 # param_1 = obj.get(word)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class WordsFrequency {
@@ -84,7 +106,7 @@ class WordsFrequency {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class WordsFrequency {
@@ -110,7 +132,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type WordsFrequency struct {
@@ -136,7 +158,60 @@ func (this *WordsFrequency) Get(word string) int {
  */
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+class WordsFrequency {
+    private cnt: Map<string, number>;
+
+    constructor(book: string[]) {
+        const cnt = new Map<string, number>();
+        for (const word of book) {
+            cnt.set(word, (cnt.get(word) ?? 0) + 1);
+        }
+        this.cnt = cnt;
+    }
+
+    get(word: string): number {
+        return this.cnt.get(word) ?? 0;
+    }
+}
+
+/**
+ * Your WordsFrequency object will be instantiated and called as such:
+ * var obj = new WordsFrequency(book)
+ * var param_1 = obj.get(word)
+ */
+```
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+struct WordsFrequency {
+    cnt: HashMap<String, i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl WordsFrequency {
+    fn new(book: Vec<String>) -> Self {
+        let mut cnt = HashMap::new();
+        for word in book.into_iter() {
+            *cnt.entry(word).or_insert(0) += 1;
+        }
+        Self { cnt }
+    }
+
+    fn get(&self, word: String) -> i32 {
+        *self.cnt.get(&word).unwrap_or(&0)
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -164,71 +239,26 @@ WordsFrequency.prototype.get = function (word) {
  */
 ```
 
-### **TypeScript**
+#### Swift
 
-```ts
+```swift
 class WordsFrequency {
-    private cnt: Map<string, number>;
+    private var cnt: [String: Int] = [:]
 
-    constructor(book: string[]) {
-        const cnt = new Map<string, number>();
-        for (const word of book) {
-            cnt.set(word, (cnt.get(word) ?? 0) + 1);
+    init(_ book: [String]) {
+        for word in book {
+            cnt[word, default: 0] += 1
         }
-        this.cnt = cnt;
     }
 
-    get(word: string): number {
-        return this.cnt.get(word) ?? 0;
-    }
-}
-
-/**
- * Your WordsFrequency object will be instantiated and called as such:
- * var obj = new WordsFrequency(book)
- * var param_1 = obj.get(word)
- */
-```
-
-### **Rust**
-
-```rust
-use std::collections::HashMap;
-struct WordsFrequency {
-    counter: HashMap<String, i32>
-}
-
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl WordsFrequency {
-
-    fn new(book: Vec<String>) -> Self {
-        let mut counter = HashMap::new();
-        for word in book.into_iter() {
-            *counter.entry(word).or_insert(0) += 1;
-        }
-        Self { counter }
-    }
-
-    fn get(&self, word: String) -> i32 {
-        *self.counter.get(&word).unwrap_or(&0)
+    func get(_ word: String) -> Int {
+        return cnt[word, default: 0]
     }
 }
-
-/**
- * Your WordsFrequency object will be instantiated and called as such:
- * let obj = WordsFrequency::new(book);
- * let ret_1: i32 = obj.get(word);
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

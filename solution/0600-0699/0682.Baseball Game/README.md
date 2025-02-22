@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0682.Baseball%20Game/README.md
+tags:
+    - 栈
+    - 数组
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [682. 棒球比赛](https://leetcode.cn/problems/baseball-game)
 
 [English Version](/solution/0600-0699/0682.Baseball%20Game/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你现在是一场采用特殊赛制棒球比赛的记录员。这场比赛由若干回合组成，过去几回合的得分可能会影响以后几回合的得分。</p>
 
@@ -70,43 +82,54 @@
 	<li>对于 <code>"C"</code> 和 <code>"D"</code> 操作，题目数据保证记录此操作时前面总是存在一个有效的分数</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-利用栈简单模拟即可。
+### 方法一：栈 + 模拟
+
+我们可以使用栈来模拟这个过程。
+
+遍历 $\textit{operations}$，对于每个操作：
+
+-   如果是 `+`，则将栈顶两个元素相加，然后将结果入栈；
+-   如果是 `D`，则将栈顶元素的值乘以 2，然后将结果入栈；
+-   如果是 `C`，则将栈顶元素出栈；
+-   如果是数字，将数字入栈。
+
+最后，将栈中的所有元素求和即为答案。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 $\textit{operations}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def calPoints(self, ops: List[str]) -> int:
+    def calPoints(self, operations: List[str]) -> int:
         stk = []
-        for op in ops:
-            if op == '+':
+        for op in operations:
+            if op == "+":
                 stk.append(stk[-1] + stk[-2])
-            elif op == 'D':
+            elif op == "D":
                 stk.append(stk[-1] << 1)
-            elif op == 'C':
+            elif op == "C":
                 stk.pop()
             else:
                 stk.append(int(op))
         return sum(stk)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-    public int calPoints(String[] ops) {
+    public int calPoints(String[] operations) {
         Deque<Integer> stk = new ArrayDeque<>();
-        for (String op : ops) {
+        for (String op : operations) {
             if ("+".equals(op)) {
                 int a = stk.pop();
                 int b = stk.peek();
@@ -125,37 +148,36 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
-    int calPoints(vector<string>& ops) {
+    int calPoints(vector<string>& operations) {
         vector<int> stk;
-        for (auto& op : ops) {
+        for (auto& op : operations) {
             int n = stk.size();
             if (op == "+") {
-                int a = stk[n - 1];
-                int b = stk[n - 2];
-                stk.push_back(a + b);
-            } else if (op == "D")
-                stk.push_back(stk[n - 1] * 2);
-            else if (op == "C")
+                stk.push_back(stk[n - 1] + stk[n - 2]);
+            } else if (op == "D") {
+                stk.push_back(stk[n - 1] << 1);
+            } else if (op == "C") {
                 stk.pop_back();
-            else
+            } else {
                 stk.push_back(stoi(op));
+            }
         }
         return accumulate(stk.begin(), stk.end(), 0);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func calPoints(ops []string) int {
+func calPoints(operations []string) (ans int) {
 	var stk []int
-	for _, op := range ops {
+	for _, op := range operations {
 		n := len(stk)
 		switch op {
 		case "+":
@@ -169,67 +191,63 @@ func calPoints(ops []string) int {
 			stk = append(stk, num)
 		}
 	}
-	ans := 0
-	for _, score := range stk {
-		ans += score
+	for _, x := range stk {
+		ans += x
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function calPoints(ops: string[]): number {
-    const stack = [];
-    for (const op of ops) {
-        const n = stack.length;
+function calPoints(operations: string[]): number {
+    const stk: number[] = [];
+    for (const op of operations) {
         if (op === '+') {
-            stack.push(stack[n - 1] + stack[n - 2]);
+            stk.push(stk.at(-1)! + stk.at(-2)!);
         } else if (op === 'D') {
-            stack.push(stack[n - 1] * 2);
+            stk.push(stk.at(-1)! << 1);
         } else if (op === 'C') {
-            stack.pop();
+            stk.pop();
         } else {
-            stack.push(Number(op));
+            stk.push(+op);
         }
     }
-    return stack.reduce((p, v) => p + v);
+    return stk.reduce((a, b) => a + b, 0);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
-    pub fn cal_points(ops: Vec<String>) -> i32 {
-        let mut stack = vec![];
-        for op in ops {
+    pub fn cal_points(operations: Vec<String>) -> i32 {
+        let mut stk = vec![];
+        for op in operations {
             match op.as_str() {
                 "+" => {
-                    let n = stack.len();
-                    stack.push(stack[n - 1] + stack[n - 2]);
+                    let n = stk.len();
+                    stk.push(stk[n - 1] + stk[n - 2]);
                 }
                 "D" => {
-                    stack.push(stack.last().unwrap() * 2);
+                    stk.push(stk.last().unwrap() * 2);
                 }
                 "C" => {
-                    stack.pop();
+                    stk.pop();
                 }
                 n => {
-                    stack.push(n.parse::<i32>().unwrap());
+                    stk.push(n.parse::<i32>().unwrap());
                 }
             }
         }
-        stack.into_iter().sum()
+        stk.into_iter().sum()
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

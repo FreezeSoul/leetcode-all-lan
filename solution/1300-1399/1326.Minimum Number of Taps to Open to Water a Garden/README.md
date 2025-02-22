@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README.md
+rating: 1885
+source: 第 172 场周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1326. 灌溉花园的最少水龙头数目](https://leetcode.cn/problems/minimum-number-of-taps-to-open-to-water-a-garden)
 
 [English Version](/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在 x 轴上有一个一维的花园。花园长度为&nbsp;<code>n</code>，从点&nbsp;<code>0</code>&nbsp;开始，到点&nbsp;<code>n</code>&nbsp;结束。</p>
 
@@ -51,15 +65,17 @@
 	<li><code>0 &lt;= ranges[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 我们注意到，对于所有能覆盖某个左端点的水龙头，选择能覆盖最远右端点的那个水龙头是最优的。
 
-因此，我们可以先预处理数组 $ranges$，对于第 $i$ 个水龙头，它能覆盖的左端点 $l = max(0, i - ranges[i])$，右端点 $r = i + ranges[i]$，我们算出所有能覆盖左端点 $l$ 的水龙头中，右端点最大的那个位置，记录在数组 $last[i]$ 中。
+因此，我们可以先预处理数组 $ranges$，对于第 $i$ 个水龙头，它能覆盖的左端点 $l = \max(0, i - ranges[i])$，右端点 $r = i + ranges[i]$，我们算出所有能覆盖左端点 $l$ 的水龙头中，右端点最大的那个位置，记录在数组 $last[i]$ 中。
 
 然后我们定义以下三个变量，其中：
 
@@ -67,7 +83,7 @@
 -   变量 $mx$ 表示当前能覆盖的最远右端点；
 -   变量 $pre$ 表示上一个水龙头覆盖的最远右端点。
 
-我们在 $[0,...n-1]$ 的范围内遍历所有位置，对于当前位置 $i$，我们用 $last[i]$ 更新 $mx$，即 $mx = max(mx, last[i])$。
+我们在 $[0,...n-1]$ 的范围内遍历所有位置，对于当前位置 $i$，我们用 $last[i]$ 更新 $mx$，即 $mx = \max(mx, last[i])$。
 
 -   如果 $mx \leq i$，说明无法覆盖下一个位置，返回 $-1$。
 -   如果 $pre = i$，说明需要使用一个新的子区间，因此我们将 $ans$ 加 $1$，并且更新 $pre = mx$。
@@ -78,15 +94,13 @@
 
 相似题目：
 
--   [45. 跳跃游戏 II](/solution/0000-0099/0045.Jump%20Game%20II/README.md)
--   [55. 跳跃游戏](/solution/0000-0099/0055.Jump%20Game/README.md)
--   [1024. 视频拼接](/solution/1000-1099/1024.Video%20Stitching/README.md)
+-   [45. 跳跃游戏 II](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0045.Jump%20Game%20II/README.md)
+-   [55. 跳跃游戏](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0055.Jump%20Game/README.md)
+-   [1024. 视频拼接](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1024.Video%20Stitching/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +121,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -135,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minTaps(n int, ranges []int) (ans int) {
@@ -184,16 +196,9 @@ func minTaps(n int, ranges []int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minTaps(n: number, ranges: number[]): number {
@@ -220,10 +225,45 @@ function minTaps(n: number, ranges: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn min_taps(n: i32, ranges: Vec<i32>) -> i32 {
+        let mut last = vec![0; (n + 1) as usize];
+        let mut ans = 0;
+        let mut mx = 0;
+        let mut pre = 0;
 
+        // Initialize the last vector
+        for (i, &r) in ranges.iter().enumerate() {
+            if (i as i32) - r >= 0 {
+                last[((i as i32) - r) as usize] =
+                    std::cmp::max(last[((i as i32) - r) as usize], (i as i32) + r);
+            } else {
+                last[0] = std::cmp::max(last[0], (i as i32) + r);
+            }
+        }
+
+        for i in 0..n as usize {
+            mx = std::cmp::max(mx, last[i]);
+            if mx <= (i as i32) {
+                return -1;
+            }
+            if pre == (i as i32) {
+                ans += 1;
+                pre = mx;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

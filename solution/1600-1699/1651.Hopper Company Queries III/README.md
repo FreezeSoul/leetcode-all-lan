@@ -1,12 +1,22 @@
-# [1651. Hopper 公司查询 III](https://leetcode.cn/problems/hopper-company-queries-iii)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1651.Hopper%20Company%20Queries%20III/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1651. Hopper 公司查询 III 🔒](https://leetcode.cn/problems/hopper-company-queries-iii)
 
 [English Version](/solution/1600-1699/1651.Hopper%20Company%20Queries%20III/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>Table: <code>Drivers</code></p>
+<p>表：&nbsp;<code>Drivers</code></p>
 
 <pre>
 +-------------+---------+
@@ -15,12 +25,12 @@
 | driver_id   | int     |
 | join_date   | date    |
 +-------------+---------+
-driver_id是该表的主键。
-该表的每一行均包含驾驶员的ID以及他们加入Hopper公司的日期。</pre>
+driver_id 是该表具有唯一值的列。
+该表的每一行均包含驾驶员的 ID 以及他们加入 Hopper 公司的日期。</pre>
 
 <p>&nbsp;</p>
 
-<p>Table: <code>Rides</code></p>
+<p>表：<code>Rides</code></p>
 
 <pre>
 +--------------+---------+
@@ -30,14 +40,14 @@ driver_id是该表的主键。
 | user_id      | int     |
 | requested_at | date    |
 +--------------+---------+
-ride_id是该表的主键。 
-该表的每一行均包含行程ID(ride_id)，用户ID(user_id)以及该行程的日期(requested_at)。 
+ride_id 是该表具有唯一值的列。 
+该表的每一行均包含行程 ID(ride_id)，用户 ID(user_id) 以及该行程的日期(requested_at)。 
 该表中可能有一些不被接受的乘车请求。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Table: <code>AcceptedRides</code></p>
+<p><font color="#333333" face="Helvetica Neue, Helvetica, Arial, sans-serif"><span style="font-size: 14px; background-color: rgb(255, 255, 255);">表：</span></font><code>AcceptedRides</code></p>
 
 <pre>
 +---------------+---------+
@@ -48,21 +58,21 @@ ride_id是该表的主键。
 | ride_distance | int     |
 | ride_duration | int     |
 +---------------+---------+
-ride_id是该表的主键。 
+ride_id 是该表具有唯一值的列。 
 该表的每一行都包含已接受的行程信息。 
-表中的行程信息都在“<code>Rides</code>”表中存在。</pre>
+表中的行程信息都在 "<code>Rides</code>" 表中存在。</pre>
 
 <p>&nbsp;</p>
 
-<p>编写SQL查询以计算从&nbsp;<strong>2020年1月至3月至2020年10月至12月&nbsp;</strong>的每三个月窗口的&nbsp;<code>average_ride_distance</code>&nbsp;和&nbsp;<code>average_ride_duration</code>&nbsp;。将&nbsp;<code>average_ride_distance</code>&nbsp;和&nbsp;<code>average_ride_duration</code>&nbsp;四舍五入至 <strong>小数点后两位</strong> 。<br />
+<p>编写一个解决方案，计算出从&nbsp;<strong>2020 年 1 月至 3 月 至 2020 年 10 月至 12 月&nbsp;</strong>的每三个月窗口的&nbsp;<code>average_ride_distance</code>&nbsp;和&nbsp;<code>average_ride_duration</code>&nbsp;。并将&nbsp;<code>average_ride_distance</code>&nbsp;和&nbsp;<code>average_ride_duration</code>&nbsp;四舍五入至 <strong>小数点后两位</strong> 。<br />
 通过将三个月的总&nbsp;<code>ride_distance</code>&nbsp;相加并除以 <code>3</code> 来计算&nbsp;<code>average_ride_distance</code>&nbsp;。<code>average_ride_duration</code>&nbsp;的计算方法与此类似。<br />
 返回按&nbsp;<code>month</code>&nbsp;升序排列的结果表，其中&nbsp;<code>month</code>&nbsp;是起始月份的编号（一月为 1，二月为 2 ...）。</p>
 
-<p>查询结果格式如下例所示。</p>
+<p>查询结果格式如下示例所示。</p>
 
 <p>&nbsp;</p>
 
-<p><strong>示例1：</strong></p>
+<p><strong>示例 1：</strong></p>
 
 <pre>
 <strong>输入:</strong> 
@@ -141,18 +151,56 @@ AcceptedRides table:
 9月底--&gt;平均骑行距离=（0+0+163）/3=54.33，平均骑行持续时间=（0+0+193）/3=64.33
 到10月底--&gt;平均骑行距离=（0+163+6）/3=56.33，平均骑行持续时间=（0+193+38）/3=77.00</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH RECURSIVE
+    Months AS (
+        SELECT 1 AS month
+        UNION ALL
+        SELECT month + 1
+        FROM Months
+        WHERE month < 12
+    ),
+    Ride AS (
+        SELECT
+            month,
+            SUM(IFNULL(ride_distance, 0)) AS ride_distance,
+            SUM(IFNULL(ride_duration, 0)) AS ride_duration
+        FROM
+            Months AS m
+            LEFT JOIN Rides AS r ON month = MONTH(requested_at) AND YEAR(requested_at) = 2020
+            LEFT JOIN AcceptedRides AS a ON r.ride_id = a.ride_id
+        GROUP BY month
+    )
+SELECT
+    month,
+    ROUND(
+        AVG(ride_distance) OVER (ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING),
+        2
+    ) AS average_ride_distance,
+    ROUND(
+        AVG(ride_duration) OVER (ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING),
+        2
+    ) AS average_ride_duration
+FROM Ride
+ORDER BY month
+LIMIT 10;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2402.Meeting%20Rooms%20III/README.md
+rating: 2092
+source: 第 309 场周赛 Q4
+tags:
+    - 数组
+    - 哈希表
+    - 排序
+    - 模拟
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2402. 会议室 III](https://leetcode.cn/problems/meeting-rooms-iii)
 
 [English Version](/solution/2400-2499/2402.Meeting%20Rooms%20III/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>n</code> ，共有编号从 <code>0</code> 到 <code>n - 1</code> 的 <code>n</code> 个会议室。</p>
 
@@ -65,13 +81,15 @@
 	<li><code>start<sub>i</sub></code> 的所有值 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（小根堆）**
+### 方法一：优先队列（小根堆）
 
-定义两个优先队列，分别表示空闲会议室、使用中的会议室。其中：空闲会议室 `idle` 依据**下标**排序；而使用中的会议室 `busy` 依据**结束时间、下标**排序。
+我们定义两个优先队列，分别表示空闲会议室、使用中的会议室。其中：空闲会议室 `idle` 依据**下标**排序；而使用中的会议室 `busy` 依据**结束时间、下标**排序。
 
 先对会议按照开始时间排序，然后遍历会议，对于每个会议：
 
@@ -79,15 +97,15 @@
 -   若当前有空闲会议室，那么在空闲队列 `idle` 中取出权重最小的会议室，将其加入使用中的队列 `busy` 中；
 -   若当前没有空闲会议室，那么在使用队列 `busy` 中找出最早结束时间且下标最小的会议室，重新加入使用中的队列 `busy` 中。
 
-时间复杂度 $O(m\log m)$，其中 $m$ 为会议数量。
+时间复杂度 $O(m \times \log m)$，其中 $m$ 为会议数量。
 
-相似题目：[1882. 使用服务器处理任务](/solution/1800-1899/1882.Process%20Tasks%20Using%20Servers/README.md)
+相似题目：
+
+-   [1882. 使用服务器处理任务](https://github.com/doocs/leetcode/blob/main/solution/1800-1899/1882.Process%20Tasks%20Using%20Servers/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -115,9 +133,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -157,7 +173,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 using ll = long long;
@@ -201,7 +217,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mostBooked(n int, meetings [][]int) int {
@@ -239,8 +255,8 @@ func mostBooked(n int, meetings [][]int) int {
 
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -255,22 +271,13 @@ func (h hp2) Less(i, j int) bool {
 	a, b := h[i], h[j]
 	return a.end < b.end || a.end == b.end && a.i < b.i
 }
-func (h hp2) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp2) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp2) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
+func (h hp2) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h *hp2) Push(v any)   { *h = append(*h, v.(pair)) }
+func (h *hp2) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

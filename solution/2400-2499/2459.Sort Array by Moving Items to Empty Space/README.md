@@ -1,10 +1,22 @@
-# [2459. 通过移动项目到空白区域来排序数组](https://leetcode.cn/problems/sort-array-by-moving-items-to-empty-space)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2459.Sort%20Array%20by%20Moving%20Items%20to%20Empty%20Space/README.md
+tags:
+    - 贪心
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [2459. 通过移动项目到空白区域来排序数组 🔒](https://leetcode.cn/problems/sort-array-by-moving-items-to-empty-space)
 
 [English Version](/solution/2400-2499/2459.Sort%20Array%20by%20Moving%20Items%20to%20Empty%20Space/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个大小为 <code>n</code> 的整数数组 <code>nums</code>，其中包含从 <code>0</code> 到 <code>n - 1</code>&nbsp;(<strong>包含边界</strong>) 的&nbsp;<strong>每个&nbsp;</strong>元素。从 <code>1</code> 到 <code>n - 1</code> 的每一个元素都代表一项目，元素 <code>0</code> 代表一个空白区域。</p>
 
@@ -64,11 +76,13 @@
 	<li><code>nums</code> 的所有值都是&nbsp;<strong>唯一&nbsp;</strong>的。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：置换环**
+### 方法一：置换环
 
 一个长度为 $m$ 的置换环，如果 $0$ 在环中，那么交换次数为 $m-1$，否则交换次数为 $m+1$。
 
@@ -80,9 +94,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +119,7 @@ class Solution:
         return min(a, b)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -147,7 +157,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -180,7 +190,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortArray(nums []int) int {
@@ -213,25 +223,10 @@ func sortArray(nums []int) int {
 	b := f(arr, n-1)
 	return min(a, b)
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

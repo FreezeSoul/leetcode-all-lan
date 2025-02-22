@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20085.%20%E7%94%9F%E6%88%90%E5%8C%B9%E9%85%8D%E7%9A%84%E6%8B%AC%E5%8F%B7/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 085. 生成匹配的括号](https://leetcode.cn/problems/IDBivT)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>正整数&nbsp;<code>n</code>&nbsp;代表生成括号的对数，请设计一个函数，用于能够生成所有可能的并且 <strong>有效的 </strong>括号组合。</p>
 
@@ -34,17 +41,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 22&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/generate-parentheses/">https://leetcode.cn/problems/generate-parentheses/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-深度优先搜索 DFS。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -63,9 +70,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -90,29 +95,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function generateParenthesis(n: number): string[] {
-    let ans = [];
-    let dfs = function (left, right, t) {
-        if (left == n && right == n) {
-            ans.push(t);
-            return;
-        }
-        if (left < n) {
-            dfs(left + 1, right, t + '(');
-        }
-        if (right < left) {
-            dfs(left, right + 1, t + ')');
-        }
-    };
-    dfs(0, 0, '');
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -134,7 +117,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func generateParenthesis(n int) []string {
@@ -157,7 +140,29 @@ func generateParenthesis(n int) []string {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function generateParenthesis(n: number): string[] {
+    let ans = [];
+    let dfs = function (left, right, t) {
+        if (left == n && right == n) {
+            ans.push(t);
+            return;
+        }
+        if (left < n) {
+            dfs(left + 1, right, t + '(');
+        }
+        if (right < left) {
+            dfs(left, right + 1, t + ')');
+        }
+    };
+    dfs(0, 0, '');
+    return ans;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -183,10 +188,33 @@ var generateParenthesis = function (n) {
 };
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func generateParenthesis(_ n: Int) -> [String] {
+        var ans = [String]()
+        dfs(0, 0, n, "", &ans)
+        return ans
+    }
 
+    private func dfs(_ left: Int, _ right: Int, _ n: Int, _ t: String, _ ans: inout [String]) {
+        if left == n && right == n {
+            ans.append(t)
+            return
+        }
+        if left < n {
+            dfs(left + 1, right, n, t + "(", &ans)
+        }
+        if right < left {
+            dfs(left, right + 1, n, t + ")", &ans)
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

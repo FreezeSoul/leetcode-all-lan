@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1934.Confirmation%20Rate/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1934. 确认率](https://leetcode.cn/problems/confirmation-rate)
 
 [English Version](/solution/1900-1999/1934.Confirmation%20Rate/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Signups</code></p>
 
@@ -87,18 +97,33 @@ Confirmations 表:
 用户 7 提出了 3 个请求，所有请求都得到了确认。确认率为 1。
 用户 2 做了 2 个请求，其中一个被确认，另一个超时。确认率为 1 / 2 = 0.5。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：左连接 + 分组统计
+
+我们可以使用左连接，将 `Signups` 表和 `Confirmations` 表按照 `user_id` 进行连接，然后使用 `GROUP BY` 对 `user_id` 进行分组统计。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    user_id,
+    ROUND(IFNULL(SUM(action = 'confirmed') / COUNT(1), 0), 2) AS confirmation_rate
+FROM
+    SignUps
+    LEFT JOIN Confirmations USING (user_id)
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

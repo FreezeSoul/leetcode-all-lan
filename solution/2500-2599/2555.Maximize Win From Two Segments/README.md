@@ -1,14 +1,28 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2555.Maximize%20Win%20From%20Two%20Segments/README.md
+rating: 2080
+source: 第 97 场双周赛 Q3
+tags:
+    - 数组
+    - 二分查找
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [2555. 两个线段获得的最多奖品](https://leetcode.cn/problems/maximize-win-from-two-segments)
 
 [English Version](/solution/2500-2599/2555.Maximize%20Win%20From%20Two%20Segments/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在 <strong>X轴</strong>&nbsp;上有一些奖品。给你一个整数数组&nbsp;<code>prizePositions</code>&nbsp;，它按照 <strong>非递减</strong>&nbsp;顺序排列，其中&nbsp;<code>prizePositions[i]</code>&nbsp;是第&nbsp;<code>i</code>&nbsp;件奖品的位置。数轴上一个位置可能会有多件奖品。再给你一个整数&nbsp;<code>k</code>&nbsp;。</p>
 
-<p>你可以选择两个端点为整数的线段。每个线段的长度都必须是 <code>k</code>&nbsp;。你可以获得位置在任一线段上的所有奖品（包括线段的两个端点）。注意，两个线段可能会有相交。</p>
+<p>你可以同时选择两个端点为整数的线段。每个线段的长度都必须是 <code>k</code>&nbsp;。你可以获得位置在任一线段上的所有奖品（包括线段的两个端点）。注意，两个线段可能会有相交。</p>
 
 <ul>
 	<li>比方说&nbsp;<code>k = 2</code>&nbsp;，你可以选择线段&nbsp;<code>[1, 3]</code> 和&nbsp;<code>[2, 4]</code>&nbsp;，你可以获得满足&nbsp;<code>1 &lt;= prizePositions[i] &lt;= 3</code> 或者&nbsp;<code>2 &lt;= prizePositions[i] &lt;= 4</code>&nbsp;的所有奖品 i 。</li>
@@ -31,7 +45,7 @@
 <pre>
 <b>输入：</b>prizePositions = [1,2,3,4], k = 0
 <b>输出：</b>2
-<b>解释：</b>这个例子中，一个选择是选择线段 <code>[3, 3]</code> 和 <code>[4, 4] ，获得 2 个奖品。</code>
+<b>解释：</b>这个例子中，一个选择是选择线段 <code>[3, 3]</code> 和 <code>[4, 4]</code> ，获得 2 个奖品。
 </pre>
 
 <p>&nbsp;</p>
@@ -45,11 +59,13 @@
 	<li><code>prizePositions</code>&nbsp;有序非递减。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划 + 二分查找**
+### 方法一：动态规划 + 二分查找
 
 我们定义 $f[i]$ 表示在前 $i$ 个奖品中，选择一个长度为 $k$ 的线段，可以获得的最多奖品数目。初始时 $f[0] = 0$。定义答案变量 $ans = 0$。
 
@@ -61,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -78,9 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -132,7 +144,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximizeWin(prizePositions []int, k int) (ans int) {
@@ -145,19 +157,40 @@ func maximizeWin(prizePositions []int, k int) (ans int) {
 	}
 	return
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maximizeWin(prizePositions: number[], k: number): number {
+    const n = prizePositions.length;
+    const f: number[] = Array(n + 1).fill(0);
+    let ans = 0;
+    const search = (x: number): number => {
+        let left = 0;
+        let right = n;
+        while (left < right) {
+            const mid = (left + right) >> 1;
+            if (prizePositions[mid] >= x) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    };
+    for (let i = 1; i <= n; ++i) {
+        const x = prizePositions[i - 1];
+        const j = search(x - k);
+        ans = Math.max(ans, f[j] + i - j);
+        f[i] = Math.max(f[i - 1], i - j);
+    }
+    return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

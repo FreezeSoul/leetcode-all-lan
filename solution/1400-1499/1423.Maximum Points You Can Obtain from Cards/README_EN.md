@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1423.Maximum%20Points%20You%20Can%20Obtain%20from%20Cards/README_EN.md
+rating: 1573
+source: Weekly Contest 186 Q2
+tags:
+    - Array
+    - Prefix Sum
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [1423. Maximum Points You Can Obtain from Cards](https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards)
 
 [中文文档](/solution/1400-1499/1423.Maximum%20Points%20You%20Can%20Obtain%20from%20Cards/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are several cards <strong>arranged in a row</strong>, and each card has an associated number of points. The points are given in the integer array <code>cardPoints</code>.</p>
 
@@ -46,132 +62,271 @@
 	<li><code>1 &lt;= k &lt;= cardPoints.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sliding Window
+
+We can use a sliding window of length $k$ to simulate this process.
+
+Initially, we place the window at the end of the array, i.e., the $k$ positions from index $n-k$ to index $n-1$. The sum of the points of the cards in the window is denoted as $s$, and the initial value of the answer $ans$ is also $s$.
+
+Next, we consider the situation where we take $1, 2, ..., k$ cards from the beginning of the array in turn. Suppose the card taken is $cardPoints[i]$. Then we add it to $s$. Due to the length limit of the window is $k$, we need to subtract $cardPoints[n-k+i]$ from $s$. In this way, we can calculate the sum of the points of the $k$ cards taken and update the answer $ans$.
+
+The time complexity is $O(k)$, where $k$ is the integer given in the problem. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maxScore(self, cardPoints: List[int], k: int) -> int:
-        n = len(cardPoints)
-        s = [0] * (n + 1)
-        for i in range(n):
-            s[i + 1] = s[i] + cardPoints[i]
-        mi = inf
-        for i in range(n):
-            j = i + (n - k) - 1
-            if j < n:
-                mi = min(mi, s[j + 1] - s[i])
-        return s[-1] - mi
+        ans = s = sum(cardPoints[-k:])
+        for i, x in enumerate(cardPoints[:k]):
+            s += x - cardPoints[-k + i]
+            ans = max(ans, s)
+        return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-
     public int maxScore(int[] cardPoints, int k) {
-        int n = cardPoints.length;
-        int[] s = new int[n + 1];
-        for (int i = 0; i < n; ++i) {
-            s[i + 1] = s[i] + cardPoints[i];
+        int s = 0, n = cardPoints.length;
+        for (int i = n - k; i < n; ++i) {
+            s += cardPoints[i];
         }
-        int mi = Integer.MAX_VALUE;
-        for (int i = 0; i < n; ++i) {
-            int j = i + (n - k) - 1;
-            if (j < n) {
-                mi = Math.min(mi, s[j + 1] - s[i]);
-            }
+        int ans = s;
+        for (int i = 0; i < k; ++i) {
+            s += cardPoints[i] - cardPoints[n - k + i];
+            ans = Math.max(ans, s);
         }
-        return s[n] - mi;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maxScore(vector<int>& cardPoints, int k) {
         int n = cardPoints.size();
-        vector<int> s(n + 1);
-        for (int i = 0; i < n; ++i) s[i + 1] = s[i] + cardPoints[i];
-        int mi = INT_MAX;
-        for (int i = 0; i < n; ++i) {
-            int j = i + (n - k) - 1;
-            if (j < n) mi = min(mi, s[j + 1] - s[i]);
+        int s = accumulate(cardPoints.end() - k, cardPoints.end(), 0);
+        int ans = s;
+        for (int i = 0; i < k; ++i) {
+            s += cardPoints[i] - cardPoints[n - k + i];
+            ans = max(ans, s);
         }
-        return s[n] - mi;
+        return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxScore(cardPoints []int, k int) int {
 	n := len(cardPoints)
-	s := make([]int, n+1)
-	for i := 0; i < n; i++ {
-		s[i+1] = s[i] + cardPoints[i]
+	s := 0
+	for _, x := range cardPoints[n-k:] {
+		s += x
 	}
-	mi := math.MaxInt64
-	for i := 0; i < n; i++ {
-		j := i + (n - k) - 1
-		if j < n {
-			mi = min(mi, s[j+1]-s[i])
-		}
+	ans := s
+	for i := 0; i < k; i++ {
+		s += cardPoints[i] - cardPoints[n-k+i]
+		ans = max(ans, s)
 	}
-	return s[n] - mi
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return ans
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxScore(cardPoints: number[], k: number): number {
     const n = cardPoints.length;
-    let sum = cardPoints.slice(0, n - k).reduce((r, v) => r + v, 0);
-    let min = sum;
-    for (let i = 0; i < k; i++) {
-        sum += cardPoints[n - k + i] - cardPoints[i];
-        min = Math.min(min, sum);
+    let s = cardPoints.slice(-k).reduce((a, b) => a + b);
+    let ans = s;
+    for (let i = 0; i < k; ++i) {
+        s += cardPoints[i] - cardPoints[n - k + i];
+        ans = Math.max(ans, s);
     }
-    return cardPoints.reduce((r, v) => r + v, 0) - min;
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn max_score(card_points: Vec<i32>, k: i32) -> i32 {
-        let (k, n) = (k as usize, card_points.len());
-        let mut sum = card_points.iter().take(n - k).sum::<i32>();
-        let mut min = sum;
+        let n = card_points.len();
+        let k = k as usize;
+        let mut s: i32 = card_points[n - k..].iter().sum();
+        let mut ans: i32 = s;
         for i in 0..k {
-            sum += card_points[n - k + i] - card_points[i];
-            min = min.min(sum);
+            s += card_points[i] - card_points[n - k + i];
+            ans = ans.max(s);
         }
-        card_points.iter().sum::<i32>() - min
+        ans
     }
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * @param {number[]} cardPoints
+ * @param {number} k
+ * @return {number}
+ */
+var maxScore = function (cardPoints, k) {
+    const n = cardPoints.length;
+    let s = cardPoints.slice(-k).reduce((a, b) => a + b);
+    let ans = s;
+    for (let i = 0; i < k; ++i) {
+        s += cardPoints[i] - cardPoints[n - k + i];
+        ans = Math.max(ans, s);
+    }
+    return ans;
+};
 ```
 
+#### C#
+
+```cs
+public class Solution {
+    public int MaxScore(int[] cardPoints, int k) {
+        int n = cardPoints.Length;
+        int s = cardPoints[^k..].Sum();
+        int ans = s;
+        for (int i = 0; i < k; ++i) {
+            s += cardPoints[i] - cardPoints[n - k + i];
+            ans = Math.Max(ans, s);
+        }
+        return ans;
+    }
+}
+```
+
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param Integer[] $cardPoints
+     * @param Integer $k
+     * @return Integer
+     */
+    function maxScore($cardPoints, $k) {
+        $n = count($cardPoints);
+        $s = array_sum(array_slice($cardPoints, -$k));
+        $ans = $s;
+        for ($i = 0; $i < $k; ++$i) {
+            $s += $cardPoints[$i] - $cardPoints[$n - $k + $i];
+            $ans = max($ans, $s);
+        }
+        return $ans;
+    }
+}
+```
+
+#### Scala
+
+```scala
+object Solution {
+    def maxScore(cardPoints: Array[Int], k: Int): Int = {
+        val n = cardPoints.length
+        var s = cardPoints.takeRight(k).sum
+        var ans = s
+        for (i <- 0 until k) {
+            s += cardPoints(i) - cardPoints(n - k + i)
+            ans = ans.max(s)
+        }
+        ans
+    }
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    func maxScore(_ cardPoints: [Int], _ k: Int) -> Int {
+        let n = cardPoints.count
+        var s = cardPoints.suffix(k).reduce(0, +)
+        var ans = s
+        for i in 0..<k {
+            s += cardPoints[i] - cardPoints[n - k + i]
+            ans = max(ans, s)
+        }
+        return ans
+    }
+}
+```
+
+#### Ruby
+
+```rb
+# @param {Integer[]} card_points
+# @param {Integer} k
+# @return {Integer}
+def max_score(card_points, k)
+  n = card_points.length
+  s = card_points[-k..].sum
+  ans = s
+  k.times do |i|
+    s += card_points[i] - card_points[n - k + i]
+    ans = [ans, s].max
+  end
+  ans
+end
+```
+
+#### Kotlin
+
+```kotlin
+class Solution {
+    fun maxScore(cardPoints: IntArray, k: Int): Int {
+        val n = cardPoints.size
+        var s = cardPoints.sliceArray(n - k until n).sum()
+        var ans = s
+        for (i in 0 until k) {
+            s += cardPoints[i] - cardPoints[n - k + i]
+            ans = maxOf(ans, s)
+        }
+        return ans
+    }
+}
+```
+
+#### Dart
+
+```dart
+class Solution {
+  int maxScore(List<int> cardPoints, int k) {
+    int n = cardPoints.length;
+    int s = cardPoints.sublist(n - k).reduce((a, b) => a + b);
+    int ans = s;
+    for (int i = 0; i < k; ++i) {
+      s += cardPoints[i] - cardPoints[n - k + i];
+      ans = s > ans ? s : ans;
+    }
+    return ans;
+  }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

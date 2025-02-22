@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0617.Merge%20Two%20Binary%20Trees/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [617. 合并二叉树](https://leetcode.cn/problems/merge-two-binary-trees)
 
 [English Version](/solution/0600-0699/0617.Merge%20Two%20Binary%20Trees/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两棵二叉树： <code>root1</code> 和 <code>root2</code> 。</p>
 
@@ -39,11 +52,13 @@
 	<li><code>-10<sup>4</sup> &lt;= Node.val &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 递归合并两棵树的节点。
 
@@ -54,9 +69,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -66,7 +79,9 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def mergeTrees(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> Optional[TreeNode]:
+    def mergeTrees(
+        self, root1: Optional[TreeNode], root2: Optional[TreeNode]
+    ) -> Optional[TreeNode]:
         if root1 is None:
             return root2
         if root2 is None:
@@ -77,9 +92,7 @@ class Solution:
         return node
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -113,7 +126,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -140,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -165,7 +178,7 @@ func mergeTrees(root1 *TreeNode, root2 *TreeNode) *TreeNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -182,20 +195,17 @@ func mergeTrees(root1 *TreeNode, root2 *TreeNode) *TreeNode {
  * }
  */
 
-function mergeTrees(
-    root1: TreeNode | null,
-    root2: TreeNode | null,
-): TreeNode | null {
-    if (root1 == null && root2 == null) return null;
-    if (root1 == null) return root2;
-    if (root2 == null) return root1;
-    let left = mergeTrees(root1.left, root2.left);
-    let right = mergeTrees(root1.right, root2.right);
+function mergeTrees(root1: TreeNode | null, root2: TreeNode | null): TreeNode | null {
+    if (root1 === null && root2 === null) return null;
+    if (root1 === null) return root2;
+    if (root2 === null) return root1;
+    const left = mergeTrees(root1.left, root2.left);
+    const right = mergeTrees(root1.right, root2.right);
     return new TreeNode(root1.val + root2.val, left, right);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -216,8 +226,8 @@ function mergeTrees(
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     pub fn merge_trees(
         root1: Option<Rc<RefCell<TreeNode>>>,
@@ -242,7 +252,7 @@ impl Solution {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -272,10 +282,8 @@ var mergeTrees = function (root1, root2) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

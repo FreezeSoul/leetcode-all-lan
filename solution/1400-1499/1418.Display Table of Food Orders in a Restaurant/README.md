@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1418.Display%20Table%20of%20Food%20Orders%20in%20a%20Restaurant/README.md
+rating: 1485
+source: 第 185 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 有序集合
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1418. 点菜展示表](https://leetcode.cn/problems/display-table-of-food-orders-in-a-restaurant)
 
 [English Version](/solution/1400-1499/1418.Display%20Table%20of%20Food%20Orders%20in%20a%20Restaurant/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组 <code>orders</code>，表示客户在餐厅中完成的订单，确切地说， <code>orders[i]=[customerName<sub>i</sub>,tableNumber<sub>i</sub>,foodItem<sub>i</sub>]</code> ，其中 <code>customerName<sub>i</sub></code> 是客户的姓名，<code>tableNumber<sub>i</sub></code> 是客户所在餐桌的桌号，而 <code>foodItem<sub>i</sub></code> 是客户点的餐品名称。</p>
 
@@ -56,165 +72,196 @@
 	<li><code>tableNumber<sub>i</sub></code> 是 <code>1</code> 到 <code>500</code> 范围内的整数。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：哈希表 + 排序
+
+我们可以用一个哈希表 $\textit{tables}$ 来存储每张餐桌点的菜品，用一个集合 $\textit{items}$ 来存储所有的菜品。
+
+遍历 $\textit{orders}$，将每张餐桌点的菜品存入 $\textit{tables}$ 和 $\textit{items}$ 中。
+
+然后我们将 $\textit{items}$ 排序，得到 $\textit{sortedItems}$。
+
+接下来，我们构建答案数组 $\textit{ans}$，首先将标题行 $\textit{header}$ 加入 $\textit{ans}$，然后遍历排序后的 $\textit{tables}$，对于每张餐桌，我们用一个计数器 $\textit{cnt}$ 来统计每种菜品的数量，然后构建一行 $\textit{row}$，将其加入 $\textit{ans}$。
+
+最后返回 $\textit{ans}$。
+
+时间复杂度 $O(n + m \times \log m + k \times \log k + m \times k)$，空间复杂度 $O(n + m + k)$。其中 $n$ 是数组 $\textit{orders}$ 的长度，而 $m$ 和 $k$ 分别表示菜品种类数和餐桌数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def displayTable(self, orders: List[List[str]]) -> List[List[str]]:
-        tables = set()
-        foods = set()
-        mp = Counter()
-        for _, table, food in orders:
-            tables.add(int(table))
-            foods.add(food)
-            mp[f'{table}.{food}'] += 1
-        foods = sorted(list(foods))
-        tables = sorted(list(tables))
-        res = [['Table'] + foods]
-        for table in tables:
-            t = [str(table)]
-            for food in foods:
-                t.append(str(mp[f'{table}.{food}']))
-            res.append(t)
-        return res
+        tables = defaultdict(list)
+        items = set()
+        for _, table, foodItem in orders:
+            tables[int(table)].append(foodItem)
+            items.add(foodItem)
+        sorted_items = sorted(items)
+        ans = [["Table"] + sorted_items]
+        for table in sorted(tables):
+            cnt = Counter(tables[table])
+            row = [str(table)] + [str(cnt[item]) for item in sorted_items]
+            ans.append(row)
+        return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public List<List<String>> displayTable(List<List<String>> orders) {
-        Set<Integer> tables = new HashSet<>();
-        Set<String> foods = new HashSet<>();
-        Map<String, Integer> mp = new HashMap<>();
-        for (List<String> order : orders) {
-            int table = Integer.parseInt(order.get(1));
-            String food = order.get(2);
-            tables.add(table);
-            foods.add(food);
-            String key = table + "." + food;
-            mp.put(key, mp.getOrDefault(key, 0) + 1);
+        TreeMap<Integer, List<String>> tables = new TreeMap<>();
+        Set<String> items = new HashSet<>();
+        for (List<String> o : orders) {
+            int table = Integer.parseInt(o.get(1));
+            String foodItem = o.get(2);
+            tables.computeIfAbsent(table, k -> new ArrayList<>()).add(foodItem);
+            items.add(foodItem);
         }
-        List<Integer> t = new ArrayList<>(tables);
-        List<String> f = new ArrayList<>(foods);
-        Collections.sort(t);
-        Collections.sort(f);
-        List<List<String>> res = new ArrayList<>();
-        List<String> title = new ArrayList<>();
-        title.add("Table");
-        title.addAll(f);
-        res.add(title);
-        for (int table : t) {
-            List<String> tmp = new ArrayList<>();
-            tmp.add(String.valueOf(table));
-            for (String food : f) {
-                tmp.add(String.valueOf(mp.getOrDefault(table + "." + food, 0)));
+        List<String> sortedItems = new ArrayList<>(items);
+        Collections.sort(sortedItems);
+        List<List<String>> ans = new ArrayList<>();
+        List<String> header = new ArrayList<>();
+        header.add("Table");
+        header.addAll(sortedItems);
+        ans.add(header);
+        for (Map.Entry<Integer, List<String>> entry : tables.entrySet()) {
+            Map<String, Integer> cnt = new HashMap<>();
+            for (String item : entry.getValue()) {
+                cnt.merge(item, 1, Integer::sum);
             }
-            res.add(tmp);
+            List<String> row = new ArrayList<>();
+            row.add(String.valueOf(entry.getKey()));
+            for (String item : sortedItems) {
+                row.add(String.valueOf(cnt.getOrDefault(item, 0)));
+            }
+            ans.add(row);
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<vector<string>> displayTable(vector<vector<string>>& orders) {
-        unordered_set<int> tables;
-        unordered_set<string> foods;
-        unordered_map<string, int> mp;
-        for (auto& order : orders) {
-            int table = stoi(order[1]);
-            string food = order[2];
-            tables.insert(table);
-            foods.insert(food);
-            ++mp[order[1] + "." + food];
+        map<int, vector<string>> tables;
+        set<string> sortedItems;
+        for (auto& o : orders) {
+            int table = stoi(o[1]);
+            string foodItem = o[2];
+            tables[table].push_back(foodItem);
+            sortedItems.insert(foodItem);
         }
-        vector<int> t;
-        t.assign(tables.begin(), tables.end());
-        sort(t.begin(), t.end());
-        vector<string> f;
-        f.assign(foods.begin(), foods.end());
-        sort(f.begin(), f.end());
-        vector<vector<string>> res;
-        vector<string> title;
-        title.push_back("Table");
-        for (auto e : f) title.push_back(e);
-        res.push_back(title);
-        for (int table : t) {
-            vector<string> tmp;
-            tmp.push_back(to_string(table));
-            for (string food : f) {
-                tmp.push_back(to_string(mp[to_string(table) + "." + food]));
+        vector<vector<string>> ans;
+        vector<string> header = {"Table"};
+        header.insert(header.end(), sortedItems.begin(), sortedItems.end());
+        ans.push_back(header);
+        for (auto& [table, items] : tables) {
+            unordered_map<string, int> cnt;
+            for (string& item : items) {
+                cnt[item]++;
             }
-            res.push_back(tmp);
+            vector<string> row;
+            row.push_back(to_string(table));
+            for (const string& item : sortedItems) {
+                row.push_back(to_string(cnt[item]));
+            }
+            ans.push_back(row);
         }
-        return res;
+        return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func displayTable(orders [][]string) [][]string {
-	tables := make(map[int]bool)
-	foods := make(map[string]bool)
-	mp := make(map[string]int)
+	tables := make(map[int]map[string]int)
+	items := make(map[string]bool)
 	for _, order := range orders {
-		table, food := order[1], order[2]
-		t, _ := strconv.Atoi(table)
-		tables[t] = true
-		foods[food] = true
-		key := table + "." + food
-		mp[key] += 1
-	}
-	var t []int
-	var f []string
-	for i := range tables {
-		t = append(t, i)
-	}
-	for i := range foods {
-		f = append(f, i)
-	}
-	sort.Ints(t)
-	sort.Strings(f)
-	var res [][]string
-	var title []string
-	title = append(title, "Table")
-	for _, e := range f {
-		title = append(title, e)
-	}
-	res = append(res, title)
-	for _, table := range t {
-		var tmp []string
-		tmp = append(tmp, strconv.Itoa(table))
-		for _, food := range f {
-			tmp = append(tmp, strconv.Itoa(mp[strconv.Itoa(table)+"."+food]))
+		table, _ := strconv.Atoi(order[1])
+		foodItem := order[2]
+		if tables[table] == nil {
+			tables[table] = make(map[string]int)
 		}
-		res = append(res, tmp)
+		tables[table][foodItem]++
+		items[foodItem] = true
 	}
-	return res
+	sortedItems := make([]string, 0, len(items))
+	for item := range items {
+		sortedItems = append(sortedItems, item)
+	}
+	sort.Strings(sortedItems)
+	ans := [][]string{}
+	header := append([]string{"Table"}, sortedItems...)
+	ans = append(ans, header)
+	tableNums := make([]int, 0, len(tables))
+	for table := range tables {
+		tableNums = append(tableNums, table)
+	}
+	sort.Ints(tableNums)
+	for _, table := range tableNums {
+		row := []string{strconv.Itoa(table)}
+		for _, item := range sortedItems {
+			count := tables[table][item]
+			row = append(row, strconv.Itoa(count))
+		}
+		ans = append(ans, row)
+	}
+	return ans
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function displayTable(orders: string[][]): string[][] {
+    const tables: Record<number, Record<string, number>> = {};
+    const items: Set<string> = new Set();
+    for (const [_, table, foodItem] of orders) {
+        const t = +table;
+        if (!tables[t]) {
+            tables[t] = {};
+        }
+        if (!tables[t][foodItem]) {
+            tables[t][foodItem] = 0;
+        }
+        tables[t][foodItem]++;
+        items.add(foodItem);
+    }
+    const sortedItems = Array.from(items).sort();
+    const ans: string[][] = [];
+    const header: string[] = ['Table', ...sortedItems];
+    ans.push(header);
+    const sortedTableNumbers = Object.keys(tables)
+        .map(Number)
+        .sort((a, b) => a - b);
+    for (const table of sortedTableNumbers) {
+        const row: string[] = [table.toString()];
+        for (const item of sortedItems) {
+            row.push((tables[table][item] || 0).toString());
+        }
+        ans.push(row);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

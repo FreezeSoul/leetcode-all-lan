@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1688.Count%20of%20Matches%20in%20Tournament/README_EN.md
+rating: 1203
+source: Weekly Contest 219 Q1
+tags:
+    - Math
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1688. Count of Matches in Tournament](https://leetcode.com/problems/count-of-matches-in-tournament)
 
 [中文文档](/solution/1600-1699/1688.Count%20of%20Matches%20in%20Tournament/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code>, the number of teams in a tournament that has strange rules:</p>
 
@@ -46,11 +61,21 @@ Total number of matches = 7 + 3 + 2 + 1 = 13.
 	<li><code>1 &lt;= n &lt;= 200</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Quick Thinking
+
+From the problem description, we know that there are $n$ teams in total. Each pairing will eliminate one team. Therefore, the number of pairings is equal to the number of teams eliminated, which is $n - 1$.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +83,7 @@ class Solution:
         return n - 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -68,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -79,7 +104,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfMatches(n int) int {
@@ -87,7 +112,15 @@ func numberOfMatches(n int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function numberOfMatches(n: number): number {
+    return n - 1;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -99,18 +132,8 @@ var numberOfMatches = function (n) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function numberOfMatches(n: number): number {
-    return n - 1;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

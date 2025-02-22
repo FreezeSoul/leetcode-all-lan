@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0237.Delete%20Node%20in%20a%20Linked%20List/README_EN.md
+tags:
+    - Linked List
+---
+
+<!-- problem:start -->
+
 # [237. Delete Node in a Linked List](https://leetcode.com/problems/delete-node-in-a-linked-list)
 
 [中文文档](/solution/0200-0299/0237.Delete%20Node%20in%20a%20Linked%20List/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a singly-linked list <code>head</code> and we want to delete a node <code>node</code> in it.</p>
 
@@ -54,9 +66,13 @@
 	<li>The <code>node</code> to be deleted is <strong>in the list</strong> and is <strong>not a tail</strong> node.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Node assignment**
+<!-- solution:start -->
+
+### Solution 1: Node assignment
 
 We can replace the value of the current node with the value of the next node, and then delete the next node. This can achieve the purpose of deleting the current node.
 
@@ -64,7 +80,7 @@ Time complexity $O(1)$, space complexity $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -84,7 +100,7 @@ class Solution:
         node.next = node.next.next
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -103,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -123,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -134,12 +150,12 @@ public:
  * }
  */
 func deleteNode(node *ListNode) {
-    node.Val = node.Next.Val
-    node.Next = node.Next.Next
+	node.Val = node.Next.Val
+	node.Next = node.Next.Next
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -163,26 +179,7 @@ function deleteNode(node: ListNode | null): void {
 }
 ```
 
-### **C#**
-
-```cs
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     public int val;
- *     public ListNode next;
- *     public ListNode(int x) { val = x; }
- * }
- */
-public class Solution {
-    public void DeleteNode(ListNode node) {
-        node.val = node.next.val;
-        node.next = node.next.next;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -202,10 +199,43 @@ var deleteNode = function (node) {
 };
 ```
 
-### **...**
+#### C#
 
+```cs
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void DeleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+}
 ```
 
+#### C
+
+```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+void deleteNode(struct ListNode* node) {
+    node->val = node->next->val;
+    node->next = node->next->next;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

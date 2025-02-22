@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0609.Find%20Duplicate%20File%20in%20System/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [609. Find Duplicate File in System](https://leetcode.com/problems/find-duplicate-file-in-system)
 
 [中文文档](/solution/0600-0699/0609.Find%20Duplicate%20File%20in%20System/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a list <code>paths</code> of directory info, including the directory path, and all the files with contents in this directory, return <em>all the duplicate files in the file system in terms of their paths</em>. You may return the answer in <strong>any order</strong>.</p>
 
@@ -53,11 +67,17 @@
 	<li>How to make sure the duplicated files you find are not false positive?</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,12 +87,12 @@ class Solution:
             ps = p.split()
             for f in ps[1:]:
                 i = f.find('(')
-                name, content = f[:i], f[i + 1: -1]
+                name, content = f[:i], f[i + 1 : -1]
                 d[content].append(ps[0] + '/' + name)
         return [v for v in d.values() if len(v) > 1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findDuplicate(paths []string) [][]string {
@@ -159,7 +179,7 @@ func findDuplicate(paths []string) [][]string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findDuplicate(paths: string[]): string[][] {
@@ -177,10 +197,8 @@ function findDuplicate(paths: string[]): string[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

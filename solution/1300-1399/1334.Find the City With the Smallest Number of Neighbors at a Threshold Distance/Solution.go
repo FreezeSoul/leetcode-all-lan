@@ -14,7 +14,6 @@ func findTheCity(n int, edges [][]int, distanceThreshold int) int {
 		g[f][t], g[t][f] = w, w
 	}
 
-	ans, t := n, inf
 	dijkstra := func(u int) (cnt int) {
 		for i := range vis {
 			vis[i] = false
@@ -40,19 +39,13 @@ func findTheCity(n int, edges [][]int, distanceThreshold int) int {
 		}
 		return
 	}
+
+	ans, cnt := n, inf
 	for i := n - 1; i >= 0; i-- {
-		cnt := dijkstra(i)
-		if t > cnt {
-			t = cnt
+		if t := dijkstra(i); t < cnt {
+			cnt = t
 			ans = i
 		}
 	}
 	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }

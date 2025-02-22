@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2514.Count%20Anagrams/README_EN.md
+rating: 2069
+source: Biweekly Contest 94 Q4
+tags:
+    - Hash Table
+    - Math
+    - String
+    - Combinatorics
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2514. Count Anagrams](https://leetcode.com/problems/count-anagrams)
 
 [中文文档](/solution/2500-2599/2514.Count%20Anagrams/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> containing one or more words. Every consecutive pair of words is separated by a single space <code>&#39; &#39;</code>.</p>
 
@@ -39,11 +57,17 @@
 	<li>There is single space between consecutive words.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 mod = 10**9 + 7
@@ -65,21 +89,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def countAnagrams(self, s: str) -> int:
-        mod = 10**9 + 7
-        ans = mul = 1
-        for w in s.split():
-            cnt = Counter()
-            for i, c in enumerate(w, 1):
-                cnt[c] += 1
-                mul = mul * cnt[c] % mod
-                ans = ans * i % mod
-        return ans * pow(mul, -1, mod) % mod
-```
-
-### **Java**
+#### Java
 
 ```java
 import java.math.BigInteger;
@@ -111,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 const mod int = 1e9 + 7
@@ -176,10 +186,34 @@ func pow(x, n int) int {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countAnagrams(self, s: str) -> int:
+        mod = 10**9 + 7
+        ans = mul = 1
+        for w in s.split():
+            cnt = Counter()
+            for i, c in enumerate(w, 1):
+                cnt[c] += 1
+                mul = mul * cnt[c] % mod
+                ans = ans * i % mod
+        return ans * pow(mul, -1, mod) % mod
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

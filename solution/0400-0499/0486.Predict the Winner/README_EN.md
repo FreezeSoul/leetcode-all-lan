@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0486.Predict%20the%20Winner/README_EN.md
+tags:
+    - Recursion
+    - Array
+    - Math
+    - Dynamic Programming
+    - Game Theory
+---
+
+<!-- problem:start -->
+
 # [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner)
 
 [中文文档](/solution/0400-0499/0486.Predict%20the%20Winner/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>. Two players are playing a game with this array: player 1 and player 2.</p>
 
@@ -39,11 +55,17 @@ Finally, player 1 has more score (234) than player 2 (12), so you need to return
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,20 +79,7 @@ class Solution:
         return dfs(0, len(nums) - 1) >= 0
 ```
 
-```python
-class Solution:
-    def PredictTheWinner(self, nums: List[int]) -> bool:
-        n = len(nums)
-        f = [[0] * n for _ in range(n)]
-        for i, x in enumerate(nums):
-            f[i][i] = x
-        for i in range(n - 2, -1, -1):
-            for j in range(i + 1, n):
-                f[i][j] = max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1])
-        return f[0][n - 1] >= 0
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -96,25 +105,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean PredictTheWinner(int[] nums) {
-        int n = nums.length;
-        int[][] f = new int[n][n];
-        for (int i = 0; i < n; ++i) {
-            f[i][i] = nums[i];
-        }
-        for (int i = n - 2; i >= 0; --i) {
-            for (int j = i + 1; j < n; ++j) {
-                f[i][j] = Math.max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1]);
-            }
-        }
-        return f[0][n - 1] >= 0;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -137,6 +128,126 @@ public:
 };
 ```
 
+#### Go
+
+```go
+func PredictTheWinner(nums []int) bool {
+	n := len(nums)
+	f := make([][]int, n)
+	for i := range f {
+		f[i] = make([]int, n)
+	}
+	var dfs func(i, j int) int
+	dfs = func(i, j int) int {
+		if i > j {
+			return 0
+		}
+		if f[i][j] == 0 {
+			f[i][j] = max(nums[i]-dfs(i+1, j), nums[j]-dfs(i, j-1))
+		}
+		return f[i][j]
+	}
+	return dfs(0, n-1) >= 0
+}
+```
+
+#### TypeScript
+
+```ts
+function PredictTheWinner(nums: number[]): boolean {
+    const n = nums.length;
+    const f: number[][] = new Array(n).fill(0).map(() => new Array(n).fill(0));
+    const dfs = (i: number, j: number): number => {
+        if (i > j) {
+            return 0;
+        }
+        if (f[i][j] === 0) {
+            f[i][j] = Math.max(nums[i] - dfs(i + 1, j), nums[j] - dfs(i, j - 1));
+        }
+        return f[i][j];
+    };
+    return dfs(0, n - 1) >= 0;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn predict_the_winner(nums: Vec<i32>) -> bool {
+        let n = nums.len();
+        let mut dp: Vec<Vec<i32>> = vec![vec![0; n]; n];
+
+        // Initialize the dp vector
+        for i in 0..n {
+            dp[i][i] = nums[i];
+        }
+
+        // Begin the dp process
+        for i in (0..n - 1).rev() {
+            for j in i + 1..n {
+                dp[i][j] = std::cmp::max(
+                    // Take i-th num
+                    nums[i] - dp[i + 1][j],
+                    // Take j-th num
+                    nums[j] - dp[i][j - 1],
+                );
+            }
+        }
+
+        dp[0][n - 1] >= 0
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def PredictTheWinner(self, nums: List[int]) -> bool:
+        n = len(nums)
+        f = [[0] * n for _ in range(n)]
+        for i, x in enumerate(nums):
+            f[i][i] = x
+        for i in range(n - 2, -1, -1):
+            for j in range(i + 1, n):
+                f[i][j] = max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1])
+        return f[0][n - 1] >= 0
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean PredictTheWinner(int[] nums) {
+        int n = nums.length;
+        int[][] f = new int[n][n];
+        for (int i = 0; i < n; ++i) {
+            f[i][i] = nums[i];
+        }
+        for (int i = n - 2; i >= 0; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                f[i][j] = Math.max(nums[i] - f[i + 1][j], nums[j] - f[i][j - 1]);
+            }
+        }
+        return f[0][n - 1] >= 0;
+    }
+}
+```
+
+#### C++
+
 ```cpp
 class Solution {
 public:
@@ -157,35 +268,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func PredictTheWinner(nums []int) bool {
-    n := len(nums)
-	f := make([][]int, n)
-	for i := range f {
-		f[i] = make([]int, n)
-	}
-	var dfs func(i, j int) int
-	dfs = func(i, j int) int {
-		if i > j {
-			return 0
-		}
-		if f[i][j] == 0 {
-			f[i][j] = max(nums[i]-dfs(i+1, j), nums[j]-dfs(i, j-1))
-		}
-		return f[i][j]
-	}
-	return dfs(0, n-1) >= 0
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func PredictTheWinner(nums []int) bool {
@@ -202,36 +285,9 @@ func PredictTheWinner(nums []int) bool {
 	}
 	return f[0][n-1] >= 0
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function PredictTheWinner(nums: number[]): boolean {
-    const n = nums.length;
-    const f: number[][] = new Array(n).fill(0).map(() => new Array(n).fill(0));
-    const dfs = (i: number, j: number): number => {
-        if (i > j) {
-            return 0;
-        }
-        if (f[i][j] === 0) {
-            f[i][j] = Math.max(
-                nums[i] - dfs(i + 1, j),
-                nums[j] - dfs(i, j - 1),
-            );
-        }
-        return f[i][j];
-    };
-    return dfs(0, n - 1) >= 0;
-}
-```
+#### TypeScript
 
 ```ts
 function PredictTheWinner(nums: number[]): boolean {
@@ -249,10 +305,8 @@ function PredictTheWinner(nums: number[]): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1129.Shortest%20Path%20with%20Alternating%20Colors/README.md
+rating: 1779
+source: 第 146 场周赛 Q2
+tags:
+    - 广度优先搜索
+    - 图
+---
+
+<!-- problem:start -->
+
 # [1129. 颜色交替的最短路径](https://leetcode.cn/problems/shortest-path-with-alternating-colors)
 
 [English Version](/solution/1100-1199/1129.Shortest%20Path%20with%20Alternating%20Colors/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数 <code>n</code>，即有向图中的节点数，其中节点标记为 <code>0</code> 到 <code>n - 1</code>。图中的每条边为红色或者蓝色，并且可能存在自环或平行边。</p>
 
@@ -44,11 +57,13 @@
 	<li><code>0 &lt;= a<sub>i</sub>, b<sub>i</sub>, u<sub>j</sub>, v<sub>j</sub>&nbsp;&lt; n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 题目实际上是最短路问题，我们可以考虑使用 BFS 来解决。
 
@@ -71,9 +86,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -103,9 +116,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -149,7 +160,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -191,7 +202,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestAlternatingPaths(n int, redEdges [][]int, blueEdges [][]int) []int {
@@ -235,10 +246,56 @@ func shortestAlternatingPaths(n int, redEdges [][]int, blueEdges [][]int) []int 
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function shortestAlternatingPaths(
+    n: number,
+    redEdges: number[][],
+    blueEdges: number[][],
+): number[] {
+    const g: [Graph, Graph] = [{}, {}];
+    const ans = Array(n).fill(-1);
+    const vis = Array.from({ length: n }, () => Array.from({ length: 2 }, () => false));
+    let q: Vertex[] = [
+        [0, 0],
+        [0, 1],
+    ];
+    vis[0][0] = vis[0][1] = true;
+    let d = 0;
+    for (const [i, j] of redEdges) {
+        (g[0][i] ??= []).push(j);
+    }
+    for (const [i, j] of blueEdges) {
+        (g[1][i] ??= []).push(j);
+    }
+    while (q.length) {
+        const qNext: Vertex[] = [];
+        for (let [i, color] of q) {
+            if (ans[i] === -1) {
+                ans[i] = d;
+            }
+            color ^= 1;
+            for (const j of g[color][i] ?? []) {
+                if (!vis[j][color]) {
+                    vis[j][color] = true;
+                    qNext.push([j, color as Color]);
+                }
+            }
+        }
+        q = qNext;
+        d++;
+    }
+    return ans;
+}
 
+type Graph = Record<number, number[]>;
+type Color = 0 | 1;
+type Vertex = [number, Color];
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

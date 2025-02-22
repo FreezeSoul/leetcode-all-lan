@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1848.Minimum%20Distance%20to%20the%20Target%20Element/README.md
+rating: 1216
+source: 第 239 场周赛 Q1
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1848. 到目标元素的最小距离](https://leetcode.cn/problems/minimum-distance-to-the-target-element)
 
 [English Version](/solution/1800-1899/1848.Minimum%20Distance%20to%20the%20Target%20Element/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> （下标 <strong>从 0 开始</strong> 计数）以及两个整数 <code>target</code> 和 <code>start</code> ，请你找出一个下标 <code>i</code> ，满足 <code>nums[i] == target</code> 且 <code>abs(i - start)</code> <strong>最小化</strong> 。注意：<code>abs(x)</code> 表示 <code>x</code> 的绝对值。</p>
 
@@ -49,35 +61,29 @@
 	<li><code>target</code> 存在于 <code>nums</code> 中</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
-遍历数组，找到所有等于 `target` 的下标，然后计算 `abs(i - start)`，取最小值即可。
+遍历数组，找到所有等于 $target$ 的下标，然后计算 $|i - start|$，取最小值即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def getMinDistance(self, nums: List[int], target: int, start: int) -> int:
-        ans = inf
-        for i, x in enumerate(nums):
-            if x == target:
-                ans = min(ans, abs(i - start))
-        return ans
+        return min(abs(i - start) for i, x in enumerate(nums) if x == target)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,7 +118,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getMinDistance(nums []int, target int, start int) int {
@@ -133,10 +139,37 @@ func abs(x int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function getMinDistance(nums: number[], target: number, start: number): number {
+    let ans = Infinity;
+    for (let i = 0; i < nums.length; ++i) {
+        if (nums[i] === target) {
+            ans = Math.min(ans, Math.abs(i - start));
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn get_min_distance(nums: Vec<i32>, target: i32, start: i32) -> i32 {
+        nums.iter()
+            .enumerate()
+            .filter(|&(_, &x)| x == target)
+            .map(|(i, _)| ((i as i32) - start).abs())
+            .min()
+            .unwrap_or_default()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

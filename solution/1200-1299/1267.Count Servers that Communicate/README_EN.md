@@ -1,8 +1,27 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1267.Count%20Servers%20that%20Communicate/README_EN.md
+rating: 1374
+source: Weekly Contest 164 Q2
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Union Find
+    - Array
+    - Counting
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1267. Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate)
 
 [中文文档](/solution/1200-1299/1267.Count%20Servers%20that%20Communicate/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a map of a server center, represented as a <code>m * n</code> integer matrix&nbsp;<code>grid</code>, where 1 means that on that cell there is a server and 0 means that it is no server. Two servers are said to communicate if they are on the same row or on the same column.<br />
 <br />
@@ -49,11 +68,23 @@ Return the number of servers&nbsp;that communicate with any other server.</p>
 	<li><code>grid[i][j] == 0 or 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We can count the number of servers in each row and each column, then traverse each server. If the number of servers in the current server's row or column exceeds $1$, it means the current server meets the condition, and we increment the result by $1$.
+
+After the traversal, we return the result.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m + n)$. Where $m$ and $n$ are the number of rows and columns in the matrix, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +104,7 @@ class Solution:
         )
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +160,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countServers(grid [][]int) (ans int) {
@@ -154,7 +185,7 @@ func countServers(grid [][]int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countServers(grid: number[][]): number {
@@ -182,10 +213,8 @@ function countServers(grid: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.01.Add%20Without%20Plus/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 17.01. 不用加号的加法](https://leetcode.cn/problems/add-without-plus-lcci)
 
 [English Version](/lcci/17.01.Add%20Without%20Plus/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>设计一个函数把两个数字相加。不得使用 + 或者其他算术运算符。</p>
 
 <p><strong>示例:</strong></p>
@@ -21,24 +30,17 @@
 	<li>结果不会溢出 32 位整数</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-
-
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -55,11 +57,30 @@ class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func add(_ a: Int, _ b: Int) -> Int {
+        var a = a
+        var b = b
+        var sum = 0
+        var carry = 0
 
+        while b != 0 {
+            sum = a ^ b
+            carry = (a & b) << 1
+            a = sum
+            b = carry
+        }
 
+        return a
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

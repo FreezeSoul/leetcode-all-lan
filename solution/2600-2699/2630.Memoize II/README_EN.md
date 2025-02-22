@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2630.Memoize%20II/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2630. Memoize II](https://leetcode.com/problems/memoize-ii)
 
 [中文文档](/solution/2600-2699/2630.Memoize%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a function <code>fn</code>,&nbsp;return&nbsp;a&nbsp;<strong>memoized</strong>&nbsp;version of that function.</p>
 
@@ -61,11 +73,17 @@ Merging two empty objects will always result in an empty object. The 2nd and 3rd
 	<li><code>inputs[i][j] != NaN</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 type Fn = (...params: any) => any;
@@ -102,10 +120,8 @@ function memoize(fn: Fn): Fn {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

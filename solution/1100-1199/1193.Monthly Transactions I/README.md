@@ -1,12 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1193.Monthly%20Transactions%20I/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1193. 每月交易 I](https://leetcode.cn/problems/monthly-transactions-i)
 
 [English Version](/solution/1100-1199/1193.Monthly%20Transactions%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>Table: <code>Transactions</code></p>
+<p>表：<code>Transactions</code></p>
 
 <pre>
 +---------------+---------+
@@ -20,7 +30,7 @@
 +---------------+---------+
 id 是这个表的主键。
 该表包含有关传入事务的信息。
-state 列类型为 “[”批准“，”拒绝“] 之一。
+state 列类型为 ["approved", "declined"] 之一。
 </pre>
 
 <p>&nbsp;</p>
@@ -55,25 +65,35 @@ Transactions</code> table:
 | 2019-01  | DE      | 1           | 1              | 2000               | 2000                  |
 +----------+---------+-------------+----------------+--------------------+-----------------------+</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分组求和
+
+我们可以先按照月份和国家分组，然后利用 `COUNT` 和 `SUM` 函数分别求出每个分组的事务数、已批准的事务数、总金额和已批准的总金额。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT  DATE_FORMAT(trans_date,'%Y-%m')      AS month
-       ,country
-       ,COUNT(*)                             AS trans_count
-       ,COUNT(IF(state = 'approved',1,NULL)) AS approved_count
-       ,SUM(amount)                          AS trans_total_amount
-       ,SUM(IF(state = 'approved',amount,0)) AS approved_total_amount
+SELECT
+    DATE_FORMAT(trans_date, '%Y-%m') AS month,
+    country,
+    COUNT(1) AS trans_count,
+    SUM(state = 'approved') AS approved_count,
+    SUM(amount) AS trans_total_amount,
+    SUM(IF(state = 'approved', amount, 0)) AS approved_total_amount
 FROM Transactions
-GROUP BY  month
-         ,country
+GROUP BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

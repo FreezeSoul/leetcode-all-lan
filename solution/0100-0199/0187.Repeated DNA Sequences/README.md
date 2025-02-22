@@ -1,10 +1,25 @@
-# [187. 重复的 DNA 序列](https://leetcode.cn/problems/repeated-dna-sequences)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0187.Repeated%20DNA%20Sequences/README.md
+tags:
+    - 位运算
+    - 哈希表
+    - 字符串
+    - 滑动窗口
+    - 哈希函数
+    - 滚动哈希
+---
+
+<!-- problem:start -->
+
+# [187. 重复的DNA序列](https://leetcode.cn/problems/repeated-dna-sequences)
 
 [English Version](/solution/0100-0199/0187.Repeated%20DNA%20Sequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>DNA序列</strong>&nbsp;由一系列核苷酸组成，缩写为<meta charset="UTF-8" />&nbsp;<code>'A'</code>,&nbsp;<code>'C'</code>,&nbsp;<code>'G'</code>&nbsp;和<meta charset="UTF-8" />&nbsp;<code>'T'</code>.。</p>
 
@@ -41,57 +56,50 @@
 	<li><code>s[i]</code><code>==</code><code>'A'</code>、<code>'C'</code>、<code>'G'</code>&nbsp;or&nbsp;<code>'T'</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
-朴素解法，用哈希表保存所有长度为 10 的子序列出现的次数，当子序列出现次数大于 1 时，把该子序列作为结果之一。
+我们定义一个哈希表 $cnt$，用于存储所有长度为 $10$ 的子字符串出现的次数。
 
-假设字符串 `s` 长度为 `n`，则时间复杂度 $O(n \times 10)$，空间复杂度 $O(n)$。
+遍历字符串 $s$ 的所有长度为 $10$ 的子字符串，对于当前子字符串 $t$，我们更新其在哈希表中对应的计数。如果 $t$ 的计数为 $2$，我们就将它加入答案。
 
-**方法二：Rabin-Karp 字符串匹配算法**
+遍历结束后，返回答案数组即可。
 
-本质上是滑动窗口和哈希的结合方法，和 [0028.找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/) 类似，本题可以借助哈希函数将子序列计数的时间复杂度降低到 $O(1)$。
-
-假设字符串 `s` 长度为 `n`，则时间复杂度为 $O(n)$，空间复杂度 $O(n)$。
+时间复杂度 $O(n \times 10)$，空间复杂度 $O(n \times 10)$。其中 $n$ 是字符串 $s$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findRepeatedDnaSequences(self, s: str) -> List[str]:
-        n = len(s) - 10
         cnt = Counter()
         ans = []
-        for i in range(n + 1):
-            sub = s[i : i + 10]
-            cnt[sub] += 1
-            if cnt[sub] == 2:
-                ans.append(sub)
+        for i in range(len(s) - 10 + 1):
+            t = s[i : i + 10]
+            cnt[t] += 1
+            if cnt[t] == 2:
+                ans.append(t)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public List<String> findRepeatedDnaSequences(String s) {
-        int n = s.length() - 10;
         Map<String, Integer> cnt = new HashMap<>();
         List<String> ans = new ArrayList<>();
-        for (int i = 0; i <= n; ++i) {
-            String sub = s.substring(i, i + 10);
-            cnt.put(sub, cnt.getOrDefault(sub, 0) + 1);
-            if (cnt.get(sub) == 2) {
-                ans.add(sub);
+        for (int i = 0; i < s.length() - 10 + 1; ++i) {
+            String t = s.substring(i, i + 10);
+            if (cnt.merge(t, 1, Integer::sum) == 2) {
+                ans.add(t);
             }
         }
         return ans;
@@ -99,7 +107,85 @@ class Solution {
 }
 ```
 
-### **JavaScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        unordered_map<string, int> cnt;
+        vector<string> ans;
+        for (int i = 0, n = s.size() - 10 + 1; i < n; ++i) {
+            auto t = s.substr(i, 10);
+            if (++cnt[t] == 2) {
+                ans.emplace_back(t);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func findRepeatedDnaSequences(s string) (ans []string) {
+	cnt := map[string]int{}
+	for i := 0; i < len(s)-10+1; i++ {
+		t := s[i : i+10]
+		cnt[t]++
+		if cnt[t] == 2 {
+			ans = append(ans, t)
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function findRepeatedDnaSequences(s: string): string[] {
+    const n = s.length;
+    const cnt: Map<string, number> = new Map();
+    const ans: string[] = [];
+    for (let i = 0; i <= n - 10; ++i) {
+        const t = s.slice(i, i + 10);
+        cnt.set(t, (cnt.get(t) ?? 0) + 1);
+        if (cnt.get(t) === 2) {
+            ans.push(t);
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn find_repeated_dna_sequences(s: String) -> Vec<String> {
+        if s.len() < 10 {
+            return vec![];
+        }
+        let mut cnt = HashMap::new();
+        let mut ans = Vec::new();
+        for i in 0..s.len() - 9 {
+            let t = &s[i..i + 10];
+            let count = cnt.entry(t).or_insert(0);
+            *count += 1;
+            if *count == 2 {
+                ans.push(t.to_string());
+            }
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -107,39 +193,55 @@ class Solution {
  * @return {string[]}
  */
 var findRepeatedDnaSequences = function (s) {
-    const n = s.length - 10;
-    let cnt = new Map();
-    let ans = [];
-    for (let i = 0; i <= n; ++i) {
-        let sub = s.slice(i, i + 10);
-        cnt[sub] = (cnt[sub] || 0) + 1;
-        if (cnt[sub] == 2) {
-            ans.push(sub);
+    const cnt = new Map();
+    const ans = [];
+    for (let i = 0; i < s.length - 10 + 1; ++i) {
+        const t = s.slice(i, i + 10);
+        cnt.set(t, (cnt.get(t) || 0) + 1);
+        if (cnt.get(t) === 2) {
+            ans.push(t);
         }
     }
     return ans;
 };
 ```
 
-### **Go**
+#### C#
 
-哈希表：
-
-```go
-func findRepeatedDnaSequences(s string) []string {
-	ans, cnt := []string{}, map[string]int{}
-	for i := 0; i <= len(s)-10; i++ {
-		sub := s[i : i+10]
-		cnt[sub]++
-		if cnt[sub] == 2 {
-			ans = append(ans, sub)
-		}
-	}
-	return ans
+```cs
+public class Solution {
+    public IList<string> FindRepeatedDnaSequences(string s) {
+        var cnt = new Dictionary<string, int>();
+        var ans = new List<string>();
+        for (int i = 0; i < s.Length - 10 + 1; ++i) {
+            var t = s.Substring(i, 10);
+            if (!cnt.ContainsKey(t)) {
+                cnt[t] = 0;
+            }
+            if (++cnt[t] == 2) {
+                ans.Add(t);
+            }
+        }
+        return ans;
+    }
 }
 ```
 
-Rabin-Karp:
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：Rabin-Karp 字符串匹配算法
+
+本质上是滑动窗口和哈希的结合方法，和 [0028.找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/) 类似，本题可以借助哈希函数将子序列计数的时间复杂度降低到 $O(1)$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是字符串 $s$ 的长度。
+
+<!-- tabs:start -->
+
+#### Go
 
 ```go
 func findRepeatedDnaSequences(s string) []string {
@@ -162,141 +264,8 @@ func findRepeatedDnaSequences(s string) []string {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<string> findRepeatedDnaSequences(string s) {
-        map<string, int> cnt;
-        int n = s.size() - 10;
-        vector<string> ans;
-        for (int i = 0; i <= n; ++i) {
-            string sub = s.substr(i, 10);
-            if (++cnt[sub] == 2) {
-                ans.push_back(sub);
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **C#**
-
-```cs
-using System.Collections.Generic;
-
-public class Solution {
-    public IList<string> FindRepeatedDnaSequences(string s) {
-        var once = new HashSet<int>();
-        var moreThanOnce = new HashSet<int>();
-        int bits = 0;
-        for (var i = 0; i < s.Length; ++i)
-        {
-            bits <<= 2;
-            switch (s[i])
-            {
-                case 'A':
-                    break;
-                case 'C':
-                    bits |= 1;
-                    break;
-                case 'G':
-                    bits |= 2;
-                    break;
-                case 'T':
-                    bits |= 3;
-                    break;
-            }
-            if (i >= 10)
-            {
-                bits &= 0xFFFFF;
-            }
-            if (i >= 9 && !once.Add(bits))
-            {
-                moreThanOnce.Add(bits);
-            }
-        }
-
-        var results = new List<string>();
-        foreach (var item in moreThanOnce)
-        {
-            var itemCopy = item;
-            var charArray = new char[10];
-            for (var i = 9; i >= 0; --i)
-            {
-                switch (itemCopy & 3)
-                {
-                    case 0:
-                        charArray[i] = 'A';
-                        break;
-                    case 1:
-                        charArray[i] = 'C';
-                        break;
-                    case 2:
-                        charArray[i] = 'G';
-                        break;
-                    case 3:
-                        charArray[i] = 'T';
-                        break;
-                }
-                itemCopy >>= 2;
-            }
-            results.Add(new string(charArray));
-        }
-        return results;
-    }
-}
-```
-
-### **TypeScript**
-
-```ts
-function findRepeatedDnaSequences(s: string): string[] {
-    const n = s.length;
-    const map = new Map<string, boolean>();
-    const res = [];
-    for (let i = 0; i <= n - 10; i++) {
-        const key = s.slice(i, i + 10);
-        if (map.has(key) && map.get(key)) {
-            res.push(key);
-        }
-        map.set(key, !map.has(key));
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-use std::collections::HashMap;
-
-impl Solution {
-    pub fn find_repeated_dna_sequences(s: String) -> Vec<String> {
-        let n = s.len();
-        let mut res = vec![];
-        if n < 10 {
-            return res;
-        }
-        let mut map = HashMap::new();
-        for i in 0..=n - 10 {
-            let key = &s[i..i + 10];
-            if map.contains_key(&key) && *map.get(&key).unwrap() {
-                res.push(key.to_string());
-            }
-            map.insert(key, !map.contains_key(&key));
-        }
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

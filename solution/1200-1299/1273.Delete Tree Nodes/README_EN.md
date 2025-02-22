@@ -1,8 +1,25 @@
-# [1273. Delete Tree Nodes](https://leetcode.com/problems/delete-tree-nodes)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1273.Delete%20Tree%20Nodes/README_EN.md
+rating: 1732
+source: Biweekly Contest 14 Q3
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+    - Array
+---
+
+<!-- problem:start -->
+
+# [1273. Delete Tree Nodes 🔒](https://leetcode.com/problems/delete-tree-nodes)
 
 [中文文档](/solution/1200-1299/1273.Delete%20Tree%20Nodes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A tree rooted at node 0 is given as follows:</p>
 
@@ -44,11 +61,25 @@
 	<li>The given input is <strong>guaranteed</strong> to represent a <strong>valid tree</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+First, we convert the tree into a graph $g$, where $g[i]$ represents all the child nodes of node $i$.
+
+Then we design a function $dfs(i)$, which represents the number of nodes and the sum of the weights in the subtree rooted at node $i$. The answer is $dfs(0)[1]$.
+
+In this function, we recursively calculate the number of nodes and the sum of the weights in the subtree rooted at each child node $j$, and then accumulate these values. If the accumulated value is zero, we set the number of nodes in this subtree to zero. Finally, we return the number of nodes and the sum of the weights in the subtree rooted at node $i$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the number of nodes in the tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +100,7 @@ class Solution:
         return dfs(0)[1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -101,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func deleteTreeNodes(nodes int, parent []int, value []int) int {
@@ -154,10 +185,8 @@ func deleteTreeNodes(nodes int, parent []int, value []int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

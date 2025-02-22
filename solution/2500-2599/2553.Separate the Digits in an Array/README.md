@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2553.Separate%20the%20Digits%20in%20an%20Array/README.md
+rating: 1216
+source: 第 97 场双周赛 Q1
+tags:
+    - 数组
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2553. 分割数组中数字的数位](https://leetcode.cn/problems/separate-the-digits-in-an-array)
 
 [English Version](/solution/2500-2599/2553.Separate%20the%20Digits%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组&nbsp;<code>nums</code>&nbsp;，请你返回一个数组<em>&nbsp;</em><code>answer</code> ，你需要将&nbsp;<code>nums</code>&nbsp;中每个整数进行数位分割后，按照&nbsp;<code>nums</code>&nbsp;中出现的&nbsp;<strong>相同顺序</strong>&nbsp;放入答案数组中。</p>
 
@@ -45,21 +58,21 @@ answer = [7,1,3,9] 。
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 将数组中的每个数字进行数位分割，然后将分割后的数字依次放入答案数组中。
 
-时间复杂度 $O(n \times \log_{10} M)$，空间复杂度 $O(n \times \log_{10} M)$，其中 $n$ 为数组 `nums` 的长度，而 $M$ 为数组 `nums` 中的最大值。
+时间复杂度 $O(n \times \log_{10} M)$，空间复杂度 $O(n \times \log_{10} M)$，其中 $n$ 为数组 $nums$ 的长度，而 $M$ 为数组 $nums$ 中的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +87,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func separateDigits(nums []int) (ans []int) {
@@ -139,7 +150,7 @@ func separateDigits(nums []int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function separateDigits(nums: number[]): number[] {
@@ -156,7 +167,7 @@ function separateDigits(nums: number[]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -176,13 +187,13 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *separateDigits(int *nums, int numsSize, int *returnSize) {
+int* separateDigits(int* nums, int numsSize, int* returnSize) {
     int n = 0;
     for (int i = 0; i < numsSize; i++) {
         int t = nums[i];
@@ -191,7 +202,7 @@ int *separateDigits(int *nums, int numsSize, int *returnSize) {
             n++;
         }
     }
-    int *ans = malloc(sizeof(int) * n);
+    int* ans = malloc(sizeof(int) * n);
     for (int i = numsSize - 1, j = n - 1; i >= 0; i--) {
         int t = nums[i];
         while (t != 0) {
@@ -204,10 +215,44 @@ int *separateDigits(int *nums, int numsSize, int *returnSize) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn separate_digits(nums: Vec<i32>) -> Vec<i32> {
+        let mut ans = vec![];
+
+        for n in nums {
+            let mut t = vec![];
+            let mut x = n;
+
+            while x != 0 {
+                t.push(x % 10);
+                x /= 10;
+            }
+
+            for i in (0..t.len()).rev() {
+                ans.push(t[i]);
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

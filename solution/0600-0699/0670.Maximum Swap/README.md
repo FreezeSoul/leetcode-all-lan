@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0670.Maximum%20Swap/README.md
+tags:
+    - 贪心
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [670. 最大交换](https://leetcode.cn/problems/maximum-swap)
 
 [English Version](/solution/0600-0699/0670.Maximum%20Swap/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个非负整数，你<strong>至多</strong>可以交换一次数字中的任意两位。返回你能得到的最大值。</p>
 
@@ -30,25 +41,25 @@
 	<li>给定数字的范围是&nbsp;[0, 10<sup>8</sup>]</li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
-先将数字转为字符串 `s`，然后从右往左遍历字符串 `s`，用数组或哈希表 `d` 记录每个数字右侧的最大数字的位置（可以是字符本身的位置）。
+我们先将数字转为字符串 $s$，然后从右往左遍历字符串 $s$，用数组或哈希表 $d$ 记录每个数字右侧的最大数字的位置（可以是数字本身的位置）。
 
-接着从左到右遍历 `d`，如果 `s[i] < s[d[i]]`，则进行交换，并退出遍历的过程。
+接着从左到右遍历 $d$，如果 $s[i] \lt s[d[i]]$，则进行交换，并退出遍历的过程。
 
-最后将字符串 `s` 转为数字，即为答案。
+最后将字符串 $s$ 转为数字，即为答案。
 
-时间复杂度 $O(\log C)$，空间复杂度 $O(\log C)$。其中 $C$ 是数字 `num` 的值域。
+时间复杂度 $O(\log M)$，空间复杂度 $O(\log M)$。其中 $M$ 是数字 $num$ 的取值范围。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -66,9 +77,7 @@ class Solution:
         return int(''.join(s))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,7 +134,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumSwap(num int) int {
@@ -151,7 +160,7 @@ func maximumSwap(num int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumSwap(num: number): number {
@@ -182,7 +191,7 @@ function maximumSwap(num: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -222,10 +231,62 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：贪心 + 空间优化
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function maximumSwap(num: number): number {
+    const ans = [...String(num)];
+    let [min, max, maybeMax, n] = [-1, -1, -1, ans.length];
+
+    for (let i = n - 1; i >= 0; i--) {
+        if (ans[i] > (ans[maybeMax] ?? -1)) maybeMax = i;
+        if (i < maybeMax && ans[i] < ans[maybeMax]) {
+            [min, max] = [i, maybeMax];
+        }
+    }
+
+    if (~min && ~max && min < max) {
+        [ans[min], ans[max]] = [ans[max], ans[min]];
+    }
+
+    return +ans.join('');
+}
 ```
 
+#### JavaScript
+
+```js
+function maximumSwap(num) {
+    const ans = [...String(num)];
+    let [min, max, maybeMax, n] = [-1, -1, -1, ans.length];
+
+    for (let i = n - 1; i >= 0; i--) {
+        if (ans[i] > (ans[maybeMax] ?? -1)) maybeMax = i;
+        if (i < maybeMax && ans[i] < ans[maybeMax]) {
+            [min, max] = [i, maybeMax];
+        }
+    }
+
+    if (~min && ~max && min < max) {
+        [ans[min], ans[max]] = [ans[max], ans[min]];
+    }
+
+    return +ans.join('');
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0084.Largest%20Rectangle%20in%20Histogram/README.md
+tags:
+    - 栈
+    - 数组
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [84. 柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram)
 
 [English Version](/solution/0000-0099/0084.Largest%20Rectangle%20in%20Histogram/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定 <em>n</em> 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。</p>
 
@@ -39,11 +51,17 @@
 	<li><code>0 <= heights[i] <= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈**
+### 方法一：单调栈
+
+我们可以枚举每根柱子的高度 $h$ 作为矩形的高度，利用单调栈，向左右两边找第一个高度小于 $h$ 的下标 $left_i$, $right_i$。那么此时矩形面积为 $h \times (right_i-left_i-1)$，求最大值即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 表示 $heights$ 的长度。
 
 单调栈常见模型：找出每个数左/右边**离它最近的**且**比它大/小的数**。模板：
 
@@ -55,15 +73,9 @@ for i in range(n):
     stk.append(i)
 ```
 
-枚举每根柱子的高度 $h$ 作为矩形的高度，向左右两边找第一个高度小于 $h$ 的下标 $left_i$, $right_i$。那么此时矩形面积为 $h \times (right_i-left_i-1)$，求最大值即可。
-
-时间复杂度 $O(n)$，其中 $n$ 表示 $heights$ 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,33 +94,7 @@ class Solution:
         return max(h * (right[i] - left[i] - 1) for i, h in enumerate(heights))
 ```
 
-```python
-class Solution:
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        n = len(heights)
-        stk = []
-        left = [-1] * n
-        right = [n] * n
-        for i, h in enumerate(heights):
-            while stk and heights[stk[-1]] >= h:
-                stk.pop()
-            if stk:
-                left[i] = stk[-1]
-            stk.append(i)
-        stk = []
-        for i in range(n - 1, -1, -1):
-            h = heights[i]
-            while stk and heights[stk[-1]] >= h:
-                stk.pop()
-            if stk:
-                right[i] = stk[-1]
-            stk.append(i)
-        return max(h * (right[i] - left[i] - 1) for i, h in enumerate(heights))
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -133,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,7 +144,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestRectangleArea(heights []int) int {
@@ -185,19 +171,128 @@ func largestRectangleArea(heights []int) int {
 	}
 	return res
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn largest_rectangle_area(heights: Vec<i32>) -> i32 {
+        let n = heights.len();
+        let mut left = vec![-1; n];
+        let mut right = vec![-1; n];
+        let mut stack: Vec<(usize, i32)> = Vec::new();
+        let mut ret = -1;
+
+        // Build left vector
+        for (i, h) in heights.iter().enumerate() {
+            while !stack.is_empty() && stack.last().unwrap().1 >= *h {
+                stack.pop();
+            }
+            if stack.is_empty() {
+                left[i] = -1;
+            } else {
+                left[i] = stack.last().unwrap().0 as i32;
+            }
+            stack.push((i, *h));
+        }
+
+        stack.clear();
+
+        // Build right vector
+        for (i, h) in heights.iter().enumerate().rev() {
+            while !stack.is_empty() && stack.last().unwrap().1 >= *h {
+                stack.pop();
+            }
+            if stack.is_empty() {
+                right[i] = n as i32;
+            } else {
+                right[i] = stack.last().unwrap().0 as i32;
+            }
+            stack.push((i, *h));
+        }
+
+        // Calculate the max area
+        for (i, h) in heights.iter().enumerate() {
+            ret = std::cmp::max(ret, (right[i] - left[i] - 1) * *h);
+        }
+
+        ret
+    }
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+public class Solution {
+    public int LargestRectangleArea(int[] height) {
+        var stack = new Stack<int>();
+        var result = 0;
+        var i = 0;
+        while (i < height.Length || stack.Any())
+        {
+            if (!stack.Any() || (i < height.Length && height[stack.Peek()] < height[i]))
+            {
+                stack.Push(i);
+                ++i;
+            }
+            else
+            {
+                var previousIndex = stack.Pop();
+                var area = height[previousIndex] * (stack.Any() ? (i - stack.Peek() - 1) : i);
+                result = Math.Max(result, area);
+            }
+        }
+
+        return result;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        n = len(heights)
+        stk = []
+        left = [-1] * n
+        right = [n] * n
+        for i, h in enumerate(heights):
+            while stk and heights[stk[-1]] >= h:
+                stk.pop()
+            if stk:
+                left[i] = stk[-1]
+            stk.append(i)
+        stk = []
+        for i in range(n - 1, -1, -1):
+            h = heights[i]
+            while stk and heights[stk[-1]] >= h:
+                stk.pop()
+            if stk:
+                right[i] = stk[-1]
+            stk.append(i)
+        return max(h * (right[i] - left[i] - 1) for i, h in enumerate(heights))
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

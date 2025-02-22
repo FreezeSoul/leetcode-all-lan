@@ -1,61 +1,70 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0065.Valid%20Number/README_EN.md
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [65. Valid Number](https://leetcode.com/problems/valid-number)
 
 [中文文档](/solution/0000-0099/0065.Valid%20Number/README.md)
 
 ## Description
 
-<p>A <strong>valid number</strong> can be split up into these components (in order):</p>
+<!-- description:start -->
+
+<p>Given a string <code>s</code>, return whether <code>s</code> is a <strong>valid number</strong>.<br />
+<br />
+For example, all the following are valid numbers: <code>&quot;2&quot;, &quot;0089&quot;, &quot;-0.1&quot;, &quot;+3.14&quot;, &quot;4.&quot;, &quot;-.9&quot;, &quot;2e10&quot;, &quot;-90E3&quot;, &quot;3e+7&quot;, &quot;+6e-1&quot;, &quot;53.5e93&quot;, &quot;-123.456e789&quot;</code>, while the following are not valid numbers: <code>&quot;abc&quot;, &quot;1a&quot;, &quot;1e&quot;, &quot;e3&quot;, &quot;99e2.5&quot;, &quot;--6&quot;, &quot;-+3&quot;, &quot;95a54e53&quot;</code>.</p>
+
+<p>Formally, a&nbsp;<strong>valid number</strong> is defined using one of the following definitions:</p>
 
 <ol>
-	<li>A <strong>decimal number</strong> or an <strong>integer</strong>.</li>
-	<li>(Optional) An <code>&#39;e&#39;</code> or <code>&#39;E&#39;</code>, followed by an <strong>integer</strong>.</li>
+	<li>An <strong>integer number</strong> followed by an <strong>optional exponent</strong>.</li>
+	<li>A <strong>decimal number</strong> followed by an <strong>optional exponent</strong>.</li>
 </ol>
 
-<p>A <strong>decimal number</strong> can be split up into these components (in order):</p>
+<p>An <strong>integer number</strong> is defined with an <strong>optional sign</strong> <code>&#39;-&#39;</code> or <code>&#39;+&#39;</code> followed by <strong>digits</strong>.</p>
+
+<p>A <strong>decimal number</strong> is defined with an <strong>optional sign</strong> <code>&#39;-&#39;</code> or <code>&#39;+&#39;</code> followed by one of the following definitions:</p>
 
 <ol>
-	<li>(Optional) A sign character (either <code>&#39;+&#39;</code> or <code>&#39;-&#39;</code>).</li>
-	<li>One of the following formats:
-	<ol>
-		<li>One or more digits, followed by a dot <code>&#39;.&#39;</code>.</li>
-		<li>One or more digits, followed by a dot <code>&#39;.&#39;</code>, followed by one or more digits.</li>
-		<li>A dot <code>&#39;.&#39;</code>, followed by one or more digits.</li>
-	</ol>
-	</li>
+	<li><strong>Digits</strong> followed by a <strong>dot</strong> <code>&#39;.&#39;</code>.</li>
+	<li><strong>Digits</strong> followed by a <strong>dot</strong> <code>&#39;.&#39;</code> followed by <strong>digits</strong>.</li>
+	<li>A <strong>dot</strong> <code>&#39;.&#39;</code> followed by <strong>digits</strong>.</li>
 </ol>
 
-<p>An <strong>integer</strong> can be split up into these components (in order):</p>
+<p>An <strong>exponent</strong> is defined with an <strong>exponent notation</strong> <code>&#39;e&#39;</code> or <code>&#39;E&#39;</code> followed by an <strong>integer number</strong>.</p>
 
-<ol>
-	<li>(Optional) A sign character (either <code>&#39;+&#39;</code> or <code>&#39;-&#39;</code>).</li>
-	<li>One or more digits.</li>
-</ol>
-
-<p>For example, all the following are valid numbers: <code>[&quot;2&quot;, &quot;0089&quot;, &quot;-0.1&quot;, &quot;+3.14&quot;, &quot;4.&quot;, &quot;-.9&quot;, &quot;2e10&quot;, &quot;-90E3&quot;, &quot;3e+7&quot;, &quot;+6e-1&quot;, &quot;53.5e93&quot;, &quot;-123.456e789&quot;]</code>, while the following are not valid numbers: <code>[&quot;abc&quot;, &quot;1a&quot;, &quot;1e&quot;, &quot;e3&quot;, &quot;99e2.5&quot;, &quot;--6&quot;, &quot;-+3&quot;, &quot;95a54e53&quot;]</code>.</p>
-
-<p>Given a string <code>s</code>, return <code>true</code><em> if </em><code>s</code><em> is a <strong>valid number</strong></em>.</p>
+<p>The <strong>digits</strong> are defined as one or more digits.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre>
-<strong>Input:</strong> s = &quot;0&quot;
-<strong>Output:</strong> true
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;0&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">true</span></p>
+</div>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre>
-<strong>Input:</strong> s = &quot;e&quot;
-<strong>Output:</strong> false
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;e&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">false</span></p>
+</div>
 
 <p><strong class="example">Example 3:</strong></p>
 
-<pre>
-<strong>Input:</strong> s = &quot;.&quot;
-<strong>Output:</strong> false
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;.&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">false</span></p>
+</div>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
@@ -65,11 +74,33 @@
 	<li><code>s</code> consists of only English letters (both uppercase and lowercase), digits (<code>0-9</code>), plus <code>&#39;+&#39;</code>, minus <code>&#39;-&#39;</code>, or dot <code>&#39;.&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Case Discussion
+
+First, we check if the string starts with a positive or negative sign. If it does, we move the pointer $i$ one step forward. If the pointer $i$ has reached the end of the string at this point, it means the string only contains a positive or negative sign, so we return `false`.
+
+If the character pointed to by the current pointer $i$ is a decimal point, and there is no number after the decimal point, or if there is an `e` or `E` after the decimal point, we return `false`.
+
+Next, we use two variables $dot$ and $e$ to record the number of decimal points and `e` or `E` respectively.
+
+We use pointer $j$ to point to the current character:
+
+-   If the current character is a decimal point, and a decimal point or `e` or `E` has appeared before, return `false`. Otherwise, we increment $dot$ by one;
+-   If the current character is `e` or `E`, and `e` or `E` has appeared before, or if the current character is at the beginning or end of the string, return `false`. Otherwise, we increment $e$ by one; then check if the next character is a positive or negative sign, if it is, move the pointer $j$ one step forward. If the pointer $j$ has reached the end of the string at this point, return `false`;
+-   If the current character is not a number, return `false`.
+
+After traversing the string, return `true`.
+
+The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the string.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -103,7 +134,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -146,7 +177,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,14 +199,15 @@ public:
                 if (s[j + 1] == '+' || s[j + 1] == '-') {
                     if (++j == n - 1) return false;
                 }
-            } else if (s[j] < '0' || s[j] > '9') return false;
+            } else if (s[j] < '0' || s[j] > '9')
+                return false;
         }
         return true;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isNumber(s string) bool {
@@ -215,7 +247,72 @@ func isNumber(s string) bool {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn is_number(s: String) -> bool {
+        let mut i = 0;
+        let n = s.len();
+
+        if let Some(c) = s.chars().nth(i) {
+            if c == '+' || c == '-' {
+                i += 1;
+                if i == n {
+                    return false;
+                }
+            }
+        }
+        if let Some(x) = s.chars().nth(i) {
+            if x == '.'
+                && (i + 1 == n
+                    || (if let Some(m) = s.chars().nth(i + 1) {
+                        m == 'e' || m == 'E'
+                    } else {
+                        false
+                    }))
+            {
+                return false;
+            }
+        }
+
+        let mut dot = 0;
+        let mut e = 0;
+        let mut j = i;
+
+        while j < n {
+            if let Some(c) = s.chars().nth(j) {
+                if c == '.' {
+                    if e > 0 || dot > 0 {
+                        return false;
+                    }
+                    dot += 1;
+                } else if c == 'e' || c == 'E' {
+                    if e > 0 || j == i || j == n - 1 {
+                        return false;
+                    }
+                    e += 1;
+                    if let Some(x) = s.chars().nth(j + 1) {
+                        if x == '+' || x == '-' {
+                            j += 1;
+                            if j == n - 1 {
+                                return false;
+                            }
+                        }
+                    }
+                } else if !c.is_ascii_digit() {
+                    return false;
+                }
+            }
+            j += 1;
+        }
+
+        true
+    }
+}
+```
+
+#### C#
 
 ```cs
 using System.Text.RegularExpressions;
@@ -229,10 +326,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

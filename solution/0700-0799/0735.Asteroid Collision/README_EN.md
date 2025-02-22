@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0735.Asteroid%20Collision/README_EN.md
+tags:
+    - Stack
+    - Array
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [735. Asteroid Collision](https://leetcode.com/problems/asteroid-collision)
 
 [中文文档](/solution/0700-0799/0735.Asteroid%20Collision/README.md)
 
 ## Description
 
-<p>We are given an array <code>asteroids</code> of integers representing asteroids in a row.</p>
+<!-- description:start -->
+
+<p>We are given an array <code>asteroids</code> of integers representing asteroids in a row. The indices of the asteriod in the array represent their relative position in space.</p>
 
 <p>For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). Each asteroid moves at the same speed.</p>
 
@@ -44,114 +58,168 @@
 	<li><code>asteroids[i] != 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-this can be analogous to matching parentheses:
+<!-- solution:start -->
 
--   right-moving asteroid (left parenthesis): will not cause a collision, will be pushed directly
--   left-moving asteroid (right parenthesis): may collision with the right-moving asteroid, special treatment
+### Solution 1: Stack
 
-because the answer requires all the asteroids left after the collision, which is element left in the stack, you can simply represent the stack in an array
+We traverse each asteroid $x$ from left to right. Since each asteroid may collide with multiple asteroids before it, we consider using a stack to store.
+
+-   For the current asteroid, if $x>0$, it will definitely not collide with the previous asteroid, and we can directly push $x$ into the stack.
+-   Otherwise, if the stack is not empty and the top element of the stack is greater than $0$, and the top element of the stack is less than $-x$, then the top element of the stack corresponds to the asteroid will explode, we loop to the top element of the stack Pop out until the condition is not satisfied. At this time, if the top element of the stack is equal to $-x$, then the two asteroids will explode, and we only need to pop the top element of the stack; if the stack is empty, or the top element of the stack is less than $0$, then the current asteroid will not collide, we will push $x$ into the stack.
+
+Finally, we return the elements in the stack as the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the length of the array $asteroids$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def asteroidCollision(self, asteroids: List[int]) -> List[int]:
-        ans = []
-        for a in asteroids:
-            if a > 0:
-                ans.append(a)
+        stk = []
+        for x in asteroids:
+            if x > 0:
+                stk.append(x)
             else:
-                while ans and 0 < ans[-1] < -a:
-                    ans.pop()
-                if ans and ans[-1] == -a:
-                    ans.pop()
-                elif not ans or ans[-1] < -a:
-                    ans.append(a)
-        return ans
+                while stk and stk[-1] > 0 and stk[-1] < -x:
+                    stk.pop()
+                if stk and stk[-1] == -x:
+                    stk.pop()
+                elif not stk or stk[-1] < 0:
+                    stk.append(x)
+        return stk
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int[] asteroidCollision(int[] asteroids) {
-        Deque<Integer> d = new ArrayDeque<>();
-        for (int a : asteroids) {
-            if (a > 0) {
-                d.offerLast(a);
+        Deque<Integer> stk = new ArrayDeque<>();
+        for (int x : asteroids) {
+            if (x > 0) {
+                stk.offerLast(x);
             } else {
-                while (!d.isEmpty() && d.peekLast() > 0 && d.peekLast() < -a) {
-                    d.pollLast();
+                while (!stk.isEmpty() && stk.peekLast() > 0 && stk.peekLast() < -x) {
+                    stk.pollLast();
                 }
-                if (!d.isEmpty() && d.peekLast() == -a) {
-                    d.pollLast();
-                } else if (d.isEmpty() || d.peekLast() < -a) {
-                    d.offerLast(a);
+                if (!stk.isEmpty() && stk.peekLast() == -x) {
+                    stk.pollLast();
+                } else if (stk.isEmpty() || stk.peekLast() < 0) {
+                    stk.offerLast(x);
                 }
             }
         }
-        return d.stream().mapToInt(Integer::valueOf).toArray();
+        return stk.stream().mapToInt(Integer::valueOf).toArray();
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> asteroidCollision(vector<int>& asteroids) {
-        vector<int> ans;
-        for (int a : asteroids) {
-            if (a > 0) {
-                ans.push_back(a);
+        vector<int> stk;
+        for (int x : asteroids) {
+            if (x > 0) {
+                stk.push_back(x);
             } else {
-                while (!ans.empty() && ans.back() > 0 && ans.back() < -a) {
-                    ans.pop_back();
+                while (stk.size() && stk.back() > 0 && stk.back() < -x) {
+                    stk.pop_back();
                 }
-                if (!ans.empty() && ans.back() == -a) {
-                    ans.pop_back();
-                } else if (ans.empty() || ans.back() < -a) {
-                    ans.push_back(a);
+                if (stk.size() && stk.back() == -x) {
+                    stk.pop_back();
+                } else if (stk.empty() || stk.back() < 0) {
+                    stk.push_back(x);
                 }
             }
         }
-        return ans;
+        return stk;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func asteroidCollision(asteroids []int) []int {
-	var ans []int
-	for _, a := range asteroids {
-		if a > 0 {
-			ans = append(ans, a)
+func asteroidCollision(asteroids []int) (stk []int) {
+	for _, x := range asteroids {
+		if x > 0 {
+			stk = append(stk, x)
 		} else {
-			for len(ans) > 0 && ans[len(ans)-1] > 0 && ans[len(ans)-1] < -a {
-				ans = ans[:len(ans)-1]
+			for len(stk) > 0 && stk[len(stk)-1] > 0 && stk[len(stk)-1] < -x {
+				stk = stk[:len(stk)-1]
 			}
-			if len(ans) > 0 && ans[len(ans)-1] == -a {
-				ans = ans[:len(ans)-1]
-			} else if len(ans) == 0 || ans[len(ans)-1] < -a {
-				ans = append(ans, a)
+			if len(stk) > 0 && stk[len(stk)-1] == -x {
+				stk = stk[:len(stk)-1]
+			} else if len(stk) == 0 || stk[len(stk)-1] < 0 {
+				stk = append(stk, x)
 			}
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function asteroidCollision(asteroids: number[]): number[] {
+    const stk: number[] = [];
+    for (const x of asteroids) {
+        if (x > 0) {
+            stk.push(x);
+        } else {
+            while (stk.length && stk.at(-1) > 0 && stk.at(-1) < -x) {
+                stk.pop();
+            }
+            if (stk.length && stk.at(-1) === -x) {
+                stk.pop();
+            } else if (!stk.length || stk.at(-1) < 0) {
+                stk.push(x);
+            }
+        }
+    }
+    return stk;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn asteroid_collision(asteroids: Vec<i32>) -> Vec<i32> {
+        let mut stk = Vec::new();
+        for &x in &asteroids {
+            if x > 0 {
+                stk.push(x);
+            } else {
+                while !stk.is_empty() && *stk.last().unwrap() > 0 && *stk.last().unwrap() < -x {
+                    stk.pop();
+                }
+                if !stk.is_empty() && *stk.last().unwrap() == -x {
+                    stk.pop();
+                } else if stk.is_empty() || *stk.last().unwrap() < 0 {
+                    stk.push(x);
+                }
+            }
+        }
+        stk
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

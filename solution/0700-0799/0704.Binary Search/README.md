@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0704.Binary%20Search/README.md
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [704. 二分查找](https://leetcode.cn/problems/binary-search)
 
 [English Version](/solution/0700-0799/0704.Binary%20Search/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个&nbsp;<code>n</code>&nbsp;个元素有序的（升序）整型数组&nbsp;<code>nums</code> 和一个目标值&nbsp;<code>target</code> &nbsp;，写一个函数搜索&nbsp;<code>nums</code>&nbsp;中的 <code>target</code>，如果目标值存在返回下标，否则返回 <code>-1</code>。</p>
 
@@ -33,90 +44,143 @@
 	<li><code>nums</code>&nbsp;的每个元素都将在&nbsp;<code>[-9999, 9999]</code>之间。</li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：二分查找
+
+我们定义二分查找的左边界 $l=0$，右边界 $r=n-1$。
+
+每一次循环，我们计算中间位置 $\textit{mid}=(l+r)/2$，然后比较 $\textit{nums}[\textit{mid}]$ 和 $\textit{target}$ 的大小。
+
+-   如果 $\textit{nums}[\textit{mid}] \geq \textit{target}$，说明 $\textit{target}$ 在左半部分，我们将右边界 $r$ 移动到 $\textit{mid}$；
+-   否则，说明 $\textit{target}$ 在右半部分，我们将左边界 $l$ 移动到 $\textit{mid}+1$。
+
+循环结束的条件是 $l<r$，此时 $\textit{nums}[l]$ 就是我们要找的目标值，如果 $\textit{nums}[l]=\textit{target}$，返回 $l$，否则返回 $-1$。
+
+时间复杂度 $O(\log n)$，其中 $n$ 是数组 $\textit{nums}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
-        left, right = 0, len(nums) - 1
-        while left < right:
-            mid = (left + right) >> 1
+        l, r = 0, len(nums) - 1
+        while l < r:
+            mid = (l + r) >> 1
             if nums[mid] >= target:
-                right = mid
+                r = mid
             else:
-                left = mid + 1
-        return left if nums[left] == target else -1
+                l = mid + 1
+        return l if nums[l] == target else -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int search(int[] nums, int target) {
-        int left = 0, right = nums.length - 1;
-        while (left < right) {
-            int mid = (left + right) >> 1;
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = (l + r) >> 1;
             if (nums[mid] >= target) {
-                right = mid;
+                r = mid;
             } else {
-                left = mid + 1;
+                l = mid + 1;
             }
         }
-        return nums[left] == target ? left : -1;
+        return nums[l] == target ? l : -1;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        int left = 0, right = nums.size() - 1;
-        while (left < right) {
-            int mid = left + right >> 1;
-            if (nums[mid] >= target)
-                right = mid;
-            else
-                left = mid + 1;
+        int l = 0, r = nums.size() - 1;
+        while (l < r) {
+            int mid = (l + r) >> 1;
+            if (nums[mid] >= target) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
         }
-        return nums[left] == target ? left : -1;
+        return nums[l] == target ? l : -1;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func search(nums []int, target int) int {
-	left, right := 0, len(nums)-1
-	for left < right {
-		mid := (left + right) >> 1
+	l, r := 0, len(nums)-1
+	for l < r {
+		mid := (l + r) >> 1
 		if nums[mid] >= target {
-			right = mid
+			r = mid
 		} else {
-			left = mid + 1
+			l = mid + 1
 		}
 	}
-	if nums[left] == target {
-		return left
+	if nums[l] == target {
+		return l
 	}
 	return -1
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function search(nums: number[], target: number): number {
+    let [l, r] = [0, nums.length - 1];
+    while (l < r) {
+        const mid = (l + r) >> 1;
+        if (nums[mid] >= target) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    return nums[l] === target ? l : -1;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
+        let mut l: usize = 0;
+        let mut r: usize = nums.len() - 1;
+        while l < r {
+            let mid = (l + r) >> 1;
+            if nums[mid] >= target {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        if nums[l] == target {
+            l as i32
+        } else {
+            -1
+        }
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -125,73 +189,40 @@ func search(nums []int, target int) int {
  * @return {number}
  */
 var search = function (nums, target) {
-    let left = 0;
-    let right = nums.length - 1;
-    while (left < right) {
-        const mid = (left + right) >> 1;
+    let [l, r] = [0, nums.length - 1];
+    while (l < r) {
+        const mid = (l + r) >> 1;
         if (nums[mid] >= target) {
-            right = mid;
+            r = mid;
         } else {
-            left = mid + 1;
+            l = mid + 1;
         }
     }
-    return nums[left] == target ? left : -1;
+    return nums[l] === target ? l : -1;
 };
 ```
 
-### **Rust**
+#### C#
 
-循环：
-
-```rust
-use std::cmp::Ordering;
-
-impl Solution {
-    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
-        let mut l = 0;
-        let mut r = nums.len();
-        while l < r {
-            let mid = l + r >> 1;
-            match nums[mid].cmp(&target) {
-                Ordering::Less => l = mid + 1,
-                Ordering::Greater => r = mid,
-                Ordering::Equal => return mid as i32,
+```cs
+public class Solution {
+    public int Search(int[] nums, int target) {
+        int l = 0, r = nums.Length - 1;
+        while (l < r) {
+            int mid = (l + r) >> 1;
+            if (nums[mid] >= target) {
+                r = mid;
+            } else {
+                l = mid + 1;
             }
         }
-        -1
+        return nums[l] == target ? l : -1;
     }
 }
-```
-
-递归：
-
-```rust
-use std::cmp::Ordering;
-
-impl Solution {
-    fn binary_search(nums: Vec<i32>, target: i32, l: usize, r: usize) -> i32 {
-        if l == r {
-            return if nums[l] == target { l as i32 } else { -1 };
-        }
-        let mid = l + r >> 1;
-        match nums[mid].cmp(&target) {
-            Ordering::Less => Self::binary_search(nums, target, mid + 1, r),
-            Ordering::Greater => Self::binary_search(nums, target, l, mid),
-            Ordering::Equal => mid as i32,
-        }
-    }
-
-    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
-        let r = nums.len() - 1;
-        Self::binary_search(nums, target, 0, r)
-    }
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

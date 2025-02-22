@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0790.Domino%20and%20Tromino%20Tiling/README_EN.md
+tags:
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [790. Domino and Tromino Tiling](https://leetcode.com/problems/domino-and-tromino-tiling)
 
 [中文文档](/solution/0700-0799/0790.Domino%20and%20Tromino%20Tiling/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have two types of tiles: a <code>2 x 1</code> domino shape and a tromino shape. You may rotate these shapes.</p>
 <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0700-0799/0790.Domino%20and%20Tromino%20Tiling/images/lc-domino.jpg" style="width: 362px; height: 195px;" />
@@ -33,11 +45,17 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -50,7 +68,12 @@ class Solution:
                 return 1
             ans = 0
             if i == j:
-                ans = dfs(i + 2, j + 2) + dfs(i + 1, j + 1) + dfs(i + 2, j + 1) + dfs(i + 1, j + 2)
+                ans = (
+                    dfs(i + 2, j + 2)
+                    + dfs(i + 1, j + 1)
+                    + dfs(i + 2, j + 1)
+                    + dfs(i + 1, j + 2)
+                )
             elif i > j:
                 ans = dfs(i, j + 2) + dfs(i + 1, j + 2)
             else:
@@ -61,22 +84,7 @@ class Solution:
         return dfs(0, 0)
 ```
 
-```python
-class Solution:
-    def numTilings(self, n: int) -> int:
-        f = [1, 0, 0, 0]
-        mod = 10**9 + 7
-        for i in range(1, n + 1):
-            g = [0] * 4
-            g[0] = (f[0] + f[1] + f[2] + f[3]) % mod
-            g[1] = (f[2] + f[3]) % mod
-            g[2] = (f[1] + f[3]) % mod
-            g[3] = f[0]
-            f = g
-        return f[0]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numTilings(n int) int {
@@ -137,10 +145,35 @@ func numTilings(n int) int {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numTilings(self, n: int) -> int:
+        f = [1, 0, 0, 0]
+        mod = 10**9 + 7
+        for i in range(1, n + 1):
+            g = [0] * 4
+            g[0] = (f[0] + f[1] + f[2] + f[3]) % mod
+            g[1] = (f[2] + f[3]) % mod
+            g[2] = (f[1] + f[3]) % mod
+            g[3] = f[0]
+            f = g
+        return f[0]
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

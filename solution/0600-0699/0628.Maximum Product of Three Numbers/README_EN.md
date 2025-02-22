@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0628.Maximum%20Product%20of%20Three%20Numbers/README_EN.md
+tags:
+    - Array
+    - Math
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [628. Maximum Product of Three Numbers](https://leetcode.com/problems/maximum-product-of-three-numbers)
 
 [中文文档](/solution/0600-0699/0628.Maximum%20Product%20of%20Three%20Numbers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, <em>find three numbers whose product is maximum and return the maximum product</em>.</p>
 
@@ -25,11 +39,26 @@
 	<li><code>-1000 &lt;= nums[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Case Analysis
+
+First, we sort the array $\textit{nums}$, and then discuss two cases:
+
+-   If $\textit{nums}$ contains all non-negative or all non-positive numbers, the answer is the product of the last three numbers, i.e., $\textit{nums}[n-1] \times \textit{nums}[n-2] \times \textit{nums}[n-3]$;
+-   If $\textit{nums}$ contains both positive and negative numbers, the answer could be the product of the two smallest negative numbers and the largest positive number, i.e., $\textit{nums}[n-1] \times \textit{nums}[0] \times \textit{nums}[1]$, or the product of the last three numbers, i.e., $\textit{nums}[n-1] \times \textit{nums}[n-2] \times \textit{nums}[n-3]$.
+
+Finally, return the maximum of the two cases.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -40,15 +69,7 @@ class Solution:
         return max(a, b)
 ```
 
-```python
-class Solution:
-    def maximumProduct(self, nums: List[int]) -> int:
-        top3 = nlargest(3, nums)
-        bottom2 = nlargest(2, nums, key=lambda x: -x)
-        return max(top3[0] * top3[1] * top3[2], top3[0] * bottom2[0] * bottom2[1])
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -61,6 +82,76 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maximumProduct(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        int a = nums[n - 1] * nums[n - 2] * nums[n - 3];
+        int b = nums[n - 1] * nums[0] * nums[1];
+        return max(a, b);
+    }
+};
+```
+
+#### Go
+
+```go
+func maximumProduct(nums []int) int {
+	sort.Ints(nums)
+	n := len(nums)
+	a := nums[n-1] * nums[n-2] * nums[n-3]
+	b := nums[n-1] * nums[0] * nums[1]
+	if a > b {
+		return a
+	}
+	return b
+}
+```
+
+#### TypeScript
+
+```ts
+function maximumProduct(nums: number[]): number {
+    nums.sort((a, b) => a - b);
+    const n = nums.length;
+    const a = nums[n - 1] * nums[n - 2] * nums[n - 3];
+    const b = nums[n - 1] * nums[0] * nums[1];
+    return Math.max(a, b);
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Single Pass
+
+We can avoid sorting the array by maintaining five variables: $\textit{mi1}$ and $\textit{mi2}$ represent the two smallest numbers in the array, while $\textit{mx1}$, $\textit{mx2}$, and $\textit{mx3}$ represent the three largest numbers in the array.
+
+Finally, return $\max(\textit{mi1} \times \textit{mi2} \times \textit{mx1}, \textit{mx1} \times \textit{mx2} \times \textit{mx3})$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maximumProduct(self, nums: List[int]) -> int:
+        top3 = nlargest(3, nums)
+        bottom2 = nlargest(2, nums, key=lambda x: -x)
+        return max(top3[0] * top3[1] * top3[2], top3[0] * bottom2[0] * bottom2[1])
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -91,20 +182,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maximumProduct(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int n = nums.size();
-        int a = nums[n - 1] * nums[n - 2] * nums[n - 3];
-        int b = nums[n - 1] * nums[0] * nums[1];
-        return max(a, b);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -136,20 +214,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func maximumProduct(nums []int) int {
-	sort.Ints(nums)
-	n := len(nums)
-	a := nums[n-1] * nums[n-2] * nums[n-3]
-	b := nums[n-1] * nums[0] * nums[1]
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func maximumProduct(nums []int) int {
@@ -172,26 +237,9 @@ func maximumProduct(nums []int) int {
 	}
 	return max(mi1*mi2*mx1, mx1*mx2*mx3)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function maximumProduct(nums: number[]): number {
-    nums.sort((a, b) => a - b);
-    const n = nums.length;
-    const a = nums[n - 1] * nums[n - 2] * nums[n - 3];
-    const b = nums[n - 1] * nums[0] * nums[1];
-    return Math.max(a, b);
-}
-```
+#### TypeScript
 
 ```ts
 function maximumProduct(nums: number[]): number {
@@ -223,10 +271,8 @@ function maximumProduct(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1766.Tree%20of%20Coprimes/README.md
+rating: 2231
+source: 第 46 场双周赛 Q4
+tags:
+    - 树
+    - 深度优先搜索
+    - 数组
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [1766. 互质树](https://leetcode.cn/problems/tree-of-coprimes)
 
 [English Version](/solution/1700-1799/1766.Tree%20of%20Coprimes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <code>n</code> 个节点的树（也就是一个无环连通无向图），节点编号从 <code>0</code> 到 <code>n - 1</code> ，且恰好有 <code>n - 1</code> 条边，每个节点有一个值。树的 <strong>根节点</strong> 为 0 号点。</p>
 
@@ -55,23 +71,23 @@
 	<li><code>u<sub>j</sub> != v<sub>j</sub></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：预处理 + 枚举 + 栈 + 回溯**
+### 方法一：预处理 + 枚举 + 栈 + 回溯
 
 由于题目中 $nums[i]$ 的取值范围为 $[1, 50]$，因此我们可以预处理出每个数的所有互质数，记录在数组 $f$ 中，其中 $f[i]$ 表示 $i$ 的所有互质数。
 
 接下来我们可以使用回溯的方法，从根节点开始遍历整棵树，对于每个节点 $i$，我们可以通过 $f$ 数组得到 $nums[i]$ 的所有互质数。然后我们枚举 $nums[i]$ 的所有互质数，找到已经出现过的且深度最大的祖先节点 $t$，即为 $i$ 的最近的互质祖先节点。这里我们可以用一个长度为 $51$ 的栈数组 $stks$ 来获取每个出现过的值 $v$ 的节点以及其深度。每个栈 $stks[v]$ 的栈顶元素就是最近的深度最大的祖先节点。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为节点个数。
+时间复杂度 $O(n \times M)$，空间复杂度 $O(M^2 + n)$。其中 $n$ 为节点个数，而 $M$ 为 $nums[i]$ 的最大值，本题中 $M = 50$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +120,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -167,7 +181,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -214,7 +228,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getCoprimes(nums []int, edges [][]int) []int {
@@ -266,10 +280,8 @@ func gcd(a, b int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

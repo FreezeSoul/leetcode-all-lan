@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2104.Sum%20of%20Subarray%20Ranges/README.md
+rating: 1504
+source: 第 271 场周赛 Q2
+tags:
+    - 栈
+    - 数组
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [2104. 子数组范围和](https://leetcode.cn/problems/sum-of-subarray-ranges)
 
 [English Version](/solution/2100-2199/2104.Sum%20of%20Subarray%20Ranges/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 。<code>nums</code> 中，子数组的 <strong>范围</strong> 是子数组中最大元素和最小元素的差值。</p>
 
@@ -64,11 +78,13 @@
 
 <p><strong>进阶：</strong>你可以设计一种时间复杂度为 <code>O(n)</code> 的解决方案吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：暴力枚举
 
 循环遍历 $i$，作为子数组的起始位置。对于每个 $i$，遍历每个 $j$ 作为子数组的终止位置，此过程中不断求解子数组的最大值、最小值，然后累加差值到结果 `ans` 中。
 
@@ -76,23 +92,9 @@
 
 时间复杂度 $O(n^2)$。
 
-**方法二：单调栈**
-
-枚举每个元素 `nums[i]` 作为最大值出现在了多少个子数组中，以及作为最小值出现在多少个子数组中。
-
-其中 `nums[i]` 作为最大值的贡献为正，作为最小值的贡献为负。
-
-我们以 `nums[i]` 作为最大值为例。找出左侧第一个比 `nums[i]` 大的位置 `left[i]`，右侧第一个大于等于 `nums[i]` 的位置 `right[i]`。计算每个 `nums[i]` 的贡献 $(i - left[i])\times (right[i] - i)\times arr[i]$，累加得到结果。
-
-时间复杂度 $O(n)$。
-
-相似题目：[907. 子数组的最小值之和](/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README.md)
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -106,6 +108,129 @@ class Solution:
                 ans += mx - mi
         return ans
 ```
+
+#### Java
+
+```java
+class Solution {
+    public long subArrayRanges(int[] nums) {
+        long ans = 0;
+        int n = nums.length;
+        for (int i = 0; i < n - 1; ++i) {
+            int mi = nums[i], mx = nums[i];
+            for (int j = i + 1; j < n; ++j) {
+                mi = Math.min(mi, nums[j]);
+                mx = Math.max(mx, nums[j]);
+                ans += (mx - mi);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    long long subArrayRanges(vector<int>& nums) {
+        long long ans = 0;
+        int n = nums.size();
+        for (int i = 0; i < n - 1; ++i) {
+            int mi = nums[i], mx = nums[i];
+            for (int j = i + 1; j < n; ++j) {
+                mi = min(mi, nums[j]);
+                mx = max(mx, nums[j]);
+                ans += (mx - mi);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func subArrayRanges(nums []int) int64 {
+	var ans int64
+	n := len(nums)
+	for i := 0; i < n-1; i++ {
+		mi, mx := nums[i], nums[i]
+		for j := i + 1; j < n; j++ {
+			mi = min(mi, nums[j])
+			mx = max(mx, nums[j])
+			ans += (int64)(mx - mi)
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function subArrayRanges(nums: number[]): number {
+    const n = nums.length;
+    let res = 0;
+    for (let i = 0; i < n - 1; i++) {
+        let min = nums[i];
+        let max = nums[i];
+        for (let j = i + 1; j < n; j++) {
+            min = Math.min(min, nums[j]);
+            max = Math.max(max, nums[j]);
+            res += max - min;
+        }
+    }
+    return res;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn sub_array_ranges(nums: Vec<i32>) -> i64 {
+        let n = nums.len();
+        let mut res: i64 = 0;
+        for i in 1..n {
+            let mut min = nums[i - 1];
+            let mut max = nums[i - 1];
+            for j in i..n {
+                min = min.min(nums[j]);
+                max = max.max(nums[j]);
+                res += (max - min) as i64;
+            }
+        }
+        res
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：单调栈
+
+枚举每个元素 `nums[i]` 作为最大值出现在了多少个子数组中，以及作为最小值出现在多少个子数组中。
+
+其中 `nums[i]` 作为最大值的贡献为正，作为最小值的贡献为负。
+
+我们以 `nums[i]` 作为最大值为例。找出左侧第一个比 `nums[i]` 大的位置 `left[i]`，右侧第一个大于等于 `nums[i]` 的位置 `right[i]`。计算每个 `nums[i]` 的贡献 $(i - left[i])\times (right[i] - i)\times arr[i]$，累加得到结果。
+
+时间复杂度 $O(n)$。
+
+相似题目：
+
+-   [907. 子数组的最小值之和](https://github.com/doocs/leetcode/blob/main/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -135,27 +260,7 @@ class Solution:
         return mx + mi
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public long subArrayRanges(int[] nums) {
-        long ans = 0;
-        int n = nums.length;
-        for (int i = 0; i < n - 1; ++i) {
-            int mi = nums[i], mx = nums[i];
-            for (int j = i + 1; j < n; ++j) {
-                mi = Math.min(mi, nums[j]);
-                mx = Math.max(mx, nums[j]);
-                ans += (mx - mi);
-            }
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -203,26 +308,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    long long subArrayRanges(vector<int>& nums) {
-        long long ans = 0;
-        int n = nums.size();
-        for (int i = 0; i < n - 1; ++i) {
-            int mi = nums[i], mx = nums[i];
-            for (int j = i + 1; j < n; ++j) {
-                mi = min(mi, nums[j]);
-                mx = max(mx, nums[j]);
-                ans += (mx - mi);
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -239,22 +325,19 @@ public:
         int n = nums.size();
         vector<int> left(n, -1);
         vector<int> right(n, n);
-        for (int i = 0; i < n; ++i)
-        {
+        for (int i = 0; i < n; ++i) {
             while (!stk.empty() && nums[stk.top()] <= nums[i]) stk.pop();
             if (!stk.empty()) left[i] = stk.top();
             stk.push(i);
         }
         stk = stack<int>();
-        for (int i = n - 1; i >= 0; --i)
-        {
+        for (int i = n - 1; i >= 0; --i) {
             while (!stk.empty() && nums[stk.top()] < nums[i]) stk.pop();
             if (!stk.empty()) right[i] = stk.top();
             stk.push(i);
         }
         long long ans = 0;
-        for (int i = 0; i < n; ++i)
-        {
+        for (int i = 0; i < n; ++i) {
             ans += (long long) (i - left[i]) * (right[i] - i) * nums[i];
         }
         return ans;
@@ -262,37 +345,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func subArrayRanges(nums []int) int64 {
-	var ans int64
-	n := len(nums)
-	for i := 0; i < n-1; i++ {
-		mi, mx := nums[i], nums[i]
-		for j := i + 1; j < n; j++ {
-			mi = min(mi, nums[j])
-			mx = max(mx, nums[j])
-			ans += (int64)(mx - mi)
-		}
-	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func subArrayRanges(nums []int) int64 {
@@ -339,50 +392,8 @@ func subArrayRanges(nums []int) int64 {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function subArrayRanges(nums: number[]): number {
-    const n = nums.length;
-    let res = 0;
-    for (let i = 0; i < n - 1; i++) {
-        let min = nums[i];
-        let max = nums[i];
-        for (let j = i + 1; j < n; j++) {
-            min = Math.min(min, nums[j]);
-            max = Math.max(max, nums[j]);
-            res += max - min;
-        }
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn sub_array_ranges(nums: Vec<i32>) -> i64 {
-        let n = nums.len();
-        let mut res: i64 = 0;
-        for i in 1..n {
-            let mut min = nums[i - 1];
-            let mut max = nums[i - 1];
-            for j in i..n {
-                min = min.min(nums[j]);
-                max = max.max(nums[j]);
-                res += (max - min) as i64;
-            }
-        }
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

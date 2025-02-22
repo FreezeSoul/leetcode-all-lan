@@ -1,11 +1,10 @@
 func reorganizeString(s string) string {
 	cnt := make([]int, 26)
-	mx := 0
 	for _, c := range s {
 		t := c - 'a'
 		cnt[t]++
-		mx = max(mx, cnt[t])
 	}
+	mx := slices.Max(cnt)
 	n := len(s)
 	if mx > (n+1)/2 {
 		return ""
@@ -33,11 +32,4 @@ func reorganizeString(s string) string {
 		}
 	}
 	return string(ans)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }

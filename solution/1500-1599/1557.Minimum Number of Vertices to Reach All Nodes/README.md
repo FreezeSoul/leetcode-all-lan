@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1557.Minimum%20Number%20of%20Vertices%20to%20Reach%20All%20Nodes/README.md
+rating: 1512
+source: 第 33 场双周赛 Q2
+tags:
+    - 图
+---
+
+<!-- problem:start -->
+
 # [1557. 可以到达所有点的最少点数目](https://leetcode.cn/problems/minimum-number-of-vertices-to-reach-all-nodes)
 
 [English Version](/solution/1500-1599/1557.Minimum%20Number%20of%20Vertices%20to%20Reach%20All%20Nodes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>有向无环图</strong>&nbsp;， <code>n</code>&nbsp;个节点编号为 <code>0</code>&nbsp;到 <code>n-1</code>&nbsp;，以及一个边数组 <code>edges</code>&nbsp;，其中 <code>edges[i] = [from<sub>i</sub>, to<sub>i</sub>]</code>&nbsp;表示一条从点&nbsp;&nbsp;<code>from<sub>i</sub></code>&nbsp;到点&nbsp;<code>to<sub>i</sub></code>&nbsp;的有向边。</p>
 
@@ -43,39 +55,41 @@
 	<li>所有点对&nbsp;<code>(from<sub>i</sub>, to<sub>i</sub>)</code>&nbsp;互不相同。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-找出所有入度为 0 的点即可。
+### 方法一：统计入度为 0 的点
+
+我们注意到，所有入度为 $0$ 的点都一定属于最小点集，因为它们没有任何入边。而由于题目给定的是一张有向无环图，因此所有入度不为 $0$ 的点一定存在一条入边，也即一定能从某个入度为 $0$ 的点出发到达。因此我们只需要找到所有入度为 $0$ 的点即可。
+
+时间复杂度 $O(n + m)$，空间复杂度 $O(n)$。其中 $n$ 和 $m$ 分别是节点数和边数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findSmallestSetOfVertices(self, n: int, edges: List[List[int]]) -> List[int]:
-        s = {to for _, to in edges}
-        return [i for i in range(n) if i not in s]
+        cnt = Counter(t for _, t in edges)
+        return [i for i in range(n) if cnt[i] == 0]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
-        Set<Integer> s = new HashSet<>();
-        for (List<Integer> e : edges) {
-            s.add(e.get(1));
+        var cnt = new int[n];
+        for (var e : edges) {
+            ++cnt[e.get(1)];
         }
         List<Integer> ans = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
-            if (!s.contains(i)) {
+            if (cnt[i] == 0) {
                 ans.add(i);
             }
         }
@@ -84,60 +98,63 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> findSmallestSetOfVertices(int n, vector<vector<int>>& edges) {
-        unordered_set<int> s;
-        for (auto& e : edges) s.insert(e[1]);
+        vector<int> cnt(n);
+        for (auto& e : edges) {
+            ++cnt[e[1]];
+        }
         vector<int> ans;
         for (int i = 0; i < n; ++i) {
-            if (!s.count(i)) ans.push_back(i);
+            if (cnt[i] == 0) {
+                ans.push_back(i);
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func findSmallestSetOfVertices(n int, edges [][]int) []int {
-	s := make(map[int]bool)
+func findSmallestSetOfVertices(n int, edges [][]int) (ans []int) {
+	cnt := make([]int, n)
 	for _, e := range edges {
-		s[e[1]] = true
+		cnt[e[1]]++
 	}
-	var ans []int
-	for i := 0; i < n; i++ {
-		if !s[i] {
+	for i, c := range cnt {
+		if c == 0 {
 			ans = append(ans, i)
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findSmallestSetOfVertices(n: number, edges: number[][]): number[] {
-    const arr = new Array(n).fill(true);
-    for (const [_, i] of edges) {
-        arr[i] = false;
+    const cnt: number[] = new Array(n).fill(0);
+    for (const [_, t] of edges) {
+        cnt[t]++;
     }
-    const res = [];
-    arr.forEach((v, i) => {
-        if (v) {
-            res.push(i);
+    const ans: number[] = [];
+    for (let i = 0; i < n; ++i) {
+        if (cnt[i] === 0) {
+            ans.push(i);
         }
-    });
-    return res;
+    }
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -154,10 +171,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

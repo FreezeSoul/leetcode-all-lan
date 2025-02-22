@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/08.07.Permutation%20I/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 08.07. 无重复字符串的排列组合](https://leetcode.cn/problems/permutation-i-lcci)
 
 [English Version](/lcci/08.07.Permutation%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>无重复字符串的排列组合。编写一种方法，计算某字符串的所有排列组合，字符串每个字符均不相同。</p>
 
 <p> <strong>示例1:</strong></p>
@@ -28,75 +37,166 @@
 <li>字符串长度在[1, 9]之间。</li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯**
+### 方法一：DFS（回溯）
+
+我们设计一个函数 $\textit{dfs}(i)$ 表示已经填完了前 $i$ 个位置，现在需要填第 $i+1$ 个位置。枚举所有可能的字符，如果这个字符没有被填过，就填入这个字符，然后继续填下一个位置，直到填完所有的位置。
+
+时间复杂度 $O(n \times n!)$，其中 $n$ 是字符串的长度。一共有 $n!$ 个排列，每个排列需要 $O(n)$ 的时间来构造。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def permutation(self, S: str) -> List[str]:
-        def dfs(u, t):
-            if u == n:
-                ans.append(''.join(t))
+        def dfs(i: int):
+            if i >= n:
+                ans.append("".join(t))
                 return
-            for i in range(n):
-                if vis[i]:
-                    continue
-                vis[i] = True
-                t.append(S[i])
-                dfs(u + 1, t)
-                t.pop()
-                vis[i] = False
+            for j, c in enumerate(S):
+                if not vis[j]:
+                    vis[j] = True
+                    t[i] = c
+                    dfs(i + 1)
+                    vis[j] = False
 
+        ans = []
         n = len(S)
         vis = [False] * n
-        ans = []
-        dfs(0, [])
+        t = list(S)
+        dfs(0)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
+    private char[] s;
+    private char[] t;
+    private boolean[] vis;
+    private List<String> ans = new ArrayList<>();
+
     public String[] permutation(String S) {
-        Set<Character> vis = new HashSet<>();
-        List<String> ans = new ArrayList<>();
-        StringBuilder t = new StringBuilder();
-        dfs(0, S, t, ans, vis);
+        s = S.toCharArray();
+        int n = s.length;
+        vis = new boolean[n];
+        t = new char[n];
+        dfs(0);
         return ans.toArray(new String[0]);
     }
 
-    private void dfs(int u, String S, StringBuilder t, List<String> ans, Set<Character> vis) {
-        if (u == S.length()) {
-            ans.add(t.toString());
+    private void dfs(int i) {
+        if (i >= s.length) {
+            ans.add(new String(t));
             return;
         }
-        for (char c : S.toCharArray()) {
-            if (vis.contains(c)) {
-                continue;
+        for (int j = 0; j < s.length; ++j) {
+            if (!vis[j]) {
+                vis[j] = true;
+                t[i] = s[j];
+                dfs(i + 1);
+                vis[j] = false;
             }
-            vis.add(c);
-            t.append(c);
-            dfs(u + 1, S, t, ans, vis);
-            t.deleteCharAt(t.length() - 1);
-            vis.remove(c);
         }
     }
 }
 ```
 
-### **JavaSript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<string> permutation(string S) {
+        int n = S.size();
+        vector<bool> vis(n);
+        string t = S;
+        vector<string> ans;
+        auto dfs = [&](this auto&& dfs, int i) {
+            if (i >= n) {
+                ans.emplace_back(t);
+                return;
+            }
+            for (int j = 0; j < n; ++j) {
+                if (!vis[j]) {
+                    vis[j] = true;
+                    t[i] = S[j];
+                    dfs(i + 1);
+                    vis[j] = false;
+                }
+            }
+        };
+        dfs(0);
+        return ans;
+    }
+};
+
+```
+
+#### Go
+
+```go
+func permutation(S string) (ans []string) {
+	t := []byte(S)
+	n := len(t)
+	vis := make([]bool, n)
+	var dfs func(int)
+	dfs = func(i int) {
+		if i >= n {
+			ans = append(ans, string(t))
+			return
+		}
+		for j := range S {
+			if !vis[j] {
+				vis[j] = true
+				t[i] = S[j]
+				dfs(i + 1)
+				vis[j] = false
+			}
+		}
+	}
+	dfs(0)
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function permutation(S: string): string[] {
+    const n = S.length;
+    const vis: boolean[] = Array(n).fill(false);
+    const ans: string[] = [];
+    const t: string[] = Array(n).fill('');
+    const dfs = (i: number) => {
+        if (i >= n) {
+            ans.push(t.join(''));
+            return;
+        }
+        for (let j = 0; j < n; ++j) {
+            if (vis[j]) {
+                continue;
+            }
+            vis[j] = true;
+            t[i] = S[j];
+            dfs(i + 1);
+            vis[j] = false;
+        }
+    };
+    dfs(0);
+    return ans;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -104,95 +204,64 @@ class Solution {
  * @return {string[]}
  */
 var permutation = function (S) {
-    let res = [];
-    let arr = [...S];
-    let prev = [];
-    let record = new Array(S.length).fill(false);
-    dfs(arr, 0, prev, record, res);
-    return res;
-};
-
-function dfs(arr, depth, prev, record, res) {
-    if (depth == arr.length) {
-        res.push(prev.join(''));
-        return;
-    }
-    for (let i = 0; i < arr.length; i++) {
-        if (record[i]) {
-            continue;
-        }
-        prev.push(arr[i]);
-        record[i] = true;
-        dfs(arr, depth + 1, prev, record, res);
-        prev.pop();
-        record[i] = false;
-    }
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<string> permutation(string S) {
-        unordered_set<char> vis;
-        vector<string> ans;
-        string t = "";
-        dfs(0, S, t, ans, vis);
-        return ans;
-    }
-
-    void dfs(int u, string& S, string& t, vector<string>& ans, unordered_set<char>& vis) {
-        if (u == S.size()) {
-            ans.push_back(t);
+    const n = S.length;
+    const vis = Array(n).fill(false);
+    const ans = [];
+    const t = Array(n).fill('');
+    const dfs = i => {
+        if (i >= n) {
+            ans.push(t.join(''));
             return;
         }
-        for (char& c : S) {
-            if (vis.count(c)) continue;
-            vis.insert(c);
-            t.push_back(c);
-            dfs(u + 1, S, t, ans, vis);
-            vis.erase(c);
-            t.pop_back();
+        for (let j = 0; j < n; ++j) {
+            if (vis[j]) {
+                continue;
+            }
+            vis[j] = true;
+            t[i] = S[j];
+            dfs(i + 1);
+            vis[j] = false;
         }
-    }
+    };
+    dfs(0);
+    return ans;
 };
 ```
 
-### **Go**
+#### Swift
 
-```go
-func permutation(S string) []string {
-	vis := make(map[byte]bool)
-	var ans []string
-	var t []byte
-	var dfs func(u int, t []byte)
-	dfs = func(u int, t []byte) {
-		if u == len(S) {
-			ans = append(ans, string(t))
-			return
-		}
-		for i := range S {
-			if vis[S[i]] {
-				continue
-			}
-			vis[S[i]] = true
-			t = append(t, S[i])
-			dfs(u+1, t)
-			vis[S[i]] = false
-			t = t[:len(t)-1]
-		}
-	}
-	dfs(0, t)
-	return ans
+```swift
+class Solution {
+    func permutation(_ S: String) -> [String] {
+        var ans: [String] = []
+        let s = Array(S)
+        var t = s
+        var vis = Array(repeating: false, count: s.count)
+        let n = s.count
+
+        func dfs(_ i: Int) {
+            if i >= n {
+                ans.append(String(t))
+                return
+            }
+            for j in 0..<n {
+                if !vis[j] {
+                    vis[j] = true
+                    t[i] = s[j]
+                    dfs(i + 1)
+                    vis[j] = false
+                }
+            }
+        }
+
+        dfs(0)
+        return ans
+    }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

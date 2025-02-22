@@ -1,14 +1,33 @@
-# [269. Alien Dictionary](https://leetcode.com/problems/alien-dictionary)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0269.Alien%20Dictionary/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Topological Sort
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
+# [269. Alien Dictionary 🔒](https://leetcode.com/problems/alien-dictionary)
 
 [中文文档](/solution/0200-0299/0269.Alien%20Dictionary/README.md)
 
 ## Description
 
-<p>There is a new alien language that uses the English alphabet. However, the order among the letters is unknown to you.</p>
+<!-- description:start -->
 
-<p>You are given a list of strings <code>words</code> from the alien language&#39;s dictionary, where the strings in <code>words</code> are <span data-keyword="lexicographically-smaller-string-alien"><strong>sorted lexicographically</strong></span> by the rules of this new language.</p>
+<p>There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.</p>
 
-<p>Return <em>a string of the unique letters in the new alien language sorted in <strong>lexicographically increasing order</strong> by the new language&#39;s rules. </em>If there is no solution, return <code>&quot;&quot;</code><em>. </em>If there are multiple solutions, return<em> <strong>any of them</strong></em>.</p>
+<p>You are given a list of strings <code>words</code> from the alien language&#39;s dictionary. Now it is claimed that the strings in <code>words</code> are <span data-keyword="lexicographically-smaller-string-alien"><strong>sorted lexicographically</strong></span> by the rules of this new language.</p>
+
+<p>If this claim is incorrect, and the given arrangement of string in&nbsp;<code>words</code>&nbsp;cannot correspond to any order of letters,&nbsp;return&nbsp;<code>&quot;&quot;.</code></p>
+
+<p>Otherwise, return <em>a string of the unique letters in the new alien language sorted in <strong>lexicographically increasing order</strong> by the new language&#39;s rules</em><em>. </em>If there are multiple solutions, return<em> <strong>any of them</strong></em>.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -42,11 +61,17 @@
 	<li><code>words[i]</code> consists of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -104,7 +129,7 @@ class Solution:
         return '' if len(ans) < cnt else ''.join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -183,7 +208,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -244,10 +269,8 @@ public:
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

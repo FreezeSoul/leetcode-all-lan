@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1648.Sell%20Diminishing-Valued%20Colored%20Balls/README.md
+rating: 2050
+source: 第 214 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 数学
+    - 二分查找
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1648. 销售价值减少的颜色球](https://leetcode.cn/problems/sell-diminishing-valued-colored-balls)
 
 [English Version](/solution/1600-1699/1648.Sell%20Diminishing-Valued%20Colored%20Balls/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一些球的库存 <code>inventory</code> ，里面包含着不同颜色的球。一个顾客想要 <strong>任意颜色</strong> 总数为 <code>orders</code> 的球。</p>
 
@@ -59,11 +76,13 @@
 	<li><code>1 <= orders <= min(sum(inventory[i]), 10<sup>9</sup>)</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 优化模拟**
+### 方法一：贪心 + 优化模拟
 
 要使得总价值最大，我们可以贪心地每次卖出数量最多的一种颜色的球。由于 `orders` 值域较大，如果直接简单地模拟，会超时。因此，我们需要优化模拟的过程。
 
@@ -73,9 +92,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +124,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -151,7 +166,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -186,7 +201,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxProfit(inventory []int, orders int) int {
@@ -224,10 +239,8 @@ func maxProfit(inventory []int, orders int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

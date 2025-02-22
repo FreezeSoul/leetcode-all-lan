@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2241.Design%20an%20ATM%20Machine/README.md
+rating: 1616
+source: 第 76 场双周赛 Q3
+tags:
+    - 贪心
+    - 设计
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2241. 设计一个 ATM 机器](https://leetcode.cn/problems/design-an-atm-machine)
 
 [English Version](/solution/2200-2299/2241.Design%20an%20ATM%20Machine/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个 ATM 机器，存有&nbsp;<code>5</code>&nbsp;种面值的钞票：<code>20</code>&nbsp;，<code>50</code>&nbsp;，<code>100</code>&nbsp;，<code>200</code>&nbsp;和&nbsp;<code>500</code>&nbsp;美元。初始时，ATM 机是空的。用户可以用它存或者取任意数目的钱。</p>
 
@@ -56,43 +70,44 @@ atm.withdraw(550);        // 返回 [0,1,0,0,1] ，机器会返回 1 张 $50 的
 	<li><span style="">函数 </span><code>withdraw</code> 和&nbsp;<code>deposit</code>&nbsp;至少各有 <strong>一次&nbsp;</strong>调用。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-我们用一个数组 $d$ 记录钞票面额，用一个数组 $cnt$ 记录每种面额的钞票数量。
+我们用一个数组 $\textit{d}$ 记录钞票面额，用一个数组 $\textit{cnt}$ 记录每种面额的钞票数量。
 
 对于 `deposit` 操作，我们只需要将对应面额的钞票数量加上即可。时间复杂度 $O(1)$。
 
-对于 `withdraw` 操作，我们从大到小枚举每种面额的钞票，取出尽可能多且不超过 $amount$ 的钞票，然后将 $amount$ 减去取出的钞票面额之和，如果最后 $amount$ 仍大于 $0$，说明无法取出 $amount$ 的钞票，返回 $-1$ 即可。否则，返回取出的钞票数量即可。时间复杂度 $O(1)$。
+对于 `withdraw` 操作，我们从大到小枚举每种面额的钞票，取出尽可能多且不超过 $\textit{amount}$ 的钞票，然后将 $\textit{amount}$ 减去取出的钞票面额之和，如果最后 $\textit{amount}$ 仍大于 $0$，说明无法取出 $\textit{amount}$ 的钞票，返回 $-1$ 即可。否则，返回取出的钞票数量即可。时间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class ATM:
     def __init__(self):
-        self.cnt = [0] * 5
         self.d = [20, 50, 100, 200, 500]
+        self.m = len(self.d)
+        self.cnt = [0] * self.m
 
     def deposit(self, banknotesCount: List[int]) -> None:
-        for i, v in enumerate(banknotesCount):
-            self.cnt[i] += v
+        for i, x in enumerate(banknotesCount):
+            self.cnt[i] += x
 
     def withdraw(self, amount: int) -> List[int]:
-        ans = [0] * 5
-        for i in range(4, -1, -1):
+        ans = [0] * self.m
+        for i in reversed(range(self.m)):
             ans[i] = min(amount // self.d[i], self.cnt[i])
             amount -= ans[i] * self.d[i]
         if amount > 0:
             return [-1]
-        for i, v in enumerate(ans):
-            self.cnt[i] -= v
+        for i, x in enumerate(ans):
+            self.cnt[i] -= x
         return ans
 
 
@@ -102,14 +117,13 @@ class ATM:
 # param_2 = obj.withdraw(amount)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class ATM {
-    private long[] cnt = new long[5];
     private int[] d = {20, 50, 100, 200, 500};
+    private int m = d.length;
+    private long[] cnt = new long[5];
 
     public ATM() {
     }
@@ -121,15 +135,15 @@ class ATM {
     }
 
     public int[] withdraw(int amount) {
-        int[] ans = new int[5];
-        for (int i = 4; i >= 0; --i) {
+        int[] ans = new int[m];
+        for (int i = m - 1; i >= 0; --i) {
             ans[i] = (int) Math.min(amount / d[i], cnt[i]);
             amount -= ans[i] * d[i];
         }
         if (amount > 0) {
             return new int[] {-1};
         }
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < m; ++i) {
             cnt[i] -= ans[i];
         }
         return ans;
@@ -144,13 +158,12 @@ class ATM {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class ATM {
 public:
     ATM() {
-
     }
 
     void deposit(vector<int> banknotesCount) {
@@ -160,23 +173,24 @@ public:
     }
 
     vector<int> withdraw(int amount) {
-        vector<int> ans(5);
-        for (int i = 4; ~i; --i) {
+        vector<int> ans(m);
+        for (int i = m - 1; ~i; --i) {
             ans[i] = min(1ll * amount / d[i], cnt[i]);
             amount -= ans[i] * d[i];
         }
         if (amount > 0) {
             return {-1};
         }
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < m; ++i) {
             cnt[i] -= ans[i];
         }
         return ans;
     }
 
 private:
-    long long cnt[5] = {0};
-    int d[5] = {20, 50, 100, 200, 500};
+    static constexpr int d[5] = {20, 50, 100, 200, 500};
+    static constexpr int m = size(d);
+    long long cnt[m] = {0};
 };
 
 /**
@@ -187,44 +201,38 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
-type ATM struct {
-	d   [5]int
-	cnt [5]int
-}
+var d = [...]int{20, 50, 100, 200, 500}
+
+const m = len(d)
+
+type ATM [m]int
 
 func Constructor() ATM {
-	return ATM{[5]int{20, 50, 100, 200, 500}, [5]int{}}
+	return ATM{}
 }
 
 func (this *ATM) Deposit(banknotesCount []int) {
-	for i, v := range banknotesCount {
-		this.cnt[i] += v
+	for i, x := range banknotesCount {
+		this[i] += x
 	}
 }
 
 func (this *ATM) Withdraw(amount int) []int {
-	ans := make([]int, 5)
-	for i := 4; i >= 0; i-- {
-		ans[i] = min(amount/this.d[i], this.cnt[i])
-		amount -= ans[i] * this.d[i]
+	ans := make([]int, m)
+	for i := m - 1; i >= 0; i-- {
+		ans[i] = min(amount/d[i], this[i])
+		amount -= ans[i] * d[i]
 	}
 	if amount > 0 {
 		return []int{-1}
 	}
-	for i, v := range ans {
-		this.cnt[i] -= v
+	for i, x := range ans {
+		this[i] -= x
 	}
 	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
 
 /**
@@ -235,16 +243,51 @@ func min(a, b int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
+const d: number[] = [20, 50, 100, 200, 500];
+const m = d.length;
 
-```
+class ATM {
+    private cnt: number[];
 
-### **...**
+    constructor() {
+        this.cnt = Array(m).fill(0);
+    }
 
-```
+    deposit(banknotesCount: number[]): void {
+        for (let i = 0; i < banknotesCount.length; ++i) {
+            this.cnt[i] += banknotesCount[i];
+        }
+    }
 
+    withdraw(amount: number): number[] {
+        const ans: number[] = Array(m).fill(0);
+        for (let i = m - 1; i >= 0; --i) {
+            ans[i] = Math.min(Math.floor(amount / d[i]), this.cnt[i]);
+            amount -= ans[i] * d[i];
+        }
+        if (amount > 0) {
+            return [-1];
+        }
+        for (let i = 0; i < m; ++i) {
+            this.cnt[i] -= ans[i];
+        }
+        return ans;
+    }
+}
+
+/**
+ * Your ATM object will be instantiated and called as such:
+ * var obj = new ATM()
+ * obj.deposit(banknotesCount)
+ * var param_2 = obj.withdraw(amount)
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

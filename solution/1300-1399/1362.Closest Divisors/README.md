@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1362.Closest%20Divisors/README.md
+rating: 1533
+source: 第 177 场周赛 Q3
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1362. 最接近的因数](https://leetcode.cn/problems/closest-divisors)
 
 [English Version](/solution/1300-1399/1362.Closest%20Divisors/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数&nbsp;<code>num</code>，请你找出同时满足下面全部要求的两个整数：</p>
 
@@ -44,11 +56,13 @@
 	<li><code>1 &lt;= num &lt;= 10^9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 我们设计一个函数 $f(x)$，该函数返回乘积等于 $x$ 的两个数，且这两个数的差的绝对值最小。我们可以从 $\sqrt{x}$ 开始枚举 $i$，如果 $x$ 能被 $i$ 整除，那么 $\frac{x}{i}$ 就是另一个因数，此时我们就找到了一个乘积等于 $x$ 的两个因数，我们将其返回即可。否则我们减小 $i$ 的值，继续枚举。
 
@@ -58,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +87,7 @@ class Solution:
         return a if abs(a[0] - a[1]) < abs(b[0] - b[1]) else b
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +127,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func closestDivisors(num int) []int {
@@ -143,10 +153,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

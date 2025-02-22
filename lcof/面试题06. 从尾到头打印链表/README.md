@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9806.%20%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 06. 从尾到头打印链表](https://leetcode.cn/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。</p>
 
@@ -17,23 +27,21 @@
 
 <p><code>0 &lt;= 链表长度 &lt;= 10000</code></p>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：顺序遍历 + 反转**
+<!-- solution:start -->
+
+### 方法一：顺序遍历 + 反转
 
 我们可以顺序遍历链表，将每个节点的值存入数组中，然后将数组反转。
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为链表的长度。
 
-**方法二：递归**
-
-我们可以使用递归的方式，先递归得到 `head` 之后的节点反过来的值列表，然后将 `head` 的值加到列表的末尾。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为链表的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -52,23 +60,7 @@ class Solution:
         return ans[::-1]
 ```
 
-```python
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def reversePrint(self, head: ListNode) -> List[int]:
-        if head is None:
-            return []
-        ans = self.reversePrint(head.next)
-        ans.append(head.val)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 /**
@@ -93,6 +85,219 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> reversePrint(ListNode* head) {
+        vector<int> ans;
+        for (; head; head = head->next) {
+            ans.push_back(head->val);
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func reversePrint(head *ListNode) (ans []int) {
+	for ; head != nil; head = head.Next {
+		ans = append(ans, head.Val)
+	}
+	for i, j := 0, len(ans)-1; i < j; i, j = i+1, j-1 {
+		ans[i], ans[j] = ans[j], ans[i]
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+function reversePrint(head: ListNode | null): number[] {
+    const ans: number[] = [];
+    for (; head; head = head.next) {
+        ans.push(head.val);
+    }
+    return ans.reverse();
+}
+```
+
+#### Rust
+
+```rust
+// Definition for singly-linked list.
+// #[derive(PartialEq, Eq, Clone, Debug)]
+// pub struct ListNode {
+//   pub val: i32,
+//   pub next: Option<Box<ListNode>>
+// }
+//
+// impl ListNode {
+//   #[inline]
+//   fn new(val: i32) -> Self {
+//     ListNode {
+//       next: None,
+//       val
+//     }
+//   }
+// }
+impl Solution {
+    pub fn reverse_print(head: Option<Box<ListNode>>) -> Vec<i32> {
+        let mut ans: Vec<i32> = vec![];
+        let mut cur = head;
+        while let Some(node) = cur {
+            ans.push(node.val);
+            cur = node.next;
+        }
+        ans.reverse();
+        ans
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {number[]}
+ */
+var reversePrint = function (head) {
+    const ans = [];
+    for (; head; head = head.next) {
+        ans.push(head.val);
+    }
+    return ans.reverse();
+};
+```
+
+#### C#
+
+```cs
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public int[] ReversePrint(ListNode head) {
+        List<int> ans = new List<int>();
+        for (; head != null; head = head.next) {
+            ans.Add(head.val);
+        }
+        ans.Reverse();
+        return ans.ToArray();
+    }
+}
+```
+
+#### Swift
+
+```swift
+/* public class ListNode {
+*    public var val: Int
+*    public var next: ListNode?
+*    public init(_ val: Int) {
+*        self.val = val
+*        self.next = nil
+*    }
+* }
+*/
+
+class Solution {
+    func reversePrint(_ head: ListNode?) -> [Int] {
+        var stack = [Int]()
+        var current = head
+        while let node = current {
+            stack.append(node.val)
+            current = node.next
+        }
+
+        return stack.reversed()
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二：递归
+
+我们可以使用递归的方式，先递归得到 `head` 之后的节点反过来的值列表，然后将 `head` 的值加到列表的末尾。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为链表的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+
+class Solution:
+    def reversePrint(self, head: ListNode) -> List[int]:
+        if head is None:
+            return []
+        ans = self.reversePrint(head.next)
+        ans.append(head.val)
+        return ans
+```
+
+#### Java
 
 ```java
 /**
@@ -120,7 +325,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -134,7 +339,9 @@ class Solution {
 class Solution {
 public:
     vector<int> reversePrint(ListNode* head) {
-        if (!head) return {};
+        if (!head) {
+            return {};
+        }
         vector<int> ans = reversePrint(head->next);
         ans.push_back(head->val);
         return ans;
@@ -142,48 +349,7 @@ public:
 };
 ```
 
-```cpp
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-class Solution {
-public:
-    vector<int> reversePrint(ListNode* head) {
-        vector<int> ans;
-        for (; head; head = head->next) {
-            ans.push_back(head->val);
-        }
-        reverse(ans.begin(), ans.end());
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-```go
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
-func reversePrint(head *ListNode) (ans []int) {
-	for ; head != nil; head = head.Next {
-		ans = append(ans, head.Val)
-	}
-	for i, j := 0, len(ans)-1; i < j; i, j = i+1, j-1 {
-		ans[i], ans[j] = ans[j], ans[i]
-	}
-	return
-}
-```
+#### Go
 
 ```go
 /**
@@ -203,107 +369,7 @@ func reversePrint(head *ListNode) (ans []int) {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} head
- * @return {number[]}
- */
-var reversePrint = function (head) {
-    let ans = [];
-    for (; !!head; head = head.next) {
-        ans.unshift(head.val);
-    }
-    return ans;
-};
-```
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} head
- * @return {number[]}
- */
-var reversePrint = function (head) {
-    if (!head) {
-        return [];
-    }
-    const ans = reversePrint(head.next);
-    ans.push(head.val);
-    return ans;
-};
-```
-
-### **TypeScript**
-
-```ts
-/**
- * Definition for singly-linked list.
- * class ListNode {
- *     val: number
- *     next: ListNode | null
- *     constructor(val?: number, next?: ListNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
- */
-
-function reversePrint(head: ListNode | null): number[] {
-    let ans: number[] = [];
-    for (; !!head; head = head.next) {
-        ans.unshift(head.val);
-    }
-    return ans;
-}
-```
-
-### **Rust**
-
-```rust
-// Definition for singly-linked list.
-// #[derive(PartialEq, Eq, Clone, Debug)]
-// pub struct ListNode {
-//   pub val: i32,
-//   pub next: Option<Box<ListNode>>
-// }
-//
-// impl ListNode {
-//   #[inline]
-//   fn new(val: i32) -> Self {
-//     ListNode {
-//       next: None,
-//       val
-//     }
-//   }
-// }
-impl Solution {
-    pub fn reverse_print(head: Option<Box<ListNode>>) -> Vec<i32> {
-        let mut arr: Vec<i32> = vec![];
-        let mut cur = head;
-        while let Some(node) = cur {
-            arr.push(node.val);
-            cur = node.next;
-        }
-        arr.reverse();
-        arr
-    }
-}
-```
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -343,34 +409,32 @@ impl Solution {
 }
 ```
 
-### **C#**
+#### JavaScript
 
-```cs
+```js
 /**
  * Definition for singly-linked list.
- * public class ListNode {
- *     public int val;
- *     public ListNode next;
- *     public ListNode(int x) { val = x; }
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
  * }
  */
- public class Solution {
-     public int[] ReversePrint(ListNode head) {
-         List<int> ans = new List<int>();
-         while (head != null) {
-             ans.Add(head.val);
-             head = head.next;
-         }
-         ans.Reverse();
-         return ans.ToArray();
-     }
- }
-```
-
-### **...**
-
-```
-
+/**
+ * @param {ListNode} head
+ * @return {number[]}
+ */
+var reversePrint = function (head) {
+    if (!head) {
+        return [];
+    }
+    const ans = reversePrint(head.next);
+    ans.push(head.val);
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

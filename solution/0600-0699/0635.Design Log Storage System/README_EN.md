@@ -1,8 +1,23 @@
-# [635. Design Log Storage System](https://leetcode.com/problems/design-log-storage-system)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0635.Design%20Log%20Storage%20System/README_EN.md
+tags:
+    - Design
+    - Hash Table
+    - String
+    - Ordered Set
+---
+
+<!-- problem:start -->
+
+# [635. Design Log Storage System 🔒](https://leetcode.com/problems/design-log-storage-system)
 
 [中文文档](/solution/0600-0699/0635.Design%20Log%20Storage%20System/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given several logs, where each log contains a unique ID and timestamp. Timestamp is a string that has the following format: <code>Year:Month:Day:Hour:Minute:Second</code>, for example, <code>2017:01:01:23:59:59</code>. All domains are zero-padded decimal numbers.</p>
 
@@ -52,11 +67,21 @@ logSystem.retrieve(&quot;2016:01:01:01:01:01&quot;, &quot;2017:01:01:23:00:00&qu
 	<li>At most <code>500</code> calls will be made to <code>put</code> and <code>retrieve</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: String Comparison
+
+Store the `id` and `timestamp` of the logs as tuples in an array. Then in the `retrieve()` method, truncate the corresponding parts of `start` and `end` based on `granularity`, and traverse the array, adding the `id` that meets the conditions to the result array.
+
+In terms of time complexity, the time complexity of the `put()` method is $O(1)$, and the time complexity of the `retrieve()` method is $O(n)$, where $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class LogSystem:
@@ -85,7 +110,7 @@ class LogSystem:
 # param_2 = obj.retrieve(start,end,granularity)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class LogSystem {
@@ -138,7 +163,7 @@ class Log {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class LogSystem {
@@ -183,7 +208,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type LogSystem struct {
@@ -232,10 +257,8 @@ type pair struct {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

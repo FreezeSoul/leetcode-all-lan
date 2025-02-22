@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1041.Robot%20Bounded%20In%20Circle/README_EN.md
+rating: 1521
+source: Weekly Contest 136 Q1
+tags:
+    - Math
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1041. Robot Bounded In Circle](https://leetcode.com/problems/robot-bounded-in-circle)
 
 [中文文档](/solution/1000-1099/1041.Robot%20Bounded%20In%20Circle/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>On an infinite plane, a robot initially stands at <code>(0, 0)</code> and faces north. Note that:</p>
 
@@ -80,11 +96,17 @@ Based on that, we return true.
 	<li><code>instructions[i]</code> is <code>&#39;G&#39;</code>, <code>&#39;L&#39;</code> or, <code>&#39;R&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -101,7 +123,7 @@ class Solution:
         return (dist[0] == dist[2] and dist[1] == dist[3]) or k != 0
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -123,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isRobotBounded(instructions string) bool {
@@ -164,7 +186,7 @@ func isRobotBounded(instructions string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isRobotBounded(instructions: string): boolean {
@@ -183,10 +205,8 @@ function isRobotBounded(instructions: string): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

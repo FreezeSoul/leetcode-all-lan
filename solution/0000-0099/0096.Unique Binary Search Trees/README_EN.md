@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0096.Unique%20Binary%20Search%20Trees/README_EN.md
+tags:
+    - Tree
+    - Binary Search Tree
+    - Math
+    - Dynamic Programming
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [96. Unique Binary Search Trees](https://leetcode.com/problems/unique-binary-search-trees)
 
 [中文文档](/solution/0000-0099/0096.Unique%20Binary%20Search%20Trees/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code>, return <em>the number of structurally unique <strong>BST&#39;</strong>s (binary search trees) which has exactly </em><code>n</code><em> nodes of unique values from</em> <code>1</code> <em>to</em> <code>n</code>.</p>
 
@@ -28,77 +44,138 @@
 	<li><code>1 &lt;= n &lt;= 19</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i]$ to represent the number of binary search trees that can be generated from $[1, i]$. Initially, $f[0] = 1$, and the answer is $f[n]$.
+
+We can enumerate the number of nodes $i$, then the number of nodes in the left subtree $j \in [0, i - 1]$, and the number of nodes in the right subtree $k = i - j - 1$. The number of combinations of the number of nodes in the left subtree and the right subtree is $f[j] \times f[k]$, so $f[i] = \sum_{j = 0}^{i - 1} f[j] \times f[i - j - 1]$.
+
+Finally, return $f[n]$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def numTrees(self, n: int) -> int:
-        dp = [0] * (n + 1)
-        dp[0] = 1
-        for i in range(1, n + 1):
+        f = [1] + [0] * n
+        for i in range(n + 1):
             for j in range(i):
-                dp[i] += dp[j] * dp[i - j - 1]
-        return dp[-1]
+                f[i] += f[j] * f[i - j - 1]
+        return f[n]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int numTrees(int n) {
-        int[] dp = new int[n + 1];
-        dp[0] = 1;
+        int[] f = new int[n + 1];
+        f[0] = 1;
         for (int i = 1; i <= n; ++i) {
             for (int j = 0; j < i; ++j) {
-                dp[i] += dp[j] * dp[i - j - 1];
+                f[i] += f[j] * f[i - j - 1];
             }
         }
-        return dp[n];
+        return f[n];
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int numTrees(int n) {
-        vector<int> dp(n + 1);
-        dp[0] = 1;
+        vector<int> f(n + 1);
+        f[0] = 1;
         for (int i = 1; i <= n; ++i) {
             for (int j = 0; j < i; ++j) {
-                dp[i] += dp[j] * dp[i - j - 1];
+                f[i] += f[j] * f[i - j - 1];
             }
         }
-        return dp[n];
+        return f[n];
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numTrees(n int) int {
-	dp := make([]int, n+1)
-	dp[0] = 1
+	f := make([]int, n+1)
+	f[0] = 1
 	for i := 1; i <= n; i++ {
 		for j := 0; j < i; j++ {
-			dp[i] += dp[j] * dp[i-j-1]
+			f[i] += f[j] * f[i-j-1]
 		}
 	}
-	return dp[n]
+	return f[n]
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function numTrees(n: number): number {
+    const f: number[] = Array(n + 1).fill(0);
+    f[0] = 1;
+    for (let i = 1; i <= n; ++i) {
+        for (let j = 0; j < i; ++j) {
+            f[i] += f[j] * f[i - j - 1];
+        }
+    }
+    return f[n];
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn num_trees(n: i32) -> i32 {
+        let n = n as usize;
+        let mut f = vec![0; n + 1];
+        f[0] = 1;
+        for i in 1..=n {
+            for j in 0..i {
+                f[i] += f[j] * f[i - j - 1];
+            }
+        }
+        f[n] as i32
+    }
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int NumTrees(int n) {
+        int[] f = new int[n + 1];
+        f[0] = 1;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                f[i] += f[j] * f[i - j - 1];
+            }
+        }
+        return f[n];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

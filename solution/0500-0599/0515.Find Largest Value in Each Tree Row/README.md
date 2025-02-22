@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0515.Find%20Largest%20Value%20in%20Each%20Tree%20Row/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [515. 在每个树行中找最大值](https://leetcode.cn/problems/find-largest-value-in-each-tree-row)
 
 [English Version](/solution/0500-0599/0515.Find%20Largest%20Value%20in%20Each%20Tree%20Row/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一棵二叉树的根节点&nbsp;<code>root</code> ，请找出该二叉树中每一层的最大值。</p>
 
@@ -37,23 +50,21 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
-BFS 找每一层最大的节点值。
+我们定义一个队列 $q$，将根节点放入队列中。每次从队列中取出当前层的所有节点，找出最大值，然后将下一层的所有节点放入队列中，直到队列为空。
 
-**方法二：DFS**
-
-DFS 先序遍历，找每个深度最大的节点值。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点个数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -64,50 +75,24 @@ DFS 先序遍历，找每个深度最大的节点值。
 #         self.right = right
 class Solution:
     def largestValues(self, root: Optional[TreeNode]) -> List[int]:
-        if root is None:
-            return []
-        q = deque([root])
         ans = []
+        if root is None:
+            return ans
+        q = deque([root])
         while q:
-            t = -inf
+            x = -inf
             for _ in range(len(q)):
                 node = q.popleft()
-                t = max(t, node.val)
+                x = max(x, node.val)
                 if node.left:
                     q.append(node.left)
                 if node.right:
                     q.append(node.right)
-            ans.append(t)
+            ans.append(x)
         return ans
 ```
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def largestValues(self, root: Optional[TreeNode]) -> List[int]:
-        def dfs(root, curr):
-            if root is None:
-                return
-            if curr == len(ans):
-                ans.append(root.val)
-            else:
-                ans[curr] = max(ans[curr], root.val)
-            dfs(root.left, curr + 1)
-            dfs(root.right, curr + 1)
-
-        ans = []
-        dfs(root, 0)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -152,6 +137,217 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> ans;
+        if (!root) {
+            return ans;
+        }
+        queue<TreeNode*> q{{root}};
+        while (q.size()) {
+            int x = INT_MIN;
+            for (int i = q.size(); i; --i) {
+                TreeNode* node = q.front();
+                q.pop();
+                x = max(x, node->val);
+                if (node->left) {
+                    q.push(node->left);
+                }
+                if (node->right) {
+                    q.push(node->right);
+                }
+            }
+            ans.push_back(x);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func largestValues(root *TreeNode) (ans []int) {
+	if root == nil {
+		return
+	}
+	q := []*TreeNode{root}
+	for len(q) > 0 {
+		x := q[0].Val
+		for i := len(q); i > 0; i-- {
+			node := q[0]
+			q = q[1:]
+			x = max(x, node.Val)
+			if node.Left != nil {
+				q = append(q, node.Left)
+			}
+			if node.Right != nil {
+				q = append(q, node.Right)
+			}
+		}
+		ans = append(ans, x)
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function largestValues(root: TreeNode | null): number[] {
+    const ans: number[] = [];
+    if (!root) {
+        return ans;
+    }
+    const q: TreeNode[] = [root];
+    while (q.length) {
+        const nq: TreeNode[] = [];
+        let x = -Infinity;
+        for (const { val, left, right } of q) {
+            x = Math.max(x, val);
+            if (left) {
+                nq.push(left);
+            }
+            if (right) {
+                nq.push(right);
+            }
+        }
+        ans.push(x);
+        q.length = 0;
+        q.push(...nq);
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::collections::VecDeque;
+use std::rc::Rc;
+impl Solution {
+    pub fn largest_values(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        let mut ans = Vec::new();
+        let mut q = VecDeque::new();
+        if root.is_some() {
+            q.push_back(root.clone());
+        }
+        while !q.is_empty() {
+            let mut x = i32::MIN;
+            for _ in 0..q.len() {
+                let node = q.pop_front().unwrap();
+                let node = node.as_ref().unwrap().borrow();
+                x = x.max(node.val);
+                if node.left.is_some() {
+                    q.push_back(node.left.clone());
+                }
+                if node.right.is_some() {
+                    q.push_back(node.right.clone());
+                }
+            }
+            ans.push(x);
+        }
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：DFS
+
+DFS 先序遍历，找每个深度最大的节点值。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def largestValues(self, root: Optional[TreeNode]) -> List[int]:
+        def dfs(root, curr):
+            if root is None:
+                return
+            if curr == len(ans):
+                ans.append(root.val)
+            else:
+                ans[curr] = max(ans[curr], root.val)
+            dfs(root.left, curr + 1)
+            dfs(root.right, curr + 1)
+
+        ans = []
+        dfs(root, 0)
+        return ans
+```
+
+#### Java
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -191,41 +387,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    vector<int> largestValues(TreeNode* root) {
-        if (!root) return {};
-        queue<TreeNode*> q {{root}};
-        vector<int> ans;
-        while (!q.empty()) {
-            int t = q.front()->val;
-            for (int i = q.size(); i; --i) {
-                TreeNode* node = q.front();
-                t = max(t, node->val);
-                q.pop();
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
-            }
-            ans.push_back(t);
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 /**
@@ -250,56 +412,17 @@ public:
 
     void dfs(TreeNode* root, int curr) {
         if (!root) return;
-        if (curr == ans.size()) ans.push_back(root->val);
-        else ans[curr] = max(ans[curr], root->val);
+        if (curr == ans.size())
+            ans.push_back(root->val);
+        else
+            ans[curr] = max(ans[curr], root->val);
         dfs(root->left, curr + 1);
         dfs(root->right, curr + 1);
     }
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func largestValues(root *TreeNode) []int {
-	var ans []int
-	if root == nil {
-		return ans
-	}
-	q := []*TreeNode{root}
-	for len(q) > 0 {
-		t := q[0].Val
-		for i := len(q); i > 0; i-- {
-			node := q[0]
-			q = q[1:]
-			t = max(t, node.Val)
-			if node.Left != nil {
-				q = append(q, node.Left)
-			}
-			if node.Right != nil {
-				q = append(q, node.Right)
-			}
-		}
-		ans = append(ans, t)
-	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 /**
@@ -328,52 +451,9 @@ func largestValues(root *TreeNode) []int {
 	dfs(root, 0)
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function largestValues(root: TreeNode | null): number[] {
-    const res: number[] = [];
-    const queue: TreeNode[] = [];
-    if (root) {
-        queue.push(root);
-    }
-    while (queue.length) {
-        const n = queue.length;
-        let max = -Infinity;
-        for (let i = 0; i < n; i++) {
-            const { val, left, right } = queue.shift();
-            max = Math.max(max, val);
-            left && queue.push(left);
-            right && queue.push(right);
-        }
-        res.push(max);
-    }
-    return res;
-}
-```
+#### TypeScript
 
 ```ts
 /**
@@ -410,7 +490,7 @@ function largestValues(root: TreeNode | null): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -431,57 +511,8 @@ function largestValues(root: TreeNode | null): number[] {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
-use std::collections::VecDeque;
-impl Solution {
-    pub fn largest_values(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
-        let mut res = Vec::new();
-        let mut queue = VecDeque::new();
-        if root.is_some() {
-            queue.push_back(root.clone());
-        }
-        while !queue.is_empty() {
-            let mut max = i32::MIN;
-            for _ in 0..queue.len() {
-                let node = queue.pop_front().unwrap();
-                let node = node.as_ref().unwrap().borrow();
-                max = max.max(node.val);
-                if node.left.is_some() {
-                    queue.push_back(node.left.clone());
-                }
-                if node.right.is_some() {
-                    queue.push_back(node.right.clone());
-                }
-            }
-            res.push(max);
-        }
-        res
-    }
-}
-```
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
 use std::rc::Rc;
-use std::cell::RefCell;
 impl Solution {
     fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, depth: usize, res: &mut Vec<i32>) {
         if root.is_none() {
@@ -505,10 +536,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

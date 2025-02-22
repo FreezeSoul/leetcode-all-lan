@@ -1,8 +1,21 @@
-# [252. Meeting Rooms](https://leetcode.com/problems/meeting-rooms)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0252.Meeting%20Rooms/README_EN.md
+tags:
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [252. Meeting Rooms 🔒](https://leetcode.com/problems/meeting-rooms)
 
 [中文文档](/solution/0200-0299/0252.Meeting%20Rooms/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of meeting time <code>intervals</code>&nbsp;where <code>intervals[i] = [start<sub>i</sub>, end<sub>i</sub>]</code>, determine if a person could attend all meetings.</p>
 
@@ -23,11 +36,17 @@
 	<li><code>0 &lt;= start<sub>i</sub> &lt;&nbsp;end<sub>i</sub> &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -36,7 +55,7 @@ class Solution:
         return all(a[1] <= b[0] for a, b in pairwise(intervals))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -54,7 +73,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -73,7 +92,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canAttendMeetings(intervals [][]int) bool {
@@ -89,7 +108,7 @@ func canAttendMeetings(intervals [][]int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canAttendMeetings(intervals: number[][]): boolean {
@@ -103,10 +122,43 @@ function canAttendMeetings(intervals: number[][]): boolean {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn can_attend_meetings(intervals: Vec<Vec<i32>>) -> bool {
+        if intervals.len() == 1 {
+            return true;
+        }
 
+        let mut intervals = intervals;
+
+        // Sort the intervals vector
+        intervals.sort_by(|lhs, rhs| lhs[0].cmp(&rhs[0]));
+
+        let mut end = -1;
+
+        // Begin traverse
+        for p in &intervals {
+            if end == -1 {
+                // This is the first pair
+                end = p[1];
+                continue;
+            }
+            if p[0] < end {
+                return false;
+            }
+            end = p[1];
+        }
+
+        true
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0778.Swim%20in%20Rising%20Water/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 并查集
+    - 数组
+    - 二分查找
+    - 矩阵
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [778. 水位上升的泳池中游泳](https://leetcode.cn/problems/swim-in-rising-water)
 
 [English Version](/solution/0700-0799/0778.Swim%20in%20Rising%20Water/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一个 <code>n x n</code>&nbsp;的整数矩阵&nbsp;<code>grid</code> 中，每一个方格的值 <code>grid[i][j]</code> 表示位置 <code>(i, j)</code> 的平台高度。</p>
 
@@ -50,77 +66,17 @@
 	<li><code>grid[i][j]</code>&nbsp;中每个值&nbsp;<strong>均无重复</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-并查集。每经过一个时刻 t，找到此时和雨水高度相等的单元格 `(i, j)`，如果与 `(i, j)` 相邻的单元格 `(x, y)` 满足高度不超过 t，则将这两个单元格进行合并。如果在某个时刻合并之后，单元格 `(0, 0)` 与单元格 `(n - 1, n - 1)` 连通，则返回该时刻。
-
-以下是并查集的几个常用模板。
-
-模板 1——朴素并查集：
-
-```python
-# 初始化，p存储每个点的父节点
-p = list(range(n))
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-```
-
-模板 2——维护 size 的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，size只有当节点是祖宗节点时才有意义，表示祖宗节点所在集合中，点的数量
-p = list(range(n))
-size = [1] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-# 合并a和b所在的两个集合
-if find(a) != find(b):
-    size[find(b)] += size[find(a)]
-    p[find(a)] = find(b)
-```
-
-模板 3——维护到祖宗节点距离的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，d[x]存储x到p[x]的距离
-p = list(range(n))
-d = [0] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        t = find(p[x])
-        d[x] += d[p[x]]
-        p[x] = t
-    return p[x]
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-d[find(a)] = distance
-```
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -147,9 +103,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -194,41 +148,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function swimInWater(grid: number[][]): number {
-    const m = grid.length,
-        n = grid[0].length;
-    let visited = Array.from({ length: m }, () => new Array(n).fill(false));
-    let ans = 0;
-    let stack = [[0, 0, grid[0][0]]];
-    const dir = [
-        [0, 1],
-        [0, -1],
-        [1, 0],
-        [-1, 0],
-    ];
-
-    while (stack.length) {
-        let [i, j] = stack.shift();
-        ans = Math.max(grid[i][j], ans);
-        if (i == m - 1 && j == n - 1) break;
-        for (let [dx, dy] of dir) {
-            let x = i + dx,
-                y = j + dy;
-            if (x < m && x > -1 && y < n && y > -1 && !visited[x][y]) {
-                visited[x][y] = true;
-                stack.push([x, y, grid[x][y]]);
-            }
-        }
-        stack.sort((a, b) => a[2] - b[2]);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -263,7 +183,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func swimInWater(grid [][]int) int {
@@ -302,10 +222,119 @@ func swimInWater(grid [][]int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function swimInWater(grid: number[][]): number {
+    const m = grid.length,
+        n = grid[0].length;
+    let visited = Array.from({ length: m }, () => new Array(n).fill(false));
+    let ans = 0;
+    let stack = [[0, 0, grid[0][0]]];
+    const dir = [
+        [0, 1],
+        [0, -1],
+        [1, 0],
+        [-1, 0],
+    ];
+
+    while (stack.length) {
+        let [i, j] = stack.shift();
+        ans = Math.max(grid[i][j], ans);
+        if (i == m - 1 && j == n - 1) break;
+        for (let [dx, dy] of dir) {
+            let x = i + dx,
+                y = j + dy;
+            if (x < m && x > -1 && y < n && y > -1 && !visited[x][y]) {
+                visited[x][y] = true;
+                stack.push([x, y, grid[x][y]]);
+            }
+        }
+        stack.sort((a, b) => a[2] - b[2]);
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+const DIR: [(i32, i32); 4] = [(-1, 0), (1, 0), (0, -1), (0, 1)];
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn swim_in_water(grid: Vec<Vec<i32>>) -> i32 {
+        let n = grid.len();
+        let m = grid[0].len();
+        let mut ret_time = 0;
+        let mut disjoint_set: Vec<usize> = vec![0; n * m];
+
+        // Initialize the disjoint set
+        for i in 0..n * m {
+            disjoint_set[i] = i;
+        }
+
+        loop {
+            if Self::check_and_union(&grid, &mut disjoint_set, ret_time) {
+                break;
+            }
+            // Otherwise, keep checking
+            ret_time += 1;
+        }
+
+        ret_time
+    }
+
+    #[allow(dead_code)]
+    fn check_and_union(grid: &Vec<Vec<i32>>, d_set: &mut Vec<usize>, cur_time: i32) -> bool {
+        let n = grid.len();
+        let m = grid[0].len();
+
+        for i in 0..n {
+            for j in 0..m {
+                if grid[i][j] != cur_time {
+                    continue;
+                }
+                // Otherwise, let's union the square with its neighbors
+                for (dx, dy) in DIR {
+                    let x = dx + (i as i32);
+                    let y = dy + (j as i32);
+                    if Self::check_bounds(x, y, n as i32, m as i32)
+                        && grid[x as usize][y as usize] <= cur_time
+                    {
+                        Self::union(i * m + j, (x as usize) * m + (y as usize), d_set);
+                    }
+                }
+            }
+        }
+
+        Self::find(0, d_set) == Self::find(n * m - 1, d_set)
+    }
+
+    #[allow(dead_code)]
+    fn find(x: usize, d_set: &mut Vec<usize>) -> usize {
+        if d_set[x] != x {
+            d_set[x] = Self::find(d_set[x], d_set);
+        }
+        d_set[x]
+    }
+
+    #[allow(dead_code)]
+    fn union(x: usize, y: usize, d_set: &mut Vec<usize>) {
+        let p_x = Self::find(x, d_set);
+        let p_y = Self::find(y, d_set);
+        d_set[p_x] = p_y;
+    }
+
+    #[allow(dead_code)]
+    fn check_bounds(i: i32, j: i32, n: i32, m: i32) -> bool {
+        i >= 0 && i < n && j >= 0 && j < m
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

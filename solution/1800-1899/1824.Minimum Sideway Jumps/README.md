@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1824.Minimum%20Sideway%20Jumps/README.md
+rating: 1778
+source: 第 236 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1824. 最少侧跳次数](https://leetcode.cn/problems/minimum-sideway-jumps)
 
 [English Version](/solution/1800-1899/1824.Minimum%20Sideway%20Jumps/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个长度为 <code>n</code> 的 <strong>3 跑道道路</strong> ，它总共包含 <code>n + 1</code> 个 <strong>点</strong> ，编号为 <code>0</code> 到 <code>n</code> 。一只青蛙从 <code>0</code> 号点第二条跑道 <strong>出发</strong> ，它想要跳到点 <code>n</code> 处。然而道路上可能有一些障碍。</p>
 
@@ -62,11 +76,13 @@
 	<li><code>obstacles[0] == obstacles[n] == 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示青蛙到达第 $i$ 个点，且处于第 $j$ 条跑道（下标从 $0$ 开始）的最小侧跳次数。
 
@@ -76,13 +92,11 @@
 
 在代码实现上，我们可以将第一维空间优化掉，只用一个长度为 $3$ 的数组 $f$ 来维护。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 $obstacles$ 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为数组 $obstacles$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -100,9 +114,7 @@ class Solution:
         return min(f)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -128,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -155,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSideJumps(obstacles []int) int {
@@ -177,16 +189,9 @@ func minSideJumps(obstacles []int) int {
 	}
 	return min(f[0], min(f[1], f[2]))
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minSideJumps(obstacles: number[]): number {
@@ -210,10 +215,8 @@ function minSideJumps(obstacles: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

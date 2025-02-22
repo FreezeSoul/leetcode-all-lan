@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0566.Reshape%20the%20Matrix/README.md
+tags:
+    - 数组
+    - 矩阵
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [566. 重塑矩阵](https://leetcode.cn/problems/reshape-the-matrix)
 
 [English Version](/solution/0500-0599/0566.Reshape%20the%20Matrix/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在 MATLAB 中，有一个非常有用的函数 <code>reshape</code> ，它可以将一个&nbsp;<code>m x n</code> 矩阵重塑为另一个大小不同（<code>r x c</code>）的新矩阵，但保留其原始数据。</p>
 
@@ -42,11 +54,13 @@
 	<li><code>1 &lt;= r, c &lt;= 300</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们先获取原矩阵的行数和列数，分别记为 $m$ 和 $n$。如果 $m \times n \neq r \times c$，则无法重塑矩阵，直接返回原矩阵。
 
@@ -58,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +86,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func matrixReshape(mat [][]int, r int, c int) [][]int {
@@ -132,7 +142,7 @@ func matrixReshape(mat [][]int, r int, c int) [][]int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function matrixReshape(mat: number[][], r: number, c: number): number[][] {
@@ -151,22 +161,7 @@ function matrixReshape(mat: number[][], r: number, c: number): number[][] {
 }
 ```
 
-```ts
-function matrixReshape(mat: number[][], r: number, c: number): number[][] {
-    const m = mat.length;
-    const n = mat[0].length;
-    if (m * n !== r * c) {
-        return mat;
-    }
-    const ans = Array.from({ length: r }, () => new Array(c).fill(0));
-    for (let i = 0; i < r * c; i++) {
-        ans[Math.floor(i / c)][i % c] = mat[Math.floor(i / n)][i % n];
-    }
-    return ans;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -201,7 +196,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
@@ -209,7 +204,7 @@ impl Solution {
  * The sizes of the arrays are returned as *returnColumnSizes array.
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
-int **matrixReshape(int **mat, int matSize, int *matColSize, int r, int c, int *returnSize, int **returnColumnSizes) {
+int** matrixReshape(int** mat, int matSize, int* matColSize, int r, int c, int* returnSize, int** returnColumnSizes) {
     if (matSize * matColSize[0] != r * c) {
         *returnSize = matSize;
         *returnColumnSizes = matColSize;
@@ -217,7 +212,7 @@ int **matrixReshape(int **mat, int matSize, int *matColSize, int r, int c, int *
     }
     *returnSize = r;
     *returnColumnSizes = malloc(sizeof(int) * r);
-    int **ans = malloc(sizeof(int *) * r);
+    int** ans = malloc(sizeof(int*) * r);
     for (int i = 0; i < r; i++) {
         (*returnColumnSizes)[i] = c;
         ans[i] = malloc(sizeof(int) * c);
@@ -229,10 +224,35 @@ int **matrixReshape(int **mat, int matSize, int *matColSize, int r, int c, int *
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function matrixReshape(mat: number[][], r: number, c: number): number[][] {
+    const m = mat.length;
+    const n = mat[0].length;
+    if (m * n !== r * c) {
+        return mat;
+    }
+    const ans = Array.from({ length: r }, () => new Array(c).fill(0));
+    for (let i = 0; i < r * c; i++) {
+        ans[Math.floor(i / c)][i % c] = mat[Math.floor(i / n)][i % n];
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

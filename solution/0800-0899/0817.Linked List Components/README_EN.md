@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0817.Linked%20List%20Components/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Linked List
+---
+
+<!-- problem:start -->
+
 # [817. Linked List Components](https://leetcode.com/problems/linked-list-components)
 
 [中文文档](/solution/0800-0899/0817.Linked%20List%20Components/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the <code>head</code> of a linked list containing unique integer values and an integer array <code>nums</code> that is a subset of the linked list values.</p>
 
@@ -38,11 +52,17 @@
 	<li>All the values of <code>nums</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -63,7 +83,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -97,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -125,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -156,38 +176,7 @@ func numComponents(head *ListNode, nums []int) int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
- * }
- */
-/**
- * @param {ListNode} head
- * @param {number[]} nums
- * @return {number}
- */
-var numComponents = function (head, nums) {
-    const s = new Set(nums);
-    let ans = 0;
-    while (head) {
-        while (head && !s.has(head.val)) {
-            head = head.next;
-        }
-        ans += head != null;
-        while (head && s.has(head.val)) {
-            head = head.next;
-        }
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -222,7 +211,7 @@ function numComponents(head: ListNode | null, nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -264,10 +253,39 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number[]} nums
+ * @return {number}
+ */
+var numComponents = function (head, nums) {
+    const s = new Set(nums);
+    let ans = 0;
+    while (head) {
+        while (head && !s.has(head.val)) {
+            head = head.next;
+        }
+        ans += head != null;
+        while (head && s.has(head.val)) {
+            head = head.next;
+        }
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

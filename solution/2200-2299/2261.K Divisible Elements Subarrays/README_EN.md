@@ -1,10 +1,29 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2261.K%20Divisible%20Elements%20Subarrays/README_EN.md
+rating: 1724
+source: Weekly Contest 291 Q3
+tags:
+    - Trie
+    - Array
+    - Hash Table
+    - Enumeration
+    - Hash Function
+    - Rolling Hash
+---
+
+<!-- problem:start -->
+
 # [2261. K Divisible Elements Subarrays](https://leetcode.com/problems/k-divisible-elements-subarrays)
 
 [中文文档](/solution/2200-2299/2261.K%20Divisible%20Elements%20Subarrays/README.md)
 
 ## Description
 
-<p>Given an integer array <code>nums</code> and two integers <code>k</code> and <code>p</code>, return <em>the number of <strong>distinct subarrays</strong> which have <strong>at most</strong></em> <code>k</code> <em>elements divisible by</em> <code>p</code>.</p>
+<!-- description:start -->
+
+<p>Given an integer array <code>nums</code> and two integers <code>k</code> and <code>p</code>, return <em>the number of <strong>distinct subarrays,</strong> which have <strong>at most</strong></em> <code>k</code> <em>elements </em>that are <em>divisible by</em> <code>p</code>.</p>
 
 <p>Two arrays <code>nums1</code> and <code>nums2</code> are said to be <strong>distinct</strong> if:</p>
 
@@ -54,26 +73,157 @@ Since all subarrays are distinct, the total number of subarrays satisfying all t
 
 <p>Can you solve this problem in O(n<sup>2</sup>) time complexity?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration + String Hashing
+
+We can enumerate the left endpoint $i$ of the subarray, and then enumerate the right endpoint $j$ in the range $[i, n)$. During the enumeration of the right endpoint, we use double hashing to store the hash value of the subarray into a set. Finally, we return the size of the set.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Here, $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def countDistinct(self, nums: List[int], k: int, p: int) -> int:
-        n = len(nums)
         s = set()
+        n = len(nums)
+        base1, base2 = 131, 13331
+        mod1, mod2 = 10**9 + 7, 10**9 + 9
         for i in range(n):
-            cnt = 0
+            h1 = h2 = cnt = 0
             for j in range(i, n):
                 cnt += nums[j] % p == 0
                 if cnt > k:
                     break
-                s.add(tuple(nums[i: j + 1]))
+                h1 = (h1 * base1 + nums[j]) % mod1
+                h2 = (h2 * base2 + nums[j]) % mod2
+                s.add(h1 << 32 | h2)
         return len(s)
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int countDistinct(int[] nums, int k, int p) {
+        Set<Long> s = new HashSet<>();
+        int n = nums.length;
+        int base1 = 131, base2 = 13331;
+        int mod1 = (int) 1e9 + 7, mod2 = (int) 1e9 + 9;
+        for (int i = 0; i < n; ++i) {
+            long h1 = 0, h2 = 0;
+            int cnt = 0;
+            for (int j = i; j < n; ++j) {
+                cnt += nums[j] % p == 0 ? 1 : 0;
+                if (cnt > k) {
+                    break;
+                }
+                h1 = (h1 * base1 + nums[j]) % mod1;
+                h2 = (h2 * base2 + nums[j]) % mod2;
+                s.add(h1 << 32 | h2);
+            }
+        }
+        return s.size();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countDistinct(vector<int>& nums, int k, int p) {
+        unordered_set<long long> s;
+        int n = nums.size();
+        int base1 = 131, base2 = 13331;
+        int mod1 = 1e9 + 7, mod2 = 1e9 + 9;
+        for (int i = 0; i < n; ++i) {
+            long long h1 = 0, h2 = 0;
+            int cnt = 0;
+            for (int j = i; j < n; ++j) {
+                cnt += nums[j] % p == 0;
+                if (cnt > k) {
+                    break;
+                }
+                h1 = (h1 * base1 + nums[j]) % mod1;
+                h2 = (h2 * base2 + nums[j]) % mod2;
+                s.insert(h1 << 32 | h2);
+            }
+        }
+        return s.size();
+    }
+};
+```
+
+#### Go
+
+```go
+func countDistinct(nums []int, k int, p int) int {
+	s := map[int]bool{}
+	base1, base2 := 131, 13331
+	mod1, mod2 := 1000000007, 1000000009
+	for i := range nums {
+		h1, h2, cnt := 0, 0, 0
+		for j := i; j < len(nums); j++ {
+			if nums[j]%p == 0 {
+				cnt++
+				if cnt > k {
+					break
+				}
+			}
+			h1 = (h1*base1 + nums[j]) % mod1
+			h2 = (h2*base2 + nums[j]) % mod2
+			s[h1<<32|h2] = true
+		}
+	}
+	return len(s)
+}
+```
+
+#### TypeScript
+
+```ts
+function countDistinct(nums: number[], k: number, p: number): number {
+    const s = new Set<bigint>();
+    const [base1, base2] = [131, 13331];
+    const [mod1, mod2] = [1000000007, 1000000009];
+    for (let i = 0; i < nums.length; i++) {
+        let [h1, h2, cnt] = [0, 0, 0];
+        for (let j = i; j < nums.length; j++) {
+            if (nums[j] % p === 0) {
+                cnt++;
+                if (cnt > k) {
+                    break;
+                }
+            }
+            h1 = (h1 * base1 + nums[j]) % mod1;
+            h2 = (h2 * base2 + nums[j]) % mod2;
+            s.add((BigInt(h1) << 32n) | BigInt(h2));
+        }
+    }
+    return s.size;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -92,100 +242,8 @@ class Solution:
         return len(s)
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public int countDistinct(int[] nums, int k, int p) {
-        int n = nums.length;
-        Set<String> s = new HashSet<>();
-        for (int i = 0; i < n; ++i) {
-            int cnt = 0;
-            String t = "";
-            for (int j = i; j < n; ++j) {
-                if (nums[j] % p == 0 && ++cnt > k) {
-                    break;
-                }
-                t += nums[j] + ",";
-                s.add(t);
-            }
-        }
-        return s.size();
-    }
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int countDistinct(vector<int>& nums, int k, int p) {
-        unordered_set<string> s;
-        int n = nums.size();
-        for (int i = 0; i < n; ++i) {
-            int cnt = 0;
-            string t;
-            for (int j = i; j < n; ++j) {
-                if (nums[j] % p == 0 && ++cnt > k) {
-                    break;
-                }
-                t += to_string(nums[j]) + ",";
-                s.insert(t);
-            }
-        }
-        return s.size();
-    }
-};
-```
-
-### **Go**
-
-```go
-func countDistinct(nums []int, k int, p int) int {
-	s := map[string]struct{}{}
-	for i := range nums {
-		cnt, t := 0, ""
-		for _, x := range nums[i:] {
-			if x%p == 0 {
-				cnt++
-				if cnt > k {
-					break
-				}
-			}
-			t += string(x) + ","
-			s[t] = struct{}{}
-		}
-	}
-	return len(s)
-}
-```
-
-### **TypeScript**
-
-```ts
-function countDistinct(nums: number[], k: number, p: number): number {
-    const n = nums.length;
-    const s = new Set();
-    for (let i = 0; i < n; ++i) {
-        let cnt = 0;
-        let t = '';
-        for (let j = i; j < n; ++j) {
-            if (nums[j] % p === 0 && ++cnt > k) {
-                break;
-            }
-            t += nums[j].toString() + ',';
-            s.add(t);
-        }
-    }
-    return s.size;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

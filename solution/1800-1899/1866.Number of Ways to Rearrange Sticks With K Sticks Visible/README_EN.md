@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1866.Number%20of%20Ways%20to%20Rearrange%20Sticks%20With%20K%20Sticks%20Visible/README_EN.md
+rating: 2333
+source: Weekly Contest 241 Q4
+tags:
+    - Math
+    - Dynamic Programming
+    - Combinatorics
+---
+
+<!-- problem:start -->
+
 # [1866. Number of Ways to Rearrange Sticks With K Sticks Visible](https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible)
 
 [中文文档](/solution/1800-1899/1866.Number%20of%20Ways%20to%20Rearrange%20Sticks%20With%20K%20Sticks%20Visible/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> uniquely-sized sticks whose lengths are integers from <code>1</code> to <code>n</code>. You want to arrange the sticks such that <strong>exactly</strong> <code>k</code>&nbsp;sticks are <strong>visible</strong> from the left. A stick&nbsp;is <strong>visible</strong> from the left if there are no <strong>longer</strong>&nbsp;sticks to the <strong>left</strong> of it.</p>
 
@@ -47,37 +63,45 @@ The visible sticks are underlined.
 	<li><code>1 &lt;= k &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i][j]$ to represent the number of permutations of length $i$ in which exactly $j$ sticks can be seen. Initially, $f[0][0]=1$ and the rest $f[i][j]=0$. The answer is $f[n][k]$.
+
+Consider whether the last stick can be seen. If it can be seen, it must be the longest. Then there are $i - 1$ sticks in front of it, and exactly $j - 1$ sticks can be seen, which is $f[i - 1][j - 1]$. If the last stick cannot be seen, it can be any one except the longest stick. Then there are $i - 1$ sticks in front of it, and exactly $j$ sticks can be seen, which is $f[i - 1][j] \times (i - 1)$.
+
+Therefore, the state transition equation is:
+
+$$
+f[i][j] = f[i - 1][j - 1] + f[i - 1][j] \times (i - 1)
+$$
+
+The final answer is $f[n][k]$.
+
+The time complexity is $O(n \times k)$, and the space complexity is $O(n \times k)$. Where $n$ and $k$ are the two integers given in the problem.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def rearrangeSticks(self, n: int, k: int) -> int:
         mod = 10**9 + 7
-        f = [1] + [0] * k
+        f = [[0] * (k + 1) for _ in range(n + 1)]
+        f[0][0] = 1
         for i in range(1, n + 1):
-            for j in range(k, 0, -1):
-                f[j] = (f[j] * (i - 1) + f[j - 1]) % mod
-            f[0] = 0
-        return f[k]
+            for j in range(1, k + 1):
+                f[i][j] = (f[i - 1][j - 1] + f[i - 1][j] * (i - 1)) % mod
+        return f[n][k]
 ```
 
-```python
-class Solution:
-    def rearrangeSticks(self, n: int, k: int) -> int:
-        mod = 10**9 + 7
-        f = [1] + [0] * k
-        for i in range(1, n + 1):
-            for j in range(k, 0, -1):
-                f[j] = (f[j] * (i - 1) + f[j - 1]) % mod
-            f[0] = 0
-        return f[k]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,24 +119,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int rearrangeSticks(int n, int k) {
-        final int mod = (int) 1e9 + 7;
-        int[] f = new int[k + 1];
-        f[0] = 1;
-        for (int i = 1; i <= n; ++i) {
-            for (int j = k; j > 0; --j) {
-                f[j] = (int) ((f[j] * (i - 1L) + f[j - 1]) % mod);
-            }
-            f[0] = 0;
-        }
-        return f[k];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,6 +138,92 @@ public:
     }
 };
 ```
+
+#### Go
+
+```go
+func rearrangeSticks(n int, k int) int {
+	const mod = 1e9 + 7
+	f := make([][]int, n+1)
+	for i := range f {
+		f[i] = make([]int, k+1)
+	}
+	f[0][0] = 1
+	for i := 1; i <= n; i++ {
+		for j := 1; j <= k; j++ {
+			f[i][j] = (f[i-1][j-1] + (i-1)*f[i-1][j]) % mod
+		}
+	}
+	return f[n][k]
+}
+```
+
+#### TypeScript
+
+```ts
+function rearrangeSticks(n: number, k: number): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[][] = Array.from({ length: n + 1 }, () =>
+        Array.from({ length: k + 1 }, () => 0),
+    );
+    f[0][0] = 1;
+    for (let i = 1; i <= n; ++i) {
+        for (let j = 1; j <= k; ++j) {
+            f[i][j] = (f[i - 1][j - 1] + (i - 1) * f[i - 1][j]) % mod;
+        }
+    }
+    return f[n][k];
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Dynamic Programming (Space Optimization)
+
+We notice that $f[i][j]$ is only related to $f[i - 1][j - 1]$ and $f[i - 1][j]$, so we can use a one-dimensional array to optimize the space complexity.
+
+The time complexity is $O(n \times k)$, and the space complexity is $O(k)$. Here, $n$ and $k$ are the two integers given in the problem.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def rearrangeSticks(self, n: int, k: int) -> int:
+        mod = 10**9 + 7
+        f = [1] + [0] * k
+        for i in range(1, n + 1):
+            for j in range(k, 0, -1):
+                f[j] = (f[j] * (i - 1) + f[j - 1]) % mod
+            f[0] = 0
+        return f[k]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int rearrangeSticks(int n, int k) {
+        final int mod = (int) 1e9 + 7;
+        int[] f = new int[k + 1];
+        f[0] = 1;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = k; j > 0; --j) {
+                f[j] = (int) ((f[j] * (i - 1L) + f[j - 1]) % mod);
+            }
+            f[0] = 0;
+        }
+        return f[k];
+    }
+}
+```
+
+#### C++
 
 ```cpp
 class Solution {
@@ -151,24 +244,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func rearrangeSticks(n int, k int) int {
-	const mod = 1e9 + 7
-	f := make([][]int, n+1)
-	for i := range f {
-		f[i] = make([]int, k+1)
-	}
-	f[0][0] = 1
-	for i := 1; i <= n; i++ {
-		for j := 1; j <= k; j++ {
-			f[i][j] = (f[i-1][j-1] + (i-1)*f[i-1][j]) % mod
-		}
-	}
-	return f[n][k]
-}
-```
+#### Go
 
 ```go
 func rearrangeSticks(n int, k int) int {
@@ -185,10 +261,25 @@ func rearrangeSticks(n int, k int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function rearrangeSticks(n: number, k: number): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[] = Array(n + 1).fill(0);
+    f[0] = 1;
+    for (let i = 1; i <= n; ++i) {
+        for (let j = k; j; --j) {
+            f[j] = (f[j] * (i - 1) + f[j - 1]) % mod;
+        }
+        f[0] = 0;
+    }
+    return f[k];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

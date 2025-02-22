@@ -1,34 +1,46 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1352.Product%20of%20the%20Last%20K%20Numbers/README.md
+rating: 1473
+source: 第 176 场周赛 Q2
+tags:
+    - 设计
+    - 数组
+    - 数学
+    - 数据流
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [1352. 最后 K 个数的乘积](https://leetcode.cn/problems/product-of-the-last-k-numbers)
 
 [English Version](/solution/1300-1399/1352.Product%20of%20the%20Last%20K%20Numbers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>请你实现一个「数字乘积类」<code>ProductOfNumbers</code>，要求支持下述两种方法：</p>
+<p>设计一个算法，该算法接受一个整数流并检索该流中最后 <code>k</code> 个整数的乘积。</p>
 
-<p>1.<code>&nbsp;add(int num)</code></p>
-
-<ul>
-	<li>将数字&nbsp;<code>num</code>&nbsp;添加到当前数字列表的最后面。</li>
-</ul>
-
-<p>2.<code> getProduct(int k)</code></p>
+<p>实现&nbsp;<code>ProductOfNumbers</code>&nbsp;类：</p>
 
 <ul>
-	<li>返回当前数字列表中，最后&nbsp;<code>k</code>&nbsp;个数字的乘积。</li>
-	<li>你可以假设当前列表中始终 <strong>至少</strong> 包含 <code>k</code> 个数字。</li>
+	<li><code>ProductOfNumbers()</code>&nbsp;用一个空的流初始化对象。</li>
+	<li><code>void add(int num)</code>&nbsp;将数字&nbsp;<code>num</code>&nbsp;添加到当前数字列表的最后面。</li>
+	<li><code>int getProduct(int k)</code>&nbsp;返回当前数字列表中，最后&nbsp;<code>k</code>&nbsp;个数字的乘积。你可以假设当前列表中始终 <strong>至少</strong> 包含 <code>k</code> 个数字。</li>
 </ul>
 
-<p>题目数据保证：任何时候，任一连续数字序列的乘积都在 32-bit 整数范围内，不会溢出。</p>
+<p>题目数据保证：任何时候，任一连续数字序列的乘积都在 32 位整数范围内，不会溢出。</p>
 
 <p>&nbsp;</p>
 
 <p><strong>示例：</strong></p>
 
-<pre><strong>输入：</strong>
-[&quot;ProductOfNumbers&quot;,&quot;add&quot;,&quot;add&quot;,&quot;add&quot;,&quot;add&quot;,&quot;add&quot;,&quot;getProduct&quot;,&quot;getProduct&quot;,&quot;getProduct&quot;,&quot;add&quot;,&quot;getProduct&quot;]
+<pre>
+<strong>输入：</strong>
+["ProductOfNumbers","add","add","add","add","add","getProduct","getProduct","getProduct","add","getProduct"]
 [[],[3],[0],[2],[5],[4],[2],[3],[4],[8],[2]]
 
 <strong>输出：</strong>
@@ -53,16 +65,23 @@ productOfNumbers.getProduct(2); // 返回 32 。最后 2 个数字的乘积是 4
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>add</code> 和 <code>getProduct</code>&nbsp;两种操作加起来总共不会超过&nbsp;<code>40000</code>&nbsp;次。</li>
 	<li><code>0 &lt;= num&nbsp;&lt;=&nbsp;100</code></li>
-	<li><code>1 &lt;= k &lt;= 40000</code></li>
+	<li><code>1 &lt;= k &lt;= 4 * 10<sup>4</sup></code></li>
+	<li><code>add</code> 和 <code>getProduct</code>&nbsp;最多被调用&nbsp;<code>4 * 10<sup>4</sup></code> 次。</li>
+	<li>在任何时间点流的乘积都在 32 位整数范围内。</li>
 </ul>
+
+<p>&nbsp;</p>
+
+<p><strong>进阶：</strong>您能否 <strong>同时</strong> 将 <code>GetProduct</code> 和 <code>Add</code> 的实现改为 <code>O(1)</code> 时间复杂度，而不是 <code>O(k)</code> 时间复杂度？</p>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀积**
+### 方法一：前缀积
 
 我们初始化一个数组 $s$，其中 $s[i]$ 表示前 $i$ 个数字的乘积。
 
@@ -74,13 +93,10 @@ productOfNumbers.getProduct(2); // 返回 32 。最后 2 个数字的乘积是 4
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class ProductOfNumbers:
-
     def __init__(self):
         self.s = [1]
 
@@ -100,9 +116,7 @@ class ProductOfNumbers:
 # param_2 = obj.getProduct(k)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class ProductOfNumbers {
@@ -135,7 +149,7 @@ class ProductOfNumbers {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class ProductOfNumbers {
@@ -170,7 +184,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type ProductOfNumbers struct {
@@ -205,10 +219,54 @@ func (this *ProductOfNumbers) GetProduct(k int) int {
  */
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+class ProductOfNumbers {
+    s = [1];
+
+    add(num: number): void {
+        if (num === 0) {
+            this.s = [1];
+        } else {
+            const i = this.s.length;
+            this.s[i] = this.s[i - 1] * num;
+        }
+    }
+
+    getProduct(k: number): number {
+        const i = this.s.length;
+        if (k > i - 1) return 0;
+        return this.s[i - 1] / this.s[i - k - 1];
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+class ProductOfNumbers {
+    s = [1];
+
+    add(num) {
+        if (num === 0) {
+            this.s = [1];
+        } else {
+            const i = this.s.length;
+            this.s[i] = this.s[i - 1] * num;
+        }
+    }
+
+    getProduct(k) {
+        const i = this.s.length;
+        if (k > i - 1) return 0;
+        return this.s[i - 1] / this.s[i - k - 1];
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

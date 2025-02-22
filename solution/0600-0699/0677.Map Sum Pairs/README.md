@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0677.Map%20Sum%20Pairs/README.md
+tags:
+    - 设计
+    - 字典树
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [677. 键值映射](https://leetcode.cn/problems/map-sum-pairs)
 
 [English Version](/solution/0600-0699/0677.Map%20Sum%20Pairs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个 map ，满足以下几点:</p>
 
@@ -51,11 +64,13 @@ mapSum.sum("ap");           // 返回 5 (<u>ap</u>ple + <u>ap</u>p = 3 + 2 = 5)
 	<li>最多调用 <code>50</code> 次 <code>insert</code> 和 <code>sum</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 前缀树**
+### 方法一：哈希表 + 前缀树
 
 我们用哈希表 $d$ 存放键值对，用前缀树 $t$ 存放键值对的前缀和。前缀树的每个节点包含两个信息：
 
@@ -72,9 +87,7 @@ mapSum.sum("ap");           // 返回 5 (<u>ap</u>ple + <u>ap</u>p = 3 + 2 = 5)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Trie:
@@ -102,7 +115,6 @@ class Trie:
 
 
 class MapSum:
-
     def __init__(self):
         self.d = defaultdict(int)
         self.tree = Trie()
@@ -115,15 +127,14 @@ class MapSum:
     def sum(self, prefix: str) -> int:
         return self.tree.search(prefix)
 
+
 # Your MapSum object will be instantiated and called as such:
 # obj = MapSum()
 # obj.insert(key,val)
 # param_2 = obj.sum(prefix)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Trie {
@@ -181,7 +192,7 @@ class MapSum {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -247,7 +258,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type trie struct {
@@ -304,7 +315,7 @@ func (this *MapSum) Sum(prefix string) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class Trie {
@@ -368,10 +379,8 @@ class MapSum {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

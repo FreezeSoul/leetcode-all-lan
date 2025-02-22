@@ -1,10 +1,22 @@
-# [359. 日志速率限制器](https://leetcode.cn/problems/logger-rate-limiter)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0359.Logger%20Rate%20Limiter/README.md
+tags:
+    - 设计
+    - 哈希表
+    - 数据流
+---
+
+<!-- problem:start -->
+
+# [359. 日志速率限制器 🔒](https://leetcode.cn/problems/logger-rate-limiter)
 
 [English Version](/solution/0300-0399/0359.Logger%20Rate%20Limiter/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你设计一个日志系统，可以流式接收消息以及它的时间戳。每条 <strong>不重复</strong> 的消息最多只能每 10 秒打印一次。也就是说，如果在时间戳 <code>t</code> 打印某条消息，那么相同内容的消息直到时间戳变为 <code>t + 10</code> 之前都不会被打印。</p>
 
@@ -49,17 +61,17 @@ logger.shouldPrintMessage(11, "foo"); // 11 >= 11 ，返回 true ，下一次 "f
 	<li>最多调用 <code>10<sup>4</sup></code> 次 <code>shouldPrintMessage</code> 方法</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-哈希表实现。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Logger:
@@ -87,9 +99,7 @@ class Logger:
 # param_1 = obj.shouldPrintMessage(timestamp,message)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Logger {
@@ -123,7 +133,7 @@ class Logger {
  */
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -157,10 +167,8 @@ Logger.prototype.shouldPrintMessage = function (timestamp, message) {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

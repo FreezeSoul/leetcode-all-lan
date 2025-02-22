@@ -1,8 +1,20 @@
-# [1188. Design Bounded Blocking Queue](https://leetcode.com/problems/design-bounded-blocking-queue)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1188.Design%20Bounded%20Blocking%20Queue/README_EN.md
+tags:
+    - Concurrency
+---
+
+<!-- problem:start -->
+
+# [1188. Design Bounded Blocking Queue 🔒](https://leetcode.com/problems/design-bounded-blocking-queue)
 
 [中文文档](/solution/1100-1199/1188.Design%20Bounded%20Blocking%20Queue/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Implement a thread-safe bounded blocking queue that has the following methods:</p>
 
@@ -88,18 +100,23 @@ Since the number of threads for producer/consumer is greater than 1, we do not k
 	<li>At most <code>40</code> calls will be made to <code>enque</code>, <code>deque</code>, and <code>size</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 from threading import Semaphore
 
 
 class BoundedBlockingQueue(object):
-
     def __init__(self, capacity: int):
         self.s1 = Semaphore(capacity)
         self.s2 = Semaphore(0)
@@ -120,7 +137,7 @@ class BoundedBlockingQueue(object):
         return len(self.q)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class BoundedBlockingQueue {
@@ -140,7 +157,7 @@ class BoundedBlockingQueue {
     }
 
     public int dequeue() throws InterruptedException {
-        s2.acquire();;
+        s2.acquire();
         int ans = q.poll();
         s1.release();
         return ans;
@@ -152,7 +169,7 @@ class BoundedBlockingQueue {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 #include <semaphore.h>
@@ -189,3 +206,7 @@ private:
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

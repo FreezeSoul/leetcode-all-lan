@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2575.Find%20the%20Divisibility%20Array%20of%20a%20String/README.md
+rating: 1541
+source: 第 334 场周赛 Q2
+tags:
+    - 数组
+    - 数学
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2575. 找出字符串的可整除数组](https://leetcode.cn/problems/find-the-divisibility-array-of-a-string)
 
 [English Version](/solution/2500-2599/2575.Find%20the%20Divisibility%20Array%20of%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的字符串 <code>word</code> ，长度为 <code>n</code> ，由从 <code>0</code> 到 <code>9</code> 的数字组成。另给你一个正整数 <code>m</code> 。</p>
 
@@ -46,21 +60,21 @@
 	<li><code>1 &lt;= m &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：遍历 + 取模**
+### 方法一：遍历 + 取模
 
 我们遍历字符串 `word`，用变量 $x$ 记录当前前缀与 $m$ 的取模结果，如果 $x$ 为 $0$，则当前位置的可整除数组值为 $1$，否则为 $0$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 `word` 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为字符串 `word` 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -73,9 +87,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -111,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func divisibilityArray(word string, m int) (ans []int) {
@@ -128,7 +140,7 @@ func divisibilityArray(word string, m int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function divisibilityArray(word: string, m: number): number[] {
@@ -142,7 +154,7 @@ function divisibilityArray(word: string, m: number): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -164,15 +176,15 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *divisibilityArray(char *word, int m, int *returnSize) {
+int* divisibilityArray(char* word, int m, int* returnSize) {
     int n = strlen(word);
-    int *ans = malloc(sizeof(int) * n);
+    int* ans = malloc(sizeof(int) * n);
     long long x = 0;
     for (int i = 0; i < n; i++) {
         x = (x * 10 + word[i] - '0') % m;
@@ -183,10 +195,8 @@ int *divisibilityArray(char *word, int m, int *returnSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

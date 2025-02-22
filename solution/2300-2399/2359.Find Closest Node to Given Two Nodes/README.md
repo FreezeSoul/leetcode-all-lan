@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2359.Find%20Closest%20Node%20to%20Given%20Two%20Nodes/README.md
+rating: 1714
+source: 第 304 场周赛 Q3
+tags:
+    - 深度优先搜索
+    - 图
+---
+
+<!-- problem:start -->
+
 # [2359. 找到离给定两个节点最近的节点](https://leetcode.cn/problems/find-closest-node-to-given-two-nodes)
 
 [English Version](/solution/2300-2399/2359.Find%20Closest%20Node%20to%20Given%20Two%20Nodes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <code>n</code>&nbsp;个节点的 <strong>有向图</strong>&nbsp;，节点编号为&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;，每个节点 <strong>至多</strong>&nbsp;有一条出边。</p>
 
@@ -50,23 +63,25 @@
 	<li><code>0 &lt;= node1, node2 &lt; n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS + 枚举公共点**
+### 方法一：BFS + 枚举公共点
 
 我们可以先用 BFS 求出从 $node1$ 和 $node2$ 分别到达每个点的距离，分别记为 $d_1$ 和 $d_2$。然后枚举所有的公共点 $i$，然后求出 $\max(d_1[i], d_2[i])$，取其中的最小值即可。
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为节点个数。
 
-相似题目：[2203.得到要求路径的最小带权子图](/solution/2200-2299/2203.Minimum%20Weighted%20Subgraph%20With%20the%20Required%20Paths/README.md)
+相似题目：
+
+-   [2203.得到要求路径的最小带权子图](https://github.com/doocs/leetcode/blob/main/solution/2200-2299/2203.Minimum%20Weighted%20Subgraph%20With%20the%20Required%20Paths/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,39 +113,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
-        def f(i):
-            dist = [inf] * n
-            dist[i] = 0
-            q = deque([i])
-            while q:
-                i = q.popleft()
-                for j in g[i]:
-                    if dist[j] == inf:
-                        dist[j] = dist[i] + 1
-                        q.append(j)
-            return dist
-
-        g = defaultdict(list)
-        for i, j in enumerate(edges):
-            if j != -1:
-                g[i].append(j)
-        n = len(edges)
-        d1 = f(node1)
-        d2 = f(node2)
-        ans, d = -1, inf
-        for i, (a, b) in enumerate(zip(d1, d2)):
-            if (t := max(a, b)) < d:
-                d = t
-                ans = i
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -181,6 +164,195 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int closestMeetingNode(vector<int>& edges, int node1, int node2) {
+        int n = edges.size();
+        vector<vector<int>> g(n);
+        for (int i = 0; i < n; ++i) {
+            if (edges[i] != -1) {
+                g[i].push_back(edges[i]);
+            }
+        }
+        const int inf = 1 << 30;
+        using pii = pair<int, int>;
+        auto dijkstra = [&](int i) {
+            vector<int> dist(n, inf);
+            dist[i] = 0;
+            priority_queue<pii, vector<pii>, greater<pii>> q;
+            q.emplace(0, i);
+            while (!q.empty()) {
+                auto p = q.top();
+                q.pop();
+                i = p.second;
+                for (int j : g[i]) {
+                    if (dist[j] > dist[i] + 1) {
+                        dist[j] = dist[i] + 1;
+                        q.emplace(dist[j], j);
+                    }
+                }
+            }
+            return dist;
+        };
+        vector<int> d1 = dijkstra(node1);
+        vector<int> d2 = dijkstra(node2);
+        int ans = -1, d = inf;
+        for (int i = 0; i < n; ++i) {
+            int t = max(d1[i], d2[i]);
+            if (t < d) {
+                d = t;
+                ans = i;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func closestMeetingNode(edges []int, node1 int, node2 int) int {
+	n := len(edges)
+	g := make([][]int, n)
+	for i, j := range edges {
+		if j != -1 {
+			g[i] = append(g[i], j)
+		}
+	}
+	const inf int = 1 << 30
+	dijkstra := func(i int) []int {
+		dist := make([]int, n)
+		for j := range dist {
+			dist[j] = inf
+		}
+		dist[i] = 0
+		q := hp{}
+		heap.Push(&q, pair{0, i})
+		for len(q) > 0 {
+			i := heap.Pop(&q).(pair).i
+			for _, j := range g[i] {
+				if dist[j] > dist[i]+1 {
+					dist[j] = dist[i] + 1
+					heap.Push(&q, pair{dist[j], j})
+				}
+			}
+		}
+		return dist
+	}
+	d1 := dijkstra(node1)
+	d2 := dijkstra(node2)
+	ans, d := -1, inf
+	for i, a := range d1 {
+		b := d2[i]
+		t := max(a, b)
+		if t < d {
+			d = t
+			ans = i
+		}
+	}
+	return ans
+}
+
+type pair struct{ d, i int }
+type hp []pair
+
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].d < h[j].d }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+```
+
+#### TypeScript
+
+```ts
+function closestMeetingNode(edges: number[], node1: number, node2: number): number {
+    const n = edges.length;
+    const g = Array.from({ length: n }, () => []);
+    for (let i = 0; i < n; ++i) {
+        if (edges[i] != -1) {
+            g[i].push(edges[i]);
+        }
+    }
+    const inf = 1 << 30;
+    const f = (i: number) => {
+        const dist = new Array(n).fill(inf);
+        dist[i] = 0;
+        const q: number[] = [i];
+        while (q.length) {
+            i = q.shift();
+            for (const j of g[i]) {
+                if (dist[j] == inf) {
+                    dist[j] = dist[i] + 1;
+                    q.push(j);
+                }
+            }
+        }
+        return dist;
+    };
+    const d1 = f(node1);
+    const d2 = f(node2);
+    let ans = -1;
+    let d = inf;
+    for (let i = 0; i < n; ++i) {
+        const t = Math.max(d1[i], d2[i]);
+        if (t < d) {
+            d = t;
+            ans = i;
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
+        def f(i):
+            dist = [inf] * n
+            dist[i] = 0
+            q = deque([i])
+            while q:
+                i = q.popleft()
+                for j in g[i]:
+                    if dist[j] == inf:
+                        dist[j] = dist[i] + 1
+                        q.append(j)
+            return dist
+
+        g = defaultdict(list)
+        for i, j in enumerate(edges):
+            if j != -1:
+                g[i].append(j)
+        n = len(edges)
+        d1 = f(node1)
+        d2 = f(node2)
+        ans, d = -1, inf
+        for i, (a, b) in enumerate(zip(d1, d2)):
+            if (t := max(a, b)) < d:
+                d = t
+                ans = i
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     private int n;
@@ -229,53 +401,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int closestMeetingNode(vector<int>& edges, int node1, int node2) {
-        int n = edges.size();
-        vector<vector<int>> g(n);
-        for (int i = 0; i < n; ++i) {
-            if (edges[i] != -1) {
-                g[i].push_back(edges[i]);
-            }
-        }
-        const int inf = 1 << 30;
-        using pii = pair<int, int>;
-        auto dijkstra = [&](int i) {
-            vector<int> dist(n, inf);
-            dist[i] = 0;
-            priority_queue<pii, vector<pii>, greater<pii>> q;
-            q.emplace(0, i);
-            while (!q.empty()) {
-                auto p = q.top();
-                q.pop();
-                i = p.second;
-                for (int j : g[i]) {
-                    if (dist[j] > dist[i] + 1) {
-                        dist[j] = dist[i] + 1;
-                        q.emplace(dist[j], j);
-                    }
-                }
-            }
-            return dist;
-        };
-        vector<int> d1 = dijkstra(node1);
-        vector<int> d2 = dijkstra(node2);
-        int ans = -1, d = inf;
-        for (int i = 0; i < n; ++i) {
-            int t = max(d1[i], d2[i]);
-            if (t < d) {
-                d = t;
-                ans = i;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -321,67 +447,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func closestMeetingNode(edges []int, node1 int, node2 int) int {
-	n := len(edges)
-	g := make([][]int, n)
-	for i, j := range edges {
-		if j != -1 {
-			g[i] = append(g[i], j)
-		}
-	}
-	const inf int = 1 << 30
-	dijkstra := func(i int) []int {
-		dist := make([]int, n)
-		for j := range dist {
-			dist[j] = inf
-		}
-		dist[i] = 0
-		q := hp{}
-		heap.Push(&q, pair{0, i})
-		for len(q) > 0 {
-			i := heap.Pop(&q).(pair).i
-			for _, j := range g[i] {
-				if dist[j] > dist[i]+1 {
-					dist[j] = dist[i] + 1
-					heap.Push(&q, pair{dist[j], j})
-				}
-			}
-		}
-		return dist
-	}
-	d1 := dijkstra(node1)
-	d2 := dijkstra(node2)
-	ans, d := -1, inf
-	for i, a := range d1 {
-		b := d2[i]
-		t := max(a, b)
-		if t < d {
-			d = t
-			ans = i
-		}
-	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-type pair struct{ d, i int }
-type hp []pair
-
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].d < h[j].d }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
+#### Go
 
 ```go
 func closestMeetingNode(edges []int, node1 int, node2 int) int {
@@ -425,65 +491,10 @@ func closestMeetingNode(edges []int, node1 int, node2 int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function closestMeetingNode(
-    edges: number[],
-    node1: number,
-    node2: number,
-): number {
-    const n = edges.length;
-    const g = Array.from({ length: n }, () => []);
-    for (let i = 0; i < n; ++i) {
-        if (edges[i] != -1) {
-            g[i].push(edges[i]);
-        }
-    }
-    const inf = 1 << 30;
-    const f = (i: number) => {
-        const dist = new Array(n).fill(inf);
-        dist[i] = 0;
-        const q: number[] = [i];
-        while (q.length) {
-            i = q.shift();
-            for (const j of g[i]) {
-                if (dist[j] == inf) {
-                    dist[j] = dist[i] + 1;
-                    q.push(j);
-                }
-            }
-        }
-        return dist;
-    };
-    const d1 = f(node1);
-    const d2 = f(node2);
-    let ans = -1;
-    let d = inf;
-    for (let i = 0; i < n; ++i) {
-        const t = Math.max(d1[i], d2[i]);
-        if (t < d) {
-            d = t;
-            ans = i;
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

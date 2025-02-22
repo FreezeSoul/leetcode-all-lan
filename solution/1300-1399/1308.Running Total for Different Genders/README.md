@@ -1,10 +1,20 @@
-# [1308. 不同性别每日分数总计](https://leetcode.cn/problems/running-total-for-different-genders)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1308.Running%20Total%20for%20Different%20Genders/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1308. 不同性别每日分数总计 🔒](https://leetcode.cn/problems/running-total-for-different-genders)
 
 [English Version](/solution/1300-1399/1308.Running%20Total%20for%20Different%20Genders/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Scores</code></p>
 
@@ -17,7 +27,7 @@
 | day           | date    |
 | score_points  | int     |
 +---------------+---------+
-(gender, day)是该表的主键
+(gender, day)是该表的主键(具有唯一值的列的组合)
 一场比赛是在女队和男队之间举行的
 该表的每一行表示一个名叫 (player_name) 性别为 (gender) 的参赛者在某一天获得了 (score_points) 的分数
 如果参赛者是女性，那么 gender 列为 'F'，如果参赛者是男性，那么 gender 列为 'M'
@@ -25,7 +35,7 @@
 
 <p>&nbsp;</p>
 
-<p>写一条SQL语句查询每种性别在每一天的总分。</p>
+<p>编写解决方案统计每种性别在每一天的总分。</p>
 
 <p>返回按&nbsp;<code>gender</code>&nbsp;和&nbsp;<code>day</code>&nbsp;对查询结果 <strong>升序排序</strong>&nbsp;的结果。</p>
 
@@ -71,6 +81,7 @@ Scores表:
 第二天是 2019-12-31, Priya 获得 23 分，队伍的总分是 40 分
 第三天是 2020-01-01, Aron 获得 17 分，队伍的总分是 57 分
 第四天是 2020-01-07, Alice 获得 23 分，队伍的总分是 80 分
+
 男性队伍：
 第一天是 2019-12-18, Jose 获得 2 分，队伍的总分是 2 分
 第二天是 2019-12-25, Khali 获得 11 分，队伍的总分是 13 分
@@ -78,16 +89,32 @@ Scores表:
 第四天是 2019-12-31, Joe 获得 3 分，队伍的总分是 29 分
 第五天是 2020-01-07, Bajrang 获得 7 分，队伍的总分是 36 分</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    gender,
+    day,
+    SUM(score_points) OVER (
+        PARTITION BY gender
+        ORDER BY gender, day
+    ) AS total
+FROM Scores;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

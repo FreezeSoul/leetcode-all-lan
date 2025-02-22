@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2177.Find%20Three%20Consecutive%20Integers%20That%20Sum%20to%20a%20Given%20Number/README_EN.md
+rating: 1257
+source: Biweekly Contest 72 Q2
+tags:
+    - Math
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2177. Find Three Consecutive Integers That Sum to a Given Number](https://leetcode.com/problems/find-three-consecutive-integers-that-sum-to-a-given-number)
 
 [中文文档](/solution/2100-2199/2177.Find%20Three%20Consecutive%20Integers%20That%20Sum%20to%20a%20Given%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>num</code>, return <em>three consecutive integers (as a sorted array)</em><em> that <strong>sum</strong> to </em><code>num</code>. If <code>num</code> cannot be expressed as the sum of three consecutive integers, return<em> an <strong>empty</strong> array.</em></p>
 
@@ -31,20 +46,30 @@
 	<li><code>0 &lt;= num &lt;= 10<sup>15</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Mathematics
+
+Assume the three consecutive integers are $x-1$, $x$, and $x+1$. Their sum is $3x$, so $\textit{num}$ must be a multiple of $3$. If $\textit{num}$ is not a multiple of $3$, it cannot be represented as the sum of three consecutive integers, and we return an empty array. Otherwise, let $x = \frac{\textit{num}}{3}$, then $x-1$, $x$, and $x+1$ are the three consecutive integers whose sum is $\textit{num}$.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def sumOfThree(self, num: int) -> List[int]:
-        a, b = divmod(num, 3)
-        return [] if b else [a - 1, a, a + 1]
+        x, mod = divmod(num, 3)
+        return [] if mod else [x - 1, x, x + 1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -58,20 +83,22 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<long long> sumOfThree(long long num) {
-        if (num % 3) return {};
+        if (num % 3) {
+            return {};
+        }
         long long x = num / 3;
         return {x - 1, x, x + 1};
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sumOfThree(num int64) []int64 {
@@ -83,16 +110,50 @@ func sumOfThree(num int64) []int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function sumOfThree(num: number): number[] {
+    if (num % 3) {
+        return [];
+    }
+    const x = Math.floor(num / 3);
+    return [x - 1, x, x + 1];
+}
 ```
 
-### **...**
+#### Rust
 
+```rust
+impl Solution {
+    pub fn sum_of_three(num: i64) -> Vec<i64> {
+        if num % 3 != 0 {
+            return Vec::new();
+        }
+        let x = num / 3;
+        vec![x - 1, x, x + 1]
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number} num
+ * @return {number[]}
+ */
+var sumOfThree = function (num) {
+    if (num % 3) {
+        return [];
+    }
+    const x = Math.floor(num / 3);
+    return [x - 1, x, x + 1];
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

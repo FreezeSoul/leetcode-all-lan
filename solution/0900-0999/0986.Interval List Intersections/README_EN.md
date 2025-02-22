@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0986.Interval%20List%20Intersections/README_EN.md
+tags:
+    - Array
+    - Two Pointers
+    - Line Sweep
+---
+
+<!-- problem:start -->
+
 # [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections)
 
 [中文文档](/solution/0900-0999/0986.Interval%20List%20Intersections/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two lists of closed intervals, <code>firstList</code> and <code>secondList</code>, where <code>firstList[i] = [start<sub>i</sub>, end<sub>i</sub>]</code> and <code>secondList[j] = [start<sub>j</sub>, end<sub>j</sub>]</code>. Each list of intervals is pairwise <strong>disjoint</strong> and in <strong>sorted order</strong>.</p>
 
@@ -39,11 +53,17 @@
 	<li><code>end<sub>j</sub> &lt; start<sub>j+1</sub></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +84,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -88,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func intervalIntersection(firstList [][]int, secondList [][]int) [][]int {
@@ -130,29 +150,12 @@ func intervalIntersection(firstList [][]int, secondList [][]int) [][]int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function intervalIntersection(
-    firstList: number[][],
-    secondList: number[][],
-): number[][] {
+function intervalIntersection(firstList: number[][], secondList: number[][]): number[][] {
     const n = firstList.length;
     const m = secondList.length;
     const res = [];
@@ -174,7 +177,7 @@ function intervalIntersection(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -203,10 +206,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

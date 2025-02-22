@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1337.The%20K%20Weakest%20Rows%20in%20a%20Matrix/README.md
+rating: 1224
+source: 第 174 场周赛 Q1
+tags:
+    - 数组
+    - 二分查找
+    - 矩阵
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1337. 矩阵中战斗力最弱的 K 行](https://leetcode.cn/problems/the-k-weakest-rows-in-a-matrix)
 
 [English Version](/solution/1300-1399/1337.The%20K%20Weakest%20Rows%20in%20a%20Matrix/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个大小为 <code>m * n</code> 的矩阵 <code>mat</code>，矩阵由若干军人和平民组成，分别用 1 和 0 表示。</p>
 
@@ -68,17 +84,17 @@ k = 2
 	<li><code>matrix[i][j]</code> 不是 0 就是 1</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-二分查找 + 排序。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -90,9 +106,7 @@ class Solution:
         return idx[:k]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -124,30 +138,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function kWeakestRows(mat: number[][], k: number): number[] {
-    let n = mat.length;
-    let sumMap = mat.map((d, i) => [d.reduce((a, c) => a + c, 0), i]);
-    let ans = [];
-    // 冒泡排序
-    for (let i = 0; i < k; i++) {
-        for (let j = i; j < n; j++) {
-            if (
-                sumMap[j][0] < sumMap[i][0] ||
-                (sumMap[j][0] == sumMap[i][0] && sumMap[i][1] > sumMap[j][1])
-            ) {
-                [sumMap[i], sumMap[j]] = [sumMap[j], sumMap[i]];
-            }
-        }
-        ans.push(sumMap[i][1]);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -181,7 +172,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func kWeakestRows(mat [][]int, k int) []int {
@@ -208,10 +199,31 @@ func kWeakestRows(mat [][]int, k int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function kWeakestRows(mat: number[][], k: number): number[] {
+    let n = mat.length;
+    let sumMap = mat.map((d, i) => [d.reduce((a, c) => a + c, 0), i]);
+    let ans = [];
+    // 冒泡排序
+    for (let i = 0; i < k; i++) {
+        for (let j = i; j < n; j++) {
+            if (
+                sumMap[j][0] < sumMap[i][0] ||
+                (sumMap[j][0] == sumMap[i][0] && sumMap[i][1] > sumMap[j][1])
+            ) {
+                [sumMap[i], sumMap[j]] = [sumMap[j], sumMap[i]];
+            }
+        }
+        ans.push(sumMap[i][1]);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2469.Convert%20the%20Temperature/README.md
+rating: 1153
+source: 第 319 场周赛 Q1
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2469. 温度转换](https://leetcode.cn/problems/convert-the-temperature)
 
 [English Version](/solution/2400-2499/2469.Convert%20the%20Temperature/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个四舍五入到两位小数的非负浮点数 <code>celsius</code> 来表示温度，以 <strong>摄氏度</strong>（<strong>Celsius</strong>）为单位。</p>
 
@@ -42,11 +54,13 @@
 	<li><code>0 &lt;= celsius &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 直接根据题意模拟即可。
 
@@ -54,9 +68,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -64,9 +76,7 @@ class Solution:
         return [celsius + 273.15, celsius * 1.8 + 32]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -76,7 +86,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -87,7 +97,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func convertTemperature(celsius float64) []float64 {
@@ -95,7 +105,7 @@ func convertTemperature(celsius float64) []float64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function convertTemperature(celsius: number): number[] {
@@ -103,7 +113,7 @@ function convertTemperature(celsius: number): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -113,14 +123,14 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-double *convertTemperature(double celsius, int *returnSize) {
-    double *ans = malloc(sizeof(double) * 2);
+double* convertTemperature(double celsius, int* returnSize) {
+    double* ans = malloc(sizeof(double) * 2);
     ans[0] = celsius + 273.15;
     ans[1] = celsius * 1.8 + 32;
     *returnSize = 2;
@@ -128,10 +138,8 @@ double *convertTemperature(double celsius, int *returnSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

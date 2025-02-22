@@ -1,24 +1,18 @@
 # Write your MySQL query statement below
-select
+SELECT
     customer_id
-from
+FROM
     (
-        select
+        SELECT
             customer_id,
-            year(order_date),
-            sum(price) as total,
-            year(order_date) - rank() over(
-                partition by customer_id
-                order by
-                    sum(price)
-            ) as rk
-        from
-            Orders
-        group by
-            customer_id,
-            year(order_date)
-    ) t
-group by
-    customer_id
-having
-    count(distinct rk) = 1;
+            YEAR(order_date),
+            SUM(price) AS total,
+            YEAR(order_date) - RANK() OVER (
+                PARTITION BY customer_id
+                ORDER BY SUM(price)
+            ) AS rk
+        FROM Orders
+        GROUP BY customer_id, YEAR(order_date)
+    ) AS t
+GROUP BY customer_id
+HAVING COUNT(DISTINCT rk) = 1;

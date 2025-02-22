@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2185.Counting%20Words%20With%20a%20Given%20Prefix/README.md
+rating: 1167
+source: 第 282 场周赛 Q1
+tags:
+    - 数组
+    - 字符串
+    - 字符串匹配
+---
+
+<!-- problem:start -->
+
 # [2185. 统计包含给定前缀的字符串](https://leetcode.cn/problems/counting-words-with-a-given-prefix)
 
 [English Version](/solution/2100-2199/2185.Counting%20Words%20With%20a%20Given%20Prefix/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>words</code> 和一个字符串 <code>pref</code> 。</p>
 
@@ -38,17 +52,110 @@
 	<li><code>words[i]</code> 和 <code>pref</code> 由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 根据题目描述，我们遍历字符串数组 `words` 中的每个字符串 $w$，判断其是否以 $pref$ 作为前缀，如果是，则答案加一。
 
 时间复杂度 $O(n \times m)$，空间复杂度 $O(1)$。其中 $n$ 和 $m$ 分别是字符串数组 `words` 和字符串 $pref$ 的长度。
 
-**方法二：前缀树**
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def prefixCount(self, words: List[str], pref: str) -> int:
+        return sum(w.startswith(pref) for w in words)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int prefixCount(String[] words, String pref) {
+        int ans = 0;
+        for (String w : words) {
+            if (w.startsWith(pref)) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int prefixCount(vector<string>& words, string pref) {
+        int ans = 0;
+        for (auto& w : words) ans += w.find(pref) == 0;
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func prefixCount(words []string, pref string) (ans int) {
+	for _, w := range words {
+		if strings.HasPrefix(w, pref) {
+			ans++
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function prefixCount(words: string[], pref: string): number {
+    return words.reduce((r, s) => (r += s.startsWith(pref) ? 1 : 0), 0);
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn prefix_count(words: Vec<String>, pref: String) -> i32 {
+        words.iter().filter(|s| s.starts_with(&pref)).count() as i32
+    }
+}
+```
+
+#### C
+
+```c
+int prefixCount(char** words, int wordsSize, char* pref) {
+    int ans = 0;
+    int n = strlen(pref);
+    for (int i = 0; i < wordsSize; i++) {
+        if (strncmp(words[i], pref, n) == 0) {
+            ans++;
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：前缀树
 
 我们还可以使用前缀树来查询答案。
 
@@ -70,15 +177,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def prefixCount(self, words: List[str], pref: str) -> int:
-        return sum(w.startswith(pref) for w in words)
-```
+#### Python3
 
 ```python
 class Trie:
@@ -113,23 +212,7 @@ class Solution:
         return tree.search(pref)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int prefixCount(String[] words, String pref) {
-        int ans = 0;
-        for (String w : words) {
-            if (w.startsWith(pref)) {
-                ++ans;
-            }
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Trie {
@@ -172,23 +255,14 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int prefixCount(vector<string>& words, string pref) {
-        int ans = 0;
-        for (auto& w : words) ans += w.find(pref) == 0;
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Trie {
 public:
-    Trie(): children(26), cnt(0) {}
+    Trie()
+        : children(26)
+        , cnt(0) {}
 
     void insert(string w) {
         Trie* node = this;
@@ -231,18 +305,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func prefixCount(words []string, pref string) (ans int) {
-	for _, w := range words {
-		if strings.HasPrefix(w, pref) {
-			ans++
-		}
-	}
-	return
-}
-```
+#### Go
 
 ```go
 type Trie struct {
@@ -287,43 +350,8 @@ func prefixCount(words []string, pref string) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function prefixCount(words: string[], pref: string): number {
-    return words.reduce((r, s) => (r += s.startsWith(pref) ? 1 : 0), 0);
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn prefix_count(words: Vec<String>, pref: String) -> i32 {
-        words.iter().filter(|s| s.starts_with(&pref)).count() as i32
-    }
-}
-```
-
-### **C**
-
-```c
-int prefixCount(char **words, int wordsSize, char *pref) {
-    int ans = 0;
-    int n = strlen(pref);
-    for (int i = 0; i < wordsSize; i++) {
-        if (strncmp(words[i], pref, n) == 0) {
-            ans++;
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->
