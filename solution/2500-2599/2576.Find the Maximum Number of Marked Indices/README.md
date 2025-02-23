@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2576.Find%20the%20Maximum%20Number%20of%20Marked%20Indices/README.md
+rating: 1843
+source: 第 334 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 双指针
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2576. 求出最多标记下标](https://leetcode.cn/problems/find-the-maximum-number-of-marked-indices)
 
 [English Version](/solution/2500-2599/2576.Find%20the%20Maximum%20Number%20of%20Marked%20Indices/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code>&nbsp;。</p>
 
@@ -54,124 +70,121 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 双指针**
+### 方法一：贪心 + 双指针
 
-为了将下标尽可能多地标记，我们可以将数组 `nums` 排序，然后从左到右遍历数组，对于每个下标 $i$，我们在数组的右半部分找到第一个满足 $2 \times nums[i] \leq nums[j]$ 的下标 $j$，然后标记下标 $i$ 和 $j$。继续遍历下一个下标 $i$。当我们遍历完数组的右半部分时，说明标记已经完成，此时标记的下标数目即为答案。
+根据题目描述，题目最多产生 $n / 2$ 组标记，其中 $n$ 为数组 $\textit{nums}$ 的长度。
 
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为数组 `nums` 的长度。
+为了将下标尽可能多地标记，我们可以将数组 $\textit{nums}$ 排序，接下来，我们遍历右半部分的每个元素 $\textit{nums}[j]$，用一个指针 $\textit{i}$ 指向左半部分的最小元素，如果 $\textit{nums}[i] \times 2 \leq \textit{nums}[j]$，则可以标记下标 $\textit{i}$ 和 $\textit{j}$，我们将 $\textit{i}$ 向右移动一个位置。继续遍历右半部分的元素，直到到达数组的末尾。此时，我们可以标记的下标数目为 $\textit{i} \times 2$。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为数组 $\textit{nums}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxNumOfMarkedIndices(self, nums: List[int]) -> int:
         nums.sort()
-        n = len(nums)
-        i, j = 0, (n + 1) // 2
-        ans = 0
-        while j < n:
-            while j < n and nums[i] * 2 > nums[j]:
-                j += 1
-            if j < n:
-                ans += 2
-            i, j = i + 1, j + 1
-        return ans
+        i, n = 0, len(nums)
+        for x in nums[(n + 1) // 2 :]:
+            if nums[i] * 2 <= x:
+                i += 1
+        return i * 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int maxNumOfMarkedIndices(int[] nums) {
         Arrays.sort(nums);
-        int n = nums.length;
-        int ans = 0;
-        for (int i = 0, j = (n + 1) / 2; j < n; ++i, ++j) {
-            while (j < n && nums[i] * 2 > nums[j]) {
-                ++j;
-            }
-            if (j < n) {
-                ans += 2;
+        int i = 0, n = nums.length;
+        for (int j = (n + 1) / 2; j < n; ++j) {
+            if (nums[i] * 2 <= nums[j]) {
+                ++i;
             }
         }
-        return ans;
+        return i * 2;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maxNumOfMarkedIndices(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int n = nums.size();
-        int ans = 0;
-        for (int i = 0, j = (n + 1) / 2; j < n; ++i, ++j) {
-            while (j < n && nums[i] * 2 > nums[j]) {
-                ++j;
-            }
-            if (j < n) {
-                ans += 2;
+        ranges::sort(nums);
+        int i = 0, n = nums.size();
+        for (int j = (n + 1) / 2; j < n; ++j) {
+            if (nums[i] * 2 <= nums[j]) {
+                ++i;
             }
         }
-        return ans;
+        return i * 2;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxNumOfMarkedIndices(nums []int) (ans int) {
 	sort.Ints(nums)
-	n := len(nums)
-	for i, j := 0, (n+1)/2; j < n; i, j = i+1, j+1 {
-		for j < n && nums[i]*2 > nums[j] {
-			j++
-		}
-		if j < n {
-			ans += 2
+	i, n := 0, len(nums)
+	for _, x := range nums[(n+1)/2:] {
+		if nums[i]*2 <= x {
+			i++
 		}
 	}
-	return
+	return i * 2
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxNumOfMarkedIndices(nums: number[]): number {
     nums.sort((a, b) => a - b);
     const n = nums.length;
-    let ans = 0;
-    for (let i = 0, j = Math.floor((n + 1) / 2); j < n; ++i, ++j) {
-        while (j < n && nums[i] * 2 > nums[j]) {
-            ++j;
-        }
-        if (j < n) {
-            ans += 2;
+    let i = 0;
+    for (let j = (n + 1) >> 1; j < n; ++j) {
+        if (nums[i] * 2 <= nums[j]) {
+            ++i;
         }
     }
-    return ans;
+    return i * 2;
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn max_num_of_marked_indices(mut nums: Vec<i32>) -> i32 {
+        nums.sort();
+        let mut i = 0;
+        let n = nums.len();
+        for j in (n + 1) / 2..n {
+            if nums[i] * 2 <= nums[j] {
+                i += 1;
+            }
+        }
+        (i * 2) as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1839.Longest%20Substring%20Of%20All%20Vowels%20in%20Order/README.md
+rating: 1580
+source: 第 238 场周赛 Q3
+tags:
+    - 字符串
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [1839. 所有元音按顺序排布的最长子字符串](https://leetcode.cn/problems/longest-substring-of-all-vowels-in-order)
 
 [English Version](/solution/1800-1899/1839.Longest%20Substring%20Of%20All%20Vowels%20in%20Order/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>当一个字符串满足如下条件时，我们称它是 <b>美丽的</b> ：</p>
 
@@ -53,11 +66,13 @@
 	<li><code>word</code> 只包含字符 <code>'a'</code>，<code>'e'</code>，<code>'i'</code>，<code>'o'</code> 和 <code>'u'</code> 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针 + 模拟**
+### 方法一：双指针 + 模拟
 
 我们可以先将字符串 `word` 做个转化，比如对于 `word="aaaeiouu"`，我们可以将其转化为数据项 `('a', 3)`, `('e', 1)`, `('i', 1)`, `('o', 1)`, `('u', 2)`，存放在数组 `arr` 中。其中每个数据项的第一个元素表示元音字母，第二个元素表示该元音字母连续出现的次数。这部分转化可以通过双指针来实现。
 
@@ -67,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +104,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -131,7 +142,7 @@ class Node {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,7 +172,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestBeautifulSubstring(word string) (ans int) {
@@ -188,19 +199,10 @@ type pair struct {
 	c byte
 	v int
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

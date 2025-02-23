@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1070.Product%20Sales%20Analysis%20III/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1070. Product Sales Analysis III](https://leetcode.com/problems/product-sales-analysis-iii)
 
 [中文文档](/solution/1000-1099/1070.Product%20Sales%20Analysis%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Sales</code></p>
 
@@ -16,8 +28,8 @@
 | quantity    | int   |
 | price       | int   |
 +-------------+-------+
-(sale_id, year) is the primary key of this table.
-product_id is a foreign key to <code>Product</code> table.
+(sale_id, year) is the primary key (combination of columns with unique values) of this table.
+product_id is a foreign key (reference column) to <code>Product</code> table.
 Each row of this table shows a sale on the product product_id in a certain year.
 Note that the price is per unit.
 </pre>
@@ -33,17 +45,17 @@ Note that the price is per unit.
 | product_id   | int     |
 | product_name | varchar |
 +--------------+---------+
-product_id is the primary key of this table.
+product_id is the primary key (column with unique values) of this table.
 Each row of this table indicates the product name of each product.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query that selects the <strong>product id</strong>, <strong>year</strong>, <strong>quantity</strong>, and <strong>price</strong> for the <strong>first year</strong> of every product sold.</p>
+<p>Write a solution to select&nbsp;the <strong>product id</strong>, <strong>year</strong>, <strong>quantity</strong>, and <strong>price</strong> for the <strong>first year</strong> of every product sold.</p>
 
 <p>Return the resulting table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -75,29 +87,67 @@ Product table:
 +------------+------------+----------+-------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
 SELECT
     product_id,
-    year as first_year,
+    year AS first_year,
     quantity,
     price
-FROM
-    Sales
+FROM Sales
 WHERE
     (product_id, year) IN (
         SELECT
-            product_id, min(year) year
-        FROM
-            Sales
+            product_id,
+            MIN(year) AS year
+        FROM Sales
         GROUP BY product_id
     );
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            *,
+            RANK() OVER (
+                PARTITION BY product_id
+                ORDER BY year
+            ) AS rk
+        FROM Sales
+    )
+SELECT product_id, year AS first_year, quantity, price
+FROM T
+WHERE rk = 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

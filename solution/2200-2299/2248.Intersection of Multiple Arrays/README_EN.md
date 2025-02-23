@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2248.Intersection%20of%20Multiple%20Arrays/README_EN.md
+rating: 1264
+source: Weekly Contest 290 Q1
+tags:
+    - Array
+    - Hash Table
+    - Counting
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2248. Intersection of Multiple Arrays](https://leetcode.com/problems/intersection-of-multiple-arrays)
 
 [中文文档](/solution/2200-2299/2248.Intersection%20of%20Multiple%20Arrays/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 Given a 2D integer array <code>nums</code> where <code>nums[i]</code> is a non-empty array of <strong>distinct</strong> positive integers, return <em>the list of integers that are present in <strong>each array</strong> of</em> <code>nums</code><em> sorted in <strong>ascending order</strong></em>.
 
@@ -34,11 +51,21 @@ There does not exist any integer present both in nums[0] and nums[1], so we retu
 	<li>All the values of <code>nums[i]</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+Traverse the array `nums`. For each sub-array `arr`, count the occurrence of each number in `arr`. Then traverse the count array, count the numbers that appear as many times as the length of the array `nums`, which are the answers.
+
+The time complexity is $O(N)$, and the space complexity is $O(1000)$. Where $N$ is the total number of numbers in the array `nums`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -50,21 +77,7 @@ class Solution:
         return [x for x, v in enumerate(cnt) if v == len(nums)]
 ```
 
-```python
-class Solution:
-    def intersection(self, nums: List[List[int]]) -> List[int]:
-        cnt = Counter()
-        ans = []
-        for arr in nums:
-            for x in arr:
-                cnt[x] += 1
-                if cnt[x] == len(nums):
-                    ans.append(x)
-        ans.sort()
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,25 +99,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public List<Integer> intersection(int[][] nums) {
-        Map<Integer, Integer> cnt = new HashMap<>();
-        List<Integer> ans = new ArrayList<>();
-        for (var arr : nums) {
-            for (int x : arr) {
-                if (cnt.merge(x, 1, Integer::sum) == nums.length) {
-                    ans.add(x);
-                }
-            }
-        }
-        Collections.sort(ans);
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,26 +122,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<int> intersection(vector<vector<int>>& nums) {
-        unordered_map<int, int> cnt;
-        vector<int> ans;
-        for (auto& arr : nums) {
-            for (int& x : arr) {
-                if (++cnt[x] == nums.size()) {
-                    ans.push_back(x);
-                }
-            }
-        }
-        sort(ans.begin(), ans.end());
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func intersection(nums [][]int) (ans []int) {
@@ -165,23 +141,7 @@ func intersection(nums [][]int) (ans []int) {
 }
 ```
 
-```go
-func intersection(nums [][]int) (ans []int) {
-	cnt := map[int]int{}
-	for _, arr := range nums {
-		for _, x := range arr {
-			cnt[x]++
-			if cnt[x] == len(nums) {
-				ans = append(ans, x)
-			}
-		}
-	}
-	sort.Ints(ans)
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function intersection(nums: number[][]): number[] {
@@ -201,6 +161,117 @@ function intersection(nums: number[][]): number[] {
 }
 ```
 
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param Integer[][] $nums
+     * @return Integer[]
+     */
+    function intersection($nums) {
+        $rs = [];
+        for ($i = 0; $i < count($nums); $i++) {
+            for ($j = 0; $j < count($nums[$i]); $j++) {
+                $hashtable[$nums[$i][$j]] += 1;
+                if ($hashtable[$nums[$i][$j]] === count($nums)) {
+                    array_push($rs, $nums[$i][$j]);
+                }
+            }
+        }
+        sort($rs);
+        return $rs;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def intersection(self, nums: List[List[int]]) -> List[int]:
+        cnt = Counter()
+        ans = []
+        for arr in nums:
+            for x in arr:
+                cnt[x] += 1
+                if cnt[x] == len(nums):
+                    ans.append(x)
+        ans.sort()
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public List<Integer> intersection(int[][] nums) {
+        Map<Integer, Integer> cnt = new HashMap<>();
+        List<Integer> ans = new ArrayList<>();
+        for (var arr : nums) {
+            for (int x : arr) {
+                if (cnt.merge(x, 1, Integer::sum) == nums.length) {
+                    ans.add(x);
+                }
+            }
+        }
+        Collections.sort(ans);
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> intersection(vector<vector<int>>& nums) {
+        unordered_map<int, int> cnt;
+        vector<int> ans;
+        for (auto& arr : nums) {
+            for (int& x : arr) {
+                if (++cnt[x] == nums.size()) {
+                    ans.push_back(x);
+                }
+            }
+        }
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func intersection(nums [][]int) (ans []int) {
+	cnt := map[int]int{}
+	for _, arr := range nums {
+		for _, x := range arr {
+			cnt[x]++
+			if cnt[x] == len(nums) {
+				ans = append(ans, x)
+			}
+		}
+	}
+	sort.Ints(ans)
+	return
+}
+```
+
+#### TypeScript
+
 ```ts
 function intersection(nums: number[][]): number[] {
     const cnt = new Array(1001).fill(0);
@@ -217,32 +288,8 @@ function intersection(nums: number[][]): number[] {
 }
 ```
 
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param Integer[][] $nums
-     * @return Integer[]
-     */
-    function intersection($nums) {
-        $rs = [];
-        for ($i = 0; $i < count($nums); $i++) {
-            for ($j = 0; $j < count($nums[$i]); $j++) {
-                $hashtable[$nums[$i][$j]] += 1;
-                if ($hashtable[$nums[$i][$j]] === count($nums)) array_push($rs, $nums[$i][$j]);
-            }
-        }
-        sort($rs);
-        return $rs;
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

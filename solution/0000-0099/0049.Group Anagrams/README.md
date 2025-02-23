@@ -1,14 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0049.Group%20Anagrams/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [49. 字母异位词分组](https://leetcode.cn/problems/group-anagrams)
 
 [English Version](/solution/0000-0099/0049.Group%20Anagrams/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组，请你将 <strong>字母异位词</strong> 组合在一起。可以按任意顺序返回结果列表。</p>
 
-<p><strong>字母异位词</strong> 是由重新排列源单词的字母得到的一个新单词，所有源单词中的字母通常恰好只用一次。</p>
+<p><strong>字母异位词</strong> 是由重新排列源单词的所有字母得到的一个新单词。</p>
 
 <p>&nbsp;</p>
 
@@ -41,11 +54,13 @@
 	<li><code>strs[i]</code>&nbsp;仅包含小写字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 1. 遍历字符串，对每个字符串按照**字符字典序**排序，得到一个新的字符串。
 2. 以新字符串为 `key`，`[str]` 为 `value`，存入哈希表当中（`HashMap<String, List<String>>`）。
@@ -63,17 +78,9 @@
 
 时间复杂度 $O(n\times k\times \log k)$。其中 $n$ 和 $k$ 分别是字符串数组的长度和字符串的最大长度。
 
-**方法二：计数**
-
-我们也可以将方法一中的排序部分改为计数，也就是说，将每个字符串 $s$ 中的字符以及出现的次数作为 `key`，将字符串 $s$ 作为 `value` 存入哈希表当中。
-
-时间复杂度 $O(n\times (k + C))$。其中 $n$ 和 $k$ 分别是字符串数组的长度和字符串的最大长度，而 $C$ 是字符集的大小，本题中 $C = 26$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -85,21 +92,7 @@ class Solution:
         return list(d.values())
 ```
 
-```python
-class Solution:
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        d = defaultdict(list)
-        for s in strs:
-            cnt = [0] * 26
-            for c in s:
-                cnt[ord(c) - ord('a')] += 1
-            d[tuple(cnt)].append(s)
-        return list(d.values())
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -115,6 +108,171 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> d;
+        for (auto& s : strs) {
+            string k = s;
+            sort(k.begin(), k.end());
+            d[k].emplace_back(s);
+        }
+        vector<vector<string>> ans;
+        for (auto& [_, v] : d) ans.emplace_back(v);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func groupAnagrams(strs []string) (ans [][]string) {
+	d := map[string][]string{}
+	for _, s := range strs {
+		t := []byte(s)
+		sort.Slice(t, func(i, j int) bool { return t[i] < t[j] })
+		k := string(t)
+		d[k] = append(d[k], s)
+	}
+	for _, v := range d {
+		ans = append(ans, v)
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function groupAnagrams(strs: string[]): string[][] {
+    const d: Map<string, string[]> = new Map();
+    for (const s of strs) {
+        const k = s.split('').sort().join('');
+        if (!d.has(k)) {
+            d.set(k, []);
+        }
+        d.get(k)!.push(s);
+    }
+    return Array.from(d.values());
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
+        let mut map = HashMap::new();
+        for s in strs {
+            let key = {
+                let mut arr = s.chars().collect::<Vec<char>>();
+                arr.sort();
+                arr.iter().collect::<String>()
+            };
+            let val = map.entry(key).or_insert(vec![]);
+            val.push(s);
+        }
+        map.into_iter().map(|(_, v)| v).collect()
+    }
+}
+```
+
+#### C#
+
+```cs
+using System.Collections.Generic;
+
+public class Comparer : IEqualityComparer<string>
+{
+    public bool Equals(string left, string right)
+    {
+        if (left.Length != right.Length) return false;
+
+        var leftCount = new int[26];
+        foreach (var ch in left)
+        {
+            ++leftCount[ch - 'a'];
+        }
+
+        var rightCount = new int[26];
+        foreach (var ch in right)
+        {
+            var index = ch - 'a';
+            if (++rightCount[index] > leftCount[index]) return false;
+        }
+
+        return true;
+    }
+
+    public int GetHashCode(string obj)
+    {
+        var hashCode = 0;
+        for (int i = 0; i < obj.Length; ++i)
+        {
+            hashCode ^= 1 << (obj[i] - 'a');
+        }
+        return hashCode;
+    }
+}
+
+public class Solution {
+    public IList<IList<string>> GroupAnagrams(string[] strs) {
+        var dict = new Dictionary<string, List<string>>(new Comparer());
+        foreach (var str in strs)
+        {
+            List<string> list;
+            if (!dict.TryGetValue(str, out list))
+            {
+                list = new List<string>();
+                dict.Add(str, list);
+            }
+            list.Add(str);
+        }
+        foreach (var list in dict.Values)
+        {
+            list.Sort();
+        }
+        return new List<IList<string>>(dict.Values);
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：计数
+
+我们也可以将方法一中的排序部分改为计数，也就是说，将每个字符串 $s$ 中的字符以及出现的次数作为 `key`，将字符串 $s$ 作为 `value` 存入哈希表当中。
+
+时间复杂度 $O(n\times (k + C))$。其中 $n$ 和 $k$ 分别是字符串数组的长度和字符串的最大长度，而 $C$ 是字符集的大小，本题中 $C = 26$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        d = defaultdict(list)
+        for s in strs:
+            cnt = [0] * 26
+            for c in s:
+                cnt[ord(c) - ord('a')] += 1
+            d[tuple(cnt)].append(s)
+        return list(d.values())
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -139,24 +297,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        unordered_map<string, vector<string>> d;
-        for (auto& s : strs) {
-            string k = s;
-            sort(k.begin(), k.end());
-            d[k].emplace_back(s);
-        }
-        vector<vector<string>> ans;
-        for (auto& [_, v] : d) ans.emplace_back(v);
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -182,23 +323,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func groupAnagrams(strs []string) (ans [][]string) {
-	d := map[string][]string{}
-	for _, s := range strs {
-		t := []byte(s)
-		sort.Slice(t, func(i, j int) bool { return t[i] < t[j] })
-		k := string(t)
-		d[k] = append(d[k], s)
-	}
-	for _, v := range d {
-		ans = append(ans, v)
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func groupAnagrams(strs []string) (ans [][]string) {
@@ -217,22 +342,7 @@ func groupAnagrams(strs []string) (ans [][]string) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function groupAnagrams(strs: string[]): string[][] {
-    let map = new Map();
-    for (let str of strs) {
-        let arr = str.split('');
-        arr.sort();
-        let key = arr.join('');
-        let value = map.get(key) ? map.get(key) : [];
-        value.push(str);
-        map.set(key, value);
-    }
-    return Array.from(map.values());
-}
-```
+#### TypeScript
 
 ```ts
 function groupAnagrams(strs: string[]): string[][] {
@@ -245,32 +355,8 @@ function groupAnagrams(strs: string[]): string[][] {
 }
 ```
 
-### **Rust**
-
-```rust
-use std::collections::HashMap;
-
-impl Solution {
-    pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
-        let mut map = HashMap::new();
-        for s in strs {
-            let key = {
-                let mut arr = s.chars().collect::<Vec<char>>();
-                arr.sort();
-                arr.iter().collect::<String>()
-            };
-            let val = map.entry(key).or_insert(vec![]);
-            val.push(s);
-        }
-        map.into_iter().map(|(_, v)| v).collect()
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

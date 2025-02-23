@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1815.Maximum%20Number%20of%20Groups%20Getting%20Fresh%20Donuts/README.md
+rating: 2559
+source: 第 49 场双周赛 Q4
+tags:
+    - 位运算
+    - 记忆化搜索
+    - 数组
+    - 动态规划
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [1815. 得到新鲜甜甜圈的最多组数](https://leetcode.cn/problems/maximum-number-of-groups-getting-fresh-donuts)
 
 [English Version](/solution/1800-1899/1815.Maximum%20Number%20of%20Groups%20Getting%20Fresh%20Donuts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个甜甜圈商店，每批次都烤 <code>batchSize</code> 个甜甜圈。这个店铺有个规则，就是在烤一批新的甜甜圈时，之前 <strong>所有</strong> 甜甜圈都必须已经全部销售完毕。给你一个整数 <code>batchSize</code> 和一个整数数组 <code>groups</code> ，数组中的每个整数都代表一批前来购买甜甜圈的顾客，其中 <code>groups[i]</code> 表示这一批顾客的人数。每一位顾客都恰好只要一个甜甜圈。</p>
 
@@ -39,11 +55,13 @@
 	<li><code>1 <= groups[i] <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 状态压缩 + 记忆化搜索**
+### 方法一：贪心 + 状态压缩 + 记忆化搜索
 
 题目实际上要我们找到一种安排顺序，使得前缀和（这里指的是“人数”）与 $batchSize$ 取模后为 $0$ 的组数最多。因此，我们可以将所有顾客按组分成两类：
 
@@ -62,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,30 +105,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def maxHappyGroups(self, batchSize: int, groups: List[int]) -> int:
-        @cache
-        def dfs(state, x):
-            if state == mask:
-                return 0
-            vis = [False] * batchSize
-            res = 0
-            for i, v in enumerate(g):
-                if state >> i & 1 == 0 and not vis[v]:
-                    vis[v] = True
-                    y = (x + v) % batchSize
-                    res = max(res, dfs(state | 1 << i, y))
-            return res + (x == 0)
-
-        g = [v % batchSize for v in groups if v % batchSize]
-        mask = (1 << len(g)) - 1
-        return len(groups) - len(g) + dfs(0, 0)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -152,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -189,7 +182,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxHappyGroups(batchSize int, groups []int) (ans int) {
@@ -225,19 +218,43 @@ func maxHappyGroups(batchSize int, groups []int) (ans int) {
 	ans += dfs(state, 0)
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxHappyGroups(self, batchSize: int, groups: List[int]) -> int:
+        @cache
+        def dfs(state, x):
+            if state == mask:
+                return 0
+            vis = [False] * batchSize
+            res = 0
+            for i, v in enumerate(g):
+                if state >> i & 1 == 0 and not vis[v]:
+                    vis[v] = True
+                    y = (x + v) % batchSize
+                    res = max(res, dfs(state | 1 << i, y))
+            return res + (x == 0)
+
+        g = [v % batchSize for v in groups if v % batchSize]
+        mask = (1 << len(g)) - 1
+        return len(groups) - len(g) + dfs(0, 0)
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

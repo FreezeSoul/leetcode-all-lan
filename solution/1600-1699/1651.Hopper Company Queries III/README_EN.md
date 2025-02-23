@@ -1,8 +1,20 @@
-# [1651. Hopper Company Queries III](https://leetcode.com/problems/hopper-company-queries-iii)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1651.Hopper%20Company%20Queries%20III/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1651. Hopper Company Queries III 🔒](https://leetcode.com/problems/hopper-company-queries-iii)
 
 [中文文档](/solution/1600-1699/1651.Hopper%20Company%20Queries%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Drivers</code></p>
 
@@ -13,7 +25,7 @@
 | driver_id   | int     |
 | join_date   | date    |
 +-------------+---------+
-driver_id is the primary key for this table.
+driver_id is the column with unique values for this table.
 Each row of this table contains the driver&#39;s ID and the date they joined the Hopper company.
 </pre>
 
@@ -29,7 +41,7 @@ Each row of this table contains the driver&#39;s ID and the date they joined the
 | user_id      | int     |
 | requested_at | date    |
 +--------------+---------+
-ride_id is the primary key for this table.
+ride_id is the column with unique values for this table.
 Each row of this table contains the ID of a ride, the user&#39;s ID that requested it, and the day they requested it.
 There may be some ride requests in this table that were not accepted.
 </pre>
@@ -47,20 +59,20 @@ There may be some ride requests in this table that were not accepted.
 | ride_distance | int     |
 | ride_duration | int     |
 +---------------+---------+
-ride_id is the primary key for this table.
+ride_id is the column with unique values for this table.
 Each row of this table contains some information about an accepted ride.
 It is guaranteed that each accepted ride exists in the Rides table.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to compute the <code>average_ride_distance</code> and <code>average_ride_duration</code> of every 3-month window starting from <strong>January - March 2020</strong> to <strong>October - December 2020</strong>. Round <code>average_ride_distance</code> and <code>average_ride_duration</code> to the nearest <strong>two decimal places</strong>.</p>
+<p>Write a solution to compute the <code>average_ride_distance</code> and <code>average_ride_duration</code> of every 3-month window starting from <strong>January - March 2020</strong> to <strong>October - December 2020</strong>. Round <code>average_ride_distance</code> and <code>average_ride_duration</code> to the nearest <strong>two decimal places</strong>.</p>
 
 <p>The <code>average_ride_distance</code> is calculated by summing up the total <code>ride_distance</code> values from the three months and dividing it by <code>3</code>. The <code>average_ride_duration</code> is calculated in a similar way.</p>
 
 <p>Return the result table ordered by <code>month</code> in ascending order, where <code>month</code> is the starting month&#39;s number (January is <code>1</code>, February is <code>2</code>, etc.).</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -143,14 +155,56 @@ By the end of Septemeber --&gt; average_ride_distance = (0+0+163)/3=54.33, avera
 By the end of October --&gt; average_ride_distance = (0+163+6)/3=56.33, average_ride_duration = (0+193+38)/3=77.00
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH RECURSIVE
+    Months AS (
+        SELECT 1 AS month
+        UNION ALL
+        SELECT month + 1
+        FROM Months
+        WHERE month < 12
+    ),
+    Ride AS (
+        SELECT
+            month,
+            SUM(IFNULL(ride_distance, 0)) AS ride_distance,
+            SUM(IFNULL(ride_duration, 0)) AS ride_duration
+        FROM
+            Months AS m
+            LEFT JOIN Rides AS r ON month = MONTH(requested_at) AND YEAR(requested_at) = 2020
+            LEFT JOIN AcceptedRides AS a ON r.ride_id = a.ride_id
+        GROUP BY month
+    )
+SELECT
+    month,
+    ROUND(
+        AVG(ride_distance) OVER (ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING),
+        2
+    ) AS average_ride_distance,
+    ROUND(
+        AVG(ride_duration) OVER (ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING),
+        2
+    ) AS average_ride_duration
+FROM Ride
+ORDER BY month
+LIMIT 10;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

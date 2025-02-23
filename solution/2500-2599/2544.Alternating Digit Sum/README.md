@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2544.Alternating%20Digit%20Sum/README.md
+rating: 1184
+source: 第 329 场周赛 Q1
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2544. 交替数字和](https://leetcode.cn/problems/alternating-digit-sum)
 
 [English Version](/solution/2500-2599/2544.Alternating%20Digit%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数 <code>n</code> 。<code>n</code> 中的每一位数字都会按下述规则分配一个符号：</p>
 
@@ -50,36 +62,31 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-从最高有效位开始，每次取出一位数字，根据其相邻数字的符号，决定当前数字的符号，然后将当前数字加入答案。
+直接根据题目描述模拟即可。
+
+我们定义一个初始符号 $sign=1$，然后从最高有效位开始，每次取出一位数字 $x$，与 $sign$ 相乘，将结果加到答案中，然后将 $sign$ 取反，继续处理下一位数字，直到处理完所有数字。
 
 时间复杂度 $O(\log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为给定数字。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def alternateDigitSum(self, n: int) -> int:
-        ans, sign = 0, 1
-        for c in str(n):
-            x = int(c)
-            ans += sign * x
-            sign *= -1
-        return ans
+        return sum((-1) ** i * int(x) for i, x in enumerate(str(n)))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,21 +119,21 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func alternateDigitSum(n int) int {
-	ans, sign := 0, 1
+func alternateDigitSum(n int) (ans int) {
+	sign := 1
 	for _, c := range strconv.Itoa(n) {
 		x := int(c - '0')
 		ans += sign * x
 		sign *= -1
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function alternateDigitSum(n: number): number {
@@ -141,7 +148,7 @@ function alternateDigitSum(n: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -158,7 +165,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 int alternateDigitSum(int n) {
@@ -173,10 +180,50 @@ int alternateDigitSum(int n) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def alternateDigitSum(self, n: int) -> int:
+        ans, sign = 0, 1
+        for c in str(n):
+            x = int(c)
+            ans += sign * x
+            sign *= -1
+        return ans
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn alternate_digit_sum(n: i32) -> i32 {
+        let mut ans = 0;
+        let mut sign = 1;
+
+        for c in format!("{}", n).chars() {
+            let x = c.to_digit(10).unwrap() as i32;
+            ans += x * sign;
+            sign *= -1;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

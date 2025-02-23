@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2325.Decode%20the%20Message/README_EN.md
+rating: 1268
+source: Weekly Contest 300 Q1
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [2325. Decode the Message](https://leetcode.com/problems/decode-the-message)
 
 [中文文档](/solution/2300-2399/2325.Decode%20the%20Message/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the strings <code>key</code> and <code>message</code>, which represent a cipher key and a secret message, respectively. The steps to decode <code>message</code> are as follows:</p>
 
@@ -49,11 +64,17 @@ It is obtained by taking the first appearance of each letter in &quot;<u><strong
 	<li><code>message</code> consists of lowercase English letters and <code>&#39; &#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +88,7 @@ class Solution:
         return "".join(d[c] for c in message)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -111,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func decodeMessage(key string, message string) string {
@@ -131,7 +152,7 @@ func decodeMessage(key string, message string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function decodeMessage(key: string, message: string): string {
@@ -147,7 +168,7 @@ function decodeMessage(key: string, message: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -169,10 +190,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-char *decodeMessage(char *key, char *message) {
+char* decodeMessage(char* key, char* message) {
     int m = strlen(key);
     int n = strlen(message);
     char d[26];
@@ -183,7 +204,7 @@ char *decodeMessage(char *key, char *message) {
         }
         d[key[i] - 'a'] = 'a' + j++;
     }
-    char *ans = malloc(n + 1);
+    char* ans = malloc(n + 1);
     for (int i = 0; i < n; i++) {
         ans[i] = message[i] == ' ' ? ' ' : d[message[i] - 'a'];
     }
@@ -192,10 +213,8 @@ char *decodeMessage(char *key, char *message) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

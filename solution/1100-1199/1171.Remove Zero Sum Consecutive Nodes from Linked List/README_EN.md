@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1171.Remove%20Zero%20Sum%20Consecutive%20Nodes%20from%20Linked%20List/README_EN.md
+rating: 1782
+source: Weekly Contest 151 Q3
+tags:
+    - Hash Table
+    - Linked List
+---
+
+<!-- problem:start -->
+
 # [1171. Remove Zero Sum Consecutive Nodes from Linked List](https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list)
 
 [中文文档](/solution/1100-1199/1171.Remove%20Zero%20Sum%20Consecutive%20Nodes%20from%20Linked%20List/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>head</code> of a linked list, we repeatedly delete consecutive sequences of nodes that sum to <code>0</code> until there are no such sequences.</p>
 
@@ -41,11 +56,27 @@
 	<li>Each node in the linked list has <code>-1000 &lt;= node.val &lt;= 1000</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Sum + Hash Table
+
+If two prefix sums of the linked list are equal, it means that the sum of the continuous node sequence between the two prefix sums is $0$, so we can remove this part of the continuous nodes.
+
+We first traverse the linked list and use a hash table $last$ to record the prefix sum and the corresponding linked list node. For the same prefix sum $s$, the later node overwrites the previous node.
+
+Next, we traverse the linked list again. If the current node $cur$ has a prefix sum $s$ that appears in $last$, it means that the sum of all nodes between $cur$ and $last[s]$ is $0$, so we directly modify the pointer of $cur$ to $last[s].next$, which removes this part of the continuous nodes with a sum of $0$. We continue to traverse and delete all continuous nodes with a sum of $0$.
+
+Finally, we return the head node of the linked list $dummy.next$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the linked list.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -70,7 +101,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -106,7 +137,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -143,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -174,7 +205,7 @@ func removeZeroSumSublists(head *ListNode) *ListNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -206,10 +237,54 @@ function removeZeroSumSublists(head: ListNode | null): ListNode | null {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+// Definition for singly-linked list.
+// #[derive(PartialEq, Eq, Clone, Debug)]
+// pub struct ListNode {
+//   pub val: i32,
+//   pub next: Option<Box<ListNode>>
+// }
+//
+// impl ListNode {
+//   #[inline]
+//   fn new(val: i32) -> Self {
+//     ListNode {
+//       next: None,
+//       val
+//     }
+//   }
+// }
+impl Solution {
+    pub fn remove_zero_sum_sublists(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let dummy = Some(Box::new(ListNode { val: 0, next: head }));
+        let mut last = std::collections::HashMap::new();
+        let mut s = 0;
+        let mut p = dummy.as_ref();
+        while let Some(node) = p {
+            s += node.val;
+            last.insert(s, node);
+            p = node.next.as_ref();
+        }
 
+        let mut dummy = Some(Box::new(ListNode::new(0)));
+        let mut q = dummy.as_mut();
+        s = 0;
+        while let Some(cur) = q {
+            s += cur.val;
+            if let Some(node) = last.get(&s) {
+                cur.next = node.next.clone();
+            }
+            q = cur.next.as_mut();
+        }
+        dummy.unwrap().next
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

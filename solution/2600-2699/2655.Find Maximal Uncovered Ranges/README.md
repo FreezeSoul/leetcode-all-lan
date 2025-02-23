@@ -1,10 +1,21 @@
-# [2655. 寻找最大长度的未覆盖区间](https://leetcode.cn/problems/find-maximal-uncovered-ranges)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2655.Find%20Maximal%20Uncovered%20Ranges/README.md
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [2655. 寻找最大长度的未覆盖区间 🔒](https://leetcode.cn/problems/find-maximal-uncovered-ranges)
 
 [English Version](/solution/2600-2699/2655.Find%20Maximal%20Uncovered%20Ranges/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现给你一个长度为 n 的 <strong>索引从 0 开始的</strong>&nbsp;数组 <code>nums</code> 和一个 <strong>索引从 0 开始的</strong> 2 维数组 <code>ranges</code> ，<strong>ranges</strong> 是 <strong>nums</strong> 的子区间列表（子区间可能 <strong>重叠</strong> ）。</p>
 
@@ -63,11 +74,13 @@
 	<li><code>ranges[i][0] &lt;=&nbsp;ranges[i][1]</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 我们将所有的区间按照左端点从小到大排序，然后从左到右遍历所有的区间，维护一个变量 $last$ 表示当前已经被覆盖的最右端点，初始时 $last=-1$。如果当前区间的左端点大于 $last+1$，那么说明 $[last+1, l-1]$ 是一个未被覆盖的区间，我们将其加入答案数组中。然后我们更新 $last$ 为当前区间的右端点，继续遍历下一个区间。当遍历完所有的区间后，如果 $last+1 \lt n$，那么说明 $[last+1, n-1]$ 是一个未被覆盖的区间，我们将其加入答案数组中。
 
@@ -77,13 +90,13 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def findMaximalUncoveredRanges(self, n: int, ranges: List[List[int]]) -> List[List[int]]:
+    def findMaximalUncoveredRanges(
+        self, n: int, ranges: List[List[int]]
+    ) -> List[List[int]]:
         ranges.sort()
         last = -1
         ans = []
@@ -96,9 +109,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -121,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,7 +158,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findMaximalUncoveredRanges(n int, ranges [][]int) (ans [][]int) {
@@ -164,19 +175,10 @@ func findMaximalUncoveredRanges(n int, ranges [][]int) (ans [][]int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

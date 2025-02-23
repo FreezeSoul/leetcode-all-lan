@@ -1,8 +1,20 @@
-# [1459. Rectangles Area](https://leetcode.com/problems/rectangles-area)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1459.Rectangles%20Area/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1459. Rectangles Area 🔒](https://leetcode.com/problems/rectangles-area)
 
 [中文文档](/solution/1400-1499/1459.Rectangles%20Area/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Points</code></p>
 
@@ -14,12 +26,12 @@
 | x_value       | int     |
 | y_value       | int     |
 +---------------+---------+
-id is the primary key for this table.
+id is the column with unique values for this table.
 Each point is represented as a 2D coordinate (x_value, y_value).</pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report all possible <strong>axis-aligned</strong> rectangles with a <strong>non-zero area</strong> that can be formed by any two points from the <code>Points</code> table.</p>
+<p>Write a solution to report all possible <strong>axis-aligned</strong> rectangles with a <strong>non-zero area</strong> that can be formed by any two points from the <code>Points</code> table.</p>
 
 <p>Each row in the result should contain three columns <code>(p1, p2, area)</code> where:</p>
 
@@ -30,7 +42,7 @@ Each point is represented as a 2D coordinate (x_value, y_value).</pre>
 
 <p>Return the result table <strong>ordered</strong> by <code>area</code> <strong>in descending order</strong>. If there is a tie, order them by <code>p1</code> <strong>in ascending order</strong>. If there is still a tie, order them by <code>p2</code> <strong>in ascending order</strong>.</p>
 
-<p>The query result format is in the following table.</p>
+<p>The&nbsp;result format is in the following table.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -58,14 +70,33 @@ The rectangle formed by p1 = 1 and p2 = 2 has an area equal to |2-4| * |7-8| = 2
 Note that the rectangle formed by p1 = 1 and p2 = 3 is invalid because the area is 0.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    p1.id AS p1,
+    p2.id AS p2,
+    ABS(p1.x_value - p2.x_value) * ABS(p1.y_value - p2.y_value) AS area
+FROM
+    Points AS p1
+    JOIN Points AS p2 ON p1.id < p2.id
+WHERE p1.x_value != p2.x_value AND p1.y_value != p2.y_value
+ORDER BY area DESC, p1, p2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

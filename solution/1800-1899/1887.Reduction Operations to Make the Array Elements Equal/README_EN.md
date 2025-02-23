@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1887.Reduction%20Operations%20to%20Make%20the%20Array%20Elements%20Equal/README_EN.md
+rating: 1427
+source: Weekly Contest 244 Q2
+tags:
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1887. Reduction Operations to Make the Array Elements Equal](https://leetcode.com/problems/reduction-operations-to-make-the-array-elements-equal)
 
 [中文文档](/solution/1800-1899/1887.Reduction%20Operations%20to%20Make%20the%20Array%20Elements%20Equal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, your goal is to make all elements in <code>nums</code> equal. To complete one operation, follow these steps:</p>
 
@@ -54,35 +69,35 @@
 	<li><code>1 &lt;= nums[i] &lt;= 5 * 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting
+
+We first sort the array $\textit{nums}$, then iterate from the second element of the array. If the current element is not equal to the previous element, we increment $\textit{cnt}$, indicating the number of operations needed to reduce the current element to the minimum value. Then we add $\textit{cnt}$ to $\textit{ans}$ and continue to the next element.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def reductionOperations(self, nums: List[int]) -> int:
         nums.sort()
         ans = cnt = 0
-        for i, v in enumerate(nums[1:]):
-            if v != nums[i]:
+        for a, b in pairwise(nums):
+            if a != b:
                 cnt += 1
             ans += cnt
         return ans
 ```
 
-```python
-class Solution:
-    def reductionOperations(self, nums: List[int]) -> int:
-        ans = cnt = 0
-        for _, v in sorted(Counter(nums).items()):
-            ans += cnt * v
-            cnt += 1
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,47 +115,13 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int reductionOperations(int[] nums) {
-        Map<Integer, Integer> tm = new TreeMap<>();
-        for (int v : nums) {
-            tm.put(v, tm.getOrDefault(v, 0) + 1);
-        }
-        int ans = 0, cnt = 0;
-        for (int v : tm.values()) {
-            ans += cnt * v;
-            ++cnt;
-        }
-        return ans;
-    }
-}
-```
-
-### **TypeScript**
-
-```ts
-function reductionOperations(nums: number[]): number {
-    nums.sort((a, b) => a - b);
-    let ans = 0;
-    let cnt = 0;
-    for (let i = 1; i < nums.length; ++i) {
-        if (nums[i] != nums[i - 1]) {
-            ++cnt;
-        }
-        ans += cnt;
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int reductionOperations(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
+        ranges::sort(nums);
         int ans = 0, cnt = 0;
         for (int i = 1; i < nums.size(); ++i) {
             cnt += nums[i] != nums[i - 1];
@@ -151,43 +132,78 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int reductionOperations(vector<int>& nums) {
-        map<int, int> m;
-        for (int v : nums) ++m[v];
-        int ans = 0, cnt = 0;
-        for (auto [_, v] : m)
-        {
-            ans += cnt * v;
-            ++cnt;
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
-func reductionOperations(nums []int) int {
+func reductionOperations(nums []int) (ans int) {
 	sort.Ints(nums)
-	ans, cnt := 0, 0
-	for i, v := range nums[1:] {
-		if v != nums[i] {
+	cnt := 0
+	for i, x := range nums[1:] {
+		if x != nums[i] {
 			cnt++
 		}
 		ans += cnt
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function reductionOperations(nums: number[]): number {
+    nums.sort((a, b) => a - b);
+    let [ans, cnt] = [0, 0];
+    for (let i = 1; i < nums.length; ++i) {
+        if (nums[i] !== nums[i - 1]) {
+            ++cnt;
+        }
+        ans += cnt;
+    }
+    return ans;
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var reductionOperations = function (nums) {
+    nums.sort((a, b) => a - b);
+    let [ans, cnt] = [0, 0];
+    for (let i = 1; i < nums.length; ++i) {
+        if (nums[i] !== nums[i - 1]) {
+            ++cnt;
+        }
+        ans += cnt;
+    }
+    return ans;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int ReductionOperations(int[] nums) {
+        Array.Sort(nums);
+        int ans = 0, cnt = 0;
+        for (int i = 1; i < nums.Length; i++) {
+            if (nums[i] != nums[i - 1]) {
+                ++cnt;
+            }
+            ans += cnt;
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

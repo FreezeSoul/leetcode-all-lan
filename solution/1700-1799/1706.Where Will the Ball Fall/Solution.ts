@@ -1,7 +1,6 @@
 function findBall(grid: number[][]): number[] {
     const m = grid.length;
     const n = grid[0].length;
-    const res = new Array(n).fill(0);
     const dfs = (i: number, j: number) => {
         if (i === m) {
             return j;
@@ -18,8 +17,5 @@ function findBall(grid: number[][]): number[] {
             return dfs(i + 1, j - 1);
         }
     };
-    for (let i = 0; i < n; i++) {
-        res[i] = dfs(0, i);
-    }
-    return res;
+    return Array.from({ length: n }, (_, j) => dfs(0, j));
 }

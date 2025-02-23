@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2025.Maximum%20Number%20of%20Ways%20to%20Partition%20an%20Array/README_EN.md
+rating: 2217
+source: Biweekly Contest 62 Q4
+tags:
+    - Array
+    - Hash Table
+    - Counting
+    - Enumeration
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2025. Maximum Number of Ways to Partition an Array](https://leetcode.com/problems/maximum-number-of-ways-to-partition-an-array)
 
 [中文文档](/solution/2000-2099/2025.Maximum%20Number%20of%20Ways%20to%20Partition%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code> of length <code>n</code>. The number of ways to <strong>partition</strong> <code>nums</code> is the number of <code>pivot</code> indices that satisfy both conditions:</p>
 
@@ -55,11 +73,27 @@ There are four ways to partition the array.
 	<li><code>-10<sup>5</sup> &lt;= k, nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Sum + Hash Table
+
+We can preprocess to get the prefix sum array $s$ corresponding to the array $nums$, where $s[i]$ represents the sum of the array $nums[0,...i-1]$. Therefore, the sum of all elements in the array is $s[n - 1]$.
+
+If we do not modify the array $nums$, the condition for the sums of the two subarrays to be equal is that $s[n - 1]$ must be even. If $s[n - 1]$ is even, then we calculate $ans = \frac{right[s[n - 1] / 2]}{2}$.
+
+If we modify the array $nums$, we can enumerate each modification position $i$, change $nums[i]$ to $k$, then the change in the total sum of the array is $d = k - nums[i]$. At this time, the sum of the left part of $i$ remains unchanged, so the legal split must satisfy $s[i] = s[n - 1] + d - s[i]$, that is, $s[i] = \frac{s[n - 1] + d}{2}$. Each prefix sum of the right part has increased by $d$, so the legal split must satisfy $s[i] + d = s[n - 1] + d - (s[i] + d)$, that is, $s[i] = \frac{s[n - 1] - d}{2}$. We use hash tables $left$ and $right$ to record the number of times each prefix sum appears in the left and right parts, respectively. Then we can calculate $ans = max(ans, left[\frac{s[n - 1] + d}{2}]) + right[\frac{s[n - 1] - d}{2}]$.
+
+Finally, we return $ans$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -87,7 +121,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -153,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func waysToPartition(nums []int, k int) (ans int) {
@@ -184,10 +218,8 @@ func waysToPartition(nums []int, k int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

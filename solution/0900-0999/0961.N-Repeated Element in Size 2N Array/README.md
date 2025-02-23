@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0961.N-Repeated%20Element%20in%20Size%202N%20Array/README.md
+tags:
+    - 数组
+    - 哈希表
+---
+
+<!-- problem:start -->
+
 # [961. 在长度 2N 的数组中找出重复 N 次的元素](https://leetcode.cn/problems/n-repeated-element-in-size-2n-array)
 
 [English Version](/solution/0900-0999/0961.N-Repeated%20Element%20in%20Size%202N%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，该数组具有以下属性：</p>
 
@@ -54,68 +65,95 @@
 	<li><code>nums</code> 由 <code>n + 1</code> 个<strong> 不同的</strong> 元素组成，且其中一个元素恰好重复 <code>n</code> 次</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-长度为 `2N`，共 `N+1` 个不同元素，其中一个元素出现 `N` 次，说明其它元素各不相同。
+### 方法一：哈希表
 
-遍历数组，只要出现重复元素，它就是我们要找的重复 `N` 次的元素。
+由于数组 $nums$ 一共有 $2n$ 个元素，其中有 $n + 1$ 个不同的元素，且有一个元素重复了 $n$ 次，说明数组中的其余 $n$ 个元素都是不同的。
+
+因此，我们只需要遍历数组 $nums$，用哈希表 $s$ 记录遍历过的元素。当遍历到某个元素 $x$ 时，如果 $x$ 在哈希表 $s$ 中已经存在，说明 $x$ 是重复的元素，直接返回 $x$ 即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def repeatedNTimes(self, nums: List[int]) -> int:
         s = set()
-        for num in nums:
-            if num in s:
-                return num
-            s.add(num)
+        for x in nums:
+            if x in s:
+                return x
+            s.add(x)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int repeatedNTimes(int[] nums) {
-        Set<Integer> s = new HashSet<>();
-        for (int num : nums) {
-            if (s.contains(num)) {
-                return num;
+        Set<Integer> s = new HashSet<>(nums.length / 2 + 1);
+        for (int i = 0;; ++i) {
+            if (!s.add(nums[i])) {
+                return nums[i];
             }
-            s.add(num);
         }
-        return -1;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int repeatedNTimes(vector<int>& nums) {
         unordered_set<int> s;
-        for (auto& num : nums) {
-            if (s.find(num) != s.end()) {
-                return num;
+        for (int i = 0;; ++i) {
+            if (s.count(nums[i])) {
+                return nums[i];
             }
-            s.insert(num);
+            s.insert(nums[i]);
         }
-        return -1;
     }
 };
 ```
 
-### **JavaScript**
+#### Go
+
+```go
+func repeatedNTimes(nums []int) int {
+	s := map[int]bool{}
+	for i := 0; ; i++ {
+		if s[nums[i]] {
+			return nums[i]
+		}
+		s[nums[i]] = true
+	}
+}
+```
+
+#### TypeScript
+
+```ts
+function repeatedNTimes(nums: number[]): number {
+    const s: Set<number> = new Set();
+    for (const x of nums) {
+        if (s.has(x)) {
+            return x;
+        }
+        s.add(x);
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -124,20 +162,17 @@ public:
  */
 var repeatedNTimes = function (nums) {
     const s = new Set();
-    for (const num of nums) {
-        if (s.has(num)) {
-            return num;
+    for (const x of nums) {
+        if (s.has(x)) {
+            return x;
         }
-        s.add(num);
+        s.add(x);
     }
-    return -1;
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

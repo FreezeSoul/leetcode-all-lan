@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0778.Swim%20in%20Rising%20Water/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Union Find
+    - Array
+    - Binary Search
+    - Matrix
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [778. Swim in Rising Water](https://leetcode.com/problems/swim-in-rising-water)
 
 [中文文档](/solution/0700-0799/0778.Swim%20in%20Rising%20Water/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an <code>n x n</code> integer matrix <code>grid</code> where each value <code>grid[i][j]</code> represents the elevation at that point <code>(i, j)</code>.</p>
 
@@ -43,11 +61,17 @@ We need to wait until time 16 so that (0, 0) and (4, 4) are connected.
 	<li>Each value <code>grid[i][j]</code> is <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -74,7 +98,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -119,41 +143,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function swimInWater(grid: number[][]): number {
-    const m = grid.length,
-        n = grid[0].length;
-    let visited = Array.from({ length: m }, () => new Array(n).fill(false));
-    let ans = 0;
-    let stack = [[0, 0, grid[0][0]]];
-    const dir = [
-        [0, 1],
-        [0, -1],
-        [1, 0],
-        [-1, 0],
-    ];
-
-    while (stack.length) {
-        let [i, j] = stack.shift();
-        ans = Math.max(grid[i][j], ans);
-        if (i == m - 1 && j == n - 1) break;
-        for (let [dx, dy] of dir) {
-            let x = i + dx,
-                y = j + dy;
-            if (x < m && x > -1 && y < n && y > -1 && !visited[x][y]) {
-                visited[x][y] = true;
-                stack.push([x, y, grid[x][y]]);
-            }
-        }
-        stack.sort((a, b) => a[2] - b[2]);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -188,7 +178,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func swimInWater(grid [][]int) int {
@@ -227,10 +217,119 @@ func swimInWater(grid [][]int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function swimInWater(grid: number[][]): number {
+    const m = grid.length,
+        n = grid[0].length;
+    let visited = Array.from({ length: m }, () => new Array(n).fill(false));
+    let ans = 0;
+    let stack = [[0, 0, grid[0][0]]];
+    const dir = [
+        [0, 1],
+        [0, -1],
+        [1, 0],
+        [-1, 0],
+    ];
+
+    while (stack.length) {
+        let [i, j] = stack.shift();
+        ans = Math.max(grid[i][j], ans);
+        if (i == m - 1 && j == n - 1) break;
+        for (let [dx, dy] of dir) {
+            let x = i + dx,
+                y = j + dy;
+            if (x < m && x > -1 && y < n && y > -1 && !visited[x][y]) {
+                visited[x][y] = true;
+                stack.push([x, y, grid[x][y]]);
+            }
+        }
+        stack.sort((a, b) => a[2] - b[2]);
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+const DIR: [(i32, i32); 4] = [(-1, 0), (1, 0), (0, -1), (0, 1)];
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn swim_in_water(grid: Vec<Vec<i32>>) -> i32 {
+        let n = grid.len();
+        let m = grid[0].len();
+        let mut ret_time = 0;
+        let mut disjoint_set: Vec<usize> = vec![0; n * m];
+
+        // Initialize the disjoint set
+        for i in 0..n * m {
+            disjoint_set[i] = i;
+        }
+
+        loop {
+            if Self::check_and_union(&grid, &mut disjoint_set, ret_time) {
+                break;
+            }
+            // Otherwise, keep checking
+            ret_time += 1;
+        }
+
+        ret_time
+    }
+
+    #[allow(dead_code)]
+    fn check_and_union(grid: &Vec<Vec<i32>>, d_set: &mut Vec<usize>, cur_time: i32) -> bool {
+        let n = grid.len();
+        let m = grid[0].len();
+
+        for i in 0..n {
+            for j in 0..m {
+                if grid[i][j] != cur_time {
+                    continue;
+                }
+                // Otherwise, let's union the square with its neighbors
+                for (dx, dy) in DIR {
+                    let x = dx + (i as i32);
+                    let y = dy + (j as i32);
+                    if Self::check_bounds(x, y, n as i32, m as i32)
+                        && grid[x as usize][y as usize] <= cur_time
+                    {
+                        Self::union(i * m + j, (x as usize) * m + (y as usize), d_set);
+                    }
+                }
+            }
+        }
+
+        Self::find(0, d_set) == Self::find(n * m - 1, d_set)
+    }
+
+    #[allow(dead_code)]
+    fn find(x: usize, d_set: &mut Vec<usize>) -> usize {
+        if d_set[x] != x {
+            d_set[x] = Self::find(d_set[x], d_set);
+        }
+        d_set[x]
+    }
+
+    #[allow(dead_code)]
+    fn union(x: usize, y: usize, d_set: &mut Vec<usize>) {
+        let p_x = Self::find(x, d_set);
+        let p_y = Self::find(y, d_set);
+        d_set[p_x] = p_y;
+    }
+
+    #[allow(dead_code)]
+    fn check_bounds(i: i32, j: i32, n: i32, m: i32) -> bool {
+        i >= 0 && i < n && j >= 0 && j < m
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

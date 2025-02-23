@@ -1,8 +1,25 @@
-# [1099. Two Sum Less Than K](https://leetcode.com/problems/two-sum-less-than-k)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1099.Two%20Sum%20Less%20Than%20K/README_EN.md
+rating: 1245
+source: Biweekly Contest 3 Q1
+tags:
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [1099. Two Sum Less Than K 🔒](https://leetcode.com/problems/two-sum-less-than-k)
 
 [中文文档](/solution/1000-1099/1099.Two%20Sum%20Less%20Than%20K/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array <code>nums</code> of integers and&nbsp;integer <code>k</code>, return the maximum <code>sum</code> such that there exists <code>i &lt; j</code> with <code>nums[i] + nums[j] = sum</code> and <code>sum &lt; k</code>. If no <code>i</code>, <code>j</code> exist satisfying this equation, return <code>-1</code>.</p>
 
@@ -32,11 +49,25 @@
 	<li><code>1 &lt;= k &lt;= 2000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Binary Search
+
+We can first sort the array $nums$, and initialize the answer as $-1$.
+
+Next, we enumerate each element $nums[i]$ in the array, and find the maximum $nums[j]$ in the array that satisfies $nums[j] + nums[i] < k$. Here, we can use binary search to speed up the search process. If we find such a $nums[j]$, then we can update the answer, i.e., $ans = \max(ans, nums[i] + nums[j])$.
+
+After the enumeration ends, return the answer.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -50,22 +81,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def twoSumLessThanK(self, nums: List[int], k: int) -> int:
-        nums.sort()
-        i, j = 0, len(nums) - 1
-        ans = -1
-        while i < j:
-            if (s := nums[i] + nums[j]) < k:
-                ans = max(ans, s)
-                i += 1
-            else:
-                j -= 1
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -96,6 +112,97 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int twoSumLessThanK(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int ans = -1, n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            int j = lower_bound(nums.begin() + i + 1, nums.end(), k - nums[i]) - nums.begin() - 1;
+            if (i < j) {
+                ans = max(ans, nums[i] + nums[j]);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func twoSumLessThanK(nums []int, k int) int {
+	sort.Ints(nums)
+	ans := -1
+	for i, x := range nums {
+		j := sort.SearchInts(nums[i+1:], k-x) + i
+		if v := nums[i] + nums[j]; i < j && ans < v {
+			ans = v
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function twoSumLessThanK(nums: number[], k: number): number {
+    nums.sort((a, b) => a - b);
+    let ans = -1;
+    for (let i = 0, j = nums.length - 1; i < j; ) {
+        const s = nums[i] + nums[j];
+        if (s < k) {
+            ans = Math.max(ans, s);
+            ++i;
+        } else {
+            --j;
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Sorting + Two Pointers
+
+Similar to Solution 1, we can first sort the array $nums$, and initialize the answer as $-1$.
+
+Next, we use two pointers $i$ and $j$ to point to the left and right ends of the array, respectively. Each time we judge whether $s = nums[i] + nums[j]$ is less than $k$. If it is less than $k$, then we can update the answer, i.e., $ans = \max(ans, s)$, and move $i$ one step to the right, otherwise move $j$ one step to the left.
+
+After the enumeration ends, return the answer.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array $nums$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def twoSumLessThanK(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        i, j = 0, len(nums) - 1
+        ans = -1
+        while i < j:
+            if (s := nums[i] + nums[j]) < k:
+                ans = max(ans, s)
+                i += 1
+            else:
+                j -= 1
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int twoSumLessThanK(int[] nums, int k) {
@@ -115,24 +222,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int twoSumLessThanK(vector<int>& nums, int k) {
-        sort(nums.begin(), nums.end());
-        int ans = -1, n = nums.size();
-        for (int i = 0; i < n; ++i) {
-            int j = lower_bound(nums.begin() + i + 1, nums.end(), k - nums[i]) - nums.begin() - 1;
-            if (i < j) {
-                ans = max(ans, nums[i] + nums[j]);
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -154,21 +244,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func twoSumLessThanK(nums []int, k int) int {
-	sort.Ints(nums)
-	ans := -1
-	for i, x := range nums {
-		j := sort.SearchInts(nums[i+1:], k-x) + i
-		if v := nums[i] + nums[j]; i < j && ans < v {
-			ans = v
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func twoSumLessThanK(nums []int, k int) int {
@@ -184,38 +260,10 @@ func twoSumLessThanK(nums []int, k int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function twoSumLessThanK(nums: number[], k: number): number {
-    nums.sort((a, b) => a - b);
-    let ans = -1;
-    for (let i = 0, j = nums.length - 1; i < j; ) {
-        const s = nums[i] + nums[j];
-        if (s < k) {
-            ans = Math.max(ans, s);
-            ++i;
-        } else {
-            --j;
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

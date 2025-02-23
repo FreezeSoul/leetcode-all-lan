@@ -1,14 +1,30 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1349.Maximum%20Students%20Taking%20Exam/README.md
+rating: 2385
+source: 第 175 场周赛 Q4
+tags:
+    - 位运算
+    - 数组
+    - 动态规划
+    - 状态压缩
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1349. 参加考试的最大学生数](https://leetcode.cn/problems/maximum-students-taking-exam)
 
 [English Version](/solution/1300-1399/1349.Maximum%20Students%20Taking%20Exam/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个&nbsp;<code>m&nbsp;* n</code>&nbsp;的矩阵 <code>seats</code>&nbsp;表示教室中的座位分布。如果座位是坏的（不可用），就用&nbsp;<code>&#39;#&#39;</code>&nbsp;表示；否则，用&nbsp;<code>&#39;.&#39;</code>&nbsp;表示。</p>
+<p>给你一个&nbsp;<code>m&nbsp;* n</code>&nbsp;的矩阵 <code>seats</code>&nbsp;表示教室中的座位分布。如果座位是坏的（不可用），就用&nbsp;<code>'#'</code>&nbsp;表示；否则，用&nbsp;<code>'.'</code>&nbsp;表示。</p>
 
-<p>学生可以看到左侧、右侧、左上、右上这四个方向上紧邻他的学生的答卷，但是看不到直接坐在他前面或者后面的学生的答卷。请你计算并返回该考场可以容纳的一起参加考试且无法作弊的最大学生人数。</p>
+<p>学生可以看到左侧、右侧、左上、右上这四个方向上紧邻他的学生的答卷，但是看不到直接坐在他前面或者后面的学生的答卷。请你计算并返回该考场可以容纳的同时参加考试且无法作弊的&nbsp;<strong>最大&nbsp;</strong>学生人数。</p>
 
 <p>学生必须坐在状况良好的座位上。</p>
 
@@ -16,33 +32,36 @@
 
 <p><strong>示例 1：</strong></p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1300-1399/1349.Maximum%20Students%20Taking%20Exam/images/image.png" style="height: 197px; width: 339px;"></p>
+<p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1300-1399/1349.Maximum%20Students%20Taking%20Exam/images/image.png" style="height: 197px; width: 339px;" /></p>
 
-<pre><strong>输入：</strong>seats = [[&quot;#&quot;,&quot;.&quot;,&quot;#&quot;,&quot;#&quot;,&quot;.&quot;,&quot;#&quot;],
-&nbsp;             [&quot;.&quot;,&quot;#&quot;,&quot;#&quot;,&quot;#&quot;,&quot;#&quot;,&quot;.&quot;],
-&nbsp;             [&quot;#&quot;,&quot;.&quot;,&quot;#&quot;,&quot;#&quot;,&quot;.&quot;,&quot;#&quot;]]
+<pre>
+<strong>输入：</strong>seats = [["#",".","#","#",".","#"],
+&nbsp;             [".","#","#","#","#","."],
+&nbsp;             ["#",".","#","#",".","#"]]
 <strong>输出：</strong>4
 <strong>解释：</strong>教师可以让 4 个学生坐在可用的座位上，这样他们就无法在考试中作弊。 
 </pre>
 
 <p><strong>示例 2：</strong></p>
 
-<pre><strong>输入：</strong>seats = [[&quot;.&quot;,&quot;#&quot;],
-&nbsp;             [&quot;#&quot;,&quot;#&quot;],
-&nbsp;             [&quot;#&quot;,&quot;.&quot;],
-&nbsp;             [&quot;#&quot;,&quot;#&quot;],
-&nbsp;             [&quot;.&quot;,&quot;#&quot;]]
+<pre>
+<strong>输入：</strong>seats = [[".","#"],
+&nbsp;             ["#","#"],
+&nbsp;             ["#","."],
+&nbsp;             ["#","#"],
+&nbsp;             [".","#"]]
 <strong>输出：</strong>3
 <strong>解释：</strong>让所有学生坐在可用的座位上。
 </pre>
 
 <p><strong>示例 3：</strong></p>
 
-<pre><strong>输入：</strong>seats = [[&quot;#&quot;,&quot;.&quot;,&quot;<strong>.</strong>&quot;,&quot;.&quot;,&quot;#&quot;],
-&nbsp;             [&quot;<strong>.</strong>&quot;,&quot;#&quot;,&quot;<strong>.</strong>&quot;,&quot;#&quot;,&quot;<strong>.</strong>&quot;],
-&nbsp;             [&quot;<strong>.</strong>&quot;,&quot;.&quot;,&quot;#&quot;,&quot;.&quot;,&quot;<strong>.</strong>&quot;],
-&nbsp;             [&quot;<strong>.</strong>&quot;,&quot;#&quot;,&quot;<strong>.</strong>&quot;,&quot;#&quot;,&quot;<strong>.</strong>&quot;],
-&nbsp;             [&quot;#&quot;,&quot;.&quot;,&quot;<strong>.</strong>&quot;,&quot;.&quot;,&quot;#&quot;]]
+<pre>
+<strong>输入：</strong>seats = [["#",".","<strong>.</strong>",".","#"],
+&nbsp;             ["<strong>.</strong>","#","<strong>.</strong>","#","<strong>.</strong>"],
+&nbsp;             ["<strong>.</strong>",".","#",".","<strong>.</strong>"],
+&nbsp;             ["<strong>.</strong>","#","<strong>.</strong>","#","<strong>.</strong>"],
+&nbsp;             ["#",".","<strong>.</strong>",".","#"]]
 <strong>输出：</strong>10
 <strong>解释：</strong>让学生坐在第 1、3 和 5 列的可用座位上。
 </pre>
@@ -52,18 +71,20 @@
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>seats</code>&nbsp;只包含字符&nbsp;<code>&#39;.&#39;&nbsp;和</code><code>&#39;#&#39;</code></li>
+	<li><code>seats</code>&nbsp;只包含字符&nbsp;<code>'.'&nbsp;和</code><code>'#'</code></li>
 	<li><code>m ==&nbsp;seats.length</code></li>
 	<li><code>n ==&nbsp;seats[i].length</code></li>
 	<li><code>1 &lt;= m &lt;= 8</code></li>
 	<li><code>1 &lt;= n &lt;= 8</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + 记忆化搜索**
+### 方法一：状态压缩 + 记忆化搜索
 
 我们注意到，每个座位有两种状态：可选和不可选。因此，我们可以使用二进制数来表示每一行的座位状态，其中 $1$ 表示可选，而 $0$ 表示不可选。例如，对于示例 $1$ 中的第一行，我们可以表示为 $010010$。因此，我们将初始座位转换为一个一维数组 $ss$，其中 $ss[i]$ 表示第 $i$ 行的座位状态。
 
@@ -74,7 +95,7 @@
 -   状态 $mask$ 不能选择 $seat$ 之外的座位；
 -   状态 $mask$ 不能选择相邻的座位。
 
-如果满足条件，我们求出当前行选择的座位个数 $cnt$，如果当前是最后一行，则更新函数的返回值，即 $ans = max(ans, cnt)$。否则，我们继续递归地求解下一行的最大人数，下一行的座位状态 $nxt = ss[i + 1]$，并且需要排除当前行已选座位的左右两侧。然后我们递归地求解下一行的最大人数，即 $ans = max(ans, cnt + dfs(nxt, i + 1))$。
+如果满足条件，我们求出当前行选择的座位个数 $cnt$，如果当前是最后一行，则更新函数的返回值，即 $ans = \max(ans, cnt)$。否则，我们继续递归地求解下一行的最大人数，下一行的座位状态 $nxt = ss[i + 1]$，并且需要排除当前行已选座位的左右两侧。然后我们递归地求解下一行的最大人数，即 $ans = \max(ans, cnt + dfs(nxt, i + 1))$。
 
 最后，我们将 $ans$ 作为函数的返回值返回。
 
@@ -84,9 +105,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -119,9 +138,7 @@ class Solution:
         return dfs(ss[0], 0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -168,7 +185,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -211,7 +228,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxStudents(seats [][]byte) int {
@@ -254,19 +271,51 @@ func maxStudents(seats [][]byte) int {
 	}
 	return dfs(ss[0], 0)
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maxStudents(seats: string[][]): number {
+    const m: number = seats.length;
+    const n: number = seats[0].length;
+    const ss: number[] = Array(m).fill(0);
+    const f: number[][] = Array.from({ length: 1 << n }, () => Array(m).fill(-1));
+    for (let i = 0; i < m; ++i) {
+        for (let j = 0; j < n; ++j) {
+            if (seats[i][j] === '.') {
+                ss[i] |= 1 << j;
+            }
+        }
+    }
+
+    const dfs = (seat: number, i: number): number => {
+        if (f[seat][i] !== -1) {
+            return f[seat][i];
+        }
+        let ans: number = 0;
+        for (let mask = 0; mask < 1 << n; ++mask) {
+            if ((seat | mask) !== seat || (mask & (mask << 1)) !== 0) {
+                continue;
+            }
+            const cnt: number = mask.toString(2).split('1').length - 1;
+            if (i === m - 1) {
+                ans = Math.max(ans, cnt);
+            } else {
+                let nxt: number = ss[i + 1];
+                nxt &= ~(mask >> 1);
+                nxt &= ~(mask << 1);
+                ans = Math.max(ans, cnt + dfs(nxt, i + 1));
+            }
+        }
+        return (f[seat][i] = ans);
+    };
+    return dfs(ss[0], 0);
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

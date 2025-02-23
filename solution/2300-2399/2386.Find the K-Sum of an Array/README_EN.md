@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2386.Find%20the%20K-Sum%20of%20an%20Array/README_EN.md
+rating: 2647
+source: Weekly Contest 307 Q4
+tags:
+    - Array
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [2386. Find the K-Sum of an Array](https://leetcode.com/problems/find-the-k-sum-of-an-array)
 
 [中文文档](/solution/2300-2399/2386.Find%20the%20K-Sum%20of%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> and a <strong>positive</strong> integer <code>k</code>. You can choose any <strong>subsequence</strong> of the array and sum all of its elements together.</p>
 
@@ -43,21 +59,39 @@ The 5-Sum of the array is 2.
 	<li><code>1 &lt;= k &lt;= min(2000, 2<sup>n</sup>)</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Priority Queue (Min-Heap)
+
+First, we find the maximum subarray sum $mx$, which is the sum of all positive numbers.
+
+It can be observed that the sum of other subarrays can be considered as the maximum subarray sum minus the sum of other parts of the subarray. Therefore, we can convert the problem into finding the $k$-th smallest subarray sum.
+
+We only need to sort all numbers in ascending order by their absolute values, then build a min-heap to store the tuple $(s, i)$, where $s$ is the current sum and $i$ is the index of the next number to be selected in the subarray.
+
+Each time, we extract the top of the heap and insert two new situations: one is to select the next number, and the other is to select the next number but not the current number.
+
+Since the array is sorted in ascending order, this method can traverse all subarray sums in order without omission.
+
+The time complexity is $O(n \times \log n + k \times \log k)$, where $n$ is the length of the array $\textit{nums}$. The space complexity is $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def kSum(self, nums: List[int], k: int) -> int:
         mx = 0
-        for i, v in enumerate(nums):
-            if v > 0:
-                mx += v
+        for i, x in enumerate(nums):
+            if x > 0:
+                mx += x
             else:
-                nums[i] = -v
+                nums[i] = -x
         nums.sort()
         h = [(0, 0)]
         for _ in range(k - 1):
@@ -69,7 +103,7 @@ class Solution:
         return mx - h[0][0]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -103,11 +137,9 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
-using pli = pair<long long, int>;
-
 class Solution {
 public:
     long long kSum(vector<int>& nums, int k) {
@@ -121,6 +153,7 @@ public:
             }
         }
         sort(nums.begin(), nums.end());
+        using pli = pair<long long, int>;
         priority_queue<pli, vector<pli>, greater<pli>> pq;
         pq.push({0, 0});
         while (--k) {
@@ -140,14 +173,14 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func kSum(nums []int, k int) int64 {
 	mx := 0
-	for i, v := range nums {
-		if v > 0 {
-			mx += v
+	for i, x := range nums {
+		if x > 0 {
+			mx += x
 		} else {
 			nums[i] *= -1
 		}
@@ -170,24 +203,15 @@ func kSum(nums []int, k int) int64 {
 type pair struct{ sum, i int }
 type hp []pair
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].sum < h[j].sum }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].sum < h[j].sum }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

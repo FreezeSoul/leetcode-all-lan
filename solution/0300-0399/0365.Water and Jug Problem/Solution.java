@@ -1,15 +1,31 @@
 class Solution {
+    private Set<Long> vis = new HashSet<>();
+    private int x, y, z;
+
     public boolean canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
-        if (jug1Capacity + jug2Capacity < targetCapacity) {
-            return false;
-        }
-        if (jug1Capacity == 0 || jug2Capacity == 0) {
-            return targetCapacity == 0 || jug1Capacity + jug2Capacity == targetCapacity;
-        }
-        return targetCapacity % gcd(jug1Capacity, jug2Capacity) == 0;
+        x = jug1Capacity;
+        y = jug2Capacity;
+        z = targetCapacity;
+        return dfs(0, 0);
     }
 
-    private int gcd(int a, int b) {
-        return b == 0 ? a : gcd(b, a % b);
+    private boolean dfs(int i, int j) {
+        long st = f(i, j);
+        if (!vis.add(st)) {
+            return false;
+        }
+        if (i == z || j == z || i + j == z) {
+            return true;
+        }
+        if (dfs(x, j) || dfs(i, y) || dfs(0, j) || dfs(i, 0)) {
+            return true;
+        }
+        int a = Math.min(i, y - j);
+        int b = Math.min(j, x - i);
+        return dfs(i - a, j + a) || dfs(i + b, j - b);
+    }
+
+    private long f(int i, int j) {
+        return i * 1000000L + j;
     }
 }

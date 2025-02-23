@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2501.Longest%20Square%20Streak%20in%20an%20Array/README_EN.md
+rating: 1479
+source: Weekly Contest 323 Q2
+tags:
+    - Array
+    - Hash Table
+    - Binary Search
+    - Dynamic Programming
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2501. Longest Square Streak in an Array](https://leetcode.com/problems/longest-square-streak-in-an-array)
 
 [中文文档](/solution/2500-2599/2501.Longest%20Square%20Streak%20in%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>. A subsequence of <code>nums</code> is called a <strong>square streak</strong> if:</p>
 
@@ -44,11 +62,21 @@ It can be shown that every subsequence of length 4 is not a square streak.
 	<li><code>2 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Enumeration
+
+We first use a hash table to record all elements in the array. Then, we enumerate each element in the array as the first element of the subsequence, square this element continuously, and check whether the squared result is in the hash table. If it is, we use the squared result as the next element and continue checking until the squared result is not in the hash table. At this point, we check whether the length of the subsequence is greater than $1$. If it is, we update the answer.
+
+The time complexity is $O(n \times \log \log M)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$, and $M$ is the maximum value of the elements in the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,21 +93,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def longestSquareStreak(self, nums: List[int]) -> int:
-        @cache
-        def dfs(x):
-            if x not in s:
-                return 0
-            return 1 + dfs(x * x)
-
-        s = set(nums)
-        ans = max(dfs(x) for x in nums)
-        return -1 if ans < 2 else ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -103,6 +117,90 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int longestSquareStreak(vector<int>& nums) {
+        unordered_set<long long> s(nums.begin(), nums.end());
+        int ans = -1;
+        for (int& v : nums) {
+            int t = 0;
+            long long x = v;
+            while (s.count(x)) {
+                x *= x;
+                ++t;
+            }
+            if (t > 1) ans = max(ans, t);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func longestSquareStreak(nums []int) int {
+	s := map[int]bool{}
+	for _, v := range nums {
+		s[v] = true
+	}
+	ans := -1
+	for _, v := range nums {
+		t := 0
+		for s[v] {
+			v *= v
+			t++
+		}
+		if t > 1 && t > ans {
+			ans = t
+		}
+	}
+	return ans
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Memoization Search
+
+Similar to Solution 1, we first use a hash table to record all elements in the array. Then, we design a function $\textit{dfs}(x)$, which represents the length of the square wave starting with $x$. The answer is $\max(\textit{dfs}(x))$, where $x$ is an element in the array $\textit{nums}$.
+
+The calculation process of the function $\textit{dfs}(x)$ is as follows:
+
+-   If $x$ is not in the hash table, return $0$.
+-   Otherwise, return $1 + \textit{dfs}(x^2)$.
+
+During the process, we can use memoization, i.e., use a hash table to record the value of the function $\textit{dfs}(x)$ to avoid redundant calculations.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def longestSquareStreak(self, nums: List[int]) -> int:
+        @cache
+        def dfs(x):
+            if x not in s:
+                return 0
+            return 1 + dfs(x * x)
+
+        s = set(nums)
+        ans = max(dfs(x) for x in nums)
+        return -1 if ans < 2 else ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -134,27 +232,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int longestSquareStreak(vector<int>& nums) {
-        unordered_set<long long> s(nums.begin(), nums.end());
-        int ans = -1;
-        for (int& v : nums) {
-            int t = 0;
-            long long x = v;
-            while (s.count(x)) {
-                x *= x;
-                ++t;
-            }
-            if (t > 1) ans = max(ans, t);
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -177,28 +255,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func longestSquareStreak(nums []int) int {
-	s := map[int]bool{}
-	for _, v := range nums {
-		s[v] = true
-	}
-	ans := -1
-	for _, v := range nums {
-		t := 0
-		for s[v] {
-			v *= v
-			t++
-		}
-		if t > 1 && t > ans {
-			ans = t
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func longestSquareStreak(nums []int) (ans int) {
@@ -230,10 +287,138 @@ func longestSquareStreak(nums []int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function longestSquareStreak(nums: number[]): number {
+    const set = new Set(nums);
+    const cache = new Map<number, number>();
+    const dfs = (x: number): number => {
+        if (cache.has(x)) return cache.get(x)!;
+        if (!set.has(x)) return 0;
+        cache.set(x, 1 + dfs(x ** 2));
+        return cache.get(x)!;
+    };
+
+    for (const x of set) dfs(x);
+    const ans = Math.max(...cache.values());
+
+    return ans > 1 ? ans : -1;
+}
 ```
 
+#### JavaScript
+
+```js
+function longestSquareStreak(nums) {
+    const set = new Set(nums);
+    const cache = new Map();
+    const dfs = x => {
+        if (cache.has(x)) return cache.get(x);
+        if (!set.has(x)) return 0;
+        cache.set(x, 1 + dfs(x ** 2));
+        return cache.get(x);
+    };
+
+    for (const x of set) dfs(x);
+    const ans = Math.max(...cache.values());
+
+    return ans > 1 ? ans : -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 3: Counting
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function longestSquareStreak(nums: number[]): number {
+    const cnt: Record<number, number> = {};
+    const squares = new Set<number>();
+
+    for (const x of new Set(nums)) {
+        cnt[x] = (cnt[x] ?? -1) + 1;
+        cnt[x ** 2] = (cnt[x ** 2] ?? -1) + 1;
+    }
+
+    for (const key in cnt) {
+        const x = +key;
+        if (cnt[x] || cnt[x ** 2]) {
+            squares.add(x);
+        }
+    }
+
+    if (squares.size <= 1) return -1;
+
+    const iterator = squares[Symbol.iterator]();
+    let [max, c, x] = [0, 0, iterator.next().value];
+
+    while (x !== undefined) {
+        if (squares.has(x)) {
+            squares.delete(x);
+            x **= 2;
+            c++;
+        } else {
+            max = Math.max(max, c);
+            x = iterator.next().value;
+            c = 0;
+        }
+    }
+
+    return max;
+}
+```
+
+#### JavaScript
+
+```js
+function longestSquareStreak(nums) {
+    const cnt = {};
+    const squares = new Set();
+
+    for (const x of new Set(nums)) {
+        cnt[x] = (cnt[x] ?? -1) + 1;
+        cnt[x ** 2] = (cnt[x ** 2] ?? -1) + 1;
+    }
+
+    for (const key in cnt) {
+        const x = +key;
+        if (cnt[x] || cnt[x ** 2]) {
+            squares.add(x);
+        }
+    }
+
+    if (squares.size <= 1) return -1;
+
+    const iterator = squares[Symbol.iterator]();
+    let [max, c, x] = [0, 0, iterator.next().value];
+
+    while (x !== undefined) {
+        if (squares.has(x)) {
+            squares.delete(x);
+            x **= 2;
+            c++;
+        } else {
+            max = Math.max(max, c);
+            x = iterator.next().value;
+            c = 0;
+        }
+    }
+
+    return max;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

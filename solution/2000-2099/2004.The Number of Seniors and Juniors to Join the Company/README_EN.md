@@ -1,8 +1,20 @@
-# [2004. The Number of Seniors and Juniors to Join the Company](https://leetcode.com/problems/the-number-of-seniors-and-juniors-to-join-the-company)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2004.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2004. The Number of Seniors and Juniors to Join the Company 🔒](https://leetcode.com/problems/the-number-of-seniors-and-juniors-to-join-the-company)
 
 [中文文档](/solution/2000-2099/2004.The%20Number%20of%20Seniors%20and%20Juniors%20to%20Join%20the%20Company/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Candidates</code></p>
 
@@ -14,8 +26,8 @@
 | experience  | enum |
 | salary      | int  |
 +-------------+------+
-employee_id is the primary key column for this table.
-experience is an enum with one of the values (&#39;Senior&#39;, &#39;Junior&#39;).
+employee_id is the column with unique values for this table.
+experience is an ENUM (category) type of values (&#39;Senior&#39;, &#39;Junior&#39;).
 Each row of this table indicates the id of a candidate, their monthly salary, and their experience.
 </pre>
 
@@ -28,11 +40,11 @@ Each row of this table indicates the id of a candidate, their monthly salary, an
 	<li>After hiring the maximum number of seniors, use the remaining budget to hire the largest number of juniors.</li>
 </ol>
 
-<p>Write an SQL query to find the number of seniors and juniors hired under the mentioned criteria.</p>
+<p>Write a solution to find the number of seniors and juniors hired under the mentioned criteria.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -89,14 +101,56 @@ We cannot hire any seniors with the current budget as we need at least $80000 to
 We can hire all three juniors with the remaining budget.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    s AS (
+        SELECT
+            employee_id,
+            SUM(salary) OVER (ORDER BY salary) AS cur
+        FROM Candidates
+        WHERE experience = 'Senior'
+    ),
+    j AS (
+        SELECT
+            employee_id,
+            IFNULL(
+                SELECT
+                    MAX(cur)
+                FROM s
+                WHERE cur <= 70000,
+                0
+            ) + SUM(salary) OVER (ORDER BY salary) AS cur
+        FROM Candidates
+        WHERE experience = 'Junior'
+    )
+SELECT
+    'Senior' AS experience,
+    COUNT(employee_id) AS accepted_candidates
+FROM s
+WHERE cur <= 70000
+UNION ALL
+SELECT
+    'Junior' AS experience,
+    COUNT(employee_id) AS accepted_candidates
+FROM j
+WHERE cur <= 70000;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

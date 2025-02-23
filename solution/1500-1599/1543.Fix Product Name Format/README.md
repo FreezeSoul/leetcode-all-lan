@@ -1,10 +1,20 @@
-# [1543. 产品名称格式修复](https://leetcode.cn/problems/fix-product-name-format)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1543.Fix%20Product%20Name%20Format/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1543. 产品名称格式修复 🔒](https://leetcode.cn/problems/fix-product-name-format)
 
 [English Version](/solution/1500-1599/1543.Fix%20Product%20Name%20Format/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表：<code>Sales</code></p>
 
@@ -16,7 +26,7 @@
 | product_name | varchar |
 | sale_date    | date    |
 +--------------+---------+
-sale_id 是该表主键
+sale_id 是该表具有唯一值的列
 该表的每一行包含了产品的名称及其销售日期
 </pre>
 
@@ -24,7 +34,7 @@ sale_id 是该表主键
 
 <p>因为在 2000 年该表是手工填写的，<code>product_name</code>&nbsp;可能包含前后空格，而且包含大小写。</p>
 
-<p>写一个 SQL 语句报告每个月的销售情况：</p>
+<p>编写一个解决方案报告每个月的销售情况：</p>
 
 <ul>
 	<li><code>product_name</code>&nbsp;是小写字母且不包含前后空格</li>
@@ -43,40 +53,59 @@ sale_id 是该表主键
 <pre>
 <code><strong>输入：</strong>
 Sales</code> 表：
-+------------+------------------+--------------+
-| sale_id    | product_name     | sale_date    |
-+------------+------------------+--------------+
-| 1          |      LCPHONE     | 2000-01-16   |
-| 2    &nbsp;     |    LCPhone       | 2000-01-17   |
-| 3    &nbsp;     |     LcPhOnE     &nbsp;| 2000-02-18   |
-| 4 &nbsp;        |      LCKeyCHAiN  | 2000-02-19   |
-| 5 &nbsp;        |   LCKeyChain     | 2000-02-28   |
-| 6        &nbsp; | Matryoshka     &nbsp; | 2000-03-31   | 
-+------------+------------------+--------------+
++---------+--------------+------------+
+| sale_id | product_name | sale_date  |
++---------+--------------+------------+
+| 1       | LCPHONE      | 2000-01-16 |
+| 2       | LCPhone      | 2000-01-17 |
+| 3       | LcPhOnE      | 2000-02-18 |
+| 4       | LCKeyCHAiN   | 2000-02-19 |
+| 5       | LCKeyChain   | 2000-02-28 |
+| 6       | Matryoshka   | 2000-03-31 |
++---------+--------------+------------+
 <strong>输出：</strong>
-+--------------+--------------+----------+
-| product_name | sale_date    | total    |
-+--------------+--------------+----------+
-| lcphone   &nbsp;  | 2000-01     &nbsp;| 2       &nbsp;|
-| lckeychain   | 2000-02  &nbsp;   | 2       &nbsp;| 
-| lcphone      | 2000-02    &nbsp; | 1       &nbsp;| 
-| matryoshka   | 2000-03 &nbsp;    | 1       &nbsp;| 
-+--------------+--------------+----------+
++--------------+-----------+-------+
+| product_name | sale_date | total |
++--------------+-----------+-------+
+| lckeychain   | 2000-02   | 2     |
+| lcphone      | 2000-01   | 2     |
+| lcphone      | 2000-02   | 1     |
+| matryoshka   | 2000-03   | 1     |
++--------------+-----------+-------+
 <strong>解释：</strong>
-1 月份，卖了 2 个 LcPhones，请注意产品名称是小写的，中间可能包含空格
-2 月份，卖了 2 个 LCKeychains 和 1 个 LCPhone
-3 月份，卖了 1 个 matryoshka</pre>
+一月份售出 2 部 LcPhones。请注意，产品名称不区分大小写，且可能包含空格。 
+二月份售出 2 个 LCKeychains 和 1 部 LCPhone。 
+三月份售出 1 个 Matryoshka。</pre>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            LOWER(TRIM(product_name)) AS product_name,
+            DATE_FORMAT(sale_date, '%Y-%m') AS sale_date
+        FROM Sales
+    )
+SELECT product_name, sale_date, COUNT(1) AS total
+FROM t
+GROUP BY 1, 2
+ORDER BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

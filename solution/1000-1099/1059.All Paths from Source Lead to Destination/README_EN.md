@@ -1,8 +1,21 @@
-# [1059. All Paths from Source Lead to Destination](https://leetcode.com/problems/all-paths-from-source-lead-to-destination)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1059.All%20Paths%20from%20Source%20Lead%20to%20Destination/README_EN.md
+tags:
+    - Graph
+    - Topological Sort
+---
+
+<!-- problem:start -->
+
+# [1059. All Paths from Source Lead to Destination 🔒](https://leetcode.com/problems/all-paths-from-source-lead-to-destination)
 
 [中文文档](/solution/1000-1099/1059.All%20Paths%20from%20Source%20Lead%20to%20Destination/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>edges</code> of a directed graph where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates there is an edge between nodes <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code>, and two nodes <code>source</code> and <code>destination</code> of this graph, determine whether or not all paths starting from <code>source</code> eventually, end at <code>destination</code>, that is:</p>
 
@@ -51,15 +64,23 @@
 	<li>The given graph may have self-loops and parallel edges.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def leadsToDestination(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+    def leadsToDestination(
+        self, n: int, edges: List[List[int]], source: int, destination: int
+    ) -> bool:
         @cache
         def dfs(i):
             if i == destination:
@@ -79,7 +100,7 @@ class Solution:
         return dfs(source)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -123,7 +144,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -160,7 +181,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func leadsToDestination(n int, edges [][]int, source int, destination int) bool {
@@ -195,10 +216,8 @@ func leadsToDestination(n int, edges [][]int, source int, destination int) bool 
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

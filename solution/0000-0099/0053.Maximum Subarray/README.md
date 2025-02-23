@@ -1,14 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0053.Maximum%20Subarray/README.md
+tags:
+    - 数组
+    - 分治
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray)
 
 [English Version](/solution/0000-0099/0053.Maximum%20Subarray/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
 
-<p><strong>子数组 </strong>是数组中的一个连续部分。</p>
+<p><strong><span data-keyword="subarray-nonempty">子数组 </span></strong>是数组中的一个连续部分。</p>
 
 <p>&nbsp;</p>
 
@@ -47,45 +59,163 @@
 
 <p><strong>进阶：</strong>如果你已经实现复杂度为 <code>O(n)</code> 的解法，尝试使用更为精妙的 <strong>分治法</strong> 求解。</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-### 1. 动态规划
+### 方法一：动态规划
 
-设 `dp[i]` 表示 `[0..i]` 中，以 `nums[i]` 结尾的最大子数组和，状态转移方程 `dp[i] = nums[i] + max(dp[i - 1], 0)`。
+我们定义 $f[i]$ 表示以元素 $\textit{nums}[i]$ 为结尾的连续子数组的最大和，初始时 $f[0] = \textit{nums}[0]$，那么最终我们要求的答案即为 $\max_{0 \leq i < n} f[i]$。
 
-由于 `dp[i]` 只与子问题 `dp[i-1]` 有关，故可以用一个变量 f 来表示。
+考虑 $f[i]$，其中 $i \geq 1$，它的状态转移方程为：
 
-### 2. 分治
+$$
+f[i] = \max(f[i - 1] + \textit{nums}[i], \textit{nums}[i])
+$$
 
-最大子数组和可能有三种情况：
+也即：
 
-1. 在数组左半部分
-1. 在数组右半部分
-1. 跨越左右半部分
+$$
+f[i] = \max(f[i - 1], 0) + \textit{nums}[i]
+$$
 
-递归求得三者，返回最大值即可。
+由于 $f[i]$ 只与 $f[i - 1]$ 有关系，因此我们可以只用一个变量 $f$ 来维护对于当前 $f[i]$ 的值是多少，然后进行状态转移即可。答案为 $\max_{0 \leq i < n} f$。
+
+时间复杂度 $O(n)$，其中 $n$ 为数组 $\textit{nums}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-动态规划：
+#### Python3
 
 ```python
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        res = f = nums[0]
-        for num in nums[1:]:
-            f = num + max(f, 0)
-            res = max(res, f)
-        return res
+        ans = f = nums[0]
+        for x in nums[1:]:
+            f = max(f, 0) + x
+            ans = max(ans, f)
+        return ans
 ```
 
-分治：
+#### Java
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int ans = nums[0];
+        for (int i = 1, f = nums[0]; i < nums.length; ++i) {
+            f = Math.max(f, 0) + nums[i];
+            ans = Math.max(ans, f);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int ans = nums[0], f = nums[0];
+        for (int i = 1; i < nums.size(); ++i) {
+            f = max(f, 0) + nums[i];
+            ans = max(ans, f);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxSubArray(nums []int) int {
+	ans, f := nums[0], nums[0]
+	for _, x := range nums[1:] {
+		f = max(f, 0) + x
+		ans = max(ans, f)
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function maxSubArray(nums: number[]): number {
+    let [ans, f] = [nums[0], nums[0]];
+    for (let i = 1; i < nums.length; ++i) {
+        f = Math.max(f, 0) + nums[i];
+        ans = Math.max(ans, f);
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_sub_array(nums: Vec<i32>) -> i32 {
+        let n = nums.len();
+        let mut ans = nums[0];
+        let mut f = nums[0];
+        for i in 1..n {
+            f = f.max(0) + nums[i];
+            ans = ans.max(f);
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function (nums) {
+    let [ans, f] = [nums[0], nums[0]];
+    for (let i = 1; i < nums.length; ++i) {
+        f = Math.max(f, 0) + nums[i];
+        ans = Math.max(ans, f);
+    }
+    return ans;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int MaxSubArray(int[] nums) {
+        int ans = nums[0], f = nums[0];
+        for (int i = 1; i < nums.Length; ++i) {
+            f = Math.Max(f, 0) + nums[i];
+            ans = Math.Max(ans, f);
+        }
+        return ans;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -114,26 +244,7 @@ class Solution:
         return maxSub(nums, left, right)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-动态规划：
-
-```java
-class Solution {
-    public int maxSubArray(int[] nums) {
-        int f = nums[0], res = nums[0];
-        for (int i = 1, n = nums.length; i < n; ++i) {
-            f = nums[i] + Math.max(f, 0);
-            res = Math.max(res, f);
-        }
-        return res;
-    }
-}
-```
-
-分治：
+#### Java
 
 ```java
 class Solution {
@@ -167,97 +278,8 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxSubArray(vector<int>& nums) {
-        int f = nums[0], res = nums[0];
-        for (int i = 1; i < nums.size(); ++i) {
-            f = nums[i] + max(f, 0);
-            res = max(res, f);
-        }
-        return res;
-    }
-};
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var maxSubArray = function (nums) {
-    let f = nums[0],
-        res = nums[0];
-    for (let i = 1; i < nums.length; ++i) {
-        f = nums[i] + Math.max(f, 0);
-        res = Math.max(res, f);
-    }
-    return res;
-};
-```
-
-### **Go**
-
-```go
-func maxSubArray(nums []int) int {
-    f, res := nums[0], nums[0]
-    for i := 1; i < len(nums); i++ {
-        if f > 0 {
-            f += nums[i]
-        } else {
-            f = nums[i]
-        }
-        if f > res {
-            res = f
-        }
-    }
-    return res
-}
-```
-
-### **C#**
-
-```cs
-public class Solution {
-    public int MaxSubArray(int[] nums) {
-        int res = nums[0], f = nums[0];
-        for (int i = 1; i < nums.Length; ++i)
-        {
-            f = nums[i] + Math.Max(f, 0);
-            res = Math.Max(res, f);
-        }
-        return res;
-    }
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn max_sub_array(nums: Vec<i32>) -> i32 {
-        let n = nums.len();
-        let mut res = nums[0];
-        let mut sum = nums[0];
-        for i in 1..n {
-            let num = nums[i];
-            sum = num.max(sum + num);
-            res = res.max(sum);
-        }
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

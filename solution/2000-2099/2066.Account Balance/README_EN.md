@@ -1,8 +1,20 @@
-# [2066. Account Balance](https://leetcode.com/problems/account-balance)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2066.Account%20Balance/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2066. Account Balance 🔒](https://leetcode.com/problems/account-balance)
 
 [中文文档](/solution/2000-2099/2066.Account%20Balance/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Transactions</code></p>
 
@@ -15,18 +27,18 @@
 | type        | ENUM |
 | amount      | int  |
 +-------------+------+
-(account_id, day) is the primary key for this table.
+(account_id, day) is the primary key (combination of columns with unique values) for this table.
 Each row contains information about one transaction, including the transaction type, the day it occurred on, and the amount.
-type is an ENUM of the type (&#39;Deposit&#39;,&#39;Withdraw&#39;) 
+type is an ENUM (category) of the type (&#39;Deposit&#39;,&#39;Withdraw&#39;) 
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the balance of each user after each transaction. You may assume that the balance of each account before any transaction is <code>0</code> and that the balance will never be below <code>0</code> at any moment.</p>
+<p>Write a solution to report the balance of each user after each transaction. You may assume that the balance of each account before any transaction is <code>0</code> and that the balance will never be below <code>0</code> at any moment.</p>
 
 <p>Return the result table <strong>in ascending order</strong> by <code>account_id</code>, then by <code>day</code> in case of a tie.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -65,14 +77,33 @@ Account 2:
 - 2021-12-12 --&gt; withdraw 7000. Balance is 7000 - 7000 = 0.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    account_id,
+    day,
+    SUM(IF(type = 'Deposit', amount, -amount)) OVER (
+        PARTITION BY account_id
+        ORDER BY day
+    ) AS balance
+FROM Transactions
+ORDER BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

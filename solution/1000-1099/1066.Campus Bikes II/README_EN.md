@@ -1,8 +1,26 @@
-# [1066. Campus Bikes II](https://leetcode.com/problems/campus-bikes-ii)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1066.Campus%20Bikes%20II/README_EN.md
+rating: 1885
+source: Biweekly Contest 1 Q3
+tags:
+    - Bit Manipulation
+    - Array
+    - Dynamic Programming
+    - Backtracking
+    - Bitmask
+---
+
+<!-- problem:start -->
+
+# [1066. Campus Bikes II 🔒](https://leetcode.com/problems/campus-bikes-ii)
 
 [中文文档](/solution/1000-1099/1066.Campus%20Bikes%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>On a campus represented as a 2D grid, there are <code>n</code> workers and <code>m</code> bikes, with <code>n &lt;= m</code>. Each worker and bike is a 2D coordinate on this grid.</p>
 
@@ -51,11 +69,17 @@ We first assign bike 0 to worker 0, then assign bike 1 to worker 1 or worker 2, 
 	<li>All the workers and the bikes locations are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,11 +91,14 @@ class Solution:
             for j in range(1 << m):
                 for k, (x2, y2) in enumerate(bikes):
                     if j >> k & 1:
-                        f[i][j] = min(f[i][j], f[i - 1][j ^ (1 << k)] + abs(x1 - x2) + abs(y1 - y2))
+                        f[i][j] = min(
+                            f[i][j],
+                            f[i - 1][j ^ (1 << k)] + abs(x1 - x2) + abs(y1 - y2),
+                        )
         return min(f[n])
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +126,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +151,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func assignBikes(workers [][]int, bikes [][]int) int {
@@ -148,18 +175,7 @@ func assignBikes(workers [][]int, bikes [][]int) int {
 			}
 		}
 	}
-	ans := inf
-	for _, x := range f[n] {
-		ans = min(ans, x)
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return slices.Min(f[n])
 }
 
 func abs(x int) int {
@@ -170,16 +186,14 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function assignBikes(workers: number[][], bikes: number[][]): number {
     const n = workers.length;
     const m = bikes.length;
     const inf = 1 << 30;
-    const f: number[][] = new Array(n + 1)
-        .fill(0)
-        .map(() => new Array(1 << m).fill(inf));
+    const f: number[][] = new Array(n + 1).fill(0).map(() => new Array(1 << m).fill(inf));
     f[0][0] = 0;
     for (let i = 1; i <= n; ++i) {
         for (let j = 0; j < 1 << m; ++j) {
@@ -197,10 +211,8 @@ function assignBikes(workers: number[][], bikes: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

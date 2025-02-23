@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0739.Daily%20Temperatures/README.md
+tags:
+    - 栈
+    - 数组
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [739. 每日温度](https://leetcode.cn/problems/daily-temperatures)
 
 [English Version](/solution/0700-0799/0739.Daily%20Temperatures/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数数组&nbsp;<code>temperatures</code>&nbsp;，表示每天的温度，返回一个数组&nbsp;<code>answer</code>&nbsp;，其中&nbsp;<code>answer[i]</code>&nbsp;是指对于第 <code>i</code> 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用&nbsp;<code>0</code> 来代替。</p>
 
@@ -39,52 +51,31 @@
 	<li><code>30 &lt;=&nbsp;temperatures[i]&nbsp;&lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈**
+### 方法一：单调栈
 
-单调栈常见模型：找出每个数左/右边**离它最近的**且**比它大/小的数**。模板：
+本题需要我们找出每个元素右边第一个比它大的元素的位置，这是一个典型的单调栈应用场景。
 
-```python
-stk = []
-for i in range(n):
-    while stk and check(stk[-1], i):
-        stk.pop()
-    stk.append(i)
-```
+我们从右往左遍历数组 $\textit{temperatures}$，维护一个从栈顶到栈底温度单调递增的栈 $\textit{stk}$，栈中存储的是数组元素的下标。对于每个元素 $\textit{temperatures}[i]$，我们不断将其与栈顶元素进行比较，如果栈顶元素对应的温度小于等于 $\textit{temperatures}[i]$，那么循环将栈顶元素弹出，直到栈为空或者栈顶元素对应的温度大于 $\textit{temperatures}[i]$。此时，栈顶元素就是右边第一个比 $\textit{temperatures}[i]$ 大的元素，距离为 $\textit{stk.top()} - i$，我们更新答案数组。然后将 $\textit{temperatures}[i]$ 入栈，继续遍历。
 
-对于本题，我们需要找出每个数右边**离它最近的**且**比它大的数**，因此我们可以从右往左遍历数组，且需要维护一个从栈底到栈顶单调递减的栈。
+遍历结束后，返回答案数组即可。
 
-对于当前遍历到的数 `temperatures[i]`，如果栈顶元素 `temperatures[stk[-1]]` 小于等于 `temperatures[i]`，则弹出栈顶元素，直到栈为空或者栈顶元素大于 `temperatures[i]`。如果此时栈不为空，那么栈顶元素就是 `temperatures[i]` 右边离它最近的且比它大的数，更新 `ans[i] = stk[-1] - i`。接着，我们将 $i$ 入栈，继续遍历下一个数。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 `temperatures` 数组的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{temperatures}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        ans = [0] * len(temperatures)
         stk = []
-        for i, t in enumerate(temperatures):
-            while stk and temperatures[stk[-1]] < t:
-                j = stk.pop()
-                ans[j] = i - j
-            stk.append(i)
-        return ans
-```
-
-```python
-class Solution:
-    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         n = len(temperatures)
-        stk = []
         ans = [0] * n
         for i in range(n - 1, -1, -1):
             while stk and temperatures[stk[-1]] <= temperatures[i]:
@@ -95,27 +86,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int[] dailyTemperatures(int[] temperatures) {
-        int n = temperatures.length;
-        int[] ans = new int[n];
-        Deque<Integer> stk = new ArrayDeque<>();
-        for (int i = 0; i < n; ++i) {
-            while (!stk.isEmpty() && temperatures[stk.peek()] < temperatures[i]) {
-                int j = stk.pop();
-                ans[j] = i - j;
-            }
-            stk.push(i);
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -137,21 +108,21 @@ class Solution {
 }
 ```
 
-### **C++**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temperatures) {
         int n = temperatures.size();
-        vector<int> ans(n);
         stack<int> stk;
-        for (int i = 0; i < n; ++i) {
-            while (!stk.empty() && temperatures[stk.top()] < temperatures[i]) {
-                ans[stk.top()] = i - stk.top();
+        vector<int> ans(n);
+        for (int i = n - 1; ~i; --i) {
+            while (!stk.empty() && temperatures[stk.top()] <= temperatures[i]) {
                 stk.pop();
+            }
+            if (!stk.empty()) {
+                ans[i] = stk.top() - i;
             }
             stk.push(i);
         }
@@ -160,47 +131,13 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<int> dailyTemperatures(vector<int> &temperatures) {
-        int n = temperatures.size();
-        vector<int> ans(n);
-        stack<int> stk;
-        for (int i = n - 1; ~i; --i)
-        {
-            while (!stk.empty() && temperatures[stk.top()] <= temperatures[i]) stk.pop();
-            if (!stk.empty()) ans[i] = stk.top() - i;
-            stk.push(i);
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-```go
-func dailyTemperatures(temperatures []int) []int {
-	ans := make([]int, len(temperatures))
-	var stk []int
-	for i, t := range temperatures {
-		for len(stk) > 0 && temperatures[stk[len(stk)-1]] < t {
-			j := stk[len(stk)-1]
-			ans[j] = i - j
-			stk = stk[:len(stk)-1]
-		}
-		stk = append(stk, i)
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func dailyTemperatures(temperatures []int) []int {
 	n := len(temperatures)
 	ans := make([]int, n)
-	var stk []int
+	stk := []int{}
 	for i := n - 1; i >= 0; i-- {
 		for len(stk) > 0 && temperatures[stk[len(stk)-1]] <= temperatures[i] {
 			stk = stk[:len(stk)-1]
@@ -214,34 +151,27 @@ func dailyTemperatures(temperatures []int) []int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
 
-```js
-/**
- * @param {number[]} temperatures
- * @return {number[]}
- */
-var dailyTemperatures = function (temperatures) {
+```ts
+function dailyTemperatures(temperatures: number[]): number[] {
     const n = temperatures.length;
-    const ans = new Array(n).fill(0);
-    const stk = [];
-    for (let i = n - 1; i >= 0; --i) {
-        while (
-            stk.length &&
-            temperatures[stk[stk.length - 1]] <= temperatures[i]
-        ) {
+    const ans: number[] = Array(n).fill(0);
+    const stk: number[] = [];
+    for (let i = n - 1; ~i; --i) {
+        while (stk.length && temperatures[stk.at(-1)!] <= temperatures[i]) {
             stk.pop();
         }
         if (stk.length) {
-            ans[i] = stk[stk.length - 1] - i;
+            ans[i] = stk.at(-1)! - i;
         }
         stk.push(i);
     }
     return ans;
-};
+}
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -261,33 +191,60 @@ impl Solution {
 }
 ```
 
-### **TypeScript**
+#### Rust
 
-```ts
-function dailyTemperatures(temperatures: number[]): number[] {
+```rust
+impl Solution {
+    pub fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
+        let n = temperatures.len();
+        let mut stk: Vec<usize> = Vec::new();
+        let mut ans = vec![0; n];
+
+        for i in (0..n).rev() {
+            while let Some(&top) = stk.last() {
+                if temperatures[top] <= temperatures[i] {
+                    stk.pop();
+                } else {
+                    break;
+                }
+            }
+            if let Some(&top) = stk.last() {
+                ans[i] = (top - i) as i32;
+            }
+            stk.push(i);
+        }
+
+        ans
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} temperatures
+ * @return {number[]}
+ */
+var dailyTemperatures = function (temperatures) {
     const n = temperatures.length;
-    const ans = new Array(n).fill(0);
-    const stk: number[] = [];
-    for (let i = n - 1; i >= 0; --i) {
-        while (
-            stk.length &&
-            temperatures[stk[stk.length - 1]] <= temperatures[i]
-        ) {
+    const ans = Array(n).fill(0);
+    const stk = [];
+    for (let i = n - 1; ~i; --i) {
+        while (stk.length && temperatures[stk.at(-1)] <= temperatures[i]) {
             stk.pop();
         }
         if (stk.length) {
-            ans[i] = stk[stk.length - 1] - i;
+            ans[i] = stk.at(-1) - i;
         }
         stk.push(i);
     }
     return ans;
-}
-```
-
-### **...**
-
-```
-
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

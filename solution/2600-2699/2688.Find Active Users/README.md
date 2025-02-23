@@ -1,10 +1,20 @@
-# [2688. 查找活跃用户](https://leetcode.cn/problems/find-active-users)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2688.Find%20Active%20Users/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2688. 查找活跃用户 🔒](https://leetcode.cn/problems/find-active-users)
 
 [English Version](/solution/2600-2699/2688.Find%20Active%20Users/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><font face="monospace"><code>Users</code> 表：</font></p>
 
@@ -17,22 +27,16 @@
 | created_at  | datetime |
 | amount      | int      |
 +-------------+----------+
-在这个表中没有主键。该表可能包含重复的记录。
+在这个表可能包含重复的记录。
 每一行包括 user_id、购买的商品、购买日期和购买金额。</pre>
 
-<p>编写一个SQL查询，找出活跃用户。活跃用户是指在其任何一次购买之后的 <strong>七天内</strong>&nbsp;进行了第二次购买的用户。</p>
+<p>编写一个解决方案，找出活跃用户。活跃用户是指在其任何一次购买之后的 <strong>七天内</strong>&nbsp;进行了第二次购买的用户。</p>
 
-<p>&nbsp;</p>
-
-<p>例如，如果结束日期是2023年5月31日，那么在2023年5月31日和2023年6月7日之间（包括这两天）的任何日期都被视为"在7天内"。</p>
-
-<p>&nbsp;</p>
+<p>例如，如果结束日期是 2023年5月31日，那么在 2023年5月31日 和 2023年6月7日之间（包括这两天）的任何日期都被视为"在7天内"。</p>
 
 <p>返回 <strong>任意顺序</strong> 的 <code>user_id</code> 列表，表示活跃用户列表。</p>
 
-<p>&nbsp;</p>
-
-<p>查询结果的格式如下示例：</p>
+<p>结果的格式如下示例：</p>
 
 <p>&nbsp;</p>
 
@@ -63,22 +67,23 @@
 – user_id 为 8 的用户只有一笔交易，因此他不是活跃用户。
 – user_id 为 4 的用户有两笔交易，第一笔交易是在2021年9月2日，第二笔交易是在2021年9月13日。第一笔和第二笔交易之间的时间间隔大于7天。因此，他不是活跃用户。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
 # Write your MySQL query statement
-SELECT
-    DISTINCT user_id
-FROM
-    Users
+SELECT DISTINCT
+    user_id
+FROM Users
 WHERE
     user_id IN (
         SELECT
@@ -88,17 +93,18 @@ WHERE
                 SELECT
                     user_id,
                     created_at,
-                    lag(created_at, 1) over (
-                        partition by user_id
-                        ORDER BY
-                            created_at
+                    LAG(created_at, 1) OVER (
+                        PARTITION BY user_id
+                        ORDER BY created_at
                     ) AS prev_created_at
-                FROM
-                    Users
+                FROM Users
             ) AS t
-        WHERE
-            DATEDIFF(created_at, prev_created_at) <= 7
-    )
+        WHERE DATEDIFF(created_at, prev_created_at) <= 7
+    );
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

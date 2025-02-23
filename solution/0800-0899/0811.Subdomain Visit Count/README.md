@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0811.Subdomain%20Visit%20Count/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [811. 子域名访问计数](https://leetcode.cn/problems/subdomain-visit-count)
 
 [English Version](/solution/0800-0899/0811.Subdomain%20Visit%20Count/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>网站域名 <code>"discuss.leetcode.com"</code> 由多个子域名组成。顶级域名为 <code>"com"</code> ，二级域名为 <code>"leetcode.com"</code> ，最低一级为 <code>"discuss.leetcode.com"</code> 。当访问域名 <code>"discuss.leetcode.com"</code> 时，同时也会隐式访问其父域名 <code>"leetcode.com" </code>以及 <code>"com"</code> 。</p>
 
@@ -47,11 +60,13 @@
 	<li><code>d1<sub>i</sub></code>、<code>d2<sub>i</sub></code> 和 <code>d3<sub>i</sub></code> 由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们用哈希表 `cnt` 存储每个域名（子域名）对应的访问次数。
 
@@ -63,9 +78,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +92,7 @@ class Solution:
         return [f'{v} {s}' for s, v in cnt.items()]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,32 +142,30 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func subdomainVisits(cpdomains []string) []string {
-    cnt := map[string]int{}
-    for _, s := range cpdomains {
-        i := strings.IndexByte(s, ' ')
-        v, _ := strconv.Atoi(s[:i])
-        for ; i < len(s); i++ {
-            if s[i] == ' ' || s[i] == '.' {
-                cnt[s[i+1:]] += v
-            }
-        }
-    }
-    ans := make([]string, 0, len(cnt))
-    for s, v := range cnt {
-        ans = append(ans, strconv.Itoa(v)+" "+s)
-    }
-    return ans
+	cnt := map[string]int{}
+	for _, s := range cpdomains {
+		i := strings.IndexByte(s, ' ')
+		v, _ := strconv.Atoi(s[:i])
+		for ; i < len(s); i++ {
+			if s[i] == ' ' || s[i] == '.' {
+				cnt[s[i+1:]] += v
+			}
+		}
+	}
+	ans := make([]string, 0, len(cnt))
+	for s, v := range cnt {
+		ans = append(ans, strconv.Itoa(v)+" "+s)
+	}
+	return ans
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1362.Closest%20Divisors/README_EN.md
+rating: 1533
+source: Weekly Contest 177 Q3
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1362. Closest Divisors](https://leetcode.com/problems/closest-divisors)
 
 [中文文档](/solution/1300-1399/1362.Closest%20Divisors/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>num</code>, find the closest two integers in absolute difference whose product equals&nbsp;<code>num + 1</code>&nbsp;or <code>num + 2</code>.</p>
 
@@ -38,11 +52,23 @@
 	<li><code>1 &lt;= num &lt;= 10^9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+We design a function $f(x)$ that returns two numbers whose product equals $x$ and the absolute difference between these two numbers is the smallest. We can start enumerating $i$ from $\sqrt{x}$. If $x$ can be divided by $i$, then $\frac{x}{i}$ is another factor. At this point, we have found two factors whose product equals $x$. We can return them directly. Otherwise, we decrease the value of $i$ and continue to enumerate.
+
+Next, we only need to calculate $f(num + 1)$ and $f(num + 2)$ respectively, and then compare the return values of the two functions. We return the one with the smaller absolute difference.
+
+The time complexity is $O(\sqrt{num})$, and the space complexity is $O(1)$. Where $num$ is the given integer.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +83,7 @@ class Solution:
         return a if abs(a[0] - a[1]) < abs(b[0] - b[1]) else b
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -77,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -97,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func closestDivisors(num int) []int {
@@ -123,10 +149,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

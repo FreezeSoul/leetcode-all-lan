@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0650.2%20Keys%20Keyboard/README_EN.md
+tags:
+    - Math
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [650. 2 Keys Keyboard](https://leetcode.com/problems/2-keys-keyboard)
 
 [中文文档](/solution/0600-0699/0650.2%20Keys%20Keyboard/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is only one character <code>&#39;A&#39;</code> on the screen of a notepad. You can perform one of two operations on this notepad for each step:</p>
 
@@ -39,11 +52,17 @@ In step 3, we use Paste operation to get &#39;AAA&#39;.
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,21 +81,7 @@ class Solution:
         return dfs(n)
 ```
 
-```python
-class Solution:
-    def minSteps(self, n: int) -> int:
-        dp = list(range(n + 1))
-        dp[1] = 0
-        for i in range(2, n + 1):
-            j = 2
-            while j * j <= i:
-                if i % j == 0:
-                    dp[i] = min(dp[i], dp[i // j] + j)
-                j += 1
-        return dp[-1]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -107,42 +112,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int minSteps(int n) {
-        int[] dp = new int[n + 1];
-        for (int i = 0; i < n + 1; ++i) {
-            dp[i] = i;
-        }
-        dp[1] = 0;
-        for (int i = 2; i < n + 1; ++i) {
-            for (int j = 2; j * j <= i; ++j) {
-                if (i % j == 0) {
-                    dp[i] = Math.min(dp[i], dp[i / j] + j);
-                }
-            }
-        }
-        return dp[n];
-    }
-}
-```
-
-```java
-class Solution {
-    public int minSteps(int n) {
-        int res = 0;
-        for (int i = 2; n > 1; ++i) {
-            while (n % i == 0) {
-                res += i;
-                n /= i;
-            }
-        }
-        return res;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -169,26 +139,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int minSteps(int n) {
-        vector<int> dp(n + 1);
-        iota(dp.begin(), dp.end(), 0);
-        dp[1] = 0;
-        for (int i = 2; i < n + 1; ++i) {
-            for (int j = 2; j * j <= i; ++j) {
-                if (i % j == 0) {
-                    dp[i] = min(dp[i], dp[i / j] + j);
-                }
-            }
-        }
-        return dp[n];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func minSteps(n int) int {
@@ -214,14 +165,78 @@ func minSteps(n int) int {
 	}
 	return dfs(n)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minSteps(self, n: int) -> int:
+        dp = list(range(n + 1))
+        dp[1] = 0
+        for i in range(2, n + 1):
+            j = 2
+            while j * j <= i:
+                if i % j == 0:
+                    dp[i] = min(dp[i], dp[i // j] + j)
+                j += 1
+        return dp[-1]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int minSteps(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 0; i < n + 1; ++i) {
+            dp[i] = i;
+        }
+        dp[1] = 0;
+        for (int i = 2; i < n + 1; ++i) {
+            for (int j = 2; j * j <= i; ++j) {
+                if (i % j == 0) {
+                    dp[i] = Math.min(dp[i], dp[i / j] + j);
+                }
+            }
+        }
+        return dp[n];
+    }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minSteps(int n) {
+        vector<int> dp(n + 1);
+        iota(dp.begin(), dp.end(), 0);
+        dp[1] = 0;
+        for (int i = 2; i < n + 1; ++i) {
+            for (int j = 2; j * j <= i; ++j) {
+                if (i % j == 0) {
+                    dp[i] = min(dp[i], dp[i / j] + j);
+                }
+            }
+        }
+        return dp[n];
+    }
+};
+```
+
+#### Go
 
 ```go
 func minSteps(n int) int {
@@ -239,19 +254,79 @@ func minSteps(n int) int {
 	}
 	return dp[n]
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minSteps(n: number): number {
+    const dp = Array(n + 1).fill(1000);
+    dp[1] = 0;
+
+    for (let i = 2; i <= n; i++) {
+        for (let j = 1, half = i / 2; j <= half; j++) {
+            if (i % j === 0) {
+                dp[i] = Math.min(dp[i], dp[j] + i / j);
+            }
+        }
+    }
+
+    return dp[n];
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var minSteps = function (n) {
+    const dp = Array(n + 1).fill(1000);
+    dp[1] = 0;
 
+    for (let i = 2; i <= n; i++) {
+        for (let j = 1, half = i / 2; j <= half; j++) {
+            if (i % j === 0) {
+                dp[i] = Math.min(dp[i], dp[j] + i / j);
+            }
+        }
+    }
+
+    return dp[n];
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 3
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public int minSteps(int n) {
+        int res = 0;
+        for (int i = 2; n > 1; ++i) {
+            while (n % i == 0) {
+                res += i;
+                n /= i;
+            }
+        }
+        return res;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

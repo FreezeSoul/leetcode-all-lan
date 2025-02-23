@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1808.Maximize%20Number%20of%20Nice%20Divisors/README.md
+rating: 2070
+source: 第 234 场周赛 Q4
+tags:
+    - 递归
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [1808. 好因子的最大数目](https://leetcode.cn/problems/maximize-number-of-nice-divisors)
 
 [English Version](/solution/1800-1899/1808.Maximize%20Number%20of%20Nice%20Divisors/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数 <code>primeFactors</code> 。你需要构造一个正整数 <code>n</code> ，它满足以下条件：</p>
 
@@ -44,11 +58,13 @@
 	<li><code>1 <= primeFactors <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：问题转换 + 快速幂**
+### 方法一：问题转换 + 快速幂
 
 我们可以将 $n$ 进行质因数分解，即 $n = a_1^{k_1} \times a_2^{k_2} \times\cdots \times a_m^{k_m}$，其中 $a_i$ 为质因子，而 $k_i$ 为质因子 $a_i$ 的指数。由于 $n$ 的质因子个数不超过 $primeFactors$ 个，因此 $k_1 + k_2 + \cdots + k_m \leq primeFactors$。
 
@@ -67,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,41 +98,39 @@ class Solution:
         return 2 * pow(3, primeFactors // 3, mod) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
+    private final int mod = (int) 1e9 + 7;
+
     public int maxNiceDivisors(int primeFactors) {
         if (primeFactors < 4) {
             return primeFactors;
         }
-        final int mod = (int) 1e9 + 7;
         if (primeFactors % 3 == 0) {
-            return (int) qmi(3, primeFactors / 3, mod);
+            return qpow(3, primeFactors / 3);
         }
         if (primeFactors % 3 == 1) {
-            return (int) (4 * qmi(3, primeFactors / 3 - 1, mod) % mod);
+            return (int) (4L * qpow(3, primeFactors / 3 - 1) % mod);
         }
-        return (int) (2 * qmi(3, primeFactors / 3, mod) % mod);
+        return 2 * qpow(3, primeFactors / 3) % mod;
     }
 
-    private long qmi(long a, long k, long p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
+    private int qpow(long a, long n) {
+        long ans = 1;
+        for (; n > 0; n >>= 1) {
+            if ((n & 1) == 1) {
+                ans = ans * a % mod;
             }
-            k >>= 1;
-            a = a * a % p;
+            a = a * a % mod;
         }
-        return res;
+        return (int) ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,63 +140,90 @@ public:
             return primeFactors;
         }
         const int mod = 1e9 + 7;
+        auto qpow = [&](long long a, long long n) {
+            long long ans = 1;
+            for (; n; n >>= 1) {
+                if (n & 1) {
+                    ans = ans * a % mod;
+                }
+                a = a * a % mod;
+            }
+            return (int) ans;
+        };
         if (primeFactors % 3 == 0) {
-            return qmi(3, primeFactors / 3, mod);
+            return qpow(3, primeFactors / 3);
         }
         if (primeFactors % 3 == 1) {
-            return 4 * qmi(3, primeFactors / 3 - 1, mod) % mod;
+            return qpow(3, primeFactors / 3 - 1) * 4L % mod;
         }
-        return 2 * qmi(3, primeFactors / 3, mod) % mod;
-    }
-
-    long qmi(long a, long k, long p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
-            }
-            k >>= 1;
-            a = a * a % p;
-        }
-        return res;
+        return qpow(3, primeFactors / 3) * 2 % mod;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxNiceDivisors(primeFactors int) int {
 	if primeFactors < 4 {
 		return primeFactors
 	}
-	const mod int = 1e9 + 7
+	const mod = 1e9 + 7
+	qpow := func(a, n int) int {
+		ans := 1
+		for ; n > 0; n >>= 1 {
+			if n&1 == 1 {
+				ans = ans * a % mod
+			}
+			a = a * a % mod
+		}
+		return ans
+	}
 	if primeFactors%3 == 0 {
-		return qmi(3, primeFactors/3, mod)
+		return qpow(3, primeFactors/3)
 	}
 	if primeFactors%3 == 1 {
-		return 4 * qmi(3, primeFactors/3-1, mod) % mod
+		return qpow(3, primeFactors/3-1) * 4 % mod
 	}
-	return 2 * qmi(3, primeFactors/3, mod) % mod
-}
-
-func qmi(a, k, p int) int {
-	res := 1
-	for k != 0 {
-		if k&1 == 1 {
-			res = res * a % p
-		}
-		k >>= 1
-		a = a * a % p
-	}
-	return res
+	return qpow(3, primeFactors/3) * 2 % mod
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number} primeFactors
+ * @return {number}
+ */
+var maxNiceDivisors = function (primeFactors) {
+    if (primeFactors < 4) {
+        return primeFactors;
+    }
+    const mod = 1e9 + 7;
+    const qpow = (a, n) => {
+        let ans = 1;
+        for (; n; n >>= 1) {
+            if (n & 1) {
+                ans = Number((BigInt(ans) * BigInt(a)) % BigInt(mod));
+            }
+            a = Number((BigInt(a) * BigInt(a)) % BigInt(mod));
+        }
+        return ans;
+    };
+    const k = Math.floor(primeFactors / 3);
+    if (primeFactors % 3 === 0) {
+        return qpow(3, k);
+    }
+    if (primeFactors % 3 === 1) {
+        return (4 * qpow(3, k - 1)) % mod;
+    }
+    return (2 * qpow(3, k)) % mod;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

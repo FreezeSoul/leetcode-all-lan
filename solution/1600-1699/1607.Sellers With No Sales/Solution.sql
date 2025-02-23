@@ -1,11 +1,8 @@
 # Write your MySQL query statement below
-select
-    seller_name
-from
-    seller s
-    left join orders o on s.seller_id = o.seller_id
-    and year(sale_date) = '2020'
-where
-    o.seller_id is null
-order by
-    seller_name
+SELECT seller_name
+FROM
+    Seller
+    LEFT JOIN Orders USING (seller_id)
+GROUP BY seller_id
+HAVING IFNULL(SUM(YEAR(sale_date) = 2020), 0) = 0
+ORDER BY 1;

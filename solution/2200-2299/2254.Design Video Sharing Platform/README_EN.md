@@ -1,8 +1,23 @@
-# [2254. Design Video Sharing Platform](https://leetcode.com/problems/design-video-sharing-platform)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2254.Design%20Video%20Sharing%20Platform/README_EN.md
+tags:
+    - Stack
+    - Design
+    - Hash Table
+    - Ordered Set
+---
+
+<!-- problem:start -->
+
+# [2254. Design Video Sharing Platform 🔒](https://leetcode.com/problems/design-video-sharing-platform)
 
 [中文文档](/solution/2200-2299/2254.Design%20Video%20Sharing%20Platform/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have a video sharing platform where users can upload and delete videos. Each <code>video</code> is a <strong>string</strong> of digits, where the <code>i<sup>th</sup></code> digit of the string represents the content of the video at minute <code>i</code>. For example, the first digit represents the content at minute <code>0</code> in the video, the second digit represents the content at minute <code>1</code> in the video, and so on. Viewers of videos can also like and dislike videos. Internally, the platform keeps track of the <strong>number of views, likes, and dislikes</strong> on each video.</p>
 
@@ -40,7 +55,7 @@ videoSharingPlatform.remove(0);              // Remove the video associated with
 videoSharingPlatform.upload(&quot;789&quot;);          // Since the video associated with videoId 0 was deleted,
                                              // 0 is the smallest available <code>videoId</code>, so return 0.
 videoSharingPlatform.watch(1, 0, 5);         // The video associated with videoId 1 is &quot;456&quot;.
-                                             // The video from minute 0 to min(5, 3 - 1) = 2 is &quot;456&quot;, so return &quot;453&quot;.
+                                             // The video from minute 0 to min(5, 3 - 1) = 2 is &quot;456&quot;, so return &quot;456&quot;.
 videoSharingPlatform.watch(1, 0, 1);         // The video associated with videoId 1 is &quot;456&quot;.
                                              // The video from minute 0 to min(1, 3 - 1) = 1 is &quot;45&quot;, so return &quot;45&quot;.
 videoSharingPlatform.like(1);                // Increase the number of likes on the video associated with videoId 1.
@@ -83,32 +98,42 @@ videoSharingPlatform.getViews(0);            // There is no video associated wit
 	<li>At most <code>10<sup>5</sup></code> calls <strong>in total</strong> will be made to all functions.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 
 ```
 
-### **Java**
+#### Java
 
 ```java
 
 ```
 
-### **TypeScript**
+#### C++
 
-```ts
-
-```
-
-### **...**
+```cpp
 
 ```
+
+#### Go
+
+```go
 
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

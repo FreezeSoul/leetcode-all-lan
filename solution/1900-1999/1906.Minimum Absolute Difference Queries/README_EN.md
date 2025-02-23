@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1906.Minimum%20Absolute%20Difference%20Queries/README_EN.md
+rating: 2146
+source: Weekly Contest 246 Q4
+tags:
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [1906. Minimum Absolute Difference Queries](https://leetcode.com/problems/minimum-absolute-difference-queries)
 
 [中文文档](/solution/1900-1999/1906.Minimum%20Absolute%20Difference%20Queries/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>The <strong>minimum absolute difference</strong> of an array <code>a</code> is defined as the <strong>minimum value</strong> of <code>|a[i] - a[j]|</code>, where <code>0 &lt;= i &lt; j &lt; a.length</code> and <code>a[i] != a[j]</code>. If all elements of <code>a</code> are the <strong>same</strong>, the minimum absolute difference is <code>-1</code>.</p>
 
@@ -59,11 +74,17 @@
 	<li><code>0 &lt;= l<sub>i</sub> &lt; r<sub>i</sub> &lt; nums.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -91,7 +112,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -128,41 +149,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function minDifference(nums: number[], queries: number[][]): number[] {
-    let m = nums.length,
-        n = queries.length;
-    let max = 100;
-    // let max = Math.max(...nums);
-    let pre: number[][] = [];
-    pre.push(new Array(max + 1).fill(0));
-    for (let i = 0; i < m; ++i) {
-        let num = nums[i];
-        pre.push(pre[i].slice());
-        pre[i + 1][num] += 1;
-    }
-
-    let ans = [];
-    for (let [left, right] of queries) {
-        let last = -1;
-        let min = Infinity;
-        for (let j = 1; j < max + 1; ++j) {
-            if (pre[left][j] < pre[right + 1][j]) {
-                if (last != -1) {
-                    min = Math.min(min, j - last);
-                }
-                last = j;
-            }
-        }
-        ans.push(min == Infinity ? -1 : min);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -200,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDifference(nums []int, queries [][]int) []int {
@@ -239,10 +226,42 @@ func minDifference(nums []int, queries [][]int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function minDifference(nums: number[], queries: number[][]): number[] {
+    let m = nums.length,
+        n = queries.length;
+    let max = 100;
+    // let max = Math.max(...nums);
+    let pre: number[][] = [];
+    pre.push(new Array(max + 1).fill(0));
+    for (let i = 0; i < m; ++i) {
+        let num = nums[i];
+        pre.push(pre[i].slice());
+        pre[i + 1][num] += 1;
+    }
 
+    let ans = [];
+    for (let [left, right] of queries) {
+        let last = -1;
+        let min = Infinity;
+        for (let j = 1; j < max + 1; ++j) {
+            if (pre[left][j] < pre[right + 1][j]) {
+                if (last != -1) {
+                    min = Math.min(min, j - last);
+                }
+                last = j;
+            }
+        }
+        ans.push(min == Infinity ? -1 : min);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

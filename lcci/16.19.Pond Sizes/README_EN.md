@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/16.19.Pond%20Sizes/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [16.19. Pond Sizes](https://leetcode.cn/problems/pond-sizes-lcci)
 
 [中文文档](/lcci/16.19.Pond%20Sizes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have an integer matrix representing a plot of land, where the value at that loca&shy;tion represents the height above sea level. A value of zero indicates water. A pond is a region of water connected vertically, horizontally, or diagonally. The size of the pond is the total number of connected water cells. Write a method to compute the sizes of all ponds in the matrix.</p>
 
@@ -35,256 +45,215 @@
 	<li><code>0 &lt; len(land[i]) &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Union find.
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+We can traverse each point $(i, j)$ in the integer matrix $land$. If the value of the point is $0$, we start a depth-first search from this point until we reach a point with a non-zero value. The number of points searched during this process is the size of the pond, which is added to the answer array.
+
+> Note: To avoid duplicate searches, we set the value of the searched points to $1$.
+
+Finally, we sort the answer array to obtain the final answer.
+
+The time complexity is $O(m \times n \times \log (m \times n))$, and the space complexity is $O(m \times n)$. Here, $m$ and $n$ are the number of rows and columns in the matrix $land$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def pondSizes(self, land: List[List[int]]) -> List[int]:
+        def dfs(i: int, j: int) -> int:
+            res = 1
+            land[i][j] = 1
+            for x in range(i - 1, i + 2):
+                for y in range(j - 1, j + 2):
+                    if 0 <= x < m and 0 <= y < n and land[x][y] == 0:
+                        res += dfs(x, y)
+            return res
+
         m, n = len(land), len(land[0])
-        p = list(range(m * n))
-        size = [1] * (m * n)
-
-        def find(x):
-            if p[x] != x:
-                p[x] = find(p[x])
-            return p[x]
-
-        def union(a, b):
-            pa, pb = find(a), find(b)
-            if pa == pb:
-                return
-            size[pb] += size[pa]
-            p[pa] = pb
-
-        for i in range(m):
-            for j in range(n):
-                if land[i][j] != 0:
-                    continue
-                idx = i * n + j
-                if i < m - 1 and land[i + 1][j] == 0:
-                    union(idx, (i + 1) * n + j)
-                if j < n - 1 and land[i][j + 1] == 0:
-                    union(idx, i * n + j + 1)
-                if i < m - 1 and j < n - 1 and land[i + 1][j + 1] == 0:
-                    union(idx, (i + 1) * n + j + 1)
-                if i < m - 1 and j > 0 and land[i + 1][j - 1] == 0:
-                    union(idx, (i + 1) * n + j - 1)
-
-        s = set()
-        res = []
-        for i in range(m * n):
-            if land[i // n][i % n] != 0:
-                continue
-            root = find(i)
-            if root not in s:
-                s.add(root)
-                res.append(size[root])
-        res.sort()
-        return res
+        return sorted(dfs(i, j) for i in range(m) for j in range(n) if land[i][j] == 0)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-    private int[] p;
-    private int[] size;
+    private int m;
+    private int n;
+    private int[][] land;
 
     public int[] pondSizes(int[][] land) {
-        int m = land.length, n = land[0].length;
-        p = new int[m * n];
-        size = new int[m * n];
-        for (int i = 0; i < p.length; ++i) {
-            p[i] = i;
-            size[i] = 1;
-        }
+        m = land.length;
+        n = land[0].length;
+        this.land = land;
+        List<Integer> ans = new ArrayList<>();
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                if (land[i][j] != 0) {
-                    continue;
-                }
-                int idx = i * n + j;
-                if (i < m - 1 && land[i + 1][j] == 0) {
-                    union(idx, (i + 1) * n + j);
-                }
-                if (j < n - 1 && land[i][j + 1] == 0) {
-                    union(idx, i * n + j + 1);
-                }
-                if (i < m - 1 && j < n - 1 && land[i + 1][j + 1] == 0) {
-                    union(idx, (i + 1) * n + j + 1);
-                }
-                if (i < m - 1 && j > 0 && land[i + 1][j - 1] == 0) {
-                    union(idx, (i + 1) * n + j - 1);
+                if (land[i][j] == 0) {
+                    ans.add(dfs(i, j));
                 }
             }
         }
-        Set<Integer> s = new HashSet<>();
-        List<Integer> t = new ArrayList<>();
-        for (int i = 0; i < m * n; ++i) {
-            if (land[i / n][i % n] != 0) {
-                continue;
+        return ans.stream().sorted().mapToInt(Integer::valueOf).toArray();
+    }
+
+    private int dfs(int i, int j) {
+        int res = 1;
+        land[i][j] = 1;
+        for (int x = i - 1; x <= i + 1; ++x) {
+            for (int y = j - 1; y <= j + 1; ++y) {
+                if (x >= 0 && x < m && y >= 0 && y < n && land[x][y] == 0) {
+                    res += dfs(x, y);
+                }
             }
-            int root = find(i);
-            if (!s.contains(root)) {
-                s.add(root);
-                t.add(size[root]);
-            }
-        }
-        Collections.sort(t);
-        int[] res = new int[t.size()];
-        for (int i = 0; i < res.length; ++i) {
-            res[i] = t.get(i);
         }
         return res;
-    }
-
-    private int find(int x) {
-        if (p[x] != x) {
-            p[x] = find(p[x]);
-        }
-        return p[x];
-    }
-
-    private void union(int a, int b) {
-        int pa = find(a), pb = find(b);
-        if (pa == pb) {
-            return;
-        }
-        size[pb] += size[pa];
-        p[pa] = pb;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
-    vector<int> p;
-    vector<int> size;
-
     vector<int> pondSizes(vector<vector<int>>& land) {
         int m = land.size(), n = land[0].size();
-        for (int i = 0; i < m * n; ++i) {
-            p.push_back(i);
-            size.push_back(1);
-        }
+        function<int(int, int)> dfs = [&](int i, int j) -> int {
+            int res = 1;
+            land[i][j] = 1;
+            for (int x = i - 1; x <= i + 1; ++x) {
+                for (int y = j - 1; y <= j + 1; ++y) {
+                    if (x >= 0 && x < m && y >= 0 && y < n && land[x][y] == 0) {
+                        res += dfs(x, y);
+                    }
+                }
+            }
+            return res;
+        };
+        vector<int> ans;
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                if (land[i][j] != 0) continue;
-                int idx = i * n + j;
-                if (i < m - 1 && land[i + 1][j] == 0) unite(idx, (i + 1) * n + j);
-                if (j < n - 1 && land[i][j + 1] == 0) unite(idx, i * n + j + 1);
-                if (i < m - 1 && j < n - 1 && land[i + 1][j + 1] == 0) unite(idx, (i + 1) * n + j + 1);
-                if (i < m - 1 && j > 0 && land[i + 1][j - 1] == 0) unite(idx, (i + 1) * n + j - 1);
+                if (land[i][j] == 0) {
+                    ans.push_back(dfs(i, j));
+                }
             }
         }
-        unordered_set<int> s;
-        vector<int> res;
-        for (int i = 0; i < m * n; ++i) {
-            if (land[i / n][i % n] != 0) continue;
-            int root = find(i);
-            if (s.find(root) == s.end()) {
-                s.insert(root);
-                res.push_back(size[root]);
-            }
-        }
-        sort(res.begin(), res.end());
-        return res;
-    }
-
-    int find(int x) {
-        if (p[x] != x) p[x] = find(p[x]);
-        return p[x];
-    }
-
-    void unite(int a, int b) {
-        int pa = find(a), pb = find(b);
-        if (pa == pb) return;
-        size[pb] += size[pa];
-        p[pa] = pb;
+        sort(ans.begin(), ans.end());
+        return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-var p []int
-var size []int
-
-func pondSizes(land [][]int) []int {
+func pondSizes(land [][]int) (ans []int) {
 	m, n := len(land), len(land[0])
-	p = make([]int, m*n)
-	size = make([]int, m*n)
-	for i := 0; i < m*n; i++ {
-		p[i] = i
-		size[i] = 1
+	var dfs func(i, j int) int
+	dfs = func(i, j int) int {
+		res := 1
+		land[i][j] = 1
+		for x := i - 1; x <= i+1; x++ {
+			for y := j - 1; y <= j+1; y++ {
+				if x >= 0 && x < m && y >= 0 && y < n && land[x][y] == 0 {
+					res += dfs(x, y)
+				}
+			}
+		}
+		return res
 	}
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if land[i][j] != 0 {
-				continue
-			}
-			idx := i*n + j
-			if i < m-1 && land[i+1][j] == 0 {
-				union(idx, (i+1)*n+j)
-			}
-			if j < n-1 && land[i][j+1] == 0 {
-				union(idx, i*n+j+1)
-			}
-			if i < m-1 && j < n-1 && land[i+1][j+1] == 0 {
-				union(idx, (i+1)*n+j+1)
-			}
-			if i < m-1 && j > 0 && land[i+1][j-1] == 0 {
-				union(idx, (i+1)*n+j-1)
+	for i := range land {
+		for j := range land[i] {
+			if land[i][j] == 0 {
+				ans = append(ans, dfs(i, j))
 			}
 		}
 	}
-	s := make(map[int]bool)
-	var res []int
-	for i := 0; i < m*n; i++ {
-		if land[i/n][i%n] != 0 {
-			continue
-		}
-		root := find(i)
-		if !s[root] {
-			s[root] = true
-			res = append(res, size[root])
-		}
-	}
-	sort.Ints(res)
-	return res
-}
-
-func find(x int) int {
-	if p[x] != x {
-		p[x] = find(p[x])
-	}
-	return p[x]
-}
-
-func union(a, b int) {
-	pa, pb := find(a), find(b)
-	if pa == pb {
-		return
-	}
-	size[pb] += size[pa]
-	p[pa] = pb
+	sort.Ints(ans)
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function pondSizes(land: number[][]): number[] {
+    const m = land.length;
+    const n = land[0].length;
+    const dfs = (i: number, j: number): number => {
+        let res = 1;
+        land[i][j] = 1;
+        for (let x = i - 1; x <= i + 1; ++x) {
+            for (let y = j - 1; y <= j + 1; ++y) {
+                if (x >= 0 && x < m && y >= 0 && y < n && land[x][y] === 0) {
+                    res += dfs(x, y);
+                }
+            }
+        }
+        return res;
+    };
+    const ans: number[] = [];
+    for (let i = 0; i < m; ++i) {
+        for (let j = 0; j < n; ++j) {
+            if (land[i][j] === 0) {
+                ans.push(dfs(i, j));
+            }
+        }
+    }
+    ans.sort((a, b) => a - b);
+    return ans;
+}
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    private var m: Int = 0
+    private var n: Int = 0
+    private var land: [[Int]] = []
+
+    func pondSizes(_ land: [[Int]]) -> [Int] {
+        self.land = land
+        m = land.count
+        n = land[0].count
+        var ans: [Int] = []
+
+        for i in 0..<m {
+            for j in 0..<n {
+                if self.land[i][j] == 0 {
+                    ans.append(dfs(i, j))
+                }
+            }
+        }
+        return ans.sorted()
+    }
+
+    private func dfs(_ i: Int, _ j: Int) -> Int {
+        var res = 1
+        self.land[i][j] = 1
+        for x in max(i - 1, 0)...min(i + 1, m - 1) {
+            for y in max(j - 1, 0)...min(j + 1, n - 1) {
+                if self.land[x][y] == 0 {
+                    res += dfs(x, y)
+                }
+            }
+        }
+        return res
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

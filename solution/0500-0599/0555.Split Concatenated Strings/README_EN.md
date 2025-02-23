@@ -1,8 +1,22 @@
-# [555. Split Concatenated Strings](https://leetcode.com/problems/split-concatenated-strings)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0555.Split%20Concatenated%20Strings/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
+# [555. Split Concatenated Strings 🔒](https://leetcode.com/problems/split-concatenated-strings)
 
 [中文文档](/solution/0500-0599/0555.Split%20Concatenated%20Strings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array of strings <code>strs</code>. You could concatenate these strings together into a loop, where for each string, you could choose to reverse it or not. Among all the possible loops</p>
 
@@ -44,11 +58,25 @@ The answer string came from the fourth looped one, where you could cut from the 
 	<li><code>strs[i]</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+We first traverse the string array `strs`. For each string $s$, if the reversed string $t$ is greater than $s$, we replace $s$ with $t$.
+
+Then we enumerate each position $i$ in the string array `strs` as a split point, dividing the string array `strs` into two parts: $strs[i + 1:]$ and $strs[:i]$. We then concatenate these two parts to get a new string $t$. Next, we enumerate each position $j$ in the current string $strs[i]$. The suffix part is $a = strs[i][j:]$, and the prefix part is $b = strs[i][:j]$. We can concatenate $a$, $t$, and $b$ to get a new string $cur$. If $cur$ is greater than the current answer, we update the answer. This considers the case where $strs[i]$ is reversed. We also need to consider the case where $strs[i]$ is not reversed, i.e., concatenate $a$, $t$, and $b$ in reverse order to get a new string $cur$. If $cur$ is greater than the current answer, we update the answer.
+
+Finally, we return the answer.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string array `strs`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +84,7 @@ class Solution:
         strs = [s[::-1] if s[::-1] > s else s for s in strs]
         ans = ''.join(strs)
         for i, s in enumerate(strs):
-            t = ''.join(strs[i + 1:]) + ''.join(strs[: i])
+            t = ''.join(strs[i + 1 :]) + ''.join(strs[:i])
             for j in range(len(s)):
                 a = s[j:]
                 b = s[:j]
@@ -65,7 +93,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -152,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func splitLoopedString(strs []string) (ans string) {
@@ -195,10 +223,8 @@ func reverse(s string) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

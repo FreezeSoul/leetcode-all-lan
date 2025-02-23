@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1652.Defuse%20the%20Bomb/README_EN.md
+rating: 1416
+source: Biweekly Contest 39 Q1
+tags:
+    - Array
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [1652. Defuse the Bomb](https://leetcode.com/problems/defuse-the-bomb)
 
 [中文文档](/solution/1600-1699/1652.Defuse%20the%20Bomb/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have a bomb to defuse, and your time is running out! Your informer will provide you with a <strong>circular</strong> array <code>code</code>&nbsp;of length of <code>n</code>&nbsp;and a key <code>k</code>.</p>
 
@@ -53,11 +68,35 @@
 	<li><code>-(n - 1) &lt;= k &lt;= n - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We define an answer array `ans` of length `n`, initially all elements are `0`. According to the problem, if `k` is `0`, return `ans` directly.
+
+Otherwise, we traverse each position `i`:
+
+-   If `k` is a positive number, then the value at position `i` is the sum of the values at the `k` positions after position `i`, that is:
+
+$$
+ans[i] = \sum_{j=i+1}^{i+k} code[j \bmod n]
+$$
+
+-   If `k` is a negative number, then the value at position `i` is the sum of the values at the `|k|` positions before position `i`, that is:
+
+$$
+ans[i] = \sum_{j=i+k}^{i-1} code[(j+n) \bmod n]
+$$
+
+The time complexity is $O(n \times |k|)$, ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,23 +115,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def decrypt(self, code: List[int], k: int) -> List[int]:
-        n = len(code)
-        ans = [0] * n
-        if k == 0:
-            return ans
-        s = list(accumulate(code + code, initial=0))
-        for i in range(n):
-            if k > 0:
-                ans[i] = s[i + k + 1] - s[i + 1]
-            else:
-                ans[i] = s[i + n] - s[i + k + n]
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -118,31 +141,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int[] decrypt(int[] code, int k) {
-        int n = code.length;
-        int[] ans = new int[n];
-        if (k == 0) {
-            return ans;
-        }
-        int[] s = new int[n << 1 | 1];
-        for (int i = 0; i < n << 1; ++i) {
-            s[i + 1] = s[i] + code[i % n];
-        }
-        for (int i = 0; i < n; ++i) {
-            if (k > 0) {
-                ans[i] = s[i + k + 1] - s[i + 1];
-            } else {
-                ans[i] = s[i + n] - s[i + k + n];
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,6 +167,123 @@ public:
     }
 };
 ```
+
+#### Go
+
+```go
+func decrypt(code []int, k int) []int {
+	n := len(code)
+	ans := make([]int, n)
+	if k == 0 {
+		return ans
+	}
+	for i := 0; i < n; i++ {
+		if k > 0 {
+			for j := i + 1; j < i+k+1; j++ {
+				ans[i] += code[j%n]
+			}
+		} else {
+			for j := i + k; j < i; j++ {
+				ans[i] += code[(j+n)%n]
+			}
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function decrypt(code: number[], k: number): number[] {
+    const n: number = code.length;
+    const ans: number[] = Array(n).fill(0);
+
+    if (k === 0) {
+        return ans;
+    }
+
+    for (let i = 0; i < n; ++i) {
+        if (k > 0) {
+            for (let j = i + 1; j < i + k + 1; ++j) {
+                ans[i] += code[j % n];
+            }
+        } else {
+            for (let j = i + k; j < i; ++j) {
+                ans[i] += code[(j + n) % n];
+            }
+        }
+    }
+
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Prefix Sum
+
+In Solution 1, for each position $i$, we need to traverse $k$ positions, which involves a lot of repeated calculations. We can optimize this by using prefix sums.
+
+We duplicate the `code` array (this can be achieved without actually duplicating the array, but by cyclically traversing with modulo operation), resulting in an array of twice the length. We then calculate the prefix sum of this array, resulting in a prefix sum array $s$ of length $2 \times n + 1$.
+
+If $k$ is a positive number, then the value at position $i$ is the sum of the values at the $k$ positions after position $i$, i.e., $ans[i] = s[i + k + 1] - s[i + 1]$.
+
+If $k$ is a negative number, then the value at position $i$ is the sum of the values at the $|k|$ positions before position $i$, i.e., $ans[i] = s[i + n] - s[i + k + n]$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the `code` array.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def decrypt(self, code: List[int], k: int) -> List[int]:
+        n = len(code)
+        ans = [0] * n
+        if k == 0:
+            return ans
+        s = list(accumulate(code + code, initial=0))
+        for i in range(n):
+            if k > 0:
+                ans[i] = s[i + k + 1] - s[i + 1]
+            else:
+                ans[i] = s[i + n] - s[i + k + n]
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[] decrypt(int[] code, int k) {
+        int n = code.length;
+        int[] ans = new int[n];
+        if (k == 0) {
+            return ans;
+        }
+        int[] s = new int[n << 1 | 1];
+        for (int i = 0; i < n << 1; ++i) {
+            s[i + 1] = s[i] + code[i % n];
+        }
+        for (int i = 0; i < n; ++i) {
+            if (k > 0) {
+                ans[i] = s[i + k + 1] - s[i + 1];
+            } else {
+                ans[i] = s[i + n] - s[i + k + n];
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
 
 ```cpp
 class Solution {
@@ -194,29 +310,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func decrypt(code []int, k int) []int {
-	n := len(code)
-	ans := make([]int, n)
-	if k == 0 {
-		return ans
-	}
-	for i := 0; i < n; i++ {
-		if k > 0 {
-			for j := i + 1; j < i+k+1; j++ {
-				ans[i] += code[j%n]
-			}
-		} else {
-			for j := i + k; j < i; j++ {
-				ans[i] += code[(j+n)%n]
-			}
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func decrypt(code []int, k int) []int {
@@ -240,46 +334,36 @@ func decrypt(code []int, k int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function decrypt(code: number[], k: number): number[] {
-    const n = code.length;
-    if (k === 0) {
-        return code.fill(0);
-    }
-    const isPrefix = k < 0;
-    if (isPrefix) {
-        k *= -1;
-    }
-    const map = new Map<number, [number, number]>();
-    let prefix = 0;
-    let suffix = 0;
-    for (let i = 1; i <= k; i++) {
-        prefix += code[n - i];
-        suffix += code[i];
-    }
-    map.set(0, [prefix, suffix]);
+    const n: number = code.length;
+    const ans: number[] = Array(n).fill(0);
 
-    for (let i = 1; i < n; i++) {
-        let [p, s] = map.get(i - 1);
-        p -= code[n - k - 1 + i] ?? code[i - k - 1];
-        p += code[i - 1];
-        s -= code[i];
-        s += code[i + k] ?? code[i + k - n];
-        map.set(i, [p, s]);
+    if (k === 0) {
+        return ans;
     }
-    for (let i = 0; i < n; i++) {
-        code[i] = map.get(i)[Number(!isPrefix)];
+
+    const s: number[] = Array((n << 1) | 1).fill(0);
+    for (let i = 0; i < n << 1; ++i) {
+        s[i + 1] = s[i] + code[i % n];
     }
-    return code;
+
+    for (let i = 0; i < n; ++i) {
+        if (k > 0) {
+            ans[i] = s[i + k + 1] - s[i + 1];
+        } else {
+            ans[i] = s[i + n] - s[i + k + n];
+        }
+    }
+
+    return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

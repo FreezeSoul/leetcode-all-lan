@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0847.Shortest%20Path%20Visiting%20All%20Nodes/README.md
+tags:
+    - 位运算
+    - 广度优先搜索
+    - 图
+    - 动态规划
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [847. 访问所有节点的最短路径](https://leetcode.cn/problems/shortest-path-visiting-all-nodes)
 
 [English Version](/solution/0800-0899/0847.Shortest%20Path%20Visiting%20All%20Nodes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>存在一个由 <code>n</code> 个节点组成的无向连通图，图中的节点按从 <code>0</code> 到 <code>n - 1</code> 编号。</p>
 
@@ -47,11 +61,13 @@
 	<li>输入的图总是连通图</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + BFS**
+### 方法一：状态压缩 + BFS
 
 我们注意到 $n$ 的范围不超过 $12$，因此，我们可以用一个 $12$ 位的二进制数来表示每个节点的访问情况，其中第 $i$ 位为 $1$ 表示第 $i$ 个节点已经被访问过，为 $0$ 表示该节点还没有被访问过。
 
@@ -61,25 +77,9 @@
 
 时间复杂度 $(n^2 \times 2^n)$，空间复杂度 $O(n \times 2^n)$。其中 $n$ 是图中的节点数。
 
-**方法二：BFS(A\* 算法)**
-
-因为每条边权值一样，所以用 BFS 就能得出最短路径，过程中可以用**状态压缩**记录节点的访问情况。另外，同一个节点 u 以及对应的节点访问情况需要保证只被搜索过一次，因此可以用 `vis(u, state)` 表示是否已经被搜索过，防止无效的重复搜索。
-
-本题也属于 BFS 最小步数模型，可以使用 A\* 算法优化搜索。
-
-A\* 算法主要思想如下：
-
-1. 将 BFS 队列转换为优先队列（小根堆）；
-1. 队列中的每个元素为 `(dist[state] + f(state), state)`，`dist[state]` 表示从起点到当前 state 的距离，`f(state)` 表示从当前 state 到终点的估计距离，这两个距离之和作为堆排序的依据；
-1. 当终点第一次出队时，说明找到了从起点到终点的最短路径，直接返回对应的 step；
-1. `f(state)` 是估价函数，并且估价函数要满足 `f(state) <= g(state)`，其中 `g(state)` 表示 state 到终点的真实距离；
-1. A\* 算法只能保证终点第一次出队时，即找到了一条从起点到终点的最小路径，不能保证其他点出队时也是从起点到当前点的最短路径。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,36 +104,7 @@ class Solution:
             ans += 1
 ```
 
-A\* 算法：
-
-```python
-class Solution:
-    def shortestPathLength(self, graph: List[List[int]]) -> int:
-        n = len(graph)
-
-        def f(state):
-            return sum(((state >> i) & 1) == 0 for i in range(n))
-
-        q = []
-        dist = [[inf] * (1 << n) for _ in range(n)]
-        for i in range(n):
-            heappush(q, (f(1 << i), i, 1 << i))
-            dist[i][1 << i] = 0
-        while q:
-            _, u, state = heappop(q)
-            if state == (1 << n) - 1:
-                return dist[u][state]
-            for v in graph[u]:
-                nxt = state | (1 << v)
-                if dist[v][nxt] > dist[u][state] + 1:
-                    dist[v][nxt] = dist[u][state] + 1
-                    heappush(q, (dist[v][nxt] + f(nxt), v, nxt))
-        return 0
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -165,7 +136,190 @@ class Solution {
 }
 ```
 
-A\* 算法：
+#### C++
+
+```cpp
+class Solution {
+public:
+    int shortestPathLength(vector<vector<int>>& graph) {
+        int n = graph.size();
+        queue<pair<int, int>> q;
+        bool vis[n][1 << n];
+        memset(vis, false, sizeof(vis));
+        for (int i = 0; i < n; ++i) {
+            q.emplace(i, 1 << i);
+            vis[i][1 << i] = true;
+        }
+        for (int ans = 0;; ++ans) {
+            for (int k = q.size(); k; --k) {
+                auto [i, st] = q.front();
+                q.pop();
+                if (st == (1 << n) - 1) {
+                    return ans;
+                }
+                for (int j : graph[i]) {
+                    int nst = st | 1 << j;
+                    if (!vis[j][nst]) {
+                        vis[j][nst] = true;
+                        q.emplace(j, nst);
+                    }
+                }
+            }
+        }
+    }
+};
+```
+
+#### Go
+
+```go
+func shortestPathLength(graph [][]int) int {
+	n := len(graph)
+	q := [][2]int{}
+	vis := make([][]bool, n)
+	for i := range vis {
+		vis[i] = make([]bool, 1<<n)
+		vis[i][1<<i] = true
+		q = append(q, [2]int{i, 1 << i})
+	}
+	for ans := 0; ; ans++ {
+		for k := len(q); k > 0; k-- {
+			p := q[0]
+			q = q[1:]
+			i, st := p[0], p[1]
+			if st == (1<<n)-1 {
+				return ans
+			}
+			for _, j := range graph[i] {
+				nst := st | 1<<j
+				if !vis[j][nst] {
+					vis[j][nst] = true
+					q = append(q, [2]int{j, nst})
+				}
+			}
+		}
+	}
+}
+```
+
+#### TypeScript
+
+```ts
+function shortestPathLength(graph: number[][]): number {
+    const n = graph.length;
+    const q: number[][] = [];
+    const vis: boolean[][] = new Array(n).fill(false).map(() => new Array(1 << n).fill(false));
+    for (let i = 0; i < n; ++i) {
+        q.push([i, 1 << i]);
+        vis[i][1 << i] = true;
+    }
+    for (let ans = 0; ; ++ans) {
+        for (let k = q.length; k; --k) {
+            const [i, st] = q.shift()!;
+            if (st === (1 << n) - 1) {
+                return ans;
+            }
+            for (const j of graph[i]) {
+                const nst = st | (1 << j);
+                if (!vis[j][nst]) {
+                    vis[j][nst] = true;
+                    q.push([j, nst]);
+                }
+            }
+        }
+    }
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::VecDeque;
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn shortest_path_length(graph: Vec<Vec<i32>>) -> i32 {
+        let n = graph.len();
+        let mut vis = vec![vec![false; 1 << n]; n];
+        let mut q = VecDeque::new();
+
+        // Initialize the queue
+        for i in 0..n {
+            q.push_back(((i, 1 << i), 0));
+            vis[i][1 << i] = true;
+        }
+
+        // Begin BFS
+        while !q.is_empty() {
+            let ((i, st), count) = q.pop_front().unwrap();
+            if st == (1 << n) - 1 {
+                return count;
+            }
+            // If the path has not been visited
+            for j in &graph[i] {
+                let nst = st | (1 << *j);
+                if !vis[*j as usize][nst] {
+                    q.push_back(((*j as usize, nst), count + 1));
+                    vis[*j as usize][nst] = true;
+                }
+            }
+        }
+
+        -1
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：BFS(A\* 算法)
+
+因为每条边权值一样，所以用 BFS 就能得出最短路径，过程中可以用**状态压缩**记录节点的访问情况。另外，同一个节点 u 以及对应的节点访问情况需要保证只被搜索过一次，因此可以用 `vis(u, state)` 表示是否已经被搜索过，防止无效的重复搜索。
+
+本题也属于 BFS 最小步数模型，可以使用 A\* 算法优化搜索。
+
+A\* 算法主要思想如下：
+
+1. 将 BFS 队列转换为优先队列（小根堆）；
+1. 队列中的每个元素为 `(dist[state] + f(state), state)`，`dist[state]` 表示从起点到当前 state 的距离，`f(state)` 表示从当前 state 到终点的估计距离，这两个距离之和作为堆排序的依据；
+1. 当终点第一次出队时，说明找到了从起点到终点的最短路径，直接返回对应的 step；
+1. `f(state)` 是估价函数，并且估价函数要满足 `f(state) <= g(state)`，其中 `g(state)` 表示 state 到终点的真实距离；
+1. A\* 算法只能保证终点第一次出队时，即找到了一条从起点到终点的最小路径，不能保证其他点出队时也是从起点到当前点的最短路径。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def shortestPathLength(self, graph: List[List[int]]) -> int:
+        n = len(graph)
+
+        def f(state):
+            return sum(((state >> i) & 1) == 0 for i in range(n))
+
+        q = []
+        dist = [[inf] * (1 << n) for _ in range(n)]
+        for i in range(n):
+            heappush(q, (f(1 << i), i, 1 << i))
+            dist[i][1 << i] = 0
+        while q:
+            _, u, state = heappop(q)
+            if state == (1 << n) - 1:
+                return dist[u][state]
+            for v in graph[u]:
+                nxt = state | (1 << v)
+                if dist[v][nxt] > dist[u][state] + 1:
+                    dist[v][nxt] = dist[u][state] + 1
+                    heappush(q, (dist[v][nxt] + f(nxt), v, nxt))
+        return 0
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -211,41 +365,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int shortestPathLength(vector<vector<int>>& graph) {
-        int n = graph.size();
-        queue<pair<int, int>> q;
-        bool vis[n][1 << n];
-        memset(vis, false, sizeof(vis));
-        for (int i = 0; i < n; ++i) {
-            q.emplace(i, 1 << i);
-            vis[i][1 << i] = true;
-        }
-        for (int ans = 0;; ++ans) {
-            for (int k = q.size(); k; --k) {
-                auto [i, st] = q.front();
-                q.pop();
-                if (st == (1 << n) - 1) {
-                    return ans;
-                }
-                for (int j : graph[i]) {
-                    int nst = st | 1 << j;
-                    if (!vis[j][nst]) {
-                        vis[j][nst] = true;
-                        q.emplace(j, nst);
-                    }
-                }
-            }
-        }
-    }
-};
-```
-
-A\* 算法：
+#### C++
 
 ```cpp
 class Solution {
@@ -285,73 +405,8 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func shortestPathLength(graph [][]int) int {
-	n := len(graph)
-	q := [][2]int{}
-	vis := make([][]bool, n)
-	for i := range vis {
-		vis[i] = make([]bool, 1<<n)
-		vis[i][1<<i] = true
-		q = append(q, [2]int{i, 1 << i})
-	}
-	for ans := 0; ; ans++ {
-		for k := len(q); k > 0; k-- {
-			p := q[0]
-			q = q[1:]
-			i, st := p[0], p[1]
-			if st == (1<<n)-1 {
-				return ans
-			}
-			for _, j := range graph[i] {
-				nst := st | 1<<j
-				if !vis[j][nst] {
-					vis[j][nst] = true
-					q = append(q, [2]int{j, nst})
-				}
-			}
-		}
-	}
-}
-```
-
-### **TypeScript**
-
-```ts
-function shortestPathLength(graph: number[][]): number {
-    const n = graph.length;
-    const q: number[][] = [];
-    const vis: boolean[][] = new Array(n)
-        .fill(false)
-        .map(() => new Array(1 << n).fill(false));
-    for (let i = 0; i < n; ++i) {
-        q.push([i, 1 << i]);
-        vis[i][1 << i] = true;
-    }
-    for (let ans = 0; ; ++ans) {
-        for (let k = q.length; k; --k) {
-            const [i, st] = q.shift()!;
-            if (st === (1 << n) - 1) {
-                return ans;
-            }
-            for (const j of graph[i]) {
-                const nst = st | (1 << j);
-                if (!vis[j][nst]) {
-                    vis[j][nst] = true;
-                    q.push([j, nst]);
-                }
-            }
-        }
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

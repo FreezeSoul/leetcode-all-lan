@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0699.Falling%20Squares/README.md
+tags:
+    - 线段树
+    - 数组
+    - 有序集合
+---
+
+<!-- problem:start -->
+
 # [699. 掉落的方块](https://leetcode.cn/problems/falling-squares)
 
 [English Version](/solution/0600-0699/0699.Falling%20Squares/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在二维平面上的 x 轴上，放置着一些方块。</p>
 
@@ -52,18 +64,22 @@
 	<li><code>1 &lt;= sideLength<sub>i</sub> &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：线段树**
+### 方法一：线段树
 
-线段树将整个区间分割为多个不连续的子区间，子区间的数量不超过 $log(width)$。更新某个元素的值，只需要更新 $log(width)$ 个区间，并且这些区间都包含在一个包含该元素的大区间内。区间修改时，需要使用**懒标记**保证效率。
+根据题目描述，我们需要维护一个区间集合，支持区间的修改和查询操作。这种情况下，我们可以使用线段树来解决。
+
+线段树将整个区间分割为多个不连续的子区间，子区间的数量不超过 $\log(width)$，其中 $width$ 是区间的长度。更新某个元素的值，只需要更新 $\log(width)$ 个区间，并且这些区间都包含在一个包含该元素的大区间内。区间修改时，需要使用**懒标记**保证效率。
 
 -   线段树的每个节点代表一个区间；
--   线段树具有唯一的根节点，代表的区间是整个统计范围，如 $[1, N]$；
+-   线段树具有唯一的根节点，代表的区间是整个统计范围，如 $[1, n]$；
 -   线段树的每个叶子节点代表一个长度为 1 的元区间 $[x, x]$；
--   对于每个内部节点 $[l, r]$，它的左儿子是 $[l, mid]$，右儿子是 $[mid + 1, r]$, 其中 $mid = ⌊(l + r) / 2⌋$ (即向下取整)。
+-   对于每个内部节点 $[l, r]$，它的左儿子是 $[l, mid]$，右儿子是 $[mid + 1, r]$, 其中 $\textit{mid} = \frac{l + r}{2}$；
 
 对于本题，线段树节点维护的信息有：
 
@@ -72,11 +88,11 @@
 
 另外，由于数轴范围很大，达到 $10^8$，因此我们采用动态开点。
 
+时间复杂度方面，每次查询和修改的时间复杂度为 $O(\log n)$，总时间复杂度为 $O(n \log n)$。空间复杂度为 $O(n)$。
+
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Node:
@@ -155,9 +171,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Node {
@@ -265,7 +279,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Node {
@@ -364,7 +378,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type node struct {
@@ -378,15 +392,8 @@ func newNode(l, r int) *node {
 	return &node{
 		l:   l,
 		r:   r,
-		mid: int(uint(l+r) >> 1),
+		mid: (l + r) >> 1,
 	}
-}
-
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
 }
 
 type segmentTree struct {
@@ -471,10 +478,113 @@ func fallingSquares(positions [][]int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+class Node {
+    left: Node | null = null;
+    right: Node | null = null;
+    l: number;
+    r: number;
+    mid: number;
+    v: number = 0;
+    add: number = 0;
 
+    constructor(l: number, r: number) {
+        this.l = l;
+        this.r = r;
+        this.mid = (l + r) >> 1;
+    }
+}
+
+class SegmentTree {
+    private root: Node = new Node(1, 1e9);
+
+    public modify(l: number, r: number, v: number): void {
+        this.modifyNode(l, r, v, this.root);
+    }
+
+    private modifyNode(l: number, r: number, v: number, node: Node): void {
+        if (l > r) {
+            return;
+        }
+        if (node.l >= l && node.r <= r) {
+            node.v = v;
+            node.add = v;
+            return;
+        }
+        this.pushdown(node);
+        if (l <= node.mid) {
+            this.modifyNode(l, r, v, node.left!);
+        }
+        if (r > node.mid) {
+            this.modifyNode(l, r, v, node.right!);
+        }
+        this.pushup(node);
+    }
+
+    public query(l: number, r: number): number {
+        return this.queryNode(l, r, this.root);
+    }
+
+    private queryNode(l: number, r: number, node: Node): number {
+        if (l > r) {
+            return 0;
+        }
+        if (node.l >= l && node.r <= r) {
+            return node.v;
+        }
+        this.pushdown(node);
+        let v = 0;
+        if (l <= node.mid) {
+            v = Math.max(v, this.queryNode(l, r, node.left!));
+        }
+        if (r > node.mid) {
+            v = Math.max(v, this.queryNode(l, r, node.right!));
+        }
+        return v;
+    }
+
+    private pushup(node: Node): void {
+        node.v = Math.max(node.left!.v, node.right!.v);
+    }
+
+    private pushdown(node: Node): void {
+        if (node.left == null) {
+            node.left = new Node(node.l, node.mid);
+        }
+        if (node.right == null) {
+            node.right = new Node(node.mid + 1, node.r);
+        }
+        if (node.add != 0) {
+            let left = node.left,
+                right = node.right;
+            left!.add = node.add;
+            right!.add = node.add;
+            left!.v = node.add;
+            right!.v = node.add;
+            node.add = 0;
+        }
+    }
+}
+
+function fallingSquares(positions: number[][]): number[] {
+    const ans: number[] = [];
+    const tree = new SegmentTree();
+    let mx = 0;
+    for (const [l, w] of positions) {
+        const r = l + w - 1;
+        const h = tree.query(l, r) + w;
+        mx = Math.max(mx, h);
+        ans.push(mx);
+        tree.modify(l, r, h);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0326.Power%20of%20Three/README.md
+tags:
+    - 递归
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [326. 3 的幂](https://leetcode.cn/problems/power-of-three)
 
 [English Version](/solution/0300-0399/0326.Power%20of%20Three/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数，写一个函数来判断它是否是 3&nbsp;的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
 
@@ -52,27 +63,21 @@
 
 <p><strong>进阶：</strong>你能不使用循环或者递归来完成本题吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：试除法**
+### 方法一：试除法
 
 如果 $n \gt 2$，我们可以不断地将 $n$ 除以 $3$，如果不能整除，说明 $n$ 不是 $3$ 的幂，否则继续除以 $3$，直到 $n$ 小于等于 $2$。如果 $n$ 等于 $1$，说明 $n$ 是 $3$ 的幂，否则不是 $3$ 的幂。
 
 时间复杂度 $O(\log_3n)$，空间复杂度 $O(1)$。
 
-**方法二：数学**
-
-如果 $n$ 是 $3$ 的幂，那么 $n$ 最大是 $3^{19} = 1162261467$，因此我们只需要判断 $n$ 是否是 $3^{19}$ 的约数即可。
-
-时间复杂度 $O(1)$，空间复杂度 $O(1)$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,15 +89,7 @@ class Solution:
         return n == 1
 ```
 
-```python
-class Solution:
-    def isPowerOfThree(self, n: int) -> bool:
-        return n > 0 and 1162261467 % n == 0
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,15 +105,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean isPowerOfThree(int n) {
-        return n > 0 && 1162261467 % n == 0;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,16 +122,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool isPowerOfThree(int n) {
-        return n > 0 && 1162261467 % n == 0;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func isPowerOfThree(n int) bool {
@@ -156,13 +136,7 @@ func isPowerOfThree(n int) bool {
 }
 ```
 
-```go
-func isPowerOfThree(n int) bool {
-	return n > 0 && 1162261467%n == 0
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isPowerOfThree(n: number): boolean {
@@ -170,7 +144,7 @@ function isPowerOfThree(n: number): boolean {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -182,10 +156,59 @@ var isPowerOfThree = function (n) {
 };
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：数学
+
+如果 $n$ 是 $3$ 的幂，那么 $n$ 最大是 $3^{19} = 1162261467$，因此我们只需要判断 $n$ 是否是 $3^{19}$ 的约数即可。
+
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isPowerOfThree(self, n: int) -> bool:
+        return n > 0 and 1162261467 % n == 0
 ```
 
+#### Java
+
+```java
+class Solution {
+    public boolean isPowerOfThree(int n) {
+        return n > 0 && 1162261467 % n == 0;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        return n > 0 && 1162261467 % n == 0;
+    }
+};
+```
+
+#### Go
+
+```go
+func isPowerOfThree(n int) bool {
+	return n > 0 && 1162261467%n == 0
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

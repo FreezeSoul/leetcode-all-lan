@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/02.05.Sum%20Lists/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [02.05. Sum Lists](https://leetcode.cn/problems/sum-lists-lcci)
 
 [中文文档](/lcci/02.05.Sum%20Lists/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have two numbers represented by a linked list, where each node contains a single digit. The digits are stored in reverse order, such that the 1&#39;s digit is at the head of the list. Write a function that adds the two numbers and returns the sum as a linked list.</p>
 
@@ -30,11 +40,25 @@
 
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We traverse two linked lists $l_1$ and $l_2$ simultaneously, and use a variable $carry$ to indicate whether there is a carry-over currently.
+
+During each traversal, we take out the current digit of the corresponding linked list, calculate the sum of them and the carry-over $carry$, then update the value of the carry-over, and finally add the value of the current digit to the answer linked list. The traversal ends when both linked lists have been traversed and the carry-over is $0$.
+
+Finally, we return the head node of the answer linked list.
+
+The time complexity is $O(\max(m, n))$, where $m$ and $n$ are the lengths of the two linked lists respectively. We need to traverse all positions of the two linked lists, and it only takes $O(1)$ time to process each position. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -46,19 +70,19 @@
 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        dummy = cur = ListNode(0)
-        carry = 0
+        dummy = ListNode()
+        carry, curr = 0, dummy
         while l1 or l2 or carry:
-            carry += (0 if not l1 else l1.val) + (0 if not l2 else l2.val)
-            cur.next = ListNode(carry % 10)
-            cur = cur.next
-            carry //= 10
-            l1 = None if not l1 else l1.next
-            l2 = None if not l2 else l2.next
+            s = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
+            carry, val = divmod(s, 10)
+            curr.next = ListNode(val)
+            curr = curr.next
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
         return dummy.next
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -71,8 +95,8 @@ class Solution:
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
         int carry = 0;
-        ListNode dummy = new ListNode(-1);
         ListNode cur = dummy;
         while (l1 != null || l2 != null || carry != 0) {
             int s = (l1 == null ? 0 : l1.val) + (l2 == null ? 0 : l2.val) + carry;
@@ -87,7 +111,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -117,38 +141,7 @@ public:
 };
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} l1
- * @param {ListNode} l2
- * @return {ListNode}
- */
-var addTwoNumbers = function (l1, l2) {
-    let carry = 0;
-    const dummy = new ListNode(0);
-    let cur = dummy;
-    while (l1 || l2 || carry) {
-        carry += (l1?.val || 0) + (l2?.val || 0);
-        cur.next = new ListNode(carry % 10);
-        carry = Math.floor(carry / 10);
-        cur = cur.next;
-        l1 = l1?.next;
-        l2 = l2?.next;
-    }
-    return dummy.next;
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 /**
@@ -179,7 +172,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -194,10 +187,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
  * }
  */
 
-function addTwoNumbers(
-    l1: ListNode | null,
-    l2: ListNode | null,
-): ListNode | null {
+function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
     if (l1 == null || l2 == null) {
         return l1 && l2;
     }
@@ -228,7 +218,7 @@ function addTwoNumbers(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -268,10 +258,75 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var addTwoNumbers = function (l1, l2) {
+    let carry = 0;
+    const dummy = new ListNode(0);
+    let cur = dummy;
+    while (l1 || l2 || carry) {
+        carry += (l1?.val || 0) + (l2?.val || 0);
+        cur.next = new ListNode(carry % 10);
+        carry = Math.floor(carry / 10);
+        cur = cur.next;
+        l1 = l1?.next;
+        l2 = l2?.next;
+    }
+    return dummy.next;
+};
 ```
 
+#### Swift
+
+```swift
+/**
+* Definition for singly-linked list.
+*    class ListNode {
+*        var val: Int
+*        var next: ListNode?
+*        init(_ val: Int) {
+*            self.val = val
+*            self.next = nil
+*        }
+*    }
+*/
+
+class Solution {
+    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+        var carry = 0
+        let dummy = ListNode(0)
+        var current: ListNode? = dummy
+        var l1 = l1, l2 = l2
+
+        while l1 != nil || l2 != nil || carry != 0 {
+            let sum = (l1?.val ?? 0) + (l2?.val ?? 0) + carry
+            carry = sum / 10
+            current?.next = ListNode(sum % 10)
+            current = current?.next
+            l1 = l1?.next
+            l2 = l2?.next
+        }
+
+        return dummy.next
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

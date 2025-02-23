@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0402.Remove%20K%20Digits/README_EN.md
+tags:
+    - Stack
+    - Greedy
+    - String
+    - Monotonic Stack
+---
+
+<!-- problem:start -->
+
 # [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits)
 
 [中文文档](/solution/0400-0499/0402.Remove%20K%20Digits/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given string num representing a non-negative integer <code>num</code>, and an integer <code>k</code>, return <em>the smallest possible integer after removing</em> <code>k</code> <em>digits from</em> <code>num</code>.</p>
 
@@ -40,13 +55,17 @@
 	<li><code>num</code> does not have any leading zeros except for the zero itself.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Greedy Algorithm**
+<!-- solution:start -->
+
+### Solution 1: Greedy Algorithm
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +80,7 @@ class Solution:
         return ''.join(stk[:remain]).lstrip('0') or '0'
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -105,7 +124,6 @@ public:
         }
         int i = 0;
         for (; i < stk.size() && stk[i] == '0'; ++i) {
-
         }
         string ans = stk.substr(i);
         return ans == "" ? "0" : ans;
@@ -113,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeKdigits(num string, k int) string {
@@ -136,27 +154,27 @@ func removeKdigits(num string, k int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function removeKdigits(num: string, k: number): string {
-    let nums = [...num];
-    while (k > 0) {
-        let idx = 0;
-        while (idx < nums.length - 1 && nums[idx + 1] >= nums[idx]) {
-            idx++;
+    const stk: string[] = [];
+    for (const c of num) {
+        while (k && stk.length > 0 && stk[stk.length - 1] > c) {
+            stk.pop();
+            k--;
         }
-        nums.splice(idx, 1);
-        k--;
+        stk.push(c);
     }
-    return nums.join('').replace(/^0*/g, '') || '0';
+    while (k--) {
+        stk.pop();
+    }
+    return stk.join('').replace(/^0*/g, '') || '0';
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

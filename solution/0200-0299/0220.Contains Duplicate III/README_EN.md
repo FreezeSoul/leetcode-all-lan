@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0220.Contains%20Duplicate%20III/README_EN.md
+tags:
+    - Array
+    - Bucket Sort
+    - Ordered Set
+    - Sorting
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [220. Contains Duplicate III](https://leetcode.com/problems/contains-duplicate-iii)
 
 [中文文档](/solution/0200-0299/0220.Contains%20Duplicate%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> and two integers <code>indexDiff</code> and <code>valueDiff</code>.</p>
 
@@ -47,18 +63,29 @@ abs(nums[i] - nums[j]) &lt;= valueDiff --&gt; abs(1 - 1) &lt;= 0
 	<li><code>0 &lt;= valueDiff &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sliding Window + Ordered Set
+
+We maintain a sliding window of size $k$, and the elements in the window are kept in order.
+
+We traverse the array `nums`. For each element $nums[i]$, we look for the first element in the ordered set that is greater than or equal to $nums[i] - t$. If the element exists, and this element is less than or equal to $nums[i] + t$, it means we have found a pair of elements that meet the conditions, and we return `true`. Otherwise, we insert $nums[i]$ into the ordered set, and if the size of the ordered set exceeds $k$, we need to remove the earliest added element from the ordered set.
+
+The time complexity is $O(n \times \log k)$, where $n$ is the length of the array `nums`. For each element, we need $O(\log k)$ time to find the element in the ordered set, and there are $n$ elements in total, so the total time complexity is $O(n \times \log k)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedSet
-
-
 class Solution:
-    def containsNearbyAlmostDuplicate(self, nums: List[int], indexDiff: int, valueDiff: int) -> bool:
+    def containsNearbyAlmostDuplicate(
+        self, nums: List[int], indexDiff: int, valueDiff: int
+    ) -> bool:
         s = SortedSet()
         for i, v in enumerate(nums):
             j = s.bisect_left(v - valueDiff)
@@ -70,7 +97,7 @@ class Solution:
         return False
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -109,7 +136,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
@@ -135,35 +162,7 @@ func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool ContainsNearbyAlmostDuplicate(int[] nums, int k, int t) {
-        if (k <= 0 || t < 0) return false;
-        var index = new SortedList<int, object>();
-        for (int i = 0; i < nums.Length; ++i) {
-            if (index.ContainsKey(nums[i])) {
-                return true;
-            }
-            index.Add(nums[i], null);
-            var j = index.IndexOfKey(nums[i]);
-            if (j > 0 && (long)nums[i] - index.Keys[j - 1] <= t) {
-                return true;
-            }
-            if (j < index.Count - 1 && (long)index.Keys[j + 1] - nums[i] <= t) {
-                return true;
-            }
-            if (index.Count > k) {
-                index.Remove(nums[i - k]);
-            }
-        }
-        return false;
-    }
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function containsNearbyAlmostDuplicate(
@@ -221,9 +220,7 @@ class RBTreeNode<T = number> {
 class RBTree<T> {
     root: RBTreeNode<T> | null;
     lt: (l: T, r: T) => boolean;
-    constructor(
-        compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0),
-    ) {
+    constructor(compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0)) {
         this.root = null;
         this.lt = (l: T, r: T) => compare(l, r) < 0;
     }
@@ -531,9 +528,7 @@ class RBTree<T> {
         for (const v of this.inOrder(root.right!)) yield v;
     }
 
-    *reverseInOrder(
-        root: RBTreeNode<T> = this.root!,
-    ): Generator<T, undefined, void> {
+    *reverseInOrder(root: RBTreeNode<T> = this.root!): Generator<T, undefined, void> {
         if (!root) return;
         for (const v of this.reverseInOrder(root.right!)) yield v;
         yield root.data;
@@ -830,10 +825,36 @@ class TreeMultiSet<T = number> {
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public bool ContainsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if (k <= 0 || t < 0) return false;
+        var index = new SortedList<int, object>();
+        for (int i = 0; i < nums.Length; ++i) {
+            if (index.ContainsKey(nums[i])) {
+                return true;
+            }
+            index.Add(nums[i], null);
+            var j = index.IndexOfKey(nums[i]);
+            if (j > 0 && (long)nums[i] - index.Keys[j - 1] <= t) {
+                return true;
+            }
+            if (j < index.Count - 1 && (long)index.Keys[j + 1] - nums[i] <= t) {
+                return true;
+            }
+            if (index.Count > k) {
+                index.Remove(nums[i - k]);
+            }
+        }
+        return false;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

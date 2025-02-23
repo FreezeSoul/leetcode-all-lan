@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1507.Reformat%20Date/README.md
+rating: 1283
+source: 第 30 场双周赛 Q1
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1507. 转变日期格式](https://leetcode.cn/problems/reformat-date)
 
 [English Version](/solution/1500-1599/1507.Reformat%20Date/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串&nbsp;<code>date</code>&nbsp;，它的格式为&nbsp;<code>Day Month Year</code>&nbsp;，其中：</p>
 
@@ -50,11 +62,13 @@
 	<li>给定日期保证是合法的，所以不需要处理异常输入。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 将字符串按空格分割为三个部分，分别为 `day`、`month` 和 `year`，然后拼接为 `YYYY-MM-DD` 的格式。
 
@@ -62,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,9 +89,7 @@ class Solution:
         return "-".join(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,7 +120,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func reformatDate(date string) string {
@@ -123,7 +133,19 @@ func reformatDate(date string) string {
 }
 ```
 
-### **PHP**
+#### TypeScript
+
+```ts
+function reformatDate(date: string): string {
+    const s = date.split(' ');
+    const months = ' JanFebMarAprMayJunJulAugSepOctNovDec';
+    const day = parseInt(s[0].substring(0, s[0].length - 2));
+    const month = Math.floor(months.indexOf(s[1]) / 3) + 1;
+    return `${s[2]}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -132,35 +154,34 @@ class Solution {
      * @return String
      */
     function reformatDate($date) {
-        $arr = explode(" ", $date);
-        $months = array("Jan" => "01", "Feb" => "02", "Mar" => "03", "Apr" => "04", "May" => "05", "Jun" => "06", "Jul" => "07", "Aug" => "08", "Sep" => "09", "Oct" => "10", "Nov" => "11", "Dec" => "12");
+        $arr = explode(' ', $date);
+        $months = [
+            'Jan' => '01',
+            'Feb' => '02',
+            'Mar' => '03',
+            'Apr' => '04',
+            'May' => '05',
+            'Jun' => '06',
+            'Jul' => '07',
+            'Aug' => '08',
+            'Sep' => '09',
+            'Oct' => '10',
+            'Nov' => '11',
+            'Dec' => '12',
+        ];
         $year = $arr[2];
         $month = $months[$arr[1]];
         $day = intval($arr[0]);
-        if ($day > 0 && $day < 10) $day = "0".$day;
-        return $year."-".$month."-".$day;
+        if ($day > 0 && $day < 10) {
+            $day = '0' . $day;
+        }
+        return $year . '-' . $month . '-' . $day;
     }
 }
 ```
 
-### **TypeScript**
-
-```ts
-function reformatDate(date: string): string {
-    const s = date.split(' ');
-    const months = ' JanFebMarAprMayJunJulAugSepOctNovDec';
-    const day = parseInt(s[0].substring(0, s[0].length - 2));
-    const month = Math.floor(months.indexOf(s[1]) / 3) + 1;
-    return `${s[2]}-${month.toString().padStart(2, '0')}-${day
-        .toString()
-        .padStart(2, '0')}`;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.17.Multi%20Search/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [17.17. Multi Search](https://leetcode.cn/problems/multi-search-lcci)
 
 [中文文档](/lcci/17.17.Multi%20Search/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string band an array of smaller strings T, design a method to search b for each small string in T. Output&nbsp;<code>positions</code> of all strings in&nbsp;<code>smalls</code>&nbsp;that appear in <code>big</code>,&nbsp;where <code>positions[i]</code> is all positions of <code>smalls[i]</code>.</p>
 
@@ -30,11 +40,17 @@ smalls = [&quot;is&quot;,&quot;ppi&quot;,&quot;hi&quot;,&quot;sis&quot;,&quot;i&
 	<li>All characters are lowercase letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Trie:
@@ -78,7 +94,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -146,7 +162,7 @@ class Trie {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -157,7 +173,7 @@ private:
 public:
     Trie()
         : children(26)
-        , idx(-1) { }
+        , idx(-1) {}
 
     void insert(string word, int i) {
         Trie* node = this;
@@ -199,7 +215,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -257,10 +273,80 @@ func multiSearch(big string, smalls []string) [][]int {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class TrieNode {
+    var idx: Int
+    var children: [TrieNode?]
 
+    init() {
+        self.idx = -1
+        self.children = Array(repeating: nil, count: 26)
+    }
+}
+
+class Trie {
+    private let root: TrieNode
+
+    init() {
+        self.root = TrieNode()
+    }
+
+    func insert(_ word: String, _ index: Int) {
+        var node = root
+        for ch in word {
+            let i = Int(ch.asciiValue! - Character("a").asciiValue!)
+            if node.children[i] == nil {
+                node.children[i] = TrieNode()
+            }
+            node = node.children[i]!
+        }
+        node.idx = index
+    }
+
+    func search(_ word: String) -> [Int] {
+        var node = root
+        var results = [Int]()
+        for ch in word {
+            let i = Int(ch.asciiValue! - Character("a").asciiValue!)
+            if node.children[i] == nil {
+                break
+            }
+            node = node.children[i]!
+            if node.idx != -1 {
+                results.append(node.idx)
+            }
+        }
+        return results
+    }
+}
+
+class Solution {
+    func multiSearch(_ big: String, _ smalls: [String]) -> [[Int]] {
+        let trie = Trie()
+        for (index, small) in smalls.enumerated() {
+            trie.insert(small, index)
+        }
+
+        var results = Array(repeating: [Int](), count: smalls.count)
+        let bigChars = Array(big)
+
+        for i in 0..<bigChars.count {
+            let substring = String(bigChars[i...])
+            let indices = trie.search(substring)
+            for index in indices {
+                results[index].append(i)
+            }
+        }
+
+        return results
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

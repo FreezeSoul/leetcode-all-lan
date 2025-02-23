@@ -1,8 +1,20 @@
-# [2252. Dynamic Pivoting of a Table](https://leetcode.com/problems/dynamic-pivoting-of-a-table)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2252.Dynamic%20Pivoting%20of%20a%20Table/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2252. Dynamic Pivoting of a Table 🔒](https://leetcode.com/problems/dynamic-pivoting-of-a-table)
 
 [中文文档](/solution/2200-2299/2252.Dynamic%20Pivoting%20of%20a%20Table/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Products</code></p>
 
@@ -14,7 +26,7 @@
 | store       | varchar |
 | price       | int     |
 +-------------+---------+
-(product_id, store) is the primary key for this table.
+(product_id, store) is the primary key (combination of columns with unique values) for this table.
 Each row of this table indicates the price of product_id in store.
 There will be at most 30 different stores in the table.
 price is the price of the product at this store.
@@ -30,7 +42,7 @@ price is the price of the product at this store.
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -63,14 +75,40 @@ Similarly, product 2 has a price of 200 in Nozama and 190 in Souq. It is not sol
 For product 3, the price is 1000 in Shop and 1900 in Souq. It is not sold in the other two stores.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+CREATE PROCEDURE PivotProducts()
+BEGIN
+	# Write your MySQL query statement below.
+	SET group_concat_max_len = 5000;
+    SELECT GROUP_CONCAT(DISTINCT 'MAX(CASE WHEN store = \'',
+               store,
+               '\' THEN price ELSE NULL END) AS ',
+               store
+               ORDER BY store) INTO @sql
+    FROM Products;
+    SET @sql =  CONCAT('SELECT product_id, ',
+                    @sql,
+                    ' FROM Products GROUP BY product_id');
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

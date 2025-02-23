@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2565.Subsequence%20With%20the%20Minimum%20Score/README.md
+rating: 2432
+source: 第 332 场周赛 Q4
+tags:
+    - 双指针
+    - 字符串
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [2565. 最少得分子序列](https://leetcode.cn/problems/subsequence-with-the-minimum-score)
 
 [English Version](/solution/2500-2599/2565.Subsequence%20With%20the%20Minimum%20Score/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串&nbsp;<code>s</code> 和&nbsp;<code>t</code>&nbsp;。</p>
 
@@ -56,11 +70,13 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前后缀预处理 + 二分查找**
+### 方法一：前后缀预处理 + 二分查找
 
 根据题目我们知道，删除字符的下标范围是 `[left, right]`，最优的做法一定是删除 `[left, right]` 范围内的所有字符。也就是说，我们要删除字符串 $t$ 中的一个子串，使得字符串 $t$ 的剩余前缀可以匹配字符串 $s$ 的前缀，字符串 $t$ 的剩余后缀可以匹配字符串 $s$ 的后缀，且字符串 $s$ 的前后缀不相交。注意，这里的匹配指的是子序列匹配。
 
@@ -72,9 +88,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +121,7 @@ class Solution:
         return bisect_left(range(n + 1), True, key=check)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -165,7 +177,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -213,7 +225,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumScore(s string, t string) int {
@@ -255,10 +267,8 @@ func minimumScore(s string, t string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

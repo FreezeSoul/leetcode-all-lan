@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0380.Insert%20Delete%20GetRandom%20O%281%29/README_EN.md
+tags:
+    - Design
+    - Array
+    - Hash Table
+    - Math
+    - Randomized
+---
+
+<!-- problem:start -->
+
 # [380. Insert Delete GetRandom O(1)](https://leetcode.com/problems/insert-delete-getrandom-o1)
 
 [中文文档](/solution/0300-0399/0380.Insert%20Delete%20GetRandom%20O%281%29/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Implement the <code>RandomizedSet</code> class:</p>
 
@@ -45,9 +61,13 @@ randomizedSet.getRandom(); // Since 2 is the only number in the set, getRandom()
 	<li>There will be <strong>at least one</strong> element in the data structure when <code>getRandom</code> is called.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Hash Table + Dynamic List**
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Dynamic List
 
 We define a dynamic list $q$ to store the elements in the set, and a hash table $d$ to store the index of each element in $q$.
 
@@ -61,11 +81,10 @@ Time complexity $O(1)$, space complexity $O(n)$, where $n$ is the number of elem
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class RandomizedSet:
-
     def __init__(self):
         self.d = {}
         self.q = []
@@ -98,7 +117,7 @@ class RandomizedSet:
 # param_3 = obj.getRandom()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class RandomizedSet {
@@ -144,13 +163,12 @@ class RandomizedSet {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class RandomizedSet {
 public:
     RandomizedSet() {
-
     }
 
     bool insert(int val) {
@@ -192,7 +210,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type RandomizedSet struct {
@@ -238,7 +256,7 @@ func (this *RandomizedSet) GetRandom() int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class RandomizedSet {
@@ -282,26 +300,24 @@ class RandomizedSet {
  */
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
-use std::collections::HashSet;
 use rand::Rng;
+use std::collections::HashSet;
 
 struct RandomizedSet {
-    list: HashSet<i32>
+    list: HashSet<i32>,
 }
-
 
 /**
  * `&self` means the method takes an immutable reference.
  * If you need a mutable reference, change it to `&mut self` instead.
  */
 impl RandomizedSet {
-
     fn new() -> Self {
         Self {
-            list: HashSet::new()
+            list: HashSet::new(),
         }
     }
 
@@ -318,17 +334,9 @@ impl RandomizedSet {
         *self.list.iter().collect::<Vec<&i32>>()[i]
     }
 }
-
-/**
- * Your RandomizedSet object will be instantiated and called as such:
- * let obj = RandomizedSet::new();
- * let ret_1: bool = obj.insert(val);
- * let ret_2: bool = obj.remove(val);
- * let ret_3: i32 = obj.get_random();
- */
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class RandomizedSet {
@@ -374,10 +382,8 @@ public class RandomizedSet {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2148.Count%20Elements%20With%20Strictly%20Smaller%20and%20Greater%20Elements/README_EN.md
+rating: 1201
+source: Weekly Contest 277 Q1
+tags:
+    - Array
+    - Counting
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2148. Count Elements With Strictly Smaller and Greater Elements](https://leetcode.com/problems/count-elements-with-strictly-smaller-and-greater-elements)
 
 [中文文档](/solution/2100-2199/2148.Count%20Elements%20With%20Strictly%20Smaller%20and%20Greater%20Elements/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return <em>the number of elements that have <strong>both</strong> a strictly smaller and a strictly greater element appear in </em><code>nums</code>.</p>
 
@@ -34,34 +50,40 @@ Since there are two elements with the value 3, in total there are 2 elements hav
 	<li><code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Find Minimum and Maximum Values
+
+According to the problem description, we can first find the minimum value $\textit{mi}$ and the maximum value $\textit{mx}$ of the array $\textit{nums}$. Then, traverse the array $\textit{nums}$ and count the number of elements that satisfy $\textit{mi} < x < \textit{mx}$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{nums}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def countElements(self, nums: List[int]) -> int:
         mi, mx = min(nums), max(nums)
-        return sum(mi < num < mx for num in nums)
+        return sum(mi < x < mx for x in nums)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-
     public int countElements(int[] nums) {
-        int mi = 1000000, mx = -1000000;
-        for (int num : nums) {
-            mi = Math.min(mi, num);
-            mx = Math.max(mx, num);
-        }
+        int mi = Arrays.stream(nums).min().getAsInt();
+        int mx = Arrays.stream(nums).max().getAsInt();
         int ans = 0;
-        for (int num : nums) {
-            if (mi < num && num < mx) {
-                ++ans;
+        for (int x : nums) {
+            if (mi < x && x < mx) {
+                ans++;
             }
         }
         return ans;
@@ -69,70 +91,45 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int countElements(vector<int>& nums) {
-        int mi = 1e6, mx = -1e6;
-        for (int num : nums) {
-            mi = min(mi, num);
-            mx = max(mx, num);
-        }
-        int ans = 0;
-        for (int num : nums)
-            if (mi < num && num < mx)
-                ++ans;
-        return ans;
+        auto [mi, mx] = ranges::minmax_element(nums);
+        return ranges::count_if(nums, [mi, mx](int x) { return *mi < x && x < *mx; });
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func countElements(nums []int) int {
-	mi, mx := int(1e6), -int(1e6)
-	for _, num := range nums {
-		if num < mi {
-			mi = num
-		}
-		if num > mx {
-			mx = num
-		}
-	}
-	ans := 0
-	for _, num := range nums {
-		if mi < num && num < mx {
+func countElements(nums []int) (ans int) {
+	mi := slices.Min(nums)
+	mx := slices.Max(nums)
+	for _, x := range nums {
+		if mi < x && x < mx {
 			ans++
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countElements(nums: number[]): number {
-    const min = Math.min(...nums),
-        max = Math.max(...nums);
-    let ans = 0;
-    for (let i = 0; i < nums.length; ++i) {
-        let cur = nums[i];
-        if (cur < max && cur > min) {
-            ++ans;
-        }
-    }
-    return ans;
+    const mi = Math.min(...nums);
+    const mx = Math.max(...nums);
+    return nums.filter(x => mi < x && x < mx).length;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

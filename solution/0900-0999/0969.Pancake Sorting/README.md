@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0969.Pancake%20Sorting/README.md
+tags:
+    - 贪心
+    - 数组
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [969. 煎饼排序](https://leetcode.cn/problems/pancake-sorting)
 
 [English Version](/solution/0900-0999/0969.Pancake%20Sorting/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>arr</code> ，请使用 <strong>煎饼翻转</strong><em> </em>完成对数组的排序。</p>
 
@@ -55,15 +68,17 @@
 	<li><code>arr</code> 中的所有整数互不相同（即，<code>arr</code> 是从 <code>1</code> 到 <code>arr.length</code> 整数的一个排列）</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +104,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -124,35 +137,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function pancakeSort(arr: number[]): number[] {
-    let ans = [];
-    for (let n = arr.length; n > 1; n--) {
-        let index = 0;
-        for (let i = 1; i < n; i++) {
-            if (arr[i] >= arr[index]) {
-                index = i;
-            }
-        }
-        if (index == n - 1) continue;
-        reverse(arr, index);
-        reverse(arr, n - 1);
-        ans.push(index + 1);
-        ans.push(n);
-    }
-    return ans;
-}
-
-function reverse(nums: Array<number>, end: number): void {
-    for (let i = 0, j = end; i < j; i++, j--) {
-        [nums[i], nums[j]] = [nums[j], nums[i]];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -177,7 +162,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pancakeSort(arr []int) []int {
@@ -205,7 +190,35 @@ func pancakeSort(arr []int) []int {
 }
 ```
 
-### **Rust**
+#### TypeScript
+
+```ts
+function pancakeSort(arr: number[]): number[] {
+    let ans = [];
+    for (let n = arr.length; n > 1; n--) {
+        let index = 0;
+        for (let i = 1; i < n; i++) {
+            if (arr[i] >= arr[index]) {
+                index = i;
+            }
+        }
+        if (index == n - 1) continue;
+        reverse(arr, index);
+        reverse(arr, n - 1);
+        ans.push(index + 1);
+        ans.push(n);
+    }
+    return ans;
+}
+
+function reverse(nums: Array<number>, end: number): void {
+    for (let i = 0, j = end; i < j; i++, j--) {
+        [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
@@ -221,10 +234,10 @@ impl Solution {
             if max_idx != n {
                 if max_idx != 0 {
                     arr[..=max_idx].reverse();
-                    res.push(max_idx as i32 + 1);
+                    res.push((max_idx as i32) + 1);
                 }
                 arr[..=n].reverse();
-                res.push(n as i32 + 1);
+                res.push((n as i32) + 1);
             }
         }
         res
@@ -232,10 +245,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

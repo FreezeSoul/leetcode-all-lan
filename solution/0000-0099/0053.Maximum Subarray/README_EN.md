@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0053.Maximum%20Subarray/README_EN.md
+tags:
+    - Array
+    - Divide and Conquer
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray)
 
 [中文文档](/solution/0000-0099/0053.Maximum%20Subarray/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, find the <span data-keyword="subarray-nonempty">subarray</span> with the largest sum, and return <em>its sum</em>.</p>
 
@@ -42,29 +56,163 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> If you have figured out the <code>O(n)</code> solution, try coding another solution using the <strong>divide and conquer</strong> approach, which is more subtle.</p>
 
+<!-- description:end -->
+
 ## Solutions
 
-### 1. Dynamic programming
+<!-- solution:start -->
 
-### 2. Divide and Conquer
+### Solution 1: Dynamic Programming
+
+We define $f[i]$ to represent the maximum sum of a contiguous subarray ending at element $\textit{nums}[i]$. Initially, $f[0] = \textit{nums}[0]$. The final answer we seek is $\max_{0 \leq i < n} f[i]$.
+
+Consider $f[i]$ for $i \geq 1$. Its state transition equation is:
+
+$$
+f[i] = \max(f[i - 1] + \textit{nums}[i], \textit{nums}[i])
+$$
+
+That is:
+
+$$
+f[i] = \max(f[i - 1], 0) + \textit{nums}[i]
+$$
+
+Since $f[i]$ is only related to $f[i - 1]$, we can use a single variable $f$ to maintain the current value of $f[i]$ and perform the state transition. The answer is $\max_{0 \leq i < n} f$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{nums}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-Dynamic programming.
+#### Python3
 
 ```python
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        res = f = nums[0]
-        for num in nums[1:]:
-            f = num + max(f, 0)
-            res = max(res, f)
-        return res
+        ans = f = nums[0]
+        for x in nums[1:]:
+            f = max(f, 0) + x
+            ans = max(ans, f)
+        return ans
 ```
 
-Divide and Conquer.
+#### Java
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int ans = nums[0];
+        for (int i = 1, f = nums[0]; i < nums.length; ++i) {
+            f = Math.max(f, 0) + nums[i];
+            ans = Math.max(ans, f);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int ans = nums[0], f = nums[0];
+        for (int i = 1; i < nums.size(); ++i) {
+            f = max(f, 0) + nums[i];
+            ans = max(ans, f);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxSubArray(nums []int) int {
+	ans, f := nums[0], nums[0]
+	for _, x := range nums[1:] {
+		f = max(f, 0) + x
+		ans = max(ans, f)
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function maxSubArray(nums: number[]): number {
+    let [ans, f] = [nums[0], nums[0]];
+    for (let i = 1; i < nums.length; ++i) {
+        f = Math.max(f, 0) + nums[i];
+        ans = Math.max(ans, f);
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_sub_array(nums: Vec<i32>) -> i32 {
+        let n = nums.len();
+        let mut ans = nums[0];
+        let mut f = nums[0];
+        for i in 1..n {
+            f = f.max(0) + nums[i];
+            ans = ans.max(f);
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function (nums) {
+    let [ans, f] = [nums[0], nums[0]];
+    for (let i = 1; i < nums.length; ++i) {
+        f = Math.max(f, 0) + nums[i];
+        ans = Math.max(ans, f);
+    }
+    return ans;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int MaxSubArray(int[] nums) {
+        int ans = nums[0], f = nums[0];
+        for (int i = 1; i < nums.Length; ++i) {
+            f = Math.Max(f, 0) + nums[i];
+            ans = Math.Max(ans, f);
+        }
+        return ans;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -93,24 +241,7 @@ class Solution:
         return maxSub(nums, left, right)
 ```
 
-### **Java**
-
-Dynamic programming.
-
-```java
-class Solution {
-    public int maxSubArray(int[] nums) {
-        int f = nums[0], res = nums[0];
-        for (int i = 1, n = nums.length; i < n; ++i) {
-            f = nums[i] + Math.max(f, 0);
-            res = Math.max(res, f);
-        }
-        return res;
-    }
-}
-```
-
-Divide and Conquer.
+#### Java
 
 ```java
 class Solution {
@@ -144,97 +275,8 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxSubArray(vector<int>& nums) {
-        int f = nums[0], res = nums[0];
-        for (int i = 1; i < nums.size(); ++i) {
-            f = nums[i] + max(f, 0);
-            res = max(res, f);
-        }
-        return res;
-    }
-};
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var maxSubArray = function (nums) {
-    let f = nums[0],
-        res = nums[0];
-    for (let i = 1; i < nums.length; ++i) {
-        f = nums[i] + Math.max(f, 0);
-        res = Math.max(res, f);
-    }
-    return res;
-};
-```
-
-### **Go**
-
-```go
-func maxSubArray(nums []int) int {
-    f, res := nums[0], nums[0]
-    for i := 1; i < len(nums); i++ {
-        if f > 0 {
-            f += nums[i]
-        } else {
-            f = nums[i]
-        }
-        if f > res {
-            res = f
-        }
-    }
-    return res
-}
-```
-
-### **C#**
-
-```cs
-public class Solution {
-    public int MaxSubArray(int[] nums) {
-        int res = nums[0], f = nums[0];
-        for (int i = 1; i < nums.Length; ++i)
-        {
-            f = nums[i] + Math.Max(f, 0);
-            res = Math.Max(res, f);
-        }
-        return res;
-    }
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn max_sub_array(nums: Vec<i32>) -> i32 {
-        let n = nums.len();
-        let mut res = nums[0];
-        let mut sum = nums[0];
-        for i in 1..n {
-            let num = nums[i];
-            sum = num.max(sum + num);
-            res = res.max(sum);
-        }
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

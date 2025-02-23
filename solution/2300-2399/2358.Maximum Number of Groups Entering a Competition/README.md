@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2358.Maximum%20Number%20of%20Groups%20Entering%20a%20Competition/README.md
+rating: 1502
+source: 第 304 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 数学
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [2358. 分组的最大数量](https://leetcode.cn/problems/maximum-number-of-groups-entering-a-competition)
 
 [English Version](/solution/2300-2399/2358.Maximum%20Number%20of%20Groups%20Entering%20a%20Competition/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>grades</code> ，表示大学中一些学生的成绩。你打算将 <strong>所有</strong> 学生分为一些 <strong>有序</strong> 的非空分组，其中分组间的顺序满足以下全部条件：</p>
 
@@ -44,11 +59,13 @@
 	<li><code>1 &lt;= grades[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 二分查找**
+### 方法一：贪心 + 二分查找
 
 我们观察题目中的条件，第 $i$ 组的学生人数要小于第 $i+1$ 组的学生人数，且第 $i$ 组的学生总成绩要小于第 $i+1$ 组的学生总成绩，我们只需要将学生按照成绩从小到大排序，然后每一组依次分配 $1$, $2$, ..., $k$ 个学生即可。如果最后一组的学生人数不足 $k$ 个，那么我们可以将这些学生分配到前面的最后一组中。
 
@@ -62,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -73,9 +88,7 @@ class Solution:
         return bisect_right(range(n + 1), n * 2, key=lambda x: x * x + x) - 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumGroups(grades []int) int {
@@ -128,7 +141,7 @@ func maximumGroups(grades []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumGroups(grades: number[]): number {
@@ -147,10 +160,8 @@ function maximumGroups(grades: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

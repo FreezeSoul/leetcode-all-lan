@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1781.Sum%20of%20Beauty%20of%20All%20Substrings/README.md
+rating: 1714
+source: 第 47 场双周赛 Q3
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1781. 所有子字符串美丽值之和](https://leetcode.cn/problems/sum-of-beauty-of-all-substrings)
 
 [English Version](/solution/1700-1799/1781.Sum%20of%20Beauty%20of%20All%20Substrings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个字符串的 <strong>美丽值</strong> 定义为：出现频率最高字符与出现频率最低字符的出现次数之差。</p>
 
@@ -39,11 +53,13 @@
 	<li><code>s</code> 只包含小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举 + 计数**
+### 方法一：枚举 + 计数
 
 枚举每个子串的起点位置 $i$，找到以该起点位置的字符为左端点的所有子串，然后计算每个子串的美丽值，累加到答案中。
 
@@ -51,9 +67,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +81,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +135,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func beautySum(s string) (ans int) {
@@ -149,7 +161,7 @@ func beautySum(s string) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -170,10 +182,179 @@ var beautySum = function (s) {
 };
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def beautySum(self, s: str) -> int:
+        ans, n = 0, len(s)
+        for i in range(n):
+            cnt = Counter()
+            freq = Counter()
+            mi = mx = 1
+            for j in range(i, n):
+                freq[cnt[s[j]]] -= 1
+                cnt[s[j]] += 1
+                freq[cnt[s[j]]] += 1
+
+                if cnt[s[j]] == 1:
+                    mi = 1
+                if freq[mi] == 0:
+                    mi += 1
+                if cnt[s[j]] > mx:
+                    mx = cnt[s[j]]
+
+                ans += mx - mi
+        return ans
 ```
 
+#### Java
+
+```java
+class Solution {
+    public int beautySum(String s) {
+        int n = s.length();
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int[] cnt = new int[26];
+            Map<Integer, Integer> freq = new HashMap<>();
+            int mi = 1, mx = 1;
+            for (int j = i; j < n; ++j) {
+                int k = s.charAt(j) - 'a';
+                freq.merge(cnt[k], -1, Integer::sum);
+                ++cnt[k];
+                freq.merge(cnt[k], 1, Integer::sum);
+
+                if (cnt[k] == 1) {
+                    mi = 1;
+                }
+                if (freq.getOrDefault(mi, 0) == 0) {
+                    ++mi;
+                }
+                if (cnt[k] > mx) {
+                    mx = cnt[k];
+                }
+                ans += mx - mi;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int beautySum(string s) {
+        int n = s.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int cnt[26]{};
+            unordered_map<int, int> freq;
+            int mi = 1, mx = 1;
+            for (int j = i; j < n; ++j) {
+                int k = s[j] - 'a';
+                --freq[cnt[k]];
+                ++cnt[k];
+                ++freq[cnt[k]];
+
+                if (cnt[k] == 1) {
+                    mi = 1;
+                }
+                if (freq[mi] == 0) {
+                    ++mi;
+                }
+                if (cnt[k] > mx) {
+                    mx = cnt[k];
+                }
+                ans += mx - mi;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func beautySum(s string) (ans int) {
+	n := len(s)
+	for i := 0; i < n; i++ {
+		cnt := [26]int{}
+		freq := map[int]int{}
+		mi, mx := 1, 1
+		for j := i; j < n; j++ {
+			k := int(s[j] - 'a')
+			freq[cnt[k]]--
+			cnt[k]++
+			freq[cnt[k]]++
+
+			if cnt[k] == 1 {
+				mi = 1
+			}
+			if freq[mi] == 0 {
+				mi++
+			}
+			if cnt[k] > mx {
+				mx = cnt[k]
+			}
+			ans += mx - mi
+		}
+	}
+	return
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var beautySum = function (s) {
+    const n = s.length;
+    let ans = 0;
+    for (let i = 0; i < n; ++i) {
+        const cnt = Array(26).fill(0);
+        const freq = new Map();
+        let [mi, mx] = [1, 1];
+        for (let j = i; j < n; ++j) {
+            const k = s[j].charCodeAt() - 97;
+            freq.set(cnt[k], (freq.get(cnt[k]) || 0) - 1);
+            ++cnt[k];
+            freq.set(cnt[k], (freq.get(cnt[k]) || 0) + 1);
+            if (cnt[k] === 1) {
+                mi = 1;
+            }
+            if (freq.get(mi) === 0) {
+                ++mi;
+            }
+            if (cnt[k] > mx) {
+                mx = cnt[k];
+            }
+            ans += mx - mi;
+        }
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

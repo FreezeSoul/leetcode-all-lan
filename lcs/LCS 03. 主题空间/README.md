@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcs/LCS%2003.%20%E4%B8%BB%E9%A2%98%E7%A9%BA%E9%97%B4/README.md
+---
+
+<!-- problem:start -->
+
 # [LCS 03. 主题空间](https://leetcode.cn/problems/YesdPw/)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 「以扣会友」线下活动所在场地由若干主题空间与走廊组成，场地的地图记作由一维字符串型数组 `grid`，字符串中仅包含 `"0"～"5"` 这 6 个字符。地图上每一个字符代表面积为 1 的区域，其中 `"0"` 表示走廊，其他字符表示主题空间。相同且连续（连续指上、下、左、右四个方向连接）的字符组成同一个主题空间。
 
@@ -32,83 +39,17 @@
 -   `1 <= grid[i].length <= 500`
 -   `grid[i][j]` 仅可能是 `"0"～"5"`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-并查集。
-
-并查集模板：
-
-模板 1——朴素并查集：
-
-```python
-# 初始化，p存储每个点的父节点
-p = list(range(n))
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-```
-
-模板 2——维护 size 的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，size只有当节点是祖宗节点时才有意义，表示祖宗节点所在集合中，点的数量
-p = list(range(n))
-size = [1] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-# 合并a和b所在的两个集合
-if find(a) != find(b):
-    size[find(b)] += size[find(a)]
-    p[find(a)] = find(b)
-```
-
-模板 3——维护到祖宗节点距离的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，d[x]存储x到p[x]的距离
-p = list(range(n))
-d = [0] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        t = find(p[x])
-        d[x] += d[p[x]]
-        p[x] = t
-    return p[x]
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-d[find(a)] = distance
-```
-
-对于本题，记 m, n 分别为 grid 的行数和列数。
-
--   将所有走廊及 "0" 对应的格子与超级节点 `m * n` 相连。
--   对于其它格子，判断其相邻（上、下、左、右）的格子是否为 "0" 或者与当前格子相同，若是，更新 size 并将两个格子相连。
--   最后，获取不与超级节点相连的格子的最大 size，即为答案。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -129,15 +70,23 @@ class Solution:
                 else:
                     for a, b in dirs:
                         x, y = i + a, j + b
-                        if (grid[x][y] == '0' or grid[i][j] == grid[x][y]) and find(x * n + y) != find(i * n + j):
+                        if (grid[x][y] == '0' or grid[i][j] == grid[x][y]) and find(
+                            x * n + y
+                        ) != find(i * n + j):
                             size[find(x * n + y)] += size[find(i * n + j)]
                             p[find(i * n + j)] = find(x * n + y)
-        return max([size[i * n + j] for i in range(m) for j in range(n) if find(i * n + j) != find(m * n)], default=0)
+        return max(
+            [
+                size[i * n + j]
+                for i in range(m)
+                for j in range(n)
+                if find(i * n + j) != find(m * n)
+            ],
+            default=0,
+        )
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -191,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -234,7 +183,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestArea(grid []string) int {
@@ -280,7 +229,7 @@ func largestArea(grid []string) int {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -304,13 +253,7 @@ var largestArea = function (grid) {
     }
     for (let i = 0; i < m; ++i) {
         for (let j = 0; j < n; ++j) {
-            if (
-                i == 0 ||
-                i == m - 1 ||
-                j == 0 ||
-                j == n - 1 ||
-                grid[i][j] == '0'
-            ) {
+            if (i == 0 || i == m - 1 || j == 0 || j == n - 1 || grid[i][j] == '0') {
                 p[find(i * n + j)] = find(m * n);
             } else {
                 for (let k = 0; k < 4; ++k) {
@@ -339,10 +282,8 @@ var largestArea = function (grid) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

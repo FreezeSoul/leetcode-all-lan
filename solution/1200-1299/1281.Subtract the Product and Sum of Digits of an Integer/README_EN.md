@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1281.Subtract%20the%20Product%20and%20Sum%20of%20Digits%20of%20an%20Integer/README_EN.md
+rating: 1141
+source: Weekly Contest 166 Q1
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1281. Subtract the Product and Sum of Digits of an Integer](https://leetcode.com/problems/subtract-the-product-and-sum-of-digits-of-an-integer)
 
 [中文文档](/solution/1200-1299/1281.Subtract%20the%20Product%20and%20Sum%20of%20Digits%20of%20an%20Integer/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 Given an integer number <code>n</code>, return the difference between the product of its digits and the sum of its digits.
 
@@ -36,128 +50,146 @@ Result = 32 - 11 = 21
 	<li><code>1 &lt;= n &lt;= 10^5</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We use two variables $x$ and $y$ to record the product of the digits and the sum of the digits respectively. At the beginning, $x=1,y=0$.
+
+When $n \gt 0$, each time we take the $mod$ of $n$ by $10$ to get the current digit $v$, and continue the next loop by dividing $n$ by $10$. In each loop, we update $x = x \times v$, $y = y + v$.
+
+Finally, we return $x - y$.
+
+The time complexity is $O(\log n)$, where $n$ is the given integer. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def subtractProductAndSum(self, n: int) -> int:
-        s, p = 0, 1
-        while n:
-            t = n % 10
-            n //= 10
-            s += t
-            p *= t
-        return p - s
+        nums = list(map(int, str(n)))
+        return prod(nums) - sum(nums)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int subtractProductAndSum(int n) {
-        int s = 0, p = 1;
-        while (n != 0) {
-            int t = n % 10;
-            n /= 10;
-            s += t;
-            p *= t;
+        int x = 1, y = 0;
+        for (; n > 0; n /= 10) {
+            int v = n % 10;
+            x *= v;
+            y += v;
         }
-        return p - s;
+        return x - y;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int subtractProductAndSum(int n) {
-        int s = 0, p = 1;
-        while (n) {
-            int t = n % 10;
-            n /= 10;
-            s += t;
-            p *= t;
+        int x = 1, y = 0;
+        for (; n; n /= 10) {
+            int v = n % 10;
+            x *= v;
+            y += v;
         }
-        return p - s;
+        return x - y;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func subtractProductAndSum(n int) int {
-	s, p := 0, 1
-	for n != 0 {
-		t := n % 10
-		n /= 10
-		s += t
-		p *= t
+	x, y := 1, 0
+	for ; n > 0; n /= 10 {
+		v := n % 10
+		x *= v
+		y += v
 	}
-	return p - s
+	return x - y
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function subtractProductAndSum(n: number): number {
-    let p = 1;
-    let s = 0;
-    while (n) {
-        const num = n % 10;
-        n = Math.floor(n / 10);
-        p *= num;
-        s += num;
+    let [x, y] = [1, 0];
+    for (; n > 0; n = Math.floor(n / 10)) {
+        const v = n % 10;
+        x *= v;
+        y += v;
     }
-    return p - s;
+    return x - y;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn subtract_product_and_sum(mut n: i32) -> i32 {
-        let mut p = 1;
-        let mut s = 0;
+        let mut x = 1;
+        let mut y = 0;
         while n != 0 {
-            let num = n % 10;
+            let v = n % 10;
             n /= 10;
-            p *= num;
-            s += num;
+            x *= v;
+            y += v;
         }
-        p - s
+        x - y
     }
 }
 ```
 
-### **C**
+#### C#
+
+```cs
+public class Solution {
+    public int SubtractProductAndSum(int n) {
+        int x = 1;
+        int y = 0;
+        for (; n > 0; n /= 10) {
+            int v = n % 10;
+            x *= v;
+            y += v;
+        }
+        return x - y;
+    }
+}
+```
+
+#### C
 
 ```c
 int subtractProductAndSum(int n) {
-    int p = 1;
-    int s = 0;
-    while (n) {
-        int num = n % 10;
-        n /= 10;
-        p *= num;
-        s += num;
+    int x = 1;
+    int y = 0;
+    for (; n > 0; n /= 10) {
+        int v = n % 10;
+        x *= v;
+        y += v;
     }
-    return p - s;
+    return x - y;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

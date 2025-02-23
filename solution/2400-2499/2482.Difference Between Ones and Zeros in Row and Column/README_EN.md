@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2482.Difference%20Between%20Ones%20and%20Zeros%20in%20Row%20and%20Column/README_EN.md
+rating: 1372
+source: Biweekly Contest 92 Q2
+tags:
+    - Array
+    - Matrix
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2482. Difference Between Ones and Zeros in Row and Column](https://leetcode.com/problems/difference-between-ones-and-zeros-in-row-and-column)
 
 [中文文档](/solution/2400-2499/2482.Difference%20Between%20Ones%20and%20Zeros%20in%20Row%20and%20Column/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> <code>m x n</code> binary matrix <code>grid</code>.</p>
 
@@ -61,11 +77,21 @@
 	<li><code>grid[i][j]</code> is either <code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can solve this problem by simulating the process as described in the problem statement.
+
+The time complexity is $O(m \times n)$, and if we ignore the space used by the answer, the space complexity is $O(m + n)$. Here, $m$ and $n$ are the number of rows and columns in the matrix, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +110,7 @@ class Solution:
         return diff
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -137,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func onesMinusZeros(grid [][]int) [][]int {
@@ -161,7 +187,7 @@ func onesMinusZeros(grid [][]int) [][]int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function onesMinusZeros(grid: number[][]): number[][] {
@@ -187,7 +213,7 @@ function onesMinusZeros(grid: number[][]): number[][] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -215,7 +241,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
@@ -223,9 +249,9 @@ impl Solution {
  * The sizes of the arrays are returned as *returnColumnSizes array.
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
-int **onesMinusZeros(int **grid, int gridSize, int *gridColSize, int *returnSize, int **returnColumnSizes) {
-    int *rows = malloc(sizeof(int) * gridSize);
-    int *cols = malloc(sizeof(int) * gridColSize[0]);
+int** onesMinusZeros(int** grid, int gridSize, int* gridColSize, int* returnSize, int** returnColumnSizes) {
+    int* rows = malloc(sizeof(int) * gridSize);
+    int* cols = malloc(sizeof(int) * gridColSize[0]);
     memset(rows, 0, sizeof(int) * gridSize);
     memset(cols, 0, sizeof(int) * gridColSize[0]);
     for (int i = 0; i < gridSize; i++) {
@@ -236,7 +262,7 @@ int **onesMinusZeros(int **grid, int gridSize, int *gridColSize, int *returnSize
             }
         }
     }
-    int **ans = malloc(sizeof(int *) * gridSize);
+    int** ans = malloc(sizeof(int*) * gridSize);
     for (int i = 0; i < gridSize; i++) {
         ans[i] = malloc(sizeof(int) * gridColSize[0]);
         for (int j = 0; j < gridColSize[0]; j++) {
@@ -249,10 +275,8 @@ int **onesMinusZeros(int **grid, int gridSize, int *gridColSize, int *returnSize
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

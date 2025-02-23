@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1641.Count%20Sorted%20Vowel%20Strings/README_EN.md
+rating: 1519
+source: Weekly Contest 213 Q2
+tags:
+    - Math
+    - Dynamic Programming
+    - Combinatorics
+---
+
+<!-- problem:start -->
+
 # [1641. Count Sorted Vowel Strings](https://leetcode.com/problems/count-sorted-vowel-strings)
 
 [中文文档](/solution/1600-1699/1641.Count%20Sorted%20Vowel%20Strings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code>, return <em>the number of strings of length </em><code>n</code><em> that consist only of vowels (</em><code>a</code><em>, </em><code>e</code><em>, </em><code>i</code><em>, </em><code>o</code><em>, </em><code>u</code><em>) and are <strong>lexicographically sorted</strong>.</em></p>
 
@@ -41,11 +57,17 @@ Note that &quot;ea&quot; is not a valid string since &#39;e&#39; comes after &#3
 	<li><code>1 &lt;= n &lt;= 50</code>&nbsp;</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,19 +79,7 @@ class Solution:
         return dfs(0, 0)
 ```
 
-```python
-class Solution:
-    def countVowelStrings(self, n: int) -> int:
-        f = [1] * 5
-        for _ in range(n - 1):
-            s = 0
-            for j in range(5):
-                s += f[j]
-                f[j] = s
-        return sum(f)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,23 +108,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countVowelStrings(int n) {
-        int[] f = {1, 1, 1, 1, 1};
-        for (int i = 0; i < n - 1; ++i) {
-            int s = 0;
-            for (int j = 0; j < 5; ++j) {
-                s += f[j];
-                f[j] = s;
-            }
-        }
-        return Arrays.stream(f).sum();
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -140,24 +134,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int countVowelStrings(int n) {
-        int f[5] = {1, 1, 1, 1, 1};
-        for (int i = 0; i < n - 1; ++i) {
-            int s = 0;
-            for (int j = 0; j < 5; ++j) {
-                s += f[j];
-                f[j] = s;
-            }
-        }
-        return accumulate(f, f + 5, 0);
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countVowelStrings(n int) int {
@@ -181,6 +158,69 @@ func countVowelStrings(n int) int {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countVowelStrings(self, n: int) -> int:
+        f = [1] * 5
+        for _ in range(n - 1):
+            s = 0
+            for j in range(5):
+                s += f[j]
+                f[j] = s
+        return sum(f)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countVowelStrings(int n) {
+        int[] f = {1, 1, 1, 1, 1};
+        for (int i = 0; i < n - 1; ++i) {
+            int s = 0;
+            for (int j = 0; j < 5; ++j) {
+                s += f[j];
+                f[j] = s;
+            }
+        }
+        return Arrays.stream(f).sum();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countVowelStrings(int n) {
+        int f[5] = {1, 1, 1, 1, 1};
+        for (int i = 0; i < n - 1; ++i) {
+            int s = 0;
+            for (int j = 0; j < 5; ++j) {
+                s += f[j];
+                f[j] = s;
+            }
+        }
+        return accumulate(f, f + 5, 0);
+    }
+};
+```
+
+#### Go
+
 ```go
 func countVowelStrings(n int) (ans int) {
 	f := [5]int{1, 1, 1, 1, 1}
@@ -198,10 +238,8 @@ func countVowelStrings(n int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

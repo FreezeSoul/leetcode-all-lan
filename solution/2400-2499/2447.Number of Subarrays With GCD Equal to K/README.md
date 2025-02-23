@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2447.Number%20of%20Subarrays%20With%20GCD%20Equal%20to%20K/README.md
+rating: 1602
+source: 第 316 场周赛 Q2
+tags:
+    - 数组
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [2447. 最大公因数等于 K 的子数组数目](https://leetcode.cn/problems/number-of-subarrays-with-gcd-equal-to-k)
 
 [English Version](/solution/2400-2499/2447.Number%20of%20Subarrays%20With%20GCD%20Equal%20to%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code>&nbsp;和一个整数&nbsp;<code>k</code> ，请你统计并返回 <code>nums</code>&nbsp;的子数组中元素的最大公因数等于 <code>k</code>&nbsp;的子数组数目。</p>
 
@@ -41,23 +55,23 @@
 	<li><code>1 &lt;= nums[i], k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：直接枚举**
+### 方法一：直接枚举
 
-我们可以枚举 $nums[i]$ 作为子数组的左端点，然后枚举 $nums[j]$ 作为子数组的右端点，其中 $i\le j$。在枚举右端点的过程中，我们可以用一个变量 $g$ 来维护当前子数组的最大公因数，每次枚举到一个新的右端点时，我们更新最大公因数 $g = \gcd(g, nums[j])$。如果 $g=k$，那么当前子数组的最大公因数等于 $k$，我们就将答案增加 $1$。
+我们可以枚举 $nums[i]$ 作为子数组的左端点，然后枚举 $nums[j]$ 作为子数组的右端点，其中 $i \le j$。在枚举右端点的过程中，我们可以用一个变量 $g$ 来维护当前子数组的最大公因数，每次枚举到一个新的右端点时，我们更新最大公因数 $g = \gcd(g, nums[j])$。如果 $g=k$，那么当前子数组的最大公因数等于 $k$，我们就将答案增加 $1$。
 
 枚举结束后，返回答案即可。
 
-时间复杂度 $O(n \times (n + \log M))$，其中 $n$ 和 $M$ 分别是数组 `nums` 的长度和数组 `nums` 中的最大值。
+时间复杂度 $O(n \times (n + \log M))$，其中 $n$ 和 $M$ 分别是数组 $nums$ 的长度和数组 $nums$ 中的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +85,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func subarrayGCD(nums []int, k int) (ans int) {
@@ -142,7 +154,7 @@ func gcd(a, b int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function subarrayGCD(nums: number[], k: number): number {
@@ -165,10 +177,8 @@ function gcd(a: number, b: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

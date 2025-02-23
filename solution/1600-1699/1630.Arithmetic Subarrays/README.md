@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1630.Arithmetic%20Subarrays/README.md
+rating: 1421
+source: 第 212 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1630. 等差子数组](https://leetcode.cn/problems/arithmetic-subarrays)
 
 [English Version](/solution/1600-1699/1630.Arithmetic%20Subarrays/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果一个数列由至少两个元素组成，且每两个连续元素之间的差值都相同，那么这个序列就是 <strong>等差数列</strong> 。更正式地，数列 <code>s</code> 是等差数列，只需要满足：对于每个有效的 <code>i</code> ， <code>s[i+1] - s[i] == s[1] - s[0]</code> 都成立。</p>
 
@@ -53,11 +67,13 @@
 	<li><code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学 + 模拟**
+### 方法一：数学 + 模拟
 
 我们设计一个函数 $check(nums, l, r)$，用于判断子数组 $nums[l], nums[l+1], \dots, nums[r]$ 是否可以重新排列形成等差数列。
 
@@ -73,26 +89,24 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def checkArithmeticSubarrays(self, nums: List[int], l: List[int], r: List[int]) -> List[bool]:
+    def checkArithmeticSubarrays(
+        self, nums: List[int], l: List[int], r: List[int]
+    ) -> List[bool]:
         def check(nums, l, r):
             n = r - l + 1
-            s = set(nums[l: l + n])
-            a1, an = min(nums[l: l + n]), max(nums[l: l + n])
+            s = set(nums[l : l + n])
+            a1, an = min(nums[l : l + n]), max(nums[l : l + n])
             d, mod = divmod(an - a1, n - 1)
             return mod == 0 and all((a1 + (i - 1) * d) in s for i in range(1, n))
 
         return [check(nums, left, right) for left, right in zip(l, r)]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -127,7 +141,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +176,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkArithmeticSubarrays(nums []int, l []int, r []int) (ans []bool) {
@@ -197,14 +211,10 @@ func checkArithmeticSubarrays(nums []int, l []int, r []int) (ans []bool) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function checkArithmeticSubarrays(
-    nums: number[],
-    l: number[],
-    r: number[],
-): boolean[] {
+function checkArithmeticSubarrays(nums: number[], l: number[], r: number[]): boolean[] {
     const check = (nums: number[], l: number, r: number): boolean => {
         const s = new Set<number>();
         const n = r - l + 1;
@@ -234,7 +244,7 @@ function checkArithmeticSubarrays(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -256,10 +266,37 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+class Solution {
+    public bool Check(int[] arr) {
+        Array.Sort(arr);
+        int diff = arr[1] - arr[0];
+        for (int i = 2; i < arr.Length; i++) {
+            if (arr[i] - arr[i - 1] != diff) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    public IList<bool> CheckArithmeticSubarrays(int[] nums, int[] l, int[] r) {
+        List<bool> ans = new List<bool>();
+        for (int i = 0; i < l.Length; i++) {
+            int[] arr = new int[r[i] - l[i] + 1];
+            for (int j = 0; j < arr.Length; j++) {
+                arr[j] = nums[l[i] + j];
+            }
+            ans.Add(Check(arr));
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

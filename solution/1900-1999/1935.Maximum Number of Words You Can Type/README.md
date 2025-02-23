@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1935.Maximum%20Number%20of%20Words%20You%20Can%20Type/README.md
+rating: 1226
+source: 第 250 场周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1935. 可以输入的最大单词数](https://leetcode.cn/problems/maximum-number-of-words-you-can-type)
 
 [English Version](/solution/1900-1999/1935.Maximum%20Number%20of%20Words%20You%20Can%20Type/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>键盘出现了一些故障，有些字母键无法正常工作。而键盘上所有其他键都能够正常工作。</p>
 
@@ -45,65 +58,167 @@
 	<li><code>brokenLetters</code> 由 <strong>互不相同</strong> 的小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：数组或哈希表
+
+我们可以用哈希表或者一个长度为 $26$ 的数组 $s$ 来记录所有损坏的字母键。
+
+然后，我们遍历字符串 $text$ 中的每个单词 $w$，如果 $w$ 中的某个字母 $c$ 在 $s$ 中出现过，那么说明这个单词无法输入，答案不需要加一，否则答案需要加一。
+
+遍历结束后，返回答案即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(|\Sigma|)$，其中 $n$ 是字符串 $text$ 的长度，而 $|\Sigma|$ 是字母表的大小，本题中 $|\Sigma|=26$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def canBeTypedWords(self, text: str, brokenLetters: str) -> int:
-        letters = set(brokenLetters)
-        res = 0
-        for word in text.split():
-            find = False
-            for letter in letters:
-                if letter in word:
-                    find = True
-                    break
-            if not find:
-                res += 1
-        return res
+        s = set(brokenLetters)
+        return sum(all(c not in s for c in w) for w in text.split())
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int canBeTypedWords(String text, String brokenLetters) {
-        Set<Character> letters = new HashSet<>();
+        boolean[] s = new boolean[26];
         for (char c : brokenLetters.toCharArray()) {
-            letters.add(c);
+            s[c - 'a'] = true;
         }
-        int res = 0;
-        for (String word : text.split(" ")) {
-            boolean find = false;
-            for (char c : letters) {
-                if (word.indexOf(c) > -1) {
-                    find = true;
+        int ans = 0;
+        for (String w : text.split(" ")) {
+            for (char c : w.toCharArray()) {
+                if (s[c - 'a']) {
+                    --ans;
                     break;
                 }
             }
-            if (!find) {
-                ++res;
-            }
+            ++ans;
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int canBeTypedWords(string text, string brokenLetters) {
+        bool s[26]{};
+        for (char& c : brokenLetters) {
+            s[c - 'a'] = true;
+        }
+        int ans = 0;
+        for (auto& w : split(text, ' ')) {
+            for (char& c : w) {
+                if (s[c - 'a']) {
+                    --ans;
+                    break;
+                }
+            }
+            ++ans;
+        }
+        return ans;
+    }
+
+    vector<string> split(const string& s, char c) {
+        vector<string> ans;
+        string t;
+        for (char d : s) {
+            if (d == c) {
+                ans.push_back(t);
+                t.clear();
+            } else {
+                t.push_back(d);
+            }
+        }
+        ans.push_back(t);
+        return ans;
+    }
+};
 ```
 
+#### Go
+
+```go
+func canBeTypedWords(text string, brokenLetters string) (ans int) {
+	s := [26]bool{}
+	for _, c := range brokenLetters {
+		s[c-'a'] = true
+	}
+	for _, w := range strings.Split(text, " ") {
+		for _, c := range w {
+			if s[c-'a'] {
+				ans--
+				break
+			}
+		}
+		ans++
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function canBeTypedWords(text: string, brokenLetters: string): number {
+    const s: boolean[] = Array(26).fill(false);
+    for (const c of brokenLetters) {
+        s[c.charCodeAt(0) - 'a'.charCodeAt(0)] = true;
+    }
+    let ans = 0;
+    for (const w of text.split(' ')) {
+        for (const c of w) {
+            if (s[c.charCodeAt(0) - 'a'.charCodeAt(0)]) {
+                --ans;
+                break;
+            }
+        }
+        ++ans;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn can_be_typed_words(text: String, broken_letters: String) -> i32 {
+        let mut s = vec![false; 26];
+        for c in broken_letters.chars() {
+            s[(c as usize) - ('a' as usize)] = true;
+        }
+        let mut ans = 0;
+        let words = text.split_whitespace();
+        for w in words {
+            for c in w.chars() {
+                if s[(c as usize) - ('a' as usize)] {
+                    ans -= 1;
+                    break;
+                }
+            }
+            ans += 1;
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

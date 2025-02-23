@@ -1,16 +1,26 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0461.Hamming%20Distance/README.md
+tags:
+    - 位运算
+---
+
+<!-- problem:start -->
+
 # [461. 汉明距离](https://leetcode.cn/problems/hamming-distance)
 
 [English Version](/solution/0400-0499/0461.Hamming%20Distance/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>两个整数之间的 <a href="https://baike.baidu.com/item/%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB">汉明距离</a> 指的是这两个数字对应二进制位不同的位置的数目。</p>
 
 <p>给你两个整数 <code>x</code> 和 <code>y</code>，计算并返回它们之间的汉明距离。</p>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
@@ -31,19 +41,25 @@
 <strong>输出：</strong>1
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>0 <= x, y <= 2<sup>31</sup> - 1</code></li>
+	<li><code>0 &lt;=&nbsp;x, y &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
+
+<p>&nbsp;</p>
+
+<p><strong>注意：</strong>本题与&nbsp;<a href="https://leetcode.cn/problems/minimum-bit-flips-to-convert-number/">2220. 转换数字的最少位翻转次数</a>&nbsp;相同。</p>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
 我们将 $x$ 和 $y$ 按位异或，得到的结果中的 $1$ 的个数就是汉明距离。
 
@@ -51,9 +67,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -61,9 +75,7 @@ class Solution:
         return (x ^ y).bit_count()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -73,7 +85,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -84,7 +96,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func hammingDistance(x int, y int) int {
@@ -92,7 +104,21 @@ func hammingDistance(x int, y int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function hammingDistance(x: number, y: number): number {
+    x ^= y;
+    let ans = 0;
+    while (x) {
+        x -= x & -x;
+        ++ans;
+    }
+    return ans;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -111,24 +137,8 @@ var hammingDistance = function (x, y) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function hammingDistance(x: number, y: number): number {
-    x ^= y;
-    let ans = 0;
-    while (x) {
-        x -= x & -x;
-        ++ans;
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

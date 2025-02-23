@@ -2,30 +2,25 @@ impl Solution {
     pub fn unique_paths_with_obstacles(obstacle_grid: Vec<Vec<i32>>) -> i32 {
         let m = obstacle_grid.len();
         let n = obstacle_grid[0].len();
-        if obstacle_grid[0][0] == 1 || obstacle_grid[m - 1][n - 1] == 1 {
+        let mut f = vec![vec![-1; n]; m];
+        Self::dfs(0, 0, &obstacle_grid, &mut f)
+    }
+
+    fn dfs(i: usize, j: usize, obstacle_grid: &Vec<Vec<i32>>, f: &mut Vec<Vec<i32>>) -> i32 {
+        let m = obstacle_grid.len();
+        let n = obstacle_grid[0].len();
+        if i >= m || j >= n || obstacle_grid[i][j] == 1 {
             return 0;
         }
-        let mut dp = vec![vec![0; n]; m];
-        for i in 0..n {
-            if obstacle_grid[0][i] == 1 {
-                break;
-            }
-            dp[0][i] = 1;
+        if i == m - 1 && j == n - 1 {
+            return 1;
         }
-        for i in 0..m {
-            if obstacle_grid[i][0] == 1 {
-                break;
-            }
-            dp[i][0] = 1;
+        if f[i][j] != -1 {
+            return f[i][j];
         }
-        for i in 1..m {
-            for j in 1..n {
-                if obstacle_grid[i][j] == 1 {
-                    continue;
-                }
-                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
-            }
-        }
-        dp[m - 1][n - 1]
+        let down = Self::dfs(i + 1, j, obstacle_grid, f);
+        let right = Self::dfs(i, j + 1, obstacle_grid, f);
+        f[i][j] = down + right;
+        f[i][j]
     }
 }

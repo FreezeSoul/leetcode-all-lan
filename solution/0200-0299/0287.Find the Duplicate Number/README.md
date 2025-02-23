@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0287.Find%20the%20Duplicate%20Number/README.md
+tags:
+    - 位运算
+    - 数组
+    - 双指针
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [287. 寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number)
 
 [English Version](/solution/0200-0299/0287.Find%20the%20Duplicate%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个包含&nbsp;<code>n + 1</code> 个整数的数组&nbsp;<code>nums</code> ，其数字都在&nbsp;<code>[1, n]</code>&nbsp;范围内（包括 <code>1</code> 和 <code>n</code>），可知至少存在一个重复的整数。</p>
 
@@ -28,6 +41,15 @@
 <strong>输出：</strong>3
 </pre>
 
+<p><strong>示例 3 :</strong></p>
+
+<pre>
+<strong>输入：</strong>nums = [3,3,3,3,3]
+<strong>输出：</strong>3
+</pre>
+
+<p>&nbsp;</p>
+
 <p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
@@ -48,44 +70,41 @@
 	<li>你可以设计一个线性级时间复杂度 <code>O(n)</code> 的解决方案吗？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
-如果值范围在 `[1, mid]` 的数小于等于 mid，说明此范围内没有重复的数，否则说明有重复数。
+我们可以发现，如果 $[1,..x]$ 中的数字个数大于 $x$，那么重复的数字一定在 $[1,..x]$ 中，否则重复的数字一定在 $[x+1,..n]$ 中。
+
+因此，我们可以二分枚举 $x$，每次判断 $[1,..x]$ 中的数字个数是否大于 $x$，从而确定重复的数字在哪个区间中，进而缩小区间范围，直到找到重复的数字。
+
+时间复杂度 $O(n \times \log n)$，其中 $n$ 是数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
-        left, right = 1, len(nums) - 1
-        while left < right:
-            mid = (left + right) >> 1
-            cnt = sum(v <= mid for v in nums)
-            if cnt > mid:
-                right = mid
-            else:
-                left = mid + 1
-        return left
+        def f(x: int) -> bool:
+            return sum(v <= x for v in nums) > x
+
+        return bisect_left(range(len(nums)), True, key=f)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int findDuplicate(int[] nums) {
-        int left = 1, right = nums.length - 1;
-        while (left < right) {
-            int mid = (left + right) >> 1;
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = (l + r) >> 1;
             int cnt = 0;
             for (int v : nums) {
                 if (v <= mid) {
@@ -93,63 +112,105 @@ class Solution {
                 }
             }
             if (cnt > mid) {
-                right = mid;
+                r = mid;
             } else {
-                left = mid + 1;
+                l = mid + 1;
             }
         }
-        return left;
+        return l;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        int left = 1, right = nums.size() - 1;
-        while (left < right) {
-            int mid = (left + right) >> 1;
+        int l = 0, r = nums.size() - 1;
+        while (l < r) {
+            int mid = (l + r) >> 1;
             int cnt = 0;
-            for (int& v : nums)
-                if (v <= mid)
-                    ++cnt;
-            if (cnt > mid)
-                right = mid;
-            else
-                left = mid + 1;
+            for (int& v : nums) {
+                cnt += v <= mid;
+            }
+            if (cnt > mid) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
         }
-        return left;
+        return l;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findDuplicate(nums []int) int {
-	left, right := 1, len(nums)-1
-	for left < right {
-		mid := (left + right) >> 1
+	return sort.Search(len(nums), func(x int) bool {
 		cnt := 0
 		for _, v := range nums {
-			if v <= mid {
+			if v <= x {
 				cnt++
 			}
 		}
-		if cnt > mid {
-			right = mid
-		} else {
-			left = mid + 1
-		}
-	}
-	return left
+		return cnt > x
+	})
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function findDuplicate(nums: number[]): number {
+    let l = 0;
+    let r = nums.length - 1;
+    while (l < r) {
+        const mid = (l + r) >> 1;
+        let cnt = 0;
+        for (const v of nums) {
+            if (v <= mid) {
+                ++cnt;
+            }
+        }
+        if (cnt > mid) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    return l;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn find_duplicate(nums: Vec<i32>) -> i32 {
+        let mut left = 0;
+        let mut right = nums.len() - 1;
+
+        while left < right {
+            let mid = (left + right) >> 1;
+            let cnt = nums.iter().filter(|x| **x <= (mid as i32)).count();
+            if cnt > mid {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        left as i32
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -157,54 +218,28 @@ func findDuplicate(nums []int) int {
  * @return {number}
  */
 var findDuplicate = function (nums) {
-    let left = 1,
-        right = nums.length - 1;
-    while (left < right) {
-        const mid = (left + right) >> 1;
+    let l = 0;
+    let r = nums.length - 1;
+    while (l < r) {
+        const mid = (l + r) >> 1;
         let cnt = 0;
-        for (let v of nums) {
+        for (const v of nums) {
             if (v <= mid) {
                 ++cnt;
             }
         }
         if (cnt > mid) {
-            right = mid;
+            r = mid;
         } else {
-            left = mid + 1;
+            l = mid + 1;
         }
     }
-    return left;
+    return l;
 };
 ```
 
-### **TypeScript**
-
-```ts
-function findDuplicate(nums: number[]): number {
-    let left = 1,
-        right = nums.length - 1;
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        let cnt = 0;
-        for (let v of nums) {
-            if (v <= mid) {
-                ++cnt;
-            }
-        }
-        if (cnt > mid) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    return left;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

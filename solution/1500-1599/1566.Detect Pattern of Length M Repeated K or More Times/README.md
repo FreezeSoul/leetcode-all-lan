@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1566.Detect%20Pattern%20of%20Length%20M%20Repeated%20K%20or%20More%20Times/README.md
+rating: 1486
+source: 第 204 场周赛 Q1
+tags:
+    - 数组
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [1566. 重复至少 K 次且长度为 M 的模式](https://leetcode.cn/problems/detect-pattern-of-length-m-repeated-k-or-more-times)
 
 [English Version](/solution/1500-1599/1566.Detect%20Pattern%20of%20Length%20M%20Repeated%20K%20or%20More%20Times/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>arr</code>，请你找出一个长度为 <code>m</code> 且在数组中至少重复 <code>k</code> 次的模式。</p>
 
@@ -60,54 +73,58 @@
 	<li><code>2 &lt;= k&nbsp;&lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：一次遍历
 
-枚举数组的左端点 `i`，判断是否存在一个 `i`，满足对于任意 `j∈[0, m * k)`，`arr[i + j] == arr[i + (j % m)]`。存在则返回 `true`，否则返回 `false`。
+首先，如果数组的长度小于 $m \times k$，那么肯定不存在长度为 $m$ 且至少重复 $k$ 次的模式，直接返回 $\textit{false}$。
 
-时间复杂度 $O((n-m\times k)\times m \times k)$。
+接下来，我们定义一个变量 $\textit{cnt}$ 来记录当前连续重复的次数，如果数组存在连续的 $(k - 1) \times m$ 个元素 $a_i$，使得 $a_i = a_{i - m}$，那么我们就找到了一个长度为 $m$ 且至少重复 $k$ 次的模式，返回 $\textit{true}$。否则，我们将 $\textit{cnt}$ 置为 $0$，继续遍历数组。
+
+最后，如果遍历完数组都没有找到符合条件的模式，返回 $\textit{false}$。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def containsPattern(self, arr: List[int], m: int, k: int) -> bool:
-        n = len(arr)
-        for i in range(n - m * k + 1):
-            j = 0
-            while j < m * k:
-                if arr[i + j] != arr[i + (j % m)]:
-                    break
-                j += 1
-            if j == m * k:
-                return True
+        if len(arr) < m * k:
+            return False
+        cnt, target = 0, (k - 1) * m
+        for i in range(m, len(arr)):
+            if arr[i] == arr[i - m]:
+                cnt += 1
+                if cnt == target:
+                    return True
+            else:
+                cnt = 0
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public boolean containsPattern(int[] arr, int m, int k) {
-        int n = arr.length;
-        for (int i = 0; i <= n - m * k; ++i) {
-            int j = 0;
-            for (; j < m * k; ++j) {
-                if (arr[i + j] != arr[i + (j % m)]) {
-                    break;
+        if (arr.length < m * k) {
+            return false;
+        }
+        int cnt = 0, target = (k - 1) * m;
+        for (int i = m; i < arr.length; ++i) {
+            if (arr[i] == arr[i - m]) {
+                if (++cnt == target) {
+                    return true;
                 }
-            }
-            if (j == m * k) {
-                return true;
+            } else {
+                cnt = 0;
             }
         }
         return false;
@@ -115,22 +132,23 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool containsPattern(vector<int>& arr, int m, int k) {
-        int n = arr.size();
-        for (int i = 0; i <= n - m * k; ++i) {
-            int j = 0;
-            for (; j < m * k; ++j) {
-                if (arr[i + j] != arr[i + (j % m)]) {
-                    break;
+        if (arr.size() < m * k) {
+            return false;
+        }
+        int cnt = 0, target = (k - 1) * m;
+        for (int i = m; i < arr.size(); ++i) {
+            if (arr[i] == arr[i - m]) {
+                if (++cnt == target) {
+                    return true;
                 }
-            }
-            if (j == m * k) {
-                return true;
+            } else {
+                cnt = 0;
             }
         }
         return false;
@@ -138,50 +156,49 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func containsPattern(arr []int, m int, k int) bool {
-	n := len(arr)
-	for i := 0; i <= n-m*k; i++ {
-		j := 0
-		for ; j < m*k; j++ {
-			if arr[i+j] != arr[i+(j%m)] {
-				break
+	cnt, target := 0, (k-1)*m
+	for i := m; i < len(arr); i++ {
+		if arr[i] == arr[i-m] {
+			cnt++
+			if cnt == target {
+				return true
 			}
-		}
-		if j == m*k {
-			return true
+		} else {
+			cnt = 0
 		}
 	}
 	return false
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function containsPattern(arr: number[], m: number, k: number): boolean {
-    const n = arr.length;
-    for (let i = 0; i <= n - m * k; ++i) {
-        let j = 0;
-        for (; j < m * k; ++j) {
-            if (arr[i + j] != arr[i + (j % m)]) {
-                break;
+    if (arr.length < m * k) {
+        return false;
+    }
+    const target = (k - 1) * m;
+    let cnt = 0;
+    for (let i = m; i < arr.length; ++i) {
+        if (arr[i] === arr[i - m]) {
+            if (++cnt === target) {
+                return true;
             }
-        }
-        if (j == m * k) {
-            return true;
+        } else {
+            cnt = 0;
         }
     }
     return false;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2300.Successful%20Pairs%20of%20Spells%20and%20Potions/README.md
+rating: 1476
+source: 第 80 场双周赛 Q2
+tags:
+    - 数组
+    - 双指针
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2300. 咒语和药水的成功对数](https://leetcode.cn/problems/successful-pairs-of-spells-and-potions)
 
 [English Version](/solution/2300-2399/2300.Successful%20Pairs%20of%20Spells%20and%20Potions/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个正整数数组&nbsp;<code>spells</code> 和&nbsp;<code>potions</code>&nbsp;，长度分别为&nbsp;<code>n</code> 和&nbsp;<code>m</code>&nbsp;，其中&nbsp;<code>spells[i]</code>&nbsp;表示第&nbsp;<code>i</code>&nbsp;个咒语的能量强度，<code>potions[j]</code>&nbsp;表示第&nbsp;<code>j</code>&nbsp;瓶药水的能量强度。</p>
 
@@ -48,21 +63,21 @@
 	<li><code>1 &lt;= success &lt;= 10<sup>10</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 二分查找**
+### 方法一：排序 + 二分查找
 
-我们可以对药水数组进行排序，然后遍历咒语数组，对于每个咒语，利用二分查找找到第一个大于等于 `success / v` 的药水，下标记为 $i$，那么药水的长度减去 $i$ 即为能跟该咒语成功组合的药水数目。
+我们可以对药水数组进行排序，然后遍历咒语数组，对于每个咒语 $v$，利用二分查找找到第一个大于等于 $\frac{success}{v}$ 的药水，下标记为 $i$，那么药水的长度减去 $i$ 即为能跟该咒语成功组合的药水数目。
 
 时间复杂度 $O((m + n) \times \log m)$，空间复杂度 $O(\log n)$。其中 $m$ 和 $n$ 分别为药水数组和咒语数组的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +89,7 @@ class Solution:
         return [m - bisect_left(potions, success / v) for v in spells]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -101,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -119,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func successfulPairs(spells []int, potions []int, success int64) (ans []int) {
@@ -133,14 +146,10 @@ func successfulPairs(spells []int, potions []int, success int64) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function successfulPairs(
-    spells: number[],
-    potions: number[],
-    success: number,
-): number[] {
+function successfulPairs(spells: number[], potions: number[], success: number): number[] {
     potions.sort((a, b) => a - b);
     const m = potions.length;
     const ans: number[] = [];
@@ -161,10 +170,8 @@ function successfulPairs(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

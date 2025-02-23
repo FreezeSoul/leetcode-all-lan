@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2389.Longest%20Subsequence%20With%20Limited%20Sum/README_EN.md
+rating: 1387
+source: Weekly Contest 308 Q1
+tags:
+    - Greedy
+    - Array
+    - Binary Search
+    - Prefix Sum
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2389. Longest Subsequence With Limited Sum](https://leetcode.com/problems/longest-subsequence-with-limited-sum)
 
 [中文文档](/solution/2300-2399/2389.Longest%20Subsequence%20With%20Limited%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> of length <code>n</code>, and an integer array <code>queries</code> of length <code>m</code>.</p>
 
@@ -39,11 +57,23 @@
 	<li><code>1 &lt;= nums[i], queries[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Prefix Sum + Binary Search
+
+According to the problem description, for each $\textit{queries[i]}$, we need to find a subsequence such that the sum of its elements does not exceed $\textit{queries[i]}$ and the length of the subsequence is maximized. Obviously, we should choose the smallest possible elements to maximize the length of the subsequence.
+
+Therefore, we can first sort the array $\textit{nums}$ in ascending order, and then for each $\textit{queries[i]}$, we can use binary search to find the smallest index $j$ such that $\textit{nums}[0] + \textit{nums}[1] + \cdots + \textit{nums}[j] > \textit{queries[i]}$. At this point, $\textit{nums}[0] + \textit{nums}[1] + \cdots + \textit{nums}[j - 1]$ is the sum of the elements of the subsequence that meets the condition, and the length of this subsequence is $j$. Therefore, we can add $j$ to the answer array.
+
+The time complexity is $O((n + m) \times \log n)$, and the space complexity is $O(n)$ or $O(\log n)$. Here, $n$ and $m$ are the lengths of the arrays $\textit{nums}$ and $\textit{queries}$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,6 +82,154 @@ class Solution:
         s = list(accumulate(nums))
         return [bisect_right(s, q) for q in queries]
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int[] answerQueries(int[] nums, int[] queries) {
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length; ++i) {
+            nums[i] += nums[i - 1];
+        }
+        int m = queries.length;
+        int[] ans = new int[m];
+        for (int i = 0; i < m; ++i) {
+            int j = Arrays.binarySearch(nums, queries[i] + 1);
+            ans[i] = j < 0 ? -j - 1 : j;
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> answerQueries(vector<int>& nums, vector<int>& queries) {
+        ranges::sort(nums);
+        for (int i = 1; i < nums.size(); i++) {
+            nums[i] += nums[i - 1];
+        }
+        vector<int> ans;
+        for (const auto& q : queries) {
+            ans.emplace_back(upper_bound(nums.begin(), nums.end(), q) - nums.begin());
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func answerQueries(nums []int, queries []int) (ans []int) {
+	sort.Ints(nums)
+	for i := 1; i < len(nums); i++ {
+		nums[i] += nums[i-1]
+	}
+	for _, q := range queries {
+		ans = append(ans, sort.SearchInts(nums, q+1))
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function answerQueries(nums: number[], queries: number[]): number[] {
+    nums.sort((a, b) => a - b);
+    for (let i = 1; i < nums.length; i++) {
+        nums[i] += nums[i - 1];
+    }
+    return queries.map(q => _.sortedIndex(nums, q + 1));
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn answer_queries(mut nums: Vec<i32>, queries: Vec<i32>) -> Vec<i32> {
+        nums.sort();
+
+        for i in 1..nums.len() {
+            nums[i] += nums[i - 1];
+        }
+
+        queries.iter().map(|&q| {
+            match nums.binary_search(&q) {
+                Ok(idx) => idx as i32 + 1,
+                Err(idx) => idx as i32,
+            }
+        }).collect()
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number[]} queries
+ * @return {number[]}
+ */
+var answerQueries = function (nums, queries) {
+    nums.sort((a, b) => a - b);
+    for (let i = 1; i < nums.length; i++) {
+        nums[i] += nums[i - 1];
+    }
+    return queries.map(q => _.sortedIndex(nums, q + 1));
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int[] AnswerQueries(int[] nums, int[] queries) {
+        Array.Sort(nums);
+        for (int i = 1; i < nums.Length; ++i) {
+            nums[i] += nums[i - 1];
+        }
+        int m = queries.Length;
+        int[] ans = new int[m];
+        for (int i = 0; i < m; ++i) {
+            int j = Array.BinarySearch(nums, queries[i] + 1);
+            ans[i] = j < 0 ? -j - 1 : j;
+        }
+        return ans;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Sorting + Offline Query + Two Pointers
+
+Similar to Solution 1, we can first sort the array $nums$ in ascending order.
+
+Next, we define an index array $idx$ of the same length as $queries$, where $idx[i] = i$. Then, we sort the array $idx$ in ascending order based on the values in $queries$. This way, we can process the elements in $queries$ in ascending order.
+
+We use a variable $s$ to record the sum of the currently selected elements and a variable $j$ to record the number of currently selected elements. Initially, $s = j = 0$.
+
+We traverse the index array $idx$, and for each index $i$ in it, we iteratively add elements from the array $nums$ to the current subsequence until $s + nums[j] \gt queries[i]$. At this point, $j$ is the length of the subsequence that meets the condition. We set the value of $ans[i]$ to $j$ and then continue to process the next index.
+
+After traversing the index array $idx$, we obtain the answer array $ans$, where $ans[i]$ is the length of the subsequence that satisfies $queries[i]$.
+
+The time complexity is $O(n \times \log n + m)$, and the space complexity is $O(m)$. Here, $n$ and $m$ are the lengths of the arrays $nums$ and $queries$, respectively.
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -69,37 +247,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public int[] answerQueries(int[] nums, int[] queries) {
-        Arrays.sort(nums);
-        for (int i = 1; i < nums.length; ++i) {
-            nums[i] += nums[i - 1];
-        }
-        int m = queries.length;
-        int[] ans = new int[m];
-        for (int i = 0; i < m; ++i) {
-            ans[i] = search(nums, queries[i]);
-        }
-        return ans;
-    }
-
-    private int search(int[] nums, int x) {
-        int l = 0, r = nums.length;
-        while (l < r) {
-            int mid = (l + r) >> 1;
-            if (nums[mid] > x) {
-                r = mid;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return l;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -124,24 +272,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<int> answerQueries(vector<int>& nums, vector<int>& queries) {
-        sort(nums.begin(), nums.end());
-        for (int i = 1; i < nums.size(); i++) {
-            nums[i] += nums[i - 1];
-        }
-        vector<int> ans;
-        for (auto& q : queries) {
-            ans.push_back(upper_bound(nums.begin(), nums.end(), q) - nums.begin());
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -167,20 +298,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func answerQueries(nums []int, queries []int) (ans []int) {
-	sort.Ints(nums)
-	for i := 1; i < len(nums); i++ {
-		nums[i] += nums[i-1]
-	}
-	for _, q := range queries {
-		ans = append(ans, sort.SearchInts(nums, q+1))
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func answerQueries(nums []int, queries []int) (ans []int) {
@@ -204,34 +322,7 @@ func answerQueries(nums []int, queries []int) (ans []int) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function answerQueries(nums: number[], queries: number[]): number[] {
-    nums.sort((a, b) => a - b);
-    for (let i = 1; i < nums.length; i++) {
-        nums[i] += nums[i - 1];
-    }
-    const ans: number[] = [];
-    const search = (nums: number[], x: number) => {
-        let l = 0;
-        let r = nums.length;
-        while (l < r) {
-            const mid = (l + r) >> 1;
-            if (nums[mid] > x) {
-                r = mid;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return l;
-    };
-    for (const q of queries) {
-        ans.push(search(nums, q));
-    }
-    return ans;
-}
-```
+#### TypeScript
 
 ```ts
 function answerQueries(nums: number[], queries: number[]): number[] {
@@ -255,34 +346,8 @@ function answerQueries(nums: number[], queries: number[]): number[] {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn answer_queries(mut nums: Vec<i32>, queries: Vec<i32>) -> Vec<i32> {
-        let n = nums.len();
-        nums.sort();
-        queries
-            .into_iter()
-            .map(|query| {
-                let mut sum = 0;
-                for i in 0..n {
-                    sum += nums[i];
-                    if sum > query {
-                        return i as i32;
-                    }
-                }
-                n as i32
-            })
-            .collect()
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2697.Lexicographically%20Smallest%20Palindrome/README.md
+rating: 1303
+source: 第 346 场周赛 Q2
+tags:
+    - 贪心
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2697. 字典序最小回文串](https://leetcode.cn/problems/lexicographically-smallest-palindrome)
 
 [English Version](/solution/2600-2699/2697.Lexicographically%20Smallest%20Palindrome/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由 <strong>小写英文字母</strong> 组成的字符串 <code>s</code> ，你可以对其执行一些操作。在一步操作中，你可以用其他小写英文字母 <strong>替换</strong>&nbsp; <code>s</code> 中的一个字符。</p>
 
@@ -48,104 +62,107 @@
 	<li><code>s</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 双指针**
+### 方法一：贪心 + 双指针
 
-我们用两个指针 $i$ 和 $j$ 分别指向字符串的首尾，初始时 $i=0,j=n-1$，其中 $n$ 是字符串的长度。每次比较 $s[i]$ 和 $s[j]$，如果二者不相同，则将其中较大的字符修改为较小的字符，使得两者相同。这样在修改之后，原字符串 $s$ 就变成了一个回文串。
+我们用两个指针 $i$ 和 $j$ 分别指向字符串的首尾，初始时 $i = 0$, $j = n - 1$。
 
-时间复杂度 $O(n)$，其中 $n$ 是字符串的长度。我们只需要遍历一遍字符串即可。忽略答案的空间消耗，空间复杂度 $O(1)$。
+接下来，我们每一次都贪心地将 $s[i]$ 和 $s[j]$ 修改为它们中的较小值，使得它们相等。然后将 $i$ 向后移动一位，将 $j$ 向前移动一位，继续进行这一过程，直到 $i \ge j$ 为止。此时，我们就得到了最小的回文串。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是字符串的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def makeSmallestPalindrome(self, s: str) -> str:
-        i, j = 0, len(s) - 1
         cs = list(s)
+        i, j = 0, len(s) - 1
         while i < j:
-            if s[i] != s[j]:
-                cs[i] = cs[j] = min(s[i], s[j])
+            cs[i] = cs[j] = min(cs[i], cs[j])
             i, j = i + 1, j - 1
         return "".join(cs)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public String makeSmallestPalindrome(String s) {
         char[] cs = s.toCharArray();
         for (int i = 0, j = cs.length - 1; i < j; ++i, --j) {
-            if (cs[i] != cs[j]) {
-                cs[i] = cs[j] = cs[i] < cs[j] ? cs[i] : cs[j];
-            }
+            cs[i] = cs[j] = (char) Math.min(cs[i], cs[j]);
         }
-        return String.valueOf(cs);
+        return new String(cs);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string makeSmallestPalindrome(string s) {
         for (int i = 0, j = s.size() - 1; i < j; ++i, --j) {
-            if (s[i] != s[j]) {
-                s[i] = s[j] = s[i] < s[j] ? s[i] : s[j];
-            }
+            s[i] = s[j] = min(s[i], s[j]);
         }
         return s;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeSmallestPalindrome(s string) string {
 	cs := []byte(s)
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		if cs[i] != cs[j] {
-			if cs[i] < cs[j] {
-				cs[j] = cs[i]
-			} else {
-				cs[i] = cs[j]
-			}
-		}
+		cs[i] = min(cs[i], cs[j])
+		cs[j] = cs[i]
 	}
 	return string(cs)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makeSmallestPalindrome(s: string): string {
     const cs = s.split('');
     for (let i = 0, j = s.length - 1; i < j; ++i, --j) {
-        if (s[i] !== s[j]) {
-            cs[i] = cs[j] = s[i] < s[j] ? s[i] : s[j];
-        }
+        cs[i] = cs[j] = s[i] < s[j] ? s[i] : s[j];
     }
     return cs.join('');
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn make_smallest_palindrome(s: String) -> String {
+        let mut cs: Vec<char> = s.chars().collect();
+        let n = cs.len();
+        for i in 0..n / 2 {
+            let j = n - 1 - i;
+            cs[i] = std::cmp::min(cs[i], cs[j]);
+            cs[j] = cs[i];
+        }
+        cs.into_iter().collect()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

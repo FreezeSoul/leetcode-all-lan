@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0028.Find%20the%20Index%20of%20the%20First%20Occurrence%20in%20a%20String/README.md
+tags:
+    - 双指针
+    - 字符串
+    - 字符串匹配
+---
+
+<!-- problem:start -->
+
 # [28. 找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string)
 
 [English Version](/solution/0000-0099/0028.Find%20the%20Index%20of%20the%20First%20Occurrence%20in%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串&nbsp;<code>haystack</code> 和 <code>needle</code> ，请你在 <code>haystack</code> 字符串中找出 <code>needle</code> 字符串的第一个匹配项的下标（下标从 0 开始）。如果&nbsp;<code>needle</code> 不是 <code>haystack</code> 的一部分，则返回&nbsp; <code>-1</code><strong> </strong>。</p>
 
@@ -36,45 +48,33 @@
 	<li><code>haystack</code> 和 <code>needle</code> 仅由小写英文字符组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：遍历**
+### 方法一：遍历
 
 以字符串 `haystack` 的每一个字符为起点与字符串 `needle` 进行比较，若发现能够匹配的索引，直接返回即可。
 
-假设字符串 `haystack` 长度为 `n`，字符串 `needle` 长度为 `m`，则时间复杂度为 $O((n-m) \times m)$，空间复杂度 $O(1)$。
-
-**方法二：Rabin-Karp 字符串匹配算法**
-
-[Rabin-Karp 算法](https://zh.wikipedia.org/zh-hans/%E6%8B%89%E5%AE%BE-%E5%8D%A1%E6%99%AE%E7%AE%97%E6%B3%95)本质上是利用滑动窗口配合哈希函数对固定长度的字符串哈希之后进行比较，可以将比较两个字符串是否相同的时间复杂度降为 $O(1)$。
-
-假设字符串 `haystack` 长度为 `n`，字符串 `needle` 长度为 `m`，则时间复杂度为 $O(n+m)$，空间复杂度 $O(1)$。
-
-**方法三：KMP 字符串匹配算法**
-
-假设字符串 `haystack` 长度为 `n`，字符串 `needle` 长度为 `m`，则时间复杂度为 $O(n+m)$，空间复杂度 $O(m)$。
+假设字符串 `haystack` 长度为 $n$，字符串 `needle` 长度为 $m$，则时间复杂度为 $O((n-m) \times m)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         n, m = len(haystack), len(needle)
-        for i in range(n-m+1):
-            if haystack[i:i+m] == needle:
+        for i in range(n - m + 1):
+            if haystack[i : i + m] == needle:
                 return i
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,28 +161,7 @@ public:
 };
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int StrStr(string haystack, string needle) {
-        for (var i = 0; i < haystack.Length - needle.Length + 1; ++i)
-        {
-            var j = 0;
-            for (; j < needle.Length; ++j)
-            {
-                if (haystack[i + j] != needle[j]) break;
-            }
-            if (j == needle.Length) return i;
-        }
-        return -1;
-    }
-}
-```
-
-### **Go**
-
-遍历：
+#### Go
 
 ```go
 func strStr(haystack string, needle string) int {
@@ -196,66 +175,7 @@ func strStr(haystack string, needle string) int {
 }
 ```
 
-Rabin-Karp 字符串匹配算法：
-
-```go
-func strStr(haystack string, needle string) int {
-	n, m := len(haystack), len(needle)
-	sha, target, left, right, mod := 0, 0, 0, 0, 1<<31-1
-	multi := 1
-	for i := 0; i < m; i++ {
-		target = (target*256%mod + int(needle[i])) % mod
-	}
-	for i := 1; i < m; i++ {
-		multi = multi * 256 % mod
-	}
-
-	for ; right < n; right++ {
-		sha = (sha*256%mod + int(haystack[right])) % mod
-		if right-left+1 < m {
-			continue
-		}
-		// 此时 left~right 的长度已经为 needle 的长度 m 了，只需要比对 sha 值与 target 是否一致即可
-		// 为避免 hash 冲突，还需要确保 haystack[left:right+1] 与 needle 相同
-		if sha == target && haystack[left:right+1] == needle {
-			return left
-		}
-		// 未匹配成功，left 右移一位
-		sha = (sha - (int(haystack[left])*multi)%mod + mod) % mod
-		left++
-	}
-	return -1
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {string} haystack
- * @param {string} needle
- * @return {number}
- */
-var strStr = function (haystack, needle) {
-    const slen = haystack.length;
-    const plen = needle.length;
-    if (slen == plen) {
-        return haystack == needle ? 0 : -1;
-    }
-    for (let i = 0; i <= slen - plen; i++) {
-        let j;
-        for (j = 0; j < plen; j++) {
-            if (haystack[i + j] != needle[j]) {
-                break;
-            }
-        }
-        if (j == plen) return i;
-    }
-    return -1;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function strStr(haystack: string, needle: string): number {
@@ -277,38 +197,7 @@ function strStr(haystack: string, needle: string): number {
 }
 ```
 
-```ts
-function strStr(haystack: string, needle: string): number {
-    const m = haystack.length;
-    const n = needle.length;
-    const next = new Array(n).fill(0);
-    let j = 0;
-    for (let i = 1; i < n; i++) {
-        while (j > 0 && needle[i] !== needle[j]) {
-            j = next[j - 1];
-        }
-        if (needle[i] === needle[j]) {
-            j++;
-        }
-        next[i] = j;
-    }
-    j = 0;
-    for (let i = 0; i < m; i++) {
-        while (j > 0 && haystack[i] !== needle[j]) {
-            j = next[j - 1];
-        }
-        if (haystack[i] === needle[j]) {
-            j++;
-        }
-        if (j === n) {
-            return i - n + 1;
-        }
-    }
-    return -1;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -345,7 +234,53 @@ impl Solution {
 }
 ```
 
-### **PHP**
+#### JavaScript
+
+```js
+/**
+ * @param {string} haystack
+ * @param {string} needle
+ * @return {number}
+ */
+var strStr = function (haystack, needle) {
+    const slen = haystack.length;
+    const plen = needle.length;
+    if (slen == plen) {
+        return haystack == needle ? 0 : -1;
+    }
+    for (let i = 0; i <= slen - plen; i++) {
+        let j;
+        for (j = 0; j < plen; j++) {
+            if (haystack[i + j] != needle[j]) {
+                break;
+            }
+        }
+        if (j == plen) return i;
+    }
+    return -1;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int StrStr(string haystack, string needle) {
+        for (var i = 0; i < haystack.Length - needle.Length + 1; ++i)
+        {
+            var j = 0;
+            for (; j < needle.Length; ++j)
+            {
+                if (haystack[i + j] != needle[j]) break;
+            }
+            if (j == needle.Length) return i;
+        }
+        return -1;
+    }
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -355,11 +290,11 @@ class Solution {
      * @return Integer
      */
     function strStr($haystack, $needle) {
-        $strNew = str_replace($needle, "+", $haystack);
-        $cnt = substr_count($strNew, "+");
+        $strNew = str_replace($needle, '+', $haystack);
+        $cnt = substr_count($strNew, '+');
         if ($cnt > 0) {
             for ($i = 0; $i < strlen($strNew); $i++) {
-                if ($strNew[$i] == "+") {
+                if ($strNew[$i] == '+') {
                     return $i;
                 }
             }
@@ -370,10 +305,95 @@ class Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：Rabin-Karp 字符串匹配算法
+
+[Rabin-Karp 算法](https://zh.wikipedia.org/zh-hans/%E6%8B%89%E5%AE%BE-%E5%8D%A1%E6%99%AE%E7%AE%97%E6%B3%95)本质上是利用滑动窗口配合哈希函数对固定长度的字符串哈希之后进行比较，可以将比较两个字符串是否相同的时间复杂度降为 $O(1)$。
+
+假设字符串 `haystack` 长度为 $n$，字符串 `needle` 长度为 $m$，则时间复杂度为 $O(n+m)$，空间复杂度 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Go
+
+```go
+func strStr(haystack string, needle string) int {
+	n, m := len(haystack), len(needle)
+	sha, target, left, right, mod := 0, 0, 0, 0, 1<<31-1
+	multi := 1
+	for i := 0; i < m; i++ {
+		target = (target*256%mod + int(needle[i])) % mod
+	}
+	for i := 1; i < m; i++ {
+		multi = multi * 256 % mod
+	}
+
+	for ; right < n; right++ {
+		sha = (sha*256%mod + int(haystack[right])) % mod
+		if right-left+1 < m {
+			continue
+		}
+		// 此时 left~right 的长度已经为 needle 的长度 m 了，只需要比对 sha 值与 target 是否一致即可
+		// 为避免 hash 冲突，还需要确保 haystack[left:right+1] 与 needle 相同
+		if sha == target && haystack[left:right+1] == needle {
+			return left
+		}
+		// 未匹配成功，left 右移一位
+		sha = (sha - (int(haystack[left])*multi)%mod + mod) % mod
+		left++
+	}
+	return -1
+}
 ```
 
+#### TypeScript
+
+```ts
+function strStr(haystack: string, needle: string): number {
+    const m = haystack.length;
+    const n = needle.length;
+    const next = new Array(n).fill(0);
+    let j = 0;
+    for (let i = 1; i < n; i++) {
+        while (j > 0 && needle[i] !== needle[j]) {
+            j = next[j - 1];
+        }
+        if (needle[i] === needle[j]) {
+            j++;
+        }
+        next[i] = j;
+    }
+    j = 0;
+    for (let i = 0; i < m; i++) {
+        while (j > 0 && haystack[i] !== needle[j]) {
+            j = next[j - 1];
+        }
+        if (haystack[i] === needle[j]) {
+            j++;
+        }
+        if (j === n) {
+            return i - n + 1;
+        }
+    }
+    return -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三：KMP 字符串匹配算法
+
+假设字符串 `haystack` 长度为 $n$，字符串 `needle` 长度为 $m$，则时间复杂度为 $O(n+m)$，空间复杂度 $O(m)$。
+
+<!-- solution:end -->
+
+<!-- problem:end -->

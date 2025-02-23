@@ -1,8 +1,23 @@
-# [2604. Minimum Time to Eat All Grains](https://leetcode.com/problems/minimum-time-to-eat-all-grains)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2604.Minimum%20Time%20to%20Eat%20All%20Grains/README_EN.md
+tags:
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [2604. Minimum Time to Eat All Grains 🔒](https://leetcode.com/problems/minimum-time-to-eat-all-grains)
 
 [中文文档](/solution/2600-2699/2604.Minimum%20Time%20to%20Eat%20All%20Grains/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> hens and <code>m</code> grains on a line. You are given the initial positions of the hens and the grains in two integer arrays <code>hens</code> and <code>grains</code> of size <code>n</code> and <code>m</code> respectively.</p>
 
@@ -48,9 +63,13 @@ So, the maximum time needed is 1.
 	<li><code>0 &lt;= hens[i], grains[j] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Sorting + Binary Search**
+<!-- solution:start -->
+
+### Solution 1: Sorting + Binary Search
 
 First, sort the chickens and grains by their position from left to right. Then enumerate the time $t$ using binary search to find the smallest $t$ such that all the grains can be eaten up in $t$ seconds.
 
@@ -65,7 +84,7 @@ Time complexity $O(n \times \log n + m \times \log m + (m + n) \times \log U)$, 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -96,7 +115,7 @@ class Solution:
         return bisect_left(range(r), True, key=check)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -152,7 +171,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -202,7 +221,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumTime(hens []int, grains []int) int {
@@ -247,13 +266,6 @@ func minimumTime(hens []int, grains []int) int {
 	return l
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -262,7 +274,7 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumTime(hens: number[], grains: number[]): number {
@@ -287,10 +299,7 @@ function minimumTime(hens: number[], grains: number[]): number {
                 while (j < m && grains[j] <= x) {
                     ++j;
                 }
-                while (
-                    j < m &&
-                    Math.min(d, grains[j] - x) + grains[j] - y <= t
-                ) {
+                while (j < m && Math.min(d, grains[j] - x) + grains[j] - y <= t) {
                     ++j;
                 }
             } else {
@@ -314,10 +323,8 @@ function minimumTime(hens: number[], grains: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0036.Valid%20Sudoku/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [36. 有效的数独](https://leetcode.cn/problems/valid-sudoku)
 
 [English Version](/solution/0000-0099/0036.Valid%20Sudoku/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你判断一个&nbsp;<code>9 x 9</code> 的数独是否有效。只需要<strong> 根据以下规则</strong> ，验证已经填入的数字是否有效即可。</p>
 
@@ -68,11 +80,13 @@
 	<li><code>board[i][j]</code> 是一位数字（<code>1-9</code>）或者 <code>'.'</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 有效的数独满足以下三个条件：
 
@@ -86,9 +100,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -111,9 +123,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -142,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -170,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isValidSudoku(board [][]byte) bool {
@@ -194,37 +204,7 @@ func isValidSudoku(board [][]byte) bool {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {character[][]} board
- * @return {boolean}
- */
-var isValidSudoku = function (board) {
-    const row = [...Array(9)].map(() => Array(9).fill(false));
-    const col = [...Array(9)].map(() => Array(9).fill(false));
-    const sub = [...Array(9)].map(() => Array(9).fill(false));
-    for (let i = 0; i < 9; ++i) {
-        for (let j = 0; j < 9; ++j) {
-            const num = board[i][j].charCodeAt() - '1'.charCodeAt();
-            if (num < 0 || num > 8) {
-                continue;
-            }
-            const k = Math.floor(i / 3) * 3 + Math.floor(j / 3);
-            if (row[i][num] || col[j][num] || sub[k][num]) {
-                return false;
-            }
-            row[i][num] = true;
-            col[j][num] = true;
-            sub[k][num] = true;
-        }
-    }
-    return true;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isValidSudoku(board: string[][]): boolean {
@@ -256,10 +236,82 @@ function isValidSudoku(board: string[][]): boolean {
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+var isValidSudoku = function (board) {
+    const row = [...Array(9)].map(() => Array(9).fill(false));
+    const col = [...Array(9)].map(() => Array(9).fill(false));
+    const sub = [...Array(9)].map(() => Array(9).fill(false));
+    for (let i = 0; i < 9; ++i) {
+        for (let j = 0; j < 9; ++j) {
+            const num = board[i][j].charCodeAt() - '1'.charCodeAt();
+            if (num < 0 || num > 8) {
+                continue;
+            }
+            const k = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+            if (row[i][num] || col[j][num] || sub[k][num]) {
+                return false;
+            }
+            row[i][num] = true;
+            col[j][num] = true;
+            sub[k][num] = true;
+        }
+    }
+    return true;
+};
 ```
 
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param string[][] $board
+     * @return boolean
+     */
+
+    function isValidSudoku($board) {
+        $rows = [];
+        $columns = [];
+        $boxes = [];
+
+        for ($i = 0; $i < 9; $i++) {
+            $rows[$i] = [];
+            $columns[$i] = [];
+            $boxes[$i] = [];
+        }
+
+        for ($row = 0; $row < 9; $row++) {
+            for ($column = 0; $column < 9; $column++) {
+                $cell = $board[$row][$column];
+
+                if ($cell != '.') {
+                    if (
+                        in_array($cell, $rows[$row]) ||
+                        in_array($cell, $columns[$column]) ||
+                        in_array($cell, $boxes[floor($row / 3) * 3 + floor($column / 3)])
+                    ) {
+                        return false;
+                    }
+
+                    $rows[$row][] = $cell;
+                    $columns[$column][] = $cell;
+                    $boxes[floor($row / 3) * 3 + floor($column / 3)][] = $cell;
+                }
+            }
+        }
+        return true;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

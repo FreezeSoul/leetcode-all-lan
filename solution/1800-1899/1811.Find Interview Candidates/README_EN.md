@@ -1,8 +1,20 @@
-# [1811. Find Interview Candidates](https://leetcode.com/problems/find-interview-candidates)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1811.Find%20Interview%20Candidates/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1811. Find Interview Candidates 🔒](https://leetcode.com/problems/find-interview-candidates)
 
 [中文文档](/solution/1800-1899/1811.Find%20Interview%20Candidates/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Contests</code></p>
 
@@ -15,7 +27,7 @@
 | silver_medal | int  |
 | bronze_medal | int  |
 +--------------+------+
-contest_id is the primary key for this table.
+contest_id is the column with unique values for this table.
 This table contains the LeetCode contest ID and the user IDs of the gold, silver, and bronze medalists.
 It is guaranteed that any consecutive contests have consecutive IDs and that no ID is skipped.</pre>
 
@@ -31,13 +43,13 @@ It is guaranteed that any consecutive contests have consecutive IDs and that no 
 | mail        | varchar |
 | name        | varchar |
 +-------------+---------+
-user_id is the primary key for this table.
+user_id is the column with unique values for this table.
 This table contains information about the users.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the <code>name</code> and the <code>mail</code> of all <strong>interview candidates</strong>. A user is an <strong>interview candidate</strong> if <strong>at least one</strong> of these two conditions is true:</p>
+<p>Write a solution to report the <code>name</code> and the <code>mail</code> of all <strong>interview candidates</strong>. A user is an <strong>interview candidate</strong> if <strong>at least one</strong> of these two conditions is true:</p>
 
 <ul>
 	<li>The user won <strong>any</strong> medal in <strong>three or more consecutive</strong> contests.</li>
@@ -46,7 +58,7 @@ This table contains information about the users.
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -100,14 +112,62 @@ Quarz won a medal in 5 consecutive contests (190, 191, 192, 193, and 194), so we
 	<li>Some users may not participate in every contest but still perform well in the ones they do. How would you change your solution to only consider contests where the user <strong>was a participant</strong>? Suppose the registered users for each contest are given in another table.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT contest_id, gold_medal AS user_id, 1 AS type
+        FROM Contests
+        UNION
+        SELECT contest_id, silver_medal AS user_id, 2 AS type
+        FROM Contests
+        UNION
+        SELECT contest_id, bronze_medal AS user_id, 3 AS type
+        FROM Contests
+    ),
+    T AS (
+        SELECT
+            user_id,
+            (
+                contest_id - ROW_NUMBER() OVER (
+                    PARTITION BY user_id
+                    ORDER BY contest_id
+                )
+            ) AS diff
+        FROM S
+    ),
+    P AS (
+        SELECT user_id
+        FROM S
+        WHERE type = 1
+        GROUP BY user_id
+        HAVING COUNT(1) >= 3
+        UNION
+        SELECT DISTINCT user_id
+        FROM T
+        GROUP BY user_id, diff
+        HAVING COUNT(1) >= 3
+    )
+SELECT name, mail
+FROM
+    P AS p
+    LEFT JOIN Users AS u ON p.user_id = u.user_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

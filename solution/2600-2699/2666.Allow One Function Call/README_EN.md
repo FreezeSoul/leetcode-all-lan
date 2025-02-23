@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2666.Allow%20One%20Function%20Call/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2666. Allow One Function Call](https://leetcode.com/problems/allow-one-function-call)
 
 [中文文档](/solution/2600-2699/2666.Allow%20One%20Function%20Call/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a function <code>fn</code>, return a new function that is identical to the original function except that it ensures&nbsp;<code>fn</code>&nbsp;is&nbsp;called at most once.</p>
 
@@ -39,21 +51,29 @@ onceFn(4, 6, 8); // undefined, fn was not called
 <p><strong>Constraints:</strong></p>
 
 <ul>
+	<li><code>calls</code> is a valid JSON array</li>
 	<li><code>1 &lt;= calls.length &lt;= 10</code></li>
 	<li><code>1 &lt;= calls[i].length &lt;= 100</code></li>
 	<li><code>2 &lt;= JSON.stringify(calls).length &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function once<T extends (...args: any[]) => any>(
-    fn: T,
-): (...args: Parameters<T>) => ReturnType<T> | undefined {
+type JSONValue = null | boolean | number | string | JSONValue[] | { [key: string]: JSONValue };
+type OnceFn = (...args: JSONValue[]) => JSONValue | undefined;
+
+function once(fn: Function): OnceFn {
     let called = false;
     return function (...args) {
         if (!called) {
@@ -72,10 +92,34 @@ function once<T extends (...args: any[]) => any>(
  */
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {Function} fn
+ * @return {Function}
+ */
+var once = function (fn) {
+    let called = false;
+    return function (...args) {
+        if (!called) {
+            called = true;
+            return fn(...args);
+        }
+    };
+};
 
+/**
+ * let fn = (a,b,c) => (a + b + c)
+ * let onceFn = once(fn)
+ *
+ * onceFn(1,2,3); // 6
+ * onceFn(2,3,6); // returns undefined without calling fn
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

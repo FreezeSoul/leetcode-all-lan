@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2643.Row%20With%20Maximum%20Ones/README.md
+rating: 1174
+source: 第 341 场周赛 Q1
+tags:
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2643. 一最多的行](https://leetcode.cn/problems/row-with-maximum-ones)
 
 [English Version](/solution/2600-2699/2643.Row%20With%20Maximum%20Ones/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个大小为 <code>m x n</code> 的二进制矩阵 <code>mat</code> ，请你找出包含最多 <strong>1</strong> 的行的下标（从 <strong>0</strong> 开始）以及这一行中 <strong>1</strong> 的数目。</p>
 
@@ -48,11 +61,13 @@
 	<li><code>mat[i][j]</code> 为 <code>0</code> 或 <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们直接遍历矩阵，统计每一行中 $1$ 的个数，更新最大值和对应的行下标。注意，如果当前行的 $1$ 的个数与最大值相等，我们需要选择行下标较小的那一行。
 
@@ -60,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +88,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +111,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +133,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rowAndMaximumOnes(mat [][]int) []int {
@@ -142,7 +153,7 @@ func rowAndMaximumOnes(mat [][]int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function rowAndMaximumOnes(mat: number[][]): number[] {
@@ -158,10 +169,28 @@ function rowAndMaximumOnes(mat: number[][]): number[] {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn row_and_maximum_ones(mat: Vec<Vec<i32>>) -> Vec<i32> {
+        let mut ans = vec![0, 0];
 
+        for (i, row) in mat.iter().enumerate() {
+            let cnt = row.iter().filter(|&v| *v == 1).count() as i32;
+            if ans[1] < cnt {
+                ans[0] = i as i32;
+                ans[1] = cnt;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

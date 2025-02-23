@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0126.Word%20Ladder%20II/README.md
+tags:
+    - 广度优先搜索
+    - 哈希表
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [126. 单词接龙 II](https://leetcode.cn/problems/word-ladder-ii)
 
 [English Version](/solution/0100-0199/0126.Word%20Ladder%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>按字典&nbsp;<code>wordList</code> 完成从单词 <code>beginWord</code> 到单词 <code>endWord</code> 转化，一个表示此过程的 <strong>转换序列</strong> 是形式上像 <code>beginWord -&gt; s<sub>1</sub> -&gt; s<sub>2</sub> -&gt; ... -&gt; s<sub>k</sub></code> 这样的单词序列，并满足：</p>
 
@@ -54,17 +67,17 @@
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-DFS。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -117,9 +130,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -190,7 +201,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findLadders(beginWord string, endWord string, wordList []string) [][]string {
@@ -264,10 +275,8 @@ func findLadders(beginWord string, endWord string, wordList []string) [][]string
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1849.Splitting%20a%20String%20Into%20Descending%20Consecutive%20Values/README.md
+rating: 1746
+source: 第 239 场周赛 Q2
+tags:
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [1849. 将字符串拆分为递减的连续值](https://leetcode.cn/problems/splitting-a-string-into-descending-consecutive-values)
 
 [English Version](/solution/1800-1899/1849.Splitting%20a%20String%20Into%20Descending%20Consecutive%20Values/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个仅由数字组成的字符串 <code>s</code> 。</p>
 
@@ -63,59 +76,65 @@
 	<li><code>s</code> 仅由数字组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
-从字符串的第一个字符开始，枚举所有可能的拆分位置，判断拆分出来的子串是否满足题目要求，如果满足则继续递归判断剩余的子串是否满足题目要求，直到遍历完整个字符串。
+我们可以从字符串的第一个字符开始，尝试将其拆分成一个或多个子字符串，然后递归处理剩余的部分。
 
-时间复杂度 $O(n^2)$，空间复杂度 $O(n)$。其中 $n$ 为字符串的长度。
+具体地，我们设计一个函数 $\textit{dfs}(i, x)$，其中 $i$ 表示当前处理到的位置，而 $x$ 表示上一个拆分出的数值。初始时 $x = -1$，表示我们还没有拆分出任何数值。
+
+在 $\textit{dfs}(i, x)$ 中，我们首先计算当前拆分出的数值 $y$，如果 $x = -1$，或者 $x - y = 1$，那么我们可以尝试将 $y$ 作为下一个数值，继续递归处理剩余的部分。如果递归的结果为 $\textit{true}$，我们就找到了一种拆分方法，返回 $\textit{true}$。
+
+遍历完所有的拆分方法后，如果没有找到合适的拆分方法，我们返回 $\textit{false}$。
+
+时间复杂度 $O(n^2)$，空间复杂度 $O(n)$，其中 $n$ 是字符串的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def splitString(self, s: str) -> bool:
-        def dfs(i, x, k):
-            if i == len(s):
-                return k > 1
+        def dfs(i: int, x: int) -> bool:
+            if i >= len(s):
+                return True
             y = 0
-            for j in range(i, len(s)):
+            r = len(s) - 1 if x < 0 else len(s)
+            for j in range(i, r):
                 y = y * 10 + int(s[j])
-                if (x == -1 or x - y == 1) and dfs(j + 1, y, k + 1):
+                if (x < 0 or x - y == 1) and dfs(j + 1, y):
                     return True
             return False
 
-        return dfs(0, -1, 0)
+        return dfs(0, -1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-    private String s;
+    private char[] s;
 
     public boolean splitString(String s) {
-        this.s = s;
-        return dfs(0, -1, 0);
+        this.s = s.toCharArray();
+        return dfs(0, -1);
     }
 
-    private boolean dfs(int i, long x, int k) {
-        if (i == s.length()) {
-            return k > 1;
+    private boolean dfs(int i, long x) {
+        if (i >= s.length) {
+            return true;
         }
         long y = 0;
-        for (int j = i; j < s.length(); ++j) {
-            y = y * 10 + (s.charAt(j) - '0');
-            if ((x == -1 || x - y == 1) && dfs(j + 1, y, k + 1)) {
+        int r = x < 0 ? s.length - 1 : s.length;
+        for (int j = i; j < r; ++j) {
+            y = y * 10 + s[j] - '0';
+            if ((x < 0 || x - y == 1) && dfs(j + 1, y)) {
                 return true;
             }
         }
@@ -124,62 +143,84 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool splitString(string s) {
-        function<bool(int, long long, int)> dfs = [&](int i, long long x, int k) -> bool {
-            if (i == s.size()) {
-                return k > 1;
+        auto dfs = [&](this auto&& dfs, int i, long long x) -> bool {
+            if (i >= s.size()) {
+                return true;
             }
             long long y = 0;
-            for (int j = i; j < s.size(); ++j) {
-                y = y * 10 + (s[j] - '0');
+            int r = x < 0 ? s.size() - 1 : s.size();
+            for (int j = i; j < r; ++j) {
+                y = y * 10 + s[j] - '0';
                 if (y > 1e10) {
                     break;
                 }
-                if ((x == -1 || x - y == 1) && dfs(j + 1, y, k + 1)) {
+                if ((x < 0 || x - y == 1) && dfs(j + 1, y)) {
                     return true;
                 }
             }
             return false;
         };
-        return dfs(0, -1, 0);
+        return dfs(0, -1);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func splitString(s string) bool {
-	var dfs func(i, x, k int) bool
-	dfs = func(i, x, k int) bool {
-		if i == len(s) {
-			return k > 1
+	var dfs func(i, x int) bool
+	dfs = func(i, x int) bool {
+		if i >= len(s) {
+			return true
 		}
 		y := 0
-		for j := i; j < len(s); j++ {
+		r := len(s)
+		if x < 0 {
+			r--
+		}
+		for j := i; j < r; j++ {
 			y = y*10 + int(s[j]-'0')
-			if y > int(1e10) {
-				break
-			}
-			if (x == -1 || x-y == 1) && dfs(j+1, y, k+1) {
+			if (x < 0 || x-y == 1) && dfs(j+1, y) {
 				return true
 			}
 		}
 		return false
 	}
-	return dfs(0, -1, 0)
+	return dfs(0, -1)
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function splitString(s: string): boolean {
+    const dfs = (i: number, x: number): boolean => {
+        if (i >= s.length) {
+            return true;
+        }
+        let y = 0;
+        const r = x < 0 ? s.length - 1 : s.length;
+        for (let j = i; j < r; ++j) {
+            y = y * 10 + +s[j];
+            if ((x < 0 || x - y === 1) && dfs(j + 1, y)) {
+                return true;
+            }
+        }
+        return false;
+    };
+    return dfs(0, -1);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

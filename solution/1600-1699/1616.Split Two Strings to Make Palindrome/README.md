@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1616.Split%20Two%20Strings%20to%20Make%20Palindrome/README.md
+rating: 1868
+source: 第 210 场周赛 Q3
+tags:
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1616. 分割两个字符串得到回文串](https://leetcode.cn/problems/split-two-strings-to-make-palindrome)
 
 [English Version](/solution/1600-1699/1616.Split%20Two%20Strings%20to%20Make%20Palindrome/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串&nbsp;<code>a</code> 和&nbsp;<code>b</code>&nbsp;，它们长度相同。请你选择一个下标，将两个字符串都在&nbsp;<strong>相同的下标 </strong>分割开。由&nbsp;<code>a</code>&nbsp;可以得到两个字符串：&nbsp;<code>a<sub>prefix</sub></code>&nbsp;和&nbsp;<code>a<sub>suffix</sub></code>&nbsp;，满足&nbsp;<code>a = a<sub>prefix</sub> + a<sub>suffix</sub></code><sub>&nbsp;</sub>，同理，由&nbsp;<code>b</code> 可以得到两个字符串&nbsp;<code>b<sub>prefix</sub></code> 和&nbsp;<code>b<sub>suffix</sub></code>&nbsp;，满足&nbsp;<code>b = b<sub>prefix</sub> + b<sub>suffix</sub></code>&nbsp;。请你判断&nbsp;<code>a<sub>prefix</sub> + b<sub>suffix</sub></code> 或者&nbsp;<code>b<sub>prefix</sub> + a<sub>suffix</sub></code>&nbsp;能否构成回文串。</p>
 
@@ -30,8 +43,8 @@ b<sub>prefix</sub> = "", b<sub>suffix</sub> = "y"
 <p><strong>示例 2：</strong></p>
 
 <pre>
-<strong>输入：</strong>a = "abdef", b = "fecab"
-<strong>输出：</strong>true
+<strong>输入：</strong>a = "xbdef", b = "xecab"
+<strong>输出：</strong>false
 </pre>
 
 <p><strong>示例 3：</strong></p>
@@ -54,11 +67,13 @@ b<sub>prefix</sub> = "jiz", b<sub>suffix</sub> = "alu"
 	<li><code>a</code> 和&nbsp;<code>b</code>&nbsp;都只包含小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们可以使用双指针，其中一个指针 $i$ 从字符串 $a$ 的头部开始，另一个指针 $j$ 从字符串 $b$ 的尾部开始，如果两个指针指向的字符相等，那么两个指针同时往中间移动，直到遇到不同的字符或两指针交叉。
 
@@ -70,9 +85,7 @@ b<sub>prefix</sub> = "jiz", b<sub>suffix</sub> = "alu"
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,14 +97,12 @@ class Solution:
             return i >= j or check2(a, i, j) or check2(b, i, j)
 
         def check2(a: str, i: int, j: int) -> bool:
-            return a[i: j + 1] == a[i: j + 1][::-1]
+            return a[i : j + 1] == a[i : j + 1][::-1]
 
         return check1(a, b) or check1(b, a)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +130,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +140,7 @@ public:
     }
 
 private:
-    bool check1(string &a, string &b) {
+    bool check1(string& a, string& b) {
         int i = 0, j = b.size() - 1;
         while (i < j && a[i] == b[j]) {
             ++i;
@@ -138,7 +149,7 @@ private:
         return i >= j || check2(a, i, j) || check2(b, i, j);
     }
 
-    bool check2(string &a, int i, int j) {
+    bool check2(string& a, int i, int j) {
         while (i <= j && a[i] == a[j]) {
             ++i;
             --j;
@@ -148,7 +159,7 @@ private:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkPalindromeFormation(a string, b string) bool {
@@ -173,7 +184,32 @@ func check2(a string, i, j int) bool {
 }
 ```
 
-### **Rust**
+#### TypeScript
+
+```ts
+function checkPalindromeFormation(a: string, b: string): boolean {
+    const check1 = (a: string, b: string) => {
+        let i = 0;
+        let j = b.length - 1;
+        while (i < j && a.charAt(i) === b.charAt(j)) {
+            i++;
+            j--;
+        }
+        return i >= j || check2(a, i, j) || check2(b, i, j);
+    };
+
+    const check2 = (a: string, i: number, j: number) => {
+        while (i < j && a.charAt(i) === a.charAt(j)) {
+            i++;
+            j--;
+        }
+        return i >= j;
+    };
+    return check1(a, b) || check1(b, a);
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
@@ -205,35 +241,8 @@ impl Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function checkPalindromeFormation(a: string, b: string): boolean {
-    const check1 = (a: string, b: string) => {
-        let i = 0;
-        let j = b.length - 1;
-        while (i < j && a.charAt(i) === b.charAt(j)) {
-            i++;
-            j--;
-        }
-        return i >= j || check2(a, i, j) || check2(b, i, j);
-    };
-
-    const check2 = (a: string, i: number, j: number) => {
-        while (i < j && a.charAt(i) === a.charAt(j)) {
-            i++;
-            j--;
-        }
-        return i >= j;
-    };
-    return check1(a, b) || check1(b, a);
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

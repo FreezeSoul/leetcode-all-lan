@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2564.Substring%20XOR%20Queries/README.md
+rating: 1959
+source: 第 332 场周赛 Q3
+tags:
+    - 位运算
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2564. 子字符串异或查询](https://leetcode.cn/problems/substring-xor-queries)
 
 [English Version](/solution/2500-2599/2564.Substring%20XOR%20Queries/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>二进制字符串</strong>&nbsp;<code>s</code>&nbsp;和一个整数数组&nbsp;<code>queries</code>&nbsp;，其中&nbsp;<code>queries[i] = [first<sub>i</sub>, second<sub>i</sub>]</code>&nbsp;。</p>
 
@@ -55,11 +70,13 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：预处理 + 枚举**
+### 方法一：预处理 + 枚举
 
 我们可以先预处理出所有长度为 $1$ 到 $32$ 的子串对应的十进制值，找到每个值对应的最小下标以及对应的右端点下标，存放在哈希表 $d$ 中。
 
@@ -69,9 +86,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +106,7 @@ class Solution:
         return [d.get(first ^ second, [-1, -1]) for first, second in queries]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -122,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -157,7 +170,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func substringXorQueries(s string, queries [][]int) (ans [][]int) {
@@ -187,10 +200,8 @@ func substringXorQueries(s string, queries [][]int) (ans [][]int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

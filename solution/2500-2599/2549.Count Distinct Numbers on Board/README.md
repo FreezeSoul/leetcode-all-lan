@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2549.Count%20Distinct%20Numbers%20on%20Board/README.md
+rating: 1265
+source: 第 330 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 数学
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2549. 统计桌面上的不同数字](https://leetcode.cn/problems/count-distinct-numbers-on-board)
 
 [English Version](/solution/2500-2599/2549.Count%20Distinct%20Numbers%20on%20Board/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数 <code>n</code> ，开始时，它放在桌面上。在 <code>10<sup>9</sup></code> 天内，每天都要执行下述步骤：</p>
 
@@ -53,13 +68,15 @@
 	<li><code>1 &lt;= n &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
-由于每一次对桌面上的数字 $n$ 进行操作，会使得数字 $n-1$ 也出现在桌面上，因此最终桌面上的数字为 $[2,...n]$，即 $n-1$ 个数字。
+由于每一次对桌面上的数字 $n$ 进行操作，会使得数字 $n-1$ 也出现在桌面上，因此最终桌面上的数字为 $[2,...n]$，共 $n-1$ 个数字。
 
 注意到 $n$ 可能为 $1$，因此需要特判。
 
@@ -67,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,9 +92,7 @@ class Solution:
         return max(1, n - 1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,18 +113,15 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func distinctIntegers(n int) int {
-	if n == 1 {
-		return 1
-	}
-	return n - 1
+	return max(1, n-1)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function distinctIntegers(n: number): number {
@@ -119,10 +129,18 @@ function distinctIntegers(n: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn distinct_integers(n: i32) -> i32 {
+        (1).max(n - 1)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
-# [1384. Total Sales Amount by Year](https://leetcode.com/problems/total-sales-amount-by-year)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1384.Total%20Sales%20Amount%20by%20Year/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1384. Total Sales Amount by Year 🔒](https://leetcode.com/problems/total-sales-amount-by-year)
 
 [中文文档](/solution/1300-1399/1384.Total%20Sales%20Amount%20by%20Year/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Product</code></p>
 
@@ -13,7 +25,7 @@
 | product_id    | int     |
 | product_name  | varchar |
 +---------------+---------+
-product_id is the primary key for this table.
+product_id is the primary key (column with unique values) for this table.
 product_name is the name of the product.
 </pre>
 
@@ -30,7 +42,7 @@ product_name is the name of the product.
 | period_end          | date    |
 | average_daily_sales | int     |
 +---------------------+---------+
-product_id is the primary key for this table. 
+product_id is the primary key (column with unique values) for this table. 
 period_start and period_end indicate the start and end date for the sales period, and both dates are inclusive.
 The average_daily_sales column holds the average daily sales amount of the items for the period.
 The dates of the sales years are between 2018 to 2020.
@@ -38,11 +50,11 @@ The dates of the sales years are between 2018 to 2020.
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the total sales amount of each item for each year, with corresponding <code>product_name</code>, <code>product_id</code>, <code>report_year</code>, and <code>total_amount</code>.</p>
+<p>Write a solution to report the total sales amount of each item for each year, with corresponding <code>product_name</code>, <code>product_id</code>, <code>report_year</code>, and <code>total_amount</code>.</p>
 
 <p>Return the result table <strong>ordered</strong> by <code>product_id</code> and <code>report_year</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -82,11 +94,17 @@ LC T-shirt was sold for the period of 2018-12-01 to 2020-01-01, and there are 31
 LC Keychain was sold for the period of 2019-12-01 to 2020-01-31, and there are 31, 31 days for years 2019 and 2020 respectively.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
@@ -95,14 +113,14 @@ SELECT
     p.product_name,
     y.YEAR report_year,
     s.average_daily_sales * (
-        IF (
-            YEAR (s.period_end) > y.YEAR,
+        IF(
+            YEAR(s.period_end) > y.YEAR,
             y.days_of_year,
-            dayofyear(s.period_end)
-        ) - IF (
-            YEAR (s.period_start) < y.YEAR,
+            DAYOFYEAR(s.period_end)
+        ) - IF(
+            YEAR(s.period_start) < y.YEAR,
             1,
-            dayofyear(s.period_start)
+            DAYOFYEAR(s.period_start)
         ) + 1
     ) total_amount
 FROM
@@ -121,8 +139,8 @@ FROM
         SELECT
             '2020' YEAR,
             366 days_of_year
-    ) y ON YEAR (s.period_start) <= y.YEAR
-    AND YEAR (s.period_end) >= y.YEAR
+    ) y ON YEAR(s.period_start) <= y.YEAR
+    AND YEAR(s.period_end) >= y.YEAR
     INNER JOIN Product p ON p.product_id = s.product_id
 ORDER BY
     s.product_id,
@@ -130,3 +148,7 @@ ORDER BY
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

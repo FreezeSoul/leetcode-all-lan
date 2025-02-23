@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0782.Transform%20to%20Chessboard/README_EN.md
+tags:
+    - Bit Manipulation
+    - Array
+    - Math
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [782. Transform to Chessboard](https://leetcode.com/problems/transform-to-chessboard)
 
 [中文文档](/solution/0700-0799/0782.Transform%20to%20Chessboard/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an <code>n x n</code> binary grid <code>board</code>. In each move, you can swap any two rows with each other, or any two columns with each other.</p>
 
@@ -47,11 +62,34 @@ The second move swaps the second and third row.
 	<li><code>board[i][j]</code> is either&nbsp;<code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Pattern Observation + State Compression
+
+In a valid chessboard, there are exactly two types of "rows".
+
+For example, if one row on the chessboard is "01010011", then any other row can only be "01010011" or "10101100". Columns also satisfy this property.
+
+Additionally, each row and each column has half $0$s and half $1$s. Suppose the chessboard is $n \times n$:
+
+-   If $n = 2 \times k$, then each row and each column has $k$ $1$s and $k$ $0$s.
+-   If $n = 2 \times k + 1$, then each row has $k$ $1$s and $k + 1$ $0$s, or $k + 1$ $1$s and $k$ $0$s.
+
+Based on the above conclusions, we can determine whether a chessboard is valid. If valid, we can calculate the minimum number of moves required.
+
+If $n$ is even, there are two possible valid chessboards, where the first row is either "010101..." or "101010...". We calculate the minimum number of swaps required for these two possibilities and take the smaller value as the answer.
+
+If $n$ is odd, there is only one possible valid chessboard. If the number of $0$s in the first row is greater than the number of $1$s, then the first row of the final chessboard must be "01010..."; otherwise, it must be "10101...". We calculate the number of swaps required and use it as the answer.
+
+The time complexity is $O(n^2)$, where $n$ is the size of the chessboard. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -85,7 +123,10 @@ class Solution:
             for j in range(n):
                 curRowMask |= board[i][j] << j
                 curColMask |= board[j][i] << j
-            if curRowMask not in (rowMask, revRowMask) or curColMask not in (colMask, revColMask):
+            if curRowMask not in (rowMask, revRowMask) or curColMask not in (
+                colMask,
+                revColMask,
+            ):
                 return -1
             sameRow += curRowMask == rowMask
             sameCol += curColMask == colMask
@@ -94,7 +135,7 @@ class Solution:
         return -1 if t1 == -1 or t2 == -1 else t1 + t2
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -153,7 +194,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -202,7 +243,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func movesToChessboard(board [][]int) int {
@@ -268,19 +309,10 @@ func abs(x int) int {
 	}
 	return x
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

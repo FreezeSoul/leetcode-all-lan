@@ -1,8 +1,20 @@
-# [1501. Countries You Can Safely Invest In](https://leetcode.com/problems/countries-you-can-safely-invest-in)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1501.Countries%20You%20Can%20Safely%20Invest%20In/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1501. Countries You Can Safely Invest In 🔒](https://leetcode.com/problems/countries-you-can-safely-invest-in)
 
 [中文文档](/solution/1500-1599/1501.Countries%20You%20Can%20Safely%20Invest%20In/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table <code>Person</code>:</p>
 
@@ -14,7 +26,7 @@
 | name           | varchar |
 | phone_number   | varchar |
 +----------------+---------+
-id is the primary key for this table.
+id is the column of unique values for this table.
 Each row of this table contains the name of a person and their phone number.
 Phone number will be in the form &#39;xxx-yyyyyyy&#39; where xxx is the country code (3 characters) and yyyyyyy is the phone number (7 characters) where x and y are digits. Both can contain leading zeros.
 </pre>
@@ -30,7 +42,7 @@ Phone number will be in the form &#39;xxx-yyyyyyy&#39; where xxx is the country 
 | name           | varchar |
 | country_code   | varchar |
 +----------------+---------+
-country_code is the primary key for this table.
+country_code is the column of unique values for this table.
 Each row of this table contains the country name and its code. country_code will be in the form &#39;xxx&#39; where x is digits.
 </pre>
 
@@ -46,7 +58,7 @@ Each row of this table contains the country name and its code. country_code will
 | callee_id   | int  |
 | duration    | int  |
 +-------------+------+
-There is no primary key for this table, it may contain duplicates.
+This table may contain duplicate rows.
 Each row of this table contains the caller id, callee id and the duration of the call in minutes. caller_id != callee_id
 </pre>
 
@@ -54,11 +66,11 @@ Each row of this table contains the caller id, callee id and the duration of the
 
 <p>A telecommunications company wants to invest in new countries. The company intends to invest in the countries where the average call duration of the calls in this country is strictly greater than the global average call duration.</p>
 
-<p>Write an SQL query to find the countries where this company can invest.</p>
+<p>Write a solution to find the countries where this company can invest.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -115,36 +127,65 @@ Global call duration average = (2 * (33 + 4 + 59 + 102 + 330 + 5 + 13 + 3 + 1 + 
 Since Peru is the only country where the average call duration is greater than the global average, it is the only recommended country.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Equi-Join + Group By + Subquery
+
+We can use an equi-join to join the `Person` table and the `Calls` table on the condition of `Person.id = Calls.caller_id` or `Person.id = Calls.callee_id`, and then join the result with the `Country` table on the condition of `left(phone_number, 3) = country_code`. After that, we can group by country and calculate the average call duration for each country. Finally, we can use a subquery to find the countries whose average call duration is greater than the global average call duration.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-with t as (
-    select
-        left(phone_number, 3) as country_code,
-        avg(duration) as duration
-    from
-        Person
-        join Calls on id in (caller_id, callee_id)
-    group by
-        country_code
-)
-select
-    c.name country
-from
-    Country c
-    join t on c.country_code = t.country_code
-where
-    t.duration > (
-        select
-            avg(duration)
-        from
-            Calls
-    )
+SELECT country
+FROM
+    (
+        SELECT c.name AS country, AVG(duration) AS duration
+        FROM
+            Person
+            JOIN Calls ON id IN(caller_id, callee_id)
+            JOIN Country AS c ON LEFT(phone_number, 3) = country_code
+        GROUP BY 1
+    ) AS t
+WHERE duration > (SELECT AVG(duration) FROM Calls);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT c.name AS country, AVG(duration) AS duration
+        FROM
+            Person
+            JOIN Calls ON id IN(caller_id, callee_id)
+            JOIN Country AS c ON LEFT(phone_number, 3) = country_code
+        GROUP BY 1
+    )
+SELECT country
+FROM T
+WHERE duration > (SELECT AVG(duration) FROM Calls);
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

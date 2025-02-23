@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1321.Restaurant%20Growth/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1321. 餐馆营业额变化增长](https://leetcode.cn/problems/restaurant-growth)
 
 [English Version](/solution/1300-1399/1321.Restaurant%20Growth/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Customer</code></p>
 
@@ -17,7 +27,7 @@
 | visited_on    | date    |
 | amount        | int     |
 +---------------+---------+
-(customer_id, visited_on) 是该表的主键。
+在 SQL 中，(customer_id, visited_on) 是该表的主键。
 该表包含一家餐馆的顾客交易数据。
 visited_on 表示 (customer_id) 的顾客在 visited_on 那天访问了餐馆。
 amount 是一个顾客某一天的消费总额。
@@ -27,11 +37,11 @@ amount 是一个顾客某一天的消费总额。
 
 <p>你是餐馆的老板，现在你想分析一下可能的营业额变化增长（每天至少有一位顾客）。</p>
 
-<p>写一条 SQL 查询计算以 7 天（某日期 + 该日期前的 6 天）为一个时间段的顾客消费平均值。<code>average_amount</code>&nbsp;要 <strong>保留两位小数。</strong></p>
+<p>计算以 7 天（某日期 + 该日期前的 6 天）为一个时间段的顾客消费平均值。<code>average_amount</code>&nbsp;要 <strong>保留两位小数。</strong></p>
 
-<p>查询结果按 <code>visited_on</code> 排序。</p>
+<p>结果按 <code>visited_on</code>&nbsp;<strong>升序排序</strong>。</p>
 
-<p>查询结果格式的例子如下。</p>
+<p>返回结果格式的例子如下。</p>
 
 <p>&nbsp;</p>
 
@@ -70,16 +80,72 @@ Customer 表:
 第三个七天消费平均值从 2019-01-03 到 2019-01-09 是 (120 + 130 + 110 + 140 + 150 + 80 + 110)/7 = 120
 第四个七天消费平均值从 2019-01-04 到 2019-01-10 是 (130 + 110 + 140 + 150 + 80 + 110 + 130 + 150)/7 = 142.86</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            visited_on,
+            SUM(amount) OVER (
+                ORDER BY visited_on
+                ROWS 6 PRECEDING
+            ) AS amount,
+            RANK() OVER (
+                ORDER BY visited_on
+                ROWS 6 PRECEDING
+            ) AS rk
+        FROM
+            (
+                SELECT visited_on, SUM(amount) AS amount
+                FROM Customer
+                GROUP BY visited_on
+            ) AS tt
+    )
+SELECT visited_on, amount, ROUND(amount / 7, 2) AS average_amount
+FROM t
+WHERE rk > 6;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+SELECT
+    a.visited_on,
+    SUM(b.amount) AS amount,
+    ROUND(SUM(b.amount) / 7, 2) AS average_amount
+FROM
+    (SELECT DISTINCT visited_on FROM customer) AS a
+    JOIN customer AS b ON DATEDIFF(a.visited_on, b.visited_on) BETWEEN 0 AND 6
+WHERE a.visited_on >= (SELECT MIN(visited_on) FROM customer) + 6
+GROUP BY 1
+ORDER BY 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,31 +1,26 @@
 class Solution {
-    private List<String> ans;
+    private String word;
+    private int n;
 
     public List<String> generateAbbreviations(String word) {
-        ans = new ArrayList<>();
-        List<String> t = new ArrayList<>();
-        dfs(word, t);
-        return ans;
+        this.word = word;
+        n = word.length();
+        return dfs(0);
     }
 
-    private void dfs(String s, List<String> t) {
-        if ("".equals(s)) {
-            ans.add(String.join("", t));
-            return;
+    private List<String> dfs(int i) {
+        if (i >= n) {
+            return List.of("");
         }
-        for (int i = 1; i < s.length() + 1; ++i) {
-            t.add(i + "");
-            if (i < s.length()) {
-                t.add(String.valueOf(s.charAt(i)));
-                dfs(s.substring(i + 1), t);
-                t.remove(t.size() - 1);
-            } else {
-                dfs(s.substring(i), t);
+        List<String> ans = new ArrayList<>();
+        for (String s : dfs(i + 1)) {
+            ans.add(String.valueOf(word.charAt(i)) + s);
+        }
+        for (int j = i + 1; j <= n; ++j) {
+            for (String s : dfs(j + 1)) {
+                ans.add((j - i) + "" + (j < n ? String.valueOf(word.charAt(j)) : "") + s);
             }
-            t.remove(t.size() - 1);
         }
-        t.add(String.valueOf(s.charAt(0)));
-        dfs(s.substring(1), t);
-        t.remove(t.size() - 1);
+        return ans;
     }
 }

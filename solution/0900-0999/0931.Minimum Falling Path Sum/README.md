@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/README.md
+tags:
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [931. 下降路径最小和](https://leetcode.cn/problems/minimum-falling-path-sum)
 
 [English Version](/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <code>n x n</code> 的<strong> 方形 </strong>整数数组&nbsp;<code>matrix</code> ，请你找出并返回通过 <code>matrix</code> 的<strong>下降路径</strong><em> </em>的<strong> </strong><strong>最小和</strong> 。</p>
 
@@ -14,7 +26,7 @@
 
 <p><strong>示例 1：</strong></p>
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/images/failing1-grid.jpg" style="height: 500px; width: 499px;" /></p>
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/images/1729566253-aneDag-image.png" style="height: 500px; width: 499px;" /></p>
 
 <pre>
 <strong>输入：</strong>matrix = [[2,1,3],[6,5,4],[7,8,9]]
@@ -24,7 +36,7 @@
 
 <p><strong>示例 2：</strong></p>
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/images/failing2-grid.jpg" style="height: 365px; width: 164px;" /></p>
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/images/1729566282-dtXwRd-image.png" style="height: 365px; width: 164px;" /></p>
 
 <pre>
 <strong>输入：</strong>matrix = [[-19,57],[-40,-5]]
@@ -42,117 +54,149 @@
 	<li><code>-100 &lt;= matrix[i][j] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-动态规划。
+### 方法一：动态规划
+
+我们定义 $f[i][j]$ 表示从第一行开始下降，到达第 $i$ 行第 $j$ 列的最小路径和。那么我们可以得到这样的动态规划转移方程：
+
+$$
+f[i][j] = matrix[i][j] + \min \left\{ \begin{aligned} & f[i - 1][j - 1], & j > 0 \\ & f[i - 1][j], & 0 \leq j < n \\ & f[i - 1][j + 1], & j + 1 < n \end{aligned} \right.
+$$
+
+最终的答案即为 $\min \limits_{0 \leq j < n} f[n - 1][j]$。
+
+时间复杂度 $O(n^2)$，空间复杂度 $O(n^2)$。
+
+我们注意到，状态 $f[i][j]$ 只与上一行的状态有关，因此我们可以使用滚动数组的方式，去掉第一维的状态，将空间复杂度优化到 $O(n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minFallingPathSum(self, matrix: List[List[int]]) -> int:
         n = len(matrix)
-        for i in range(1, n):
-            for j in range(n):
-                mi = matrix[i - 1][j]
-                if j > 0:
-                    mi = min(mi, matrix[i - 1][j - 1])
-                if j < n - 1:
-                    mi = min(mi, matrix[i - 1][j + 1])
-                matrix[i][j] += mi
-        return min(matrix[n - 1])
+        f = [0] * n
+        for row in matrix:
+            g = [0] * n
+            for j, x in enumerate(row):
+                l, r = max(0, j - 1), min(n, j + 2)
+                g[j] = min(f[l:r]) + x
+            f = g
+        return min(f)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int minFallingPathSum(int[][] matrix) {
         int n = matrix.length;
-        for (int i = 1; i < n; ++i) {
+        var f = new int[n];
+        for (var row : matrix) {
+            var g = f.clone();
             for (int j = 0; j < n; ++j) {
-                int mi = matrix[i - 1][j];
                 if (j > 0) {
-                    mi = Math.min(mi, matrix[i - 1][j - 1]);
+                    g[j] = Math.min(g[j], f[j - 1]);
                 }
-                if (j < n - 1) {
-                    mi = Math.min(mi, matrix[i - 1][j + 1]);
+                if (j + 1 < n) {
+                    g[j] = Math.min(g[j], f[j + 1]);
                 }
-                matrix[i][j] += mi;
+                g[j] += row[j];
             }
+            f = g;
         }
-        int res = Integer.MAX_VALUE;
-        for (int j = 0; j < n; ++j) {
-            res = Math.min(res, matrix[n - 1][j]);
+        // return Arrays.stream(f).min().getAsInt();
+        int ans = 1 << 30;
+        for (int x : f) {
+            ans = Math.min(ans, x);
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int n = matrix.size();
-        for (int i = 1; i < n; ++i) {
+        vector<int> f(n);
+        for (auto& row : matrix) {
+            auto g = f;
             for (int j = 0; j < n; ++j) {
-                int mi = matrix[i - 1][j];
-                if (j > 0) mi = min(mi, matrix[i - 1][j - 1]);
-                if (j < n - 1) mi = min(mi, matrix[i - 1][j + 1]);
-                matrix[i][j] += mi;
+                if (j) {
+                    g[j] = min(g[j], f[j - 1]);
+                }
+                if (j + 1 < n) {
+                    g[j] = min(g[j], f[j + 1]);
+                }
+                g[j] += row[j];
             }
+            f = move(g);
         }
-        int res = INT_MAX;
-        for (int j = 0; j < n; ++j) {
-            res = min(res, matrix[n - 1][j]);
-        }
-        return res;
+        return *min_element(f.begin(), f.end());
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minFallingPathSum(matrix [][]int) int {
-    n := len(matrix)
-    for i := 1; i < n; i++ {
-        for j := 0; j < n; j++ {
-            mi := matrix[i - 1][j]
-            if j > 0 && mi > matrix[i - 1][j - 1] {
-                mi = matrix[i - 1][j - 1]
-            }
-            if j < n - 1 && mi > matrix[i - 1][j + 1] {
-                mi = matrix[i - 1][j + 1]
-            }
-            matrix[i][j] += mi
-        }
-    }
-    res := 10000
-    for j := 0; j < n; j++ {
-        if res > matrix[n - 1][j] {
-            res = matrix[n - 1][j]
-        }
-    }
-    return res
+	n := len(matrix)
+	f := make([]int, n)
+	for _, row := range matrix {
+		g := make([]int, n)
+		copy(g, f)
+		for j, x := range row {
+			if j > 0 {
+				g[j] = min(g[j], f[j-1])
+			}
+			if j+1 < n {
+				g[j] = min(g[j], f[j+1])
+			}
+			g[j] += x
+		}
+		f = g
+	}
+	return slices.Min(f)
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minFallingPathSum(matrix: number[][]): number {
+    const n = matrix.length;
+    const f: number[] = new Array(n).fill(0);
+    for (const row of matrix) {
+        const g = f.slice();
+        for (let j = 0; j < n; ++j) {
+            if (j > 0) {
+                g[j] = Math.min(g[j], f[j - 1]);
+            }
+            if (j + 1 < n) {
+                g[j] = Math.min(g[j], f[j + 1]);
+            }
+            g[j] += row[j];
+        }
+        f.splice(0, n, ...g);
+    }
+    return Math.min(...f);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1287.Element%20Appearing%20More%20Than%2025%25%20In%20Sorted%20Array/README_EN.md
+rating: 1179
+source: Biweekly Contest 15 Q1
+tags:
+    - Array
+---
+
+<!-- problem:start -->
+
 # [1287. Element Appearing More Than 25% In Sorted Array](https://leetcode.com/problems/element-appearing-more-than-25-in-sorted-array)
 
 [中文文档](/solution/1200-1299/1287.Element%20Appearing%20More%20Than%2025%25%20In%20Sorted%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <strong>sorted</strong> in non-decreasing order, there is exactly one integer in the array that occurs more than 25% of the time, return that integer.</p>
 
@@ -29,67 +43,86 @@
 	<li><code>0 &lt;= arr[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Traversal
+
+We traverse the array $\textit{arr}$ from the beginning. For each element $\textit{arr}[i]$, we check if $\textit{arr}[i]$ is equal to $\textit{arr}[i + \left\lfloor \frac{n}{4} \right\rfloor]$, where $n$ is the length of the array. If they are equal, then $\textit{arr}[i]$ is the element we are looking for, and we return it directly.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{arr}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def findSpecialInteger(self, arr: List[int]) -> int:
         n = len(arr)
-        for i, val in enumerate(arr):
-            if val == arr[i + (n >> 2)]:
-                return val
-        return 0
+        for i, x in enumerate(arr):
+            if x == arr[(i + (n >> 2))]:
+                return x
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int findSpecialInteger(int[] arr) {
-        int n = arr.length;
-        for (int i = 0; i < n; ++i) {
-            if (arr[i] == arr[i + (n >> 2)]) {
+        for (int i = 0;; ++i) {
+            if (arr[i] == (arr[i + (arr.length >> 2)])) {
                 return arr[i];
             }
         }
-        return 0;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int findSpecialInteger(vector<int>& arr) {
-        int n = arr.size();
-        for (int i = 0; i < n; ++i)
-            if (arr[i] == arr[i + (n >> 2)]) return arr[i];
-        return 0;
+        for (int i = 0;; ++i) {
+            if (arr[i] == (arr[i + (arr.size() >> 2)])) {
+                return arr[i];
+            }
+        }
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findSpecialInteger(arr []int) int {
-	n := len(arr)
-	for i, val := range arr {
-		if val == arr[i+(n>>2)] {
-			return val
+	for i := 0; ; i++ {
+		if arr[i] == arr[i+len(arr)/4] {
+			return arr[i]
 		}
 	}
-	return 0
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function findSpecialInteger(arr: number[]): number {
+    const n = arr.length;
+    for (let i = 0; ; ++i) {
+        if (arr[i] === arr[i + (n >> 2)]) {
+            return arr[i];
+        }
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -98,16 +131,15 @@ func findSpecialInteger(arr []int) int {
  */
 var findSpecialInteger = function (arr) {
     const n = arr.length;
-    for (let i = 0; i < n; ++i) {
-        if (arr[i] == arr[i + (n >> 2)]) {
+    for (let i = 0; ; ++i) {
+        if (arr[i] === arr[i + (n >> 2)]) {
             return arr[i];
         }
     }
-    return 0;
 };
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -116,19 +148,18 @@ class Solution {
      * @return Integer
      */
     function findSpecialInteger($arr) {
-        $len = count($arr);
-        for ($i = 0; $i < $len; $i++) {
-            if ($arr[$i] == $arr[$i + ($len >> 2)]) return $arr[$i];
+        $n = count($arr);
+        for ($i = 0; ; ++$i) {
+            if ($arr[$i] == $arr[$i + ($n >> 2)]) {
+                return $arr[$i];
+            }
         }
-        return -1;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

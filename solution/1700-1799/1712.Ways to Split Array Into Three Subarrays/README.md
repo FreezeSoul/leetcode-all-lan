@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1712.Ways%20to%20Split%20Array%20Into%20Three%20Subarrays/README.md
+rating: 2078
+source: 第 222 场周赛 Q3
+tags:
+    - 数组
+    - 双指针
+    - 二分查找
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [1712. 将数组分成三个子数组的方案数](https://leetcode.cn/problems/ways-to-split-array-into-three-subarrays)
 
 [English Version](/solution/1700-1799/1712.Ways%20to%20Split%20Array%20Into%20Three%20Subarrays/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们称一个分割整数数组的方案是 <strong>好的</strong> ，当它满足：</p>
 
@@ -51,15 +66,17 @@
 	<li><code>0 <= nums[i] <= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和 + 二分查找**
+### 方法一：前缀和 + 二分查找
 
-我们先预处理出数组 `nums` 的前缀和数组 $s$，其中 $s[i]$ 表述数组 `nums` 前 $i+1$ 个元素之和。
+我们先预处理出数组 $nums$ 的前缀和数组 $s$，其中 $s[i]$ 表述数组 $nums$ 前 $i+1$ 个元素之和。
 
-由于数组 `nums` 的元素都是非负整数，因此前缀和数组 $s$ 是一个单调递增数组。
+由于数组 $nums$ 的元素都是非负整数，因此前缀和数组 $s$ 是一个单调递增数组。
 
 我们在 $[0,..n-2)$ 的范围内枚举 `left` 子数组所能到达的下标 $i$，然后利用前缀和数组单调递增的特性，通过二分查找的方式找到 `mid` 子数组分割的合理范围，记为 $[j, k)$，累加方案数 $k-j$。
 
@@ -67,13 +84,11 @@
 
 最后，将方案数对 $10^9+7$ 取模后返回即可。
 
-时间复杂度 $O(n\times \log n)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n \times \log n)$。其中 $n$ 为数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,9 +103,7 @@ class Solution:
         return ans % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -126,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -148,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func waysToSplit(nums []int) (ans int) {
@@ -168,7 +181,7 @@ func waysToSplit(nums []int) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -203,10 +216,8 @@ var waysToSplit = function (nums) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

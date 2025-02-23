@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0719.Find%20K-th%20Smallest%20Pair%20Distance/README.md
+tags:
+    - 数组
+    - 双指针
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [719. 找出第 K 小的数对距离](https://leetcode.cn/problems/find-k-th-smallest-pair-distance)
 
 [English Version](/solution/0700-0799/0719.Find%20K-th%20Smallest%20Pair%20Distance/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>数对 <code>(a,b)</code> 由整数 <code>a</code> 和 <code>b</code> 组成，其数对距离定义为 <code>a</code> 和 <code>b</code> 的绝对差值。</p>
 
@@ -49,11 +62,13 @@
 	<li><code>1 &lt;= k &lt;= n * (n - 1) / 2</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 二分查找**
+### 方法一：排序 + 二分查找
 
 先对 $nums$ 数组进行排序，然后在 $[0, nums[n-1]-nums[0]]$ 范围内二分枚举数对距离 $dist$，若 $nums$ 中数对距离小于等于 $dist$ 的数量 $cnt$ 大于等于 $k$，则尝试缩小 $dist$，否则尝试扩大 $dist$。
 
@@ -61,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,9 +93,7 @@ class Solution:
         return bisect_left(range(nums[-1] - nums[0]), k, key=count)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -120,36 +131,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function smallestDistancePair(nums: number[], k: number): number {
-    nums.sort((a, b) => a - b);
-    const n = nums.length;
-    let left = 0,
-        right = nums[n - 1] - nums[0];
-    while (left < right) {
-        let mid = (left + right) >> 1;
-        let count = 0,
-            i = 0;
-        for (let j = 0; j < n; j++) {
-            // 索引[i, j]距离nums[j]的距离<=mid
-            while (nums[j] - nums[i] > mid) {
-                i++;
-            }
-            count += j - i;
-        }
-        if (count >= k) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    return left;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -179,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestDistancePair(nums []int, k int) int {
@@ -215,10 +197,74 @@ func smallestDistancePair(nums []int, k int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function smallestDistancePair(nums: number[], k: number): number {
+    nums.sort((a, b) => a - b);
+    const n = nums.length;
+    let left = 0,
+        right = nums[n - 1] - nums[0];
+    while (left < right) {
+        let mid = (left + right) >> 1;
+        let count = 0,
+            i = 0;
+        for (let j = 0; j < n; j++) {
+            // 索引[i, j]距离nums[j]的距离<=mid
+            while (nums[j] - nums[i] > mid) {
+                i++;
+            }
+            count += j - i;
+        }
+        if (count >= k) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+function smallestDistancePair(nums, k) {
+    nums.sort((a, b) => a - b);
+    const n = nums.length;
+    let left = 0,
+        right = nums[n - 1] - nums[0];
+
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        let count = 0,
+            i = 0;
+
+        for (let j = 0; j < n; j++) {
+            while (nums[j] - nums[i] > mid) {
+                i++;
+            }
+            count += j - i;
+        }
+
+        if (count >= k) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+
+    return left;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2598.Smallest%20Missing%20Non-negative%20Integer%20After%20Operations/README.md
+rating: 1845
+source: 第 337 场周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 哈希表
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2598. 执行操作后的最大 MEX](https://leetcode.cn/problems/smallest-missing-non-negative-integer-after-operations)
 
 [English Version](/solution/2500-2599/2598.Smallest%20Missing%20Non-negative%20Integer%20After%20Operations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的整数数组 <code>nums</code> 和一个整数 <code>value</code> 。</p>
 
@@ -53,11 +68,13 @@ nums 的 MEX 是 2 。可以证明 2 是可以取到的最大 MEX 。
 	<li><code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 我们用哈希表或数组 $cnt$ 统计数组中每个数对 $value$ 取模后的余数的个数。
 
@@ -67,9 +84,7 @@ nums 的 MEX 是 2 。可以证明 2 是可以取到的最大 MEX 。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,9 +96,7 @@ class Solution:
             cnt[i % value] -= 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -101,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,7 +134,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findSmallestInteger(nums []int, value int) int {
@@ -138,7 +151,7 @@ func findSmallestInteger(nums []int, value int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findSmallestInteger(nums: number[], value: number): number {
@@ -154,10 +167,8 @@ function findSmallestInteger(nums: number[], value: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

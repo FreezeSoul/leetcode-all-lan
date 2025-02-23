@@ -1,13 +1,24 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int f1 = -prices[0], f2 = 0, f3 = 0;
-        for (int i = 1; i < prices.size(); ++i) {
-            int pf1 = f1, pf2 = f2, pf3 = f3;
-            f1 = max(pf1, pf3 - prices[i]);
-            f2 = max(pf2, pf1 + prices[i]);
-            f3 = max(pf3, pf2);
-        }
-        return f2;
+        int n = prices.size();
+        int f[n][2];
+        memset(f, -1, sizeof(f));
+        function<int(int, int)> dfs = [&](int i, int j) {
+            if (i >= n) {
+                return 0;
+            }
+            if (f[i][j] != -1) {
+                return f[i][j];
+            }
+            int ans = dfs(i + 1, j);
+            if (j) {
+                ans = max(ans, prices[i] + dfs(i + 2, 0));
+            } else {
+                ans = max(ans, -prices[i] + dfs(i + 1, 1));
+            }
+            return f[i][j] = ans;
+        };
+        return dfs(0, 0);
     }
 };

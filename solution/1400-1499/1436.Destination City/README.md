@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1436.Destination%20City/README.md
+rating: 1192
+source: 第 187 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1436. 旅行终点站](https://leetcode.cn/problems/destination-city)
 
 [English Version](/solution/1400-1499/1436.Destination%20City/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一份旅游线路图，该线路图中的旅行线路用数组 <code>paths</code> 表示，其中 <code>paths[i] = [cityA<sub>i</sub>, cityB<sub>i</sub>]</code> 表示该线路将会从 <code>cityA<sub>i</sub></code> 直接前往 <code>cityB<sub>i</sub></code> 。请你找出这次旅行的终点站，即没有任何可以通往其他城市的线路的城市<em>。</em></p>
 
@@ -52,21 +66,21 @@
 	<li>所有字符串均由大小写英文字母和空格字符组成。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
-将所有起点存入哈希表中，然后遍历所有终点，找出没出现在哈希表中的终点，即为答案。
+根据题目描述，终点一定不会出现在所有 $\textit{cityA}$ 中，因此，我们可以先遍历一遍 $\textit{paths}$，将所有 $\textit{cityA}$ 放入一个集合 $\textit{s}$ 中，然后再遍历一遍 $\textit{paths}$，找到不在 $\textit{s}$ 中的 $\textit{cityB}$ 即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是线路数。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 $\textit{paths}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +89,7 @@ class Solution:
         return next(b for _, b in paths if b not in s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -86,17 +98,17 @@ class Solution {
         for (var p : paths) {
             s.add(p.get(0));
         }
-        for (var p : paths) {
-            if (!s.contains(p.get(1))) {
-                return p.get(1);
+        for (int i = 0;; ++i) {
+            var b = paths.get(i).get(1);
+            if (!s.contains(b)) {
+                return b;
             }
         }
-        return "";
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,17 +118,17 @@ public:
         for (auto& p : paths) {
             s.insert(p[0]);
         }
-        for (auto& p : paths) {
-            if (!s.count(p[1])) {
-                return p[1];
+        for (int i = 0;; ++i) {
+            auto b = paths[i][1];
+            if (!s.contains(b)) {
+                return b;
             }
         }
-        return "";
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func destCity(paths [][]string) string {
@@ -133,7 +145,32 @@ func destCity(paths [][]string) string {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function destCity(paths: string[][]): string {
+    const s = new Set<string>(paths.map(([a, _]) => a));
+    return paths.find(([_, b]) => !s.has(b))![1];
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::HashSet;
+
+impl Solution {
+    pub fn dest_city(paths: Vec<Vec<String>>) -> String {
+        let s = paths
+            .iter()
+            .map(|p| p[0].clone())
+            .collect::<HashSet<String>>();
+        paths.into_iter().find(|p| !s.contains(&p[1])).unwrap()[1].clone()
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -141,74 +178,13 @@ func destCity(paths [][]string) string {
  * @return {string}
  */
 var destCity = function (paths) {
-    const s = new Set();
-    for (const [a, _] of paths) {
-        s.add(a);
-    }
-    for (const [_, b] of paths) {
-        if (!s.has(b)) {
-            return b;
-        }
-    }
-    return '';
+    const s = new Set(paths.map(([a, _]) => a));
+    return paths.find(([_, b]) => !s.has(b))[1];
 };
 ```
 
-### **TypeScript**
-
-```ts
-function destCity(paths: string[][]): string {
-    const set = new Set(paths.map(([a]) => a));
-    for (const [_, b] of paths) {
-        if (!set.has(b)) {
-            return b;
-        }
-    }
-    return '';
-}
-```
-
-### **Rust**
-
-```rust
-use std::collections::HashSet;
-impl Solution {
-    pub fn dest_city(paths: Vec<Vec<String>>) -> String {
-        let set = paths.iter().map(|v| &v[0]).collect::<HashSet<&String>>();
-        for path in paths.iter() {
-            if !set.contains(&path[1]) {
-                return path[1].clone();
-            }
-        }
-        String::new()
-    }
-}
-```
-
-### **C**
-
-```c
-char *destCity(char ***paths, int pathsSize, int *pathsColSize) {
-    for (int i = 0; i < pathsSize; i++) {
-        int flag = 1;
-        for (int j = 0; j < pathsSize; j++) {
-            if (strcmp(paths[i][1], paths[j][0]) == 0) {
-                flag = 0;
-                break;
-            }
-        }
-        if (flag) {
-            return paths[i][1];
-        }
-    }
-    return NULL;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

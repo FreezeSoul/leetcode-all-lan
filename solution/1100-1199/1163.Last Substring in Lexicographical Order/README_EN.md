@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1163.Last%20Substring%20in%20Lexicographical%20Order/README_EN.md
+rating: 1864
+source: Weekly Contest 150 Q4
+tags:
+    - Two Pointers
+    - String
+---
+
+<!-- problem:start -->
+
 # [1163. Last Substring in Lexicographical Order](https://leetcode.com/problems/last-substring-in-lexicographical-order)
 
 [中文文档](/solution/1100-1199/1163.Last%20Substring%20in%20Lexicographical%20Order/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, return <em>the last substring of</em> <code>s</code> <em>in lexicographical order</em>.</p>
 
@@ -30,9 +45,13 @@
 	<li><code>s</code> contains only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Two pointers**
+<!-- solution:start -->
+
+### Solution 1: Two pointers
 
 We notice that if a substring starts from position $i$, then the largest substring with the largest dictionary order must be $s[i,..n-1]$, which is the longest suffix starting from position $i$. Therefore, we only need to find the largest suffix substring.
 
@@ -52,7 +71,7 @@ The time complexity is $O(n)$, where $n$ is the length of string $s$. The space 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +91,7 @@ class Solution:
         return s[i:]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func lastSubstring(s string) string {
@@ -149,7 +168,7 @@ func lastSubstring(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function lastSubstring(s: string): string {
@@ -173,10 +192,8 @@ function lastSubstring(s: string): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

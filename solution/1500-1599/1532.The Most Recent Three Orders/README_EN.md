@@ -1,8 +1,20 @@
-# [1532. The Most Recent Three Orders](https://leetcode.com/problems/the-most-recent-three-orders)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1532.The%20Most%20Recent%20Three%20Orders/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1532. The Most Recent Three Orders 🔒](https://leetcode.com/problems/the-most-recent-three-orders)
 
 [中文文档](/solution/1500-1599/1532.The%20Most%20Recent%20Three%20Orders/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Customers</code></p>
 
@@ -13,7 +25,7 @@
 | customer_id   | int     |
 | name          | varchar |
 +---------------+---------+
-customer_id is the primary key for this table.
+customer_id is the column with unique values for this table.
 This table contains information about customers.
 </pre>
 
@@ -30,18 +42,18 @@ This table contains information about customers.
 | customer_id   | int     |
 | cost          | int     |
 +---------------+---------+
-order_id is the primary key for this table.
+order_id is the column with unique values for this table.
 This table contains information about the orders made by customer_id.
 Each customer has <strong>one order per day</strong>.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find the most recent three orders of each user. If a user ordered less than three orders, return all of their orders.</p>
+<p>Write a solution to find the most recent three orders of each user. If a user ordered less than three orders, return all of their orders.</p>
 
 <p>Return the result table ordered by <code>customer_name</code> in <strong>ascending order</strong> and in case of a tie by the <code>customer_id</code> in <strong>ascending order</strong>. If there is still a tie, order them by <code>order_date</code> in <strong>descending order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -98,40 +110,42 @@ We sort the result table by customer_name in ascending order, by customer_id in 
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you write a general solution for the most recent <code>n</code> orders?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Equi-Join + Window Function
+
+We can use an equi-join to join the `Customers` table and the `Orders` table based on `customer_id`, and then use the window function `row_number()` to sort the orders for each customer by `order_date` in descending order and assign a row number to each order. Finally, we can filter out the orders with a row number less than or equal to $3$.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    name as customer_name,
-    o.customer_id,
-    order_id,
-    order_date
-from
-    Customers c
-    join (
-        select
-            customer_id,
-            order_date,
-            order_id,
-            rank() over(
-                partition by customer_id
-                order by
-                    order_date desc
-            ) rk
-        from
-            orders
-    ) o on c.customer_id = o.customer_id
-where
-    rk <= 3
-order by
-    name,
-    o.customer_id,
-    order_date desc;
+WITH
+    T AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY customer_id
+                ORDER BY order_date DESC
+            ) AS rk
+        FROM
+            Orders
+            JOIN Customers USING (customer_id)
+    )
+SELECT name AS customer_name, customer_id, order_id, order_date
+FROM T
+WHERE rk <= 3
+ORDER BY 1, 2, 4 DESC;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

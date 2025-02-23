@@ -1,8 +1,24 @@
-# [1810. Minimum Path Cost in a Hidden Grid](https://leetcode.com/problems/minimum-path-cost-in-a-hidden-grid)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1810.Minimum%20Path%20Cost%20in%20a%20Hidden%20Grid/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Interactive
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
+# [1810. Minimum Path Cost in a Hidden Grid 🔒](https://leetcode.com/problems/minimum-path-cost-in-a-hidden-grid)
 
 [中文文档](/solution/1800-1899/1810.Minimum%20Path%20Cost%20in%20a%20Hidden%20Grid/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>This is an <strong>interactive problem</strong>.</p>
 
@@ -87,11 +103,17 @@ We now know that the target is the cell (1, 0), and the minimum total cost to re
 	<li><code>0 &lt;= grid[i][j] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # """
@@ -156,7 +178,7 @@ class Solution(object):
         return 0
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -227,10 +249,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

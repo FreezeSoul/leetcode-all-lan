@@ -1,28 +1,27 @@
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        vector<int> res;
-        vector<int> hash(26, 0), zero(26, 0);
-
-        if (p.size() > s.size())
-            return res;
-
-        for (int i = 0; i < p.size(); i++) {
-            hash[p[i] - 'a']++;
-            hash[s[i] - 'a']--;
+        int m = s.size();
+        int n = p.size();
+        vector<int> ans;
+        if (m < n) {
+            return ans;
         }
-
-        if (hash == zero)
-            res.push_back(0);
-
-        for (int i = p.size(); i < s.size(); i++) {
-            hash[s[i] - 'a']--;
-            hash[s[i - p.size()] - 'a']++;
-
-            if (hash == zero)
-                res.push_back(i - p.size() + 1);
+        vector<int> cnt1(26), cnt2(26);
+        for (int i = 0; i < n; ++i) {
+            ++cnt1[s[i] - 'a'];
+            ++cnt2[p[i] - 'a'];
         }
-
-        return res;
+        if (cnt1 == cnt2) {
+            ans.push_back(0);
+        }
+        for (int i = n; i < m; ++i) {
+            ++cnt1[s[i] - 'a'];
+            --cnt1[s[i - n] - 'a'];
+            if (cnt1 == cnt2) {
+                ans.push_back(i - n + 1);
+            }
+        }
+        return ans;
     }
 };

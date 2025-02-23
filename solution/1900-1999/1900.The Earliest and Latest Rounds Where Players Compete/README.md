@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1900.The%20Earliest%20and%20Latest%20Rounds%20Where%20Players%20Compete/README.md
+rating: 2454
+source: 第 245 场周赛 Q4
+tags:
+    - 记忆化搜索
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1900. 最佳运动员的比拼回合](https://leetcode.cn/problems/the-earliest-and-latest-rounds-where-players-compete)
 
 [English Version](/solution/1900-1999/1900.The%20Earliest%20and%20Latest%20Rounds%20Where%20Players%20Compete/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><code>n</code> 名运动员参与一场锦标赛，所有运动员站成一排，并根据 <strong>最开始的</strong> 站位从 <code>1</code> 到 <code>n</code> 编号（运动员 <code>1</code> 是这一排中的第一个运动员，运动员 <code>2</code> 是第二个运动员，依此类推）。</p>
 
@@ -63,32 +76,51 @@
 	<li><code>1 &lt;= firstPlayer &lt; secondPlayer &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
+class Solution:
+    def earliestAndLatest(
+        self, n: int, firstPlayer: int, secondPlayer: int
+    ) -> List[int]:
+        # dp[i][j][k] := (earliest, latest) pair w/ firstPlayer is i-th player from
+        # Front, secondPlayer is j-th player from end, and there're k people
+        @functools.lru_cache(None)
+        def dp(l: int, r: int, k: int) -> List[int]:
+            if l == r:
+                return [1, 1]
+            if l > r:
+                return dp(r, l, k)
 
-```
+            a = math.inf
+            b = -math.inf
 
-### **Java**
+            # Enumerate all possible positions
+            for i in range(1, l + 1):
+                for j in range(l - i + 1, r - i + 1):
+                    if not l + r - k // 2 <= i + j <= (k + 1) // 2:
+                        continue
+                    x, y = dp(i, j, (k + 1) // 2)
+                    a = min(a, x + 1)
+                    b = max(b, y + 1)
 
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+            return [a, b]
 
-```java
-
-```
-
-### **...**
-
-```
-
+        return dp(firstPlayer, n - secondPlayer + 1, n)
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

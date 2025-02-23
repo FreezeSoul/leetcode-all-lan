@@ -16,8 +16,8 @@
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn dfs(root: &Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let node = root.as_ref().unwrap().borrow();
@@ -42,9 +42,15 @@ impl Solution {
                 }
                 std::cmp::Ordering::Equal => {
                     match (node.left.is_some(), node.right.is_some()) {
-                        (false, false) => return None,
-                        (true, false) => return node.left.take(),
-                        (false, true) => return node.right.take(),
+                        (false, false) => {
+                            return None;
+                        }
+                        (true, false) => {
+                            return node.left.take();
+                        }
+                        (false, true) => {
+                            return node.right.take();
+                        }
                         (true, true) => {
                             if node.right.as_ref().unwrap().borrow().left.is_none() {
                                 let mut r = node.right.take();

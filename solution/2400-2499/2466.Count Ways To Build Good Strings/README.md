@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2466.Count%20Ways%20To%20Build%20Good%20Strings/README.md
+rating: 1694
+source: 第 91 场双周赛 Q2
+tags:
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2466. 统计构造好字符串的方案数](https://leetcode.cn/problems/count-ways-to-build-good-strings)
 
 [English Version](/solution/2400-2499/2466.Count%20Ways%20To%20Build%20Good%20Strings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你整数&nbsp;<code>zero</code>&nbsp;，<code>one</code>&nbsp;，<code>low</code>&nbsp;和&nbsp;<code>high</code>&nbsp;，我们从空字符串开始构造一个字符串，每一步执行下面操作中的一种：</p>
 
@@ -47,11 +59,13 @@
 	<li><code>1 &lt;= zero, one &lt;= low</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i)$ 表示从第 $i$ 位开始构造的好字符串的个数，答案即为 $dfs(0)$。
 
@@ -66,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +99,7 @@ class Solution:
         return dfs(0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -129,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -152,7 +162,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countGoodStrings(low int, high int, zero int, one int) int {
@@ -182,16 +192,65 @@ func countGoodStrings(low int, high int, zero int, one int) int {
 }
 ```
 
-### **TypeScript**
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+<!-- tabs:start -->
+
+#### TypeScript
 
 ```ts
+function countGoodStrings(low: number, high: number, zero: number, one: number): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[] = new Array(high + 1).fill(0);
+    f[0] = 1;
 
+    for (let i = 1; i <= high; i++) {
+        if (i >= zero) f[i] += f[i - zero];
+        if (i >= one) f[i] += f[i - one];
+        f[i] %= mod;
+    }
+
+    const ans = f.slice(low, high + 1).reduce((acc, cur) => acc + cur, 0);
+
+    return ans % mod;
+}
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {number} low
+ * @param {number} high
+ * @param {number} zero
+ * @param {number} one
+ * @return {number}
+ */
+function countGoodStrings(low, high, zero, one) {
+    const mod = 10 ** 9 + 7;
+    const f = Array(high + 1).fill(0);
+    f[0] = 1;
 
+    for (let i = 1; i <= high; i++) {
+        if (i >= zero) f[i] += f[i - zero];
+        if (i >= one) f[i] += f[i - one];
+        f[i] %= mod;
+    }
+
+    const ans = f.slice(low, high + 1).reduce((acc, cur) => acc + cur, 0);
+
+    return ans % mod;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0834.Sum%20of%20Distances%20in%20Tree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Graph
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [834. Sum of Distances in Tree](https://leetcode.com/problems/sum-of-distances-in-tree)
 
 [中文文档](/solution/0800-0899/0834.Sum%20of%20Distances%20in%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an undirected connected tree with <code>n</code> nodes labeled from <code>0</code> to <code>n - 1</code> and <code>n - 1</code> edges.</p>
 
@@ -48,11 +63,27 @@ Hence, answer[0] = 8, and so on.
 	<li>The given input represents a valid tree.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Tree DP (Re-rooting)
+
+First, we run a DFS to calculate the size of each node's subtree, recorded in the array $size$, and compute the sum of distances from node $0$ to all other nodes, recorded in $ans[0]$.
+
+Next, we run another DFS to enumerate the sum of distances from each node when it is considered as the root. Suppose the answer for the current node $i$ is $t$. When we move from node $i$ to node $j$, the sum of distances changes to $t - size[j] + n - size[j]$, meaning the sum of distances to node $j$ and its subtree nodes decreases by $size[j]$, while the sum of distances to other nodes increases by $n - size[j]$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the number of nodes in the tree.
+
+Similar problems:
+
+-   [2581. Count Number of Possible Root Nodes](https://github.com/doocs/leetcode/blob/main/solution/2500-2599/2581.Count%20Number%20of%20Possible%20Root%20Nodes/README_EN.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -83,7 +114,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -130,7 +161,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -172,7 +203,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sumOfDistancesInTree(n int, edges [][]int) []int {
@@ -210,7 +241,7 @@ func sumOfDistancesInTree(n int, edges [][]int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
@@ -234,7 +265,7 @@ function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
     const dfs2 = (i: number, fa: number, t: number) => {
         ans[i] = t;
         for (const j of g[i]) {
-            if (j != fa) {
+            if (j !== fa) {
                 dfs2(j, i, t - size[j] + n - size[j]);
             }
         }
@@ -245,10 +276,8 @@ function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

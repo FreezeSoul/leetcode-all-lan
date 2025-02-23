@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2440.Create%20Components%20With%20Same%20Value/README.md
+rating: 2460
+source: 第 89 场双周赛 Q4
+tags:
+    - 树
+    - 深度优先搜索
+    - 数组
+    - 数学
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [2440. 创建价值相同的连通块](https://leetcode.cn/problems/create-components-with-same-value)
 
 [English Version](/solution/2400-2499/2440.Create%20Components%20With%20Same%20Value/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一棵&nbsp;<code>n</code>&nbsp;个节点的无向树，节点编号为&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;。</p>
 
@@ -46,27 +62,27 @@
 	<li><code>edges</code>&nbsp;表示一棵合法的树。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举连通块的个数**
+### 方法一：枚举连通块的个数
 
-假设连通块的个数为 $k$，那么要删除的边数为 $k-1$，每个连通块的价值为 $\frac{s}{k}$，其中 $s$ 为 `nums` 所有节点的值之和。
+假设连通块的个数为 $k$，那么要删除的边数为 $k-1$，每个连通块的价值为 $\frac{s}{k}$，其中 $s$ 为 $nums$ 所有节点的值之和。
 
-我们从大到小枚举 $k$，如果存在一个 $k$，使得 $\frac{s}{k}$ 是整数，并且得到的每个连通块的价值都相等，那么直接返回 $k-1$。其中 $k$ 的初始值为 $\min(n, \frac{s}{mx})$，记 $mx$ 为 `nums` 中的最大值。
+我们从大到小枚举 $k$，如果存在一个 $k$，使得 $\frac{s}{k}$ 是整数，并且得到的每个连通块的价值都相等，那么直接返回 $k-1$。其中 $k$ 的初始值为 $\min(n, \frac{s}{mx})$，记 $mx$ 为 $nums$ 中的最大值。
 
 关键点在于判断对于给定的 $\frac{s}{k}$，是否能划分出若干子树，使得每棵子树的价值都为 $\frac{s}{k}$。
 
 这里我们通过 `dfs` 函数来判断，从上到下递归遍历求出各个子树的价值，如果子树价值和恰好为 $\frac{s}{k}$，说明此时划分成功，我们将价值置为 $0$ 返回给上一层，表示此子树可以与父节点断开。如果子树价值之和大于 $\frac{s}{k}$，说明此时划分失败，我们返回 $-1$，表示无法划分。
 
-时间复杂度 $O(n\times \sqrt{s})$，其中 $n$ 和 $s$ 分别为 `nums` 的长度和 `nums` 所有节点的值之和。
+时间复杂度 $O(n \times \sqrt{s})$，其中 $n$ 和 $s$ 分别为 $nums$ 的长度和 $nums$ 所有节点的值之和。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,9 +114,7 @@ class Solution:
         return 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -165,7 +179,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -206,14 +220,13 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func componentValue(nums []int, edges [][]int) int {
-	s, mx := 0, 0
+	s, mx := 0, slices.Max(nums)
 	for _, x := range nums {
 		s += x
-		mx = max(mx, x)
 	}
 	n := len(nums)
 	g := make([][]int, n)
@@ -253,32 +266,10 @@ func componentValue(nums []int, edges [][]int) int {
 	}
 	return 0
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2211.Count%20Collisions%20on%20a%20Road/README.md
+rating: 1581
+source: 第 285 场周赛 Q2
+tags:
+    - 栈
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2211. 统计道路上的碰撞次数](https://leetcode.cn/problems/count-collisions-on-a-road)
 
 [English Version](/solution/2200-2299/2211.Count%20Collisions%20on%20a%20Road/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一条无限长的公路上有 <code>n</code> 辆汽车正在行驶。汽车按从左到右的顺序按从 <code>0</code> 到 <code>n - 1</code> 编号，每辆车都在一个 <strong>独特的</strong> 位置。</p>
 
@@ -54,113 +68,132 @@
 	<li><code>directions[i]</code> 的值为 <code>'L'</code>、<code>'R'</code> 或 <code>'S'</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
--   去除前缀为 `L` 的字符；
--   去除后缀为 `R` 的字符；
--   剩余的字符串中，除了 `S` 以外的字符，都会贡献一次碰撞次数。
+### 方法一：脑筋急转弯
+
+根据题意，当两辆移动方向相反的车相撞时，碰撞次数加 $2$，即两辆车被撞停，答案加 $2$；当一辆移动的车和一辆静止的车相撞时，碰撞次数加 $1$，即一辆车被撞停，答案加 $1$。
+
+而显然前缀的 $\textit{L}$ 和后缀的 $\textit{R}$ 是不会发生碰撞的，所以我们只需要统计中间不等于 $\textit{S}$ 的字符个数即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$ 或 $O(1)$。其中 $n$ 是字符串 $\textit{directions}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def countCollisions(self, directions: str) -> int:
-        d = directions.lstrip('L').rstrip('R')
-        return len(d) - d.count('S')
+        s = directions.lstrip("L").rstrip("R")
+        return len(s) - s.count("S")
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int countCollisions(String directions) {
-        char[] ds = directions.toCharArray();
-        int n = ds.length;
-        int l = 0;
-        int r = n - 1;
-        while (l < n && ds[l] == 'L') {
+        char[] s = directions.toCharArray();
+        int n = s.length;
+        int l = 0, r = n - 1;
+        while (l < n && s[l] == 'L') {
             ++l;
         }
-        while (r >= 0 && ds[r] == 'R') {
+        while (r >= 0 && s[r] == 'R') {
             --r;
         }
-        int ans = 0;
+        int ans = r - l + 1;
         for (int i = l; i <= r; ++i) {
-            if (ds[i] != 'S') {
-                ++ans;
-            }
+            ans -= s[i] == 'S' ? 1 : 0;
         }
         return ans;
     }
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countCollisions(string s) {
+        int n = s.size();
+        int l = 0, r = n - 1;
+        while (l < n && s[l] == 'L') {
+            ++l;
+        }
+        while (r >= 0 && s[r] == 'R') {
+            --r;
+        }
+        return r - l + 1 - count(s.begin() + l, s.begin() + r + 1, 'S');
+    }
+};
+```
+
+#### Go
+
+```go
+func countCollisions(directions string) int {
+	s := strings.TrimRight(strings.TrimLeft(directions, "L"), "R")
+	return len(s) - strings.Count(s, "S")
+}
+```
+
+#### TypeScript
 
 ```ts
 function countCollisions(directions: string): number {
     const n = directions.length;
-    let l = 0,
-        r = n - 1;
+    let [l, r] = [0, n - 1];
     while (l < n && directions[l] == 'L') {
         ++l;
     }
     while (r >= 0 && directions[r] == 'R') {
         --r;
     }
-    let ans = 0;
+    let ans = r - l + 1;
     for (let i = l; i <= r; ++i) {
-        if (directions[i] != 'S') {
-            ++ans;
+        if (directions[i] === 'S') {
+            --ans;
         }
     }
     return ans;
 }
 ```
 
-### **C++**
+#### JavaScript
 
-```cpp
-class Solution {
-public:
-    int countCollisions(string directions) {
-        int l = 0, r = directions.size() - 1, count = 0;
-        while (l <= r && directions[l] == 'L') {
-            l++;
-        }
-        while (l <= r && directions[r] == 'R') {
-            r--;
-        }
-        for (int i = l; i <= r; i++) {
-            count += directions[i] != 'S';
-        }
-        return count;
+```js
+/**
+ * @param {string} directions
+ * @return {number}
+ */
+var countCollisions = function (directions) {
+    const n = directions.length;
+    let [l, r] = [0, n - 1];
+    while (l < n && directions[l] == 'L') {
+        ++l;
     }
+    while (r >= 0 && directions[r] == 'R') {
+        --r;
+    }
+    let ans = r - l + 1;
+    for (let i = l; i <= r; ++i) {
+        if (directions[i] === 'S') {
+            --ans;
+        }
+    }
+    return ans;
 };
 ```
 
-### **Go**
-
-```go
-func countCollisions(directions string) int {
-	d := strings.TrimLeft(directions, "L")
-	d = strings.TrimRight(d, "R")
-	return len(d) - strings.Count(d, "S")
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

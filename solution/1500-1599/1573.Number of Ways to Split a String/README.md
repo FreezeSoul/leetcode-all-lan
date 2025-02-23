@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1573.Number%20of%20Ways%20to%20Split%20a%20String/README.md
+rating: 1590
+source: 第 34 场双周赛 Q2
+tags:
+    - 数学
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1573. 分割字符串的方案数](https://leetcode.cn/problems/number-of-ways-to-split-a-string)
 
 [English Version](/solution/1500-1599/1573.Number%20of%20Ways%20to%20Split%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二进制串&nbsp;<code>s</code>&nbsp; （一个只包含 0 和 1 的字符串），我们可以将 <code>s</code>&nbsp;分割成 3 个 <strong>非空</strong>&nbsp;字符串 s1, s2, s3 （s1 + s2 + s3 = s）。</p>
 
@@ -56,11 +69,13 @@
 	<li><code>3 &lt;= s.length &lt;= 10^5</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 我们先遍历字符串 $s$，统计其中字符 $1$ 的个数 $cnt$，如果 $cnt$ 不能被 $3$ 整除，那么无法分割，直接返回 $0$。如果 $cnt$ 为 $0$，说明字符串中没有字符 $1$，我们可以在 $n-1$ 个位置中任意选择两个位置，将字符串分割成三个子串，那么方案数就是 $C_{n-1}^2$。
 
@@ -74,13 +89,11 @@
 
 相似题目：
 
--   [927. 三等分](/solution/0900-0999/0927.Three%20Equal%20Parts/README.md)
+-   [927. 三等分](https://github.com/doocs/leetcode/blob/main/solution/0900-0999/0927.Three%20Equal%20Parts/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,6 +104,7 @@ class Solution:
                 t += int(c == '1')
                 if t == x:
                     return i
+
         cnt, m = divmod(sum(c == '1' for c in s), 3)
         if m:
             return 0
@@ -103,9 +117,7 @@ class Solution:
         return (i2 - i1) * (j2 - j1) % (10**9 + 7)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -146,7 +158,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,7 +180,7 @@ public:
         cnt /= 3;
         auto find = [&](int x) {
             int t = 0;
-            for (int i = 0; ; ++i) {
+            for (int i = 0;; ++i) {
                 t += s[i] == '1';
                 if (t == x) {
                     return i;
@@ -182,7 +194,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numWays(s string) int {
@@ -219,10 +231,8 @@ func numWays(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

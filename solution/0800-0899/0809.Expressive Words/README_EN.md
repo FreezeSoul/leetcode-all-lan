@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0809.Expressive%20Words/README_EN.md
+tags:
+    - Array
+    - Two Pointers
+    - String
+---
+
+<!-- problem:start -->
+
 # [809. Expressive Words](https://leetcode.com/problems/expressive-words)
 
 [中文文档](/solution/0800-0899/0809.Expressive%20Words/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Sometimes people repeat letters to represent extra feeling. For example:</p>
 
@@ -48,11 +62,29 @@ We can&#39;t extend &quot;helo&quot; to get &quot;heeellooo&quot; because the gr
 	<li><code>s</code> and <code>words[i]</code> consist of lowercase letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Traversal Counting + Two Pointers
+
+We can traverse the array $\textit{words}$, and for each word $t$ in the array, check if $t$ can be expanded to obtain $s$. If it can, increment the answer by one.
+
+Therefore, the key problem is to determine if the word $t$ can be expanded to obtain $s$. We use a function $\textit{check}(s, t)$ to determine this. The implementation logic of the function is as follows:
+
+First, check the length relationship between $s$ and $t$. If the length of $t$ is greater than $s$, return $\textit{false}$ directly. Otherwise, use two pointers $i$ and $j$ to point to $s$ and $t$, respectively, both initially set to $0$.
+
+If the characters pointed to by $i$ and $j$ are different, then $t$ cannot be expanded to obtain $s$, and we return $\textit{false}$. Otherwise, we need to check the relationship between the consecutive occurrence counts of the characters pointed to by $i$ and $j$, denoted as $c_1$ and $c_2$. If $c_1 \lt c_2$ or $c_1 \lt 3$ and $c_1 \neq c_2$, then $t$ cannot be expanded to obtain $s$, and we return $\textit{false}$. Otherwise, move $i$ and $j$ to the right by $c_1$ and $c_2$ times, respectively, and continue checking.
+
+If both $i$ and $j$ reach the end of the strings, then $t$ can be expanded to obtain $s$, and we return $\textit{true}$. Otherwise, we return $\textit{false}$.
+
+The time complexity is $O(n \times m + \sum_{i=0}^{m-1} w_i)$, where $n$ and $m$ are the lengths of the string $s$ and the array $\textit{words}$, respectively, and $w_i$ is the length of the $i$-th word in the array $\textit{words}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -81,7 +113,7 @@ class Solution:
         return sum(check(s, t) for t in words)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -126,13 +158,13 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int expressiveWords(string s, vector<string>& words) {
-        auto check = [](string&s, string& t) -> int {
+        auto check = [](string& s, string& t) -> int {
             int m = s.size(), n = t.size();
             if (n > m) return 0;
             int i = 0, j = 0;
@@ -157,7 +189,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func expressiveWords(s string, words []string) (ans int) {
@@ -197,10 +229,8 @@ func expressiveWords(s string, words []string) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

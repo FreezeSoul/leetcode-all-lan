@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2449.Minimum%20Number%20of%20Operations%20to%20Make%20Arrays%20Similar/README_EN.md
+rating: 2076
+source: Weekly Contest 316 Q4
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2449. Minimum Number of Operations to Make Arrays Similar](https://leetcode.com/problems/minimum-number-of-operations-to-make-arrays-similar)
 
 [中文文档](/solution/2400-2499/2449.Minimum%20Number%20of%20Operations%20to%20Make%20Arrays%20Similar/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two positive integer arrays <code>nums</code> and <code>target</code>, of the same length.</p>
 
@@ -56,11 +72,27 @@ It can be shown that 2 is the minimum number of operations needed.
 	<li>It is possible to make <code>nums</code> similar to <code>target</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Odd-Even Classification + Sorting
+
+Notice that, because each operation will only increase or decrease the value of an element by $2$, the parity of the element will not change.
+
+Therefore, we can divide the arrays $nums$ and $target$ into two groups according to their parity, denoted as $a_1$ and $a_2$, and $b_1$ and $b_2$ respectively.
+
+Then, we just need to pair the elements in $a_1$ with the elements in $b_1$, and pair the elements in $a_2$ with the elements in $b_2$, and then perform operations. During the pairing process, we can use a greedy strategy, pairing the smaller elements in $a_i$ with the smaller elements in $b_i$ each time, which can ensure the minimum number of operations. This can be directly implemented through sorting.
+
+Since each operation can reduce the difference of the corresponding elements by $4$, we accumulate the difference of each corresponding position, and finally divide by $4$ to get the answer.
+
+The time complexity is $O(n \times \log n)$, where $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +102,7 @@ class Solution:
         return sum(abs(a - b) for a, b in zip(nums, target)) // 4
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -139,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeSimilar(nums []int, target []int) int64 {
@@ -178,16 +210,49 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
+function makeSimilar(nums: number[], target: number[]): number {
+    nums.sort((a, b) => a - b);
+    target.sort((a, b) => a - b);
 
-```
+    const a1: number[] = [];
+    const a2: number[] = [];
+    const b1: number[] = [];
+    const b2: number[] = [];
 
-### **...**
+    for (const v of nums) {
+        if (v % 2 === 0) {
+            a1.push(v);
+        } else {
+            a2.push(v);
+        }
+    }
 
-```
+    for (const v of target) {
+        if (v % 2 === 0) {
+            b1.push(v);
+        } else {
+            b2.push(v);
+        }
+    }
 
+    let ans = 0;
+    for (let i = 0; i < a1.length; ++i) {
+        ans += Math.abs(a1[i] - b1[i]);
+    }
+
+    for (let i = 0; i < a2.length; ++i) {
+        ans += Math.abs(a2[i] - b2[i]);
+    }
+
+    return ans / 4;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

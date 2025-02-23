@@ -1,12 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0850.Rectangle%20Area%20II/README.md
+tags:
+    - 线段树
+    - 数组
+    - 有序集合
+    - 扫描线
+---
+
+<!-- problem:start -->
+
 # [850. 矩形面积 II](https://leetcode.cn/problems/rectangle-area-ii)
 
 [English Version](/solution/0800-0899/0850.Rectangle%20Area%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个轴对齐的二维数组&nbsp;<code>rectangles</code>&nbsp;。 对于&nbsp;<code>rectangle[i] = [x1, y1, x2, y2]</code>，其中（x1，y1）是矩形&nbsp;<code>i</code>&nbsp;左下角的坐标，<meta charset="UTF-8" />&nbsp;<code>(x<sub>i1</sub>, y<sub>i1</sub>)</code>&nbsp;是该矩形 <strong>左下角</strong> 的坐标，<meta charset="UTF-8" />&nbsp;<code>(x<sub>i2</sub>, y<sub>i2</sub>)</code>&nbsp;是该矩形&nbsp;<strong>右上角</strong> 的坐标。</p>
+<p>给你一个轴对齐的二维数组&nbsp;<code>rectangles</code>&nbsp;。 对于&nbsp;<code>rectangle[i] = [x1, y1, x2, y2]</code>，其中&nbsp;<code>(x<sub>i1</sub>, y<sub>i1</sub>)</code>&nbsp;是该矩形 <strong>左下角</strong> 的坐标，<meta charset="UTF-8" />&nbsp;<code>(x<sub>i2</sub>, y<sub>i2</sub>)</code>&nbsp;是该矩形&nbsp;<strong>右上角</strong> 的坐标。</p>
 
 <p>计算平面中所有&nbsp;<code>rectangles</code>&nbsp;所覆盖的 <strong>总面积 </strong>。任何被两个或多个矩形覆盖的区域应只计算 <strong>一次</strong> 。</p>
 
@@ -42,13 +55,18 @@
 	<li><code>1 &lt;= rectangles.length &lt;= 200</code></li>
 	<li><code>rectanges[i].length = 4</code><meta charset="UTF-8" /></li>
 	<li><code>0 &lt;= x<sub>i1</sub>, y<sub>i1</sub>, x<sub>i2</sub>, y<sub>i2</sub>&nbsp;&lt;= 10<sup>9</sup></code></li>
+	<li><code>x<sub>i1&nbsp;</sub>&lt;= x<sub>i2</sub></code></li>
+	<li><code>y<sub>i1&nbsp;</sub>&lt;= y<sub>i2</sub></code></li>
+	<li>所有矩阵面积不为 0。</li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：离散化 + 线段树 + 扫描线**
+### 方法一：离散化 + 线段树 + 扫描线
 
 线段树将整个区间分割为多个不连续的子区间，子区间的数量不超过 $log(width)$。更新某个元素的值，只需要更新 $log(width)$ 个区间，并且这些区间都包含在一个包含该元素的大区间内。区间修改时，需要使用**懒标记**保证效率。
 
@@ -66,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Node:
@@ -104,13 +120,11 @@ class SegmentTree:
 
     def pushup(self, u):
         if self.tr[u].cnt:
-            self.tr[u].length = self.nums[self.tr[u].r + 1] - \
-                self.nums[self.tr[u].l]
+            self.tr[u].length = self.nums[self.tr[u].r + 1] - self.nums[self.tr[u].l]
         elif self.tr[u].l == self.tr[u].r:
             self.tr[u].length = 0
         else:
-            self.tr[u].length = self.tr[u << 1].length + \
-                self.tr[u << 1 | 1].length
+            self.tr[u].length = self.tr[u << 1].length + self.tr[u << 1 | 1].length
 
     @property
     def length(self):
@@ -139,9 +153,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Node {
@@ -242,7 +254,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Node {
@@ -333,7 +345,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rectangleArea(rectangles [][]int) int {
@@ -433,10 +445,8 @@ func (t *segmentTree) pushup(u int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

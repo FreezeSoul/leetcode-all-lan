@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1792.Maximum%20Average%20Pass%20Ratio/README.md
+rating: 1817
+source: 第 232 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1792. 最大平均通过率](https://leetcode.cn/problems/maximum-average-pass-ratio)
 
 [English Version](/solution/1700-1799/1792.Maximum%20Average%20Pass%20Ratio/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一所学校里有一些班级，每个班级里有一些学生，现在每个班都会进行一场期末考试。给你一个二维数组 <code>classes</code> ，其中 <code>classes[i] = [pass<sub>i</sub>, total<sub>i</sub>]</code> ，表示你提前知道了第 <code>i</code> 个班级总共有 <code>total<sub>i</sub></code> 个学生，其中只有 <code>pass<sub>i</sub></code> 个学生可以通过考试。</p>
 
@@ -42,11 +56,13 @@
 	<li><code>1 <= extraStudents <= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（增量大根堆）**
+### 方法一：优先队列（增量大根堆）
 
 假设一个班级当前的通过率为 $\frac{a}{b}$，那么如果我们将一个聪明的学生安排到此班级，那么班级的通过率就会变为 $\frac{a+1}{b+1}$。我们可以发现，通过率的增量为 $\frac{a+1}{b+1} - \frac{a}{b}$。
 
@@ -56,13 +72,11 @@
 
 最后，我们将所有班级的通过率求和，然后除以班级数目，即为答案。
 
-时间复杂度 $O(n\log n)$，其中 $n$ 为班级数目。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为班级数目。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +90,7 @@ class Solution:
         return sum(v[1] / v[2] for v in h) / len(classes)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,14 +118,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     double maxAverageRatio(vector<vector<int>>& classes, int extraStudents) {
         priority_queue<tuple<double, int, int>> pq;
-        for(auto& e : classes) {
+        for (auto& e : classes) {
             int a = e[0], b = e[1];
             double x = (double) (a + 1) / (b + 1) - (double) a / b;
             pq.push({x, a, b});
@@ -137,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxAverageRatio(classes [][]int, extraStudents int) float64 {
@@ -174,15 +186,13 @@ func (h hp) Less(i, j int) bool {
 	a, b := h[i], h[j]
 	return a.x > b.x
 }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(tuple)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **...**
-
-```
-
+func (h hp) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)   { *h = append(*h, v.(tuple)) }
+func (h *hp) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1557.Minimum%20Number%20of%20Vertices%20to%20Reach%20All%20Nodes/README_EN.md
+rating: 1512
+source: Biweekly Contest 33 Q2
+tags:
+    - Graph
+---
+
+<!-- problem:start -->
+
 # [1557. Minimum Number of Vertices to Reach All Nodes](https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes)
 
 [中文文档](/solution/1500-1599/1557.Minimum%20Number%20of%20Vertices%20to%20Reach%20All%20Nodes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a<strong>&nbsp;directed acyclic graph</strong>,&nbsp;with&nbsp;<code>n</code>&nbsp;vertices numbered from&nbsp;<code>0</code>&nbsp;to&nbsp;<code>n-1</code>,&nbsp;and an array&nbsp;<code>edges</code>&nbsp;where&nbsp;<code>edges[i] = [from<sub>i</sub>, to<sub>i</sub>]</code>&nbsp;represents a directed edge from node&nbsp;<code>from<sub>i</sub></code>&nbsp;to node&nbsp;<code>to<sub>i</sub></code>.</p>
 
@@ -41,31 +55,37 @@
 	<li>All pairs <code>(from<sub>i</sub>, to<sub>i</sub>)</code> are distinct.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def findSmallestSetOfVertices(self, n: int, edges: List[List[int]]) -> List[int]:
-        s = {to for _, to in edges}
-        return [i for i in range(n) if i not in s]
+        cnt = Counter(t for _, t in edges)
+        return [i for i in range(n) if cnt[i] == 0]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
-        Set<Integer> s = new HashSet<>();
-        for (List<Integer> e : edges) {
-            s.add(e.get(1));
+        var cnt = new int[n];
+        for (var e : edges) {
+            ++cnt[e.get(1)];
         }
         List<Integer> ans = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
-            if (!s.contains(i)) {
+            if (cnt[i] == 0) {
                 ans.add(i);
             }
         }
@@ -74,60 +94,63 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> findSmallestSetOfVertices(int n, vector<vector<int>>& edges) {
-        unordered_set<int> s;
-        for (auto& e : edges) s.insert(e[1]);
+        vector<int> cnt(n);
+        for (auto& e : edges) {
+            ++cnt[e[1]];
+        }
         vector<int> ans;
         for (int i = 0; i < n; ++i) {
-            if (!s.count(i)) ans.push_back(i);
+            if (cnt[i] == 0) {
+                ans.push_back(i);
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func findSmallestSetOfVertices(n int, edges [][]int) []int {
-	s := make(map[int]bool)
+func findSmallestSetOfVertices(n int, edges [][]int) (ans []int) {
+	cnt := make([]int, n)
 	for _, e := range edges {
-		s[e[1]] = true
+		cnt[e[1]]++
 	}
-	var ans []int
-	for i := 0; i < n; i++ {
-		if !s[i] {
+	for i, c := range cnt {
+		if c == 0 {
 			ans = append(ans, i)
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findSmallestSetOfVertices(n: number, edges: number[][]): number[] {
-    const arr = new Array(n).fill(true);
-    for (const [_, i] of edges) {
-        arr[i] = false;
+    const cnt: number[] = new Array(n).fill(0);
+    for (const [_, t] of edges) {
+        cnt[t]++;
     }
-    const res = [];
-    arr.forEach((v, i) => {
-        if (v) {
-            res.push(i);
+    const ans: number[] = [];
+    for (let i = 0; i < n; ++i) {
+        if (cnt[i] === 0) {
+            ans.push(i);
         }
-    });
-    return res;
+    }
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -144,10 +167,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

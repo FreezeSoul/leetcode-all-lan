@@ -1,16 +1,16 @@
 function totalFruit(fruits: number[]): number {
     const n = fruits.length;
-    const map = new Map<number, number>();
-    let i = 0;
-    for (const fruit of fruits) {
-        map.set(fruit, (map.get(fruit) ?? 0) + 1);
-        if (map.size > 2) {
-            const k = fruits[i++];
-            map.set(k, map.get(k) - 1);
-            if (map.get(k) == 0) {
-                map.delete(k);
+    const cnt: Map<number, number> = new Map();
+    let ans = 0;
+    for (let i = 0, j = 0; i < n; ++i) {
+        cnt.set(fruits[i], (cnt.get(fruits[i]) || 0) + 1);
+        for (; cnt.size > 2; ++j) {
+            cnt.set(fruits[j], cnt.get(fruits[j])! - 1);
+            if (!cnt.get(fruits[j])) {
+                cnt.delete(fruits[j]);
             }
         }
+        ans = Math.max(ans, i - j + 1);
     }
-    return n - i;
+    return ans;
 }

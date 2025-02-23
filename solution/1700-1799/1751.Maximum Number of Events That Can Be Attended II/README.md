@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1751.Maximum%20Number%20of%20Events%20That%20Can%20Be%20Attended%20II/README.md
+rating: 2040
+source: 第 45 场双周赛 Q4
+tags:
+    - 数组
+    - 二分查找
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1751. 最多可以参加的会议数目 II](https://leetcode.cn/problems/maximum-number-of-events-that-can-be-attended-ii)
 
 [English Version](/solution/1700-1799/1751.Maximum%20Number%20of%20Events%20That%20Can%20Be%20Attended%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <code>events</code> 数组，其中 <code>events[i] = [startDay<sub>i</sub>, endDay<sub>i</sub>, value<sub>i</sub>]</code> ，表示第 <code>i</code> 个会议在 <code>startDay<sub>i</sub></code><sub> </sub>天开始，第 <code>endDay<sub>i</sub></code> 天结束，如果你参加这个会议，你能得到价值 <code>value<sub>i</sub></code> 。同时给你一个整数 <code>k</code> 表示你能参加的最多会议数目。</p>
 
@@ -53,11 +68,13 @@
 	<li><code>1 <= value<sub>i</sub> <= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索 + 二分查找**
+### 方法一：记忆化搜索 + 二分查找
 
 我们先将会议按照开始时间从小到大排序，然后设计一个函数 $dfs(i, k)$ 表示从第 $i$ 个会议开始，最多参加 $k$ 个会议的最大价值和。答案即为 $dfs(0, k)$。
 
@@ -75,32 +92,9 @@ $$
 
 时间复杂度 $O(n\times \log n + n\times k)$，其中 $n$ 为会议数量。
 
-**方法二：动态规划 + 二分查找**
-
-我们可以将方法一中的记忆化搜索改为动态规划。
-
-先将会议排序，这次我们按照结束时间从小到大排序。然后定义 $f[i][j]$ 表示前 $i$ 个会议中，最多参加 $j$ 个会议的最大价值和。答案即为 $f[n][k]$。
-
-对于第 $i$ 个会议，我们可以选择参加或者不参加。如果不参加，那么最大价值和就是 $f[i][j]$，如果参加，我们可以通过二分查找，找到最后一个结束时间小于第 $i$ 个会议开始时间的会议，记为 $h$，那么最大价值和就是 $f[h+1][j - 1] + value[i]$。取二者的较大值即可。即：
-
-$$
-f[i+1][j] = \max(f[i][j], f[h+1][j - 1] + value[i])
-$$
-
-其中 $h$ 为最后一个结束时间小于第 $i$ 个会议开始时间的会议，可以通过二分查找得到。
-
-时间复杂度 $O(n\times \log n + n\times k)$，其中 $n$ 为会议数量。
-
-相似题目：
-
--   [1235. 规划兼职工作](/solution/1200-1299/1235.Maximum%20Profit%20in%20Job%20Scheduling/README.md)
--   [2008. 出租车的最大盈利](/solution/2000-2099/2008.Maximum%20Earnings%20From%20Taxi/README.md)
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -120,22 +114,7 @@ class Solution:
         return dfs(0, k)
 ```
 
-```python
-class Solution:
-    def maxValue(self, events: List[List[int]], k: int) -> int:
-        events.sort(key=lambda x: x[1])
-        n = len(events)
-        f = [[0] * (k + 1) for _ in range(n + 1)]
-        for i, (st, _, val) in enumerate(events, 1):
-            p = bisect_left(events, st, hi=i - 1, key=lambda x: x[1])
-            for j in range(1, k + 1):
-                f[i][j] = max(f[i - 1][j], f[p][j - 1] + val)
-        return f[n][k]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -178,6 +157,138 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& events, int k) {
+        sort(events.begin(), events.end());
+        int n = events.size();
+        int f[n][k + 1];
+        memset(f, 0, sizeof(f));
+        function<int(int, int)> dfs = [&](int i, int k) -> int {
+            if (i >= n || k <= 0) {
+                return 0;
+            }
+            if (f[i][k] > 0) {
+                return f[i][k];
+            }
+            int ed = events[i][1], val = events[i][2];
+            vector<int> t = {ed};
+            int p = upper_bound(events.begin() + i + 1, events.end(), t, [](const auto& a, const auto& b) { return a[0] < b[0]; }) - events.begin();
+            f[i][k] = max(dfs(i + 1, k), dfs(p, k - 1) + val);
+            return f[i][k];
+        };
+        return dfs(0, k);
+    }
+};
+```
+
+#### Go
+
+```go
+func maxValue(events [][]int, k int) int {
+	sort.Slice(events, func(i, j int) bool { return events[i][0] < events[j][0] })
+	n := len(events)
+	f := make([][]int, n)
+	for i := range f {
+		f[i] = make([]int, k+1)
+	}
+	var dfs func(i, k int) int
+	dfs = func(i, k int) int {
+		if i >= n || k <= 0 {
+			return 0
+		}
+		if f[i][k] > 0 {
+			return f[i][k]
+		}
+		j := sort.Search(n, func(h int) bool { return events[h][0] > events[i][1] })
+		ans := max(dfs(i+1, k), dfs(j, k-1)+events[i][2])
+		f[i][k] = ans
+		return ans
+	}
+	return dfs(0, k)
+}
+```
+
+#### TypeScript
+
+```ts
+function maxValue(events: number[][], k: number): number {
+    events.sort((a, b) => a[1] - b[1]);
+    const n = events.length;
+    const f: number[][] = new Array(n + 1).fill(0).map(() => new Array(k + 1).fill(0));
+    const search = (x: number, hi: number): number => {
+        let l = 0;
+        let r = hi;
+        while (l < r) {
+            const mid = (l + r) >> 1;
+            if (events[mid][1] >= x) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    };
+    for (let i = 1; i <= n; ++i) {
+        const [st, _, val] = events[i - 1];
+        const p = search(st, i - 1);
+        for (let j = 1; j <= k; ++j) {
+            f[i][j] = Math.max(f[i - 1][j], f[p][j - 1] + val);
+        }
+    }
+    return f[n][k];
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划 + 二分查找
+
+我们可以将方法一中的记忆化搜索改为动态规划。
+
+先将会议排序，这次我们按照结束时间从小到大排序。然后定义 $f[i][j]$ 表示前 $i$ 个会议中，最多参加 $j$ 个会议的最大价值和。答案即为 $f[n][k]$。
+
+对于第 $i$ 个会议，我们可以选择参加或者不参加。如果不参加，那么最大价值和就是 $f[i][j]$，如果参加，我们可以通过二分查找，找到最后一个结束时间小于第 $i$ 个会议开始时间的会议，记为 $h$，那么最大价值和就是 $f[h+1][j - 1] + value[i]$。取二者的较大值即可。即：
+
+$$
+f[i+1][j] = \max(f[i][j], f[h+1][j - 1] + value[i])
+$$
+
+其中 $h$ 为最后一个结束时间小于第 $i$ 个会议开始时间的会议，可以通过二分查找得到。
+
+时间复杂度 $O(n\times \log n + n\times k)$，其中 $n$ 为会议数量。
+
+相似题目：
+
+-   [1235. 规划兼职工作](https://github.com/doocs/leetcode/blob/main/solution/1200-1299/1235.Maximum%20Profit%20in%20Job%20Scheduling/README.md)
+-   [2008. 出租车的最大盈利](https://github.com/doocs/leetcode/blob/main/solution/2000-2099/2008.Maximum%20Earnings%20From%20Taxi/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxValue(self, events: List[List[int]], k: int) -> int:
+        events.sort(key=lambda x: x[1])
+        n = len(events)
+        f = [[0] * (k + 1) for _ in range(n + 1)]
+        for i, (st, _, val) in enumerate(events, 1):
+            p = bisect_left(events, st, hi=i - 1, key=lambda x: x[1])
+            for j in range(1, k + 1):
+                f[i][j] = max(f[i - 1][j], f[p][j - 1] + val)
+        return f[n][k]
+```
+
+#### Java
+
 ```java
 class Solution {
     public int maxValue(int[][] events, int k) {
@@ -209,33 +320,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxValue(vector<vector<int>>& events, int k) {
-        sort(events.begin(), events.end());
-        int n = events.size();
-        int f[n][k + 1];
-        memset(f, 0, sizeof(f));
-        function<int(int, int)> dfs = [&](int i, int k) -> int {
-            if (i >= n || k <= 0) {
-                return 0;
-            }
-            if (f[i][k] > 0) {
-                return f[i][k];
-            }
-            int ed = events[i][1], val = events[i][2];
-            vector<int> t = {ed};
-            int p = upper_bound(events.begin() + i + 1, events.end(), t, [](const auto& a, const auto& b) { return a[0] < b[0]; }) - events.begin();
-            f[i][k] = max(dfs(i + 1, k), dfs(p, k - 1) + val);
-            return f[i][k];
-        };
-        return dfs(0, k);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -258,39 +343,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func maxValue(events [][]int, k int) int {
-	sort.Slice(events, func(i, j int) bool { return events[i][0] < events[j][0] })
-	n := len(events)
-	f := make([][]int, n)
-	for i := range f {
-		f[i] = make([]int, k+1)
-	}
-	var dfs func(i, k int) int
-	dfs = func(i, k int) int {
-		if i >= n || k <= 0 {
-			return 0
-		}
-		if f[i][k] > 0 {
-			return f[i][k]
-		}
-		j := sort.Search(n, func(h int) bool { return events[h][0] > events[i][1] })
-		ans := max(dfs(i+1, k), dfs(j, k-1)+events[i][2])
-		f[i][k] = ans
-		return ans
-	}
-	return dfs(0, k)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func maxValue(events [][]int, k int) int {
@@ -309,52 +362,10 @@ func maxValue(events [][]int, k int) int {
 	}
 	return f[n][k]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function maxValue(events: number[][], k: number): number {
-    events.sort((a, b) => a[1] - b[1]);
-    const n = events.length;
-    const f: number[][] = new Array(n + 1)
-        .fill(0)
-        .map(() => new Array(k + 1).fill(0));
-    const search = (x: number, hi: number): number => {
-        let l = 0;
-        let r = hi;
-        while (l < r) {
-            const mid = (l + r) >> 1;
-            if (events[mid][1] >= x) {
-                r = mid;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return l;
-    };
-    for (let i = 1; i <= n; ++i) {
-        const [st, _, val] = events[i - 1];
-        const p = search(st, i - 1);
-        for (let j = 1; j <= k; ++j) {
-            f[i][j] = Math.max(f[i - 1][j], f[p][j - 1] + val);
-        }
-    }
-    return f[n][k];
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

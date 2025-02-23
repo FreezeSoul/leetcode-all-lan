@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/README.md
+rating: 1797
+source: 第 132 场周赛 Q4
+tags:
+    - 树
+    - 深度优先搜索
+    - 字符串
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1028. 从先序遍历还原二叉树](https://leetcode.cn/problems/recover-a-tree-from-preorder-traversal)
 
 [English Version](/solution/1000-1099/1028.Recover%20a%20Tree%20From%20Preorder%20Traversal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们从二叉树的根节点 <code>root</code>&nbsp;开始进行深度优先搜索。</p>
 
@@ -49,32 +64,212 @@
 	<li>每个节点的值介于 <code>1</code> 和 <code>10 ^ 9</code> 之间。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode recoverFromPreorder(String traversal) {
+        Stack<TreeNode> stack = new Stack<>();
+        int i = 0;
 
+        while (i < traversal.length()) {
+            int depth = 0;
+            while (i < traversal.length() && traversal.charAt(i) == '-') {
+                depth++;
+                i++;
+            }
+
+            int num = 0;
+            while (i < traversal.length() && Character.isDigit(traversal.charAt(i))) {
+                num = num * 10 + (traversal.charAt(i) - '0');
+                i++;
+            }
+
+            // Create the new node
+            TreeNode newNode = new TreeNode(num);
+
+            while (stack.size() > depth) {
+                stack.pop();
+            }
+            if (!stack.isEmpty()) {
+                if (stack.peek().left == null) {
+                    stack.peek().left = newNode;
+                } else {
+                    stack.peek().right = newNode;
+                }
+            }
+
+            stack.push(newNode);
+        }
+        return stack.isEmpty() ? null : stack.get(0);
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* recoverFromPreorder(string S) {
+        stack<TreeNode*> st;
+        int depth = 0;
+        int num = 0;
+        for (int i = 0; i < S.length(); ++i) {
+            if (S[i] == '-') {
+                depth++;
+            } else {
+                num = 10 * num + S[i] - '0';
+            }
+            if (i + 1 >= S.length() || (isdigit(S[i]) && S[i + 1] == '-')) {
+                TreeNode* newNode = new TreeNode(num);
+                while (st.size() > depth) {
+                    st.pop();
+                }
+                if (!st.empty()) {
+                    if (st.top()->left == nullptr) {
+                        st.top()->left = newNode;
+                    } else {
+                        st.top()->right = newNode;
+                    }
+                }
+                st.push(newNode);
+                depth = 0;
+                num = 0;
+            }
+        }
+        TreeNode* res;
+        while (!st.empty()) {
+            res = st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
 ```
 
+#### TypeScript
+
+```ts
+function recoverFromPreorder(traversal: string): TreeNode | null {
+    const stack: TreeNode[] = [];
+    let i = 0;
+
+    while (i < traversal.length) {
+        let depth = 0;
+        while (i < traversal.length && traversal[i] === '-') {
+            depth++;
+            i++;
+        }
+
+        let num = 0;
+        while (i < traversal.length && !Number.isNaN(+traversal[i])) {
+            num = num * 10 + +traversal[i];
+            i++;
+        }
+
+        // Create the new node
+        const newNode = new TreeNode(num);
+
+        while (stack.length > depth) {
+            stack.pop();
+        }
+
+        if (stack.length > 0) {
+            const i = stack.length - 1;
+            if (stack[i].left === null) {
+                stack[i].left = newNode;
+            } else {
+                stack[i].right = newNode;
+            }
+        }
+
+        stack.push(newNode);
+    }
+
+    return stack.length ? stack[0] : null;
+}
+```
+
+#### JavaScript
+
+```js
+function recoverFromPreorder(traversal) {
+    const stack = [];
+    let i = 0;
+
+    while (i < traversal.length) {
+        let depth = 0;
+        while (i < traversal.length && traversal[i] === '-') {
+            depth++;
+            i++;
+        }
+
+        let num = 0;
+        while (i < traversal.length && !Number.isNaN(+traversal[i])) {
+            num = num * 10 + +traversal[i];
+            i++;
+        }
+
+        // Create the new node
+        const newNode = new TreeNode(num);
+
+        while (stack.length > depth) {
+            stack.pop();
+        }
+
+        if (stack.length > 0) {
+            const i = stack.length - 1;
+            if (stack[i].left === null) {
+                stack[i].left = newNode;
+            } else {
+                stack[i].right = newNode;
+            }
+        }
+
+        stack.push(newNode);
+    }
+
+    return stack.length ? stack[0] : null;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

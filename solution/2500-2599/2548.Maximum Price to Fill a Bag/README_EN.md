@@ -1,8 +1,22 @@
-# [2548. Maximum Price to Fill a Bag](https://leetcode.com/problems/maximum-price-to-fill-a-bag)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2548.Maximum%20Price%20to%20Fill%20a%20Bag/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [2548. Maximum Price to Fill a Bag 🔒](https://leetcode.com/problems/maximum-price-to-fill-a-bag)
 
 [中文文档](/solution/2500-2599/2548.Maximum%20Price%20to%20Fill%20a%20Bag/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a 2D integer array <code>items</code> where <code>items[i] = [price<sub>i</sub>, weight<sub>i</sub>]</code> denotes the price and weight of the <code>i<sup>th</sup></code> item, respectively.</p>
 
@@ -49,11 +63,23 @@ It can be proved that 55.0 is the maximum total price that we can achieve.
 	<li><code>1 &lt;= capacity &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Sorting
+
+We sort the items in descending order by unit price, and then take out the items one by one until the backpack is full.
+
+If the backpack is not full in the end, return $-1$, otherwise return the total price.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$, where $n$ is the number of items.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,7 +92,7 @@ class Solution:
         return -1 if capacity else ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,13 +110,13 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     double maxPrice(vector<vector<int>>& items, int capacity) {
-        sort(items.begin(), items.end(), [&](const auto& a, const auto& b) { return a[1] * b[0] < a[0] * b[1];});
+        sort(items.begin(), items.end(), [&](const auto& a, const auto& b) { return a[1] * b[0] < a[0] * b[1]; });
         double ans = 0;
         for (auto& e : items) {
             int p = e[0], w = e[1];
@@ -103,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxPrice(items [][]int, capacity int) (ans float64) {
@@ -119,16 +145,9 @@ func maxPrice(items [][]int, capacity int) (ans float64) {
 	}
 	return
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxPrice(items: number[][], capacity: number): number {
@@ -143,10 +162,8 @@ function maxPrice(items: number[][], capacity: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

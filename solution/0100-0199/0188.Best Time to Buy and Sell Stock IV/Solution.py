@@ -1,13 +1,14 @@
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:
-        n = len(prices)
-        if n < 2:
-            return 0
-        dp = [[[0] * 2 for _ in range(k + 1)] for _ in range(n)]
-        for i in range(1, k + 1):
-            dp[0][i][1] = -prices[0]
-        for i in range(1, n):
-            for j in range(1, k + 1):
-                dp[i][j][0] = max(dp[i - 1][j][1] + prices[i], dp[i - 1][j][0])
-                dp[i][j][1] = max(dp[i - 1][j - 1][0] - prices[i], dp[i - 1][j][1])
-        return dp[-1][k][0]
+        @cache
+        def dfs(i: int, j: int, k: int) -> int:
+            if i >= len(prices):
+                return 0
+            ans = dfs(i + 1, j, k)
+            if k:
+                ans = max(ans, prices[i] + dfs(i + 1, j, 0))
+            elif j:
+                ans = max(ans, -prices[i] + dfs(i + 1, j - 1, 1))
+            return ans
+
+        return dfs(0, k, 0)

@@ -13,8 +13,12 @@ impl Solution {
             }
             if code[i..].starts_with("<![CDATA[") {
                 match code[i + 9..].find("]]>") {
-                    Some(n) => i += n + 11,
-                    None => return false,
+                    Some(n) => {
+                        i += n + 11;
+                    }
+                    None => {
+                        return false;
+                    }
                 };
             } else if code[i..].starts_with("</") {
                 let j = i + 2;
@@ -26,7 +30,9 @@ impl Solution {
                         }
                         i += n + 2;
                     }
-                    None => return false,
+                    None => {
+                        return false;
+                    }
                 };
             } else if code[i..].starts_with("<") {
                 let j = i + 1;
@@ -38,7 +44,9 @@ impl Solution {
                         }
                         stk.push(t);
                     }
-                    None => return false,
+                    None => {
+                        return false;
+                    }
                 };
             }
             i += 1;

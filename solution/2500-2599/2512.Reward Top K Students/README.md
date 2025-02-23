@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2512.Reward%20Top%20K%20Students/README.md
+rating: 1636
+source: 第 94 场双周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2512. 奖励最顶尖的 K 名学生](https://leetcode.cn/problems/reward-top-k-students)
 
 [English Version](/solution/2500-2599/2512.Reward%20Top%20K%20Students/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串数组&nbsp;<code>positive_feedback</code> 和&nbsp;<code>negative_feedback</code>&nbsp;，分别包含表示正面的和负面的词汇。<strong>不会</strong>&nbsp;有单词同时是正面的和负面的。</p>
 
@@ -53,15 +69,25 @@
 	<li><code>1 &lt;= k &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：哈希表 + 排序
+
+我们可以将正面的单词存入哈希表 $ps$ 中，将负面的单词存入哈希表 $ns$ 中。
+
+然后遍历 $report$，对于每个学生，我们将其得分存入数组 $arr$ 中，数组中的每个元素为一个二元组 $(t, sid)$，其中 $t$ 表示学生的得分，而 $sid$ 表示学生的 ID。
+
+最后我们对数组 $arr$ 按照得分从高到低排序，如果得分相同则按照 ID 从小到大排序，然后取出前 $k$ 个学生的 ID 即可。
+
+时间复杂度 $O(n \times \log n + (|ps| + |ns| + n) \times |s|)$，空间复杂度 $O((|ps|+|ns|) \times |s| + n)$。其中 $n$ 为学生数量，$|ps|$ 和 $|ns|$ 分别为正面和负面单词的数量，$|s|$ 为单词的平均长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,9 +114,7 @@ class Solution:
         return [v[1] for v in arr[:k]]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +129,7 @@ class Solution {
             ns.add(s);
         }
         int n = report.length;
-        int[][] arr = new int[n][2];
+        int[][] arr = new int[n][0];
         for (int i = 0; i < n; ++i) {
             int sid = student_id[i];
             int t = 0;
@@ -128,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -171,7 +195,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func topStudents(positive_feedback []string, negative_feedback []string, report []string, student_id []int, k int) (ans []int) {
@@ -203,7 +227,7 @@ func topStudents(positive_feedback []string, negative_feedback []string, report 
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function topStudents(
@@ -243,7 +267,7 @@ function topStudents(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::{HashMap, HashSet};
@@ -284,10 +308,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

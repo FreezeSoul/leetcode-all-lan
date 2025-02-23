@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/04.02.Minimum%20Height%20Tree/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [04.02. Minimum Height Tree](https://leetcode.cn/problems/minimum-height-tree-lcci)
 
 [中文文档](/lcci/04.02.Minimum%20Height%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a sorted (increasing order) array with unique integer elements, write an algo&shy;rithm to create a binary search tree with minimal height.</p>
 
@@ -14,27 +24,43 @@ Given sorted array: [-10,-3,0,5,9],
 
 
 
-One possible answer is: [0,-3,9,-10,null,5]，which represents the following tree: 
+One possible answer is: [0,-3,9,-10,null,5]，which represents the following tree:
 
 
 
-          0 
+          0
 
-         / \ 
+         / \
 
-       -3   9 
+       -3   9
 
-       /   / 
+       /   /
 
-     -10  5 
+     -10  5
 
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Recursion
+
+We design a function `dfs(l, r)`, which constructs a subtree from `l` to `r`. Therefore, the answer is `dfs(0, len(nums) - 1)`.
+
+The execution process of the function `dfs(l, r)` is as follows:
+
+1. If `l > r`, return `None`.
+2. Otherwise, we calculate the middle position `mid = (l + r) / 2`, then construct the root node, the left subtree is `dfs(l, mid - 1)`, and the right subtree is `dfs(mid + 1, r)`.
+3. Finally, return the root node.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -44,9 +70,10 @@ One possible answer is: [0,-3,9,-10,null,5]，which represents the following tre
 #         self.left = None
 #         self.right = None
 
+
 class Solution:
     def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
-        def dfs(l, r):
+        def dfs(l: int, r: int) -> TreeNode:
             if l > r:
                 return None
             mid = (l + r) >> 1
@@ -55,7 +82,7 @@ class Solution:
         return dfs(0, len(nums) - 1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -85,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -100,8 +127,10 @@ class Solution {
 class Solution {
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums) {
-        function<TreeNode*(int, int)> dfs = [&](int l, int r) -> TreeNode* {
-            if (l > r) return nullptr;
+        auto dfs = [&](this auto&& dfs, int l, int r) -> TreeNode* {
+            if (l > r) {
+                return nullptr;
+            }
             int mid = l + r >> 1;
             return new TreeNode(nums[mid], dfs(l, mid - 1), dfs(mid + 1, r));
         };
@@ -110,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -135,7 +164,7 @@ func sortedArrayToBST(nums []int) *TreeNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -164,7 +193,7 @@ function sortedArrayToBST(nums: number[]): TreeNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -185,28 +214,27 @@ function sortedArrayToBST(nums: number[]): TreeNode | null {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
-    fn dfs(nums: &Vec<i32>, start: usize, end: usize) -> Option<Rc<RefCell<TreeNode>>> {
-        if start >= end {
+    fn dfs(nums: &Vec<i32>, l: usize, r: usize) -> Option<Rc<RefCell<TreeNode>>> {
+        if l >= r {
             return None;
         }
-        let mid = start + (end - start) / 2;
+        let mid = (l + r) >> 1;
         Some(Rc::new(RefCell::new(TreeNode {
             val: nums[mid],
-            left: Self::dfs(nums, start, mid),
-            right: Self::dfs(nums, mid + 1, end),
+            left: Self::dfs(nums, l, mid),
+            right: Self::dfs(nums, mid + 1, r),
         })))
     }
     pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        let end = nums.len();
-        Self::dfs(&nums, 0, end)
+        Self::dfs(&nums, 0, nums.len())
     }
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -233,10 +261,43 @@ var sortedArrayToBST = function (nums) {
 };
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/**
+* class TreeNode {
+*     var val: Int
+*     var left: TreeNode?
+*     var right: TreeNode?
+*
+*     init(_ val: Int, _ left: TreeNode? = nil, _ right: TreeNode? = nil) {
+*         self.val = val
+*         self.left = left
+*         self.right = right
+*     }
+* }
+*/
 
+class Solution {
+    private var nums: [Int]!
+
+    func sortedArrayToBST(_ nums: [Int]) -> TreeNode? {
+        self.nums = nums
+        return dfs(0, nums.count - 1)
+    }
+
+    private func dfs(_ l: Int, _ r: Int) -> TreeNode? {
+        if l > r {
+            return nil
+        }
+        let mid = (l + r) / 2
+        return TreeNode(nums[mid], dfs(l, mid - 1), dfs(mid + 1, r))
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

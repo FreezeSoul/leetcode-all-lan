@@ -17,8 +17,8 @@ class Solution {
         ListNode p = fast;
         ListNode slow = head;
         while (fast.next != null) {
-            slow = slow.next;
             fast = fast.next;
+            slow = slow.next;
         }
         ListNode q = slow;
         int t = p.val;

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1641.Count%20Sorted%20Vowel%20Strings/README.md
+rating: 1519
+source: 第 213 场周赛 Q2
+tags:
+    - 数学
+    - 动态规划
+    - 组合数学
+---
+
+<!-- problem:start -->
+
 # [1641. 统计字典序元音字符串的数目](https://leetcode.cn/problems/count-sorted-vowel-strings)
 
 [English Version](/solution/1600-1699/1641.Count%20Sorted%20Vowel%20Strings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>n</code>，请返回长度为 <code>n</code> 、仅由元音 (<code>a</code>, <code>e</code>, <code>i</code>, <code>o</code>, <code>u</code>) 组成且按 <strong>字典序排列</strong> 的字符串数量。</p>
 
@@ -45,11 +59,13 @@
 	<li><code>1 <= n <= 50</code> </li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i, j)$，表示当前已经选了 $i$ 个元音字母，且最后一个元音字母是 $j$ 的方案数。那么答案就是 $dfs(0, 0)$。
 
@@ -62,19 +78,9 @@
 
 时间复杂度 $O(n \times C^2)$，空间复杂度 $O(n \times C)$。其中 $n$ 为题目给定的整数，而 $C$ 是元音字母的数量，本题中 $C = 5$。
 
-**方法二：动态规划 + 前缀和**
-
-定义 $f[i][j]$ 表示当前已经选了 $i$ 个元音字母，且最后一个元音字母是 $j$ 的方案数。初始时 $f[1][j]=1$。答案是 $\sum_{j = 0}^4 f[n][j]$。
-
-我们可以发现 $f[i][j]$ 只与 $f[i - 1][j]$ 有关，因此可以将二维数组压缩为一维数组，从而优化空间复杂度。
-
-时间复杂度 $O(n \times C)$，空间复杂度 $O(C)$。其中 $n$ 为题目给定的整数，而 $C$ 是元音字母的数量，本题中 $C = 5$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,21 +92,7 @@ class Solution:
         return dfs(0, 0)
 ```
 
-```python
-class Solution:
-    def countVowelStrings(self, n: int) -> int:
-        f = [1] * 5
-        for _ in range(n - 1):
-            s = 0
-            for j in range(5):
-                s += f[j]
-                f[j] = s
-        return sum(f)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -129,23 +121,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countVowelStrings(int n) {
-        int[] f = {1, 1, 1, 1, 1};
-        for (int i = 0; i < n - 1; ++i) {
-            int s = 0;
-            for (int j = 0; j < 5; ++j) {
-                s += f[j];
-                f[j] = s;
-            }
-        }
-        return Arrays.stream(f).sum();
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -171,24 +147,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int countVowelStrings(int n) {
-        int f[5] = {1, 1, 1, 1, 1};
-        for (int i = 0; i < n - 1; ++i) {
-            int s = 0;
-            for (int j = 0; j < 5; ++j) {
-                s += f[j];
-                f[j] = s;
-            }
-        }
-        return accumulate(f, f + 5, 0);
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countVowelStrings(n int) int {
@@ -212,6 +171,75 @@ func countVowelStrings(n int) int {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划 + 前缀和
+
+定义 $f[i][j]$ 表示当前已经选了 $i$ 个元音字母，且最后一个元音字母是 $j$ 的方案数。初始时 $f[1][j]=1$。答案是 $\sum_{j = 0}^4 f[n][j]$。
+
+我们可以发现 $f[i][j]$ 只与 $f[i - 1][j]$ 有关，因此可以将二维数组压缩为一维数组，从而优化空间复杂度。
+
+时间复杂度 $O(n \times C)$，空间复杂度 $O(C)$。其中 $n$ 为题目给定的整数，而 $C$ 是元音字母的数量，本题中 $C = 5$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countVowelStrings(self, n: int) -> int:
+        f = [1] * 5
+        for _ in range(n - 1):
+            s = 0
+            for j in range(5):
+                s += f[j]
+                f[j] = s
+        return sum(f)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countVowelStrings(int n) {
+        int[] f = {1, 1, 1, 1, 1};
+        for (int i = 0; i < n - 1; ++i) {
+            int s = 0;
+            for (int j = 0; j < 5; ++j) {
+                s += f[j];
+                f[j] = s;
+            }
+        }
+        return Arrays.stream(f).sum();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countVowelStrings(int n) {
+        int f[5] = {1, 1, 1, 1, 1};
+        for (int i = 0; i < n - 1; ++i) {
+            int s = 0;
+            for (int j = 0; j < 5; ++j) {
+                s += f[j];
+                f[j] = s;
+            }
+        }
+        return accumulate(f, f + 5, 0);
+    }
+};
+```
+
+#### Go
+
 ```go
 func countVowelStrings(n int) (ans int) {
 	f := [5]int{1, 1, 1, 1, 1}
@@ -229,10 +257,8 @@ func countVowelStrings(n int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

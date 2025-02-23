@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2620.Counter/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2620. Counter](https://leetcode.com/problems/counter)
 
 [中文文档](/solution/2600-2699/2620.Counter/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer&nbsp;<code>n</code>,&nbsp;return a <code>counter</code> function. This <code>counter</code> function initially returns&nbsp;<code>n</code>&nbsp;and then returns 1 more than the previous value every subsequent time it is called (<code>n</code>, <code>n + 1</code>, <code>n + 2</code>, etc).</p>
 
@@ -35,14 +47,21 @@ n = -2
 
 <ul>
 	<li><code>-1000<sup>&nbsp;</sup>&lt;= n &lt;= 1000</code></li>
-	<li><code>At most 1000 calls to counter() will be made</code></li>
+	<li><code>0 &lt;= calls.length &lt;= 1000</code></li>
+	<li><code>calls[i] === &quot;call&quot;</code></li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function createCounter(n: number): () => number {
@@ -60,10 +79,8 @@ function createCounter(n: number): () => number {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

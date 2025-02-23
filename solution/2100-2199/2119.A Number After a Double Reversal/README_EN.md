@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2119.A%20Number%20After%20a%20Double%20Reversal/README_EN.md
+rating: 1187
+source: Weekly Contest 273 Q1
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2119. A Number After a Double Reversal](https://leetcode.com/problems/a-number-after-a-double-reversal)
 
 [中文文档](/solution/2100-2199/2119.A%20Number%20After%20a%20Double%20Reversal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p><strong>Reversing</strong> an integer means to reverse all its digits.</p>
 
@@ -44,11 +58,21 @@
 	<li><code>0 &lt;= num &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Mathematics
+
+If the number is $0$, or the last digit of the number is not $0$, then the number after reversing twice will be the same as the original number.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +80,7 @@ class Solution:
         return num == 0 or num % 10 != 0
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -66,7 +90,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -77,7 +101,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isSameAfterReversals(num int) bool {
@@ -85,16 +109,38 @@ func isSameAfterReversals(num int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function isSameAfterReversals(num: number): boolean {
+    return num === 0 || num % 10 !== 0;
+}
 ```
 
-### **...**
+#### Rust
 
+```rust
+impl Solution {
+    pub fn is_same_after_reversals(num: i32) -> bool {
+        num == 0 || num % 10 != 0
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number} num
+ * @return {boolean}
+ */
+var isSameAfterReversals = function (num) {
+    return num === 0 || num % 10 !== 0;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

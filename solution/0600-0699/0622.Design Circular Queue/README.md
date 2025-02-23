@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0622.Design%20Circular%20Queue/README.md
+tags:
+    - 设计
+    - 队列
+    - 数组
+    - 链表
+---
+
+<!-- problem:start -->
+
 # [622. 设计循环队列](https://leetcode.cn/problems/design-circular-queue)
 
 [English Version](/solution/0600-0699/0622.Design%20Circular%20Queue/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计你的循环队列实现。 循环队列是一种线性数据结构，其操作表现基于 FIFO（先进先出）原则并且队尾被连接在队首之后以形成一个循环。它也被称为&ldquo;环形缓冲器&rdquo;。</p>
 
@@ -47,31 +60,47 @@ circularQueue.Rear(); &nbsp;// 返回 4</pre>
 	<li>请不要使用内置的队列库。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-“循环数组”实现。
+### 方法一：数组模拟
+
+我们可以使用一个长度为 $k$ 的数组 $q$ 来模拟循环队列，用一个指针 $\textit{front}$ 记录队首元素的位置，初始时队列为空，而 $\textit{front}$ 为 $0$。另外，我们用一个变量 $\textit{size}$ 记录队列中元素的个数，初始时 $\textit{size}$ 为 $0$。
+
+调用 `enQueue` 方法时，我们首先检查队列是否已满，即 $\textit{size} = k$，如果满了则直接返回 $\textit{false}$。否则，我们将元素插入到 $(\textit{front} + \textit{size}) \bmod k$ 的位置，然后 $\textit{size} = \textit{size} + 1$，表示队列中元素的个数增加了 $1$。最后返回 $\textit{true}$。
+
+调用 `deQueue` 方法时，我们首先检查队列是否为空，即 $\textit{size} = 0$，如果为空则直接返回 $\textit{false}$。否则，我们将 $\textit{front} = (\textit{front} + 1) \bmod k$，表示队首元素出队，然后 $\textit{size} = \textit{size} - 1$，
+
+调用 `Front` 方法时，我们首先检查队列是否为空，即 $\textit{size} = 0$，如果为空则返回 $-1$。否则，返回 $q[\textit{front}]$。
+
+调用 `Rear` 方法时，我们首先检查队列是否为空，即 $\textit{size} = 0$，如果为空则返回 $-1$。否则，返回 $q[(\textit{front} + \textit{size} - 1) \bmod k]$。
+
+调用 `isEmpty` 方法时，我们只需判断 $\textit{size} = 0$ 即可。
+
+调用 `isFull` 方法时，我们只需判断 $\textit{size} = k$ 即可。
+
+时间复杂度方面，以上操作的时间复杂度均为 $O(1)$。空间复杂度为 $O(k)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class MyCircularQueue:
+
     def __init__(self, k: int):
         self.q = [0] * k
-        self.front = 0
         self.size = 0
         self.capacity = k
+        self.front = 0
 
     def enQueue(self, value: int) -> bool:
         if self.isFull():
             return False
-        idx = (self.front + self.size) % self.capacity
-        self.q[idx] = value
+        self.q[(self.front + self.size) % self.capacity] = value
         self.size += 1
         return True
 
@@ -88,8 +117,7 @@ class MyCircularQueue:
     def Rear(self) -> int:
         if self.isEmpty():
             return -1
-        idx = (self.front + self.size - 1) % self.capacity
-        return self.q[idx]
+        return self.q[(self.front + self.size - 1) % self.capacity]
 
     def isEmpty(self) -> bool:
         return self.size == 0
@@ -108,9 +136,7 @@ class MyCircularQueue:
 # param_6 = obj.isFull()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class MyCircularQueue {
@@ -179,7 +205,7 @@ class MyCircularQueue {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class MyCircularQueue {
@@ -243,7 +269,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type MyCircularQueue struct {
@@ -312,7 +338,7 @@ func (this *MyCircularQueue) IsFull() bool {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class MyCircularQueue {
@@ -380,28 +406,23 @@ class MyCircularQueue {
  */
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 struct MyCircularQueue {
-    queue: Vec<i32>,
-    left: usize,
-    right: usize,
+    q: Vec<i32>,
+    size: usize,
     capacity: usize,
+    front: usize,
 }
 
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
 impl MyCircularQueue {
     fn new(k: i32) -> Self {
-        let k = k as usize;
-        Self {
-            queue: vec![0; k],
-            left: 0,
-            right: 0,
-            capacity: k,
+        MyCircularQueue {
+            q: vec![0; k as usize],
+            size: 0,
+            capacity: k as usize,
+            front: 0,
         }
     }
 
@@ -409,8 +430,9 @@ impl MyCircularQueue {
         if self.is_full() {
             return false;
         }
-        self.queue[self.right % self.capacity] = value;
-        self.right += 1;
+        let rear = (self.front + self.size) % self.capacity;
+        self.q[rear] = value;
+        self.size += 1;
         true
     }
 
@@ -418,49 +440,40 @@ impl MyCircularQueue {
         if self.is_empty() {
             return false;
         }
-        self.left += 1;
+        self.front = (self.front + 1) % self.capacity;
+        self.size -= 1;
         true
     }
 
     fn front(&self) -> i32 {
         if self.is_empty() {
-            return -1;
+            -1
+        } else {
+            self.q[self.front]
         }
-        self.queue[self.left % self.capacity]
     }
 
     fn rear(&self) -> i32 {
         if self.is_empty() {
-            return -1;
+            -1
+        } else {
+            let rear = (self.front + self.size - 1) % self.capacity;
+            self.q[rear]
         }
-        self.queue[(self.right - 1) % self.capacity]
     }
 
     fn is_empty(&self) -> bool {
-        self.right - self.left == 0
+        self.size == 0
     }
 
     fn is_full(&self) -> bool {
-        self.right - self.left == self.capacity
+        self.size == self.capacity
     }
 }
-/**
- * Your MyCircularQueue object will be instantiated and called as such:
- * let obj = MyCircularQueue::new(k);
- * let ret_1: bool = obj.en_queue(value);
- * let ret_2: bool = obj.de_queue();
- * let ret_3: i32 = obj.front();
- * let ret_4: i32 = obj.rear();
- * let ret_5: bool = obj.is_empty();
- * let ret_6: bool = obj.is_full();
- */
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2162.Minimum%20Cost%20to%20Set%20Cooking%20Time/README.md
+rating: 1851
+source: 第 71 场双周赛 Q3
+tags:
+    - 数学
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [2162. 设置时间的最少代价](https://leetcode.cn/problems/minimum-cost-to-set-cooking-time)
 
 [English Version](/solution/2100-2199/2162.Minimum%20Cost%20to%20Set%20Cooking%20Time/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>常见的微波炉可以设置加热时间，且加热时间满足以下条件：</p>
 
@@ -71,15 +84,17 @@
 	<li><code>1 &lt;= targetSeconds &lt;= 6039</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +122,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -141,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,7 +181,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCostSetTime(startAt int, moveCost int, pushCost int, targetSeconds int) int {
@@ -194,25 +207,10 @@ func minCostSetTime(startAt int, moveCost int, pushCost int, targetSeconds int) 
 	}
 	return min(f(m, s), f(m-1, s+60))
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,70 +1,93 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0220.Contains%20Duplicate%20III/README.md
+tags:
+    - 数组
+    - 桶排序
+    - 有序集合
+    - 排序
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [220. 存在重复元素 III](https://leetcode.cn/problems/contains-duplicate-iii)
 
 [English Version](/solution/0200-0299/0220.Contains%20Duplicate%20III/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个整数数组 <code>nums</code> 和两个整数 <code>k</code> 和 <code>t</code> 。请你判断是否存在 <b>两个不同下标</b> <code>i</code> 和 <code>j</code>，使得 <code>abs(nums[i] - nums[j]) <= t</code> ，同时又满足 <code>abs(i - j) <= k</code><em> </em>。</p>
+<p>给你一个整数数组 <code>nums</code> 和两个整数 <code>indexDiff</code> 和 <code>valueDiff</code> 。</p>
 
-<p>如果存在则返回 <code>true</code>，不存在返回 <code>false</code>。</p>
+<p>找出满足下述条件的下标对 <code>(i, j)</code>：</p>
 
-<p> </p>
+<ul>
+	<li><code>i != j</code>,</li>
+	<li><code>abs(i - j) &lt;= indexDiff</code></li>
+	<li><code>abs(nums[i] - nums[j]) &lt;= valueDiff</code></li>
+</ul>
 
-<p><strong>示例 1：</strong></p>
+<p>如果存在，返回 <code>true</code><em> ；</em>否则，返回<em> </em><code>false</code><em> </em>。</p>
 
-<pre>
-<strong>输入：</strong>nums = [1,2,3,1], k<em> </em>= 3, t = 0
-<strong>输出：</strong>true</pre>
+<p>&nbsp;</p>
 
-<p><strong>示例 2：</strong></p>
-
-<pre>
-<strong>输入：</strong>nums = [1,0,1,1], k<em> </em>=<em> </em>1, t = 2
-<strong>输出：</strong>true</pre>
-
-<p><strong>示例 3：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
 <pre>
-<strong>输入：</strong>nums = [1,5,9,1,5,9], k = 2, t = 3
-<strong>输出：</strong>false</pre>
+<strong>输入：</strong>nums = [1,2,3,1], indexDiff = 3, valueDiff = 0
+<strong>输出：</strong>true
+<strong>解释：</strong>可以找出 (i, j) = (0, 3) 。
+满足下述 3 个条件：
+i != j --&gt; 0 != 3
+abs(i - j) &lt;= indexDiff --&gt; abs(0 - 3) &lt;= 3
+abs(nums[i] - nums[j]) &lt;= valueDiff --&gt; abs(1 - 1) &lt;= 0
+</pre>
 
-<p> </p>
+<p><strong class="example">示例 2：</strong></p>
+
+<pre>
+<strong>输入：</strong>nums = [1,5,9,1,5,9], indexDiff = 2, valueDiff = 3
+<strong>输出：</strong>false
+<strong>解释：</strong>尝试所有可能的下标对 (i, j) ，均无法满足这 3 个条件，因此返回 false 。
+</pre>
+
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>0 <= nums.length <= 2 * 10<sup>4</sup></code></li>
-	<li><code>-2<sup>31</sup> <= nums[i] <= 2<sup>31</sup> - 1</code></li>
-	<li><code>0 <= k <= 10<sup>4</sup></code></li>
-	<li><code>0 <= t <= 2<sup>31</sup> - 1</code></li>
+	<li><code>2 &lt;= nums.length &lt;= 10<sup>5</sup></code></li>
+	<li><code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
+	<li><code>1 &lt;= indexDiff &lt;= nums.length</code></li>
+	<li><code>0 &lt;= valueDiff &lt;= 10<sup>9</sup></code></li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：滑动窗口 + 有序集合**
+### 方法一：滑动窗口 + 有序集合
 
-维护一个大小为 $k$ 的滑动窗口，窗口中的元素保持有序。
+我们维护一个大小为 $k$ 的滑动窗口，窗口中的元素保持有序。
 
 遍历数组 `nums`，对于每个元素 $nums[i]$，我们在有序集合中查找第一个大于等于 $nums[i] - t$ 的元素，如果元素存在，并且该元素小于等于 $nums[i] + t$，说明找到了一对符合条件的元素，返回 `true`。否则，我们将 $nums[i]$ 插入到有序集合中，并且如果有序集合的大小超过了 $k$，我们需要将最早加入有序集合的元素删除。
 
-时间复杂度 $O(n\times \log k)$，其中 $n$ 是数组 `nums` 的长度。对于每个元素，我们需要 $O(\log k)$ 的时间来查找有序集合中的元素，一共有 $n$ 个元素，因此总时间复杂度是 $O(n\times \log k)$。
+时间复杂度 $O(n \times \log k)$，其中 $n$ 是数组 `nums` 的长度。对于每个元素，我们需要 $O(\log k)$ 的时间来查找有序集合中的元素，一共有 $n$ 个元素，因此总时间复杂度是 $O(n \times \log k)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedSet
-
-
 class Solution:
-    def containsNearbyAlmostDuplicate(self, nums: List[int], indexDiff: int, valueDiff: int) -> bool:
+    def containsNearbyAlmostDuplicate(
+        self, nums: List[int], indexDiff: int, valueDiff: int
+    ) -> bool:
         s = SortedSet()
         for i, v in enumerate(nums):
             j = s.bisect_left(v - valueDiff)
@@ -76,9 +99,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
@@ -143,35 +164,7 @@ func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool ContainsNearbyAlmostDuplicate(int[] nums, int k, int t) {
-        if (k <= 0 || t < 0) return false;
-        var index = new SortedList<int, object>();
-        for (int i = 0; i < nums.Length; ++i) {
-            if (index.ContainsKey(nums[i])) {
-                return true;
-            }
-            index.Add(nums[i], null);
-            var j = index.IndexOfKey(nums[i]);
-            if (j > 0 && (long)nums[i] - index.Keys[j - 1] <= t) {
-                return true;
-            }
-            if (j < index.Count - 1 && (long)index.Keys[j + 1] - nums[i] <= t) {
-                return true;
-            }
-            if (index.Count > k) {
-                index.Remove(nums[i - k]);
-            }
-        }
-        return false;
-    }
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function containsNearbyAlmostDuplicate(
@@ -229,9 +222,7 @@ class RBTreeNode<T = number> {
 class RBTree<T> {
     root: RBTreeNode<T> | null;
     lt: (l: T, r: T) => boolean;
-    constructor(
-        compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0),
-    ) {
+    constructor(compare: Compare<T> = (l: T, r: T) => (l < r ? -1 : l > r ? 1 : 0)) {
         this.root = null;
         this.lt = (l: T, r: T) => compare(l, r) < 0;
     }
@@ -539,9 +530,7 @@ class RBTree<T> {
         for (const v of this.inOrder(root.right!)) yield v;
     }
 
-    *reverseInOrder(
-        root: RBTreeNode<T> = this.root!,
-    ): Generator<T, undefined, void> {
+    *reverseInOrder(root: RBTreeNode<T> = this.root!): Generator<T, undefined, void> {
         if (!root) return;
         for (const v of this.reverseInOrder(root.right!)) yield v;
         yield root.data;
@@ -838,10 +827,36 @@ class TreeMultiSet<T = number> {
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public bool ContainsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if (k <= 0 || t < 0) return false;
+        var index = new SortedList<int, object>();
+        for (int i = 0; i < nums.Length; ++i) {
+            if (index.ContainsKey(nums[i])) {
+                return true;
+            }
+            index.Add(nums[i], null);
+            var j = index.IndexOfKey(nums[i]);
+            if (j > 0 && (long)nums[i] - index.Keys[j - 1] <= t) {
+                return true;
+            }
+            if (j < index.Count - 1 && (long)index.Keys[j + 1] - nums[i] <= t) {
+                return true;
+            }
+            if (index.Count > k) {
+                index.Remove(nums[i - k]);
+            }
+        }
+        return false;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

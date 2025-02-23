@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1210.Minimum%20Moves%20to%20Reach%20Target%20with%20Rotations/README.md
+rating: 2022
+source: 第 156 场周赛 Q4
+tags:
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1210. 穿过迷宫的最少移动次数](https://leetcode.cn/problems/minimum-moves-to-reach-target-with-rotations)
 
 [English Version](/solution/1200-1299/1210.Minimum%20Moves%20to%20Reach%20Target%20with%20Rotations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你还记得那条风靡全球的贪吃蛇吗？</p>
 
@@ -63,11 +77,13 @@
 	<li>蛇保证从空单元格开始出发。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 题目求的是蛇从起始位置到达目标位置的最少移动次数，我们考虑使用广度优先搜索 $BFS$ 来求解。
 
@@ -86,9 +102,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -127,9 +141,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -185,7 +197,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -241,7 +253,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumMoves(grid [][]int) int {
@@ -296,7 +308,7 @@ func minimumMoves(grid [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumMoves(grid: number[][]): number {
@@ -307,16 +319,7 @@ function minimumMoves(grid: number[][]): number {
     vis[0][0] = true;
 
     const move = (i1: number, j1: number, i2: number, j2: number) => {
-        if (
-            i1 >= 0 &&
-            i1 < n &&
-            j1 >= 0 &&
-            j1 < n &&
-            i2 >= 0 &&
-            i2 < n &&
-            j2 >= 0 &&
-            j2 < n
-        ) {
+        if (i1 >= 0 && i1 < n && j1 >= 0 && j1 < n && i2 >= 0 && i2 < n && j2 >= 0 && j2 < n) {
             const a = i1 * n + j1;
             const b = i2 * n + j2;
             const status = i1 === i2 ? 0 : 1;
@@ -355,7 +358,7 @@ function minimumMoves(grid: number[][]): number {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -370,16 +373,7 @@ var minimumMoves = function (grid) {
     vis[0][0] = true;
 
     const move = (i1, j1, i2, j2) => {
-        if (
-            i1 >= 0 &&
-            i1 < n &&
-            j1 >= 0 &&
-            j1 < n &&
-            i2 >= 0 &&
-            i2 < n &&
-            j2 >= 0 &&
-            j2 < n
-        ) {
+        if (i1 >= 0 && i1 < n && j1 >= 0 && j1 < n && i2 >= 0 && i2 < n && j2 >= 0 && j2 < n) {
             const a = i1 * n + j1;
             const b = i2 * n + j2;
             const status = i1 === i2 ? 0 : 1;
@@ -418,10 +412,8 @@ var minimumMoves = function (grid) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

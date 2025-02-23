@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [833. Find And Replace in String](https://leetcode.com/problems/find-and-replace-in-string)
 
 [中文文档](/solution/0800-0899/0833.Find%20And%20Replace%20in%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> string <code>s</code> that you must perform <code>k</code> replacement operations on. The replacement operations are given as three <strong>0-indexed</strong> parallel arrays, <code>indices</code>, <code>sources</code>, and <code>targets</code>, all of length <code>k</code>.</p>
 
@@ -60,48 +75,61 @@
 	<li><code>sources[i]</code> and <code>targets[i]</code> consist of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We iterate through each replacement operation. For the current $k$-th replacement operation $(i, \text{src})$, if $s[i..i+|\text{src}|-1]$ is equal to $\text{src}$, we record that the string at index $i$ needs to be replaced with the $k$-th string in $\text{targets}$; otherwise, no replacement is needed.
+
+Next, we only need to iterate through the original string $s$ and perform the replacements based on the recorded information.
+
+The time complexity is $O(L)$, and the space complexity is $O(n)$, where $L$ is the sum of the lengths of all strings, and $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def findReplaceString(self, s: str, indices: List[int], sources: List[str], targets: List[str]) -> str:
+    def findReplaceString(
+        self, s: str, indices: List[int], sources: List[str], targets: List[str]
+    ) -> str:
         n = len(s)
         d = [-1] * n
-        for i, (j, source) in enumerate(zip(indices, sources)):
-            if s[j: j + len(source)] == source:
-                d[j] = i
+        for k, (i, src) in enumerate(zip(indices, sources)):
+            if s.startswith(src, i):
+                d[i] = k
         ans = []
         i = 0
         while i < n:
-            if d[i] >= 0:
+            if ~d[i]:
                 ans.append(targets[d[i]])
                 i += len(sources[d[i]])
             else:
                 ans.append(s[i])
                 i += 1
-        return ''.join(ans)
+        return "".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
         int n = s.length();
-        int[] d = new int[n];
+        var d = new int[n];
         Arrays.fill(d, -1);
-        for (int i = 0; i < indices.length; ++i) {
-            int j = indices[i];
-            String source = sources[i];
-            if (s.substring(j, Math.min(n, j + source.length())).equals(source)) {
-                d[j] = i;
+        for (int k = 0; k < indices.length; ++k) {
+            int i = indices[k];
+            if (s.startsWith(sources[k], i)) {
+                d[i] = k;
             }
         }
-        StringBuilder ans = new StringBuilder();
+        var ans = new StringBuilder();
         for (int i = 0; i < n;) {
             if (d[i] >= 0) {
                 ans.append(targets[d[i]]);
@@ -115,7 +143,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,16 +151,15 @@ public:
     string findReplaceString(string s, vector<int>& indices, vector<string>& sources, vector<string>& targets) {
         int n = s.size();
         vector<int> d(n, -1);
-        for (int i = 0; i < indices.size(); ++i) {
-            int j = indices[i];
-            string source = sources[i];
-            if (s.substr(j, source.size()) == source) {
-                d[j] = i;
+        for (int k = 0; k < indices.size(); ++k) {
+            int i = indices[k];
+            if (s.compare(i, sources[k].size(), sources[k]) == 0) {
+                d[i] = k;
             }
         }
         string ans;
         for (int i = 0; i < n;) {
-            if (d[i] >= 0) {
+            if (~d[i]) {
                 ans += targets[d[i]];
                 i += sources[d[i]].size();
             } else {
@@ -144,16 +171,15 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findReplaceString(s string, indices []int, sources []string, targets []string) string {
 	n := len(s)
 	d := make([]int, n)
-	for i, j := range indices {
-		source := sources[i]
-		if s[j:min(j+len(source), n)] == source {
-			d[j] = i + 1
+	for k, i := range indices {
+		if strings.HasPrefix(s[i:], sources[k]) {
+			d[i] = k + 1
 		}
 	}
 	ans := &strings.Builder{}
@@ -168,19 +194,40 @@ func findReplaceString(s string, indices []int, sources []string, targets []stri
 	}
 	return ans.String()
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function findReplaceString(
+    s: string,
+    indices: number[],
+    sources: string[],
+    targets: string[],
+): string {
+    const n = s.length;
+    const d: number[] = Array(n).fill(-1);
+    for (let k = 0; k < indices.length; ++k) {
+        const [i, src] = [indices[k], sources[k]];
+        if (s.startsWith(src, i)) {
+            d[i] = k;
+        }
+    }
+    const ans: string[] = [];
+    for (let i = 0; i < n; ) {
+        if (d[i] >= 0) {
+            ans.push(targets[d[i]]);
+            i += sources[d[i]].length;
+        } else {
+            ans.push(s[i++]);
+        }
+    }
+    return ans.join('');
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

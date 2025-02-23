@@ -1,20 +1,34 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1920.Build%20Array%20from%20Permutation/README.md
+rating: 1160
+source: 第 248 场周赛 Q1
+tags:
+    - 数组
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [1920. 基于排列构建数组](https://leetcode.cn/problems/build-array-from-permutation)
 
 [English Version](/solution/1900-1999/1920.Build%20Array%20from%20Permutation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>从 0 开始的排列</strong> <code>nums</code>（<strong>下标也从 0 开始</strong>）。请你构建一个 <strong>同样长度</strong> 的数组 <code>ans</code> ，其中，对于每个 <code>i</code>（<code>0 &lt;= i &lt; nums.length</code>），都满足 <code>ans[i] = nums[nums[i]]</code> 。返回构建好的数组 <code>ans</code> 。</p>
 
-<p><strong>从 0 开始的排列</strong> <code>nums</code> 是一个由 <code>0</code> 到 <code>nums.length - 1</code>（<code>0</code> 和 <code>nums.length - 1</code> 也包含在内）的不同整数组成的数组。</p>
+<p><strong>从 0 开始的排列</strong> <code>nums</code> 是一个由 <code>0</code> 到&nbsp;<code>nums.length - 1</code>（<code>0</code> 和 <code>nums.length - 1</code> 也包含在内）的不同整数组成的数组。</p>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
-<pre><strong>输入：</strong>nums = [0,2,1,5,3,4]
+<pre>
+<strong>输入：</strong>nums = [0,2,1,5,3,4]
 <strong>输出：</strong>[0,1,2,4,5,3]<strong>
 解释：</strong>数组 ans 构建如下：
 ans = [nums[nums[0]], nums[nums[1]], nums[nums[2]], nums[nums[3]], nums[nums[4]], nums[nums[5]]]
@@ -23,14 +37,15 @@ ans = [nums[nums[0]], nums[nums[1]], nums[nums[2]], nums[nums[3]], nums[nums[4]]
 
 <p><strong>示例 2：</strong></p>
 
-<pre><strong>输入：</strong>nums = [5,0,1,2,3,4]
+<pre>
+<strong>输入：</strong>nums = [5,0,1,2,3,4]
 <strong>输出：</strong>[4,5,0,1,2,3]
 <strong>解释：</strong>数组 ans 构建如下：
 ans = [nums[nums[0]], nums[nums[1]], nums[nums[2]], nums[nums[3]], nums[nums[4]], nums[nums[5]]]
     = [nums[5], nums[0], nums[1], nums[2], nums[3], nums[4]]
     = [4,5,0,1,2,3]</pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
@@ -40,15 +55,25 @@ ans = [nums[nums[0]], nums[nums[1]], nums[nums[2]], nums[nums[3]], nums[nums[4]]
 	<li><code>nums</code> 中的元素 <strong>互不相同</strong></li>
 </ul>
 
+<p>&nbsp;</p>
+
+<p><strong>进阶：</strong>你能在不使用额外空间的情况下解决此问题吗（即 <code>O(1)</code> 内存）？</p>
+
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：模拟
+
+我们可以直接模拟题目描述的过程，构建一个新的数组 $\textit{ans}$，对于每个 $i$，令 $\textit{ans}[i] = \textit{nums}[\textit{nums}[i]]$。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组 $\textit{nums}$ 的长度。忽略答案数组的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -56,9 +81,7 @@ class Solution:
         return [nums[num] for num in nums]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +95,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -87,7 +110,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func buildArray(nums []int) []int {
@@ -99,31 +122,15 @@ func buildArray(nums []int) []int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @return {number[]}
- */
-var buildArray = function (nums) {
-    let ans = [];
-    for (let i = 0; i < nums.length; ++i) {
-        ans[i] = nums[nums[i]];
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function buildArray(nums: number[]): number[] {
-    return nums.map(v => nums[v]);
+    return nums.map(x => nums[x]);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -133,14 +140,26 @@ impl Solution {
 }
 ```
 
-### **C**
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var buildArray = function (nums) {
+    return nums.map(x => nums[x]);
+};
+```
+
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *buildArray(int *nums, int numsSize, int *returnSize) {
-    int *ans = malloc(sizeof(int) * numsSize);
+int* buildArray(int* nums, int numsSize, int* returnSize) {
+    int* ans = malloc(sizeof(int) * numsSize);
     for (int i = 0; i < numsSize; i++) {
         ans[i] = nums[nums[i]];
     }
@@ -149,10 +168,8 @@ int *buildArray(int *nums, int numsSize, int *returnSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

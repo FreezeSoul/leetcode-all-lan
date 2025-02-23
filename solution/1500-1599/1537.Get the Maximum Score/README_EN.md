@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1537.Get%20the%20Maximum%20Score/README_EN.md
+rating: 1961
+source: Weekly Contest 200 Q4
+tags:
+    - Greedy
+    - Array
+    - Two Pointers
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1537. Get the Maximum Score](https://leetcode.com/problems/get-the-maximum-score)
 
 [中文文档](/solution/1500-1599/1537.Get%20the%20Maximum%20Score/README.md)
 
 ## Description
 
-<p>You are given two <strong>sorted</strong> arrays of distinct integers <code>nums1</code> and <code>nums2.</code></p>
+<!-- description:start -->
+
+<p>You are given two <strong>sorted</strong> arrays of distinct integers <code>nums1</code> and <code>nums2</code>.</p>
 
 <p>A <strong>valid<strong><em> </em></strong>path</strong> is defined as follows:</p>
 
@@ -14,7 +31,7 @@
 	<li>If you are reading any value that is present in <code>nums1</code> and <code>nums2</code> you are allowed to change your path to the other array. (Only one repeated value is considered in the valid path).</li>
 </ul>
 
-<p>The <strong>score</strong> is defined as the sum of uniques values in a valid path.</p>
+<p>The <strong>score</strong> is defined as the sum of unique values in a valid path.</p>
 
 <p>Return <em>the maximum score you can obtain of all possible <strong>valid paths</strong></em>. Since the answer may be too large, return it modulo <code>10<sup>9</sup> + 7</code>.</p>
 
@@ -56,11 +73,17 @@ Maximum sum is obtained with the path [6,7,8,9,10].
 	<li><code>nums1</code> and <code>nums2</code> are strictly increasing.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -89,7 +112,7 @@ class Solution:
         return max(f, g) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -118,7 +141,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -148,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSum(nums1 []int, nums2 []int) int {
@@ -178,16 +201,9 @@ func maxSum(nums1 []int, nums2 []int) int {
 	}
 	return max(f, g) % mod
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxSum(nums1: number[], nums2: number[]): number {
@@ -215,10 +231,8 @@ function maxSum(nums1: number[], nums2: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

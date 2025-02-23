@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1968.Array%20With%20Elements%20Not%20Equal%20to%20Average%20of%20Neighbors/README_EN.md
+rating: 1499
+source: Weekly Contest 254 Q2
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1968. Array With Elements Not Equal to Average of Neighbors](https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors)
 
 [中文文档](/solution/1900-1999/1968.Array%20With%20Elements%20Not%20Equal%20to%20Average%20of%20Neighbors/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array <code>nums</code> of <strong>distinct</strong> integers. You want to rearrange the elements in the array such that every element in the rearranged array is <strong>not</strong> equal to the <strong>average</strong> of its neighbors.</p>
 
@@ -41,18 +57,28 @@ When i=3, nums[i] = 2, and the average of its neighbors is (6+0) / 2 = 3.
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting
+
+Since the elements in the array are distinct, we can first sort the array, then divide the array into two parts. Place the first half of the elements in the even positions of the answer array, and the second half of the elements in the odd positions of the answer array. In this way, for each element, its two adjacent elements will not be equal to its average value.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def rearrangeArray(self, nums: List[int]) -> List[int]:
         nums.sort()
         n = len(nums)
-        m = (n + 1) >> 1
+        m = (n + 1) // 2
         ans = []
         for i in range(m):
             ans.append(nums[i])
@@ -61,7 +87,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -81,63 +107,64 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> rearrangeArray(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
+        ranges::sort(nums);
         vector<int> ans;
         int n = nums.size();
         int m = (n + 1) >> 1;
         for (int i = 0; i < m; ++i) {
             ans.push_back(nums[i]);
-            if (i + m < n) ans.push_back(nums[i + m]);
+            if (i + m < n) {
+                ans.push_back(nums[i + m]);
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func rearrangeArray(nums []int) []int {
+func rearrangeArray(nums []int) (ans []int) {
 	sort.Ints(nums)
 	n := len(nums)
 	m := (n + 1) >> 1
-	var ans []int
 	for i := 0; i < m; i++ {
 		ans = append(ans, nums[i])
 		if i+m < n {
 			ans = append(ans, nums[i+m])
 		}
 	}
-	return ans
+	return
 }
 ```
 
-```go
-func rearrangeArray(nums []int) []int {
-	rand.Seed(time.Now().UnixNano())
-outer:
-	for {
-		rand.Shuffle(len(nums), func(i, j int) { nums[i], nums[j] = nums[j], nums[i] })
-		for i := 1; i < len(nums)-1; i++ {
-			if nums[i]*2 == nums[i-1]+nums[i+1] {
-				continue outer
-			}
-		}
-		return nums
-	}
+#### TypeScript
+
+```ts
+function rearrangeArray(nums: number[]): number[] {
+    nums.sort((a, b) => a - b);
+    const n = nums.length;
+    const m = (n + 1) >> 1;
+    const ans: number[] = [];
+    for (let i = 0; i < m; i++) {
+        ans.push(nums[i]);
+        if (i + m < n) {
+            ans.push(nums[i + m]);
+        }
+    }
+    return ans;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

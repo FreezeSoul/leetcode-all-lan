@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0848.Shifting%20Letters/README_EN.md
+tags:
+    - Array
+    - String
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [848. Shifting Letters](https://leetcode.com/problems/shifting-letters)
 
 [中文文档](/solution/0800-0899/0848.Shifting%20Letters/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> of lowercase English letters and an integer array <code>shifts</code> of the same length.</p>
 
@@ -45,32 +59,21 @@ After shifting the first 3 letters of s by 9, we have &quot;rpl&quot;, the answe
 	<li><code>0 &lt;= shifts[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Suffix Sum
+
+For each character in the string $s$, we need to calculate its final shift amount, which is the sum of $\textit{shifts}[i]$, $\textit{shifts}[i + 1]$, $\textit{shifts}[i + 2]$, and so on. We can use the concept of suffix sum, traversing $\textit{shifts}$ from back to front, calculating the final shift amount for each character, and then taking modulo $26$ to get the final character.
+
+The time complexity is $O(n)$, where $n$ is the length of the string $s$. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-```python
-class Solution:
-    def shiftingLetters(self, s: str, shifts: List[int]) -> str:
-        n = len(s)
-        d = [0] * (n + 1)
-        for i, c in enumerate(s):
-            v = ord(c) - ord('a')
-            d[i] += v
-            d[i + 1] -= v
-        for i, x in enumerate(shifts):
-            d[0] += x
-            d[i + 1] -= x
-        t = 0
-        ans = []
-        for i in range(n):
-            d[i] %= 26
-            ans.append(ascii_lowercase[d[i]])
-            d[i + 1] += d[i]
-        return ''.join(ans)
-```
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +87,7 @@ class Solution:
         return ''.join(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shiftingLetters(s string, shifts []int) string {
@@ -136,10 +139,8 @@ func shiftingLetters(s string, shifts []int) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1309.Decrypt%20String%20from%20Alphabet%20to%20Integer%20Mapping/README_EN.md
+rating: 1257
+source: Weekly Contest 170 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [1309. Decrypt String from Alphabet to Integer Mapping](https://leetcode.com/problems/decrypt-string-from-alphabet-to-integer-mapping)
 
 [中文文档](/solution/1300-1399/1309.Decrypt%20String%20from%20Alphabet%20to%20Integer%20Mapping/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> formed by digits and <code>&#39;#&#39;</code>. We want to map <code>s</code> to English lowercase characters as follows:</p>
 
@@ -40,110 +54,155 @@
 	<li><code>s</code> will be a valid string such that mapping is always possible.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can directly simulate the process.
+
+Traverse the string $s$. For the current index $i$, if $i + 2 < n$ and $s[i + 2]$ is `#`, then convert the substring formed by $s[i]$ and $s[i + 1]$ to an integer, add the ASCII value of `a` minus 1, convert it to a character, add it to the result array, and increment $i$ by 3. Otherwise, convert $s[i]$ to an integer, add the ASCII value of `a` minus 1, convert it to a character, add it to the result array, and increment $i$ by 1.
+
+Finally, convert the result array to a string and return it.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def freqAlphabets(self, s: str) -> str:
-        def get(s):
-            return chr(ord('a') + int(s) - 1)
-
+        ans = []
         i, n = 0, len(s)
-        res = []
         while i < n:
-            if i + 2 < n and s[i + 2] == '#':
-                res.append(get(s[i : i + 2]))
+            if i + 2 < n and s[i + 2] == "#":
+                ans.append(chr(int(s[i : i + 2]) + ord("a") - 1))
                 i += 3
             else:
-                res.append(get(s[i]))
+                ans.append(chr(int(s[i]) + ord("a") - 1))
                 i += 1
-        return ''.join(res)
+        return "".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public String freqAlphabets(String s) {
         int i = 0, n = s.length();
-        StringBuilder res = new StringBuilder();
+        StringBuilder ans = new StringBuilder();
         while (i < n) {
             if (i + 2 < n && s.charAt(i + 2) == '#') {
-                res.append(get(s.substring(i, i + 2)));
+                ans.append((char) ('a' + Integer.parseInt(s.substring(i, i + 2)) - 1));
                 i += 3;
             } else {
-                res.append(get(s.substring(i, i + 1)));
+                ans.append((char) ('a' + Integer.parseInt(s.substring(i, i + 1)) - 1));
+                i++;
+            }
+        }
+        return ans.toString();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    string freqAlphabets(string s) {
+        string ans = "";
+        int i = 0, n = s.size();
+        while (i < n) {
+            if (i + 2 < n && s[i + 2] == '#') {
+                ans += char(stoi(s.substr(i, 2)) + 'a' - 1);
+                i += 3;
+            } else {
+                ans += char(s[i] - '0' + 'a' - 1);
                 i += 1;
             }
         }
-        return res.toString();
+        return ans;
     }
+};
+```
 
-    private char get(String s) {
-        return (char) ('a' + Integer.parseInt(s) - 1);
-    }
+#### Go
+
+```go
+func freqAlphabets(s string) string {
+	var ans []byte
+	for i, n := 0, len(s); i < n; {
+		if i+2 < n && s[i+2] == '#' {
+			num := (int(s[i])-'0')*10 + int(s[i+1]) - '0'
+			ans = append(ans, byte(num+int('a')-1))
+			i += 3
+		} else {
+			num := int(s[i]) - '0'
+			ans = append(ans, byte(num+int('a')-1))
+			i += 1
+		}
+	}
+	return string(ans)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function freqAlphabets(s: string): string {
-    const n = s.length;
-    const ans = [];
-    let i = 0;
-    while (i < n) {
-        if (s[i + 2] == '#') {
-            ans.push(s.slice(i, i + 2));
+    const ans: string[] = [];
+    for (let i = 0, n = s.length; i < n; ) {
+        if (i + 2 < n && s[i + 2] === '#') {
+            ans.push(String.fromCharCode(96 + +s.slice(i, i + 2)));
             i += 3;
         } else {
-            ans.push(s[i]);
-            i += 1;
+            ans.push(String.fromCharCode(96 + +s[i]));
+            i++;
         }
     }
-    return ans
-        .map(c => String.fromCharCode('a'.charCodeAt(0) + Number(c) - 1))
-        .join('');
+    return ans.join('');
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn freq_alphabets(s: String) -> String {
         let s = s.as_bytes();
-        let n = s.len();
-        let mut res = String::new();
+        let mut ans = String::new();
         let mut i = 0;
+        let n = s.len();
         while i < n {
-            let code: u8;
-            if s.get(i + 2).is_some() && s[i + 2] == b'#' {
-                code = (s[i] - b'0') * 10 + s[i + 1];
+            if i + 2 < n && s[i + 2] == b'#' {
+                let num = (s[i] - b'0') * 10 + (s[i + 1] - b'0');
+                ans.push((96 + num) as char);
                 i += 3;
             } else {
-                code = s[i];
+                let num = s[i] - b'0';
+                ans.push((96 + num) as char);
                 i += 1;
             }
-            res.push(char::from('a' as u8 + code - b'1'));
         }
-        res
+        ans
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
-char *freqAlphabets(char *s) {
+char* freqAlphabets(char* s) {
     int n = strlen(s);
     int i = 0;
     int j = 0;
-    char *ans = malloc(sizeof(s) * n);
+    char* ans = malloc(sizeof(s) * n);
     while (i < n) {
         int t;
         if (i + 2 < n && s[i + 2] == '#') {
@@ -160,10 +219,8 @@ char *freqAlphabets(char *s) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

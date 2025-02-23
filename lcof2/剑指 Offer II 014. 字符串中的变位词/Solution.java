@@ -1,28 +1,26 @@
 class Solution {
     public boolean checkInclusion(String s1, String s2) {
-        int n1 = s1.length(), n2 = s2.length();
-        if (n1 > n2) {
+        int m = s1.length();
+        int n = s2.length();
+        if (m > n) {
             return false;
         }
-        int[] window = new int[26];
-        for (int i = 0; i < n1; i++) {
-            window[s1.charAt(i) - 'a']++;
-            window[s2.charAt(i) - 'a']--;
+        int[] cnt1 = new int[26];
+        int[] cnt2 = new int[26];
+        for (int i = 0; i < m; ++i) {
+            ++cnt1[s1.charAt(i) - 'a'];
+            ++cnt2[s2.charAt(i) - 'a'];
         }
-        if (check(window)) {
+        if (Arrays.equals(cnt1, cnt2)) {
             return true;
         }
-        for (int i = n1; i < n2; i++) {
-            window[s2.charAt(i) - 'a']--;
-            window[s2.charAt(i - n1) - 'a']++;
-            if (check(window)) {
+        for (int i = m; i < n; ++i) {
+            ++cnt2[s2.charAt(i) - 'a'];
+            --cnt2[s2.charAt(i - m) - 'a'];
+            if (Arrays.equals(cnt1, cnt2)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private boolean check(int[] window) {
-        return Arrays.stream(window).allMatch(cnt -> cnt == 0);
     }
 }

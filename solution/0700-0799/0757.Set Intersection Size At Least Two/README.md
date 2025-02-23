@@ -1,10 +1,22 @@
-# [757. 设置交集大小至少为 2](https://leetcode.cn/problems/set-intersection-size-at-least-two)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0757.Set%20Intersection%20Size%20At%20Least%20Two/README.md
+tags:
+    - 贪心
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [757. 设置交集大小至少为2](https://leetcode.cn/problems/set-intersection-size-at-least-two)
 
 [English Version](/solution/0700-0799/0757.Set%20Intersection%20Size%20At%20Least%20Two/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二维整数数组 <code>intervals</code> ，其中 <code>intervals[i] = [start<sub>i</sub>, end<sub>i</sub>]</code> 表示从 <code>start<sub>i</sub></code> 到 <code>end<sub>i</sub></code> 的所有整数，包括 <code>start<sub>i</sub></code> 和 <code>end<sub>i</sub></code> 。</p>
 
@@ -55,19 +67,21 @@
 	<li><code>0 &lt;= start<sub>i</sub> &lt; end<sub>i</sub> &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 贪心**
+### 方法一：排序 + 贪心
 
-相似题目： [452. 用最少数量的箭引爆气球](/solution/0400-0499/0452.Minimum%20Number%20of%20Arrows%20to%20Burst%20Balloons/README.md)
+相似题目：
+
+-   [452. 用最少数量的箭引爆气球](https://github.com/doocs/leetcode/blob/main/solution/0400-0499/0452.Minimum%20Number%20of%20Arrows%20to%20Burst%20Balloons/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +129,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -146,40 +158,38 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func intersectionSizeTwo(intervals [][]int) int {
-    sort.Slice(intervals, func(i, j int) bool {
-        a, b := intervals[i], intervals[j]
-        if a[1] == b[1] {
-            return a[0] > b[0]
-        }
-        return a[1] < b[1]
-    })
-    ans := 0
-    s, e := -1, -1
-    for _, v := range intervals {
-        a, b := v[0], v[1]
-        if a <= s {
-            continue
-        }
-        if a > e {
-            ans += 2
-            s, e = b - 1, b
-        } else {
-            ans += 1
-            s, e = e, b
-        }
-    }
-    return ans
+	sort.Slice(intervals, func(i, j int) bool {
+		a, b := intervals[i], intervals[j]
+		if a[1] == b[1] {
+			return a[0] > b[0]
+		}
+		return a[1] < b[1]
+	})
+	ans := 0
+	s, e := -1, -1
+	for _, v := range intervals {
+		a, b := v[0], v[1]
+		if a <= s {
+			continue
+		}
+		if a > e {
+			ans += 2
+			s, e = b-1, b
+		} else {
+			ans += 1
+			s, e = e, b
+		}
+	}
+	return ans
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

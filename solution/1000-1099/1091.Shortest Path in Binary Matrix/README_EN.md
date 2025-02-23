@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1091.Shortest%20Path%20in%20Binary%20Matrix/README_EN.md
+rating: 1658
+source: Weekly Contest 141 Q3
+tags:
+    - Breadth-First Search
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1091. Shortest Path in Binary Matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix)
 
 [中文文档](/solution/1000-1099/1091.Shortest%20Path%20in%20Binary%20Matrix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an <code>n x n</code> binary matrix <code>grid</code>, return <em>the length of the shortest <strong>clear path</strong> in the matrix</em>. If there is no clear path, return <code>-1</code>.</p>
 
@@ -47,13 +63,17 @@
 	<li><code>grid[i][j] is 0 or 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-BFS.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -78,7 +98,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestPathBinaryMatrix(grid [][]int) int {
@@ -179,25 +199,25 @@ func shortestPathBinaryMatrix(grid [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function shortestPathBinaryMatrix(grid: number[][]): number {
     if (grid[0][0]) {
         return -1;
     }
-    const n = grid.length;
+    const max = grid.length - 1;
     grid[0][0] = 1;
     let q: number[][] = [[0, 0]];
     for (let ans = 1; q.length > 0; ++ans) {
         const nq: number[][] = [];
         for (const [i, j] of q) {
-            if (i === n - 1 && j === n - 1) {
+            if (i === max && j === max) {
                 return ans;
             }
             for (let x = i - 1; x <= i + 1; ++x) {
                 for (let y = j - 1; y <= j + 1; ++y) {
-                    if (x >= 0 && x < n && y >= 0 && y < n && !grid[x][y]) {
+                    if (grid[x]?.[y] === 0) {
                         grid[x][y] = 1;
                         nq.push([x, y]);
                     }
@@ -210,7 +230,7 @@ function shortestPathBinaryMatrix(grid: number[][]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::VecDeque;
@@ -233,9 +253,9 @@ impl Solution {
                 grid[i][j] = 1;
                 for x in -1..=1 {
                     for y in -1..=1 {
-                        let x = x + i as i32;
-                        let y = y + j as i32;
-                        if x < 0 || x == n as i32 || y < 0 || y == n as i32 {
+                        let x = x + (i as i32);
+                        let y = y + (j as i32);
+                        if x < 0 || x == (n as i32) || y < 0 || y == (n as i32) {
                             continue;
                         }
                         queue.push_back([x as usize, y as usize]);
@@ -248,10 +268,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1190.Reverse%20Substrings%20Between%20Each%20Pair%20of%20Parentheses/README.md
+rating: 1485
+source: 第 154 场周赛 Q2
+tags:
+    - 栈
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1190. 反转每对括号间的子串](https://leetcode.cn/problems/reverse-substrings-between-each-pair-of-parentheses)
 
 [English Version](/solution/1100-1199/1190.Reverse%20Substrings%20Between%20Each%20Pair%20of%20Parentheses/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给出一个字符串&nbsp;<code>s</code>（仅含有小写英文字母和括号）。</p>
 
@@ -35,13 +48,6 @@
 <strong>输出：</strong>"leetcode"
 <strong>解释：</strong>先反转子字符串 "oc" ，接着反转 "etco" ，然后反转整个字符串。</pre>
 
-<p><strong>示例 4：</strong></p>
-
-<pre>
-<strong>输入：</strong>s = "a(bcdefghijkl(mno)p)q"
-<strong>输出：</strong>"apmnolkjihgfedcbq"
-</pre>
-
 <p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
@@ -52,17 +58,162 @@
 	<li>题目测试用例确保所有括号都是成对出现的</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-用双端队列或者栈，模拟反转的过程。
+我们可以直接用栈来模拟反转的过程。
 
-时间复杂度 $O(n^2)$，其中 $n$ 为字符串 $s$ 的长度。
+时间复杂度 $O(n^2)$，空间复杂度 $O(n)$，其中 $n$ 为字符串 $s$ 的长度。
 
-**方法二：脑筋急转弯**
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def reverseParentheses(self, s: str) -> str:
+        stk = []
+        for c in s:
+            if c == ")":
+                t = []
+                while stk[-1] != "(":
+                    t.append(stk.pop())
+                stk.pop()
+                stk.extend(t)
+            else:
+                stk.append(c)
+        return "".join(stk)
+```
+
+#### Java
+
+```java
+class Solution {
+    public String reverseParentheses(String s) {
+        StringBuilder stk = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (c == ')') {
+                StringBuilder t = new StringBuilder();
+                while (stk.charAt(stk.length() - 1) != '(') {
+                    t.append(stk.charAt(stk.length() - 1));
+                    stk.deleteCharAt(stk.length() - 1);
+                }
+                stk.deleteCharAt(stk.length() - 1);
+                stk.append(t);
+            } else {
+                stk.append(c);
+            }
+        }
+        return stk.toString();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    string reverseParentheses(string s) {
+        string stk;
+        for (char& c : s) {
+            if (c == ')') {
+                string t;
+                while (stk.back() != '(') {
+                    t.push_back(stk.back());
+                    stk.pop_back();
+                }
+                stk.pop_back();
+                stk += t;
+            } else {
+                stk.push_back(c);
+            }
+        }
+        return stk;
+    }
+};
+```
+
+#### Go
+
+```go
+func reverseParentheses(s string) string {
+	stk := []byte{}
+	for i := range s {
+		if s[i] == ')' {
+			t := []byte{}
+			for stk[len(stk)-1] != '(' {
+				t = append(t, stk[len(stk)-1])
+				stk = stk[:len(stk)-1]
+			}
+			stk = stk[:len(stk)-1]
+			stk = append(stk, t...)
+		} else {
+			stk = append(stk, s[i])
+		}
+	}
+	return string(stk)
+}
+```
+
+#### TypeScript
+
+```ts
+function reverseParentheses(s: string): string {
+    const stk: string[] = [];
+    for (const c of s) {
+        if (c === ')') {
+            const t: string[] = [];
+            while (stk.at(-1)! !== '(') {
+                t.push(stk.pop()!);
+            }
+            stk.pop();
+            stk.push(...t);
+        } else {
+            stk.push(c);
+        }
+    }
+    return stk.join('');
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseParentheses = function (s) {
+    const stk = [];
+    for (const c of s) {
+        if (c === ')') {
+            const t = [];
+            while (stk.at(-1) !== '(') {
+                t.push(stk.pop());
+            }
+            stk.pop();
+            stk.push(...t);
+        } else {
+            stk.push(c);
+        }
+    }
+    return stk.join('');
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：脑筋急转弯
 
 我们观察发现，遍历字符串时，每一次遇到 `(` 或者 `)`，都是跳到对应的 `)` 或者 `(`，然后反转遍历的方向，继续遍历。
 
@@ -70,29 +221,11 @@
 
 然后，我们从左到右遍历字符串，遇到 `(` 或者 `)` 时，根据 $d$ 数组跳到对应的位置，然后反转方向，继续遍历，直到遍历完整个字符串。
 
-时间复杂度 $O(n)$，其中 $n$ 为字符串 $s$ 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$，其中 $n$ 为字符串 $s$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def reverseParentheses(self, s: str) -> str:
-        stk = []
-        for c in s:
-            if c == ')':
-                t = []
-                while stk[-1] != '(':
-                    t.append(stk.pop())
-                stk.pop()
-                stk.extend(t)
-            else:
-                stk.append(c)
-        return ''.join(stk)
-```
+#### Python3
 
 ```python
 class Solution:
@@ -101,26 +234,24 @@ class Solution:
         d = [0] * n
         stk = []
         for i, c in enumerate(s):
-            if c == '(':
+            if c == "(":
                 stk.append(i)
-            elif c == ')':
+            elif c == ")":
                 j = stk.pop()
                 d[i], d[j] = j, i
         i, x = 0, 1
         ans = []
         while i < n:
-            if s[i] in '()':
+            if s[i] in "()":
                 i = d[i]
                 x = -x
             else:
                 ans.append(s[i])
             i += x
-        return ''.join(ans)
+        return "".join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -153,30 +284,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    string reverseParentheses(string s) {
-        string stk;
-        for (char& c : s) {
-            if (c == ')') {
-                string t;
-                while (stk.back() != '(') {
-                    t.push_back(stk.back());
-                    stk.pop_back();
-                }
-                stk.pop_back();
-                stk += t;
-            } else {
-                stk.push_back(c);
-            }
-        }
-        return stk;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -211,27 +319,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func reverseParentheses(s string) string {
-	stk := []byte{}
-	for i := range s {
-		if s[i] == ')' {
-			t := []byte{}
-			for stk[len(stk)-1] != '(' {
-				t = append(t, stk[len(stk)-1])
-				stk = stk[:len(stk)-1]
-			}
-			stk = stk[:len(stk)-1]
-			stk = append(stk, t...)
-		} else {
-			stk = append(stk, s[i])
-		}
-	}
-	return string(stk)
-}
-```
+#### Go
 
 ```go
 func reverseParentheses(s string) string {
@@ -262,7 +350,40 @@ func reverseParentheses(s string) string {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function reverseParentheses(s: string): string {
+    const n = s.length;
+    const d: number[] = Array(n).fill(0);
+    const stk: number[] = [];
+    for (let i = 0; i < n; ++i) {
+        if (s[i] === '(') {
+            stk.push(i);
+        } else if (s[i] === ')') {
+            const j = stk.pop()!;
+            d[i] = j;
+            d[j] = i;
+        }
+    }
+    let i = 0;
+    let x = 1;
+    const ans: string[] = [];
+    while (i < n) {
+        const c = s.charAt(i);
+        if ('()'.includes(c)) {
+            i = d[i];
+            x = -x;
+        } else {
+            ans.push(c);
+        }
+        i += x;
+    }
+    return ans.join('');
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -271,12 +392,12 @@ func reverseParentheses(s string) string {
  */
 var reverseParentheses = function (s) {
     const n = s.length;
-    const d = new Array(n).fill(0);
+    const d = Array(n).fill(0);
     const stk = [];
     for (let i = 0; i < n; ++i) {
-        if (s[i] == '(') {
+        if (s[i] === '(') {
             stk.push(i);
-        } else if (s[i] == ')') {
+        } else if (s[i] === ')') {
             const j = stk.pop();
             d[i] = j;
             d[j] = i;
@@ -287,7 +408,7 @@ var reverseParentheses = function (s) {
     const ans = [];
     while (i < n) {
         const c = s.charAt(i);
-        if (c == '(' || c == ')') {
+        if ('()'.includes(c)) {
             i = d[i];
             x = -x;
         } else {
@@ -299,10 +420,8 @@ var reverseParentheses = function (s) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

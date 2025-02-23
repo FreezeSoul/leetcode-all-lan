@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0949.Largest%20Time%20for%20Given%20Digits/README.md
+tags:
+    - 数组
+    - 字符串
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [949. 给定数字能组成的最大时间](https://leetcode.cn/problems/largest-time-for-given-digits)
 
 [English Version](/solution/0900-0999/0949.Largest%20Time%20for%20Given%20Digits/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个由 4 位数字组成的数组，返回可以设置的符合 24 小时制的最大时间。</p>
 
@@ -53,11 +65,13 @@
 	<li><code>0 <= arr[i] <= 9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：暴力枚举
 
 我们可以枚举所有的 4 个数字的排列，然后判断每个排列是否满足题目要求，如果满足则更新答案。
 
@@ -65,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,24 +99,7 @@ class Solution:
         return ''
 ```
 
-```python
-class Solution:
-    def largestTimeFromDigits(self, arr: List[int]) -> str:
-        ans = -1
-        for i in range(4):
-            for j in range(4):
-                for k in range(4):
-                    if i != j and i != k and j != k:
-                        h = arr[i] * 10 + arr[j]
-                        m = arr[k] * 10 + arr[6 - i - j - k]
-                        if h < 24 and m < 60:
-                            ans = max(ans, h * 60 + m)
-        return '' if ans < 0 else f'{ans // 60:02}:{ans % 60:02}'
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -128,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -155,7 +150,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestTimeFromDigits(arr []int) string {
@@ -178,19 +173,37 @@ func largestTimeFromDigits(arr []int) string {
 	}
 	return fmt.Sprintf("%02d:%02d", ans/60, ans%60)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def largestTimeFromDigits(self, arr: List[int]) -> str:
+        ans = -1
+        for i in range(4):
+            for j in range(4):
+                for k in range(4):
+                    if i != j and i != k and j != k:
+                        h = arr[i] * 10 + arr[j]
+                        m = arr[k] * 10 + arr[6 - i - j - k]
+                        if h < 24 and m < 60:
+                            ans = max(ans, h * 60 + m)
+        return '' if ans < 0 else f'{ans // 60:02}:{ans % 60:02}'
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

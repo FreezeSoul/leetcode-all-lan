@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0916.Word%20Subsets/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [916. 单词子集](https://leetcode.cn/problems/word-subsets)
 
 [English Version](/solution/0900-0999/0916.Word%20Subsets/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串数组 <code>words1</code>&nbsp;和&nbsp;<code>words2</code>。</p>
 
@@ -16,47 +28,36 @@
 
 <p>如果对 <code>words2</code> 中的每一个单词&nbsp;<code>b</code>，<code>b</code> 都是 <code>a</code> 的子集，那么我们称&nbsp;<code>words1</code> 中的单词 <code>a</code> 是<em> </em><strong>通用单词</strong><em> </em>。</p>
 
-<p>以数组形式返回&nbsp;<code>words1</code> 中所有的通用单词。你可以按 <strong>任意顺序</strong> 返回答案。</p>
+<p>以数组形式返回&nbsp;<code>words1</code> 中所有的 <strong>通用</strong> 单词。你可以按 <strong>任意顺序</strong> 返回答案。</p>
 
 <p>&nbsp;</p>
 
 <ol>
 </ol>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
-<pre>
-<strong>输入：</strong>words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["e","o"]
-<strong>输出：</strong>["facebook","google","leetcode"]
-</pre>
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b>words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["e","o"]</span></p>
 
-<p><strong>示例 2：</strong></p>
+<p><span class="example-io"><b>输出：</b>["facebook","google","leetcode"]</span></p>
+</div>
 
-<pre>
-<strong>输入：</strong>words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["l","e"]
-<strong>输出：</strong>["apple","google","leetcode"]
-</pre>
+<p><strong class="example">示例 2：</strong></p>
 
-<p><strong>示例 3：</strong></p>
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b></span><span class="example-io">words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["lc","eo"]</span></p>
 
-<pre>
-<strong>输入：</strong>words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["e","oo"]
-<strong>输出：</strong>["facebook","google"]
-</pre>
+<p><span class="example-io"><b>输出：</b></span><span class="example-io">["leetcode"]</span></p>
+</div>
 
-<p><strong>示例 4：</strong></p>
+<p><strong class="example">示例 3：</strong></p>
 
-<pre>
-<strong>输入：</strong>words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["lo","eo"]
-<strong>输出：</strong>["google","leetcode"]
-</pre>
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b></span><span class="example-io">words1 = ["acaac","cccbb","aacbb","caacc","bcbbb"], words2 = ["c","cc","b"]</span></p>
 
-<p><strong>示例 5：</strong></p>
-
-<pre>
-<strong>输入：</strong>words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["ec","oc","ceo"]
-<strong>输出：</strong>["facebook","leetcode"]
-</pre>
+<p><span class="example-io"><b>输出：</b></span><span class="example-io">["cccbb"]</span></p>
+</div>
 
 <p>&nbsp;</p>
 
@@ -69,11 +70,13 @@
 	<li><code>words1</code> 中的所有字符串 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 遍历 `words2` 中的每个单词 `b`，统计每个字母出现的最大次数，记为 `cnt`。
 
@@ -83,9 +86,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -103,9 +104,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -142,7 +141,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -181,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func wordSubsets(words1 []string, words2 []string) (ans []string) {
@@ -213,19 +212,10 @@ func wordSubsets(words1 []string, words2 []string) (ans []string) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

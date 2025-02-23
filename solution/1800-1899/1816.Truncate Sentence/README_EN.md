@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1816.Truncate%20Sentence/README_EN.md
+rating: 1235
+source: Weekly Contest 235 Q1
+tags:
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
 # [1816. Truncate Sentence](https://leetcode.com/problems/truncate-sentence)
 
 [中文文档](/solution/1800-1899/1816.Truncate%20Sentence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>sentence</strong> is a list of words that are separated by a single space with no leading or trailing spaces. Each of the words consists of <strong>only</strong> uppercase and lowercase English letters (no punctuation).</p>
 
@@ -52,11 +67,23 @@ Hence, you should return &quot;What is the solution&quot;.</pre>
 	<li>There are no leading or trailing spaces.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We traverse the string $s$ from the beginning. For the current character $s[i]$, if it is a space, we decrement $k$. When $k$ becomes $0$, it means that we have extracted $k$ words, so we return the substring $s[0..i)$.
+
+After the traversal, we return $s$.
+
+The time complexity is $O(n)$, where $n$ is the length of the string $s$. Ignoring the space complexity of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,17 +91,7 @@ class Solution:
         return ' '.join(s.split()[:k])
 ```
 
-```python
-class Solution:
-    def truncateSentence(self, s: str, k: int) -> str:
-        for i, c in enumerate(s):
-            k -= c == ' '
-            if k == 0:
-                return s[:i]
-        return s
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -105,7 +122,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func truncateSentence(s string, k int) string {
@@ -121,7 +138,20 @@ func truncateSentence(s string, k int) string {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function truncateSentence(s: string, k: number): string {
+    for (let i = 0; i < s.length; ++i) {
+        if (s[i] === ' ' && --k === 0) {
+            return s.slice(0, i);
+        }
+    }
+    return s;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -131,7 +161,7 @@ func truncateSentence(s string, k int) string {
  */
 var truncateSentence = function (s, k) {
     for (let i = 0; i < s.length; ++i) {
-        if (s[i] == ' ' && --k == 0) {
+        if (s[i] === ' ' && --k === 0) {
             return s.slice(0, i);
         }
     }
@@ -139,10 +169,30 @@ var truncateSentence = function (s, k) {
 };
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def truncateSentence(self, s: str, k: int) -> str:
+        for i, c in enumerate(s):
+            k -= c == ' '
+            if k == 0:
+                return s[:i]
+        return s
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

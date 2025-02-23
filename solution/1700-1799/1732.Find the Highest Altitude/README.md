@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1732.Find%20the%20Highest%20Altitude/README.md
+rating: 1256
+source: 第 44 场双周赛 Q1
+tags:
+    - 数组
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [1732. 找到最高海拔](https://leetcode.cn/problems/find-the-highest-altitude)
 
 [English Version](/solution/1700-1799/1732.Find%20the%20Highest%20Altitude/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个自行车手打算进行一场公路骑行，这条路线总共由 <code>n + 1</code> 个不同海拔的点组成。自行车手从海拔为 <code>0</code> 的点 <code>0</code> 开始骑行。</p>
 
@@ -38,11 +51,13 @@
 	<li><code>-100 <= gain[i] <= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和（差分数组）**
+### 方法一：前缀和（差分数组）
 
 我们假设每个点的海拔为 $h_i$，由于 $gain[i]$ 表示第 $i$ 个点和第 $i + 1$ 个点的海拔差，因此 $gain[i] = h_{i + 1} - h_i$。那么：
 
@@ -64,9 +79,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,19 +87,7 @@ class Solution:
         return max(accumulate(gain, initial=0))
 ```
 
-```python
-class Solution:
-    def largestAltitude(self, gain: List[int]) -> int:
-        ans = h = 0
-        for v in gain:
-            h += v
-            ans = max(ans, h)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -101,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +115,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestAltitude(gain []int) (ans int) {
@@ -129,7 +130,23 @@ func largestAltitude(gain []int) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn largest_altitude(gain: Vec<i32>) -> i32 {
+        let mut ans = 0;
+        let mut h = 0;
+        for v in gain.iter() {
+            h += v;
+            ans = ans.max(h);
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -147,28 +164,33 @@ var largestAltitude = function (gain) {
 };
 ```
 
-### **Rust**
+#### PHP
 
-```rust
-impl Solution {
-    pub fn largest_altitude(gain: Vec<i32>) -> i32 {
-        let mut ans = 0;
-        let mut h = 0;
-        for v in gain.iter() {
-            h += v;
-            ans = ans.max(h);
+```php
+class Solution {
+    /**
+     * @param Integer[] $gain
+     * @return Integer
+     */
+    function largestAltitude($gain) {
+        $max = 0;
+        for ($i = 0; $i < count($gain); $i++) {
+            $tmp += $gain[$i];
+            if ($tmp > $max) {
+                $max = $tmp;
+            }
         }
-        ans
+        return $max;
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
-int largestAltitude(int *gain, int gainSize) {
+int largestAltitude(int* gain, int gainSize) {
     int ans = 0;
     int h = 0;
     for (int i = 0; i < gainSize; i++) {
@@ -179,10 +201,8 @@ int largestAltitude(int *gain, int gainSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

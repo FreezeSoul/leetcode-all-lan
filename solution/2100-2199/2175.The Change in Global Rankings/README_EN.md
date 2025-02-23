@@ -1,8 +1,20 @@
-# [2175. The Change in Global Rankings](https://leetcode.com/problems/the-change-in-global-rankings)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2175.The%20Change%20in%20Global%20Rankings/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2175. The Change in Global Rankings 🔒](https://leetcode.com/problems/the-change-in-global-rankings)
 
 [中文文档](/solution/2100-2199/2175.The%20Change%20in%20Global%20Rankings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>TeamPoints</code></p>
 
@@ -14,7 +26,7 @@
 | name        | varchar |
 | points      | int     |
 +-------------+---------+
-team_id is the primary key for this table.
+team_id contains unique values.
 Each row of this table contains the ID of a national team, the name of the country it represents, and the points it has in the global rankings. No two teams will represent the same country.
 </pre>
 
@@ -29,7 +41,7 @@ Each row of this table contains the ID of a national team, the name of the count
 | team_id       | int  |
 | points_change | int  |
 +---------------+------+
-team_id is the primary key for this table.
+team_id contains unique values.
 Each row of this table contains the ID of a national team and the change in its points in the global rankings.
 points_change can be:
 - 0: indicates no change in points.
@@ -44,11 +56,11 @@ Each team_id that appears in TeamPoints will also appear in this table.
 
 <p>The points of each national team should be updated based on its corresponding <code>points_change</code> value.</p>
 
-<p>Write an SQL query to calculate the change in the global rankings after updating each team&#39;s points.</p>
+<p>Write a solution to calculate the change in the global rankings after updating each team&#39;s points.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -108,14 +120,39 @@ Algeria gained 399 points and their rank increased by one.
 New Zealand did not gain or lose points and their rank did not change.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    P AS (
+        SELECT team_id, SUM(points_change) AS delta
+        FROM PointsChange
+        GROUP BY team_id
+    )
+SELECT
+    team_id,
+    name,
+    CAST(RANK() OVER (ORDER BY points DESC, name) AS SIGNED) - CAST(
+        RANK() OVER (ORDER BY (points + delta) DESC, name) AS SIGNED
+    ) AS 'rank_diff'
+FROM
+    TeamPoints
+    JOIN P USING (team_id);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

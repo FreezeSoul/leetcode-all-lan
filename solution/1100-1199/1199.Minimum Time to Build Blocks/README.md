@@ -1,10 +1,25 @@
-# [1199. 建造街区的最短时间](https://leetcode.cn/problems/minimum-time-to-build-blocks)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1199.Minimum%20Time%20to%20Build%20Blocks/README.md
+rating: 2250
+source: 第 9 场双周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 数学
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
+# [1199. 建造街区的最短时间 🔒](https://leetcode.cn/problems/minimum-time-to-build-blocks)
 
 [English Version](/solution/1100-1199/1199.Minimum%20Time%20to%20Build%20Blocks/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你是个城市规划工作者，手里负责管辖一系列的街区。在这个街区列表中&nbsp;<code>blocks[i] = t</code>&nbsp;意味着第 &nbsp;<code>i</code>&nbsp;个街区需要&nbsp;<code>t</code>&nbsp;个单位的时间来建造。</p>
 
@@ -54,29 +69,29 @@
 	<li><code>1 &lt;= split &lt;= 100</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 优先队列（小根堆）**
+### 方法一：贪心 + 优先队列（小根堆）
 
-先考虑只有一个街区的情况，此时不需要分裂工人，直接让他去建造街区，时间花费为 `block[0]`。
+先考虑只有一个街区的情况，此时不需要分裂工人，直接让他去建造街区，时间花费为 $block[0]$。
 
-如果有两个街区，此时需要把工人分裂为两个，然后让他们分别去建造街区，时间花费为 `split + max(block[0], block[1])`。
+如果有两个街区，此时需要把工人分裂为两个，然后让他们分别去建造街区，时间花费为 $split + \max(block[0], block[1])$。
 
 如果有超过两个街区，此时每一步都需要考虑将几个工人进行分裂，正向思维不好处理。
 
-我们不妨采用逆向思维，不分裂工人，而是将街区进行合并。我们选取任意两个街区 $i$, $j$ 进行合并，建造一个新的街区的时间为 `split + max(block[i], block[j])`。
+我们不妨采用逆向思维，不分裂工人，而是将街区进行合并。我们选取任意两个街区 $i$, $j$ 进行合并，建造一个新的街区的时间为 $split + \max(block[i], block[j])$。
 
 为了让耗时长的街区尽可能少参与到合并中，我们可以每次贪心地选取耗时最小的两个街区进行合并。因此，我们可以维护一个小根堆，每次取出最小的两个街区进行合并，直到只剩下一个街区。最后剩下的这个街区的建造时间就是答案。
 
-时间复杂度 $O(n\log n)$。其中 $n$ 是街区数量。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为街区的数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,9 +103,7 @@ class Solution:
         return blocks[0]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minBuildTime(blocks []int, split int) int {
@@ -144,8 +157,8 @@ func minBuildTime(blocks []int, split int) int {
 
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -153,10 +166,49 @@ func (h *hp) Pop() interface{} {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function minBuildTime(blocks: number[], split: number): number {
+    const pq = new MinPriorityQueue();
+    for (const x of blocks) {
+        pq.enqueue(x);
+    }
+    while (pq.size() > 1) {
+        pq.dequeue()!;
+        pq.enqueue(pq.dequeue()!.element + split);
+    }
+    return pq.dequeue()!.element;
+}
 ```
 
+#### Rust
+
+```rust
+use std::cmp::Reverse;
+use std::collections::BinaryHeap;
+
+impl Solution {
+    pub fn min_build_time(blocks: Vec<i32>, split: i32) -> i32 {
+        let mut pq = BinaryHeap::new();
+
+        for x in blocks {
+            pq.push(Reverse(x));
+        }
+
+        while pq.len() > 1 {
+            pq.pop();
+            let new_element = pq.pop().unwrap().0 + split;
+            pq.push(Reverse(new_element));
+        }
+
+        pq.pop().unwrap().0
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

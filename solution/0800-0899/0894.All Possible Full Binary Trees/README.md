@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0894.All%20Possible%20Full%20Binary%20Trees/README.md
+tags:
+    - 树
+    - 递归
+    - 记忆化搜索
+    - 动态规划
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [894. 所有可能的真二叉树](https://leetcode.cn/problems/all-possible-full-binary-trees)
 
 [English Version](/solution/0800-0899/0894.All%20Possible%20Full%20Binary%20Trees/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>n</code> ，请你找出所有可能含 <code>n</code> 个节点的 <strong>真二叉树</strong> ，并以列表形式返回。答案中每棵树的每个节点都必须符合 <code>Node.val == 0</code> 。</p>
 
@@ -36,11 +50,13 @@
 	<li><code>1 &lt;= n &lt;= 20</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 如果 $n=1$，直接返回单个节点的列表。
 
@@ -48,13 +64,11 @@
 
 此过程可以用记忆化搜索，避免重复计算。
 
-时间复杂度 $O(2^n)$，空间复杂度 $O(2^n)$。其中 $n$ 是节点数量。
+时间复杂度 $O(\frac{2^n}{\sqrt{n}})$，空间复杂度 $O(\frac{2^n}{\sqrt{n}})$。其中 $n$ 是节点数量。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -80,9 +94,7 @@ class Solution:
         return dfs(n)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -129,7 +141,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -170,7 +182,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -207,7 +219,7 @@ func allPossibleFBT(n int) []*TreeNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -225,9 +237,7 @@ func allPossibleFBT(n int) []*TreeNode {
  */
 
 function allPossibleFBT(n: number): Array<TreeNode | null> {
-    const f: Array<Array<TreeNode | null>> = new Array(n + 1)
-        .fill(0)
-        .map(() => []);
+    const f: Array<Array<TreeNode | null>> = new Array(n + 1).fill(0).map(() => []);
     const dfs = (n: number): Array<TreeNode | null> => {
         if (f[n].length) {
             return f[n];
@@ -251,10 +261,118 @@ function allPossibleFBT(n: number): Array<TreeNode | null> {
 }
 ```
 
-### **...**
+#### Rust
 
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::rc::Rc;
+impl Solution {
+    pub fn all_possible_fbt(n: i32) -> Vec<Option<Rc<RefCell<TreeNode>>>> {
+        let mut f: Vec<Option<Vec<Option<Rc<RefCell<TreeNode>>>>>> = vec![None; (n + 1) as usize];
+        Self::dfs(n, &mut f)
+    }
+
+    fn dfs(
+        n: i32,
+        f: &mut Vec<Option<Vec<Option<Rc<RefCell<TreeNode>>>>>>,
+    ) -> Vec<Option<Rc<RefCell<TreeNode>>>> {
+        if let Some(ref result) = f[n as usize] {
+            return result.clone();
+        }
+
+        let mut ans = Vec::new();
+        if n == 1 {
+            ans.push(Some(Rc::new(RefCell::new(TreeNode::new(0)))));
+            return ans;
+        }
+
+        for i in 0..n - 1 {
+            let j = n - 1 - i;
+            for left in Self::dfs(i, f).iter() {
+                for right in Self::dfs(j, f).iter() {
+                    let new_node = Some(Rc::new(RefCell::new(TreeNode {
+                        val: 0,
+                        left: left.clone(),
+                        right: right.clone(),
+                    })));
+                    ans.push(new_node);
+                }
+            }
+        }
+        f[n as usize] = Some(ans.clone());
+        ans
+    }
+}
 ```
 
+#### C#
+
+```cs
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    private List<TreeNode>[] f;
+
+    public IList<TreeNode> AllPossibleFBT(int n) {
+        f = new List<TreeNode>[n + 1];
+        return Dfs(n);
+    }
+
+    private IList<TreeNode> Dfs(int n) {
+        if (f[n] != null) {
+            return f[n];
+        }
+
+        if (n == 1) {
+            return new List<TreeNode> { new TreeNode() };
+        }
+
+        List<TreeNode> ans = new List<TreeNode>();
+        for (int i = 0; i < n - 1; ++i) {
+            int j = n - 1 - i;
+            foreach (var left in Dfs(i)) {
+                foreach (var right in Dfs(j)) {
+                    ans.Add(new TreeNode(0, left, right));
+                }
+            }
+        }
+        f[n] = ans;
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

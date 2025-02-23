@@ -1,8 +1,20 @@
-# [2228. Users With Two Purchases Within Seven Days](https://leetcode.com/problems/users-with-two-purchases-within-seven-days)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2228.Users%20With%20Two%20Purchases%20Within%20Seven%20Days/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2228. Users With Two Purchases Within Seven Days 🔒](https://leetcode.com/problems/users-with-two-purchases-within-seven-days)
 
 [中文文档](/solution/2200-2299/2228.Users%20With%20Two%20Purchases%20Within%20Seven%20Days/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Purchases</code></p>
 
@@ -14,17 +26,17 @@
 | user_id       | int  |
 | purchase_date | date |
 +---------------+------+
-purchase_id is the primary key for this table.
+purchase_id contains unique values.
 This table contains logs of the dates that users purchased from a certain retailer.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the IDs of the users that made any two purchases <strong>at most</strong> <code>7</code> days apart.</p>
+<p>Write a solution to report the IDs of the users that made any two purchases <strong>at most</strong> <code>7</code> days apart.</p>
 
 <p>Return the result table ordered by <code>user_id</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -55,14 +67,41 @@ User 5 had only 1 purchase.
 User 7 had two purchases on the same day so we add their ID.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            user_id,
+            DATEDIFF(
+                purchase_date,
+                LAG(purchase_date, 1) OVER (
+                    PARTITION BY user_id
+                    ORDER BY purchase_date
+                )
+            ) AS d
+        FROM Purchases
+    )
+SELECT DISTINCT user_id
+FROM t
+WHERE d <= 7
+ORDER BY user_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

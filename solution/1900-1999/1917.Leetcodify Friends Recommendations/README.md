@@ -1,14 +1,25 @@
-# [1917. Leetcodify 好友推荐](https://leetcode.cn/problems/leetcodify-friends-recommendations)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1917.Leetcodify%20Friends%20Recommendations/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1917. Leetcodify 好友推荐 🔒](https://leetcode.cn/problems/leetcodify-friends-recommendations)
 
 [English Version](/solution/1900-1999/1917.Leetcodify%20Friends%20Recommendations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表： <code>Listens</code></p>
 
-<pre>+-------------+---------+
+<pre>
++-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
 | user_id     | int     |
@@ -23,7 +34,8 @@
 
 <p>表： <code>Friendship</code></p>
 
-<pre>+---------------+---------+
+<pre>
++---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
 | user1_id      | int     |
@@ -53,7 +65,8 @@
 
 <p><strong>示例 1:</strong></p>
 
-<pre><strong>输入：</strong>
+<pre>
+<strong>输入：</strong>
 Listens 表：
 +---------+---------+------------+
 | user_id | song_id | day        |
@@ -98,18 +111,45 @@ Friendship 表：
 类似地，我们可以发现用户 2 和 3 在同一天收听了歌曲 10、11 和 12，且他们不是好友，所以我们给他们互相推荐为好友。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT user1_id, user2_id FROM Friendship
+        UNION
+        SELECT user2_id AS user1_id, user1_id AS user2_id FROM Friendship
+    )
+SELECT DISTINCT l1.user_id, l2.user_id AS recommended_id
+FROM
+    Listens AS l1,
+    Listens AS l2
+WHERE
+    l1.day = l2.day
+    AND l1.song_id = l2.song_id
+    AND l1.user_id != l2.user_id
+    AND NOT EXISTS (
+        SELECT 1
+        FROM T AS t
+        WHERE l1.user_id = t.user1_id AND l2.user_id = t.user2_id
+    )
+GROUP BY l1.day, l1.user_id, l2.user_id
+HAVING COUNT(DISTINCT l1.song_id) >= 3;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

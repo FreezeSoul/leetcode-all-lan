@@ -1,10 +1,22 @@
-# [1533. 找到最大整数的索引](https://leetcode.cn/problems/find-the-index-of-the-large-integer)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1533.Find%20the%20Index%20of%20the%20Large%20Integer/README.md
+tags:
+    - 数组
+    - 二分查找
+    - 交互
+---
+
+<!-- problem:start -->
+
+# [1533. 找到最大整数的索引 🔒](https://leetcode.cn/problems/find-the-index-of-the-large-integer)
 
 [English Version](/solution/1500-1599/1533.Find%20the%20Index%20of%20the%20Large%20Integer/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们有这样一个整数数组&nbsp;<code>arr</code>&nbsp;，除了一个最大的整数外，其他所有整数都相等。你不能直接访问该数组，你需要通过&nbsp;<strong>API</strong> <code>ArrayReader</code>&nbsp;来间接访问，这个 API&nbsp;有以下成员函数：</p>
 
@@ -55,7 +67,7 @@ reader.compareSub(4, 4, 5, 5) // 返回 1。因此，可以确定 arr[4] 是数�
 <p><strong>提示:</strong></p>
 
 <ul>
-	<li><code>2 &lt;= arr.length&nbsp;&lt;= 5 * 10^5</code></li>
+	<li><code>2 &lt;= arr.length&nbsp;&lt;= 5 * 10<sup>5</sup></code></li>
 	<li><code>1 &lt;= arr[i] &lt;= 100</code></li>
 	<li><code>arr</code>&nbsp;中除一个最大元素外，其余所有元素都相等。</li>
 </ul>
@@ -69,19 +81,17 @@ reader.compareSub(4, 4, 5, 5) // 返回 1。因此，可以确定 arr[4] 是数�
 	<li>如果有一个数比其他数大，另一个数比其他数小呢？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-三分查找。
-
-前两部分数量相等，进行 `compareSub` 比较。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # """
@@ -119,9 +129,7 @@ class Solution:
         return left
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -159,7 +167,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -199,7 +207,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -234,10 +242,8 @@ func getIndex(reader *ArrayReader) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

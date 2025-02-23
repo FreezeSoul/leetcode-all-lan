@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0700.Search%20in%20a%20Binary%20Search%20Tree/README.md
+tags:
+    - 树
+    - 二叉搜索树
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [700. 二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree)
 
 [English Version](/solution/0700-0799/0700.Search%20in%20a%20Binary%20Search%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定二叉搜索树（BST）的根节点<meta charset="UTF-8" />&nbsp;<code>root</code>&nbsp;和一个整数值<meta charset="UTF-8" />&nbsp;<code>val</code>。</p>
 
@@ -33,21 +45,29 @@
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li>数中节点数在&nbsp;<code>[1, 5000]</code>&nbsp;范围内</li>
+	<li>树中节点数在&nbsp;<code>[1, 5000]</code>&nbsp;范围内</li>
 	<li><code>1 &lt;= Node.val &lt;= 10<sup>7</sup></code></li>
 	<li><code>root</code>&nbsp;是二叉搜索树</li>
 	<li><code>1 &lt;= val &lt;= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：递归
+
+我们判断当前节点是否为空或者当前节点的值是否等于目标值，如果是则返回当前节点。
+
+否则，如果当前节点的值大于目标值，则递归搜索左子树，否则递归搜索右子树。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -57,19 +77,17 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def searchBST(self, root: TreeNode, val: int) -> TreeNode:
+    def searchBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
         if root is None or root.val == val:
             return root
         return (
-            self.searchBST(root.right, val)
-            if root.val < val
-            else self.searchBST(root.left, val)
+            self.searchBST(root.left, val)
+            if root.val > val
+            else self.searchBST(root.right, val)
         )
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -92,12 +110,12 @@ class Solution {
         if (root == null || root.val == val) {
             return root;
         }
-        return root.val < val ? searchBST(root.right, val) : searchBST(root.left, val);
+        return root.val > val ? searchBST(root.left, val) : searchBST(root.right, val);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -114,13 +132,15 @@ class Solution {
 class Solution {
 public:
     TreeNode* searchBST(TreeNode* root, int val) {
-        if (!root || root->val == val) return root;
-        return root->val < val ? searchBST(root->right, val) : searchBST(root->left, val);
+        if (!root || root->val == val) {
+            return root;
+        }
+        return root->val > val ? searchBST(root->left, val) : searchBST(root->right, val);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -131,21 +151,44 @@ public:
  *     Right *TreeNode
  * }
  */
-func searchBST(root *TreeNode, val int) *TreeNode {
-	if root == nil || root.Val == val {
-		return root
-	}
-	if root.Val < val {
-		return searchBST(root.Right, val)
-	}
-	return searchBST(root.Left, val)
+ func searchBST(root *TreeNode, val int) *TreeNode {
+    if root == nil || root.Val == val {
+        return root
+    }
+    if root.Val > val {
+        return searchBST(root.Left, val)
+    }
+    return searchBST(root.Right, val)
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
 
+function searchBST(root: TreeNode | null, val: number): TreeNode | null {
+    if (root === null || root.val === val) {
+        return root;
+    }
+    return root.val > val ? searchBST(root.left, val) : searchBST(root.right, val);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

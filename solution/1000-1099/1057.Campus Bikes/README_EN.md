@@ -1,8 +1,22 @@
-# [1057. Campus Bikes](https://leetcode.com/problems/campus-bikes)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1057.Campus%20Bikes/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [1057. Campus Bikes 🔒](https://leetcode.com/problems/campus-bikes)
 
 [中文文档](/solution/1000-1099/1057.Campus%20Bikes/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>On a campus represented on the X-Y plane, there are <code>n</code> workers and <code>m</code> bikes, with <code>n &lt;= m</code>.</p>
 
@@ -46,20 +60,27 @@
 	<li>All worker and bike locations are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def assignBikes(self, workers: List[List[int]], bikes: List[List[int]]) -> List[int]:
+    def assignBikes(
+        self, workers: List[List[int]], bikes: List[List[int]]
+    ) -> List[int]:
         n, m = len(workers), len(bikes)
         arr = []
         for i, j in product(range(n), range(m)):
-            dist = abs(workers[i][0] - bikes[j][0]) + \
-                abs(workers[i][1] - bikes[j][1])
+            dist = abs(workers[i][0] - bikes[j][0]) + abs(workers[i][1] - bikes[j][1])
             arr.append((dist, i, j))
         arr.sort()
         vis1 = [False] * n
@@ -72,7 +93,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -140,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func assignBikes(workers [][]int, bikes [][]int) []int {
@@ -183,10 +204,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

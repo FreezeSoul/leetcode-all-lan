@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2356.Number%20of%20Unique%20Subjects%20Taught%20by%20Each%20Teacher/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [2356. Number of Unique Subjects Taught by Each Teacher](https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher)
 
 [中文文档](/solution/2300-2399/2356.Number%20of%20Unique%20Subjects%20Taught%20by%20Each%20Teacher/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Teacher</code></p>
 
@@ -14,17 +26,17 @@
 | subject_id  | int  |
 | dept_id     | int  |
 +-------------+------+
-(subject_id, dept_id) is the primary key for this table.
+(subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
 Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the number of unique subjects each teacher teaches in the university.</p>
+<p>Write a solution to calculate&nbsp;the number of unique subjects each teacher teaches in the university.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is shown in the following example.</p>
+<p>The&nbsp;result format is shown in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -61,14 +73,27 @@ Teacher 2:
   - They teach subject 4 in department 1.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt
+FROM Teacher
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

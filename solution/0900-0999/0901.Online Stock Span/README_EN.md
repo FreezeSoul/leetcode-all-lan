@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0901.Online%20Stock%20Span/README_EN.md
+tags:
+    - Stack
+    - Design
+    - Data Stream
+    - Monotonic Stack
+---
+
+<!-- problem:start -->
+
 # [901. Online Stock Span](https://leetcode.com/problems/online-stock-span)
 
 [中文文档](/solution/0900-0999/0901.Online%20Stock%20Span/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design an algorithm that collects daily price quotes for some stock and returns <strong>the span</strong> of that stock&#39;s price for the current day.</p>
 
@@ -49,11 +64,29 @@ stockSpanner.next(85);  // return 6
 	<li>At most <code>10<sup>4</sup></code> calls will be made to <code>next</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Monotonic Stack
+
+Based on the problem description, we know that for the current day's price $price$, we start from this price and look backwards to find the first price that is larger than this price. The difference in indices $cnt$ between these two prices is the span of the current day's price.
+
+This is actually a classic monotonic stack model, where we find the first element larger than the current element on the left.
+
+We maintain a stack where the prices from the bottom to the top of the stack are monotonically decreasing. Each element in the stack is a $(price, cnt)$ data pair, where $price$ represents the price, and $cnt$ represents the span of the current price.
+
+When the price $price$ appears, we compare it with the top element of the stack. If the price of the top element of the stack is less than or equal to $price$, we add the span $cnt$ of the current day's price to the span of the top element of the stack, and then pop the top element of the stack. This continues until the price of the top element of the stack is greater than $price$, or the stack is empty.
+
+Finally, we push $(price, cnt)$ onto the stack and return $cnt$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of times `next(price)` is called.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class StockSpanner:
@@ -73,7 +106,7 @@ class StockSpanner:
 # param_1 = obj.next(price)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class StockSpanner {
@@ -99,13 +132,12 @@ class StockSpanner {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class StockSpanner {
 public:
     StockSpanner() {
-
     }
 
     int next(int price) {
@@ -114,7 +146,7 @@ public:
             cnt += stk.top().second;
             stk.pop();
         }
-        stk.push({price, cnt});
+        stk.emplace(price, cnt);
         return cnt;
     }
 
@@ -129,7 +161,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type StockSpanner struct {
@@ -159,23 +191,23 @@ type pair struct{ price, cnt int }
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class StockSpanner {
-    private stack: [number, number][];
+    private stk: number[][];
 
     constructor() {
-        this.stack = [[Infinity, -1]];
+        this.stk = [];
     }
 
     next(price: number): number {
-        let res = 1;
-        while (this.stack[this.stack.length - 1][0] <= price) {
-            res += this.stack.pop()[1];
+        let cnt = 1;
+        while (this.stk.length && this.stk.at(-1)[0] <= price) {
+            cnt += this.stk.pop()[1];
         }
-        this.stack.push([price, res]);
-        return res;
+        this.stk.push([price, cnt]);
+        return cnt;
     }
 }
 
@@ -186,14 +218,13 @@ class StockSpanner {
  */
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::VecDeque;
 struct StockSpanner {
-    stack: VecDeque<(i32, i32)>,
+    stk: VecDeque<(i32, i32)>,
 }
-
 
 /**
  * `&self` means the method takes an immutable reference.
@@ -202,31 +233,23 @@ struct StockSpanner {
 impl StockSpanner {
     fn new() -> Self {
         Self {
-            stack: vec![(i32::MAX, -1)].into_iter().collect()
+            stk: vec![(i32::MAX, -1)].into_iter().collect(),
         }
     }
 
     fn next(&mut self, price: i32) -> i32 {
-        let mut res = 1;
-        while self.stack.back().unwrap().0 <= price {
-            res += self.stack.pop_back().unwrap().1;
+        let mut cnt = 1;
+        while self.stk.back().unwrap().0 <= price {
+            cnt += self.stk.pop_back().unwrap().1;
         }
-        self.stack.push_back((price, res));
-        res
+        self.stk.push_back((price, cnt));
+        cnt
     }
 }
-
-/**
- * Your StockSpanner object will be instantiated and called as such:
- * let obj = StockSpanner::new();
- * let ret_1: i32 = obj.next(price);
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

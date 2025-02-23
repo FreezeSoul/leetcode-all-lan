@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0240.Search%20a%202D%20Matrix%20II/README_EN.md
+tags:
+    - Array
+    - Binary Search
+    - Divide and Conquer
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii)
 
 [中文文档](/solution/0200-0299/0240.Search%20a%202D%20Matrix%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write an efficient algorithm that searches for a value <code>target</code> in an <code>m x n</code> integer matrix <code>matrix</code>. This matrix has the following properties:</p>
 
@@ -39,11 +54,23 @@
 	<li><code>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Binary Search
+
+Since all elements in each row are sorted in ascending order, for each row, we can use binary search to find the first element greater than or equal to $\textit{target}$, and then check if that element is equal to $\textit{target}$. If it is equal to $\textit{target}$, it means the target value is found, and we return $\text{true}$. If it is not equal to $\textit{target}$, it means all elements in this row are less than $\textit{target}$, and we should continue searching the next row.
+
+If all rows have been searched and the target value is not found, it means the target value does not exist, and we return $\text{false}$.
+
+The time complexity is $O(m \times \log n)$, where $m$ and $n$ are the number of rows and columns of the matrix, respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -54,6 +81,155 @@ class Solution:
                 return True
         return False
 ```
+
+#### Java
+
+```java
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        for (var row : matrix) {
+            int j = Arrays.binarySearch(row, target);
+            if (j >= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        for (auto& row : matrix) {
+            int j = lower_bound(row.begin(), row.end(), target) - row.begin();
+            if (j < matrix[0].size() && row[j] == target) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+```
+
+#### Go
+
+```go
+func searchMatrix(matrix [][]int, target int) bool {
+	for _, row := range matrix {
+		j := sort.SearchInts(row, target)
+		if j < len(matrix[0]) && row[j] == target {
+			return true
+		}
+	}
+	return false
+}
+```
+
+#### TypeScript
+
+```ts
+function searchMatrix(matrix: number[][], target: number): boolean {
+    const n = matrix[0].length;
+    for (const row of matrix) {
+        const j = _.sortedIndex(row, target);
+        if (j < n && row[j] === target) {
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+#### Rust
+
+```rust
+use std::cmp::Ordering;
+
+impl Solution {
+    pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
+        let m = matrix.len();
+        let n = matrix[0].len();
+        let mut i = 0;
+        let mut j = n;
+        while i < m && j > 0 {
+            match target.cmp(&matrix[i][j - 1]) {
+                Ordering::Less => {
+                    j -= 1;
+                }
+                Ordering::Greater => {
+                    i += 1;
+                }
+                Ordering::Equal => {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var searchMatrix = function (matrix, target) {
+    const n = matrix[0].length;
+    for (const row of matrix) {
+        const j = _.sortedIndex(row, target);
+        if (j < n && row[j] == target) {
+            return true;
+        }
+    }
+    return false;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public bool SearchMatrix(int[][] matrix, int target) {
+        foreach (int[] row in matrix) {
+            int j = Array.BinarySearch(row, target);
+            if (j >= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Search from Bottom-Left or Top-Right
+
+We start the search from the bottom-left or top-right corner and move towards the top-right or bottom-left direction. Compare the current element $\textit{matrix}[i][j]$ with $\textit{target}$:
+
+-   If $\textit{matrix}[i][j] = \textit{target}$, it means the target value is found, and we return $\text{true}$.
+-   If $\textit{matrix}[i][j] > \textit{target}$, it means all elements in this column from the current position upwards are greater than $\textit{target}$, so we move the $i$ pointer upwards, i.e., $i \leftarrow i - 1$.
+-   If $\textit{matrix}[i][j] < \textit{target}$, it means all elements in this row from the current position to the right are less than $\textit{target}$, so we move the $j$ pointer to the right, i.e., $j \leftarrow j + 1$.
+
+If the search ends and the $\textit{target}$ is not found, return $\text{false}$.
+
+The time complexity is $O(m + n)$, where $m$ and $n$ are the number of rows and columns of the matrix, respectively. The space complexity is $O(1)$.
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -70,21 +246,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public boolean searchMatrix(int[][] matrix, int target) {
-        for (var row : matrix) {
-            int j = Arrays.binarySearch(row, target);
-            if (j >= 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -106,22 +268,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        for (auto& row : matrix) {
-            int j = lower_bound(row.begin(), row.end(), target) - row.begin();
-            if (j < matrix[0].size() && row[j] == target) {
-                return true;
-            }
-        }
-        return false;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -144,19 +291,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func searchMatrix(matrix [][]int, target int) bool {
-	for _, row := range matrix {
-		j := sort.SearchInts(row, target)
-		if j < len(matrix[0]) && row[j] == target {
-			return true
-		}
-	}
-	return false
-}
-```
+#### Go
 
 ```go
 func searchMatrix(matrix [][]int, target int) bool {
@@ -176,40 +311,17 @@ func searchMatrix(matrix [][]int, target int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function searchMatrix(matrix: number[][], target: number): boolean {
-    const n = matrix[0].length;
-    for (const row of matrix) {
-        let left = 0,
-            right = n;
-        while (left < right) {
-            const mid = (left + right) >> 1;
-            if (row[mid] >= target) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        if (left != n && row[left] == target) {
+    const [m, n] = [matrix.length, matrix[0].length];
+    let [i, j] = [m - 1, 0];
+    while (i >= 0 && j < n) {
+        if (matrix[i][j] === target) {
             return true;
         }
-    }
-    return false;
-}
-```
-
-```ts
-function searchMatrix(matrix: number[][], target: number): boolean {
-    let m = matrix.length,
-        n = matrix[0].length;
-    let i = m - 1,
-        j = 0;
-    while (i >= 0 && j < n) {
-        let cur = matrix[i][j];
-        if (cur == target) return true;
-        if (cur > target) {
+        if (matrix[i][j] > target) {
             --i;
         } else {
             ++j;
@@ -219,21 +331,34 @@ function searchMatrix(matrix: number[][], target: number): boolean {
 }
 ```
 
-### **C#**
+#### Rust
 
-```cs
-public class Solution {
-    public bool SearchMatrix(int[][] matrix, int target) {
-        foreach (int[] row in matrix) {
-            int j = Array.BinarySearch(row, target);
-            if (j >= 0) {
+```rust
+impl Solution {
+    pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
+        let m = matrix.len();
+        let n = matrix[0].len();
+        let mut i = m - 1;
+        let mut j = 0;
+        while i >= 0 && j < n {
+            if matrix[i][j] == target {
                 return true;
             }
+            if matrix[i][j] > target {
+                if i == 0 {
+                    break;
+                }
+                i -= 1;
+            } else {
+                j += 1;
+            }
         }
-        return false;
+        false
     }
 }
 ```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -255,62 +380,8 @@ public class Solution {
 }
 ```
 
-### **Rust**
-
-```rust
-use std::cmp::Ordering;
-
-impl Solution {
-    pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
-        let m = matrix.len();
-        let n = matrix[0].len();
-        let mut i = 0;
-        let mut j = n;
-        while i < m && j > 0 {
-            match target.cmp(&matrix[i][j - 1]) {
-                Ordering::Less => j -= 1,
-                Ordering::Greater => i += 1,
-                Ordering::Equal => return true,
-            }
-        }
-        false
-    }
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {number[][]} matrix
- * @param {number} target
- * @return {boolean}
- */
-var searchMatrix = function (matrix, target) {
-    const n = matrix[0].length;
-    for (const row of matrix) {
-        let left = 0,
-            right = n;
-        while (left < right) {
-            const mid = (left + right) >> 1;
-            if (row[mid] >= target) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        if (left != n && row[left] == target) {
-            return true;
-        }
-    }
-    return false;
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

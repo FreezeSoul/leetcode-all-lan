@@ -1,10 +1,24 @@
-# [2186. 使两字符串互为字母异位词的最少步骤数](https://leetcode.cn/problems/minimum-number-of-steps-to-make-two-strings-anagram-ii)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2186.Minimum%20Number%20of%20Steps%20to%20Make%20Two%20Strings%20Anagram%20II/README.md
+rating: 1253
+source: 第 282 场周赛 Q2
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
+# [2186. 制造字母异位词的最小步骤数 II](https://leetcode.cn/problems/minimum-number-of-steps-to-make-two-strings-anagram-ii)
 
 [English Version](/solution/2100-2199/2186.Minimum%20Number%20of%20Steps%20to%20Make%20Two%20Strings%20Anagram%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串 <code>s</code> 和 <code>t</code> 。在一步操作中，你可以给 <code>s</code> 或者 <code>t</code> 追加 <strong>任一字符</strong> 。</p>
 
@@ -41,17 +55,17 @@
 	<li><code>s</code> 和 <code>t</code> 由小写英文字符组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -62,9 +76,7 @@ class Solution:
         return sum(abs(v) for v in cnt.values())
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -85,26 +97,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function minSteps(s: string, t: string): number {
-    let cnt = new Array(128).fill(0);
-    for (const c of s) {
-        ++cnt[c.charCodeAt(0)];
-    }
-    for (const c of t) {
-        --cnt[c.charCodeAt(0)];
-    }
-    let ans = 0;
-    for (const v of cnt) {
-        ans += Math.abs(v);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +113,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSteps(s string, t string) int {
@@ -146,7 +139,26 @@ func abs(x int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function minSteps(s: string, t: string): number {
+    let cnt = new Array(128).fill(0);
+    for (const c of s) {
+        ++cnt[c.charCodeAt(0)];
+    }
+    for (const c of t) {
+        --cnt[c.charCodeAt(0)];
+    }
+    let ans = 0;
+    for (const v of cnt) {
+        ans += Math.abs(v);
+    }
+    return ans;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -170,10 +182,8 @@ var minSteps = function (s, t) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

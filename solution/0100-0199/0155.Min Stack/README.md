@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0155.Min%20Stack/README.md
+tags:
+    - 栈
+    - 设计
+---
+
+<!-- problem:start -->
+
 # [155. 最小栈](https://leetcode.cn/problems/min-stack)
 
 [English Version](/solution/0100-0199/0155.Min%20Stack/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个支持 <code>push</code> ，<code>pop</code> ，<code>top</code> 操作，并能在常数时间内检索到最小元素的栈。</p>
 
@@ -51,11 +62,13 @@ minStack.getMin();   --&gt; 返回 -2.
 	<li><code>push</code>,&nbsp;<code>pop</code>,&nbsp;<code>top</code>, and&nbsp;<code>getMin</code>最多被调用&nbsp;<code>3 * 10<sup>4</sup></code>&nbsp;次</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双栈**
+### 方法一：双栈
 
 我们用两个栈来实现，其中 `stk1` 用来存储数据，`stk2` 用来存储当前栈中的最小值。初始时，`stk2` 中存储一个极大值。
 
@@ -68,13 +81,10 @@ minStack.getMin();   --&gt; 返回 -2.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class MinStack:
-
     def __init__(self):
         self.stk1 = []
         self.stk2 = [inf]
@@ -102,9 +112,7 @@ class MinStack:
 # param_4 = obj.getMin()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class MinStack {
@@ -144,7 +152,7 @@ class MinStack {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class MinStack {
@@ -186,7 +194,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type MinStack struct {
@@ -216,13 +224,6 @@ func (this *MinStack) GetMin() int {
 	return this.stk2[len(this.stk2)-1]
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 /**
  * Your MinStack object will be instantiated and called as such:
  * obj := Constructor();
@@ -233,7 +234,7 @@ func min(a, b int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class MinStack {
@@ -274,7 +275,52 @@ class MinStack {
  */
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+use std::collections::VecDeque;
+struct MinStack {
+    stk1: VecDeque<i32>,
+    stk2: VecDeque<i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl MinStack {
+    fn new() -> Self {
+        Self {
+            stk1: VecDeque::new(),
+            stk2: VecDeque::new(),
+        }
+    }
+
+    fn push(&mut self, x: i32) {
+        self.stk1.push_back(x);
+        if self.stk2.is_empty() || *self.stk2.back().unwrap() >= x {
+            self.stk2.push_back(x);
+        }
+    }
+
+    fn pop(&mut self) {
+        let val = self.stk1.pop_back().unwrap();
+        if *self.stk2.back().unwrap() == val {
+            self.stk2.pop_back();
+        }
+    }
+
+    fn top(&self) -> i32 {
+        *self.stk1.back().unwrap()
+    }
+
+    fn get_min(&self) -> i32 {
+        *self.stk2.back().unwrap()
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 var MinStack = function () {
@@ -323,60 +369,7 @@ MinStack.prototype.getMin = function () {
  */
 ```
 
-### **Rust**
-
-```rust
-use std::collections::VecDeque;
-struct MinStack {
-    stk1: VecDeque<i32>,
-    stk2: VecDeque<i32>,
-}
-
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl MinStack {
-
-    fn new() -> Self {
-        Self { stk1: VecDeque::new(), stk2: VecDeque::new() }
-    }
-
-    fn push(&mut self, x: i32) {
-        self.stk1.push_back(x);
-        if self.stk2.is_empty() || *self.stk2.back().unwrap() >= x {
-            self.stk2.push_back(x);
-        }
-    }
-
-    fn pop(&mut self) {
-        let val = self.stk1.pop_back().unwrap();
-        if *self.stk2.back().unwrap() == val {
-            self.stk2.pop_back();
-        }
-    }
-
-    fn top(&self) -> i32 {
-        *self.stk1.back().unwrap()
-    }
-
-    fn get_min(&self) -> i32 {
-        *self.stk2.back().unwrap()
-    }
-}
-
-/**
- * Your MinStack object will be instantiated and called as such:
- * let obj = MinStack::new();
- * obj.push(x);
- * obj.pop();
- * let ret_3: i32 = obj.top();
- * let ret_4: i32 = obj.get_min();
- */
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class MinStack {
@@ -416,10 +409,8 @@ public class MinStack {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0619.Biggest%20Single%20Number/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [619. Biggest Single Number](https://leetcode.com/problems/biggest-single-number)
 
 [中文文档](/solution/0600-0699/0619.Biggest%20Single%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>MyNumbers</code></p>
 
@@ -12,7 +24,7 @@
 +-------------+------+
 | num         | int  |
 +-------------+------+
-There is no primary key for this table. It may contain duplicates.
+This table may contain duplicates (In other words, there is no primary key for this table in SQL).
 Each row of this table contains an integer.
 </pre>
 
@@ -20,9 +32,9 @@ Each row of this table contains an integer.
 
 <p>A <strong>single number</strong> is a number that appeared only once in the <code>MyNumbers</code> table.</p>
 
-<p>Write an SQL query to report the largest <strong>single number</strong>. If there is no <strong>single number</strong>, report <code>null</code>.</p>
+<p>Find the largest <strong>single number</strong>. If there is no <strong>single number</strong>, report <code>null</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 <ptable> </ptable>
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -77,20 +89,61 @@ MyNumbers table:
 <strong>Explanation:</strong> There are no single numbers in the input table so we return null.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Grouping and Subquery
+
+We can first group the `MyNumbers` table by `num` and count the number of occurrences of each number. Then, we can use a subquery to find the maximum number among the numbers that appear only once.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT MAX(a.num) AS num
-FROM (
-	SELECT num
-	FROM MyNumbers
-	GROUP BY num
-	HAVING count(*) = 1
-) a;
+# Write your MySQL query statement below
+SELECT MAX(num) AS num
+FROM
+    (
+        SELECT num
+        FROM MyNumbers
+        GROUP BY 1
+        HAVING COUNT(1) = 1
+    ) AS t;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Grouping and `CASE` Expression
+
+Similar to Solution 1, we can first group the `MyNumbers` table by `num` and count the number of occurrences of each number. Then, we can use a `CASE` expression to find the numbers that appear only once, sort them in descending order by number, and take the first one.
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+SELECT
+    CASE
+        WHEN COUNT(1) = 1 THEN num
+        ELSE NULL
+    END AS num
+FROM MyNumbers
+GROUP BY num
+ORDER BY 1 DESC
+LIMIT 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

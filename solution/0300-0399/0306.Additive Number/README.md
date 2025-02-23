@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0306.Additive%20Number/README.md
+tags:
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [306. 累加数](https://leetcode.cn/problems/additive-number)
 
 [English Version](/solution/0300-0399/0306.Additive%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>累加数</strong> 是一个字符串，组成它的数字可以形成累加序列。</p>
 
@@ -44,19 +55,17 @@
 
 <p><strong>进阶：</strong>你计划如何处理由过大的整数输入导致的溢出?</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-DFS + 剪枝。
-
-Python 大整数相加不会有溢出问题。由于 num 字符串长度最大为 35，因此对于其他语言，可以通过控制整数长度防止溢出。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +93,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -129,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -151,7 +158,7 @@ public:
     bool dfs(long long a, long long b, string num) {
         if (num == "") return true;
         if (a + b > 0 && num[0] == '0') return false;
-        for (int i = 1; i < min((int)num.size() + 1, 19); ++i)
+        for (int i = 1; i < min((int) num.size() + 1, 19); ++i)
             if (a + b == stoll(num.substr(0, i)))
                 if (dfs(b, a + b, num.substr(i, num.size() - i)))
                     return true;
@@ -160,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isAdditiveNumber(num string) bool {
@@ -200,19 +207,10 @@ func isAdditiveNumber(num string) bool {
 	}
 	return false
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

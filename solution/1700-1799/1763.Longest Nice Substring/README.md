@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1763.Longest%20Nice%20Substring/README.md
+rating: 1521
+source: 第 46 场双周赛 Q1
+tags:
+    - 位运算
+    - 哈希表
+    - 字符串
+    - 分治
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [1763. 最长的美好子字符串](https://leetcode.cn/problems/longest-nice-substring)
 
 [English Version](/solution/1700-1799/1763.Longest%20Nice%20Substring/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>当一个字符串 <code>s</code> 包含的每一种字母的大写和小写形式 <strong>同时</strong> 出现在 <code>s</code> 中，就称这个字符串 <code>s</code> 是 <strong>美好</strong> 字符串。比方说，<code>"abABB"</code> 是美好字符串，因为 <code>'A'</code> 和 <code>'a'</code> 同时出现了，且 <code>'B'</code> 和 <code>'b'</code> 也同时出现了。然而，<code>"abA"</code> 不是美好字符串因为 <code>'b'</code> 出现了，而 <code>'B'</code> 没有出现。</p>
 
@@ -52,11 +68,13 @@
 	<li><code>s</code> 只包含大写和小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举 + 哈希表**
+### 方法一：枚举 + 哈希表
 
 我们可以直接枚举所有子串的起点位置 $i$，找到以该位置所在的字符为首字符的所有子串，用哈希表 $s$ 记录子串的所有字符。
 
@@ -64,19 +82,9 @@
 
 时间复杂度 $O(n^2 \times C)$，空间复杂度 $O(C)$。其中 $n$ 为字符串 $s$ 的长度，而 $C$ 为字符集的大小。
 
-**方法二：枚举 + 位运算**
-
-与方法一类似，我们可以直接枚举所有子串的起点位置 $i$，找到以该位置所在的字符为首字符的所有子串，用两个整数 $lower$ 和 $upper$ 分别记录子串中小写字母和大写字母的出现情况。
-
-判断子串是否满足条件，只需要判断 $lower$ 和 $upper$ 中对应的位是否都为 $1$ 即可。
-
-时间复杂度 $O(n^2)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,31 +95,15 @@ class Solution:
             ss = set()
             for j in range(i, n):
                 ss.add(s[j])
-                if all(c.lower() in ss and c.upper() in ss for c in ss) and len(ans) < j - i + 1:
-                    ans = s[i: j + 1]
+                if (
+                    all(c.lower() in ss and c.upper() in ss for c in ss)
+                    and len(ans) < j - i + 1
+                ):
+                    ans = s[i : j + 1]
         return ans
 ```
 
-```python
-class Solution:
-    def longestNiceSubstring(self, s: str) -> str:
-        n = len(s)
-        ans = ''
-        for i in range(n):
-            lower = upper = 0
-            for j in range(i, n):
-                if s[j].islower():
-                    lower |= 1 << (ord(s[j]) - ord('a'))
-                else:
-                    upper |= 1 << (ord(s[j]) - ord('A'))
-                if lower == upper and len(ans) < j - i + 1:
-                    ans = s[i: j + 1]
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -142,33 +134,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public String longestNiceSubstring(String s) {
-        int n = s.length();
-        int k = -1;
-        int mx = 0;
-        for (int i = 0; i < n; ++i) {
-            int lower = 0, upper = 0;
-            for (int j = i; j < n; ++j) {
-                char c = s.charAt(j);
-                if (Character.isLowerCase(c)) {
-                    lower |= 1 << (c - 'a');
-                } else {
-                    upper |= 1 << (c - 'A');
-                }
-                if (lower == upper && mx < j - i + 1) {
-                    mx = j - i + 1;
-                    k = i;
-                }
-            }
-        }
-        return k == -1 ? "" : s.substring(k, k + mx);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -199,30 +165,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    string longestNiceSubstring(string s) {
-        int n = s.size();
-        int k = -1, mx = 0;
-        for (int i = 0; i < n; ++i) {
-            int lower = 0, upper = 0;
-            for (int j = i; j < n; ++j) {
-                char c = s[j];
-                if (islower(c)) lower |= 1 << (c - 'a');
-                else upper |= 1 << (c - 'A');
-                if (lower == upper && mx < j - i + 1) {
-                    mx = j - i + 1;
-                    k = i;
-                }
-            }
-        }
-        return k == -1 ? "" : s.substr(k, mx);
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func longestNiceSubstring(s string) string {
@@ -253,6 +196,123 @@ func longestNiceSubstring(s string) string {
 }
 ```
 
+#### TypeScript
+
+```ts
+function longestNiceSubstring(s: string): string {
+    const n = s.length;
+    let ans = '';
+    for (let i = 0; i < n; i++) {
+        let lower = 0,
+            upper = 0;
+        for (let j = i; j < n; j++) {
+            const c = s.charCodeAt(j);
+            if (c > 96) {
+                lower |= 1 << (c - 97);
+            } else {
+                upper |= 1 << (c - 65);
+            }
+            if (lower == upper && j - i + 1 > ans.length) {
+                ans = s.substring(i, j + 1);
+            }
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：枚举 + 位运算
+
+与方法一类似，我们可以直接枚举所有子串的起点位置 $i$，找到以该位置所在的字符为首字符的所有子串，用两个整数 $lower$ 和 $upper$ 分别记录子串中小写字母和大写字母的出现情况。
+
+判断子串是否满足条件，只需要判断 $lower$ 和 $upper$ 中对应的位是否都为 $1$ 即可。
+
+时间复杂度 $O(n^2)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def longestNiceSubstring(self, s: str) -> str:
+        n = len(s)
+        ans = ''
+        for i in range(n):
+            lower = upper = 0
+            for j in range(i, n):
+                if s[j].islower():
+                    lower |= 1 << (ord(s[j]) - ord('a'))
+                else:
+                    upper |= 1 << (ord(s[j]) - ord('A'))
+                if lower == upper and len(ans) < j - i + 1:
+                    ans = s[i : j + 1]
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public String longestNiceSubstring(String s) {
+        int n = s.length();
+        int k = -1;
+        int mx = 0;
+        for (int i = 0; i < n; ++i) {
+            int lower = 0, upper = 0;
+            for (int j = i; j < n; ++j) {
+                char c = s.charAt(j);
+                if (Character.isLowerCase(c)) {
+                    lower |= 1 << (c - 'a');
+                } else {
+                    upper |= 1 << (c - 'A');
+                }
+                if (lower == upper && mx < j - i + 1) {
+                    mx = j - i + 1;
+                    k = i;
+                }
+            }
+        }
+        return k == -1 ? "" : s.substring(k, k + mx);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    string longestNiceSubstring(string s) {
+        int n = s.size();
+        int k = -1, mx = 0;
+        for (int i = 0; i < n; ++i) {
+            int lower = 0, upper = 0;
+            for (int j = i; j < n; ++j) {
+                char c = s[j];
+                if (islower(c))
+                    lower |= 1 << (c - 'a');
+                else
+                    upper |= 1 << (c - 'A');
+                if (lower == upper && mx < j - i + 1) {
+                    mx = j - i + 1;
+                    k = i;
+                }
+            }
+        }
+        return k == -1 ? "" : s.substr(k, mx);
+    }
+};
+```
+
+#### Go
+
 ```go
 func longestNiceSubstring(s string) string {
 	n := len(s)
@@ -278,35 +338,8 @@ func longestNiceSubstring(s string) string {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function longestNiceSubstring(s: string): string {
-    const n = s.length;
-    let ans = '';
-    for (let i = 0; i < n; i++) {
-        let lower = 0,
-            upper = 0;
-        for (let j = i; j < n; j++) {
-            const c = s.charCodeAt(j);
-            if (c > 96) {
-                lower |= 1 << (c - 97);
-            } else {
-                upper |= 1 << (c - 65);
-            }
-            if (lower == upper && j - i + 1 > ans.length) {
-                ans = s.substring(i, j + 1);
-            }
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

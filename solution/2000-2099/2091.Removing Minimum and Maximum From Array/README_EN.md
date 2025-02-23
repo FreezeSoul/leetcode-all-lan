@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2091.Removing%20Minimum%20and%20Maximum%20From%20Array/README_EN.md
+rating: 1384
+source: Weekly Contest 269 Q3
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2091. Removing Minimum and Maximum From Array](https://leetcode.com/problems/removing-minimum-and-maximum-from-array)
 
 [中文文档](/solution/2000-2099/2091.Removing%20Minimum%20and%20Maximum%20From%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array of <strong>distinct</strong> integers <code>nums</code>.</p>
 
@@ -56,11 +71,17 @@ We can remove it with 1 deletion.
 	<li>The integers in <code>nums</code> are <strong>distinct</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +97,7 @@ class Solution:
         return min(mx + 1, len(nums) - mi, mi + 1 + len(nums) - mx)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,21 +121,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function minimumDeletions(nums: number[]): number {
-    const n = nums.length;
-    if (n == 1) return 1;
-    let i = nums.indexOf(Math.min(...nums));
-    let j = nums.indexOf(Math.max(...nums));
-    let left = Math.min(i, j);
-    let right = Math.max(i, j);
-    return Math.min(left + 1 + n - right, right + 1, n - left);
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumDeletions(nums []int) int {
@@ -153,19 +160,27 @@ func minimumDeletions(nums []int) int {
 	}
 	return min(min(mx+1, n-mi), mi+1+n-mx)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minimumDeletions(nums: number[]): number {
+    const n = nums.length;
+    if (n == 1) return 1;
+    let i = nums.indexOf(Math.min(...nums));
+    let j = nums.indexOf(Math.max(...nums));
+    let left = Math.min(i, j);
+    let right = Math.max(i, j);
+    // 左右 left + 1 + n - right
+    // 两个都是左边 left + 1 + right - left = right + 1
+    // 都是右边 n - right + right - left = n - left
+    return Math.min(left + 1 + n - right, right + 1, n - left);
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

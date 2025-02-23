@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1312.Minimum%20Insertion%20Steps%20to%20Make%20a%20String%20Palindrome/README_EN.md
+rating: 1786
+source: Weekly Contest 170 Q4
+tags:
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1312. Minimum Insertion Steps to Make a String Palindrome](https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome)
 
 [中文文档](/solution/1300-1399/1312.Minimum%20Insertion%20Steps%20to%20Make%20a%20String%20Palindrome/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>. In one step you can insert any character at any index of the string.</p>
 
@@ -43,11 +58,17 @@
 	<li><code>s</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,36 +84,7 @@ class Solution:
         return dfs(0, len(s) - 1)
 ```
 
-```python
-class Solution:
-    def minInsertions(self, s: str) -> int:
-        n = len(s)
-        f = [[0] * n for _ in range(n)]
-        for i in range(n - 2, -1, -1):
-            for j in range(i + 1, n):
-                if s[i] == s[j]:
-                    f[i][j] = f[i + 1][j - 1]
-                else:
-                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1
-        return f[0][-1]
-```
-
-```python
-class Solution:
-    def minInsertions(self, s: str) -> int:
-        n = len(s)
-        f = [[0] * n for _ in range(n)]
-        for k in range(2, n + 1):
-            for i in range(n - k + 1):
-                j = i + k - 1
-                if s[i] == s[j]:
-                    f[i][j] = f[i + 1][j - 1]
-                else:
-                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1
-        return f[0][n - 1]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -124,46 +116,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int minInsertions(String s) {
-        int n = s.length();
-        int[][] f = new int[n][n];
-        for (int i = n - 2; i >= 0; --i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (s.charAt(i) == s.charAt(j)) {
-                    f[i][j] = f[i + 1][j - 1];
-                } else {
-                    f[i][j] = Math.min(f[i + 1][j], f[i][j - 1]) + 1;
-                }
-            }
-        }
-        return f[0][n - 1];
-    }
-}
-```
-
-```java
-class Solution {
-    public int minInsertions(String s) {
-        int n = s.length();
-        int[][] f = new int[n][n];
-        for (int k = 2; k <= n; ++k) {
-            for (int i = 0; i + k - 1 < n; ++i) {
-                int j = i + k - 1;
-                if (s.charAt(i) == s.charAt(j)) {
-                    f[i][j] = f[i + 1][j - 1];
-                } else {
-                    f[i][j] = Math.min(f[i + 1][j], f[i][j - 1]) + 1;
-                }
-            }
-        }
-        return f[0][n - 1];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -192,50 +145,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int minInsertions(string s) {
-        int n = s.size();
-        int f[n][n];
-        memset(f, 0, sizeof(f));
-        for (int i = n - 2; i >= 0; --i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (s[i] == s[j]) {
-                    f[i][j] = f[i + 1][j - 1];
-                } else {
-                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1;
-                }
-            }
-        }
-        return f[0][n - 1];
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    int minInsertions(string s) {
-        int n = s.size();
-        int f[n][n];
-        memset(f, 0, sizeof(f));
-        for (int k = 2; k <= n; ++k) {
-            for (int i = 0; i + k - 1 < n; ++i) {
-                int j = i + k - 1;
-                if (s[i] == s[j]) {
-                    f[i][j] = f[i + 1][j - 1];
-                } else {
-                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1;
-                }
-            }
-        }
-        return f[0][n - 1];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func minInsertions(s string) int {
@@ -266,14 +176,79 @@ func minInsertions(s string) int {
 	}
 	return dfs(0, n-1)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minInsertions(self, s: str) -> int:
+        n = len(s)
+        f = [[0] * n for _ in range(n)]
+        for i in range(n - 2, -1, -1):
+            for j in range(i + 1, n):
+                if s[i] == s[j]:
+                    f[i][j] = f[i + 1][j - 1]
+                else:
+                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1
+        return f[0][-1]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int minInsertions(String s) {
+        int n = s.length();
+        int[][] f = new int[n][n];
+        for (int i = n - 2; i >= 0; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    f[i][j] = f[i + 1][j - 1];
+                } else {
+                    f[i][j] = Math.min(f[i + 1][j], f[i][j - 1]) + 1;
+                }
+            }
+        }
+        return f[0][n - 1];
+    }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minInsertions(string s) {
+        int n = s.size();
+        int f[n][n];
+        memset(f, 0, sizeof(f));
+        for (int i = n - 2; i >= 0; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (s[i] == s[j]) {
+                    f[i][j] = f[i + 1][j - 1];
+                } else {
+                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1;
+                }
+            }
+        }
+        return f[0][n - 1];
+    }
+};
+```
+
+#### Go
 
 ```go
 func minInsertions(s string) int {
@@ -293,14 +268,82 @@ func minInsertions(s string) int {
 	}
 	return f[0][n-1]
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 3
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minInsertions(self, s: str) -> int:
+        n = len(s)
+        f = [[0] * n for _ in range(n)]
+        for k in range(2, n + 1):
+            for i in range(n - k + 1):
+                j = i + k - 1
+                if s[i] == s[j]:
+                    f[i][j] = f[i + 1][j - 1]
+                else:
+                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1
+        return f[0][n - 1]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int minInsertions(String s) {
+        int n = s.length();
+        int[][] f = new int[n][n];
+        for (int k = 2; k <= n; ++k) {
+            for (int i = 0; i + k - 1 < n; ++i) {
+                int j = i + k - 1;
+                if (s.charAt(i) == s.charAt(j)) {
+                    f[i][j] = f[i + 1][j - 1];
+                } else {
+                    f[i][j] = Math.min(f[i + 1][j], f[i][j - 1]) + 1;
+                }
+            }
+        }
+        return f[0][n - 1];
+    }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minInsertions(string s) {
+        int n = s.size();
+        int f[n][n];
+        memset(f, 0, sizeof(f));
+        for (int k = 2; k <= n; ++k) {
+            for (int i = 0; i + k - 1 < n; ++i) {
+                int j = i + k - 1;
+                if (s[i] == s[j]) {
+                    f[i][j] = f[i + 1][j - 1];
+                } else {
+                    f[i][j] = min(f[i + 1][j], f[i][j - 1]) + 1;
+                }
+            }
+        }
+        return f[0][n - 1];
+    }
+};
+```
+
+#### Go
 
 ```go
 func minInsertions(s string) int {
@@ -321,19 +364,10 @@ func minInsertions(s string) int {
 	}
 	return f[0][n-1]
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

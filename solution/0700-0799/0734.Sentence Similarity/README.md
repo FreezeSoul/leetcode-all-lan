@@ -1,10 +1,22 @@
-# [734. 句子相似性](https://leetcode.cn/problems/sentence-similarity)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0734.Sentence%20Similarity/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [734. 句子相似性 🔒](https://leetcode.cn/problems/sentence-similarity)
 
 [English Version](/solution/0700-0799/0734.Sentence%20Similarity/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们可以将一个句子表示为一个单词数组，例如，句子 <code>"I am happy with leetcode"</code> 可以表示为 <code>arr = ["I","am",happy","with","leetcode"]</code></p>
 
@@ -60,17 +72,27 @@
 	<li>所有对&nbsp;<code>(xi, yi)</code>&nbsp;都是 <strong>不同</strong> 的</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
+
+我们首先判断 $\textit{sentence1}$ 和 $\textit{sentence2}$ 的长度是否相等，如果不相等则返回 $\text{false}$。
+
+然后我们使用一个哈希表 $\textit{s}$ 来存储所有相似的单词对，对于 $\textit{similarPairs}$ 中的每一个单词对 $[x, y]$，我们将 $x$ 和 $y$ 加入到哈希表 $\textit{s}$ 中。
+
+接下来我们遍历 $\textit{sentence1}$ 和 $\textit{sentence2}$，对于每一个位置 $i$，如果 $\textit{sentence1}[i]$ 不等于 $\textit{sentence2}[i]$，并且 $(\textit{sentence1}[i], \textit{sentence2}[i])$ 和 $(\textit{sentence2}[i], \textit{sentence1}[i])$ 都不在哈希表 $\textit{s}$ 中，那么返回 $\text{false}$。
+
+如果遍历结束后都没有返回 $\text{false}$，说明 $\textit{sentence1}$ 和 $\textit{sentence2}$ 是相似的，返回 $\text{true}$。
+
+时间复杂度 $O(L)$，空间复杂度 $O(L)$，其中 $L$ 为题目中所有字符串的长度之和。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,15 +101,14 @@ class Solution:
     ) -> bool:
         if len(sentence1) != len(sentence2):
             return False
-        s = {(a, b) for a, b in similarPairs}
-        return all(
-            a == b or (a, b) in s or (b, a) in s for a, b in zip(sentence1, sentence2)
-        )
+        s = {(x, y) for x, y in similarPairs}
+        for x, y in zip(sentence1, sentence2):
+            if x != y and (x, y) not in s and (y, x) not in s:
+                return False
+        return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -96,13 +117,14 @@ class Solution {
         if (sentence1.length != sentence2.length) {
             return false;
         }
-        Set<String> s = new HashSet<>();
-        for (List<String> e : similarPairs) {
-            s.add(e.get(0) + "." + e.get(1));
+        Set<List<String>> s = new HashSet<>();
+        for (var p : similarPairs) {
+            s.add(p);
         }
-        for (int i = 0; i < sentence1.length; ++i) {
-            String a = sentence1[i], b = sentence2[i];
-            if (!a.equals(b) && !s.contains(a + "." + b) && !s.contains(b + "." + a)) {
+        for (int i = 0; i < sentence1.length; i++) {
+            if (!sentence1[i].equals(sentence2[i])
+                && !s.contains(List.of(sentence1[i], sentence2[i]))
+                && !s.contains(List.of(sentence2[i], sentence1[i]))) {
                 return false;
             }
         }
@@ -111,26 +133,31 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool areSentencesSimilar(vector<string>& sentence1, vector<string>& sentence2, vector<vector<string>>& similarPairs) {
-        int m = sentence1.size(), n = sentence2.size();
-        if (m != n) return false;
+        if (sentence1.size() != sentence2.size()) {
+            return false;
+        }
         unordered_set<string> s;
-        for (auto e : similarPairs) s.insert(e[0] + "." + e[1]);
-        for (int i = 0; i < n; ++i) {
-            string a = sentence1[i], b = sentence2[i];
-            if (a != b && !s.count(a + "." + b) && !s.count(b + "." + a)) return false;
+        for (const auto& p : similarPairs) {
+            s.insert(p[0] + "#" + p[1]);
+            s.insert(p[1] + "#" + p[0]);
+        }
+        for (int i = 0; i < sentence1.size(); ++i) {
+            if (sentence1[i] != sentence2[i] && !s.contains(sentence1[i] + "#" + sentence2[i])) {
+                return false;
+            }
         }
         return true;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func areSentencesSimilar(sentence1 []string, sentence2 []string, similarPairs [][]string) bool {
@@ -138,12 +165,12 @@ func areSentencesSimilar(sentence1 []string, sentence2 []string, similarPairs []
 		return false
 	}
 	s := map[string]bool{}
-	for _, e := range similarPairs {
-		s[e[0]+"."+e[1]] = true
+	for _, p := range similarPairs {
+		s[p[0]+"#"+p[1]] = true
 	}
-	for i, a := range sentence1 {
-		b := sentence2[i]
-		if a != b && !s[a+"."+b] && !s[b+"."+a] {
+	for i, x := range sentence1 {
+		y := sentence2[i]
+		if x != y && !s[x+"#"+y] && !s[y+"#"+x] {
 			return false
 		}
 	}
@@ -151,10 +178,93 @@ func areSentencesSimilar(sentence1 []string, sentence2 []string, similarPairs []
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function areSentencesSimilar(
+    sentence1: string[],
+    sentence2: string[],
+    similarPairs: string[][],
+): boolean {
+    if (sentence1.length !== sentence2.length) {
+        return false;
+    }
+    const s = new Set<string>();
+    for (const [x, y] of similarPairs) {
+        s.add(x + '#' + y);
+        s.add(y + '#' + x);
+    }
+    for (let i = 0; i < sentence1.length; i++) {
+        if (sentence1[i] !== sentence2[i] && !s.has(sentence1[i] + '#' + sentence2[i])) {
+            return false;
+        }
+    }
+    return true;
+}
 ```
 
+#### Rust
+
+```rust
+use std::collections::HashSet;
+
+impl Solution {
+    pub fn are_sentences_similar(
+        sentence1: Vec<String>,
+        sentence2: Vec<String>,
+        similar_pairs: Vec<Vec<String>>,
+    ) -> bool {
+        if sentence1.len() != sentence2.len() {
+            return false;
+        }
+
+        let s: HashSet<(String, String)> = similar_pairs
+            .into_iter()
+            .map(|pair| (pair[0].clone(), pair[1].clone()))
+            .collect();
+
+        for (x, y) in sentence1.iter().zip(sentence2.iter()) {
+            if x != y
+                && !s.contains(&(x.clone(), y.clone()))
+                && !s.contains(&(y.clone(), x.clone()))
+            {
+                return false;
+            }
+        }
+        true
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string[]} sentence1
+ * @param {string[]} sentence2
+ * @param {string[][]} similarPairs
+ * @return {boolean}
+ */
+var areSentencesSimilar = function (sentence1, sentence2, similarPairs) {
+    if (sentence1.length !== sentence2.length) {
+        return false;
+    }
+    const s = new Set();
+    for (const [x, y] of similarPairs) {
+        s.add(x + '#' + y);
+        s.add(y + '#' + x);
+    }
+    for (let i = 0; i < sentence1.length; i++) {
+        if (sentence1[i] !== sentence2[i] && !s.has(sentence1[i] + '#' + sentence2[i])) {
+            return false;
+        }
+    }
+    return true;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,18 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.13.Re-Space/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 17.13. 恢复空格](https://leetcode.cn/problems/re-space-lcci)
 
 [English Version](/lcci/17.13.Re-Space/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>哦，不！你不小心把一个长篇文章中的空格、标点都删掉了，并且大写也弄成了小写。像句子<code>&quot;I reset the computer. It still didn&rsquo;t boot!&quot;</code>已经变成了<code>&quot;iresetthecomputeritstilldidntboot&quot;</code>。在处理标点符号和大小写之前，你得先把它断成词语。当然了，你有一本厚厚的词典<code>dictionary</code>，不过，有些词没在词典里。假设文章用<code>sentence</code>表示，设计一个算法，把文章断开，要求未识别的字符最少，返回未识别的字符数。</p>
 
@@ -29,17 +37,17 @@ sentence = &quot;jesslookedjustliketimherbrother&quot;
 	<li>你可以认为<code>dictionary</code>和<code>sentence</code>中只包含小写字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -55,9 +63,7 @@ class Solution:
         return dp[-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +84,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,7 +106,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func respace(dictionary []string, sentence string) int {
@@ -120,19 +126,68 @@ func respace(dictionary []string, sentence string) int {
 	}
 	return dp[n]
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### Swift
+
+```swift
+class TrieNode {
+    var children: [TrieNode?] = Array(repeating: nil, count: 26)
+    var isEndOfWord = false
+}
+
+class Trie {
+    private let root = TrieNode()
+
+    func insert(_ word: String) {
+        var node = root
+        for char in word {
+            let index = Int(char.asciiValue! - Character("a").asciiValue!)
+            if node.children[index] == nil {
+                node.children[index] = TrieNode()
+            }
+            node = node.children[index]!
+        }
+        node.isEndOfWord = true
+    }
+
+    func search(_ sentence: Array<Character>, start: Int, end: Int) -> Bool {
+        var node = root
+        for i in start...end {
+            let index = Int(sentence[i].asciiValue! - Character("a").asciiValue!)
+            guard let nextNode = node.children[index] else {
+                return false
+            }
+            node = nextNode
+        }
+        return node.isEndOfWord
+    }
+}
+
+class Solution {
+    func respace(_ dictionary: [String], _ sentence: String) -> Int {
+        let n = sentence.count
+        guard n > 0 else { return 0 }
+        let trie = Trie()
+        dictionary.forEach { trie.insert($0) }
+        let chars = Array(sentence)
+        var dp = Array(repeating: Int.max, count: n + 1)
+        dp[0] = 0
+        for i in 1...n {
+            dp[i] = dp[i - 1] + 1
+            for j in 0..<i {
+                if trie.search(chars, start: j, end: i - 1) {
+                    dp[i] = min(dp[i], dp[j])
+                }
+            }
+        }
+        return dp[n]
+    }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

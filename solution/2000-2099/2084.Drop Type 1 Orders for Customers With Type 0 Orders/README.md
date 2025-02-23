@@ -1,10 +1,20 @@
-# [2084. 为订单类型为 0 的客户删除类型为 1 的订单](https://leetcode.cn/problems/drop-type-1-orders-for-customers-with-type-0-orders)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2084.Drop%20Type%201%20Orders%20for%20Customers%20With%20Type%200%20Orders/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2084. 为订单类型为 0 的客户删除类型为 1 的订单 🔒](https://leetcode.cn/problems/drop-type-1-orders-for-customers-with-type-0-orders)
 
 [English Version](/solution/2000-2099/2084.Drop%20Type%201%20Orders%20for%20Customers%20With%20Type%200%20Orders/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>活动表: <code>Orders</code></p>
 
@@ -69,18 +79,56 @@ Orders table:
 客户4有两个类型1的订单。我们两个都返回。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT DISTINCT customer_id
+        FROM Orders
+        WHERE order_type = 0
+    )
+SELECT *
+FROM Orders AS o
+WHERE order_type = 0 OR NOT EXISTS (SELECT 1 FROM T AS t WHERE t.customer_id = o.customer_id);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+SELECT DISTINCT
+    a.order_id,
+    a.customer_id,
+    a.order_type
+FROM
+    Orders AS a
+    LEFT JOIN Orders AS b ON a.customer_id = b.customer_id AND a.order_type != b.order_type
+WHERE b.order_type IS NULL OR b.order_type = 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1928.Minimum%20Cost%20to%20Reach%20Destination%20in%20Time/README.md
+rating: 2413
+source: 第 56 场双周赛 Q4
+tags:
+    - 图
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1928. 规定时间内到达终点的最小花费](https://leetcode.cn/problems/minimum-cost-to-reach-destination-in-time)
 
 [English Version](/solution/1900-1999/1928.Minimum%20Cost%20to%20Reach%20Destination%20in%20Time/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一个国家有 <code>n</code> 个城市，城市编号为 <code>0</code> 到 <code>n - 1</code> ，题目保证 <strong>所有城市</strong> 都由双向道路 <b>连接在一起</b> 。道路由二维整数数组 <code>edges</code> 表示，其中 <code>edges[i] = [x<sub>i</sub>, y<sub>i</sub>, time<sub>i</sub>]</code> 表示城市 <code>x<sub>i</sub></code> 和 <code>y<sub>i</sub></code> 之间有一条双向道路，耗费时间为 <code>time<sub>i</sub></code> 分钟。两个城市之间可能会有多条耗费时间不同的道路，但是不会有道路两头连接着同一座城市。</p>
 
@@ -61,32 +75,163 @@
 	<li>图中不含有自环。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：动态规划
+
+我们定义 $f[i][j]$ 表示经过 $i$ 分钟，从城市 $0$ 到达城市 $j$ 的最小花费。初始时 $f[0][0] = \textit{passingFees}[0]$，其余的 $f[0][j] = +\infty$。
+
+接下来，我们在 $[1, \textit{maxTime}]$ 的时间范围内，遍历所有的边，对于每一条边 $(x, y, t)$，如果 $t \leq i$，那么我们：
+
+-   可以先经过 $i - t$ 分钟，从城市 $0$ 到达城市 $y$，然后再经过 $t$ 分钟，从城市 $y$ 到达城市 $x$，再加上到达城市 $x$ 的通行费，即 $f[i][x] = \min(f[i][x], f[i - t][y] + \textit{passingFees}[x])$；
+-   也可以先经过 $i - t$ 分钟，从城市 $0$ 到达城市 $x$，然后再经过 $t$ 分钟，从城市 $x$ 到达城市 $y$，再加上到达城市 $y$ 的通行费，即 $f[i][y] = \min(f[i][y], f[i - t][x] + \textit{passingFees}[y])$。
+
+最终答案即为 $\min\{f[i][n - 1]\}$，其中 $i \in [0, \textit{maxTime}]$。如果答案为 $+\infty$，则返回 $-1$。
+
+时间复杂度 $O(\textit{maxTime} \times (m + n))$，其中 $m$ 和 $n$ 分别是边的数量和城市的数量。空间复杂度 $O(\textit{maxTime} \times n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-
+class Solution:
+    def minCost(
+        self, maxTime: int, edges: List[List[int]], passingFees: List[int]
+    ) -> int:
+        m, n = maxTime, len(passingFees)
+        f = [[inf] * n for _ in range(m + 1)]
+        f[0][0] = passingFees[0]
+        for i in range(1, m + 1):
+            for x, y, t in edges:
+                if t <= i:
+                    f[i][x] = min(f[i][x], f[i - t][y] + passingFees[x])
+                    f[i][y] = min(f[i][y], f[i - t][x] + passingFees[y])
+        ans = min(f[i][n - 1] for i in range(m + 1))
+        return ans if ans < inf else -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
+class Solution {
+    public int minCost(int maxTime, int[][] edges, int[] passingFees) {
+        int m = maxTime, n = passingFees.length;
+        int[][] f = new int[m + 1][n];
+        final int inf = 1 << 30;
+        for (var g : f) {
+            Arrays.fill(g, inf);
+        }
+        f[0][0] = passingFees[0];
+        for (int i = 1; i <= m; ++i) {
+            for (var e : edges) {
+                int x = e[0], y = e[1], t = e[2];
+                if (t <= i) {
+                    f[i][x] = Math.min(f[i][x], f[i - t][y] + passingFees[x]);
+                    f[i][y] = Math.min(f[i][y], f[i - t][x] + passingFees[y]);
+                }
+            }
+        }
+        int ans = inf;
+        for (int i = 0; i <= m; ++i) {
+            ans = Math.min(ans, f[i][n - 1]);
+        }
+        return ans == inf ? -1 : ans;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int minCost(int maxTime, vector<vector<int>>& edges, vector<int>& passingFees) {
+        int m = maxTime, n = passingFees.size();
+        const int inf = 1 << 30;
+        vector<vector<int>> f(m + 1, vector<int>(n, inf));
+        f[0][0] = passingFees[0];
+        for (int i = 1; i <= m; ++i) {
+            for (const auto& e : edges) {
+                int x = e[0], y = e[1], t = e[2];
+                if (t <= i) {
+                    f[i][x] = min(f[i][x], f[i - t][y] + passingFees[x]);
+                    f[i][y] = min(f[i][y], f[i - t][x] + passingFees[y]);
+                }
+            }
+        }
+        int ans = inf;
+        for (int i = 1; i <= m; ++i) {
+            ans = min(ans, f[i][n - 1]);
+        }
+        return ans == inf ? -1 : ans;
+    }
+};
 ```
 
+#### Go
+
+```go
+func minCost(maxTime int, edges [][]int, passingFees []int) int {
+	m, n := maxTime, len(passingFees)
+	f := make([][]int, m+1)
+	const inf int = 1 << 30
+	for i := range f {
+		f[i] = make([]int, n)
+		for j := range f[i] {
+			f[i][j] = inf
+		}
+	}
+	f[0][0] = passingFees[0]
+	for i := 1; i <= m; i++ {
+		for _, e := range edges {
+			x, y, t := e[0], e[1], e[2]
+			if t <= i {
+				f[i][x] = min(f[i][x], f[i-t][y]+passingFees[x])
+				f[i][y] = min(f[i][y], f[i-t][x]+passingFees[y])
+			}
+		}
+	}
+	ans := inf
+	for i := 1; i <= m; i++ {
+		ans = min(ans, f[i][n-1])
+	}
+	if ans == inf {
+		return -1
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function minCost(maxTime: number, edges: number[][], passingFees: number[]): number {
+    const [m, n] = [maxTime, passingFees.length];
+    const f: number[][] = Array.from({ length: m + 1 }, () => Array(n).fill(Infinity));
+    f[0][0] = passingFees[0];
+    for (let i = 1; i <= m; ++i) {
+        for (const [x, y, t] of edges) {
+            if (t <= i) {
+                f[i][x] = Math.min(f[i][x], f[i - t][y] + passingFees[x]);
+                f[i][y] = Math.min(f[i][y], f[i - t][x] + passingFees[y]);
+            }
+        }
+    }
+    let ans = Infinity;
+    for (let i = 1; i <= m; ++i) {
+        ans = Math.min(ans, f[i][n - 1]);
+    }
+    return ans === Infinity ? -1 : ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

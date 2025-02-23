@@ -1,30 +1,28 @@
 func maxProfit(k int, prices []int) int {
 	n := len(prices)
-	if n < 2 {
-		return 0
-	}
-	dp := make([][][]int, n)
-	for i := 0; i < n; i++ {
-		dp[i] = make([][]int, k+1)
-		for j := 0; j <= k; j++ {
-			dp[i][j] = make([]int, 2)
+	f := make([][][2]int, n)
+	for i := range f {
+		f[i] = make([][2]int, k+1)
+		for j := range f[i] {
+			f[i][j] = [2]int{-1, -1}
 		}
 	}
-	for i := 1; i <= k; i++ {
-		dp[0][i][1] = -prices[0]
-	}
-	for i := 1; i < n; i++ {
-		for j := 1; j <= k; j++ {
-			dp[i][j][0] = max(dp[i-1][j][1]+prices[i], dp[i-1][j][0])
-			dp[i][j][1] = max(dp[i-1][j-1][0]-prices[i], dp[i-1][j][1])
+	var dfs func(i, j, k int) int
+	dfs = func(i, j, k int) int {
+		if i >= n {
+			return 0
 		}
+		if f[i][j][k] != -1 {
+			return f[i][j][k]
+		}
+		ans := dfs(i+1, j, k)
+		if k > 0 {
+			ans = max(ans, prices[i]+dfs(i+1, j, 0))
+		} else if j > 0 {
+			ans = max(ans, -prices[i]+dfs(i+1, j-1, 1))
+		}
+		f[i][j][k] = ans
+		return ans
 	}
-	return dp[n-1][k][0]
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return dfs(0, k, 0)
 }

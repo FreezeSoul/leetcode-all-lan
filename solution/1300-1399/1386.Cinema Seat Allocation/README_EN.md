@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1386.Cinema%20Seat%20Allocation/README_EN.md
+rating: 1636
+source: Biweekly Contest 22 Q2
+tags:
+    - Greedy
+    - Bit Manipulation
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [1386. Cinema Seat Allocation](https://leetcode.com/problems/cinema-seat-allocation)
 
 [中文文档](/solution/1300-1399/1386.Cinema%20Seat%20Allocation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1300-1399/1386.Cinema%20Seat%20Allocation/images/cinema_seats_1.png" style="width: 400px; height: 149px;" /></p>
 
@@ -49,11 +66,29 @@
 	<li>All <code>reservedSeats[i]</code> are distinct.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Bit Manipulation
+
+We use a hash table $d$ to store all the reserved seats, where the key is the row number, and the value is the state of the reserved seats in that row, i.e., a binary number. The $j$-th bit being $1$ means the $j$-th seat is reserved, and $0$ means the $j$-th seat is not reserved.
+
+We traverse $reservedSeats$, for each seat $(i, j)$, we add the state of the $j$-th seat (corresponding to the $10-j$ bit in the lower bits) to $d[i]$.
+
+For rows that do not appear in the hash table $d$, we can arrange $2$ families arbitrarily, so the initial answer is $(n - len(d)) \times 2$.
+
+Next, we traverse the state of each row in the hash table. For each row, we try to arrange the situations $1234, 5678, 3456$ in turn. If a situation can be arranged, we add $1$ to the answer.
+
+After the traversal, we get the final answer.
+
+The time complexity is $O(m)$, and the space complexity is $O(m)$. Where $m$ is the length of $reservedSeats$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +106,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +157,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxNumberOfFamilies(n int, reservedSeats [][]int) int {
@@ -145,7 +180,7 @@ func maxNumberOfFamilies(n int, reservedSeats [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxNumberOfFamilies(n: number, reservedSeats: number[][]): number {
@@ -167,10 +202,8 @@ function maxNumberOfFamilies(n: number, reservedSeats: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

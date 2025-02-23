@@ -1,8 +1,24 @@
-# [1167. Minimum Cost to Connect Sticks](https://leetcode.com/problems/minimum-cost-to-connect-sticks)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1167.Minimum%20Cost%20to%20Connect%20Sticks/README_EN.md
+rating: 1481
+source: Biweekly Contest 7 Q3
+tags:
+    - Greedy
+    - Array
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
+# [1167. Minimum Cost to Connect Sticks 🔒](https://leetcode.com/problems/minimum-cost-to-connect-sticks)
 
 [中文文档](/solution/1100-1199/1167.Minimum%20Cost%20to%20Connect%20Sticks/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have some number of sticks with positive integer lengths. These lengths are given as an array&nbsp;<code>sticks</code>, where&nbsp;<code>sticks[i]</code>&nbsp;is the length of the&nbsp;<code>i<sup>th</sup></code>&nbsp;stick.</p>
 
@@ -50,13 +66,23 @@ There is only one stick left, so you are done. The total cost is 4 + 9 + 17 = 30
 	<li><code><span>1 &lt;= sticks[i] &lt;= 10<sup>4</sup></span></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Priority queue.
+<!-- solution:start -->
+
+### Solution 1: Greedy + Priority Queue (Min Heap)
+
+We can use a greedy approach, each time choosing the shortest two sticks to connect, which ensures the minimum cost of connection.
+
+Therefore, we can use a priority queue (min heap) to maintain the current stick lengths. Each time, we take out two sticks from the priority queue to connect, then put the connected stick back into the priority queue, until there is only one stick left in the priority queue.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array `sticks`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -90,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -115,7 +141,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func connectSticks(sticks []int) (ans int) {
@@ -131,9 +157,9 @@ func connectSticks(sticks []int) (ans int) {
 
 type hp struct{ sort.IntSlice }
 
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] < h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] < h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -141,7 +167,7 @@ func (h *hp) Pop() interface{} {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function connectSticks(sticks: number[]): number {
@@ -168,8 +194,7 @@ class Heap<T = number> {
     constructor(data: T[] | Compare<T>, compare?: (lhs: T, rhs: T) => number);
     constructor(
         data: T[] | Compare<T> = [],
-        compare: Compare<T> = (lhs: T, rhs: T) =>
-            lhs < rhs ? -1 : lhs > rhs ? 1 : 0,
+        compare: Compare<T> = (lhs: T, rhs: T) => (lhs < rhs ? -1 : lhs > rhs ? 1 : 0),
     ) {
         if (typeof data === 'function') {
             compare = data;
@@ -224,10 +249,8 @@ class Heap<T = number> {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

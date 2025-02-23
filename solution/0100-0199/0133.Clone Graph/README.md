@@ -1,16 +1,30 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0133.Clone%20Graph/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 图
+    - 哈希表
+---
+
+<!-- problem:start -->
+
 # [133. 克隆图](https://leetcode.cn/problems/clone-graph)
 
 [English Version](/solution/0100-0199/0133.Clone%20Graph/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你无向&nbsp;<strong><a href="https://baike.baidu.com/item/连通图/6460995?fr=aladdin" target="_blank">连通</a>&nbsp;</strong>图中一个节点的引用，请你返回该图的&nbsp;<a href="https://baike.baidu.com/item/深拷贝/22785317?fr=aladdin" target="_blank"><strong>深拷贝</strong></a>（克隆）。</p>
 
 <p>图中的每个节点都包含它的值 <code>val</code>（<code>int</code>） 和其邻居的列表（<code>list[Node]</code>）。</p>
 
-<pre>class Node {
+<pre>
+class Node {
     public int val;
     public List&lt;Node&gt; neighbors;
 }</pre>
@@ -29,9 +43,10 @@
 
 <p><strong>示例 1：</strong></p>
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0133.Clone%20Graph/images/133_clone_graph_question.png" style="height: 500px; width: 500px;"></p>
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0133.Clone%20Graph/images/133_clone_graph_question.png" style="height: 500px; width: 500px;" /></p>
 
-<pre><strong>输入：</strong>adjList = [[2,4],[1,3],[2,4],[1,3]]
+<pre>
+<strong>输入：</strong>adjList = [[2,4],[1,3],[2,4],[1,3]]
 <strong>输出：</strong>[[2,4],[1,3],[2,4],[1,3]]
 <strong>解释：
 </strong>图中有 4 个节点。
@@ -43,48 +58,45 @@
 
 <p><strong>示例 2：</strong></p>
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0133.Clone%20Graph/images/graph.png" style="height: 148px; width: 163px;"></p>
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0133.Clone%20Graph/images/graph.png" style="height: 148px; width: 163px;" /></p>
 
-<pre><strong>输入：</strong>adjList = [[]]
+<pre>
+<strong>输入：</strong>adjList = [[]]
 <strong>输出：</strong>[[]]
 <strong>解释：</strong>输入包含一个空列表。该图仅仅只有一个值为 1 的节点，它没有任何邻居。
 </pre>
 
 <p><strong>示例 3：</strong></p>
 
-<pre><strong>输入：</strong>adjList = []
+<pre>
+<strong>输入：</strong>adjList = []
 <strong>输出：</strong>[]
 <strong>解释：</strong>这个图是空的，它不含任何节点。
 </pre>
-
-<p><strong>示例 4：</strong></p>
-
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0133.Clone%20Graph/images/graph-1.png" style="height: 133px; width: 272px;"></p>
-
-<pre><strong>输入：</strong>adjList = [[2],[1]]
-<strong>输出：</strong>[[2],[1]]</pre>
 
 <p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
-<ol>
-	<li>节点数不超过 100 。</li>
-	<li>每个节点值&nbsp;<code>Node.val</code> 都是唯一的，<code>1 &lt;= Node.val &lt;= 100</code>。</li>
-	<li>无向图是一个<a href="https://baike.baidu.com/item/简单图/1680528?fr=aladdin" target="_blank">简单图</a>，这意味着图中没有重复的边，也没有自环。</li>
-	<li>由于图是无向的，如果节点 <em>p</em> 是节点 <em>q</em> 的邻居，那么节点 <em>q</em> 也必须是节点 <em>p</em>&nbsp;的邻居。</li>
+<ul>
+	<li>这张图中的节点数在 <code>[0, 100]</code>&nbsp;之间。</li>
+	<li><code>1 &lt;= Node.val &lt;= 100</code></li>
+	<li>每个节点值&nbsp;<code>Node.val</code> 都是唯一的，</li>
+	<li>图中没有重复的边，也没有自环。</li>
 	<li>图是连通图，你可以从给定节点访问到所有节点。</li>
-</ol>
+</ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 """
@@ -114,9 +126,7 @@ class Solution:
         return clone(node)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /*
@@ -159,44 +169,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for Node.
- * class Node {
- *     val: number
- *     neighbors: Node[]
- *     constructor(val?: number, neighbors?: Node[]) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.neighbors = (neighbors===undefined ? [] : neighbors)
- *     }
- * }
- */
-
-function cloneGraph(node: Node | null): Node | null {
-    if (node == null) return null;
-
-    const visited = new Map();
-    visited.set(node, new Node(node.val));
-    const queue = [node];
-    while (queue.length) {
-        const cur = queue.shift();
-        for (let neighbor of cur.neighbors || []) {
-            if (!visited.has(neighbor)) {
-                queue.push(neighbor);
-                const newNeighbor = new Node(neighbor.val, []);
-                visited.set(neighbor, newNeighbor);
-            }
-            const newNode = visited.get(cur);
-            newNode.neighbors.push(visited.get(neighbor));
-        }
-    }
-    return visited.get(node);
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -236,7 +209,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -269,10 +242,84 @@ func cloneGraph(node *Node) *Node {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+/**
+ * Definition for Node.
+ * class Node {
+ *     val: number
+ *     neighbors: Node[]
+ *     constructor(val?: number, neighbors?: Node[]) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.neighbors = (neighbors===undefined ? [] : neighbors)
+ *     }
+ * }
+ */
+
+function cloneGraph(node: Node | null): Node | null {
+    if (node == null) return null;
+
+    const visited = new Map();
+    visited.set(node, new Node(node.val));
+    const queue = [node];
+    while (queue.length) {
+        const cur = queue.shift();
+        for (let neighbor of cur.neighbors || []) {
+            if (!visited.has(neighbor)) {
+                queue.push(neighbor);
+                const newNeighbor = new Node(neighbor.val, []);
+                visited.set(neighbor, newNeighbor);
+            }
+            const newNode = visited.get(cur);
+            newNode.neighbors.push(visited.get(neighbor));
+        }
+    }
+    return visited.get(node);
+}
 ```
 
+#### C#
+
+```cs
+using System.Collections.Generic;
+
+public class Solution {
+    public Node CloneGraph(Node node) {
+        if (node == null) return null;
+        var dict = new Dictionary<int, Node>();
+        var queue = new Queue<Node>();
+        queue.Enqueue(CloneVal(node));
+        dict.Add(node.val, queue.Peek());
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+            var newNeighbors = new List<Node>(current.neighbors.Count);
+            foreach (var oldNeighbor in current.neighbors)
+            {
+                Node newNeighbor;
+                if (!dict.TryGetValue(oldNeighbor.val, out newNeighbor))
+                {
+                    newNeighbor = CloneVal(oldNeighbor);
+                    queue.Enqueue(newNeighbor);
+                    dict.Add(newNeighbor.val, newNeighbor);
+                }
+                newNeighbors.Add(newNeighbor);
+            }
+            current.neighbors = newNeighbors;
+        }
+        return dict[node.val];
+    }
+
+    private Node CloneVal(Node node)
+    {
+        return new Node(node.val, new List<Node>(node.neighbors));
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

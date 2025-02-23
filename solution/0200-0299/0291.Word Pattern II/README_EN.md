@@ -1,12 +1,26 @@
-# [291. Word Pattern II](https://leetcode.com/problems/word-pattern-ii)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0291.Word%20Pattern%20II/README_EN.md
+tags:
+    - Hash Table
+    - String
+    - Backtracking
+---
+
+<!-- problem:start -->
+
+# [291. Word Pattern II 🔒](https://leetcode.com/problems/word-pattern-ii)
 
 [中文文档](/solution/0200-0299/0291.Word%20Pattern%20II/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>Given a <code>pattern</code> and a string <code>s</code>, return <code>true</code><em> if </em><code>s</code><em> <strong>matches</strong> the </em><code>pattern</code><em>.</em></p>
 
-<p>A string <code>s</code> <b>matches</b> a <code>pattern</code> if there is some <strong>bijective mapping</strong> of single characters to strings such that if each character in <code>pattern</code> is replaced by the string it maps to, then the resulting string is <code>s</code>. A <strong>bijective mapping</strong> means that no two characters map to the same string, and no character maps to two different strings.</p>
+<p>A string <code>s</code> <b>matches</b> a <code>pattern</code> if there is some <strong>bijective mapping</strong> of single characters to <strong>non-empty</strong> strings such that if each character in <code>pattern</code> is replaced by the string it maps to, then the resulting string is <code>s</code>. A <strong>bijective mapping</strong> means that no two characters map to the same string, and no character maps to two different strings.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -42,11 +56,17 @@
 	<li><code>pattern</code> and <code>s</code> consist of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +96,7 @@ class Solution:
         return dfs(0, 0)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -127,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,7 +181,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func wordPatternMatch(pattern string, s string) bool {
@@ -200,10 +220,8 @@ func wordPatternMatch(pattern string, s string) bool {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

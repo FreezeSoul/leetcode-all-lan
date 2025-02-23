@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0125.Valid%20Palindrome/README.md
+tags:
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [125. 验证回文串](https://leetcode.cn/problems/valid-palindrome)
 
 [English Version](/solution/0100-0199/0125.Valid%20Palindrome/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果在将所有大写字符转换为小写字符、并移除所有非字母数字字符之后，短语正着读和反着读都一样。则可以认为该短语是一个 <strong>回文串</strong> 。</p>
 
@@ -48,11 +59,13 @@
 	<li><code>s</code> 仅由可打印的 ASCII 字符组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们用双指针 $i$ 和 $j$ 分别指向字符串 $s$ 的两端，接下来循环以下过程，直至 $i \geq j$：
 
@@ -67,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +98,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -136,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isPalindrome(s string) bool {
@@ -167,53 +176,7 @@ func tolower(ch byte) byte {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool IsPalindrome(string s) {
-        int i = 0, j = s.Length - 1;
-        while (i < j) {
-            if (!char.IsLetterOrDigit(s[i])) {
-                ++i;
-            } else if (!char.IsLetterOrDigit(s[j])) {
-                --j;
-            } else if (char.ToLower(s[i++]) != char.ToLower(s[j--])) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {string} s
- * @return {boolean}
- */
-var isPalindrome = function (s) {
-    let i = 0;
-    let j = s.length - 1;
-    while (i < j) {
-        if (!/[a-zA-Z0-9]/.test(s[i])) {
-            ++i;
-        } else if (!/[a-zA-Z0-9]/.test(s[j])) {
-            --j;
-        } else if (s[i].toLowerCase() !== s[j].toLowerCase()) {
-            return false;
-        } else {
-            ++i;
-            --j;
-        }
-    }
-    return true;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isPalindrome(s: string): boolean {
@@ -235,7 +198,7 @@ function isPalindrome(s: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -264,7 +227,53 @@ impl Solution {
 }
 ```
 
-### **PHP**
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isPalindrome = function (s) {
+    let i = 0;
+    let j = s.length - 1;
+    while (i < j) {
+        if (!/[a-zA-Z0-9]/.test(s[i])) {
+            ++i;
+        } else if (!/[a-zA-Z0-9]/.test(s[j])) {
+            --j;
+        } else if (s[i].toLowerCase() !== s[j].toLowerCase()) {
+            return false;
+        } else {
+            ++i;
+            --j;
+        }
+    }
+    return true;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public bool IsPalindrome(string s) {
+        int i = 0, j = s.Length - 1;
+        while (i < j) {
+            if (!char.IsLetterOrDigit(s[i])) {
+                ++i;
+            } else if (!char.IsLetterOrDigit(s[j])) {
+                --j;
+            } else if (char.ToLower(s[i++]) != char.ToLower(s[j--])) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -273,10 +282,12 @@ class Solution {
      * @return Boolean
      */
     function isPalindrome($s) {
-        $regex = "/[a-z0-9]/";
+        $regex = '/[a-z0-9]/';
         $s = strtolower($s);
         preg_match_all($regex, $s, $matches);
-        if ($matches[0] == Null) return true;
+        if ($matches[0] == null) {
+            return true;
+        }
         $len = floor(count($matches[0]) / 2);
         for ($i = 0; $i < $len; $i++) {
             if ($matches[0][$i] != $matches[0][count($matches[0]) - 1 - $i]) {
@@ -288,10 +299,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

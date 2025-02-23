@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1047.Remove%20All%20Adjacent%20Duplicates%20In%20String/README_EN.md
+rating: 1286
+source: Weekly Contest 137 Q2
+tags:
+    - Stack
+    - String
+---
+
+<!-- problem:start -->
+
 # [1047. Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string)
 
 [中文文档](/solution/1000-1099/1047.Remove%20All%20Adjacent%20Duplicates%20In%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> consisting of lowercase English letters. A <strong>duplicate removal</strong> consists of choosing two <strong>adjacent</strong> and <strong>equal</strong> letters and removing them.</p>
 
@@ -35,11 +50,17 @@ For example, in &quot;abbaca&quot; we could remove &quot;bb&quot; since the lett
 	<li><code>s</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -53,7 +74,7 @@ class Solution:
         return ''.join(stk)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -71,7 +92,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -90,7 +111,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeDuplicates(s string) string {
@@ -106,7 +127,25 @@ func removeDuplicates(s string) string {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn remove_duplicates(s: String) -> String {
+        let mut stack = Vec::new();
+        for c in s.chars() {
+            if !stack.is_empty() && *stack.last().unwrap() == c {
+                stack.pop();
+            } else {
+                stack.push(c);
+            }
+        }
+        stack.into_iter().collect()
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -126,30 +165,12 @@ var removeDuplicates = function (s) {
 };
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn remove_duplicates(s: String) -> String {
-        let mut stack = Vec::new();
-        for c in s.chars() {
-            if !stack.is_empty() && *stack.last().unwrap() == c {
-                stack.pop();
-            } else {
-                stack.push(c);
-            }
-        }
-        stack.into_iter().collect()
-    }
-}
-```
-
-### **C**
+#### C
 
 ```c
-char *removeDuplicates(char *s) {
+char* removeDuplicates(char* s) {
     int n = strlen(s);
-    char *stack = malloc(sizeof(char) * (n + 1));
+    char* stack = malloc(sizeof(char) * (n + 1));
     int i = 0;
     for (int j = 0; j < n; j++) {
         char c = s[j];
@@ -164,10 +185,8 @@ char *removeDuplicates(char *s) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

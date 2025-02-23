@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1342.Number%20of%20Steps%20to%20Reduce%20a%20Number%20to%20Zero/README_EN.md
+rating: 1163
+source: Biweekly Contest 19 Q1
+tags:
+    - Bit Manipulation
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1342. Number of Steps to Reduce a Number to Zero](https://leetcode.com/problems/number-of-steps-to-reduce-a-number-to-zero)
 
 [中文文档](/solution/1300-1399/1342.Number%20of%20Steps%20to%20Reduce%20a%20Number%20to%20Zero/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>num</code>, return <em>the number of steps to reduce it to zero</em>.</p>
 
@@ -49,11 +64,17 @@ Step 4) 1 is odd; subtract 1 and obtain 0.
 	<li><code>0 &lt;= num &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,15 +89,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def numberOfSteps(self, num: int) -> int:
-        if num == 0:
-            return 0
-        return 1 + (self.numberOfSteps(num // 2) if num % 2 == 0 else self.numberOfSteps(num - 1))
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -90,35 +103,9 @@ class Solution {
         return ans;
     }
 }
-
 ```
 
-```java
-class Solution {
-
-    public int numberOfSteps(int num) {
-        if (num == 0) {
-            return 0;
-        }
-        return 1 + numberOfSteps((num & 1) == 0 ? num >> 1 : num - 1);
-    }
-}
-```
-
-### **TypeScript**
-
-```ts
-function numberOfSteps(num: number): number {
-    let ans = 0;
-    while (num) {
-        num = num & 1 ? num - 1 : num >>> 1;
-        ans++;
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -134,17 +121,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int numberOfSteps(int num) {
-        if (num == 0) return 0;
-        return 1 + (num & 1 ? numberOfSteps(num - 1) : numberOfSteps(num >> 1));
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func numberOfSteps(num int) int {
@@ -161,19 +138,20 @@ func numberOfSteps(num int) int {
 }
 ```
 
-```go
-func numberOfSteps(num int) int {
-	if num == 0 {
-		return 0
-	}
-	if (num & 1) == 0 {
-		return 1 + numberOfSteps(num>>1)
-	}
-	return 1 + numberOfSteps(num-1)
+#### TypeScript
+
+```ts
+function numberOfSteps(num: number): number {
+    let ans = 0;
+    while (num) {
+        num = num & 1 ? num - 1 : num >>> 1;
+        ans++;
+    }
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -192,6 +170,72 @@ impl Solution {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numberOfSteps(self, num: int) -> int:
+        if num == 0:
+            return 0
+        return 1 + (
+            self.numberOfSteps(num // 2)
+            if num % 2 == 0
+            else self.numberOfSteps(num - 1)
+        )
+```
+
+#### Java
+
+```java
+class Solution {
+
+    public int numberOfSteps(int num) {
+        if (num == 0) {
+            return 0;
+        }
+        return 1 + numberOfSteps((num & 1) == 0 ? num >> 1 : num - 1);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numberOfSteps(int num) {
+        if (num == 0) return 0;
+        return 1 + (num & 1 ? numberOfSteps(num - 1) : numberOfSteps(num >> 1));
+    }
+};
+```
+
+#### Go
+
+```go
+func numberOfSteps(num int) int {
+	if num == 0 {
+		return 0
+	}
+	if (num & 1) == 0 {
+		return 1 + numberOfSteps(num>>1)
+	}
+	return 1 + numberOfSteps(num-1)
+}
+```
+
+#### Rust
+
 ```rust
 impl Solution {
     pub fn number_of_steps(mut num: i32) -> i32 {
@@ -206,10 +250,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1652.Defuse%20the%20Bomb/README.md
+rating: 1416
+source: 第 39 场双周赛 Q1
+tags:
+    - 数组
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [1652. 拆炸弹](https://leetcode.cn/problems/defuse-the-bomb)
 
 [English Version](/solution/1600-1699/1652.Defuse%20the%20Bomb/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一个炸弹需要拆除，时间紧迫！你的情报员会给你一个长度为 <code>n</code> 的 <strong>循环</strong> 数组 <code>code</code> 以及一个密钥 <code>k</code> 。</p>
 
@@ -57,47 +70,35 @@
 	<li><code>-(n - 1) <= k <= n - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-定义答案数组 `ans`，长度为 $n$，初始时所有元素都为 $0$。根据题意，若 $k$ 为 $0$，直接返回 `ans`。
+我们定义一个长度为 $n$ 的答案数组 $ans$，初始时所有元素都为 $0$。根据题意，若 $k$ 为 $0$，直接返回 $ans$。
 
 否则，遍历每个位置 $i$：
 
 若 $k$ 为正数，那么 $i$ 位置的值为 $i$ 位置后 $k$ 个位置的值之和，即：
 
 $$
-ans[i] = \sum_{j=i+1}^{i+k} code[j\mod{n}]
+ans[i] = \sum_{j=i+1}^{i+k} code[j \bmod n]
 $$
 
 若 $k$ 为负数，那么 $i$ 位置的值为 $i$ 位置前 $|k|$ 个位置的值之和，即：
 
 $$
-ans[i] = \sum_{j=i+k}^{i-1} code[(j+n)\mod{n}]
+ans[i] = \sum_{j=i+k}^{i-1} code[(j+n) \bmod n]
 $$
 
-时间复杂度 $O(n\times|k|)$，忽略答案的空间消耗，空间复杂度 $O(1)$。
-
-**方法二：前缀和**
-
-在方法一中，对于每个位置 $i$，都需要遍历 $k$ 个位置，有很多重复计算的操作。我们可以利用前缀和来优化。
-
-我们将 `code` 数组复制一份（可以不用执行复制操作，直接通过循环遍历取模实现），得到两倍长度的数组，对其求前缀和，得到长度为 $2\times n + 1$ 的前缀和数组 $s$。
-
-若 $k$ 为正数，那么 $i$ 位置的值为 $i$ 位置后 $k$ 个位置的值之和，即 $ans[i] = s[i + k + 1] - s[i + 1]$。
-
-若 $k$ 为负数，那么 $i$ 位置的值为 $i$ 位置前 $|k|$ 个位置的值之和，即 $ans[i] = s[i + n] - s[i + k + n]$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 `code` 数组的长度。
+时间复杂度 $O(n \times |k|)$，忽略答案的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -116,25 +117,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def decrypt(self, code: List[int], k: int) -> List[int]:
-        n = len(code)
-        ans = [0] * n
-        if k == 0:
-            return ans
-        s = list(accumulate(code + code, initial=0))
-        for i in range(n):
-            if k > 0:
-                ans[i] = s[i + k + 1] - s[i + 1]
-            else:
-                ans[i] = s[i + n] - s[i + k + n]
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -160,31 +143,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int[] decrypt(int[] code, int k) {
-        int n = code.length;
-        int[] ans = new int[n];
-        if (k == 0) {
-            return ans;
-        }
-        int[] s = new int[n << 1 | 1];
-        for (int i = 0; i < n << 1; ++i) {
-            s[i + 1] = s[i] + code[i % n];
-        }
-        for (int i = 0; i < n; ++i) {
-            if (k > 0) {
-                ans[i] = s[i + k + 1] - s[i + 1];
-            } else {
-                ans[i] = s[i + n] - s[i + k + n];
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -210,6 +169,123 @@ public:
     }
 };
 ```
+
+#### Go
+
+```go
+func decrypt(code []int, k int) []int {
+	n := len(code)
+	ans := make([]int, n)
+	if k == 0 {
+		return ans
+	}
+	for i := 0; i < n; i++ {
+		if k > 0 {
+			for j := i + 1; j < i+k+1; j++ {
+				ans[i] += code[j%n]
+			}
+		} else {
+			for j := i + k; j < i; j++ {
+				ans[i] += code[(j+n)%n]
+			}
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function decrypt(code: number[], k: number): number[] {
+    const n: number = code.length;
+    const ans: number[] = Array(n).fill(0);
+
+    if (k === 0) {
+        return ans;
+    }
+
+    for (let i = 0; i < n; ++i) {
+        if (k > 0) {
+            for (let j = i + 1; j < i + k + 1; ++j) {
+                ans[i] += code[j % n];
+            }
+        } else {
+            for (let j = i + k; j < i; ++j) {
+                ans[i] += code[(j + n) % n];
+            }
+        }
+    }
+
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：前缀和
+
+在方法一中，对于每个位置 $i$，都需要遍历 $k$ 个位置，有很多重复计算的操作。我们可以利用前缀和来优化。
+
+我们将 `code` 数组复制一份（可以不用执行复制操作，直接通过循环遍历取模实现），得到两倍长度的数组，对其求前缀和，得到长度为 $2 \times n + 1$ 的前缀和数组 $s$。
+
+若 $k$ 为正数，那么 $i$ 位置的值为 $i$ 位置后 $k$ 个位置的值之和，即 $ans[i] = s[i + k + 1] - s[i + 1]$。
+
+若 $k$ 为负数，那么 $i$ 位置的值为 $i$ 位置前 $|k|$ 个位置的值之和，即 $ans[i] = s[i + n] - s[i + k + n]$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 `code` 数组的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def decrypt(self, code: List[int], k: int) -> List[int]:
+        n = len(code)
+        ans = [0] * n
+        if k == 0:
+            return ans
+        s = list(accumulate(code + code, initial=0))
+        for i in range(n):
+            if k > 0:
+                ans[i] = s[i + k + 1] - s[i + 1]
+            else:
+                ans[i] = s[i + n] - s[i + k + n]
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[] decrypt(int[] code, int k) {
+        int n = code.length;
+        int[] ans = new int[n];
+        if (k == 0) {
+            return ans;
+        }
+        int[] s = new int[n << 1 | 1];
+        for (int i = 0; i < n << 1; ++i) {
+            s[i + 1] = s[i] + code[i % n];
+        }
+        for (int i = 0; i < n; ++i) {
+            if (k > 0) {
+                ans[i] = s[i + k + 1] - s[i + 1];
+            } else {
+                ans[i] = s[i + n] - s[i + k + n];
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
 
 ```cpp
 class Solution {
@@ -236,29 +312,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func decrypt(code []int, k int) []int {
-	n := len(code)
-	ans := make([]int, n)
-	if k == 0 {
-		return ans
-	}
-	for i := 0; i < n; i++ {
-		if k > 0 {
-			for j := i + 1; j < i+k+1; j++ {
-				ans[i] += code[j%n]
-			}
-		} else {
-			for j := i + k; j < i; j++ {
-				ans[i] += code[(j+n)%n]
-			}
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func decrypt(code []int, k int) []int {
@@ -282,46 +336,36 @@ func decrypt(code []int, k int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function decrypt(code: number[], k: number): number[] {
-    const n = code.length;
-    if (k === 0) {
-        return code.fill(0);
-    }
-    const isPrefix = k < 0;
-    if (isPrefix) {
-        k *= -1;
-    }
-    const map = new Map<number, [number, number]>();
-    let prefix = 0;
-    let suffix = 0;
-    for (let i = 1; i <= k; i++) {
-        prefix += code[n - i];
-        suffix += code[i];
-    }
-    map.set(0, [prefix, suffix]);
+    const n: number = code.length;
+    const ans: number[] = Array(n).fill(0);
 
-    for (let i = 1; i < n; i++) {
-        let [p, s] = map.get(i - 1);
-        p -= code[n - k - 1 + i] ?? code[i - k - 1];
-        p += code[i - 1];
-        s -= code[i];
-        s += code[i + k] ?? code[i + k - n];
-        map.set(i, [p, s]);
+    if (k === 0) {
+        return ans;
     }
-    for (let i = 0; i < n; i++) {
-        code[i] = map.get(i)[Number(!isPrefix)];
+
+    const s: number[] = Array((n << 1) | 1).fill(0);
+    for (let i = 0; i < n << 1; ++i) {
+        s[i + 1] = s[i] + code[i % n];
     }
-    return code;
+
+    for (let i = 0; i < n; ++i) {
+        if (k > 0) {
+            ans[i] = s[i + k + 1] - s[i + 1];
+        } else {
+            ans[i] = s[i + n] - s[i + k + n];
+        }
+    }
+
+    return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

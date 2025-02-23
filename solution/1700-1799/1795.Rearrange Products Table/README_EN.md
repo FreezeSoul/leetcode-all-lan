@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1795.Rearrange%20Products%20Table/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1795. Rearrange Products Table](https://leetcode.com/problems/rearrange-products-table)
 
 [中文文档](/solution/1700-1799/1795.Rearrange%20Products%20Table/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Products</code></p>
 
@@ -15,18 +27,18 @@
 | store2      | int     |
 | store3      | int     |
 +-------------+---------+
-product_id is the primary key for this table.
+product_id is the primary key (column with unique values) for this table.
 Each row in this table indicates the product&#39;s price in 3 different stores: store1, store2, and store3.
 If the product is not available in a store, the price will be null in that store&#39;s column.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to rearrange the <code>Products</code> table so that each row has <code>(product_id, store, price)</code>. If a product is not available in a store, do <strong>not</strong> include a row with that <code>product_id</code> and <code>store</code> combination in the result table.</p>
+<p>Write a solution to rearrange the <code>Products</code> table so that each row has <code>(product_id, store, price)</code>. If a product is not available in a store, do <strong>not</strong> include a row with that <code>product_id</code> and <code>store</code> combination in the result table.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -55,60 +67,31 @@ Product 0 is available in all three stores with prices 95, 100, and 105 respecti
 Product 1 is available in store1 with price 70 and store3 with price 80. The product is not available in store2.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Union
+
+We can select the products and prices for each store, and then use the `UNION` operator to combine the results.
 
 <!-- tabs:start -->
 
-### **SQL**
-
-```sql
-SELECT product_id,
-    'store1' AS store,
-    store1 AS price
-FROM products
-WHERE store1 IS NOT NULL
-UNION
-SELECT product_id,
-    'store2' AS store,
-    store2 AS price
-FROM products
-WHERE store2 IS NOT NULL
-UNION
-SELECT product_id,
-    'store3' AS store,
-    store3 AS price
-FROM products
-WHERE store3 IS NOT NULL;
-```
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    product_id,
-    'store1' as store,
-    store1 as price
-from
-    Products
-where
-    store1 > 0
-union
-select
-    product_id,
-    'store2' as store,
-    store2 as price
-from
-    Products
-where
-    store2 > 0
-union
-select
-    product_id,
-    'store3' as store,
-    store3 as price
-from
-    Products
-where
-    store3 > 0
+SELECT product_id, 'store1' AS store, store1 AS price FROM Products WHERE store1 IS NOT NULL
+UNION
+SELECT product_id, 'store2' AS store, store2 AS price FROM Products WHERE store2 IS NOT NULL
+UNION
+SELECT product_id, 'store3' AS store, store3 AS price FROM Products WHERE store3 IS NOT NULL;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

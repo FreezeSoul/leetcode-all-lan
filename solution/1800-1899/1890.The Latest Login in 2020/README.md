@@ -1,10 +1,20 @@
-# [1890. 2020 年最后一次登录](https://leetcode.cn/problems/the-latest-login-in-2020)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1890.The%20Latest%20Login%20in%202020/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1890. 2020年最后一次登录](https://leetcode.cn/problems/the-latest-login-in-2020)
 
 [English Version](/solution/1800-1899/1890.The%20Latest%20Login%20in%202020/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Logins</code></p>
 
@@ -15,17 +25,17 @@
 | user_id        | int      |
 | time_stamp     | datetime |
 +----------------+----------+
-(user_id, time_stamp) 是这个表的主键。
+(user_id, time_stamp) 是这个表的主键(具有唯一值的列的组合)。
 每一行包含的信息是user_id 这个用户的登录时间。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一个 SQL 查询，该查询可以获取在 <code>2020</code> 年登录过的所有用户的本年度 <strong>最后一次 </strong>登录时间。结果集 <strong>不</strong> 包含 <code>2020</code> 年没有登录过的用户。</p>
+<p>编写解决方案以获取在 <code>2020</code> 年登录过的所有用户的本年度 <strong>最后一次 </strong>登录时间。结果集 <strong>不</strong> 包含 <code>2020</code> 年没有登录过的用户。</p>
 
 <p>返回的结果集可以按 <strong>任意顺序 </strong>排列。</p>
 
-<p>查询结果格式如下例。</p>
+<p>返回结果格式如下例。</p>
 
 <p>&nbsp;</p>
 
@@ -61,24 +71,30 @@ Logins 表:
 2号用户登录了2次，但是在2020年仅有一次，所以结果集应包含此次登录。
 14号用户在2020年没有登录，所以结果集不应包含。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分组求最大值
+
+我们可以先筛选出 2020 年的登录记录，并且按照 `user_id` 分组，然后利用 `max` 函数求出每个用户的最大登录时间。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-SELECT
-    user_id,
-    MAX(time_stamp) AS last_stamp
-FROM
-    Logins
+# Write your MySQL query statement below
+SELECT user_id, MAX(time_stamp) AS last_stamp
+FROM Logins
 WHERE YEAR(time_stamp) = 2020
-GROUP BY user_id;
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

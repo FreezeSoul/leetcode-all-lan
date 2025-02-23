@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0988.Smallest%20String%20Starting%20From%20Leaf/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 字符串
+    - 回溯
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [988. 从叶结点开始的最小字符串](https://leetcode.cn/problems/smallest-string-starting-from-leaf)
 
 [English Version](/solution/0900-0999/0988.Smallest%20String%20Starting%20From%20Leaf/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一颗根结点为&nbsp;<code>root</code>&nbsp;的二叉树，树中的每一个结点都有一个&nbsp;<code>[0, 25]</code>&nbsp;范围内的值，分别代表字母&nbsp;<code>'a'</code> 到&nbsp;<code>'z'</code>。</p>
 
@@ -61,36 +75,17 @@
 	<li><code>0 &lt;= Node.val &lt;= 25</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-本题不能用这种以下这种方式实现：
-
-```python
-class Solution:
-    def smallestFromLeaf(self, root: TreeNode) -> str:
-        if root is None:
-            return ''
-        left = self.smallestFromLeaf(root.left)
-        right = self.smallestFromLeaf(root.right)
-        val = chr(ord('a') + root.val)
-        return min(left + val, right + val)
-```
-
-<p><strong><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0900-0999/0988.Smallest%20String%20Starting%20From%20Leaf/images/image_1551131779.png" style="height: 180px; width: 172px;"></strong></p>
-
-我们举个例子来说明，对于上面这棵二叉树，正确答案应该是 "ababz"，但是我们采用以上实现方式得到的答案是 "abz"。
-
-问题就在于，当 `str(x) < str(y)`，并不能保证 `str(x) + a < str(y) + a`，例如 `"ab" < "abab"`，但是 `"abz" > "ababz"`。
-
-本题可以用 DFS 解决，每次到达一个叶子节点时，翻转此路径上的字符串，并与 ans 比较大小，取二者较小值。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -117,9 +112,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -166,7 +159,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -205,7 +198,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -239,10 +232,8 @@ func smallestFromLeaf(root *TreeNode) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

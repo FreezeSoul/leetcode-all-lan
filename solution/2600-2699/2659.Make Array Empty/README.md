@@ -1,10 +1,28 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2659.Make%20Array%20Empty/README.md
+rating: 2281
+source: 第 103 场双周赛 Q4
+tags:
+    - 贪心
+    - 树状数组
+    - 线段树
+    - 数组
+    - 二分查找
+    - 有序集合
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2659. 将数组清空](https://leetcode.cn/problems/make-array-empty)
 
 [English Version](/solution/2600-2699/2659.Make%20Array%20Empty/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个包含若干 <strong>互不相同</strong>&nbsp;整数的数组&nbsp;<code>nums</code>&nbsp;，你需要执行以下操作 <strong>直到</strong><strong>数组为空</strong>&nbsp;：</p>
 
@@ -137,11 +155,13 @@
 	<li><code>nums</code>&nbsp;中的元素 <strong>互不相同</strong>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 排序 + 树状数组**
+### 方法一：哈希表 + 排序 + 树状数组
 
 我们先用哈希表 $pos$ 记录数组 $nums$ 中每个元素的位置，接下来对数组 $nums$ 进行排序，那么数组最小值的下标为 $pos[nums[0]]$，移动到数组的第一个位置并且删除，需要 $pos[nums[0]] + 1$ 次操作，因此初始答案为 $ans = pos[nums[0]] + 1$。
 
@@ -153,14 +173,9 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class Solution:
     def countOperationsToEmptyArray(self, nums: List[int]) -> int:
         pos = {x: i for i, x in enumerate(nums)}
@@ -176,42 +191,7 @@ class Solution:
         return ans
 ```
 
-```python
-class BinaryIndexedTree:
-    def __init__(self, n):
-        self.n = n
-        self.c = [0] * (n + 1)
-
-    def update(self, x, delta):
-        while x <= self.n:
-            self.c[x] += delta
-            x += x & -x
-
-    def query(self, x):
-        s = 0
-        while x:
-            s += self.c[x]
-            x -= x & -x
-        return s
-
-class Solution:
-    def countOperationsToEmptyArray(self, nums: List[int]) -> int:
-        pos = {x: i for i, x in enumerate(nums)}
-        nums.sort()
-        ans = pos[nums[0]] + 1
-        n = len(nums)
-        tree = BinaryIndexedTree(n)
-        for k, (a, b) in enumerate(pairwise(nums)):
-            i, j = pos[a], pos[b]
-            d = j - i - tree.query(j + 1) + tree.query(i + 1)
-            ans += d + (n - k) * int(i > j)
-            tree.update(i + 1, 1)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -261,12 +241,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
 public:
-    BinaryIndexedTree(int _n) : n(_n), c(_n + 1) {}
+    BinaryIndexedTree(int _n)
+        : n(_n)
+        , c(_n + 1) {}
 
     void update(int x, int delta) {
         while (x <= n) {
@@ -311,7 +293,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type BinaryIndexedTree struct {
@@ -362,7 +344,7 @@ func countOperationsToEmptyArray(nums []int) int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class BinaryIndexedTree {
@@ -414,10 +396,54 @@ function countOperationsToEmptyArray(nums: number[]): number {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class BinaryIndexedTree:
+    def __init__(self, n):
+        self.n = n
+        self.c = [0] * (n + 1)
+
+    def update(self, x, delta):
+        while x <= self.n:
+            self.c[x] += delta
+            x += x & -x
+
+    def query(self, x):
+        s = 0
+        while x:
+            s += self.c[x]
+            x -= x & -x
+        return s
+
+
+class Solution:
+    def countOperationsToEmptyArray(self, nums: List[int]) -> int:
+        pos = {x: i for i, x in enumerate(nums)}
+        nums.sort()
+        ans = pos[nums[0]] + 1
+        n = len(nums)
+        tree = BinaryIndexedTree(n)
+        for k, (a, b) in enumerate(pairwise(nums)):
+            i, j = pos[a], pos[b]
+            d = j - i - tree.query(j + 1) + tree.query(i + 1)
+            ans += d + (n - k) * int(i > j)
+            tree.update(i + 1, 1)
+        return ans
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

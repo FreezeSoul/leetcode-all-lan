@@ -1,8 +1,20 @@
-# [2020. Number of Accounts That Did Not Stream](https://leetcode.com/problems/number-of-accounts-that-did-not-stream)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2020.Number%20of%20Accounts%20That%20Did%20Not%20Stream/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2020. Number of Accounts That Did Not Stream 🔒](https://leetcode.com/problems/number-of-accounts-that-did-not-stream)
 
 [中文文档](/solution/2000-2099/2020.Number%20of%20Accounts%20That%20Did%20Not%20Stream/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Subscriptions</code></p>
 
@@ -79,14 +91,32 @@ Streams table:
 User 11 did not subscribe in 2021.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT COUNT(sub.account_id) AS accounts_count
+FROM
+    Subscriptions AS sub
+    LEFT JOIN Streams USING (account_id)
+WHERE
+    YEAR(start_date) <= 2021
+    AND YEAR(end_date) >= 2021
+    AND (YEAR(stream_date) != 2021 OR stream_date > end_date);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

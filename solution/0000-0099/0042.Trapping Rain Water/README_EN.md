@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0042.Trapping%20Rain%20Water/README_EN.md
+tags:
+    - Stack
+    - Array
+    - Two Pointers
+    - Dynamic Programming
+    - Monotonic Stack
+---
+
+<!-- problem:start -->
+
 # [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water)
 
 [中文文档](/solution/0000-0099/0042.Trapping%20Rain%20Water/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given <code>n</code> non-negative integers representing an elevation map where the width of each bar is <code>1</code>, compute how much water it can trap after raining.</p>
 
@@ -31,17 +47,21 @@
 	<li><code>0 &lt;= height[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Dynamic Programming**
+<!-- solution:start -->
 
-We define $left[i]$ as the height of the highest pillar to the left of and including the position with index $i$, and define $right[i]$ as the height of the highest pillar to the right of and including the position with index $i$. Then the amount of rain water that can be trapped at the position with index $i$ is $min(left[i], right[i]) - height[i]$. We traverse the array, calculate $left[i]$ and $right[i]$, and the answer is $\sum_{i=0}^{n-1} min(left[i], right[i]) - height[i]$.
+### Solution 1: Dynamic Programming
 
-The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the length of the array.
+We define $left[i]$ as the height of the highest bar to the left of and including the position at index $i$, and $right[i]$ as the height of the highest bar to the right of and including the position at index $i$. Therefore, the amount of rainwater that can be trapped at index $i$ is $min(left[i], right[i]) - height[i]$. We traverse the array to calculate $left[i]$ and $right[i]$, and the final answer is $\sum_{i=0}^{n-1} \min(left[i], right[i]) - height[i]$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +75,7 @@ class Solution:
         return sum(min(l, r) - h for l, r, h in zip(left, right, height))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +98,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -101,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func trap(height []int) (ans int) {
@@ -118,23 +138,9 @@ func trap(height []int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function trap(height: number[]): number {
@@ -153,7 +159,38 @@ function trap(height: number[]): number {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn trap(height: Vec<i32>) -> i32 {
+        let n = height.len();
+        let mut left: Vec<i32> = vec![0; n];
+        let mut right: Vec<i32> = vec![0; n];
+
+        left[0] = height[0];
+        right[n - 1] = height[n - 1];
+
+        // Initialize the left & right vector
+        for i in 1..n {
+            left[i] = std::cmp::max(left[i - 1], height[i]);
+            right[n - i - 1] = std::cmp::max(right[n - i], height[n - i - 1]);
+        }
+
+        let mut ans = 0;
+
+        // Calculate the ans
+        for i in 0..n {
+            ans += std::cmp::min(left[i], right[i]) - height[i];
+        }
+
+        ans
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -176,10 +213,52 @@ public class Solution {
 }
 ```
 
-### **...**
+#### PHP
 
-```
+```php
+class Solution {
+    /**
+     * @param integer[] $height
+     * @return integer
+     */
 
+    function trap($height) {
+        $n = count($height);
+
+        if ($n == 0) {
+            return 0;
+        }
+
+        $left = 0;
+        $right = $n - 1;
+        $leftMax = 0;
+        $rightMax = 0;
+        $ans = 0;
+
+        while ($left < $right) {
+            if ($height[$left] < $height[$right]) {
+                if ($height[$left] > $leftMax) {
+                    $leftMax = $height[$left];
+                } else {
+                    $ans += $leftMax - $height[$left];
+                }
+                $left++;
+            } else {
+                if ($height[$right] > $rightMax) {
+                    $rightMax = $height[$right];
+                } else {
+                    $ans += $rightMax - $height[$right];
+                }
+                $right--;
+            }
+        }
+        return $ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

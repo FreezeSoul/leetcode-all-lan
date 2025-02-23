@@ -1,10 +1,20 @@
-# [1188. 设计有限阻塞队列](https://leetcode.cn/problems/design-bounded-blocking-queue)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1188.Design%20Bounded%20Blocking%20Queue/README.md
+tags:
+    - 多线程
+---
+
+<!-- problem:start -->
+
+# [1188. 设计有限阻塞队列 🔒](https://leetcode.cn/problems/design-bounded-blocking-queue)
 
 [English Version](/solution/1100-1199/1188.Design%20Bounded%20Blocking%20Queue/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>实现一个拥有如下方法的线程安全有限阻塞队列：</p>
 
@@ -94,20 +104,23 @@ queue.size();       // 队列中还有 1 个元素。
 	<li>&nbsp;<code>enque</code>,&nbsp;<code>deque</code> 和&nbsp;<code>size</code>&nbsp;最多被调用&nbsp;<code>40</code>&nbsp;次</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 from threading import Semaphore
 
 
 class BoundedBlockingQueue(object):
-
     def __init__(self, capacity: int):
         self.s1 = Semaphore(capacity)
         self.s2 = Semaphore(0)
@@ -128,7 +141,7 @@ class BoundedBlockingQueue(object):
         return len(self.q)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class BoundedBlockingQueue {
@@ -148,7 +161,7 @@ class BoundedBlockingQueue {
     }
 
     public int dequeue() throws InterruptedException {
-        s2.acquire();;
+        s2.acquire();
         int ans = q.poll();
         s1.release();
         return ans;
@@ -160,7 +173,7 @@ class BoundedBlockingQueue {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 #include <semaphore.h>
@@ -196,6 +209,8 @@ private:
 };
 ```
 
-### \*\*
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

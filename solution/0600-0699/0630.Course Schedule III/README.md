@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0630.Course%20Schedule%20III/README.md
+tags:
+    - 贪心
+    - 数组
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [630. 课程表 III](https://leetcode.cn/problems/course-schedule-iii)
 
 [English Version](/solution/0600-0699/0630.Course%20Schedule%20III/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>这里有 <code>n</code> 门不同的在线课程，按从 <code>1</code> 到 <code>n</code>&nbsp;编号。给你一个数组 <code>courses</code> ，其中 <code>courses[i] = [duration<sub>i</sub>, lastDay<sub>i</sub>]</code> 表示第 <code>i</code> 门课将会 <strong>持续</strong> 上 <code>duration<sub>i</sub></code> 天课，并且必须在不晚于 <code>lastDay<sub>i</sub></code> 的时候完成。</p>
 
@@ -49,22 +62,25 @@
 	<li><code>1 &lt;= duration<sub>i</sub>, lastDay<sub>i</sub> &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-贪心 + 优先队列。
+### 方法一：贪心 + 优先队列（大根堆）
 
-先根据「结束时间」对 `courses` 升序排列，从前往后考虑每个课程，过程中维护一个总时长 s，对于某个课程 `courses[i]` 而言，根据如果学习该课程，是否满足「最晚完成时间」条件进行讨论：
+我们可以按照课程的结束时间进行升序排序，每次选择结束时间最早的课程进行上课。
 
--   学习该课程后，满足「最晚完成时间」要求，即 s + `courses[i][0]` <= `courses[i][1]`，则进行学习；
--   学习该课程后，不满足「最晚完成时间」要求，此时从过往学习的课程中找出「持续时间」最长的课程进行「回退」操作（这个持续时长最长的课程也有可能是当前课程）。
+如果已选择的课程的总时间 $s$ 超过了当前课程的结束时间 $last$，那么我们就将此前选择的课程中耗时最长的课程去掉，直到能够满足当前课程的结束时间为止。这里我们使用一个优先队列（大根堆） $pq$ 来维护当前已经选择的课程的耗时，每次我们都从优先队列中取出耗时最长的课程进行去除。
+
+最后，优先队列中的元素个数即为我们能够选择的课程数目。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是课程数目。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,29 +88,27 @@ class Solution:
         courses.sort(key=lambda x: x[1])
         pq = []
         s = 0
-        for d, e in courses:
-            heappush(pq, -d)
-            s += d
-            if s > e:
+        for duration, last in courses:
+            heappush(pq, -duration)
+            s += duration
+            while s > last:
                 s += heappop(pq)
         return len(pq)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int scheduleCourse(int[][] courses) {
-        Arrays.sort(courses, Comparator.comparingInt(a -> a[1]));
+        Arrays.sort(courses, (a, b) -> a[1] - b[1]);
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
         int s = 0;
-        for (int[] course : courses) {
-            int duration = course[0], lastDay = course[1];
+        for (var e : courses) {
+            int duration = e[0], last = e[1];
             pq.offer(duration);
             s += duration;
-            if (s > lastDay) {
+            while (s > last) {
                 s -= pq.poll();
             }
         }
@@ -103,22 +117,22 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int scheduleCourse(vector<vector<int>>& courses) {
-        sort(courses.begin(), courses.end(), [](const auto& c0, const auto& c1) {
-            return c0[1] < c1[1];
+        sort(courses.begin(), courses.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[1] < b[1];
         });
-        int s = 0;
         priority_queue<int> pq;
-        for (auto& course : courses) {
-            int d = course[0], e = course[1];
-            pq.push(d);
-            s += d;
-            if (s > e) {
+        int s = 0;
+        for (auto& e : courses) {
+            int duration = e[0], last = e[1];
+            pq.push(duration);
+            s += duration;
+            while (s > last) {
                 s -= pq.top();
                 pq.pop();
             }
@@ -128,53 +142,58 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func scheduleCourse(courses [][]int) int {
-	sort.Slice(courses, func(i, j int) bool {
-		return courses[i][1] < courses[j][1]
-	})
-
-	h := &Heap{}
+	sort.Slice(courses, func(i, j int) bool { return courses[i][1] < courses[j][1] })
+	pq := &hp{}
 	s := 0
-	for _, course := range courses {
-		if d := course[0]; s+d <= course[1] {
-			s += d
-			heap.Push(h, d)
-		} else if h.Len() > 0 && d < h.IntSlice[0] {
-			s += d - h.IntSlice[0]
-			h.IntSlice[0] = d
-			heap.Fix(h, 0)
+	for _, e := range courses {
+		duration, last := e[0], e[1]
+		s += duration
+		pq.push(duration)
+		for s > last {
+			s -= pq.pop()
 		}
 	}
-	return h.Len()
+	return pq.Len()
 }
 
-type Heap struct {
-	sort.IntSlice
-}
+type hp struct{ sort.IntSlice }
 
-func (h Heap) Less(i, j int) bool {
-	return h.IntSlice[i] > h.IntSlice[j]
-}
-
-func (h *Heap) Push(x interface{}) {
-	h.IntSlice = append(h.IntSlice, x.(int))
-}
-
-func (h *Heap) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
-	x := a[len(a)-1]
+	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
-	return x
+	return v
 }
+func (h *hp) push(v int) { heap.Push(h, v) }
+func (h *hp) pop() int   { return heap.Pop(h).(int) }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function scheduleCourse(courses: number[][]): number {
+    courses.sort((a, b) => a[1] - b[1]);
+    const pq = new MaxPriorityQueue();
+    let s = 0;
+    for (const [duration, last] of courses) {
+        pq.enqueue(duration);
+        s += duration;
+        while (s > last) {
+            s -= pq.dequeue().element;
+        }
+    }
+    return pq.size();
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

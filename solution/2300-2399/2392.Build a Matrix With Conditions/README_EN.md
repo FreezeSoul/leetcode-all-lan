@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2392.Build%20a%20Matrix%20With%20Conditions/README_EN.md
+rating: 1960
+source: Weekly Contest 308 Q4
+tags:
+    - Graph
+    - Topological Sort
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [2392. Build a Matrix With Conditions](https://leetcode.com/problems/build-a-matrix-with-conditions)
 
 [中文文档](/solution/2300-2399/2392.Build%20a%20Matrix%20With%20Conditions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>positive</strong> integer <code>k</code>. You are also given:</p>
 
@@ -61,17 +78,23 @@ No matrix can satisfy all the conditions, so we return the empty matrix.
 	<li><code>left<sub>i</sub> != right<sub>i</sub></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Topological Sort.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def buildMatrix(self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]) -> List[List[int]]:
+    def buildMatrix(
+        self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]
+    ) -> List[List[int]]:
         def f(cond):
             g = defaultdict(list)
             indeg = [0] * (k + 1)
@@ -103,7 +126,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -159,7 +182,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -214,7 +237,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func buildMatrix(k int, rowConditions [][]int, colConditions [][]int) [][]int {
@@ -272,14 +295,10 @@ func buildMatrix(k int, rowConditions [][]int, colConditions [][]int) [][]int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function buildMatrix(
-    k: number,
-    rowConditions: number[][],
-    colConditions: number[][],
-): number[][] {
+function buildMatrix(k: number, rowConditions: number[][], colConditions: number[][]): number[][] {
     function f(cond) {
         const g = Array.from({ length: k + 1 }, () => []);
         const indeg = new Array(k + 1).fill(0);
@@ -323,11 +342,8 @@ function buildMatrix(
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

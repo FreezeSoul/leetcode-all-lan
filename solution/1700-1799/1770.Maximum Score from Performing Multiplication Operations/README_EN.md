@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1770.Maximum%20Score%20from%20Performing%20Multiplication%20Operations/README_EN.md
+rating: 2068
+source: Weekly Contest 229 Q3
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1770. Maximum Score from Performing Multiplication Operations](https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations)
 
 [中文文档](/solution/1700-1799/1770.Maximum%20Score%20from%20Performing%20Multiplication%20Operations/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two <strong>0-indexed</strong> integer arrays <code>nums</code> and <code>multipliers</code><strong> </strong>of size <code>n</code> and <code>m</code> respectively, where <code>n &gt;= m</code>.</p>
 
@@ -57,11 +72,17 @@ The total score is 50 + 15 - 9 + 4 + 42 = 102.
 	<li><code>-1000 &lt;= nums[i], multipliers[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -79,26 +100,7 @@ class Solution:
         return f(0, n - 1, 0)
 ```
 
-```python
-class Solution:
-    def maximumScore(self, nums: List[int], multipliers: List[int]) -> int:
-        n, m = len(nums), len(multipliers)
-        f = [[-inf] * (m + 1) for _ in range(m + 1)]
-        f[0][0] = 0
-        ans = -inf
-        for i in range(m + 1):
-            for j in range(m - i + 1):
-                k = i + j - 1
-                if i > 0:
-                    f[i][j] = max(f[i][j], f[i - 1][j] + multipliers[k] * nums[i - 1])
-                if j > 0:
-                    f[i][j] = max(f[i][j], f[i][j - 1] + multipliers[k] * nums[n - j])
-                if i + j == m:
-                    ans = max(ans, f[i][j])
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -133,6 +135,119 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, vector<int>& multipliers) {
+        int n = nums.size(), m = multipliers.size();
+        int f[m][m];
+        memset(f, 0x3f, sizeof f);
+        function<int(int, int)> dfs = [&](int i, int j) -> int {
+            if (i >= m || j >= m || (i + j) >= m) return 0;
+            if (f[i][j] != 0x3f3f3f3f) return f[i][j];
+            int k = i + j;
+            int a = dfs(i + 1, j) + nums[i] * multipliers[k];
+            int b = dfs(i, j + 1) + nums[n - j - 1] * multipliers[k];
+            return f[i][j] = max(a, b);
+        };
+        return dfs(0, 0);
+    }
+};
+```
+
+#### Go
+
+```go
+func maximumScore(nums []int, multipliers []int) int {
+	n, m := len(nums), len(multipliers)
+	f := make([][]int, m)
+	for i := range f {
+		f[i] = make([]int, m)
+		for j := range f[i] {
+			f[i][j] = 1 << 30
+		}
+	}
+	var dfs func(i, j int) int
+	dfs = func(i, j int) int {
+		if i >= m || j >= m || i+j >= m {
+			return 0
+		}
+		if f[i][j] != 1<<30 {
+			return f[i][j]
+		}
+		k := i + j
+		a := dfs(i+1, j) + nums[i]*multipliers[k]
+		b := dfs(i, j+1) + nums[n-j-1]*multipliers[k]
+		f[i][j] = max(a, b)
+		return f[i][j]
+	}
+	return dfs(0, 0)
+}
+```
+
+#### TypeScript
+
+```ts
+function maximumScore(nums: number[], multipliers: number[]): number {
+    const inf = 1 << 30;
+    const n = nums.length;
+    const m = multipliers.length;
+    const f = new Array(m + 1).fill(0).map(() => new Array(m + 1).fill(-inf));
+    f[0][0] = 0;
+    let ans = -inf;
+    for (let i = 0; i <= m; ++i) {
+        for (let j = 0; j <= m - i; ++j) {
+            const k = i + j - 1;
+            if (i > 0) {
+                f[i][j] = Math.max(f[i][j], f[i - 1][j] + nums[i - 1] * multipliers[k]);
+            }
+            if (j > 0) {
+                f[i][j] = Math.max(f[i][j], f[i][j - 1] + nums[n - j] * multipliers[k]);
+            }
+            if (i + j === m) {
+                ans = Math.max(ans, f[i][j]);
+            }
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maximumScore(self, nums: List[int], multipliers: List[int]) -> int:
+        n, m = len(nums), len(multipliers)
+        f = [[-inf] * (m + 1) for _ in range(m + 1)]
+        f[0][0] = 0
+        ans = -inf
+        for i in range(m + 1):
+            for j in range(m - i + 1):
+                k = i + j - 1
+                if i > 0:
+                    f[i][j] = max(f[i][j], f[i - 1][j] + multipliers[k] * nums[i - 1])
+                if j > 0:
+                    f[i][j] = max(f[i][j], f[i][j - 1] + multipliers[k] * nums[n - j])
+                if i + j == m:
+                    ans = max(ans, f[i][j])
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int maximumScore(int[] nums, int[] multipliers) {
@@ -163,27 +278,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maximumScore(vector<int>& nums, vector<int>& multipliers) {
-        int n = nums.size(), m = multipliers.size();
-        int f[m][m];
-        memset(f, 0x3f, sizeof f);
-        function<int(int, int)> dfs = [&](int i, int j) -> int {
-            if (i >= m || j >= m || (i + j) >= m) return 0;
-            if (f[i][j] != 0x3f3f3f3f) return f[i][j];
-            int k = i + j;
-            int a = dfs(i + 1, j) + nums[i] * multipliers[k];
-            int b = dfs(i, j + 1) + nums[n - j - 1] * multipliers[k];
-            return f[i][j] = max(a, b);
-        };
-        return dfs(0, 0);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -213,42 +308,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func maximumScore(nums []int, multipliers []int) int {
-	n, m := len(nums), len(multipliers)
-	f := make([][]int, m)
-	for i := range f {
-		f[i] = make([]int, m)
-		for j := range f[i] {
-			f[i][j] = 1 << 30
-		}
-	}
-	var dfs func(i, j int) int
-	dfs = func(i, j int) int {
-		if i >= m || j >= m || i+j >= m {
-			return 0
-		}
-		if f[i][j] != 1<<30 {
-			return f[i][j]
-		}
-		k := i + j
-		a := dfs(i+1, j) + nums[i]*multipliers[k]
-		b := dfs(i, j+1) + nums[n-j-1]*multipliers[k]
-		f[i][j] = max(a, b)
-		return f[i][j]
-	}
-	return dfs(0, 0)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func maximumScore(nums []int, multipliers []int) int {
@@ -279,53 +339,10 @@ func maximumScore(nums []int, multipliers []int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function maximumScore(nums: number[], multipliers: number[]): number {
-    const inf = 1 << 30;
-    const n = nums.length;
-    const m = multipliers.length;
-    const f = new Array(m + 1).fill(0).map(() => new Array(m + 1).fill(-inf));
-    f[0][0] = 0;
-    let ans = -inf;
-    for (let i = 0; i <= m; ++i) {
-        for (let j = 0; j <= m - i; ++j) {
-            const k = i + j - 1;
-            if (i > 0) {
-                f[i][j] = Math.max(
-                    f[i][j],
-                    f[i - 1][j] + nums[i - 1] * multipliers[k],
-                );
-            }
-            if (j > 0) {
-                f[i][j] = Math.max(
-                    f[i][j],
-                    f[i][j - 1] + nums[n - j] * multipliers[k],
-                );
-            }
-            if (i + j === m) {
-                ans = Math.max(ans, f[i][j]);
-            }
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

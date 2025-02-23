@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0185.Department%20Top%20Three%20Salaries/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [185. Department Top Three Salaries](https://leetcode.com/problems/department-top-three-salaries)
 
 [中文文档](/solution/0100-0199/0185.Department%20Top%20Three%20Salaries/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Employee</code></p>
 
@@ -15,8 +27,8 @@
 | salary       | int     |
 | departmentId | int     |
 +--------------+---------+
-id is the primary key column for this table.
-departmentId is a foreign key of the ID from the <code>Department </code>table.
+id is the primary key (column with unique values) for this table.
+departmentId is a foreign key (reference column) of the ID from the <code>Department </code>table.
 Each row of this table indicates the ID, name, and salary of an employee. It also contains the ID of their department.
 </pre>
 
@@ -31,7 +43,7 @@ Each row of this table indicates the ID, name, and salary of an employee. It als
 | id          | int     |
 | name        | varchar |
 +-------------+---------+
-id is the primary key column for this table.
+id is the primary key (column with unique values) for this table.
 Each row of this table indicates the ID of a department and its name.
 </pre>
 
@@ -39,11 +51,11 @@ Each row of this table indicates the ID of a department and its name.
 
 <p>A company&#39;s executives are interested in seeing who earns the most money in each of the company&#39;s departments. A <strong>high earner</strong> in a department is an employee who has a salary in the <strong>top three unique</strong> salaries for that department.</p>
 
-<p>Write an SQL query to find the employees who are <strong>high earners</strong> in each of the departments.</p>
+<p>Write a solution to find the employees who are <strong>high earners</strong> in each of the departments.</p>
 
 <p>Return the result table <strong>in any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -92,56 +104,101 @@ In the Sales department:
 - There is no third-highest salary as there are only two employees
 </pre>
 
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li>There are no employees with the <strong>exact</strong> same name, salary <em>and</em> department.</li>
+</ul>
+
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### Python3
+
+```python
+import pandas as pd
+
+
+def top_three_salaries(
+    employee: pd.DataFrame, department: pd.DataFrame
+) -> pd.DataFrame:
+    salary_cutoff = (
+        employee.drop_duplicates(["salary", "departmentId"])
+        .groupby("departmentId")["salary"]
+        .nlargest(3)
+        .groupby("departmentId")
+        .min()
+    )
+    employee["Department"] = department.set_index("id")["name"][
+        employee["departmentId"]
+    ].values
+    employee["cutoff"] = salary_cutoff[employee["departmentId"]].values
+    return employee[employee["salary"] >= employee["cutoff"]].rename(
+        columns={"name": "Employee", "salary": "Salary"}
+    )[["Department", "Employee", "Salary"]]
+```
+
+#### MySQL
 
 ```sql
 SELECT
-	Department.NAME AS Department,
-	Employee.NAME AS Employee,
-	Salary
+    Department.NAME AS Department,
+    Employee.NAME AS Employee,
+    Salary
 FROM
-	Employee,
-	Department
+    Employee,
+    Department
 WHERE
-	Employee.DepartmentId = Department.Id
-	AND  (SELECT
+    Employee.DepartmentId = Department.Id
+    AND (
+        SELECT
             COUNT(DISTINCT e2.Salary)
-        FROM
-            Employee e2
-        WHERE
-            e2.Salary > Employee.Salary
-                AND Employee.DepartmentId = e2.DepartmentId
-    ) < 3
-```
-
-```sql
-# Write your MySQL query statement below
-with t as (
-    select
-        departmentId,
-        name,
-        salary,
-        dense_rank() over(
-            partition by departmentId
-            order by
-                salary desc
-        ) as rk
-    from
-        Employee
-)
-select
-    d.name Department,
-    t.name Employee,
-    salary Salary
-from
-    t
-    join Department d on t.departmentId = d.id
-where
-    rk < 4
+        FROM Employee AS e2
+        WHERE e2.Salary > Employee.Salary AND Employee.DepartmentId = e2.DepartmentId
+    ) < 3;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            *,
+            DENSE_RANK() OVER (
+                PARTITION BY departmentId
+                ORDER BY salary DESC
+            ) AS rk
+        FROM Employee
+    )
+SELECT d.name AS Department, t.name AS Employee, salary AS Salary
+FROM
+    T AS t
+    JOIN Department AS d ON t.departmentId = d.id
+WHERE rk <= 3;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

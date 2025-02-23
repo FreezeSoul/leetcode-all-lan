@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0372.Super%20Pow/README.md
+tags:
+    - 数学
+    - 分治
+---
+
+<!-- problem:start -->
+
 # [372. 超级次方](https://leetcode.cn/problems/super-pow)
 
 [English Version](/solution/0300-0399/0372.Super%20Pow/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你的任务是计算 <code>a<sup>b</sup></code> 对 <code>1337</code> 取模，<code>a</code> 是一个正整数，<code>b</code> 是一个非常大的正整数且会以数组形式给出。</p>
 
@@ -49,121 +60,143 @@
 	<li><code>b</code> 不含前导 0</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-乘方快速幂。
+### 方法一：快速幂
+
+我们初始化答案变量 $ans = 1$。
+
+接下来，倒序遍历数组 $b$，每次遍历到一个元素 $e$，我们将答案变量 $ans$ 自乘 $a^e$ 并对 $1337$ 取模，然后将 $a$ 自乘 $10$ 次并对 $1337$ 取模。这里需要用到快速幂。
+
+遍历完数组后，返回答案即可。
+
+时间复杂度 $O(\sum_{i=0}^{n-1} \log b_i)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def superPow(self, a: int, b: List[int]) -> int:
-        MOD = 1337
+        mod = 1337
         ans = 1
         for e in b[::-1]:
-            ans = ans * pow(a, e, MOD) % MOD
-            a = pow(a, 10, MOD)
+            ans = ans * pow(a, e, mod) % mod
+            a = pow(a, 10, mod)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-    private static final int MOD = 1337;
+    private final int mod = 1337;
 
     public int superPow(int a, int[] b) {
-        int ans = 1;
+        long ans = 1;
         for (int i = b.length - 1; i >= 0; --i) {
-            ans = (int) ((long) ans * quickPowAndMod(a, b[i]) % MOD);
-            a = quickPowAndMod(a, 10);
+            ans = ans * qpow(a, b[i]) % mod;
+            a = qpow(a, 10);
         }
-        return ans;
+        return (int) ans;
     }
 
-    private int quickPowAndMod(int a, int b) {
-        int ans = 1;
-        while (b > 0) {
-            if ((b & 1) == 1) {
-                ans = (ans * (a % MOD)) % MOD;
+    private long qpow(long a, int n) {
+        long ans = 1;
+        for (; n > 0; n >>= 1) {
+            if ((n & 1) == 1) {
+                ans = ans * a % mod;
             }
-            b >>= 1;
-            a = (a % MOD) * (a % MOD) % MOD;
+            a = a * a % mod;
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
-    const int MOD = 1337;
-
 public:
     int superPow(int a, vector<int>& b) {
-        int ans = 1;
-        for (int i = b.size() - 1; i >= 0; --i) {
-            ans = (long)ans * quickPowAndMod(a, b[i]) % MOD;
-            a = quickPowAndMod(a, 10);
-        }
-        return ans;
-    }
-
-    int quickPowAndMod(int a, int b) {
-        int ans = 1;
-        while (b) {
-            if (b & 1) {
-                ans = (ans * (a % MOD)) % MOD;
+        using ll = long long;
+        const int mod = 1337;
+        ll ans = 1;
+        auto qpow = [&](ll a, int n) {
+            ll ans = 1;
+            for (; n; n >>= 1) {
+                if (n & 1) {
+                    ans = ans * a % mod;
+                }
+                a = a * a % mod;
             }
-            b >>= 1;
-            a = ((a % MOD) * (a % MOD)) % MOD;
+            return (int) ans;
+        };
+        for (int i = b.size() - 1; ~i; --i) {
+            ans = ans * qpow(a, b[i]) % mod;
+            a = qpow(a, 10);
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-const mod = 1337
-
 func superPow(a int, b []int) int {
+	const mod int = 1337
 	ans := 1
-	for i := len(b) - 1; i >= 0; i-- {
-		ans = ans * quickPowAndMod(a, b[i]) % mod
-		a = quickPowAndMod(a, 10)
-	}
-	return ans
-}
-
-func quickPowAndMod(a, b int) int {
-	ans := 1
-	for b > 0 {
-		if b&1 > 0 {
-			ans = ans * a % mod
+	qpow := func(a, n int) int {
+		ans := 1
+		for ; n > 0; n >>= 1 {
+			if n&1 == 1 {
+				ans = ans * a % mod
+			}
+			a = a * a % mod
 		}
-		b >>= 1
-		a = ((a % mod) * (a % mod)) % mod
+		return ans
+	}
+	for i := len(b) - 1; i >= 0; i-- {
+		ans = ans * qpow(a, b[i]) % mod
+		a = qpow(a, 10)
 	}
 	return ans
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function superPow(a: number, b: number[]): number {
+    let ans = 1;
+    const mod = 1337;
+    const qpow = (a: number, n: number): number => {
+        let ans = 1;
+        for (; n; n >>= 1) {
+            if (n & 1) {
+                ans = Number((BigInt(ans) * BigInt(a)) % BigInt(mod));
+            }
+            a = Number((BigInt(a) * BigInt(a)) % BigInt(mod));
+        }
+        return ans;
+    };
+    for (let i = b.length - 1; ~i; --i) {
+        ans = Number((BigInt(ans) * BigInt(qpow(a, b[i]))) % BigInt(mod));
+        a = qpow(a, 10);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

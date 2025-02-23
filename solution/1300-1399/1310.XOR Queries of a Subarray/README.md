@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1310.XOR%20Queries%20of%20a%20Subarray/README.md
+rating: 1459
+source: 第 170 场周赛 Q2
+tags:
+    - 位运算
+    - 数组
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [1310. 子数组异或查询](https://leetcode.cn/problems/xor-queries-of-a-subarray)
 
 [English Version](/solution/1300-1399/1310.XOR%20Queries%20of%20a%20Subarray/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个正整数数组 <code>arr</code>，现给你一个对应的查询数组 <code>queries</code>，其中 <code>queries[i] = [L<sub>i, </sub>R<sub>i</sub>]</code>。</p>
 
@@ -51,30 +65,30 @@
 	<li><code>0 <= queries[i][0] <= queries[i][1] < arr.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀异或**
+### 方法一：前缀异或
 
-我们可以用一个长度为 $n+1$ 的前缀异或数组 $s$ 来存储数组 $arr$ 的前缀异或结果，其中 $s[i] = s[i-1] \oplus arr[i-1]$，即 $s[i]$ 表示 $arr$ 中下标 $[0,i-1]$ 的元素的异或结果。
+我们可以用一个长度为 $n+1$ 的前缀异或数组 $s$ 来存储数组 $\textit{arr}$ 的前缀异或结果，其中 $s[i] = s[i-1] \oplus \textit{arr}[i-1]$，即 $s[i]$ 表示 $\textit{arr}$ 的前 $i$ 个元素的异或结果。
 
 那么对于一个查询 $[l,r]$，我们可以得到：
 
 $$
 \begin{aligned}
-arr[l] \oplus arr[l+1] \oplus \cdots \oplus arr[r] &= (arr[0] \oplus arr[1] \oplus \cdots \oplus arr[l-1]) \oplus (arr[0] \oplus arr[1] \oplus \cdots \oplus arr[r]) \\
+\textit{arr}[l] \oplus \textit{arr}[l+1] \oplus \cdots \oplus \textit{arr}[r] &= (\textit{arr}[0] \oplus \textit{arr}[1] \oplus \cdots \oplus \textit{arr}[l-1]) \oplus (\textit{arr}[0] \oplus \textit{arr}[1] \oplus \cdots \oplus \textit{arr}[r]) \\
 &= s[l] \oplus s[r+1]
 \end{aligned}
 $$
 
-时间复杂度 $O(n+m)$，空间复杂度 $O(n)$。其中 $n$ 和 $m$ 分别是数组 $arr$ 和查询数组 $queries$ 的长度。
+时间复杂度 $O(n+m)$，空间复杂度 $O(n)$。其中 $n$ 和 $m$ 分别是数组 $\textit{arr}$ 的长度和查询数组 $\textit{queries}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +97,7 @@ class Solution:
         return [s[r + 1] ^ s[l] for l, r in queries]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func xorQueries(arr []int, queries [][]int) (ans []int) {
@@ -145,24 +157,20 @@ func xorQueries(arr []int, queries [][]int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function xorQueries(arr: number[], queries: number[][]): number[] {
     const n = arr.length;
-    const s: number[] = new Array(n + 1).fill(0);
+    const s: number[] = Array(n + 1).fill(0);
     for (let i = 0; i < n; ++i) {
         s[i + 1] = s[i] ^ arr[i];
     }
-    const ans: number[] = [];
-    for (const [l, r] of queries) {
-        ans.push(s[r + 1] ^ s[l]);
-    }
-    return ans;
+    return queries.map(([l, r]) => s[r + 1] ^ s[l]);
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -172,22 +180,16 @@ function xorQueries(arr: number[], queries: number[][]): number[] {
  */
 var xorQueries = function (arr, queries) {
     const n = arr.length;
-    const s = new Array(n + 1).fill(0);
+    const s = Array(n + 1).fill(0);
     for (let i = 0; i < n; ++i) {
         s[i + 1] = s[i] ^ arr[i];
     }
-    const ans = [];
-    for (const [l, r] of queries) {
-        ans.push(s[r + 1] ^ s[l]);
-    }
-    return ans;
+    return queries.map(([l, r]) => s[r + 1] ^ s[l]);
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

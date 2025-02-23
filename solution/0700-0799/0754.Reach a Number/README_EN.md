@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0754.Reach%20a%20Number/README_EN.md
+tags:
+    - Math
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [754. Reach a Number](https://leetcode.com/problems/reach-a-number)
 
 [中文文档](/solution/0700-0799/0754.Reach%20a%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are standing at position <code>0</code> on an infinite number line. There is a destination at position <code>target</code>.</p>
 
@@ -45,11 +58,27 @@ On the 2<sup>nd</sup> move, we step from 1 to 3 (2 steps).
 	<li><code>target != 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Mathematical Analysis
+
+Due to symmetry, each time we can choose to move left or right, so we can take the absolute value of $\textit{target}$.
+
+Define $s$ as the current position, and use the variable $k$ to record the number of moves. Initially, both $s$ and $k$ are $0$.
+
+We keep adding to $s$ in a loop until $s \ge \textit{target}$ and $(s - \textit{target}) \bmod 2 = 0$. At this point, the number of moves $k$ is the answer, and we return it directly.
+
+Why? Because if $s \ge \textit{target}$ and $(s - \textit{target}) \bmod 2 = 0$, we only need to change the sign of the positive integer $\frac{s - \textit{target}}{2}$ to negative, so that $s$ equals $\textit{target}$. Changing the sign of a positive integer essentially means changing the direction of the move, but the actual number of moves remains the same.
+
+The time complexity is $O(\sqrt{\left | \textit{target} \right | })$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +92,7 @@ class Solution:
             s += k
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -81,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +127,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func reachNumber(target int) int {
@@ -116,7 +145,7 @@ func reachNumber(target int) int {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -136,10 +165,8 @@ var reachNumber = function (target) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

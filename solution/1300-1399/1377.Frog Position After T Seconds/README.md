@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1377.Frog%20Position%20After%20T%20Seconds/README.md
+rating: 1823
+source: 第 179 场周赛 Q4
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 图
+---
+
+<!-- problem:start -->
+
 # [1377. T 秒后青蛙的位置](https://leetcode.cn/problems/frog-position-after-t-seconds)
 
 [English Version](/solution/1300-1399/1377.Frog%20Position%20After%20T%20Seconds/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵由 <code>n</code> 个顶点组成的无向树，顶点编号从 <code>1</code> 到 <code>n</code>。青蛙从 <strong>顶点 1</strong> 开始起跳。规则如下：</p>
 
@@ -56,11 +71,13 @@
 	<li><code>1 &lt;= target &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 我们先根据题目给出的无向树的边，建立一个邻接表 $g$，其中 $g[u]$ 表示顶点 $u$ 的所有相邻顶点。
 
@@ -84,9 +101,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -114,9 +129,7 @@ class Solution:
         return 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -154,7 +167,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -191,7 +204,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func frogPosition(n int, edges [][]int, t int, target int) float64 {
@@ -213,9 +226,9 @@ func frogPosition(n int, edges [][]int, t int, target int) float64 {
 			u, p := q[0].u, q[0].p
 			q = q[1:]
 			cnt := len(g[u])
-            if u != 1 {
-                cnt--
-            }
+			if u != 1 {
+				cnt--
+			}
 			if u == target {
 				if cnt*t == 0 {
 					return p
@@ -234,15 +247,10 @@ func frogPosition(n int, edges [][]int, t int, target int) float64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function frogPosition(
-    n: number,
-    edges: number[][],
-    t: number,
-    target: number,
-): number {
+function frogPosition(n: number, edges: number[][], t: number, target: number): number {
     const g: number[][] = Array.from({ length: n + 1 }, () => []);
     for (const [u, v] of edges) {
         g[u].push(v);
@@ -270,7 +278,7 @@ function frogPosition(
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -308,10 +316,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2481.Minimum%20Cuts%20to%20Divide%20a%20Circle/README_EN.md
+rating: 1246
+source: Biweekly Contest 92 Q1
+tags:
+    - Geometry
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2481. Minimum Cuts to Divide a Circle](https://leetcode.com/problems/minimum-cuts-to-divide-a-circle)
 
 [中文文档](/solution/2400-2499/2481.Minimum%20Cuts%20to%20Divide%20a%20Circle/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>valid cut</strong> in a circle can be:</p>
 
@@ -43,19 +58,40 @@ Also note that the first cut will not divide the circle into distinct parts.
 	<li><code>1 &lt;= n &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Case Discussion
+
+-   When $n=1$, no cutting is needed, so the number of cuts is $0$;
+-   When $n$ is odd, there is no collinear situation, and at least $n$ cuts are needed;
+-   When $n$ is even, they can be collinear in pairs, and at least $\frac{n}{2}$ cuts are needed.
+
+In summary, we can get:
+
+$$
+\textit{ans} = \begin{cases}
+n, & n \gt 1 \textit{ and } n \textit{ is odd} \\
+\frac{n}{2}, & n \textit{ is even} \\
+\end{cases}
+$$
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def numberOfCuts(self, n: int) -> int:
-        return n if n > 1 and n % 2 else n >> 1
+        return n if (n > 1 and n & 1) else n >> 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -65,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -76,7 +112,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfCuts(n int) int {
@@ -87,10 +123,39 @@ func numberOfCuts(n int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function numberOfCuts(n: number): number {
+    return n > 1 && n & 1 ? n : n >> 1;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn number_of_cuts(n: i32) -> i32 {
+        if n > 1 && n % 2 == 1 {
+            return n;
+        }
+        n >> 1
+    }
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int NumberOfCuts(int n) {
+        return n > 1 && n % 2 == 1 ? n : n >> 1;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

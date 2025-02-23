@@ -1,29 +1,12 @@
-func maxScore(s string) int {
-	t := 0
-	if s[0] == '0' {
-		t++
-	}
-	n := len(s)
-	for i := 1; i < n; i++ {
-		if s[i] == '1' {
-			t++
-		}
-	}
-	ans := t
-	for i := 1; i < n-1; i++ {
-		if s[i] == '0' {
-			t++
+func maxScore(s string) (ans int) {
+	l, r := 0, strings.Count(s, "1")
+	for _, c := range s[:len(s)-1] {
+		if c == '0' {
+			l++
 		} else {
-			t--
+			r--
 		}
-		ans = max(ans, t)
+		ans = max(ans, l+r)
 	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return
 }

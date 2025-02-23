@@ -1,8 +1,23 @@
-# [351. Android Unlock Patterns](https://leetcode.com/problems/android-unlock-patterns)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0351.Android%20Unlock%20Patterns/README_EN.md
+tags:
+    - Bit Manipulation
+    - Dynamic Programming
+    - Backtracking
+    - Bitmask
+---
+
+<!-- problem:start -->
+
+# [351. Android Unlock Patterns 🔒](https://leetcode.com/problems/android-unlock-patterns)
 
 [中文文档](/solution/0300-0399/0351.Android%20Unlock%20Patterns/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Android devices have a special lock screen with a <code>3 x 3</code> grid of dots. Users can set an &quot;unlock pattern&quot; by connecting the dots in a specific sequence, forming a series of joined line segments where each segment&#39;s endpoints are two consecutive dots in the sequence. A sequence of <code>k</code> dots is a <strong>valid</strong> unlock pattern if both of the following are true:</p>
 
@@ -53,26 +68,212 @@
 	<li><code>1 &lt;= m, n &lt;= 9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
+class Solution:
+    def numberOfPatterns(self, m: int, n: int) -> int:
+        def dfs(i: int, cnt: int = 1) -> int:
+            if cnt > n:
+                return 0
+            vis[i] = True
+            ans = int(cnt >= m)
+            for j in range(1, 10):
+                x = cross[i][j]
+                if not vis[j] and (x == 0 or vis[x]):
+                    ans += dfs(j, cnt + 1)
+            vis[i] = False
+            return ans
 
+        cross = [[0] * 10 for _ in range(10)]
+        cross[1][3] = cross[3][1] = 2
+        cross[1][7] = cross[7][1] = 4
+        cross[1][9] = cross[9][1] = 5
+        cross[2][8] = cross[8][2] = 5
+        cross[3][7] = cross[7][3] = 5
+        cross[3][9] = cross[9][3] = 6
+        cross[4][6] = cross[6][4] = 5
+        cross[7][9] = cross[9][7] = 8
+        vis = [False] * 10
+        return dfs(1) * 4 + dfs(2) * 4 + dfs(5)
 ```
 
-### **Java**
+#### Java
 
 ```java
+class Solution {
+    private int m;
+    private int n;
+    private int[][] cross = new int[10][10];
+    private boolean[] vis = new boolean[10];
 
+    public int numberOfPatterns(int m, int n) {
+        this.m = m;
+        this.n = n;
+        cross[1][3] = cross[3][1] = 2;
+        cross[1][7] = cross[7][1] = 4;
+        cross[1][9] = cross[9][1] = 5;
+        cross[2][8] = cross[8][2] = 5;
+        cross[3][7] = cross[7][3] = 5;
+        cross[3][9] = cross[9][3] = 6;
+        cross[4][6] = cross[6][4] = 5;
+        cross[7][9] = cross[9][7] = 8;
+        return dfs(1, 1) * 4 + dfs(2, 1) * 4 + dfs(5, 1);
+    }
+
+    private int dfs(int i, int cnt) {
+        if (cnt > n) {
+            return 0;
+        }
+        vis[i] = true;
+        int ans = cnt >= m ? 1 : 0;
+        for (int j = 1; j < 10; ++j) {
+            int x = cross[i][j];
+            if (!vis[j] && (x == 0 || vis[x])) {
+                ans += dfs(j, cnt + 1);
+            }
+        }
+        vis[i] = false;
+        return ans;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int numberOfPatterns(int m, int n) {
+        int cross[10][10];
+        memset(cross, 0, sizeof(cross));
+        bool vis[10];
+        memset(vis, false, sizeof(vis));
+        cross[1][3] = cross[3][1] = 2;
+        cross[1][7] = cross[7][1] = 4;
+        cross[1][9] = cross[9][1] = 5;
+        cross[2][8] = cross[8][2] = 5;
+        cross[3][7] = cross[7][3] = 5;
+        cross[3][9] = cross[9][3] = 6;
+        cross[4][6] = cross[6][4] = 5;
+        cross[7][9] = cross[9][7] = 8;
+
+        function<int(int, int)> dfs = [&](int i, int cnt) {
+            if (cnt > n) {
+                return 0;
+            }
+            vis[i] = true;
+            int ans = cnt >= m ? 1 : 0;
+            for (int j = 1; j < 10; ++j) {
+                int x = cross[i][j];
+                if (!vis[j] && (x == 0 || vis[x])) {
+                    ans += dfs(j, cnt + 1);
+                }
+            }
+            vis[i] = false;
+            return ans;
+        };
+
+        return dfs(1, 1) * 4 + dfs(2, 1) * 4 + dfs(5, 1);
+    }
+};
 ```
 
+#### Go
+
+```go
+func numberOfPatterns(m int, n int) int {
+	cross := [10][10]int{}
+	vis := [10]bool{}
+	cross[1][3] = 2
+	cross[1][7] = 4
+	cross[1][9] = 5
+	cross[2][8] = 5
+	cross[3][7] = 5
+	cross[3][9] = 6
+	cross[4][6] = 5
+	cross[7][9] = 8
+	cross[3][1] = 2
+	cross[7][1] = 4
+	cross[9][1] = 5
+	cross[8][2] = 5
+	cross[7][3] = 5
+	cross[9][3] = 6
+	cross[6][4] = 5
+	cross[9][7] = 8
+	var dfs func(int, int) int
+	dfs = func(i, cnt int) int {
+		if cnt > n {
+			return 0
+		}
+		vis[i] = true
+		ans := 0
+		if cnt >= m {
+			ans++
+		}
+		for j := 1; j < 10; j++ {
+			x := cross[i][j]
+			if !vis[j] && (x == 0 || vis[x]) {
+				ans += dfs(j, cnt+1)
+			}
+		}
+		vis[i] = false
+		return ans
+	}
+	return dfs(1, 1)*4 + dfs(2, 1)*4 + dfs(5, 1)
+}
+```
+
+#### TypeScript
+
+```ts
+function numberOfPatterns(m: number, n: number): number {
+    const cross: number[][] = Array(10)
+        .fill(0)
+        .map(() => Array(10).fill(0));
+    const vis: boolean[] = Array(10).fill(false);
+    cross[1][3] = cross[3][1] = 2;
+    cross[1][7] = cross[7][1] = 4;
+    cross[1][9] = cross[9][1] = 5;
+    cross[2][8] = cross[8][2] = 5;
+    cross[3][7] = cross[7][3] = 5;
+    cross[3][9] = cross[9][3] = 6;
+    cross[4][6] = cross[6][4] = 5;
+    cross[7][9] = cross[9][7] = 8;
+    const dfs = (i: number, cnt: number): number => {
+        if (cnt > n) {
+            return 0;
+        }
+        vis[i] = true;
+        let ans = 0;
+        if (cnt >= m) {
+            ++ans;
+        }
+        for (let j = 1; j < 10; ++j) {
+            const x = cross[i][j];
+            if (!vis[j] && (x === 0 || vis[x])) {
+                ans += dfs(j, cnt + 1);
+            }
+        }
+        vis[i] = false;
+        return ans;
+    };
+    return dfs(1, 1) * 4 + dfs(2, 1) * 4 + dfs(5, 1);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

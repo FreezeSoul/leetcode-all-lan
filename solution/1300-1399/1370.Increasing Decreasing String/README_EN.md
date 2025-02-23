@@ -1,24 +1,40 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1370.Increasing%20Decreasing%20String/README_EN.md
+rating: 1369
+source: Biweekly Contest 21 Q1
+tags:
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [1370. Increasing Decreasing String](https://leetcode.com/problems/increasing-decreasing-string)
 
 [中文文档](/solution/1300-1399/1370.Increasing%20Decreasing%20String/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>You are given a string <code>s</code>. Reorder the string using the following algorithm:</p>
 
 <ol>
-	<li>Pick the <strong>smallest</strong> character from <code>s</code> and <strong>append</strong> it to the result.</li>
-	<li>Pick the <strong>smallest</strong> character from <code>s</code> which is greater than the last appended character to the result and <strong>append</strong> it.</li>
-	<li>Repeat step 2 until you cannot pick more characters.</li>
-	<li>Pick the <strong>largest</strong> character from <code>s</code> and <strong>append</strong> it to the result.</li>
-	<li>Pick the <strong>largest</strong> character from <code>s</code> which is smaller than the last appended character to the result and <strong>append</strong> it.</li>
-	<li>Repeat step 5 until you cannot pick more characters.</li>
-	<li>Repeat the steps from 1 to 6 until you pick all characters from <code>s</code>.</li>
+	<li>Remove the <strong>smallest</strong> character from <code>s</code> and <strong>append</strong> it to the result.</li>
+	<li>Remove the <strong>smallest</strong> character from <code>s</code> that is greater than the last appended character, and <strong>append</strong> it to the result.</li>
+	<li>Repeat step 2 until no more characters can be removed.</li>
+	<li>Remove the <strong>largest</strong> character from <code>s</code> and <strong>append</strong> it to the result.</li>
+	<li>Remove the <strong>largest</strong> character from <code>s</code> that is smaller than the last appended character, and <strong>append</strong> it to the result.</li>
+	<li>Repeat step 5 until no more characters can be removed.</li>
+	<li>Repeat steps 1 through 6 until all characters from <code>s</code> have been removed.</li>
 </ol>
 
-<p>In each step, If the smallest or the largest character appears more than once you can choose any occurrence and append it to the result.</p>
+<p>If the smallest or largest character appears more than once, you may choose any occurrence to append to the result.</p>
 
-<p>Return <em>the result string after sorting </em><code>s</code><em> with this algorithm</em>.</p>
+<p>Return the resulting string after reordering <code>s</code> using this algorithm.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -49,52 +65,60 @@ After steps 4, 5 and 6 of the second iteration, result = &quot;abccbaabccba&quot
 	<li><code>s</code> consists of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting + Simulation
+
+First, we use a hash table or an array $cnt$ of length $26$ to count the number of occurrences of each character in the string $s$.
+
+Then, we enumerate the letters $[a,...,z]$. For the current enumerated letter $c$, if $cnt[c] > 0$, we append the letter $c$ to the end of the answer string and decrease $cnt[c]$ by one. We repeat this step until $cnt[c] = 0$. Then we enumerate the letters $[z,...,a]$ in reverse order and perform similar operations. If the length of the answer string equals the length of $s$, then we have completed all the concatenation operations.
+
+The time complexity is $O(n \times |\Sigma|)$, and the space complexity is $O(|\Sigma|)$. Where $n$ is the length of the string $s$, and $\Sigma$ is the character set. In this problem, the character set is all lowercase letters, so $|\Sigma| = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def sortString(self, s: str) -> str:
-        counter = [0] * 26
-        for c in s:
-            counter[ord(c) - ord('a')] += 1
+        cnt = Counter(s)
+        cs = ascii_lowercase + ascii_lowercase[::-1]
         ans = []
         while len(ans) < len(s):
-            for i in range(26):
-                if counter[i]:
-                    ans.append(chr(i + ord('a')))
-                    counter[i] -= 1
-            for i in range(25, -1, -1):
-                if counter[i]:
-                    ans.append(chr(i + ord('a')))
-                    counter[i] -= 1
-        return ''.join(ans)
+            for c in cs:
+                if cnt[c]:
+                    ans.append(c)
+                    cnt[c] -= 1
+        return "".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public String sortString(String s) {
-        int[] counter = new int[26];
-        for (char c : s.toCharArray()) {
-            ++counter[c - 'a'];
+        int[] cnt = new int[26];
+        int n = s.length();
+        for (int i = 0; i < n; ++i) {
+            cnt[s.charAt(i) - 'a']++;
         }
         StringBuilder sb = new StringBuilder();
-        while (sb.length() < s.length()) {
+        while (sb.length() < n) {
             for (int i = 0; i < 26; ++i) {
-                if (counter[i] > 0) {
+                if (cnt[i] > 0) {
                     sb.append((char) ('a' + i));
-                    --counter[i];
+                    --cnt[i];
                 }
             }
             for (int i = 25; i >= 0; --i) {
-                if (counter[i] > 0) {
+                if (cnt[i] > 0) {
                     sb.append((char) ('a' + i));
-                    --counter[i];
+                    --cnt[i];
                 }
             }
         }
@@ -103,26 +127,28 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string sortString(string s) {
-        vector<int> counter(26);
-        for (char c : s) ++counter[c - 'a'];
-        string ans = "";
+        int cnt[26]{};
+        for (char& c : s) {
+            ++cnt[c - 'a'];
+        }
+        string ans;
         while (ans.size() < s.size()) {
             for (int i = 0; i < 26; ++i) {
-                if (counter[i]) {
-                    ans += (i + 'a');
-                    --counter[i];
+                if (cnt[i]) {
+                    ans += i + 'a';
+                    --cnt[i];
                 }
             }
             for (int i = 25; i >= 0; --i) {
-                if (counter[i]) {
-                    ans += (i + 'a');
-                    --counter[i];
+                if (cnt[i]) {
+                    ans += i + 'a';
+                    --cnt[i];
                 }
             }
         }
@@ -131,26 +157,27 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortString(s string) string {
-	counter := ['z' + 1]int{}
+	cnt := [26]int{}
 	for _, c := range s {
-		counter[c]++
+		cnt[c-'a']++
 	}
-	var ans []byte
-	for len(ans) < len(s) {
-		for i := byte('a'); i <= 'z'; i++ {
-			if counter[i] > 0 {
-				ans = append(ans, i)
-				counter[i]--
+	n := len(s)
+	ans := make([]byte, 0, n)
+	for len(ans) < n {
+		for i := 0; i < 26; i++ {
+			if cnt[i] > 0 {
+				ans = append(ans, byte(i)+'a')
+				cnt[i]--
 			}
 		}
-		for i := byte('z'); i >= 'a'; i-- {
-			if counter[i] > 0 {
-				ans = append(ans, i)
-				counter[i]--
+		for i := 25; i >= 0; i-- {
+			if cnt[i] > 0 {
+				ans = append(ans, byte(i)+'a')
+				cnt[i]--
 			}
 		}
 	}
@@ -158,7 +185,34 @@ func sortString(s string) string {
 }
 ```
 
-### **Javascript**
+#### TypeScript
+
+```ts
+function sortString(s: string): string {
+    const cnt: number[] = Array(26).fill(0);
+    for (const c of s) {
+        ++cnt[c.charCodeAt(0) - 'a'.charCodeAt(0)];
+    }
+    const ans: string[] = [];
+    while (ans.length < s.length) {
+        for (let i = 0; i < 26; ++i) {
+            if (cnt[i]) {
+                ans.push(String.fromCharCode(i + 'a'.charCodeAt(0)));
+                --cnt[i];
+            }
+        }
+        for (let i = 25; i >= 0; --i) {
+            if (cnt[i]) {
+                ans.push(String.fromCharCode(i + 'a'.charCodeAt(0)));
+                --cnt[i];
+            }
+        }
+    }
+    return ans.join('');
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -166,35 +220,31 @@ func sortString(s string) string {
  * @return {string}
  */
 var sortString = function (s) {
-    let rs = '';
-    const m = new Map();
-    for (let i = 0; i < s.length; i++) {
-        m.set(s[i], (m.get(s[i]) || 0) + 1);
+    const cnt = Array(26).fill(0);
+    for (const c of s) {
+        ++cnt[c.charCodeAt(0) - 'a'.charCodeAt(0)];
     }
-    const keys = [...m.keys()];
-    keys.sort();
-    while (rs.length < s.length) {
-        for (let j = 0; j < keys.length; j++) {
-            if (m.get(keys[j]) != 0) {
-                rs += keys[j];
-                m.set(keys[j], m.get(keys[j]) - 1);
+    const ans = [];
+    while (ans.length < s.length) {
+        for (let i = 0; i < 26; ++i) {
+            if (cnt[i]) {
+                ans.push(String.fromCharCode(i + 'a'.charCodeAt(0)));
+                --cnt[i];
             }
         }
-        for (let j = keys.length - 1; j >= 0; j--) {
-            if (m.get(keys[j]) != 0) {
-                rs += keys[j];
-                m.set(keys[j], m.get(keys[j]) - 1);
+        for (let i = 25; i >= 0; --i) {
+            if (cnt[i]) {
+                ans.push(String.fromCharCode(i + 'a'.charCodeAt(0)));
+                --cnt[i];
             }
         }
     }
-    return rs;
+    return ans.join('');
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

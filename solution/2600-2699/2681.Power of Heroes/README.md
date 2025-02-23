@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2681.Power%20of%20Heroes/README.md
+rating: 2060
+source: 第 104 场双周赛 Q4
+tags:
+    - 数组
+    - 数学
+    - 动态规划
+    - 前缀和
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2681. 英雄的力量](https://leetcode.cn/problems/power-of-heroes)
 
 [English Version](/solution/2600-2699/2681.Power%20of%20Heroes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code>&nbsp;，它表示英雄的能力值。如果我们选出一部分英雄，这组英雄的 <strong>力量</strong>&nbsp;定义为：</p>
 
@@ -49,11 +65,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 数学**
+### 方法一：排序 + 数学
 
 我们注意到，题目中涉及到子序列的最大值和最小值，数组中元素的顺序不影响最终的结果，因此我们可以先对数组进行排序。
 
@@ -73,9 +91,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,9 +107,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +126,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sumOfPower(nums []int) (ans int) {
@@ -148,10 +162,26 @@ func sumOfPower(nums []int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function sumOfPower(nums: number[]): number {
+    const mod = 10 ** 9 + 7;
+    nums.sort((a, b) => a - b);
+    let ans = 0;
+    let p = 0;
+    for (let i = nums.length - 1; i >= 0; --i) {
+        const x = BigInt(nums[i]);
+        ans = (ans + Number((x * x * x) % BigInt(mod))) % mod;
+        ans = (ans + Number((x * BigInt(p)) % BigInt(mod))) % mod;
+        p = Number((BigInt(p) * 2n + x * x) % BigInt(mod));
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

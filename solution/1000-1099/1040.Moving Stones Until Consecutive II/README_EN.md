@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1040.Moving%20Stones%20Until%20Consecutive%20II/README_EN.md
+rating: 2455
+source: Weekly Contest 135 Q4
+tags:
+    - Array
+    - Math
+    - Two Pointers
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1040. Moving Stones Until Consecutive II](https://leetcode.com/problems/moving-stones-until-consecutive-ii)
 
 [中文文档](/solution/1000-1099/1040.Moving%20Stones%20Until%20Consecutive%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are some stones in different positions on the X-axis. You are given an integer array <code>stones</code>, the positions of the stones.</p>
 
@@ -50,11 +67,17 @@ Notice we cannot move 10 -&gt; 2 to finish the game, because that would be an il
 	<li>All the values of <code>stones</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +96,7 @@ class Solution:
         return [mi, mx]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numMovesStonesII(stones []int) []int {
@@ -143,32 +166,16 @@ func numMovesStonesII(stones []int) []int {
 	}
 	return []int{mi, mx}
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numMovesStonesII(stones: number[]): number[] {
     stones.sort((a, b) => a - b);
     const n = stones.length;
     let mi = n;
-    const mx =
-        Math.max(stones[n - 1] - stones[1] + 1, stones[n - 2] - stones[0] + 1) -
-        (n - 1);
+    const mx = Math.max(stones[n - 1] - stones[1] + 1, stones[n - 2] - stones[0] + 1) - (n - 1);
     for (let i = 0, j = 0; j < n; ++j) {
         while (stones[j] - stones[i] + 1 > n) {
             ++i;
@@ -183,10 +190,8 @@ function numMovesStonesII(stones: number[]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

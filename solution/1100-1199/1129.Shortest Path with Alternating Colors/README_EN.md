@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1129.Shortest%20Path%20with%20Alternating%20Colors/README_EN.md
+rating: 1779
+source: Weekly Contest 146 Q2
+tags:
+    - Breadth-First Search
+    - Graph
+---
+
+<!-- problem:start -->
+
 # [1129. Shortest Path with Alternating Colors](https://leetcode.com/problems/shortest-path-with-alternating-colors)
 
 [中文文档](/solution/1100-1199/1129.Shortest%20Path%20with%20Alternating%20Colors/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code>, the number of nodes in a directed graph where the nodes are labeled from <code>0</code> to <code>n - 1</code>. Each edge is red or blue in this graph, and there could be self-edges and parallel edges.</p>
 
@@ -40,13 +55,36 @@
 	<li><code>0 &lt;= a<sub>i</sub>, b<sub>i</sub>, u<sub>j</sub>, v<sub>j</sub> &lt; n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-BFS.
+<!-- solution:start -->
+
+### Solution 1: BFS
+
+The problem is essentially a shortest path problem, which we can consider solving using BFS.
+
+First, we preprocess all the edges, categorizing all the edges by color and storing them in a multi-dimensional array $g$. Where $g[0]$ stores all red edges, and $g[1]$ stores all blue edges.
+
+Next, we define the following data structures or variables:
+
+-   Queue $q$: used to store the currently searched node and the color of the current edge;
+-   Set $vis$: used to store the nodes that have been searched and the color of the current edge;
+-   Variable $d$: used to represent the current search level, i.e., the distance from the currently searched node to the starting point;
+-   Array $ans$: used to store the shortest distance from each node to the starting point. Initially, we initialize all elements in the $ans$ array to $-1$, indicating that the distance from all nodes to the starting point is unknown.
+
+We first enqueue the starting point $0$ and the color of the starting edge $0$ or $1$, indicating that we start from the starting point and the current edge is red or blue.
+
+Next, we start the BFS search. Each time we take out a node $(i, c)$ from the queue, if the answer of the current node has not been updated, then we update the answer of the current node to the current level $d$, i.e., $ans[i] = d$. Then, we flip the color of the current edge $c$, i.e., if the current edge is red, we change it to blue, and vice versa. We take out all edges corresponding to the color, if the other end node $j$ of the edge has not been searched, then we enqueue it.
+
+After the search is over, return the answer array.
+
+The time complexity is $O(n + m)$, and the space complexity is $O(n + m)$. Here, $n$ and $m$ are the number of nodes and edges, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +114,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +158,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +200,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestAlternatingPaths(n int, redEdges [][]int, blueEdges [][]int) []int {
@@ -206,10 +244,56 @@ func shortestAlternatingPaths(n int, redEdges [][]int, blueEdges [][]int) []int 
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function shortestAlternatingPaths(
+    n: number,
+    redEdges: number[][],
+    blueEdges: number[][],
+): number[] {
+    const g: [Graph, Graph] = [{}, {}];
+    const ans = Array(n).fill(-1);
+    const vis = Array.from({ length: n }, () => Array.from({ length: 2 }, () => false));
+    let q: Vertex[] = [
+        [0, 0],
+        [0, 1],
+    ];
+    vis[0][0] = vis[0][1] = true;
+    let d = 0;
+    for (const [i, j] of redEdges) {
+        (g[0][i] ??= []).push(j);
+    }
+    for (const [i, j] of blueEdges) {
+        (g[1][i] ??= []).push(j);
+    }
+    while (q.length) {
+        const qNext: Vertex[] = [];
+        for (let [i, color] of q) {
+            if (ans[i] === -1) {
+                ans[i] = d;
+            }
+            color ^= 1;
+            for (const j of g[color][i] ?? []) {
+                if (!vis[j][color]) {
+                    vis[j][color] = true;
+                    qNext.push([j, color as Color]);
+                }
+            }
+        }
+        q = qNext;
+        d++;
+    }
+    return ans;
+}
 
+type Graph = Record<number, number[]>;
+type Color = 0 | 1;
+type Vertex = [number, Color];
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

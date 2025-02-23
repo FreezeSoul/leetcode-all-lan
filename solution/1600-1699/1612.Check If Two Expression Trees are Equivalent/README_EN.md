@@ -1,8 +1,24 @@
-# [1612. Check If Two Expression Trees are Equivalent](https://leetcode.com/problems/check-if-two-expression-trees-are-equivalent)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1612.Check%20If%20Two%20Expression%20Trees%20are%20Equivalent/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Hash Table
+    - Binary Tree
+    - Counting
+---
+
+<!-- problem:start -->
+
+# [1612. Check If Two Expression Trees are Equivalent 🔒](https://leetcode.com/problems/check-if-two-expression-trees-are-equivalent)
 
 [中文文档](/solution/1600-1699/1612.Check%20If%20Two%20Expression%20Trees%20are%20Equivalent/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong><a href="https://en.wikipedia.org/wiki/Binary_expression_tree" target="_blank">binary expression tree</a></strong> is a kind of binary tree used to represent arithmetic expressions. Each node of a binary expression tree has either zero or two children. Leaf nodes (nodes with 0 children) correspond to operands (variables), and internal nodes (nodes with two children) correspond to the operators. In this problem, we only consider the <code>&#39;+&#39;</code> operator (i.e. addition).</p>
 
@@ -25,7 +41,7 @@
 <pre>
 <strong>Input:</strong> root1 = [+,a,+,null,null,b,c], root2 = [+,+,a,b,c]
 <strong>Output:</strong> true
-<strong>Explaination:</strong> <code>a + (b + c) == (b + c) + a</code></pre>
+<strong>Explanation</strong><strong>:</strong> <code>a + (b + c) == (b + c) + a</code></pre>
 
 <p><strong class="example">Example 3:</strong></p>
 
@@ -34,7 +50,7 @@
 <pre>
 <strong>Input:</strong> root1 = [+,a,+,null,null,b,c], root2 = [+,+,a,b,d]
 <strong>Output:</strong> false
-<strong>Explaination:</strong> <code>a + (b + c) != (b + d) + a</code>
+<strong>Explanation</strong><strong>:</strong> <code>a + (b + c) != (b + d) + a</code>
 </pre>
 
 <p>&nbsp;</p>
@@ -49,11 +65,17 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> What will you change in your solution if the tree also supports the <code>&#39;-&#39;</code> operator (i.e. subtraction)?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -78,32 +100,7 @@ class Solution:
         return all(x == 0 for x in cnt.values())
 ```
 
-```python
-# Definition for a binary tree node.
-# class Node(object):
-#     def __init__(self, val=" ", left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def checkEquivalence(self, root1: 'Node', root2: 'Node') -> bool:
-        def dfs(root):
-            cnt = [0] * 26
-            if root is None:
-                return cnt
-            if root.val in '+-':
-                l, r = dfs(root.left), dfs(root.right)
-                k = 1 if root.val == '+' else -1
-                for i in range(26):
-                    cnt[i] += l[i] + r[i] * k
-            else:
-                cnt[ord(root.val) - ord('a')] += 1
-            return cnt
-
-        return dfs(root1) == dfs(root2)
-```
-
-### **Java**
+#### Java
 
 ```java
 /**
@@ -147,6 +144,124 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct Node {
+ *     char val;
+ *     Node *left;
+ *     Node *right;
+ *     Node() : val(' '), left(nullptr), right(nullptr) {}
+ *     Node(char x) : val(x), left(nullptr), right(nullptr) {}
+ *     Node(char x, Node *left, Node *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool checkEquivalence(Node* root1, Node* root2) {
+        int cnt[26]{};
+        function<void(Node*, int)> dfs = [&](Node* root, int v) {
+            if (!root) {
+                return;
+            }
+            if (root->val != '+') {
+                cnt[root->val - 'a'] += v;
+            }
+            dfs(root->left, v);
+            dfs(root->right, v);
+        };
+        dfs(root1, 1);
+        dfs(root2, -1);
+        for (int& x : cnt) {
+            if (x) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function Node(val, left, right) {
+ *     this.val = (val===undefined ? " " : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {Node} root1
+ * @param {Node} root2
+ * @return {boolean}
+ */
+var checkEquivalence = function (root1, root2) {
+    const cnt = new Array(26).fill(0);
+    const dfs = (root, v) => {
+        if (!root) {
+            return;
+        }
+        if (root.val !== '+') {
+            cnt[root.val.charCodeAt(0) - 'a'.charCodeAt(0)] += v;
+        }
+        dfs(root.left, v);
+        dfs(root.right, v);
+    };
+    dfs(root1, 1);
+    dfs(root2, -1);
+    for (const x of cnt) {
+        if (x) {
+            return false;
+        }
+    }
+    return true;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class Node(object):
+#     def __init__(self, val=" ", left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def checkEquivalence(self, root1: 'Node', root2: 'Node') -> bool:
+        def dfs(root):
+            cnt = [0] * 26
+            if root is None:
+                return cnt
+            if root.val in '+-':
+                l, r = dfs(root.left), dfs(root.right)
+                k = 1 if root.val == '+' else -1
+                for i in range(26):
+                    cnt[i] += l[i] + r[i] * k
+            else:
+                cnt[ord(root.val) - ord('a')] += 1
+            return cnt
+
+        return dfs(root1) == dfs(root2)
+```
+
+#### Java
 
 ```java
 /**
@@ -196,45 +311,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct Node {
- *     char val;
- *     Node *left;
- *     Node *right;
- *     Node() : val(' '), left(nullptr), right(nullptr) {}
- *     Node(char x) : val(x), left(nullptr), right(nullptr) {}
- *     Node(char x, Node *left, Node *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    bool checkEquivalence(Node* root1, Node* root2) {
-        int cnt[26]{};
-        function<void(Node*, int)> dfs = [&](Node* root, int v) {
-            if (!root) {
-                return;
-            }
-            if (root->val != '+') {
-                cnt[root->val - 'a'] += v;
-            }
-            dfs(root->left, v);
-            dfs(root->right, v);
-        };
-        dfs(root1, 1);
-        dfs(root2, -1);
-        for (int& x : cnt) {
-            if (x) {
-                return false;
-            }
-        }
-        return true;
-    }
-};
-```
+#### C++
 
 ```cpp
 /**
@@ -273,44 +350,7 @@ public:
 };
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function Node(val, left, right) {
- *     this.val = (val===undefined ? " " : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {Node} root1
- * @param {Node} root2
- * @return {boolean}
- */
-var checkEquivalence = function (root1, root2) {
-    const cnt = new Array(26).fill(0);
-    const dfs = (root, v) => {
-        if (!root) {
-            return;
-        }
-        if (root.val !== '+') {
-            cnt[root.val.charCodeAt(0) - 'a'.charCodeAt(0)] += v;
-        }
-        dfs(root.left, v);
-        dfs(root.right, v);
-    };
-    dfs(root1, 1);
-    dfs(root2, -1);
-    for (const x of cnt) {
-        if (x) {
-            return false;
-        }
-    }
-    return true;
-};
-```
+#### JavaScript
 
 ```js
 /**
@@ -355,10 +395,8 @@ var checkEquivalence = function (root1, root2) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

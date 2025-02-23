@@ -1,10 +1,20 @@
-# [1571. 仓库经理](https://leetcode.cn/problems/warehouse-manager)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1571.Warehouse%20Manager/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1571. 仓库经理 🔒](https://leetcode.cn/problems/warehouse-manager)
 
 [English Version](/solution/1500-1599/1571.Warehouse%20Manager/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表:&nbsp;<code>Warehouse</code></p>
 
@@ -16,7 +26,7 @@
 | product_id   | int     |
 | units        | int     |
 +--------------+---------+
-(name, product_id) 是该表主键.
+(name, product_id) 是该表主键(具有唯一值的列的组合).
 该表的行包含了每个仓库的所有商品信息.
 </pre>
 
@@ -34,17 +44,17 @@
 | Length        | int     |
 | Height        | int     |
 +---------------+---------+
-product_id 是该表主键.
+product_id 是该表主键(具有唯一值的列).
 该表的行包含了每件商品以英尺为单位的尺寸(宽度, 长度和高度)信息.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写一个 SQL&nbsp;查询来报告,&nbsp;每个仓库的存货量是多少立方英尺.</p>
+<p>编写解决方案报告每个仓库的存货量是多少立方英尺。</p>
 
-<p>返回结果没有顺序要求.</p>
+<p>返回结果没有顺序要求。</p>
 
-<p>查询结果如下例所示.</p>
+<p>返回结果格式如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -74,7 +84,7 @@ Products 表:
 +------------+--------------+------------+----------+-----------+
 <strong>输出：</strong>
 +----------------+------------+
-| <code>WAREHOUSE_NAME </code>| <code>VOLUME   </code>  | 
+| warehouse_name<code> </code>| volume<code>   </code>  | 
 +----------------+------------+
 | LCHouse1       | 12250      | 
 | LCHouse2       | 20250      |
@@ -92,24 +102,33 @@ Id为4的商品(LC-T-Shirt)的存货量为 4x10x20 = 800
 仓库LCHouse3: 1个单位的LC-T-Shirt.
           总存货量为: 1*800 = 800 立方英尺.</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：等值连接 + 分组求和
+
+我们可以使用等值连接将 `Warehouse` 表和 `Products` 表按照 `product_id` 进行连接，并按照仓库名称进行分组，然后使用 `SUM` 函数计算每个仓库的存货量。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
 SELECT
     name AS warehouse_name,
-    SUM(units * Width * Length * Height) AS volume
+    SUM(width * length * height * units) AS volume
 FROM
-    Warehouse w
-    JOIN Products p ON w.product_id = p.product_id
-GROUP BY
-    name
+    Warehouse
+    JOIN Products USING (product_id)
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

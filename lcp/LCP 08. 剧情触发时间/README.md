@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2008.%20%E5%89%A7%E6%83%85%E8%A7%A6%E5%8F%91%E6%97%B6%E9%97%B4/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 08. 剧情触发时间](https://leetcode.cn/problems/ju-qing-hong-fa-shi-jian)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在战略游戏中，玩家往往需要发展自己的势力来触发各种新的剧情。一个势力的主要属性有三种，分别是文明等级（<code>C</code>），资源储备（<code>R</code>）以及人口数量（<code>H</code>）。在游戏开始时（第 0 天），三种属性的值均为 0。</p>
 
@@ -57,17 +64,17 @@
 	<li><code>0 &lt;= requirements[i] &lt;= 100000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和 + 二分查找**
+### 方法一：前缀和 + 二分查找
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +99,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -135,10 +140,49 @@ class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func getTriggerTime(_ increase: [[Int]], _ requirements: [[Int]]) -> [Int] {
+        let m = increase.count, n = requirements.count
+        var s = Array(repeating: [0, 0, 0], count: m + 1)
 
+        for i in 0..<m {
+            for j in 0..<3 {
+                s[i + 1][j] = s[i][j] + increase[i][j]
+            }
+        }
+
+        var ans = Array(repeating: -1, count: n)
+        for i in 0..<n {
+            var left = 0, right = m + 1
+            while left < right {
+                let mid = (left + right) / 2
+                if check(s[mid], requirements[i]) {
+                    ans[i] = mid
+                    right = mid
+                } else {
+                    left = mid + 1
+                }
+            }
+        }
+        return ans
+    }
+
+    private func check(_ a: [Int], _ b: [Int]) -> Bool {
+        for i in 0..<3 {
+            if a[i] < b[i] {
+                return false
+            }
+        }
+        return true
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

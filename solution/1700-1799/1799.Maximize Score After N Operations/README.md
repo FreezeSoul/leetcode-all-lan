@@ -1,10 +1,28 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1799.Maximize%20Score%20After%20N%20Operations/README.md
+rating: 2072
+source: 第 48 场双周赛 Q4
+tags:
+    - 位运算
+    - 数组
+    - 数学
+    - 动态规划
+    - 回溯
+    - 状态压缩
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [1799. N 次操作后的最大分数和](https://leetcode.cn/problems/maximize-score-after-n-operations)
 
 [English Version](/solution/1700-1799/1799.Maximize%20Score%20After%20N%20Operations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你 <code>nums</code> ，它是一个大小为 <code>2 * n</code> 的正整数数组。你必须对这个数组执行 <code>n</code> 次操作。</p>
 
@@ -56,11 +74,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + 动态规划**
+### 方法一：状态压缩 + 动态规划
 
 我们可以先预处理得到数组 `nums` 中任意两个数的最大公约数，存储在二维数组 $g$ 中，其中 $g[i][j]$ 表示 $nums[i]$ 和 $nums[j]$ 的最大公约数。
 
@@ -76,9 +96,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -95,13 +113,14 @@ class Solution:
                     if k >> i & 1:
                         for j in range(i + 1, m):
                             if k >> j & 1:
-                                f[k] = max(f[k], f[k ^ (1 << i) ^ (1 << j)] + cnt // 2 * g[i][j])
+                                f[k] = max(
+                                    f[k],
+                                    f[k ^ (1 << i) ^ (1 << j)] + cnt // 2 * g[i][j],
+                                )
         return f[-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -138,7 +157,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -172,7 +191,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxScore(nums []int) int {
@@ -201,13 +220,6 @@ func maxScore(nums []int) int {
 	return f[1<<m-1]
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func gcd(a, b int) int {
 	if b == 0 {
 		return a
@@ -216,7 +228,7 @@ func gcd(a, b int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxScore(nums: number[]): number {
@@ -235,9 +247,7 @@ function maxScore(nums: number[]): number {
                 if ((k >> i) & 1) {
                     for (let j = i + 1; j < m; ++j) {
                         if ((k >> j) & 1) {
-                            const t =
-                                f[k ^ (1 << i) ^ (1 << j)] +
-                                ~~(cnt / 2) * g[i][j];
+                            const t = f[k ^ (1 << i) ^ (1 << j)] + ~~(cnt / 2) * g[i][j];
                             f[k] = Math.max(f[k], t);
                         }
                     }
@@ -262,10 +272,8 @@ function bitCount(i: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

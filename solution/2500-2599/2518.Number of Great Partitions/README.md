@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2518.Number%20of%20Great%20Partitions/README.md
+rating: 2414
+source: 第 325 场周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2518. 好分区的数目](https://leetcode.cn/problems/number-of-great-partitions)
 
 [English Version](/solution/2500-2599/2518.Number%20of%20Great%20Partitions/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>nums</code> 和一个整数 <code>k</code> 。</p>
 
@@ -50,11 +63,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：逆向思维 + 动态规划**
+### 方法一：逆向思维 + 动态规划
 
 对于一个长度为 $n$ 的数组 `nums`，每个元素都可以选择放入第一个分区或第二个分区，因此一共有 $2^n$ 种分区方式。每一种分区方式，得到的结果可以是“好分区”或者“坏分区”，题目要我们求“好分区”的个数，我们可以转换为求“坏分区”的个数。那么“好分区”的个数就是 $2^n$ 减去“坏分区”的个数。
 
@@ -65,8 +80,8 @@
 $$
 f[i][j] = \left\{
 \begin{aligned}
-&f[i - 1][j] & \text{如果不选第 } i \text{ 个元素} \\
-&f[i - 1][j - nums[i - 1]] & \text{如果选第 } i \text{ 个元素}
+&f[i - 1][j] & \textit{如果不选第 } i \textit{ 个元素} \\
+&f[i - 1][j - nums[i - 1]] & \textit{如果选第 } i \textit{ 个元素}
 \end{aligned}
 \right.
 $$
@@ -77,9 +92,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -100,9 +113,7 @@ class Solution:
         return (ans - sum(f[-1]) * 2 + mod) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -138,7 +149,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -171,7 +182,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPartitions(nums []int, k int) int {
@@ -207,10 +218,8 @@ func countPartitions(nums []int, k int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

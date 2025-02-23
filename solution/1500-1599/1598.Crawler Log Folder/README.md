@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1598.Crawler%20Log%20Folder/README.md
+rating: 1297
+source: 第 208 场周赛 Q1
+tags:
+    - 栈
+    - 数组
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1598. 文件夹操作日志搜集器](https://leetcode.cn/problems/crawler-log-folder)
 
 [English Version](/solution/1500-1599/1598.Crawler%20Log%20Folder/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>每当用户执行变更文件夹操作时，LeetCode 文件系统都会保存一条日志记录。</p>
 
@@ -59,11 +73,13 @@
 	<li>文件夹名称由小写英文字母和数字组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 直接模拟，记录深度的变化即可。
 
@@ -71,9 +87,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minOperations(logs []string) int {
@@ -144,15 +156,65 @@ func minOperations(logs []string) int {
 }
 ```
 
-### **C**
+#### TypeScript
+
+```ts
+function minOperations(logs: string[]): number {
+    let ans = 0;
+    for (const x of logs) {
+        if (x === '../') {
+            ans && ans--;
+        } else if (x !== './') {
+            ans++;
+        }
+    }
+    return ans;
+}
+```
+
+#### JavaScript
+
+```ts
+function minOperations(logs) {
+    let ans = 0;
+    for (const x of logs) {
+        if (x === '../') {
+            ans && ans--;
+        } else if (x !== './') {
+            ans++;
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_operations(logs: Vec<String>) -> i32 {
+        let mut depth = 0;
+        for log in logs.iter() {
+            if log == "../" {
+                depth = (0).max(depth - 1);
+            } else if log != "./" {
+                depth += 1;
+            }
+        }
+        depth
+    }
+}
+```
+
+#### C
 
 ```c
-#define max(a,b) (((a) > (b)) ? (a) : (b))
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 
-int minOperations(char **logs, int logsSize) {
+int minOperations(char** logs, int logsSize) {
     int depth = 0;
     for (int i = 0; i < logsSize; i++) {
-        char *log = logs[i];
+        char* log = logs[i];
         if (!strcmp(log, "../")) {
             depth = max(0, depth - 1);
         } else if (strcmp(log, "./")) {
@@ -163,44 +225,8 @@ int minOperations(char **logs, int logsSize) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function minOperations(logs: string[]): number {
-    let depth = 0;
-    for (const log of logs) {
-        if (log === '../') {
-            depth = Math.max(0, depth - 1);
-        } else if (log !== './') {
-            depth++;
-        }
-    }
-    return depth;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn min_operations(logs: Vec<String>) -> i32 {
-        let mut depth = 0;
-        for log in logs.iter() {
-            if log == "../" {
-                depth = 0.max(depth - 1);
-            } else if log != "./" {
-                depth += 1;
-            }
-        }
-        depth
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

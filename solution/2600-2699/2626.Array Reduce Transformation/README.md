@@ -1,16 +1,26 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2626.Array%20Reduce%20Transformation/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2626. 数组归约运算](https://leetcode.cn/problems/array-reduce-transformation)
 
 [English Version](/solution/2600-2699/2626.Array%20Reduce%20Transformation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>请你编写一个函数，它的参数为一个整数数组&nbsp;<code>nums</code>&nbsp;、一个计算函数&nbsp;<code>fn</code>&nbsp;和初始值&nbsp;<font color="#c7254e"><font face="Menlo, Monaco, Consolas, Courier New, monospace"><span style="font-size:12.6px"><span style="background-color:#f9f2f4">init&nbsp;</span></span></font></font>。返回一个数组&nbsp;<strong>归约后 </strong>的值。</p>
+<p>给定一个整数数组 <code>nums</code>、一个 reducer 函数 <code>fn</code> 和一个初始值 <code>init</code>，返回通过依次对数组的每个元素执行 <code>fn</code> 函数得到的最终结果。</p>
 
-<p>你可以定义一个数组&nbsp;<strong>归约后 </strong>的值，然后应用以下操作： <code>val = fn(init, nums[0])</code>&nbsp;， <code>val = fn(val, nums[1])</code>&nbsp;， <code>val = fn(val, nums[2])</code>&nbsp;，<code>...</code>&nbsp;直到数组中的每个元素都被处理完毕。返回 <code>val</code> 的最终值。</p>
+<p>通过以下操作实现这个结果：<code>val = fn(init, nums[0])，val = fn(val, nums[1])，val = fn(val, nums[2])，...</code> 直到处理数组中的每个元素。然后返回 <code>val</code> 的最终值。</p>
 
-<p>如果数组的长度为 0，它应该返回 <code>init</code>&nbsp;的值。</p>
+<p>如果数组的长度为 0，则函数应返回 <code>init</code>。</p>
 
 <p>请你在不使用内置数组方法的&nbsp;<code>Array.reduce</code>&nbsp;前提下解决这个问题。</p>
 
@@ -42,7 +52,7 @@ fn = function sum(accum, curr) { return accum + curr * curr; }
 init = 100
 <strong>输出：</strong>130
 <strong>解释：</strong>
-初始值为 init=0 。
+初始值为 init=100 。
 (100) + nums[0]^2 = 101
 (101) + nums[1]^2 = 105
 (105) + nums[2]^2 = 114
@@ -71,15 +81,17 @@ init = 25
 	<li><code>0 &lt;= init &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 type Fn = (accum: number, curr: number) => number;
@@ -93,10 +105,8 @@ function reduce(nums: number[], fn: Fn, init: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

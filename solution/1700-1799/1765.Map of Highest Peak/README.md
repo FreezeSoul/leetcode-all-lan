@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1765.Map%20of%20Highest%20Peak/README.md
+rating: 1782
+source: 第 46 场双周赛 Q3
+tags:
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1765. 地图中的最高点](https://leetcode.cn/problems/map-of-highest-peak)
 
 [English Version](/solution/1700-1799/1765.Map%20of%20Highest%20Peak/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个大小为&nbsp;<code>m x n</code>&nbsp;的整数矩阵&nbsp;<code>isWater</code>&nbsp;，它代表了一个由 <strong>陆地</strong>&nbsp;和 <strong>水域</strong>&nbsp;单元格组成的地图。</p>
 
@@ -60,12 +74,15 @@
 	<li><code>isWater[i][j]</code>&nbsp;要么是&nbsp;<code>0</code>&nbsp;，要么是&nbsp;<code>1</code>&nbsp;。</li>
 	<li>至少有 <strong>1</strong>&nbsp;个水域格子。</li>
 </ul>
+<strong>注意：</strong>本题与 <a href="https://leetcode.cn/problems/01-matrix/">542</a> 题相同。
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 根据题目描述，水域的高度必须是 $0$，而任意相邻格子的高度差至多为 $1$。因此，我们可以从所有水域格子出发，用 BFS 搜索相邻且未访问过的格子，将其高度置为当前格子的高度再加一。
 
@@ -75,9 +92,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -100,31 +115,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def highestPeak(self, isWater: List[List[int]]) -> List[List[int]]:
-        m, n = len(isWater), len(isWater[0])
-        ans = [[-1] * n for _ in range(m)]
-        q = deque()
-        for i, row in enumerate(isWater):
-            for j, v in enumerate(row):
-                if v:
-                    q.append((i, j))
-                    ans[i][j] = 0
-        while q:
-            for _ in range(len(q)):
-                i, j = q.popleft()
-                for a, b in pairwise((-1, 0, 1, 0, -1)):
-                    x, y = i + a, j + b
-                    if 0 <= x < m and 0 <= y < n and ans[x][y] == -1:
-                        ans[x][y] = ans[i][j] + 1
-                        q.append((x, y))
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -157,40 +148,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int[][] highestPeak(int[][] isWater) {
-        int m = isWater.length, n = isWater[0].length;
-        int[][] ans = new int[m][n];
-        Deque<int[]> q = new ArrayDeque<>();
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                ans[i][j] = isWater[i][j] - 1;
-                if (ans[i][j] == 0) {
-                    q.offer(new int[] {i, j});
-                }
-            }
-        }
-        int[] dirs = {-1, 0, 1, 0, -1};
-        while (!q.isEmpty()) {
-            for (int t = q.size(); t > 0; --t) {
-                var p = q.poll();
-                int i = p[0], j = p[1];
-                for (int k = 0; k < 4; ++k) {
-                    int x = i + dirs[k], y = j + dirs[k + 1];
-                    if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
-                        ans[x][y] = ans[i][j] + 1;
-                        q.offer(new int[] {x, y});
-                    }
-                }
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -225,43 +183,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    const int dirs[5] = {-1, 0, 1, 0, -1};
-
-    vector<vector<int>> highestPeak(vector<vector<int>>& isWater) {
-        int m = isWater.size(), n = isWater[0].size();
-        vector<vector<int>> ans(m, vector<int>(n));
-        queue<pair<int, int>> q;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                ans[i][j] = isWater[i][j] - 1;
-                if (ans[i][j] == 0) {
-                    q.emplace(i, j);
-                }
-            }
-        }
-        while (!q.empty()) {
-            for (int t = q.size(); t; --t) {
-                auto [i, j] = q.front();
-                q.pop();
-                for (int k = 0; k < 4; ++k) {
-                    int x = i + dirs[k], y = j + dirs[k + 1];
-                    if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
-                        ans[x][y] = ans[i][j] + 1;
-                        q.emplace(x, y);
-                    }
-                }
-            }
-
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func highestPeak(isWater [][]int) [][]int {
@@ -294,6 +216,203 @@ func highestPeak(isWater [][]int) [][]int {
 	return ans
 }
 ```
+
+#### TypeScript
+
+```ts
+function highestPeak(isWater: number[][]): number[][] {
+    const m = isWater.length;
+    const n = isWater[0].length;
+    let ans: number[][] = [];
+    let q: number[][] = [];
+    for (let i = 0; i < m; ++i) {
+        ans.push(new Array(n).fill(-1));
+        for (let j = 0; j < n; ++j) {
+            if (isWater[i][j]) {
+                q.push([i, j]);
+                ans[i][j] = 0;
+            }
+        }
+    }
+    const dirs = [-1, 0, 1, 0, -1];
+    while (q.length) {
+        let tq: number[][] = [];
+        for (const [i, j] of q) {
+            for (let k = 0; k < 4; k++) {
+                const [x, y] = [i + dirs[k], j + dirs[k + 1]];
+                if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
+                    tq.push([x, y]);
+                    ans[x][y] = ans[i][j] + 1;
+                }
+            }
+        }
+        q = tq;
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::VecDeque;
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn highest_peak(is_water: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        let n = is_water.len();
+        let m = is_water[0].len();
+        let mut ret_vec = vec![vec![-1; m]; n];
+        let mut q: VecDeque<(usize, usize)> = VecDeque::new();
+        let vis_pair: Vec<(i32, i32)> = vec![(-1, 0), (1, 0), (0, -1), (0, 1)];
+
+        // Initialize the return vector
+        for i in 0..n {
+            for j in 0..m {
+                if is_water[i][j] == 1 {
+                    // This cell is water, the height of which must be 0
+                    ret_vec[i][j] = 0;
+                    q.push_back((i, j));
+                }
+            }
+        }
+
+        while !q.is_empty() {
+            // Get the front X-Y Coordinates
+            let (x, y) = q.front().unwrap().clone();
+            q.pop_front();
+            // Traverse through the vis pair
+            for d in &vis_pair {
+                let (dx, dy) = *d;
+                if Self::check_bounds((x as i32) + dx, (y as i32) + dy, n as i32, m as i32) {
+                    if ret_vec[((x as i32) + dx) as usize][((y as i32) + dy) as usize] == -1 {
+                        // This cell hasn't been visited, update its height
+                        ret_vec[((x as i32) + dx) as usize][((y as i32) + dy) as usize] =
+                            ret_vec[x][y] + 1;
+                        // Enqueue the current cell
+                        q.push_back((((x as i32) + dx) as usize, ((y as i32) + dy) as usize));
+                    }
+                }
+            }
+        }
+
+        ret_vec
+    }
+
+    #[allow(dead_code)]
+    fn check_bounds(i: i32, j: i32, n: i32, m: i32) -> bool {
+        i >= 0 && i < n && j >= 0 && j < m
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def highestPeak(self, isWater: List[List[int]]) -> List[List[int]]:
+        m, n = len(isWater), len(isWater[0])
+        ans = [[-1] * n for _ in range(m)]
+        q = deque()
+        for i, row in enumerate(isWater):
+            for j, v in enumerate(row):
+                if v:
+                    q.append((i, j))
+                    ans[i][j] = 0
+        while q:
+            for _ in range(len(q)):
+                i, j = q.popleft()
+                for a, b in pairwise((-1, 0, 1, 0, -1)):
+                    x, y = i + a, j + b
+                    if 0 <= x < m and 0 <= y < n and ans[x][y] == -1:
+                        ans[x][y] = ans[i][j] + 1
+                        q.append((x, y))
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[][] highestPeak(int[][] isWater) {
+        int m = isWater.length, n = isWater[0].length;
+        int[][] ans = new int[m][n];
+        Deque<int[]> q = new ArrayDeque<>();
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                ans[i][j] = isWater[i][j] - 1;
+                if (ans[i][j] == 0) {
+                    q.offer(new int[] {i, j});
+                }
+            }
+        }
+        int[] dirs = {-1, 0, 1, 0, -1};
+        while (!q.isEmpty()) {
+            for (int t = q.size(); t > 0; --t) {
+                var p = q.poll();
+                int i = p[0], j = p[1];
+                for (int k = 0; k < 4; ++k) {
+                    int x = i + dirs[k], y = j + dirs[k + 1];
+                    if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
+                        ans[x][y] = ans[i][j] + 1;
+                        q.offer(new int[] {x, y});
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    const int dirs[5] = {-1, 0, 1, 0, -1};
+
+    vector<vector<int>> highestPeak(vector<vector<int>>& isWater) {
+        int m = isWater.size(), n = isWater[0].size();
+        vector<vector<int>> ans(m, vector<int>(n));
+        queue<pair<int, int>> q;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                ans[i][j] = isWater[i][j] - 1;
+                if (ans[i][j] == 0) {
+                    q.emplace(i, j);
+                }
+            }
+        }
+        while (!q.empty()) {
+            for (int t = q.size(); t; --t) {
+                auto [i, j] = q.front();
+                q.pop();
+                for (int k = 0; k < 4; ++k) {
+                    int x = i + dirs[k], y = j + dirs[k + 1];
+                    if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
+                        ans[x][y] = ans[i][j] + 1;
+                        q.emplace(x, y);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
 
 ```go
 func highestPeak(isWater [][]int) [][]int {
@@ -329,45 +448,8 @@ func highestPeak(isWater [][]int) [][]int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function highestPeak(isWater: number[][]): number[][] {
-    const m = isWater.length;
-    const n = isWater[0].length;
-    let ans: number[][] = [];
-    let q: number[][] = [];
-    for (let i = 0; i < m; ++i) {
-        ans.push(new Array(n).fill(-1));
-        for (let j = 0; j < n; ++j) {
-            if (isWater[i][j]) {
-                q.push([i, j]);
-                ans[i][j] = 0;
-            }
-        }
-    }
-    const dirs = [-1, 0, 1, 0, -1];
-    while (q.length) {
-        let tq: number[][] = [];
-        for (const [i, j] of q) {
-            for (let k = 0; k < 4; k++) {
-                const [x, y] = [i + dirs[k], j + dirs[k + 1]];
-                if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
-                    tq.push([x, y]);
-                    ans[x][y] = ans[i][j] + 1;
-                }
-            }
-        }
-        q = tq;
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

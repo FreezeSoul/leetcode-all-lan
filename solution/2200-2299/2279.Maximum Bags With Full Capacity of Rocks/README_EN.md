@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2279.Maximum%20Bags%20With%20Full%20Capacity%20of%20Rocks/README_EN.md
+rating: 1249
+source: Weekly Contest 294 Q2
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2279. Maximum Bags With Full Capacity of Rocks](https://leetcode.com/problems/maximum-bags-with-full-capacity-of-rocks)
 
 [中文文档](/solution/2200-2299/2279.Maximum%20Bags%20With%20Full%20Capacity%20of%20Rocks/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have <code>n</code> bags numbered from <code>0</code> to <code>n - 1</code>. You are given two <strong>0-indexed</strong> integer arrays <code>capacity</code> and <code>rocks</code>. The <code>i<sup>th</sup></code> bag can hold a maximum of <code>capacity[i]</code> rocks and currently contains <code>rocks[i]</code> rocks. You are also given an integer <code>additionalRocks</code>, the number of additional rocks you can place in <strong>any</strong> of the bags.</p>
 
@@ -48,145 +64,139 @@ Note that we did not use all of the additional rocks.
 	<li><code>1 &lt;= additionalRocks &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Greedy
+
+First, we calculate the remaining capacity of each bag, then sort the remaining capacities. Next, we traverse the remaining capacities from smallest to largest, putting the extra stones into the bags until the extra stones are used up or the remaining capacities of the bags are exhausted. Finally, we return the number of bags at this point.
+
+Time complexity is $O(n \times \log n)$, and space complexity is $O(\log n)$. Here, $n$ is the number of bags.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maximumBags(
         self, capacity: List[int], rocks: List[int], additionalRocks: int
     ) -> int:
-        d = [a - b for a, b in zip(capacity, rocks)]
-        d.sort()
-        ans = 0
-        for v in d:
-            if v <= additionalRocks:
-                ans += 1
-                additionalRocks -= v
-        return ans
+        for i, x in enumerate(rocks):
+            capacity[i] -= x
+        capacity.sort()
+        for i, x in enumerate(capacity):
+            additionalRocks -= x
+            if additionalRocks < 0:
+                return i
+        return len(capacity)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int maximumBags(int[] capacity, int[] rocks, int additionalRocks) {
-        int n = capacity.length;
-        int[] d = new int[n];
+        int n = rocks.length;
         for (int i = 0; i < n; ++i) {
-            d[i] = capacity[i] - rocks[i];
+            capacity[i] -= rocks[i];
         }
-        Arrays.sort(d);
-        int ans = 0;
-        for (int v : d) {
-            if (v <= additionalRocks) {
-                ++ans;
-                additionalRocks -= v;
-            } else {
-                break;
+        Arrays.sort(capacity);
+        for (int i = 0; i < n; ++i) {
+            additionalRocks -= capacity[i];
+            if (additionalRocks < 0) {
+                return i;
             }
         }
-        return ans;
+        return n;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maximumBags(vector<int>& capacity, vector<int>& rocks, int additionalRocks) {
-        int n = capacity.size();
-        vector<int> d(n);
-        for (int i = 0; i < n; ++i) d[i] = capacity[i] - rocks[i];
-        sort(d.begin(), d.end());
-        int ans = 0;
-        for (int& v : d) {
-            if (v > additionalRocks) break;
-            ++ans;
-            additionalRocks -= v;
+        int n = rocks.size();
+        for (int i = 0; i < n; ++i) {
+            capacity[i] -= rocks[i];
         }
-        return ans;
+        ranges::sort(capacity);
+        for (int i = 0; i < n; ++i) {
+            additionalRocks -= capacity[i];
+            if (additionalRocks < 0) {
+                return i;
+            }
+        }
+        return n;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumBags(capacity []int, rocks []int, additionalRocks int) int {
-	n := len(capacity)
-	d := make([]int, n)
-	for i, v := range capacity {
-		d[i] = v - rocks[i]
+	for i, x := range rocks {
+		capacity[i] -= x
 	}
-	sort.Ints(d)
-	ans := 0
-	for _, v := range d {
-		if v > additionalRocks {
-			break
+	sort.Ints(capacity)
+	for i, x := range capacity {
+		additionalRocks -= x
+		if additionalRocks < 0 {
+			return i
 		}
-		ans++
-		additionalRocks -= v
 	}
-	return ans
+	return len(capacity)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function maximumBags(
-    capacity: number[],
-    rocks: number[],
-    additionalRocks: number,
-): number {
-    const n = capacity.length;
-    const diffs = capacity.map((c, i) => c - rocks[i]);
-    diffs.sort((a, b) => a - b);
-    let ans = 0;
-    for (
-        let i = 0;
-        i < n && (diffs[i] === 0 || diffs[i] <= additionalRocks);
-        i++
-    ) {
-        ans++;
-        additionalRocks -= diffs[i];
+function maximumBags(capacity: number[], rocks: number[], additionalRocks: number): number {
+    const n = rocks.length;
+    for (let i = 0; i < n; ++i) {
+        capacity[i] -= rocks[i];
     }
-    return ans;
+    capacity.sort((a, b) => a - b);
+    for (let i = 0; i < n; ++i) {
+        additionalRocks -= capacity[i];
+        if (additionalRocks < 0) {
+            return i;
+        }
+    }
+    return n;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
-    pub fn maximum_bags(capacity: Vec<i32>, rocks: Vec<i32>, mut additional_rocks: i32) -> i32 {
-        let n = capacity.len();
-        let mut diffs = vec![0; n];
-        for i in 0..n {
-            diffs[i] = capacity[i] - rocks[i];
+    pub fn maximum_bags(mut capacity: Vec<i32>, rocks: Vec<i32>, mut additional_rocks: i32) -> i32 {
+        for i in 0..rocks.len() {
+            capacity[i] -= rocks[i];
         }
-        diffs.sort();
-        for i in 0..n {
-            if diffs[i] > additional_rocks {
+        capacity.sort();
+        for i in 0..capacity.len() {
+            additional_rocks -= capacity[i];
+            if additional_rocks < 0 {
                 return i as i32;
             }
-            additional_rocks -= diffs[i];
         }
-        n as i32
+        capacity.len() as i32
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

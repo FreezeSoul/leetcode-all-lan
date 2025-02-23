@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2260.Minimum%20Consecutive%20Cards%20to%20Pick%20Up/README_EN.md
+rating: 1364
+source: Weekly Contest 291 Q2
+tags:
+    - Array
+    - Hash Table
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [2260. Minimum Consecutive Cards to Pick Up](https://leetcode.com/problems/minimum-consecutive-cards-to-pick-up)
 
 [中文文档](/solution/2200-2299/2260.Minimum%20Consecutive%20Cards%20to%20Pick%20Up/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>cards</code> where <code>cards[i]</code> represents the <strong>value</strong> of the <code>i<sup>th</sup></code> card. A pair of cards are <strong>matching</strong> if the cards have the <strong>same</strong> value.</p>
 
@@ -33,11 +49,21 @@
 	<li><code>0 &lt;= cards[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We initialize the answer as $+\infty$. We traverse the array, and for each number $x$, if $\textit{last}[x]$ exists, it means $x$ has a matching pair of cards. In this case, we update the answer to $\textit{ans} = \min(\textit{ans}, i - \textit{last}[x] + 1)$. Finally, if the answer is $+\infty$, we return $-1$; otherwise, we return the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -51,7 +77,7 @@ class Solution:
         return -1 if ans == inf else ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -70,7 +96,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -90,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumCardPickup(cards []int) int {
@@ -110,7 +136,7 @@ func minimumCardPickup(cards []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumCardPickup(cards: number[]): number {
@@ -127,10 +153,8 @@ function minimumCardPickup(cards: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

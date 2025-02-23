@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2550.Count%20Collisions%20of%20Monkeys%20on%20a%20Polygon/README.md
+rating: 1662
+source: 第 330 场周赛 Q2
+tags:
+    - 递归
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2550. 猴子碰撞的方法数](https://leetcode.cn/problems/count-collisions-of-monkeys-on-a-polygon)
 
 [English Version](/solution/2500-2599/2550.Count%20Collisions%20of%20Monkeys%20on%20a%20Polygon/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现在有一个正凸多边形，其上共有 <code>n</code> 个顶点。顶点按顺时针方向从 <code>0</code> 到 <code>n - 1</code> 依次编号。每个顶点上 <strong>正好有一只猴子</strong> 。下图中是一个 6 个顶点的凸多边形。</p>
 
@@ -52,23 +65,23 @@
 	<li><code>3 &lt;= n &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学（快速幂）**
+### 方法一：数学（快速幂）
 
-每一只猴子都有两种移动方式，即顺时针或逆时针。因此，一共有 $2^n$ 种移动方式。不碰撞的移动方式只有两种，即所有猴子都顺时针移动或所有猴子都逆时针移动。因此，碰撞的移动方式有 $2^n - 2$ 种。
+根据题目描述，每一只猴子都有两种移动方式，即顺时针或逆时针。因此，一共有 $2^n$ 种移动方式。不碰撞的移动方式只有两种，即所有猴子都顺时针移动或所有猴子都逆时针移动。因此，碰撞的移动方式有 $2^n - 2$ 种。
 
 我们可以用快速幂求出 $2^n$ 的值，然后用 $2^n - 2$ 求出碰撞的移动方式数，最后对 $10^9 + 7$ 取余即可。
 
-时间复杂度为 $O(\log n)$，空间复杂度为 $O(1)$。其中 $n$ 为猴子的数量。
+时间复杂度 $O(\log n)$，其中 $n$ 为猴子的数量。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,101 +90,91 @@ class Solution:
         return (pow(2, n, mod) - 2) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int monkeyMove(int n) {
         final int mod = (int) 1e9 + 7;
-        return (int) (qmi(2, n, mod) - 2 + mod) % mod;
+        return (qpow(2, n, mod) - 2 + mod) % mod;
     }
 
-    public long qmi(long a, long k, long p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
+    private int qpow(long a, int n, int mod) {
+        long ans = 1;
+        for (; n > 0; n >>= 1) {
+            if ((n & 1) == 1) {
+                ans = ans * a % mod;
             }
-            k >>= 1;
-            a = a * a % p;
+            a = a * a % mod;
         }
-        return res;
+        return (int) ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int monkeyMove(int n) {
         const int mod = 1e9 + 7;
-        return (qmi(2, n, mod) - 2 + mod) % mod;
-    }
-
-    long qmi(long a, long k, long p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
+        using ll = long long;
+        auto qpow = [&](ll a, int n) {
+            ll ans = 1;
+            for (; n; n >>= 1) {
+                if (n & 1) {
+                    ans = ans * a % mod;
+                }
+                a = a * a % mod;
             }
-            k >>= 1;
-            a = a * a % p;
-        }
-        return res;
+            return ans;
+        };
+        return (qpow(2, n) - 2 + mod) % mod;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func monkeyMove(n int) int {
 	const mod = 1e9 + 7
-	return (qmi(2, n, mod) - 2 + mod) % mod
-}
-
-func qmi(a, k, p int) int {
-	res := 1
-	for k != 0 {
-		if k&1 == 1 {
-			res = res * a % p
+	qpow := func(a, n int) int {
+		ans := 1
+		for ; n > 0; n >>= 1 {
+			if n&1 == 1 {
+				ans = ans * a % mod
+			}
+			a = a * a % mod
 		}
-		k >>= 1
-		a = a * a % p
+		return ans
 	}
-	return res
+	return (qpow(2, n) - 2 + mod) % mod
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function monkeyMove(n: number): number {
-    const mod = BigInt(10 ** 9 + 7);
-    return Number((qmi(2n, n, mod) - 2n + mod) % mod);
-}
-
-function qmi(a: bigint, k: number, p: bigint): bigint {
-    let res = 1n;
-    while (k) {
-        if ((k & 1) === 1) {
-            res = (res * a) % p;
+    const mod = 10 ** 9 + 7;
+    const qpow = (a: number, n: number): number => {
+        let ans = 1n;
+        for (; n; n >>>= 1) {
+            if (n & 1) {
+                ans = (ans * BigInt(a)) % BigInt(mod);
+            }
+            a = Number((BigInt(a) * BigInt(a)) % BigInt(mod));
         }
-        k >>= 1;
-        a = (a * a) % p;
-    }
-    return res;
+        return Number(ans);
+    };
+    return (qpow(2, n) - 2 + mod) % mod;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1487.Making%20File%20Names%20Unique/README_EN.md
+rating: 1696
+source: Weekly Contest 194 Q2
+tags:
+    - Array
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [1487. Making File Names Unique](https://leetcode.com/problems/making-file-names-unique)
 
 [中文文档](/solution/1400-1499/1487.Making%20File%20Names%20Unique/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of strings <code>names</code> of size <code>n</code>. You will create <code>n</code> folders in your file system <strong>such that</strong>, at the <code>i<sup>th</sup></code> minute, you will create a folder with the name <code>names[i]</code>.</p>
 
@@ -52,11 +68,17 @@
 	<li><code>names[i]</code> consists of lowercase English letters, digits, and/or round brackets.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +95,7 @@ class Solution:
         return names
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getFolderNames(names []string) []string {
@@ -141,7 +163,7 @@ func getFolderNames(names []string) []string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function getFolderNames(names: string[]): string[] {
@@ -161,10 +183,8 @@ function getFolderNames(names: string[]): string[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

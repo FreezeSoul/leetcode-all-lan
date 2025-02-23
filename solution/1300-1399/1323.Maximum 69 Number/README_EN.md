@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1323.Maximum%2069%20Number/README_EN.md
+rating: 1193
+source: Weekly Contest 172 Q1
+tags:
+    - Greedy
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1323. Maximum 69 Number](https://leetcode.com/problems/maximum-69-number)
 
 [中文文档](/solution/1300-1399/1323.Maximum%2069%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a positive integer <code>num</code> consisting only of digits <code>6</code> and <code>9</code>.</p>
 
@@ -46,11 +61,17 @@ The maximum number is 9969.
 	<li><code>num</code>&nbsp;consists of only <code>6</code> and <code>9</code> digits.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +79,7 @@ class Solution:
         return int(str(num).replace("6", "9", 1))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -68,7 +89,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -86,7 +107,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximum69Number(num int) int {
@@ -103,7 +124,7 @@ func maximum69Number(num int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximum69Number(num: number): number {
@@ -111,7 +132,7 @@ function maximum69Number(num: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -121,7 +142,24 @@ impl Solution {
 }
 ```
 
-### **C**
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param Integer $num
+     * @return Integer
+     */
+    function maximum69Number($num) {
+        $num = strval($num);
+        $n = strpos($num, '6');
+        $num[$n] = 9;
+        return intval($num);
+    }
+}
+```
+
+#### C
 
 ```c
 int maximum69Number(int num) {
@@ -139,27 +177,8 @@ int maximum69Number(int num) {
 }
 ```
 
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param Integer $num
-     * @return Integer
-     */
-    function maximum69Number($num) {
-        $num = strval($num);
-        $n = strpos($num, "6");
-        $num[$n] = 9;
-        return intval($num);
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

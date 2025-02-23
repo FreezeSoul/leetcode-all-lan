@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1185.Day%20of%20the%20Week/README.md
+rating: 1382
+source: 第 153 场周赛 Q2
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1185. 一周中的第几天](https://leetcode.cn/problems/day-of-the-week)
 
 [English Version](/solution/1100-1199/1185.Day%20of%20the%20Week/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个日期，请你设计一个算法来判断它是对应一周中的哪一天。</p>
 
@@ -40,27 +52,35 @@
 	<li>给出的日期一定是在&nbsp;<code>1971</code> 到&nbsp;<code>2100</code>&nbsp;年之间的有效日期。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-直接调库或者应用蔡勒公式。
+### 方法一：蔡勒公式
 
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1100-1199/1185.Day%20of%20the%20Week/images/zeller.svg">
+我们可以使用蔡勒公式来计算星期几，蔡勒公式如下：
+
+$$
+w = (\left \lfloor \frac{c}{4} \right \rfloor - 2c + y + \left \lfloor \frac{y}{4} \right \rfloor + \left \lfloor \frac{13(m+1)}{5} \right \rfloor + d - 1) \bmod 7
+$$
+
+其中：
 
 -   `w`: 星期（从 Sunday 开始）
 -   `c`: 年份前两位
 -   `y`: 年份后两位
 -   `m`: 月（m 的取值范围是 3 至 14，即在蔡勒公式中，某年的 1、2 月要看作上一年的 13、14 月来计算，比如 2003 年 1 月 1 日要看作 2002 年的 13 月 1 日来计算）
 -   `d`: 日
--   `[ ]`: 向下取整
+-   `⌊⌋`: 向下取整
 -   `mod`: 取余
+
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -68,27 +88,14 @@ class Solution:
         return datetime.date(year, month, day).strftime('%A')
 ```
 
-```python
-class Solution:
-    def dayOfTheWeek(self, d: int, m: int, y: int) -> str:
-        if m < 3:
-            m += 12
-            y -= 1
-        c = y // 100
-        y = y % 100
-        w = (c // 4 - 2 * c + y + y // 4 + 13 * (m + 1) // 5 + d - 1) % 7
-        return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][w]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 import java.util.Calendar;
 
 class Solution {
-    private static final String[] WEEK = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    private static final String[] WEEK
+        = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     public static String dayOfTheWeek(int day, int month, int year) {
         Calendar calendar = Calendar.getInstance();
@@ -98,23 +105,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public String dayOfTheWeek(int d, int m, int y) {
-        if (m < 3) {
-            m += 12;
-            y -= 1;
-        }
-        int c = y / 100;
-        y %= 100;
-        int w = (c / 4 - 2 * c + y + y / 4 + 13 * (m + 1) / 5 + d - 1) % 7;
-        return new String[] {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-            "Saturday"}[(w + 7) % 7];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +124,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func dayOfTheWeek(d int, m int, y int) string {
@@ -149,10 +140,82 @@ func dayOfTheWeek(d int, m int, y int) string {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function dayOfTheWeek(d: number, m: number, y: number): string {
+    if (m < 3) {
+        m += 12;
+        y -= 1;
+    }
+    const c: number = (y / 100) | 0;
+    y %= 100;
+    const w = (((c / 4) | 0) - 2 * c + y + ((y / 4) | 0) + (((13 * (m + 1)) / 5) | 0) + d - 1) % 7;
+    const weeks: string[] = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+    ];
+    return weeks[(w + 7) % 7];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def dayOfTheWeek(self, d: int, m: int, y: int) -> str:
+        if m < 3:
+            m += 12
+            y -= 1
+        c = y // 100
+        y = y % 100
+        w = (c // 4 - 2 * c + y + y // 4 + 13 * (m + 1) // 5 + d - 1) % 7
+        return [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ][w]
+```
+
+#### Java
+
+```java
+class Solution {
+    public String dayOfTheWeek(int d, int m, int y) {
+        if (m < 3) {
+            m += 12;
+            y -= 1;
+        }
+        int c = y / 100;
+        y %= 100;
+        int w = (c / 4 - 2 * c + y + y / 4 + 13 * (m + 1) / 5 + d - 1) % 7;
+        return new String[] {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+            "Saturday"}[(w + 7) % 7];
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

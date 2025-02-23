@@ -1,8 +1,20 @@
-# [1709. Biggest Window Between Visits](https://leetcode.com/problems/biggest-window-between-visits)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1709.Biggest%20Window%20Between%20Visits/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1709. Biggest Window Between Visits 🔒](https://leetcode.com/problems/biggest-window-between-visits)
 
 [中文文档](/solution/1700-1799/1709.Biggest%20Window%20Between%20Visits/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>UserVisits</code></p>
 
@@ -13,7 +25,7 @@
 | user_id     | int  |
 | visit_date  | date |
 +-------------+------+
-This table does not have a primary key.
+This table does not have a primary key, it might contain duplicate rows.
 This table contains logs of the dates that users visited a certain retailer.
 </pre>
 
@@ -21,7 +33,7 @@ This table contains logs of the dates that users visited a certain retailer.
 
 <p>Assume today&#39;s date is <code>&#39;2021-1-1&#39;</code>.</p>
 
-<p>Write an SQL query that will, for each <code>user_id</code>, find out the largest <code>window</code> of days between each visit and the one right after it (or today if you are considering the last visit).</p>
+<p>Write a solution that will, for each <code>user_id</code>, find out the largest <code>window</code> of days between each visit and the one right after it (or today if you are considering the last visit).</p>
 
 <p>Return the result table ordered by <code>user_id</code>.</p>
 
@@ -64,34 +76,43 @@ Making the biggest window the one with 65 days.
 For the third user, the only window in question is between dates 2020-11-11 and 2021-1-1 with a total of 51 days.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Window Function
+
+We can use the window function `LEAD` to obtain the date of the next visit for each user (if the date of the next visit does not exist, it is considered as `2021-1-1`), and then use the `DATEDIFF` function to calculate the number of days between two visits. Finally, we can take the maximum value of the number of days between visits for each user.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    user_id,
-    max(datediff(nxt_day, visit_date)) as biggest_window
-from
-    (
-        select
+WITH
+    T AS (
+        SELECT
             user_id,
-            visit_date,
-            lead(visit_date, 1, '2021-1-1') over (
-                partition by user_id
-                order by
-                    visit_date
-            ) as nxt_day
-        from
-            UserVisits
-    ) t
-group by
-    user_id
-order by
-    user_id;
+            DATEDIFF(
+                LEAD(visit_date, 1, '2021-1-1') OVER (
+                    PARTITION BY user_id
+                    ORDER BY visit_date
+                ),
+                visit_date
+            ) AS diff
+        FROM UserVisits
+    )
+SELECT user_id, MAX(diff) AS biggest_window
+FROM T
+GROUP BY 1
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

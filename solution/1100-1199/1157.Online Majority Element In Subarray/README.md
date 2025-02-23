@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1157.Online%20Majority%20Element%20In%20Subarray/README.md
+rating: 2205
+source: 第 149 场周赛 Q4
+tags:
+    - 设计
+    - 树状数组
+    - 线段树
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [1157. 子数组中占绝大多数的元素](https://leetcode.cn/problems/online-majority-element-in-subarray)
 
 [English Version](/solution/1100-1199/1157.Online%20Majority%20Element%20In%20Subarray/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个数据结构，有效地找到给定子数组的 <strong>多数元素</strong> 。</p>
 
@@ -48,11 +64,13 @@ majorityChecker.query(2,3,2); // 返回 2
 	<li>调用&nbsp;<code>query</code>&nbsp;的次数最多为&nbsp;<code>10<sup>4</sup></code>&nbsp;</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：线段树 + 摩尔投票 + 二分查找**
+### 方法一：线段树 + 摩尔投票 + 二分查找
 
 我们注意到，题目需要我们找出特定区间内可能的众数，考虑使用线段树来维护每个区间内的候选众数以及其出现的次数。
 
@@ -77,12 +95,12 @@ majorityChecker.query(2,3,2); // 返回 2
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Node:
+    __slots__ = ("l", "r", "x", "cnt")
+
     def __init__(self):
         self.l = self.r = 0
         self.x = self.cnt = 0
@@ -136,7 +154,6 @@ class SegmentTree:
 
 
 class MajorityChecker:
-
     def __init__(self, arr: List[int]):
         self.tree = SegmentTree(arr)
         self.d = defaultdict(list)
@@ -155,9 +172,7 @@ class MajorityChecker:
 # param_1 = obj.query(left,right,threshold)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Node {
@@ -270,7 +285,7 @@ class MajorityChecker {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Node {
@@ -377,7 +392,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type node struct {
@@ -482,10 +497,8 @@ func (this *MajorityChecker) Query(left int, right int, threshold int) int {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

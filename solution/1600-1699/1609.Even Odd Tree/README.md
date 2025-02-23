@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1609.Even%20Odd%20Tree/README.md
+rating: 1438
+source: 第 209 场周赛 Q2
+tags:
+    - 树
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1609. 奇偶树](https://leetcode.cn/problems/even-odd-tree)
 
 [English Version](/solution/1600-1699/1609.Even%20Odd%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>如果一棵二叉树满足下述几个条件，则可以称为 <strong>奇偶树</strong> ：</p>
 
@@ -80,27 +94,21 @@
 	<li><code>1 <= Node.val <= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 BFS 逐层遍历，每层按照奇偶性判断，每层的节点值都是偶数或奇数，且严格递增或递减。
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点数。
 
-**方法二：DFS**
-
-DFS 先序遍历二叉树，同样根据节点所在层的奇偶性判断是否满足条件，遍历过程中用哈希表记录每一层最近访问到的节点值。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点数。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -130,6 +138,157 @@ class Solution:
         return True
 ```
 
+#### Java
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isEvenOddTree(TreeNode root) {
+        boolean even = true;
+        Deque<TreeNode> q = new ArrayDeque<>();
+        q.offer(root);
+        while (!q.isEmpty()) {
+            int prev = even ? 0 : 1000001;
+            for (int n = q.size(); n > 0; --n) {
+                root = q.pollFirst();
+                if (even && (root.val % 2 == 0 || prev >= root.val)) {
+                    return false;
+                }
+                if (!even && (root.val % 2 == 1 || prev <= root.val)) {
+                    return false;
+                }
+                prev = root.val;
+                if (root.left != null) {
+                    q.offer(root.left);
+                }
+                if (root.right != null) {
+                    q.offer(root.right);
+                }
+            }
+            even = !even;
+        }
+        return true;
+    }
+}
+```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isEvenOddTree(TreeNode* root) {
+        int even = 1;
+        queue<TreeNode*> q{{root}};
+        while (!q.empty()) {
+            int prev = even ? 0 : 1e7;
+            for (int n = q.size(); n; --n) {
+                root = q.front();
+                q.pop();
+                if (even && (root->val % 2 == 0 || prev >= root->val)) {
+                    return false;
+                }
+                if (!even && (root->val % 2 == 1 || prev <= root->val)) {
+                    return false;
+                }
+                prev = root->val;
+                if (root->left) {
+                    q.push(root->left);
+                }
+                if (root->right) {
+                    q.push(root->right);
+                }
+            }
+            even ^= 1;
+        }
+        return true;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isEvenOddTree(root *TreeNode) bool {
+	even := true
+	q := []*TreeNode{root}
+	for len(q) > 0 {
+		var prev int = 1e7
+		if even {
+			prev = 0
+		}
+		for n := len(q); n > 0; n-- {
+			root = q[0]
+			q = q[1:]
+			if even && (root.Val%2 == 0 || prev >= root.Val) {
+				return false
+			}
+			if !even && (root.Val%2 == 1 || prev <= root.Val) {
+				return false
+			}
+			prev = root.Val
+			if root.Left != nil {
+				q = append(q, root.Left)
+			}
+			if root.Right != nil {
+				q = append(q, root.Right)
+			}
+		}
+		even = !even
+	}
+	return true
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：DFS
+
+DFS 先序遍历二叉树，同样根据节点所在层的奇偶性判断是否满足条件，遍历过程中用哈希表记录每一层最近访问到的节点值。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点数。
+
+<!-- tabs:start -->
+
+#### Python3
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -155,55 +314,7 @@ class Solution:
         return dfs(root, 0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public boolean isEvenOddTree(TreeNode root) {
-        boolean even = true;
-        Deque<TreeNode> q = new ArrayDeque<>();
-        q.offer(root);
-        while (!q.isEmpty()) {
-            int prev = even ? 0 : 1000000;
-            for (int n = q.size(); n > 0; --n) {
-                root = q.pollFirst();
-                if (even && (root.val % 2 == 0 || prev >= root.val)) {
-                    return false;
-                }
-                if (!even && (root.val % 2 == 1 || prev <= root.val)) {
-                    return false;
-                }
-                prev = root.val;
-                if (root.left != null) {
-                    q.offer(root.left);
-                }
-                if (root.right != null) {
-                    q.offer(root.right);
-                }
-            }
-            even = !even;
-        }
-        return true;
-    }
-}
-```
+#### Java
 
 ```java
 /**
@@ -233,7 +344,7 @@ class Solution {
             return true;
         }
         boolean even = i % 2 == 0;
-        int prev = d.getOrDefault(i, even ? 0 : 1000000);
+        int prev = d.getOrDefault(i, even ? 0 : 1000001);
         if (even && (root.val % 2 == 0 || prev >= root.val)) {
             return false;
         }
@@ -246,42 +357,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    bool isEvenOddTree(TreeNode* root) {
-        int even = 1;
-        queue<TreeNode*> q{{root}};
-        while (!q.empty()) {
-            int prev = even ? 0 : 1e6;
-            for (int n = q.size(); n; --n) {
-                root = q.front();
-                q.pop();
-                if (even && (root->val % 2 == 0 || prev >= root->val)) return false;
-                if (!even && (root->val % 2 == 1 || prev <= root->val)) return false;
-                prev = root->val;
-                if (root->left) q.push(root->left);
-                if (root->right) q.push(root->right);
-            }
-            even ^= 1;
-        }
-        return true;
-    }
-};
-```
+#### C++
 
 ```cpp
 /**
@@ -304,58 +380,24 @@ public:
     }
 
     bool dfs(TreeNode* root, int i) {
-        if (!root) return true;
+        if (!root) {
+            return true;
+        }
         int even = i % 2 == 0;
-        int prev = d.count(i) ? d[i] : (even ? 0 : 1e6);
-        if (even && (root->val % 2 == 0 || prev >= root->val)) return false;
-        if (!even && (root->val % 2 == 1 || prev <= root->val)) return false;
+        int prev = d.count(i) ? d[i] : (even ? 0 : 1e7);
+        if (even && (root->val % 2 == 0 || prev >= root->val)) {
+            return false;
+        }
+        if (!even && (root->val % 2 == 1 || prev <= root->val)) {
+            return false;
+        }
         d[i] = root->val;
         return dfs(root->left, i + 1) && dfs(root->right, i + 1);
     }
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func isEvenOddTree(root *TreeNode) bool {
-	even := true
-	q := []*TreeNode{root}
-	for len(q) > 0 {
-		var prev int = 1e6
-		if even {
-			prev = 0
-		}
-		for n := len(q); n > 0; n-- {
-			root = q[0]
-			q = q[1:]
-			if even && (root.Val%2 == 0 || prev >= root.Val) {
-				return false
-			}
-			if !even && (root.Val%2 == 1 || prev <= root.Val) {
-				return false
-			}
-			prev = root.Val
-			if root.Left != nil {
-				q = append(q, root.Left)
-			}
-			if root.Right != nil {
-				q = append(q, root.Right)
-			}
-		}
-		even = !even
-	}
-	return true
-}
-```
+#### Go
 
 ```go
 /**
@@ -379,7 +421,7 @@ func isEvenOddTree(root *TreeNode) bool {
 			if even {
 				prev = 0
 			} else {
-				prev = 1000000
+				prev = 10000000
 			}
 		}
 		if even && (root.Val%2 == 0 || prev >= root.Val) {
@@ -395,10 +437,8 @@ func isEvenOddTree(root *TreeNode) bool {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

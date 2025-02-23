@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20074.%20%E5%90%88%E5%B9%B6%E5%8C%BA%E9%97%B4/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 074. 合并区间](https://leetcode.cn/problems/SsGoHC)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>以数组 <code>intervals</code> 表示若干个区间的集合，其中单个区间为 <code>intervals[i] = [start<sub>i</sub>, end<sub>i</sub>]</code> 。请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。</p>
 
@@ -37,11 +44,13 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 56&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/merge-intervals/">https://leetcode.cn/problems/merge-intervals/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：区间合并**
+### 方法一：区间合并
 
 区间合并，将所有存在交集的区间进行合并。方法是：先对区间**按照左端点升序排列**，然后遍历区间进行合并。
 
@@ -64,9 +73,7 @@ def merge(intervals):
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +91,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func merge(intervals [][]int) [][]int {
@@ -155,7 +160,7 @@ func merge(intervals [][]int) [][]int {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -183,10 +188,34 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func merge(_ intervals: [[Int]]) -> [[Int]] {
+        guard !intervals.isEmpty else { return [] }
 
+        let intervals = intervals.sorted { $0[0] < $1[0] }
+        var result: [[Int]] = []
+
+        var currentInterval = intervals[0]
+        for interval in intervals.dropFirst() {
+            if currentInterval[1] < interval[0] {
+                result.append(currentInterval)
+                currentInterval = interval
+            } else {
+                currentInterval[1] = max(currentInterval[1], interval[1])
+            }
+        }
+        result.append(currentInterval)
+
+        return result
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

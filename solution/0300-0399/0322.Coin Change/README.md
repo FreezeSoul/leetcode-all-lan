@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0322.Coin%20Change/README.md
+tags:
+    - 广度优先搜索
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [322. 零钱兑换](https://leetcode.cn/problems/coin-change)
 
 [English Version](/solution/0300-0399/0322.Coin%20Change/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>coins</code> ，表示不同面额的硬币；以及一个整数 <code>amount</code> ，表示总金额。</p>
 
@@ -44,115 +56,181 @@
 	<li><code>0 &lt;= amount &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划(完全背包)
 
-类似完全背包的思路，硬币数量不限，求凑成总金额所需的最少的硬币个数。
+我们定义 $f[i][j]$ 表示使用前 $i$ 种硬币，凑出金额 $j$ 的最少硬币数。初始时 $f[0][0] = 0$，其余位置的值均为正无穷。
 
-定义 $dp[i][j]$ 表示从前 $i$ 种硬币选出总金额为 $j$ 所需的最少硬币数。
-
-那么有：
+我们可以枚举使用的最后一枚硬币的数量 $k$，那么有：
 
 $$
-dp[i][j] = \min(dp[i - 1][j], dp[i - 1][j - v] + 1, dp[i - 1][j - 2\times v] + 2, ... , dp[i - 1][j - k\times v] + k)
+f[i][j] = \min(f[i - 1][j], f[i - 1][j - x] + 1, \cdots, f[i - 1][j - k \times x] + k)
 $$
 
-令 $j=j-v$，则有：
+其中 $x$ 表示第 $i$ 种硬币的面值。
+
+不妨令 $j = j - x$，那么有：
 
 $$
-dp[i][j - v] = \min( dp[i - 1][j - v], dp[i - 1][j - 2\times v] + 1, ... , dp[i - 1][j - k\times v] + k - 1)
+f[i][j - x] = \min(f[i - 1][j - x], f[i - 1][j - 2 \times x] + 1, \cdots, f[i - 1][j - k \times x] + k - 1)
 $$
 
-因此，我们可以得到状态转移方程：
+将二式代入一式，我们可以得到以下状态转移方程：
 
 $$
-dp[i][j] = \min(dp[i - 1][j], dp[i][j - v] + 1)
+f[i][j] = \min(f[i - 1][j], f[i][j - x] + 1)
 $$
 
-时间复杂度 $O(m\times n)$，空间复杂度 $O(m\times n)$。其中 $m$ 和 $n$ 分别为硬币数量和总金额。
+最后答案即为 $f[m][n]$。
+
+时间复杂度 $O(m \times n)$，空间复杂度 $O(m \times n)$。其中 $m$ 和 $n$ 分别为硬币的种类数和总金额。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-动态规划——完全背包问题朴素做法：
+#### Python3
 
 ```python
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         m, n = len(coins), amount
-        dp = [[n + 1] * (n + 1) for _ in range(m + 1)]
-        dp[0][0] = 0
-        for i in range(1, m + 1):
+        f = [[inf] * (n + 1) for _ in range(m + 1)]
+        f[0][0] = 0
+        for i, x in enumerate(coins, 1):
             for j in range(n + 1):
-                dp[i][j] = dp[i - 1][j]
-                if j >= coins[i - 1]:
-                    dp[i][j] = min(dp[i][j], dp[i][j - coins[i - 1]] + 1)
-        return -1 if dp[-1][-1] > n else dp[-1][-1]
+                f[i][j] = f[i - 1][j]
+                if j >= x:
+                    f[i][j] = min(f[i][j], f[i][j - x] + 1)
+        return -1 if f[m][n] >= inf else f[m][n]
 ```
 
-动态规划——完全背包问题空间优化：
-
-```python
-class Solution:
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        dp = [amount + 1] * (amount + 1)
-        dp[0] = 0
-        for coin in coins:
-            for j in range(coin, amount + 1):
-                dp[j] = min(dp[j], dp[j - coin] + 1)
-        return -1 if dp[-1] > amount else dp[-1]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int coinChange(int[] coins, int amount) {
+        final int inf = 1 << 30;
         int m = coins.length;
-        int[][] dp = new int[m + 1][amount + 1];
-        for (int i = 0; i <= m; ++i) {
-            Arrays.fill(dp[i], amount + 1);
+        int n = amount;
+        int[][] f = new int[m + 1][n + 1];
+        for (var g : f) {
+            Arrays.fill(g, inf);
         }
-        dp[0][0] = 0;
+        f[0][0] = 0;
         for (int i = 1; i <= m; ++i) {
-            int v = coins[i - 1];
-            for (int j = 0; j <= amount; ++j) {
-                dp[i][j] = dp[i - 1][j];
-                if (j >= v) {
-                    dp[i][j] = Math.min(dp[i][j], dp[i][j - v] + 1);
+            for (int j = 0; j <= n; ++j) {
+                f[i][j] = f[i - 1][j];
+                if (j >= coins[i - 1]) {
+                    f[i][j] = Math.min(f[i][j], f[i][j - coins[i - 1]] + 1);
                 }
             }
         }
-        return dp[m][amount] > amount ? - 1 : dp[m][amount];
+        return f[m][n] >= inf ? -1 : f[m][n];
     }
 }
 ```
 
-```java
+#### C++
+
+```cpp
 class Solution {
-    public int coinChange(int[] coins, int amount) {
-        int[] dp = new int[amount + 1];
-        Arrays.fill(dp, amount + 1);
-        dp[0] = 0;
-        for (int coin : coins) {
-            for (int j = coin; j <= amount; j++) {
-                dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int m = coins.size(), n = amount;
+        int f[m + 1][n + 1];
+        memset(f, 0x3f, sizeof(f));
+        f[0][0] = 0;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                f[i][j] = f[i - 1][j];
+                if (j >= coins[i - 1]) {
+                    f[i][j] = min(f[i][j], f[i][j - coins[i - 1]] + 1);
+                }
             }
         }
-        return dp[amount] > amount ? -1 : dp[amount];
+        return f[m][n] > n ? -1 : f[m][n];
+    }
+};
+```
+
+#### Go
+
+```go
+func coinChange(coins []int, amount int) int {
+	m, n := len(coins), amount
+	f := make([][]int, m+1)
+	const inf = 1 << 30
+	for i := range f {
+		f[i] = make([]int, n+1)
+		for j := range f[i] {
+			f[i][j] = inf
+		}
+	}
+	f[0][0] = 0
+	for i := 1; i <= m; i++ {
+		for j := 0; j <= n; j++ {
+			f[i][j] = f[i-1][j]
+			if j >= coins[i-1] {
+				f[i][j] = min(f[i][j], f[i][j-coins[i-1]]+1)
+			}
+		}
+	}
+	if f[m][n] > n {
+		return -1
+	}
+	return f[m][n]
+}
+```
+
+#### TypeScript
+
+```ts
+function coinChange(coins: number[], amount: number): number {
+    const m = coins.length;
+    const n = amount;
+    const f: number[][] = Array(m + 1)
+        .fill(0)
+        .map(() => Array(n + 1).fill(1 << 30));
+    f[0][0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 0; j <= n; ++j) {
+            f[i][j] = f[i - 1][j];
+            if (j >= coins[i - 1]) {
+                f[i][j] = Math.min(f[i][j], f[i][j - coins[i - 1]] + 1);
+            }
+        }
+    }
+    return f[m][n] > n ? -1 : f[m][n];
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
+        let n = amount as usize;
+        let mut f = vec![n + 1; n + 1];
+        f[0] = 0;
+        for &x in &coins {
+            for j in x as usize..=n {
+                f[j] = f[j].min(f[j - (x as usize)] + 1);
+            }
+        }
+        if f[n] > n {
+            -1
+        } else {
+            f[n] as i32
+        }
     }
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -161,105 +239,148 @@ class Solution {
  * @return {number}
  */
 var coinChange = function (coins, amount) {
-    let dp = Array(amount + 1).fill(amount + 1);
-    dp[0] = 0;
-    for (const coin of coins) {
-        for (let j = coin; j <= amount; ++j) {
-            dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+    const m = coins.length;
+    const n = amount;
+    const f = Array(m + 1)
+        .fill(0)
+        .map(() => Array(n + 1).fill(1 << 30));
+    f[0][0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 0; j <= n; ++j) {
+            f[i][j] = f[i - 1][j];
+            if (j >= coins[i - 1]) {
+                f[i][j] = Math.min(f[i][j], f[i][j - coins[i - 1]] + 1);
+            }
         }
     }
-    return dp[amount] > amount ? -1 : dp[amount];
+    return f[m][n] > n ? -1 : f[m][n];
 };
 ```
 
-### **C++**
+<!-- tabs:end -->
+
+我们注意到 $f[i][j]$ 只与 $f[i - 1][j]$ 和 $f[i][j - x]$ 有关，因此我们可以将二维数组优化为一维数组，空间复杂度降为 $O(n)$。
+
+相似题目：
+
+-   [279. 完全平方数](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0279.Perfect%20Squares/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        n = amount
+        f = [0] + [inf] * n
+        for x in coins:
+            for j in range(x, n + 1):
+                f[j] = min(f[j], f[j - x] + 1)
+        return -1 if f[n] >= inf else f[n]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        final int inf = 1 << 30;
+        int n = amount;
+        int[] f = new int[n + 1];
+        Arrays.fill(f, inf);
+        f[0] = 0;
+        for (int x : coins) {
+            for (int j = x; j <= n; ++j) {
+                f[j] = Math.min(f[j], f[j - x] + 1);
+            }
+        }
+        return f[n] >= inf ? -1 : f[n];
+    }
+}
+```
+
+#### C++
 
 ```cpp
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount + 1, amount + 1);
-        dp[0] = 0;
-        for (auto& coin : coins)
-            for (int j = coin; j <= amount; ++j)
-                dp[j] = min(dp[j], dp[j - coin] + 1);
-        return dp[amount] > amount ? -1 : dp[amount];
+        int n = amount;
+        int f[n + 1];
+        memset(f, 0x3f, sizeof(f));
+        f[0] = 0;
+        for (int x : coins) {
+            for (int j = x; j <= n; ++j) {
+                f[j] = min(f[j], f[j - x] + 1);
+            }
+        }
+        return f[n] > n ? -1 : f[n];
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func coinChange(coins []int, amount int) int {
-	dp := make([]int, amount+1)
-	for i := 1; i <= amount; i++ {
-		dp[i] = amount + 1
+	n := amount
+	f := make([]int, n+1)
+	for i := range f {
+		f[i] = 1 << 30
 	}
-	for _, coin := range coins {
-		for j := coin; j <= amount; j++ {
-			dp[j] = min(dp[j], dp[j-coin]+1)
+	f[0] = 0
+	for _, x := range coins {
+		for j := x; j <= n; j++ {
+			f[j] = min(f[j], f[j-x]+1)
 		}
 	}
-	if dp[amount] > amount {
+	if f[n] > n {
 		return -1
 	}
-	return dp[amount]
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return f[n]
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function coinChange(coins: number[], amount: number): number {
-    let dp = new Array(amount + 1).fill(amount + 1);
-    dp[0] = 0;
-    for (const coin of coins) {
-        for (let j = coin; j <= amount; ++j) {
-            dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+    const n = amount;
+    const f: number[] = Array(n + 1).fill(1 << 30);
+    f[0] = 0;
+    for (const x of coins) {
+        for (let j = x; j <= n; ++j) {
+            f[j] = Math.min(f[j], f[j - x] + 1);
         }
     }
-    return dp[amount] > amount ? -1 : dp[amount];
+    return f[n] > n ? -1 : f[n];
 }
 ```
 
-### **Rust**
+#### JavaScript
 
-```rust
-impl Solution {
-    pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
-        let n = coins.len();
-        let amount = amount as usize;
-        let mut dp = vec![amount + 1; amount + 1];
-        dp[0] = 0;
-        for i in 1..=amount {
-            for j in 0..n {
-                let coin = coins[j] as usize;
-                if coin <= i {
-                    dp[i] = dp[i].min(dp[i - coin] + 1);
-                }
-            }
-        }
-        if dp[amount] > amount {
-            -1
-        } else {
-            dp[amount] as i32
+```js
+/**
+ * @param {number[]} coins
+ * @param {number} amount
+ * @return {number}
+ */
+var coinChange = function (coins, amount) {
+    const n = amount;
+    const f = Array(n + 1).fill(1 << 30);
+    f[0] = 0;
+    for (const x of coins) {
+        for (let j = x; j <= n; ++j) {
+            f[j] = Math.min(f[j], f[j - x] + 1);
         }
     }
-}
-```
-
-### **...**
-
-```
-
+    return f[n] > n ? -1 : f[n];
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

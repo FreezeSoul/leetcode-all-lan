@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2404.Most%20Frequent%20Even%20Element/README.md
+rating: 1259
+source: 第 310 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2404. 出现最频繁的偶数元素](https://leetcode.cn/problems/most-frequent-even-element)
 
 [English Version](/solution/2400-2499/2404.Most%20Frequent%20Even%20Element/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，返回出现最频繁的偶数元素。</p>
 
@@ -43,11 +57,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们用哈希表 $cnt$ 统计所有偶数元素出现的次数，然后找出出现次数最多且值最小的偶数元素。
 
@@ -55,9 +71,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,9 +84,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mostFrequentEven(nums []int) int {
@@ -140,7 +152,7 @@ func mostFrequentEven(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function mostFrequentEven(nums: number[]): number {
@@ -162,7 +174,7 @@ function mostFrequentEven(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -187,7 +199,7 @@ impl Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -200,7 +212,10 @@ class Solution {
         for ($i = 0; $i < count($nums); $i++) {
             if ($nums[$i] % 2 == 0) {
                 $hashtable[$nums[$i]] += 1;
-                if ($hashtable[$nums[$i]] > $max || ($hashtable[$nums[$i]] == $max && $rs > $nums[$i])) {
+                if (
+                    $hashtable[$nums[$i]] > $max ||
+                    ($hashtable[$nums[$i]] == $max && $rs > $nums[$i])
+                ) {
                     $max = $hashtable[$nums[$i]];
                     $rs = $nums[$i];
                 }
@@ -211,10 +226,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

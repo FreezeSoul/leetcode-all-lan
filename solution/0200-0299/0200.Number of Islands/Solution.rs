@@ -5,8 +5,8 @@ impl Solution {
         fn dfs(grid: &mut Vec<Vec<char>>, i: usize, j: usize) {
             grid[i][j] = '0';
             for k in 0..4 {
-                let x = i as i32 + DIRS[k];
-                let y = j as i32 + DIRS[k + 1];
+                let x = (i as i32) + DIRS[k];
+                let y = (j as i32) + DIRS[k + 1];
                 if x >= 0
                     && (x as usize) < grid.len()
                     && y >= 0

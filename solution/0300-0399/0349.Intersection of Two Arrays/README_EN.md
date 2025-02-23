@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0349.Intersection%20of%20Two%20Arrays/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [349. Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays)
 
 [中文文档](/solution/0300-0399/0349.Intersection%20of%20Two%20Arrays/README.md)
 
 ## Description
 
-<p>Given two integer arrays <code>nums1</code> and <code>nums2</code>, return <em>an array of their intersection</em>. Each element in the result must be <strong>unique</strong> and you may return the result in <strong>any order</strong>.</p>
+<!-- description:start -->
+
+<p>Given two integer arrays <code>nums1</code> and <code>nums2</code>, return <em>an array of their <span data-keyword="array-intersection">intersection</span></em>. Each element in the result must be <strong>unique</strong> and you may return the result in <strong>any order</strong>.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -30,49 +46,102 @@
 	<li><code>0 &lt;= nums1[i], nums2[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table or Array
+
+First, we use a hash table or an array $s$ of length $1001$ to record the elements that appear in the array $nums1$. Then, we iterate through each element in the array $nums2$. If an element $x$ is in $s$, we add $x$ to the answer and remove $x$ from $s$.
+
+After the iteration is finished, we return the answer array.
+
+The time complexity is $O(n+m)$, and the space complexity is $O(n)$. Here, $n$ and $m$ are the lengths of the arrays $nums1$ and $nums2$, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        s = set(nums1)
-        res = set()
-        for num in nums2:
-            if num in s:
-                res.add(num)
-        return list(res)
+        return list(set(nums1) & set(nums2))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int[] intersection(int[] nums1, int[] nums2) {
-        Set<Integer> s = new HashSet<>();
-        for (int num : nums1) {
-            s.add(num);
+        boolean[] s = new boolean[1001];
+        for (int x : nums1) {
+            s[x] = true;
         }
-        Set<Integer> t = new HashSet<>();
-        for (int num : nums2) {
-            if (s.contains(num)) {
-                t.add(num);
+        List<Integer> ans = new ArrayList<>();
+        for (int x : nums2) {
+            if (s[x]) {
+                ans.add(x);
+                s[x] = false;
             }
         }
-        int[] res = new int[t.size()];
-        int i = 0;
-        for (int num : t) {
-            res[i++] = num;
-        }
-        return res;
+        return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 }
 ```
 
-### **JavaScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        bool s[1001];
+        memset(s, false, sizeof(s));
+        for (int x : nums1) {
+            s[x] = true;
+        }
+        vector<int> ans;
+        for (int x : nums2) {
+            if (s[x]) {
+                ans.push_back(x);
+                s[x] = false;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func intersection(nums1 []int, nums2 []int) (ans []int) {
+	s := [1001]bool{}
+	for _, x := range nums1 {
+		s[x] = true
+	}
+	for _, x := range nums2 {
+		if s[x] {
+			ans = append(ans, x)
+			s[x] = false
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function intersection(nums1: number[], nums2: number[]): number[] {
+    const s = new Set(nums1);
+    return [...new Set(nums2.filter(x => s.has(x)))];
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -81,62 +150,27 @@ class Solution {
  * @return {number[]}
  */
 var intersection = function (nums1, nums2) {
-    const s = new Set();
-    for (const num of nums1) {
-        s.add(num);
-    }
-    let res = new Set();
-    for (const num of nums2) {
-        if (s.has(num)) {
-            res.add(num);
-        }
-    }
-    return [...res];
+    const s = new Set(nums1);
+    return [...new Set(nums2.filter(x => s.has(x)))];
 };
 ```
 
-### **C++**
+#### C#
 
-```cpp
-class Solution {
-public:
-    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        unordered_set<int> s;
-        for (int num : nums1) s.insert(num);
-        unordered_set<int> t;
-        vector<int> res;
-        for (int num : nums2) {
-            if (s.count(num) && !t.count(num)) {
-                t.insert(num);
-                res.push_back(num);
-            }
-        }
-        return res;
+```cs
+public class Solution {
+    public int[] Intersection(int[] nums1, int[] nums2) {
+        HashSet<int> s1 = new HashSet<int>(nums1);
+        HashSet<int> s2 = new HashSet<int>(nums2);
+        s1.IntersectWith(s2);
+        int[] ans = new int[s1.Count];
+        s1.CopyTo(ans);
+        return ans;
     }
-};
-```
-
-### **Go**
-
-```go
-func intersection(nums1 []int, nums2 []int) []int {
-	s := make(map[int]bool)
-	for _, num := range nums1 {
-		s[num] = true
-	}
-	t := make(map[int]bool)
-	var res []int
-	for _, num := range nums2 {
-		if s[num] && !t[num] {
-			res = append(res, num)
-			t[num] = true
-		}
-	}
-	return res
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -146,24 +180,16 @@ class Solution {
      * @return Integer[]
      */
     function intersection($nums1, $nums2) {
-        $rs = [];
-        $set1 = array_values(array_unique($nums1));
-        $set2 = array_values(array_unique($nums2));
-        for ($i = 0; $i < count($set1); $i++) {
-            $hashmap[$set1[$i]] = 1;
-        }
-        for ($j = 0; $j < count($set2); $j++) {
-            if ($hashmap[$set2[$j]]) array_push($rs, $set2[$j]);
-        }
-        return $rs;
+        $s1 = array_unique($nums1);
+        $s2 = array_unique($nums2);
+        $ans = array_intersect($s1, $s2);
+        return array_values($ans);
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

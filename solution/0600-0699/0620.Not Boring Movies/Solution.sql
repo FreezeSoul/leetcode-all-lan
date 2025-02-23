@@ -1,5 +1,5 @@
+# Write your MySQL query statement below
 SELECT *
-FROM cinema
-WHERE description NOT LIKE '%boring%'
-        AND mod(id, 2) = 1
-ORDER BY rating desc;
+FROM Cinema
+WHERE description != 'boring' AND id & 1 = 1
+ORDER BY 4 DESC;

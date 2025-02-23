@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1193.Monthly%20Transactions%20I/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1193. Monthly Transactions I](https://leetcode.com/problems/monthly-transactions-i)
 
 [中文文档](/solution/1100-1199/1193.Monthly%20Transactions%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Transactions</code></p>
 
@@ -53,23 +65,35 @@ Transactions table:
 +----------+---------+-------------+----------------+--------------------+-----------------------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Grouping and Aggregation
+
+We can first group by month and country, and then use the `COUNT` and `SUM` functions to respectively calculate the number of transactions, the number of approved transactions, the total amount, and the total amount of approved transactions for each group.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT  DATE_FORMAT(trans_date,'%Y-%m')      AS month
-       ,country
-       ,COUNT(*)                             AS trans_count
-       ,COUNT(IF(state = 'approved',1,NULL)) AS approved_count
-       ,SUM(amount)                          AS trans_total_amount
-       ,SUM(IF(state = 'approved',amount,0)) AS approved_total_amount
+SELECT
+    DATE_FORMAT(trans_date, '%Y-%m') AS month,
+    country,
+    COUNT(1) AS trans_count,
+    SUM(state = 'approved') AS approved_count,
+    SUM(amount) AS trans_total_amount,
+    SUM(IF(state = 'approved', amount, 0)) AS approved_total_amount
 FROM Transactions
-GROUP BY  month
-         ,country
+GROUP BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

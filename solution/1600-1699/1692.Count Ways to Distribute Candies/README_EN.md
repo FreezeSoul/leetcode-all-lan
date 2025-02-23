@@ -1,8 +1,20 @@
-# [1692. Count Ways to Distribute Candies](https://leetcode.com/problems/count-ways-to-distribute-candies)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1692.Count%20Ways%20to%20Distribute%20Candies/README_EN.md
+tags:
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
+# [1692. Count Ways to Distribute Candies 🔒](https://leetcode.com/problems/count-ways-to-distribute-candies)
 
 [中文文档](/solution/1600-1699/1692.Count%20Ways%20to%20Distribute%20Candies/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> <strong>unique</strong> candies (labeled <code>1</code> through <code>n</code>) and <code>k</code> bags. You are asked to distribute <strong>all</strong> the candies into the bags such that every bag has <strong>at least</strong> one candy.</p>
 
@@ -56,11 +68,29 @@
 	<li><code>1 &lt;= k &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i][j]$ as the number of different ways to distribute $i$ candies to $j$ bags. Initially, $f[0][0]=1$, and the answer is $f[n][k]$.
+
+We consider how to distribute the $i$-th candy. If the $i$-th candy is distributed to a new bag, then $f[i][j]=f[i-1][j-1]$. If the $i$-th candy is distributed to an existing bag, then $f[i][j]=f[i-1][j]\times j$. Therefore, the state transition equation is:
+
+$$
+f[i][j]=f[i-1][j-1]+f[i-1][j]\times j
+$$
+
+The final answer is $f[n][k]$.
+
+The time complexity is $O(n \times k)$, and the space complexity is $O(n \times k)$. Here, $n$ and $k$ are the number of candies and bags, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -74,7 +104,7 @@ class Solution:
         return f[n][k]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func waysToDistribute(n int, k int) int {
@@ -131,10 +161,26 @@ func waysToDistribute(n int, k int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function waysToDistribute(n: number, k: number): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[][] = Array.from({ length: n + 1 }, () =>
+        Array.from({ length: k + 1 }, () => 0),
+    );
+    f[0][0] = 1;
+    for (let i = 1; i <= n; ++i) {
+        for (let j = 1; j <= k; ++j) {
+            f[i][j] = (f[i - 1][j] * j + f[i - 1][j - 1]) % mod;
+        }
+    }
+    return f[n][k];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

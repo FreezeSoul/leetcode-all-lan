@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2133.Check%20if%20Every%20Row%20and%20Column%20Contains%20All%20Numbers/README.md
+rating: 1264
+source: 第 275 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2133. 检查是否每一行每一列都包含全部整数](https://leetcode.cn/problems/check-if-every-row-and-column-contains-all-numbers)
 
 [English Version](/solution/2100-2199/2133.Check%20if%20Every%20Row%20and%20Column%20Contains%20All%20Numbers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>对一个大小为 <code>n x n</code> 的矩阵而言，如果其每一行和每一列都包含从 <code>1</code> 到 <code>n</code> 的 <strong>全部</strong> 整数（含 <code>1</code> 和 <code>n</code>），则认为该矩阵是一个 <strong>有效</strong> 矩阵。</p>
 
@@ -44,63 +58,52 @@
 	<li><code>1 &lt;= matrix[i][j] &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：哈希表
+
+遍历矩阵的每一行和每一列，使用哈希表记录每个数字是否出现过，如果某一行或某一列中有数字重复出现，则返回 `false`，否则返回 `true`。
+
+时间复杂度 $O(n^2)$，空间复杂度 $O(n)$。其中 $n$ 为矩阵的大小。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def checkValid(self, matrix: List[List[int]]) -> bool:
         n = len(matrix)
-        for i in range(n):
-            seen = [False] * n
-            for j in range(n):
-                v = matrix[i][j] - 1
-                if seen[v]:
-                    return False
-                seen[v] = True
-        for j in range(n):
-            seen = [False] * n
-            for i in range(n):
-                v = matrix[i][j] - 1
-                if seen[v]:
-                    return False
-                seen[v] = True
-        return True
+        return all(len(set(row)) == n for row in chain(matrix, zip(*matrix)))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public boolean checkValid(int[][] matrix) {
         int n = matrix.length;
-        for (int i = 0; i < n; ++i) {
-            boolean[] seen = new boolean[n];
-            for (int j = 0; j < n; ++j) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) {
+        boolean[] vis = new boolean[n + 1];
+        for (var row : matrix) {
+            Arrays.fill(vis, false);
+            for (int x : row) {
+                if (vis[x]) {
                     return false;
                 }
-                seen[v] = true;
+                vis[x] = true;
             }
         }
         for (int j = 0; j < n; ++j) {
-            boolean[] seen = new boolean[n];
+            Arrays.fill(vis, false);
             for (int i = 0; i < n; ++i) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) {
+                if (vis[matrix[i][j]]) {
                     return false;
                 }
-                seen[v] = true;
+                vis[matrix[i][j]] = true;
             }
         }
         return true;
@@ -108,48 +111,30 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```ts
-function checkValid(matrix: number[][]): boolean {
-    const n = matrix.length;
-    let rows = Array.from({ length: n }, () => new Array(n).fill(false));
-    let cols = Array.from({ length: n }, () => new Array(n).fill(false));
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n; j++) {
-            let cur = matrix[i][j];
-            if (rows[i][cur] || cols[j][cur]) return false;
-            rows[i][cur] = true;
-            cols[j][cur] = true;
-        }
-    }
-    return true;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool checkValid(vector<vector<int>>& matrix) {
         int n = matrix.size();
-        for (int i = 0; i < n; ++i) {
-            vector<bool> seen(n);
-            for (int j = 0; j < n; ++j) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) return false;
-                seen[v] = true;
+        bool vis[n + 1];
+        for (const auto& row : matrix) {
+            memset(vis, false, sizeof(vis));
+            for (int x : row) {
+                if (vis[x]) {
+                    return false;
+                }
+                vis[x] = true;
             }
         }
         for (int j = 0; j < n; ++j) {
-            vector<bool> seen(n);
+            memset(vis, false, sizeof(vis));
             for (int i = 0; i < n; ++i) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) return false;
-                seen[v] = true;
+                if (vis[matrix[i][j]]) {
+                    return false;
+                }
+                vis[matrix[i][j]] = true;
             }
         }
         return true;
@@ -157,39 +142,63 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkValid(matrix [][]int) bool {
 	n := len(matrix)
-	for i := 0; i < n; i++ {
-		seen := make([]bool, n)
-		for j := 0; j < n; j++ {
-			v := matrix[i][j] - 1
-			if seen[v] {
+	for _, row := range matrix {
+		vis := make([]bool, n+1)
+		for _, x := range row {
+			if vis[x] {
 				return false
 			}
-			seen[v] = true
+			vis[x] = true
 		}
 	}
 	for j := 0; j < n; j++ {
-		seen := make([]bool, n)
+		vis := make([]bool, n+1)
 		for i := 0; i < n; i++ {
-			v := matrix[i][j] - 1
-			if seen[v] {
+			if vis[matrix[i][j]] {
 				return false
 			}
-			seen[v] = true
+			vis[matrix[i][j]] = true
 		}
 	}
 	return true
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function checkValid(matrix: number[][]): boolean {
+    const n = matrix.length;
+    const vis: boolean[] = Array(n + 1).fill(false);
+    for (const row of matrix) {
+        vis.fill(false);
+        for (const x of row) {
+            if (vis[x]) {
+                return false;
+            }
+            vis[x] = true;
+        }
+    }
+    for (let j = 0; j < n; ++j) {
+        vis.fill(false);
+        for (let i = 0; i < n; ++i) {
+            if (vis[matrix[i][j]]) {
+                return false;
+            }
+            vis[matrix[i][j]] = true;
+        }
+    }
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

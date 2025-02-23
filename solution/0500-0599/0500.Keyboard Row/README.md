@@ -1,12 +1,26 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0500.Keyboard%20Row/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [500. 键盘行](https://leetcode.cn/problems/keyboard-row)
 
 [English Version](/solution/0500-0599/0500.Keyboard%20Row/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>words</code> ，只返回可以使用在 <strong>美式键盘</strong> 同一行的字母打印出来的单词。键盘如下图所示。</p>
+
+<p><strong>请注意</strong>，字符串&nbsp;<strong>不区分大小写</strong>，相同字母的大小写形式都被视为在同一行<strong>。</strong></p>
 
 <p><strong>美式键盘</strong> 中：</p>
 
@@ -18,44 +32,53 @@
 
 <p><img alt="American keyboard" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0500-0599/0500.Keyboard%20Row/images/keyboard.png" style="width: 100%; max-width: 600px" /></p>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
-<pre>
-<strong>输入：</strong>words = ["Hello","Alaska","Dad","Peace"]
-<strong>输出：</strong>["Alaska","Dad"]
-</pre>
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">words = ["Hello","Alaska","Dad","Peace"]</span></p>
+
+<p><b>输出：</b><span class="example-io">["Alaska","Dad"]</span></p>
+
+<p><strong>解释：</strong></p>
+
+<p>由于不区分大小写，<code>"a"</code> 和&nbsp;<code>"A"</code> 都在美式键盘的第二行。</p>
+</div>
 
 <p><strong>示例 2：</strong></p>
 
-<pre>
-<strong>输入：</strong>words = ["omk"]
-<strong>输出：</strong>[]
-</pre>
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b>words = ["omk"]</span></p>
 
-<p><strong>示例 3：</strong></p>
+<p><span class="example-io"><b>输出：</b>[]</span></p>
+</div>
 
-<pre>
-<strong>输入：</strong>words = ["adsdf","sfd"]
-<strong>输出：</strong>["adsdf","sfd"]
-</pre>
+<p><strong class="example">示例 3：</strong></p>
 
-<p> </p>
+<div class="example-block">
+<p><span class="example-io"><b>输入：</b></span><span class="example-io">words = ["adsdf","sfd"]</span></p>
+
+<p><span class="example-io"><b>输出：</b></span><span class="example-io">["adsdf","sfd"]</span></p>
+</div>
+
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 <= words.length <= 20</code></li>
-	<li><code>1 <= words[i].length <= 100</code></li>
+	<li><code>1 &lt;= words.length &lt;= 20</code></li>
+	<li><code>1 &lt;= words[i].length &lt;= 100</code></li>
 	<li><code>words[i]</code> 由英文字母（小写和大写字母）组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：字符映射**
+### 方法一：字符映射
 
 我们将每个键盘行的字符映射到对应的行数，然后遍历字符串数组，判断每个字符串是否都在同一行即可。
 
@@ -63,9 +86,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,21 +102,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def findWords(self, words: List[str]) -> List[str]:
-        ans = []
-        s = "12210111011122000010020202"
-        for w in words:
-            x = s[ord(w[0].lower()) - ord('a')]
-            if all(s[ord(c.lower()) - ord('a')] == x for c in w):
-                ans.append(w)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -121,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findWords(words []string) (ans []string) {
@@ -169,7 +176,31 @@ func findWords(words []string) (ans []string) {
 }
 ```
 
-### **C#**
+#### TypeScript
+
+```ts
+function findWords(words: string[]): string[] {
+    const s = '12210111011122000010020202';
+    const ans: string[] = [];
+    for (const w of words) {
+        const t = w.toLowerCase();
+        const x = s[t.charCodeAt(0) - 'a'.charCodeAt(0)];
+        let ok = true;
+        for (const c of t) {
+            if (s[c.charCodeAt(0) - 'a'.charCodeAt(0)] !== x) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            ans.push(w);
+        }
+    }
+    return ans;
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -194,34 +225,32 @@ public class Solution {
 }
 ```
 
-### **TypeScript**
+<!-- tabs:end -->
 
-```ts
-function findWords(words: string[]): string[] {
-    const s = '12210111011122000010020202';
-    const ans: string[] = [];
-    for (const w of words) {
-        const t = w.toLowerCase();
-        const x = s[t.charCodeAt(0) - 'a'.charCodeAt(0)];
-        let ok = true;
-        for (const c of t) {
-            if (s[c.charCodeAt(0) - 'a'.charCodeAt(0)] !== x) {
-                ok = false;
-                break;
-            }
-        }
-        if (ok) {
-            ans.push(w);
-        }
-    }
-    return ans;
-}
-```
+<!-- solution:end -->
 
-### **...**
+<!-- solution:start -->
 
-```
+### 方法二
 
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def findWords(self, words: List[str]) -> List[str]:
+        ans = []
+        s = "12210111011122000010020202"
+        for w in words:
+            x = s[ord(w[0].lower()) - ord('a')]
+            if all(s[ord(c.lower()) - ord('a')] == x for c in w):
+                ans.append(w)
+        return ans
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

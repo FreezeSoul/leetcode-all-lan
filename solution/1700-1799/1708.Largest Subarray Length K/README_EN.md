@@ -1,8 +1,21 @@
-# [1708. Largest Subarray Length K](https://leetcode.com/problems/largest-subarray-length-k)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1708.Largest%20Subarray%20Length%20K/README_EN.md
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
+# [1708. Largest Subarray Length K 🔒](https://leetcode.com/problems/largest-subarray-length-k)
 
 [中文文档](/solution/1700-1799/1708.Largest%20Subarray%20Length%20K/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>An array <code>A</code> is larger than some array <code>B</code> if for the first index <code>i</code> where <code>A[i] != B[i]</code>, <code>A[i] &gt; B[i]</code>.</p>
 
@@ -53,72 +66,103 @@ Of these, [4,5,2,3] is the largest.</pre>
 <p>&nbsp;</p>
 <strong>Follow up:</strong> What if the integers in <code>nums</code> are not distinct?
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+All integers in the array are distinct, so we can first find the index of the maximum element in the range $[0,..n-k]$, and then take $k$ elements starting from this index.
+
+The time complexity is $O(n)$, where $n$ is the length of the array. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def largestSubarray(self, nums: List[int], k: int) -> List[int]:
-        mx = max(nums[: len(nums) - k + 1])
-        i = nums.index(mx)
-        return nums[i: i + k]
+        i = nums.index(max(nums[: len(nums) - k + 1]))
+        return nums[i : i + k]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int[] largestSubarray(int[] nums, int k) {
-        int i = 0, mx = 0;
-        for (int j = 0; j < nums.length - k + 1; ++j) {
-            if (mx < nums[j]) {
-                mx = nums[j];
-                i = j;
+        int j = 0;
+        for (int i = 1; i < nums.length - k + 1; ++i) {
+            if (nums[j] < nums[i]) {
+                j = i;
             }
         }
-        int[] ans = new int[k];
-        for (int j = 0; j < k; ++j) {
-            ans[j] = nums[i + j];
-        }
-        return ans;
+        return Arrays.copyOfRange(nums, j, j + k);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> largestSubarray(vector<int>& nums, int k) {
-        auto pos = max_element(nums.begin(), nums.begin() + nums.size() - k + 1);
-        return {pos, pos + k};
+        auto i = max_element(nums.begin(), nums.end() - k + 1);
+        return {i, i + k};
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestSubarray(nums []int, k int) []int {
-	i, mx := 0, 0
-	for j := 0; j < len(nums)-k+1; j++ {
-		if mx < nums[j] {
-			mx = nums[j]
-			i = j
+	j := 0
+	for i := 1; i < len(nums)-k+1; i++ {
+		if nums[j] < nums[i] {
+			j = i
 		}
 	}
-	return nums[i : i+k]
+	return nums[j : j+k]
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function largestSubarray(nums: number[], k: number): number[] {
+    let j = 0;
+    for (let i = 1; i < nums.length - k + 1; ++i) {
+        if (nums[j] < nums[i]) {
+            j = i;
+        }
+    }
+    return nums.slice(j, j + k);
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn largest_subarray(nums: Vec<i32>, k: i32) -> Vec<i32> {
+        let mut j = 0;
+        for i in 1..=nums.len() - (k as usize) {
+            if nums[i] > nums[j] {
+                j = i;
+            }
+        }
+        nums[j..j + (k as usize)].to_vec()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

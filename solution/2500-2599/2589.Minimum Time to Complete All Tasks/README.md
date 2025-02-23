@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2589.Minimum%20Time%20to%20Complete%20All%20Tasks/README.md
+rating: 2380
+source: 第 336 场周赛 Q4
+tags:
+    - 栈
+    - 贪心
+    - 数组
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2589. 完成所有任务的最少时间](https://leetcode.cn/problems/minimum-time-to-complete-all-tasks)
 
 [English Version](/solution/2500-2599/2589.Minimum%20Time%20to%20Complete%20All%20Tasks/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一台电脑，它可以 <strong>同时</strong>&nbsp;运行无数个任务。给你一个二维整数数组&nbsp;<code>tasks</code>&nbsp;，其中&nbsp;<code>tasks[i] = [start<sub>i</sub>, end<sub>i</sub>, duration<sub>i</sub>]</code>&nbsp;表示第&nbsp;<code>i</code>&nbsp;个任务需要在 <strong>闭区间</strong>&nbsp;时间段&nbsp;<code>[start<sub>i</sub>, end<sub>i</sub>]</code>&nbsp;内运行&nbsp;<code>duration<sub>i</sub></code>&nbsp;个整数时间点（但不需要连续）。</p>
 
@@ -47,11 +63,13 @@
 	<li><code>1 &lt;= duration<sub>i</sub> &lt;= end<sub>i</sub> - start<sub>i</sub> + 1 </code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 排序**
+### 方法一：贪心 + 排序
 
 我们观察发现，题目相当于在每一个区间 $[start,..,end]$ 中，选择 $duration$ 个整数时间点，使得总共选择的整数时间点最少。
 
@@ -65,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +92,7 @@ class Solution:
         vis = [0] * 2010
         ans = 0
         for start, end, duration in tasks:
-            duration -= sum(vis[start: end + 1])
+            duration -= sum(vis[start : end + 1])
             i = end
             while i >= start and duration > 0:
                 if not vis[i]:
@@ -87,9 +103,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -140,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findMinimumTime(tasks [][]int) (ans int) {
@@ -163,12 +177,12 @@ func findMinimumTime(tasks [][]int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findMinimumTime(tasks: number[][]): number {
     tasks.sort((a, b) => a[1] - b[1]);
-    const vis = new Array(2010).fill(0);
+    const vis: number[] = Array(2010).fill(0);
     let ans = 0;
     for (let [start, end, duration] of tasks) {
         for (let i = start; i <= end; ++i) {
@@ -185,10 +199,39 @@ function findMinimumTime(tasks: number[][]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn find_minimum_time(tasks: Vec<Vec<i32>>) -> i32 {
+        let mut tasks = tasks;
+        tasks.sort_by(|a, b| a[1].cmp(&b[1]));
+        let mut vis = vec![0; 2010];
+        let mut ans = 0;
 
+        for task in tasks {
+            let start = task[0] as usize;
+            let end = task[1] as usize;
+            let mut duration = task[2] - vis[start..=end].iter().sum::<i32>();
+            let mut i = end;
+
+            while i >= start && duration > 0 {
+                if vis[i] == 0 {
+                    duration -= 1;
+                    vis[i] = 1;
+                    ans += 1;
+                }
+                i -= 1;
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

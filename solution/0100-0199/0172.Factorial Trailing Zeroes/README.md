@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0172.Factorial%20Trailing%20Zeroes/README.md
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [172. 阶乘后的零](https://leetcode.cn/problems/factorial-trailing-zeroes)
 
 [English Version](/solution/0100-0199/0172.Factorial%20Trailing%20Zeroes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个整数 <code>n</code> ，返回 <code>n!</code> 结果中尾随零的数量。</p>
 
@@ -47,11 +57,13 @@
 
 <p><b>进阶：</b>你可以设计并实现对数时间复杂度的算法来解决此问题吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 题目实际上是求 $[1,n]$ 中有多少个 $5$ 的因数。
 
@@ -62,11 +74,11 @@
 1. 第 $3$ 次除以 $5$，得到 $1$，表示存在 $1$ 个包含因数 $5^3$ 的数；
 1. 累加得到从 $[1,n]$ 中所有 $5$ 的因数的个数。
 
+时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。
+
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -78,9 +90,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,33 +105,23 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function trailingZeroes(n: number): number {
-    let ans = 0;
-    while (n > 0) {
-        n = Math.floor(n / 5);
-        ans += n;
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int trailingZeroes(int n) {
         int ans = 0;
-        for (int i = 5; i <= n; i *= 5) ans += n / i;
+        while (n) {
+            n /= 5;
+            ans += n;
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func trailingZeroes(n int) int {
@@ -134,10 +134,21 @@ func trailingZeroes(n int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function trailingZeroes(n: number): number {
+    let ans = 0;
+    while (n > 0) {
+        n = Math.floor(n / 5);
+        ans += n;
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

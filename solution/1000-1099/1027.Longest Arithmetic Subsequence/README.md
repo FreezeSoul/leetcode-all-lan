@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1027.Longest%20Arithmetic%20Subsequence/README.md
+rating: 1758
+source: 第 132 场周赛 Q3
+tags:
+    - 数组
+    - 哈希表
+    - 二分查找
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1027. 最长等差数列](https://leetcode.cn/problems/longest-arithmetic-subsequence)
 
 [English Version](/solution/1000-1099/1027.Longest%20Arithmetic%20Subsequence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code>，返回 <code>nums</code>&nbsp;中最长等差子序列的<strong>长度</strong>。</p>
 
@@ -48,11 +63,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 500</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示以 $nums[i]$ 结尾且公差为 $j$ 的等差数列的最大长度。初始时 $f[i][j]=1$，即每个元素自身都是一个长度为 $1$ 的等差数列。
 
@@ -68,9 +85,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestArithSeqLength(nums []int) int {
@@ -149,24 +162,15 @@ func longestArithSeqLength(nums []int) int {
 	}
 	return ans + 1
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestArithSeqLength(nums: number[]): number {
     const n = nums.length;
     let ans = 0;
-    const f: number[][] = Array.from({ length: n }, () =>
-        new Array(1001).fill(0),
-    );
+    const f: number[][] = Array.from({ length: n }, () => new Array(1001).fill(0));
     for (let i = 1; i < n; ++i) {
         for (let k = 0; k < i; ++k) {
             const j = nums[i] - nums[k] + 500;
@@ -178,10 +182,8 @@ function longestArithSeqLength(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2265.Count%20Nodes%20Equal%20to%20Average%20of%20Subtree/README_EN.md
+rating: 1472
+source: Weekly Contest 292 Q2
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [2265. Count Nodes Equal to Average of Subtree](https://leetcode.com/problems/count-nodes-equal-to-average-of-subtree)
 
 [中文文档](/solution/2200-2299/2265.Count%20Nodes%20Equal%20to%20Average%20of%20Subtree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree, return <em>the number of nodes where the value of the node is equal to the <strong>average</strong> of the values in its <strong>subtree</strong></em>.</p>
 
@@ -43,31 +59,42 @@ For the node with value 6: The average of its subtree is 6 / 1 = 6.
 	<li><code>0 &lt;= Node.val &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+We design a function $\textit{dfs}$, which calculates the sum and the number of nodes of the subtree rooted at the current node.
+
+The execution process of the function $\textit{dfs}$ is as follows:
+
+-   If the current node is null, return $(0, 0)$.
+-   Otherwise, we recursively calculate the sum and the number of nodes of the left and right subtrees, denoted as $(\textit{ls}, \textit{ln})$ and $(\textit{rs}, \textit{rn})$, respectively. Then, the sum $\textit{s}$ and the number of nodes $\textit{n}$ of the subtree rooted at the current node are $\textit{ls} + \textit{rs} + \textit{root.val}$ and $\textit{ln} + \textit{rn} + 1$, respectively. If $\textit{s} / \textit{n} = \textit{root.val}$, it means the current node meets the requirement of the problem, and we increment the answer $\textit{ans}$ by $1$.
+-   Finally, the function $\textit{dfs}$ returns $\textit{s}$ and $\textit{n}$.
+
+We initialize the answer $\textit{ans}$ to $0$, then call the $\textit{dfs}$ function, and finally return the answer $\textit{ans}$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ represents the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
 class Solution:
-    def averageOfSubtree(self, root: Optional[TreeNode]) -> int:
-        def dfs(root):
-            if root is None:
+    def averageOfSubtree(self, root: TreeNode) -> int:
+        def dfs(root) -> tuple:
+            if not root:
                 return 0, 0
             ls, ln = dfs(root.left)
             rs, rn = dfs(root.right)
             s = ls + rs + root.val
             n = ln + rn + 1
-            if s // n == root.val:
-                nonlocal ans
-                ans += 1
+            nonlocal ans
+            ans += int(s // n == root.val)
             return s, n
 
         ans = 0
@@ -75,7 +102,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -97,17 +124,16 @@ class Solution {
     private int ans;
 
     public int averageOfSubtree(TreeNode root) {
-        ans = 0;
         dfs(root);
         return ans;
     }
 
     private int[] dfs(TreeNode root) {
         if (root == null) {
-            return new int[] {0, 0};
+            return new int[2];
         }
-        int[] l = dfs(root.left);
-        int[] r = dfs(root.right);
+        var l = dfs(root.left);
+        var r = dfs(root.right);
         int s = l[0] + r[0] + root.val;
         int n = l[1] + r[1] + 1;
         if (s / n == root.val) {
@@ -118,7 +144,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -134,26 +160,28 @@ class Solution {
  */
 class Solution {
 public:
-    int ans;
     int averageOfSubtree(TreeNode* root) {
-        ans = 0;
+        int ans = 0;
+        auto dfs = [&](this auto&& dfs, TreeNode* root) -> pair<int, int> {
+            if (!root) {
+                return {0, 0};
+            }
+            auto [ls, ln] = dfs(root->left);
+            auto [rs, rn] = dfs(root->right);
+            int s = ls + rs + root->val;
+            int n = ln + rn + 1;
+            if (s / n == root->val) {
+                ++ans;
+            }
+            return {s, n};
+        };
         dfs(root);
         return ans;
-    }
-
-    vector<int> dfs(TreeNode* root) {
-        if (!root) return {0, 0};
-        auto l = dfs(root->left);
-        auto r = dfs(root->right);
-        int s = l[0] + r[0] + root->val;
-        int n = l[1] + r[1] + 1;
-        if (s / n == root->val) ++ans;
-        return {s, n};
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -164,37 +192,64 @@ public:
  *     Right *TreeNode
  * }
  */
-func averageOfSubtree(root *TreeNode) int {
-	ans := 0
-	var dfs func(*TreeNode) (int, int)
+func averageOfSubtree(root *TreeNode) (ans int) {
+	var dfs func(root *TreeNode) (int, int)
 	dfs = func(root *TreeNode) (int, int) {
 		if root == nil {
 			return 0, 0
 		}
 		ls, ln := dfs(root.Left)
 		rs, rn := dfs(root.Right)
-		s := ls + rs + root.Val
-		n := ln + rn + 1
+		s, n := ls+rs+root.Val, ln+rn+1
 		if s/n == root.Val {
 			ans++
 		}
 		return s, n
 	}
 	dfs(root)
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
 
-```
-
-### **...**
-
-```
-
+function averageOfSubtree(root: TreeNode | null): number {
+    let ans: number = 0;
+    const dfs = (root: TreeNode | null): [number, number] => {
+        if (!root) {
+            return [0, 0];
+        }
+        const [ls, ln] = dfs(root.left);
+        const [rs, rn] = dfs(root.right);
+        const s = ls + rs + root.val;
+        const n = ln + rn + 1;
+        if (Math.floor(s / n) === root.val) {
+            ++ans;
+        }
+        return [s, n];
+    };
+    dfs(root);
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

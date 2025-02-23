@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0140.Word%20Break%20II/README_EN.md
+tags:
+    - Trie
+    - Memoization
+    - Array
+    - Hash Table
+    - String
+    - Dynamic Programming
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [140. Word Break II](https://leetcode.com/problems/word-break-ii)
 
 [中文文档](/solution/0100-0199/0140.Word%20Break%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> and a dictionary of strings <code>wordDict</code>, add spaces in <code>s</code> to construct a sentence where each word is a valid dictionary word. Return all such possible sentences in <strong>any order</strong>.</p>
 
@@ -43,11 +61,17 @@
 	<li>Input is generated in a way that the length of the answer doesn&#39;t exceed&nbsp;10<sup>5</sup>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Trie:
@@ -93,7 +117,7 @@ class Solution:
         return [' '.join(v) for v in ans]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Trie {
@@ -155,7 +179,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -220,10 +244,90 @@ func wordBreak(s string, wordDict []string) []string {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
+class Node
+{
+    public int Index1 { get; set; }
+    public int Index2 { get; set; }
+}
+
+public class Solution {
+    public IList<string> WordBreak(string s, IList<string> wordDict) {
+        var paths = new List<Tuple<int, string>>[s.Length + 1];
+        paths[s.Length] = new List<Tuple<int, string>> { Tuple.Create(-1, (string)null) };
+        var wordDictGroup = wordDict.GroupBy(word => word.Length);
+        for (var i = s.Length - 1; i >= 0; --i)
+        {
+            paths[i] = new List<Tuple<int, string>>();
+            foreach (var wordGroup in wordDictGroup)
+            {
+                var wordLength = wordGroup.Key;
+                if (i + wordLength <= s.Length && paths[i + wordLength].Count > 0)
+                {
+                    foreach (var word in wordGroup)
+                    {
+                        if (s.Substring(i, wordLength) == word)
+                        {
+                            paths[i].Add(Tuple.Create(i + wordLength, word));
+                        }
+                    }
+                }
+            }
+        }
+
+        return GenerateResults(paths);
+    }
+
+    private IList<string> GenerateResults(List<Tuple<int, string>>[] paths)
+    {
+        var results = new List<string>();
+        var sb = new StringBuilder();
+        var stack = new Stack<Node>();
+        stack.Push(new Node());
+        while (stack.Count > 0)
+        {
+            var node = stack.Peek();
+            if (node.Index1 == paths.Length - 1 || node.Index2 == paths[node.Index1].Count)
+            {
+                if (node.Index1 == paths.Length - 1)
+                {
+                    results.Add(sb.ToString());
+                }
+                stack.Pop();
+                if (stack.Count > 0)
+                {
+                    var parent = stack.Peek();
+                    var length = paths[parent.Index1][parent.Index2 - 1].Item2.Length;
+                    if (length < sb.Length) ++length;
+                    sb.Remove(sb.Length - length, length);
+                }
+            }
+            else
+            {
+                var newNode = new Node { Index1 = paths[node.Index1][node.Index2].Item1, Index2 = 0 };
+                if (sb.Length != 0)
+                {
+                    sb.Append(' ');
+                }
+                sb.Append(paths[node.Index1][node.Index2].Item2);
+                stack.Push(newNode);
+                ++node.Index2;
+            }
+        }
+        return results;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

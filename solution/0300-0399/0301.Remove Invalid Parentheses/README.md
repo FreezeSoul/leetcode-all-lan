@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0301.Remove%20Invalid%20Parentheses/README.md
+tags:
+    - 广度优先搜索
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [301. 删除无效的括号](https://leetcode.cn/problems/remove-invalid-parentheses)
 
 [English Version](/solution/0300-0399/0301.Remove%20Invalid%20Parentheses/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由若干括号和字母组成的字符串 <code>s</code> ，删除最小数量的无效括号，使得输入的字符串有效。</p>
 
@@ -43,11 +55,13 @@
 	<li><code>s</code> 中至多含 <code>20</code> 个括号</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS + 剪枝**
+### 方法一：DFS + 剪枝
 
 我们首先处理得到字符串 $s$ 待删除的左、右括号的最小数量，分别记为 $l$ 和 $r$。
 
@@ -74,9 +88,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,8 +104,7 @@ class Solution:
                 dfs(i + 1, l - 1, r, lcnt, rcnt, t)
             elif s[i] == ')' and r:
                 dfs(i + 1, l, r - 1, lcnt, rcnt, t)
-            dfs(i + 1, l, r, lcnt + (s[i] == '('),
-                rcnt + (s[i] == ')'), t + s[i])
+            dfs(i + 1, l, r, lcnt + (s[i] == '('), rcnt + (s[i] == ')'), t + s[i])
 
         l = r = 0
         for c in s:
@@ -110,9 +121,7 @@ class Solution:
         return list(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -163,7 +172,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -210,7 +219,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeInvalidParentheses(s string) []string {
@@ -261,10 +270,8 @@ func removeInvalidParentheses(s string) []string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

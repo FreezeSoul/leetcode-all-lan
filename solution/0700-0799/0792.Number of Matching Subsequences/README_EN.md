@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0792.Number%20of%20Matching%20Subsequences/README_EN.md
+tags:
+    - Trie
+    - Array
+    - Hash Table
+    - String
+    - Binary Search
+    - Dynamic Programming
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [792. Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences)
 
 [中文文档](/solution/0700-0799/0792.Number%20of%20Matching%20Subsequences/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> and an array of strings <code>words</code>, return <em>the number of</em> <code>words[i]</code> <em>that is a subsequence of</em> <code>s</code>.</p>
 
@@ -38,11 +56,17 @@
 	<li><code>s</code> and <code>words[i]</code> consist of only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,43 +85,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
-        d = defaultdict(deque)
-        for i, w in enumerate(words):
-            d[w[0]].append((i, 0))
-        ans = 0
-        for c in s:
-            for _ in range(len(d[c])):
-                i, j = d[c].popleft()
-                j += 1
-                if j == len(words[i]):
-                    ans += 1
-                else:
-                    d[words[i][j]].append((i, j))
-        return ans
-```
-
-```python
-class Solution:
-    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
-        def check(w):
-            i = -1
-            for c in w:
-                j = bisect_right(d[c], i)
-                if j == len(d[c]):
-                    return False
-                i = d[c][j]
-            return True
-
-        d = defaultdict(list)
-        for i, c in enumerate(s):
-            d[c].append(i)
-        return sum(check(w) for w in words)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -124,6 +112,86 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numMatchingSubseq(string s, vector<string>& words) {
+        vector<queue<string>> d(26);
+        for (auto& w : words) d[w[0] - 'a'].emplace(w);
+        int ans = 0;
+        for (char& c : s) {
+            auto& q = d[c - 'a'];
+            for (int k = q.size(); k; --k) {
+                auto t = q.front();
+                q.pop();
+                if (t.size() == 1)
+                    ++ans;
+                else
+                    d[t[1] - 'a'].emplace(t.substr(1));
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func numMatchingSubseq(s string, words []string) (ans int) {
+	d := [26][]string{}
+	for _, w := range words {
+		d[w[0]-'a'] = append(d[w[0]-'a'], w)
+	}
+	for _, c := range s {
+		q := d[c-'a']
+		d[c-'a'] = nil
+		for _, t := range q {
+			if len(t) == 1 {
+				ans++
+			} else {
+				d[t[1]-'a'] = append(d[t[1]-'a'], t[1:])
+			}
+		}
+	}
+	return
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
+        d = defaultdict(deque)
+        for i, w in enumerate(words):
+            d[w[0]].append((i, 0))
+        ans = 0
+        for c in s:
+            for _ in range(len(d[c])):
+                i, j = d[c].popleft()
+                j += 1
+                if j == len(words[i]):
+                    ans += 1
+                else:
+                    d[words[i][j]].append((i, j))
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int numMatchingSubseq(String s, String[] words) {
@@ -138,7 +206,7 @@ class Solution {
             for (int t = q.size(); t > 0; --t) {
                 var p = q.pollFirst();
                 int i = p[0], j = p[1] + 1;
-                if (j ==  words[i].length()) {
+                if (j == words[i].length()) {
                     ++ans;
                 } else {
                     d[words[i].charAt(j) - 'a'].offer(new int[] {i, j});
@@ -149,6 +217,88 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numMatchingSubseq(string s, vector<string>& words) {
+        vector<queue<pair<int, int>>> d(26);
+        for (int i = 0; i < words.size(); ++i) d[words[i][0] - 'a'].emplace(i, 0);
+        int ans = 0;
+        for (char& c : s) {
+            auto& q = d[c - 'a'];
+            for (int t = q.size(); t; --t) {
+                auto [i, j] = q.front();
+                q.pop();
+                if (++j == words[i].size())
+                    ++ans;
+                else
+                    d[words[i][j] - 'a'].emplace(i, j);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func numMatchingSubseq(s string, words []string) (ans int) {
+	type pair struct{ i, j int }
+	d := [26][]pair{}
+	for i, w := range words {
+		d[w[0]-'a'] = append(d[w[0]-'a'], pair{i, 0})
+	}
+	for _, c := range s {
+		q := d[c-'a']
+		d[c-'a'] = nil
+		for _, p := range q {
+			i, j := p.i, p.j+1
+			if j == len(words[i]) {
+				ans++
+			} else {
+				d[words[i][j]-'a'] = append(d[words[i][j]-'a'], pair{i, j})
+			}
+		}
+	}
+	return
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 3
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
+        def check(w):
+            i = -1
+            for c in w:
+                j = bisect_right(d[c], i)
+                if j == len(d[c]):
+                    return False
+                i = d[c][j]
+            return True
+
+        d = defaultdict(list)
+        for i, c in enumerate(s):
+            d[c].append(i)
+        return sum(check(w) for w in words)
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -196,49 +346,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int numMatchingSubseq(string s, vector<string>& words) {
-        vector<queue<string>> d(26);
-        for (auto& w : words) d[w[0] - 'a'].emplace(w);
-        int ans = 0;
-        for (char& c : s) {
-            auto& q = d[c - 'a'];
-            for (int k = q.size(); k; --k) {
-                auto t = q.front();
-                q.pop();
-                if (t.size() == 1) ++ans;
-                else d[t[1] - 'a'].emplace(t.substr(1));
-            }
-        }
-        return ans;
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    int numMatchingSubseq(string s, vector<string>& words) {
-        vector<queue<pair<int, int>>> d(26);
-        for (int i = 0; i < words.size(); ++i) d[words[i][0] - 'a'].emplace(i, 0);
-        int ans = 0;
-        for (char& c : s) {
-            auto& q = d[c - 'a'];
-            for (int t = q.size(); t; --t) {
-                auto [i, j] = q.front();
-                q.pop();
-                if (++j == words[i].size()) ++ans;
-                else d[words[i][j] - 'a'].emplace(i, j);
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -263,51 +371,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func numMatchingSubseq(s string, words []string) (ans int) {
-	d := [26][]string{}
-	for _, w := range words {
-		d[w[0]-'a'] = append(d[w[0]-'a'], w)
-	}
-	for _, c := range s {
-		q := d[c-'a']
-		d[c-'a'] = nil
-		for _, t := range q {
-			if len(t) == 1 {
-				ans++
-			} else {
-				d[t[1]-'a'] = append(d[t[1]-'a'], t[1:])
-			}
-		}
-	}
-	return
-}
-```
-
-```go
-func numMatchingSubseq(s string, words []string) (ans int) {
-	type pair struct{ i, j int }
-	d := [26][]pair{}
-	for i, w := range words {
-		d[w[0]-'a'] = append(d[w[0]-'a'], pair{i, 0})
-	}
-	for _, c := range s {
-		q := d[c-'a']
-		d[c-'a'] = nil
-		for _, p := range q {
-			i, j := p.i, p.j+1
-			if j == len(words[i]) {
-				ans++
-			} else {
-				d[words[i][j]-'a'] = append(d[words[i][j]-'a'], pair{i, j})
-			}
-		}
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func numMatchingSubseq(s string, words []string) (ans int) {
@@ -336,10 +400,8 @@ func numMatchingSubseq(s string, words []string) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

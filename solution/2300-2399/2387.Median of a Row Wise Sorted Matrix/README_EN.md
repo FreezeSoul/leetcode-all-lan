@@ -1,8 +1,22 @@
-# [2387. Median of a Row Wise Sorted Matrix](https://leetcode.com/problems/median-of-a-row-wise-sorted-matrix)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2387.Median%20of%20a%20Row%20Wise%20Sorted%20Matrix/README_EN.md
+tags:
+    - Array
+    - Binary Search
+    - Matrix
+---
+
+<!-- problem:start -->
+
+# [2387. Median of a Row Wise Sorted Matrix 🔒](https://leetcode.com/problems/median-of-a-row-wise-sorted-matrix)
 
 [中文文档](/solution/2300-2399/2387.Median%20of%20a%20Row%20Wise%20Sorted%20Matrix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an <code>m x n</code> matrix <code>grid</code> containing an <strong>odd</strong> number of integers where each row is sorted in <strong>non-decreasing</strong> order, return <em>the <strong>median</strong> of the matrix</em>.</p>
 
@@ -37,11 +51,23 @@
 	<li><code>grid[i]</code> is sorted in non-decreasing order.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Binary Searches
+
+The median is actually the $target = \left \lceil \frac{m \times n}{2} \right \rceil$-th number after sorting.
+
+We perform a binary search on the elements of the matrix $x$, counting the number of elements in the grid that are greater than $x$, denoted as $cnt$. If $cnt \ge target$, it means the median is on the left side of $x$ (including $x$); otherwise, it is on the right side.
+
+The time complexity is $O(m \times \log n \times \log M)$, where $m$ and $n$ are the number of rows and columns of the grid, respectively, and $M$ is the maximum element in the grid. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -54,7 +80,7 @@ class Solution:
         return bisect_left(range(10**6 + 1), target, key=count)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +150,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func matrixMedian(grid [][]int) int {
@@ -160,17 +186,8 @@ func matrixMedian(grid [][]int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

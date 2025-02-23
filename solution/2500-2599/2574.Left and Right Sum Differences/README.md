@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2574.Left%20and%20Right%20Sum%20Differences/README.md
+rating: 1206
+source: 第 334 场周赛 Q1
+tags:
+    - 数组
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2574. 左右元素和的差值](https://leetcode.cn/problems/left-and-right-sum-differences)
 
 [English Version](/solution/2500-2599/2574.Left%20and%20Right%20Sum%20Differences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的整数数组 <code>nums</code> ，请你找出一个下标从 <strong>0</strong> 开始的整数数组 <code>answer</code> ，其中：</p>
 
@@ -49,11 +62,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和**
+### 方法一：前缀和
 
 我们定义变量 $left$ 表示数组 `nums` 中下标 $i$ 左侧元素之和，变量 $right$ 表示数组 `nums` 中下标 $i$ 右侧元素之和。初始时 $left = 0$, $right = \sum_{i = 0}^{n - 1} nums[i]$。
 
@@ -65,14 +80,12 @@
 
 相似题目：
 
--   [0724. 寻找数组的中心下标](/solution/0700-0799/0724.Find%20Pivot%20Index/README.md)
--   [1991. 找到数组的中间位置](/solution/1900-1999/1991.Find%20the%20Middle%20Index%20in%20Array/README.md)
+-   [0724. 寻找数组的中心下标](https://github.com/doocs/leetcode/blob/main/solution/0700-0799/0724.Find%20Pivot%20Index/README.md)
+-   [1991. 找到数组的中间位置](https://github.com/doocs/leetcode/blob/main/solution/1900-1999/1991.Find%20the%20Middle%20Index%20in%20Array/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +99,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +135,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func leftRigthDifference(nums []int) (ans []int) {
@@ -148,7 +159,7 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function leftRigthDifference(nums: number[]): number[] {
@@ -164,20 +175,7 @@ function leftRigthDifference(nums: number[]): number[] {
 }
 ```
 
-```ts
-function leftRigthDifference(nums: number[]): number[] {
-    let left = 0;
-    let right = nums.reduce((r, v) => r + v);
-    return nums.map(v => {
-        right -= v;
-        const res = Math.abs(left - right);
-        left += v;
-        return res;
-    });
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -196,19 +194,19 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *leftRigthDifference(int *nums, int numsSize, int *returnSize) {
+int* leftRigthDifference(int* nums, int numsSize, int* returnSize) {
     int left = 0;
     int right = 0;
     for (int i = 0; i < numsSize; i++) {
         right += nums[i];
     }
-    int *ans = malloc(sizeof(int) * numsSize);
+    int* ans = malloc(sizeof(int) * numsSize);
     for (int i = 0; i < numsSize; i++) {
         right -= nums[i];
         ans[i] = abs(left - right);
@@ -219,10 +217,89 @@ int *leftRigthDifference(int *nums, int numsSize, int *returnSize) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function leftRigthDifference(nums: number[]): number[] {
+    let left = 0;
+    let right = nums.reduce((r, v) => r + v);
+    return nums.map(v => {
+        right -= v;
+        const res = Math.abs(left - right);
+        left += v;
+        return res;
+    });
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn left_right_difference(nums: Vec<i32>) -> Vec<i32> {
+        let mut ans = vec![];
+
+        for i in 0..nums.len() {
+            let mut left = 0;
+            for j in 0..i {
+                left += nums[j];
+            }
+
+            let mut right = 0;
+            for k in i + 1..nums.len() {
+                right += nums[k];
+            }
+
+            ans.push((left - right).abs());
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn left_right_difference(nums: Vec<i32>) -> Vec<i32> {
+        let mut left = 0;
+        let mut right: i32 = nums.iter().sum();
+        let mut ans = vec![];
+
+        for &x in &nums {
+            right -= x;
+            ans.push((left - right).abs());
+            left += x;
+        }
+
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

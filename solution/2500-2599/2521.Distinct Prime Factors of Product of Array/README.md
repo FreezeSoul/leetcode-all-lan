@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2521.Distinct%20Prime%20Factors%20of%20Product%20of%20Array/README.md
+rating: 1413
+source: 第 326 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [2521. 数组乘积中的不同质因数数目](https://leetcode.cn/problems/distinct-prime-factors-of-product-of-array)
 
 [English Version](/solution/2500-2599/2521.Distinct%20Prime%20Factors%20of%20Product%20of%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>nums</code> ，对 <code>nums</code> 所有元素求积之后，找出并返回乘积中 <strong>不同质因数</strong> 的数目。</p>
 
@@ -43,21 +58,21 @@ nums 中所有元素的乘积是：2 * 4 * 8 * 16 = 1024 = 2<sup>10</sup> 。
 	<li><code>2 &lt;= nums[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 质因数分解**
+### 方法一：哈希表 + 质因数分解
 
 对于数组中的每个元素，先对其进行质因数分解，然后将分解出的质因数加入哈希表中。最后返回哈希表的大小即可。
 
-时间复杂度 $O(n\sqrt{m})$，其中 $n$ 和 $m$ 分别是数组的长度和数组中元素的最大值。
+时间复杂度 $O(n \times \sqrt{m})$，空间复杂度 $O(\frac{m}{\log m})$，其中 $n$ 和 $m$ 分别为数组的长度和数组中元素的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +91,7 @@ class Solution:
         return len(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,14 +115,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int distinctPrimeFactors(vector<int>& nums) {
         unordered_set<int> s;
-        for (int& n :nums) {
+        for (int& n : nums) {
             for (int i = 2; i <= n / i; ++i) {
                 if (n % i == 0) {
                     s.insert(i);
@@ -127,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func distinctPrimeFactors(nums []int) int {
@@ -149,10 +162,32 @@ func distinctPrimeFactors(nums []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function distinctPrimeFactors(nums: number[]): number {
+    const s: Set<number> = new Set();
+    for (let n of nums) {
+        let i = 2;
+        while (i <= n / i) {
+            if (n % i === 0) {
+                s.add(i);
+                while (n % i === 0) {
+                    n = Math.floor(n / i);
+                }
+            }
+            ++i;
+        }
+        if (n > 1) {
+            s.add(n);
+        }
+    }
+    return s.size;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

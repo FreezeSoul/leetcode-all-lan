@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0864.Shortest%20Path%20to%20Get%20All%20Keys/README.md
+tags:
+    - 位运算
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [864. 获取所有钥匙的最短路径](https://leetcode.cn/problems/shortest-path-to-get-all-keys)
 
 [English Version](/solution/0800-0899/0864.Shortest%20Path%20to%20Get%20All%20Keys/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个二维网格&nbsp;<code>grid</code>&nbsp;，其中：</p>
 
@@ -29,7 +42,7 @@
 <p><img src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0800-0899/0864.Shortest%20Path%20to%20Get%20All%20Keys/images/lc-keys2.jpg" /></p>
 
 <pre>
-<strong>输入：</strong>grid = ["@.a.#","###.#","b.A.B"]
+<strong>输入：</strong>grid = ["@.a..","###.#","b.A.B"]
 <strong>输出：</strong>8
 <strong>解释：</strong>目标是获得所有钥匙，而不是打开所有锁。
 </pre>
@@ -63,11 +76,13 @@
 	<li>每个钥匙正好打开一个对应的锁</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + BFS**
+### 方法一：状态压缩 + BFS
 
 根据题意，我们需要从起点出发，往上下左右四个方向走，获取所有钥匙，最后返回获取所有钥匙所需要的移动的最少次数。若无法获取所有钥匙，返回 $-1$。
 
@@ -83,13 +98,13 @@
 f   d c b
 ```
 
-我们定义一个队列 $q$ 来存储当前位置以及当前拥有的钥匙的状态，即 $(i, j, state)$，其中 $(i, j)$ 表示当前位置，$state$ 表示当前拥有的钥匙的状态，即 $state$ 的第 $i$ 位为 $1$ 表示当前拥有第 $i$ 把钥匙，否则表示当前没有第 $i$ 把钥匙。
+我们定义一个队列 $q$ 来存储当前位置以及当前拥有的钥匙的状态，即 $(i, j, \textit{state})$，其中 $(i, j)$ 表示当前位置，$\textit{state}$ 表示当前拥有的钥匙的状态，即 $\textit{state}$ 的第 $i$ 位为 $1$ 表示当前拥有第 $i$ 把钥匙，否则表示当前没有第 $i$ 把钥匙。
 
-另外，定义哈希表或数组 $vis$ 记录当前位置以及当前拥有的钥匙的状态是否已经被访问过，如果访问过，则不需要再次访问。$vis[i][j][state]$ 表示当前位置为 $(i, j)$，当前拥有的钥匙的状态为 $state$ 时，是否已经被访问过。
+另外，定义哈希表或数组 $vis$ 记录当前位置以及当前拥有的钥匙的状态是否已经被访问过，如果访问过，则不需要再次访问。$vis[i][j][\textit{state}]$ 表示当前位置为 $(i, j)$，当前拥有的钥匙的状态为 $state$ 时，是否已经被访问过。
 
 我们从起点 $(si, sj)$ 出发，将其加入队列 $q$，并将 $vis[si][sj][0]$ 置为 $true$，表示起点位置以及拥有的钥匙的状态为 $0$ 时已经被访问过。
 
-在广度优先搜索的过程中，我们每次从队首取出一个位置 $(i, j, state)$，并判断当前位置是否为终点，即当前位置是否拥有所有的钥匙，即 $state$ 的二进制表示中的 $1$ 的个数是否为 $k$。如果是，将当前步数作为答案返回。
+在广度优先搜索的过程中，我们每次从队首取出一个位置 $(i, j, \textit{state})$，并判断当前位置是否为终点，即当前位置是否拥有所有的钥匙，即 $state$ 的二进制表示中的 $1$ 的个数是否为 $k$。如果是，将当前步数作为答案返回。
 
 否则，我们从当前位置出发，往上下左右四个方向走，如果可以走到下一个位置 $(x, y)$，则将 $(x, y, nxt)$ 加入队列 $q$，其中 $nxt$ 表示下一个位置的钥匙的状态。
 
@@ -101,9 +116,7 @@ f   d c b
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -132,7 +145,11 @@ class Solution:
                     if 0 <= x < m and 0 <= y < n:
                         c = grid[x][y]
                         # 是墙，或者是锁，但此时没有对应的钥匙，无法通过
-                        if c == '#' or c.isupper() and (state & (1 << (ord(c) - ord('A')))) == 0:
+                        if (
+                            c == '#'
+                            or c.isupper()
+                            and (state & (1 << (ord(c) - ord('A')))) == 0
+                        ):
                             continue
                         # 是钥匙
                         if c.islower():
@@ -147,9 +164,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -218,7 +233,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -235,7 +250,8 @@ public:
                 // 累加钥匙数量
                 if (islower(c)) ++k;
                 // 起点
-                else if (c == '@') si = i, sj = j;
+                else if (c == '@')
+                    si = i, sj = j;
             }
         }
         queue<tuple<int, int, int>> q{{{si, sj, 0}}};
@@ -275,7 +291,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestPathAllKeys(grid []string) int {
@@ -336,10 +352,8 @@ func shortestPathAllKeys(grid []string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

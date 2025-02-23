@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0463.Island%20Perimeter/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [463. 岛屿的周长](https://leetcode.cn/problems/island-perimeter)
 
 [English Version](/solution/0400-0499/0463.Island%20Perimeter/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个 <code>row x col</code> 的二维网格地图 <code>grid</code> ，其中：<code>grid[i][j] = 1</code> 表示陆地， <code>grid[i][j] = 0</code> 表示水域。</p>
 
@@ -48,17 +61,17 @@
 	<li><code>grid[i][j]</code> 为 <code>0</code> 或 <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-遍历二维数组
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +89,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +115,52 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        int ans = 0;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (grid[i][j] == 1) {
+                    ans += 4;
+                    if (i < m - 1 && grid[i + 1][j] == 1) ans -= 2;
+                    if (j < n - 1 && grid[i][j + 1] == 1) ans -= 2;
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func islandPerimeter(grid [][]int) int {
+	m, n := len(grid), len(grid[0])
+	ans := 0
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if grid[i][j] == 1 {
+				ans += 4
+				if i < m-1 && grid[i+1][j] == 1 {
+					ans -= 2
+				}
+				if j < n-1 && grid[i][j+1] == 1 {
+					ans -= 2
+				}
+			}
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
 
 ```ts
 function islandPerimeter(grid: number[][]): number {
@@ -137,55 +193,8 @@ function islandPerimeter(grid: number[][]): number {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int islandPerimeter(vector<vector<int>>& grid) {
-        int m = grid.size(), n = grid[0].size();
-        int ans = 0;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 1) {
-                    ans += 4;
-                    if (i < m - 1 && grid[i + 1][j] == 1) ans -= 2;
-                    if (j < n - 1 && grid[i][j + 1] == 1) ans -= 2;
-                }
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-```go
-func islandPerimeter(grid [][]int) int {
-	m, n := len(grid), len(grid[0])
-	ans := 0
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if grid[i][j] == 1 {
-				ans += 4
-				if i < m-1 && grid[i+1][j] == 1 {
-					ans -= 2
-				}
-				if j < n-1 && grid[i][j+1] == 1 {
-					ans -= 2
-				}
-			}
-		}
-	}
-	return ans
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

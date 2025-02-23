@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1049.Last%20Stone%20Weight%20II/README.md
+rating: 2092
+source: 第 137 场周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii)
 
 [English Version](/solution/1000-1099/1049.Last%20Stone%20Weight%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一堆石头，用整数数组&nbsp;<code>stones</code> 表示。其中&nbsp;<code>stones[i]</code> 表示第 <code>i</code> 块石头的重量。</p>
 
@@ -47,11 +60,13 @@
 	<li><code>1 &lt;= stones[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 **两个**石头的重量越接近，粉碎后的新重量就越小。同样的，**两堆**石头的重量越接近，它们粉碎后的新重量也越小。
 
@@ -61,11 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-动态规划——`0-1` 背包朴素做法：
+#### Python3
 
 ```python
 class Solution:
@@ -83,23 +94,7 @@ class Solution:
         return s - 2 * dp[-1][-1]
 ```
 
-动态规划——`0-1` 背包空间优化：
-
-```python
-class Solution:
-    def lastStoneWeightII(self, stones: List[int]) -> int:
-        s = sum(stones)
-        m, n = len(stones), s >> 1
-        dp = [0] * (n + 1)
-        for v in stones:
-            for j in range(n, v - 1, -1):
-                dp[j] = max(dp[j], dp[j - v] + v)
-        return s - dp[-1] * 2
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -124,27 +119,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int lastStoneWeightII(int[] stones) {
-        int s = 0;
-        for (int v : stones) {
-            s += v;
-        }
-        int m = stones.length;
-        int n = s >> 1;
-        int[] dp = new int[n + 1];
-        for (int v : stones) {
-            for (int j = n; j >= v; --j) {
-                dp[j] = Math.max(dp[j], dp[j - v] + v);
-            }
-        }
-        return s - dp[n] * 2;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -164,22 +139,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int lastStoneWeightII(vector<int>& stones) {
-        int s = accumulate(stones.begin(), stones.end(), 0);
-        int n = s >> 1;
-        vector<int> dp(n + 1);
-        for (int& v : stones)
-            for (int j = n; j >= v; --j)
-                dp[j] = max(dp[j], dp[j - v] + v);
-        return s - dp[n] * 2;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func lastStoneWeightII(stones []int) int {
@@ -202,40 +162,44 @@ func lastStoneWeightII(stones []int) int {
 	}
 	return s - dp[m][n]*2
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn last_stone_weight_ii(stones: Vec<i32>) -> i32 {
+        let n = stones.len();
+        let mut sum = 0;
+
+        for e in &stones {
+            sum += *e;
+        }
+
+        let m = (sum / 2) as usize;
+        let mut dp: Vec<Vec<i32>> = vec![vec![0; m + 1]; n + 1];
+
+        // Begin the actual dp process
+        for i in 1..=n {
+            for j in 1..=m {
+                dp[i][j] = if stones[i - 1] > (j as i32) {
+                    dp[i - 1][j]
+                } else {
+                    std::cmp::max(
+                        dp[i - 1][j],
+                        dp[i - 1][j - (stones[i - 1] as usize)] + stones[i - 1],
+                    )
+                };
+            }
+        }
+
+        sum - 2 * dp[n][m]
+    }
 }
 ```
 
-```go
-func lastStoneWeightII(stones []int) int {
-	s := 0
-	for _, v := range stones {
-		s += v
-	}
-	n := s >> 1
-	dp := make([]int, n+1)
-	for _, v := range stones {
-		for j := n; j >= v; j-- {
-			dp[j] = max(dp[j], dp[j-v]+v)
-		}
-	}
-	return s - dp[n]*2
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -258,10 +222,90 @@ var lastStoneWeightII = function (stones) {
 };
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def lastStoneWeightII(self, stones: List[int]) -> int:
+        s = sum(stones)
+        m, n = len(stones), s >> 1
+        dp = [0] * (n + 1)
+        for v in stones:
+            for j in range(n, v - 1, -1):
+                dp[j] = max(dp[j], dp[j - v] + v)
+        return s - dp[-1] * 2
 ```
 
+#### Java
+
+```java
+class Solution {
+    public int lastStoneWeightII(int[] stones) {
+        int s = 0;
+        for (int v : stones) {
+            s += v;
+        }
+        int m = stones.length;
+        int n = s >> 1;
+        int[] dp = new int[n + 1];
+        for (int v : stones) {
+            for (int j = n; j >= v; --j) {
+                dp[j] = Math.max(dp[j], dp[j - v] + v);
+            }
+        }
+        return s - dp[n] * 2;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int lastStoneWeightII(vector<int>& stones) {
+        int s = accumulate(stones.begin(), stones.end(), 0);
+        int n = s >> 1;
+        vector<int> dp(n + 1);
+        for (int& v : stones)
+            for (int j = n; j >= v; --j)
+                dp[j] = max(dp[j], dp[j - v] + v);
+        return s - dp[n] * 2;
+    }
+};
+```
+
+#### Go
+
+```go
+func lastStoneWeightII(stones []int) int {
+	s := 0
+	for _, v := range stones {
+		s += v
+	}
+	n := s >> 1
+	dp := make([]int, n+1)
+	for _, v := range stones {
+		for j := n; j >= v; j-- {
+			dp[j] = max(dp[j], dp[j-v]+v)
+		}
+	}
+	return s - dp[n]*2
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

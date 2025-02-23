@@ -1,8 +1,25 @@
-# [1183. Maximum Number of Ones](https://leetcode.com/problems/maximum-number-of-ones)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1183.Maximum%20Number%20of%20Ones/README_EN.md
+rating: 2366
+source: Biweekly Contest 8 Q4
+tags:
+    - Greedy
+    - Math
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
+# [1183. Maximum Number of Ones 🔒](https://leetcode.com/problems/maximum-number-of-ones)
 
 [中文文档](/solution/1100-1199/1183.Maximum%20Number%20of%20Ones/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Consider a matrix <code>M</code> with dimensions <code>width * height</code>, such that every cell has value <code>0</code>&nbsp;or <code>1</code>, and any <strong>square</strong>&nbsp;sub-matrix of <code>M</code> of size <code>sideLength * sideLength</code>&nbsp;has at most <code>maxOnes</code>&nbsp;ones.</p>
 
@@ -42,11 +59,23 @@ The best solution that has 4 ones is:
 	<li><code>0 &lt;= maxOnes &lt;= sideLength * sideLength</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Count Equivalent Positions
+
+For convenience, let's denote $x = sideLength$.
+
+Consider a $x \times x$ square, we need to select at most $maxOnes$ points inside the square and set them to 1. Note that when the point at coordinate $(i, j)$ is selected, all points at coordinates $(i\pm k_1 \times x, j\pm k_2 \times x)$ can be equivalently set to 1. Therefore, we calculate the number of equivalent positions of the coordinate $(i, j)$ in the matrix, and select the top $maxOnes$ with the most quantities.
+
+The time complexity is $O(m \times n)$, where $m$ and $n$ are the number of rows and columns of the matrix, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +92,7 @@ class Solution:
         return sum(cnt[:maxOnes])
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumNumberOfOnes(width int, height int, sideLength int, maxOnes int) int {
@@ -131,7 +160,7 @@ func maximumNumberOfOnes(width int, height int, sideLength int, maxOnes int) int
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -155,10 +184,8 @@ var maximumNumberOfOnes = function (width, height, sideLength, maxOnes) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

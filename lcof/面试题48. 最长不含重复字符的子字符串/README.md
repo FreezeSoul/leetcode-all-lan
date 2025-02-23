@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9848.%20%E6%9C%80%E9%95%BF%E4%B8%8D%E5%90%AB%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 48. 最长不含重复字符的子字符串](https://leetcode.cn/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。</p>
 
@@ -38,13 +48,17 @@
 
 <p>注意：本题与主站 3 题相同：<a href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/">https://leetcode.cn/problems/longest-substring-without-repeating-characters/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：双指针 + 哈希表**
+<!-- solution:start -->
+
+### 方法一：双指针 + 哈希表
 
 我们用双指针 $j$ 和 $i$ 分别表示子串的左右边界，其中 $j$ 是滑动窗口的左边界，$i$ 是滑动窗口的右边界，用哈希表 $vis$ 记录每个字符是否出现过。
 
-遍历字符串 $s$，如果此时 $s[i]$ 在哈希表 $vis$ 中存在，说明 $s[i]$ 重复了，我们需要将左边界 $j$ 右移，直到 $s[i]$ 不在哈希表 $vis$ 中为止，然后将 $s[i]$ 加入哈希表 $vis$ 中。此时，我们更新无重复字符子串的最大长度，即 $ans = max(ans, i - j + 1)$。
+遍历字符串 $s$，如果此时 $s[i]$ 在哈希表 $vis$ 中存在，说明 $s[i]$ 重复了，我们需要将左边界 $j$ 右移，直到 $s[i]$ 不在哈希表 $vis$ 中为止，然后将 $s[i]$ 加入哈希表 $vis$ 中。此时，我们更新无重复字符子串的最大长度，即 $ans = \max(ans, i - j + 1)$。
 
 遍历结束后，我们返回 $ans$ 即可。
 
@@ -52,7 +66,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,21 +82,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def lengthOfLongestSubstring(self, s: str) -> int:
-        vis = set()
-        ans = j = 0
-        for i, c in enumerate(s):
-            while c in vis:
-                vis.remove(s[j])
-                j += 1
-            vis.add(c)
-            ans = max(ans, i - j + 1)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -101,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func lengthOfLongestSubstring(s string) (ans int) {
@@ -137,42 +137,14 @@ func lengthOfLongestSubstring(s string) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {string} s
- * @return {number}
- */
-var lengthOfLongestSubstring = function (s) {
-    let ans = 0;
-    let vis = new Set();
-    for (let i = 0, j = 0; i < s.length; ++i) {
-        while (vis.has(s[i])) {
-            vis.delete(s[j++]);
-        }
-        vis.add(s[i]);
-        ans = Math.max(ans, i - j + 1);
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function lengthOfLongestSubstring(s: string): number {
     let ans = 0;
-    let vis = new Set<string>();
+    const vis = new Set<string>();
     for (let i = 0, j = 0; i < s.length; ++i) {
         while (vis.has(s[i])) {
             vis.delete(s[j++]);
@@ -184,7 +156,7 @@ function lengthOfLongestSubstring(s: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -207,6 +179,176 @@ impl Solution {
     }
 }
 ```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function (s) {
+    let ans = 0;
+    const vis = new Set();
+    for (let i = 0, j = 0; i < s.length; ++i) {
+        while (vis.has(s[i])) {
+            vis.delete(s[j++]);
+        }
+        vis.add(s[i]);
+        ans = Math.max(ans, i - j + 1);
+    }
+    return ans;
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int LengthOfLongestSubstring(string s) {
+        var vis = new HashSet<char>();
+        int ans = 0;
+        for (int i = 0, j = 0; i < s.Length; ++i) {
+            while (vis.Contains(s[i])) {
+                vis.Remove(s[j++]);
+            }
+            vis.Add(s[i]);
+            ans = Math.Max(ans, i - j + 1);
+        }
+        return ans;
+    }
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    func lengthOfLongestSubstring(_ s: String) -> Int {
+        var ans = 0
+        var j = 0
+        var vis = Set<Character>()
+        let sArray = Array(s)
+
+        for i in 0..<sArray.count {
+            while vis.contains(sArray[i]) {
+                vis.remove(sArray[j])
+                j += 1
+            }
+            vis.insert(sArray[i])
+            ans = max(ans, i - j + 1)
+        }
+
+        return ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        vis = set()
+        ans = j = 0
+        for i, c in enumerate(s):
+            while c in vis:
+                vis.remove(s[j])
+                j += 1
+            vis.add(c)
+            ans = max(ans, i - j + 1)
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        boolean[] ss = new boolean[128];
+        int ans = 0, j = 0;
+        int n = s.length();
+        for (int i = 0; i < n; ++i) {
+            char c = s.charAt(i);
+            while (ss[c]) {
+                ss[s.charAt(j++)] = false;
+            }
+            ans = Math.max(ans, i - j + 1);
+            ss[c] = true;
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        bool ss[128] = {false};
+        int n = s.size();
+        int ans = 0;
+        for (int i = 0, j = 0; i < n; ++i) {
+            while (ss[s[i]]) {
+                ss[s[j++]] = false;
+            }
+            ss[s[i]] = true;
+            ans = max(ans, i - j + 1);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func lengthOfLongestSubstring(s string) (ans int) {
+	ss := make([]bool, 128)
+	j := 0
+	for i, c := range s {
+		for ss[c] {
+			ss[s[j]] = false
+			j++
+		}
+		ss[c] = true
+		ans = max(ans, i-j+1)
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function lengthOfLongestSubstring(s: string): number {
+    let ans = 0;
+    const n = s.length;
+    const ss: boolean[] = new Array(128).fill(false);
+    for (let i = 0, j = 0; i < n; ++i) {
+        while (ss[s[i]]) {
+            ss[s[j++]] = false;
+        }
+        ss[s[i]] = true;
+        ans = Math.max(ans, i - j + 1);
+    }
+    return ans;
+}
+```
+
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -231,29 +373,8 @@ impl Solution {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int LengthOfLongestSubstring(string s) {
-        var vis = new HashSet<char>();
-        int ans = 0;
-        for (int i = 0, j = 0; i < s.Length; ++i) {
-            while (vis.Contains(s[i])) {
-                vis.Remove(s[j++]);
-            }
-            vis.Add(s[i]);
-            ans = Math.Max(ans, i - j + 1);
-        }
-        return ans;
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

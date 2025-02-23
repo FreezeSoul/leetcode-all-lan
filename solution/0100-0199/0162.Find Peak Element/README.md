@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0162.Find%20Peak%20Element/README.md
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [162. 寻找峰值](https://leetcode.cn/problems/find-peak-element)
 
 [English Version](/solution/0100-0199/0162.Find%20Peak%20Element/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>峰值元素是指其值严格大于左右相邻值的元素。</p>
 
@@ -42,17 +53,25 @@
 	<li>对于所有有效的 <code>i</code> 都有 <code>nums[i] != nums[i + 1]</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-二分查找。
+### 方法一：二分查找
+
+我们定义二分查找的左边界 $left=0$，右边界 $right=n-1$，其中 $n$ 是数组的长度。在每一步二分查找中，我们找到当前区间的中间元素 $mid$，然后比较 $mid$ 与其右边元素 $mid+1$ 的值：
+
+-   如果 $mid$ 的值大于 $mid+1$ 的值，则左侧存在峰值元素，我们将右边界 $right$ 更新为 $mid$；
+-   否则，右侧存在峰值元素，我们将左边界 $left$ 更新为 $mid+1$。
+-   最后，当左边界 $left$ 与右边界 $right$ 相等时，我们就找到了数组的峰值元素。
+
+时间复杂度 $O(\log n)$，其中 $n$ 是数组 $nums$ 的长度。每一步二分查找可以将搜索区间减少一半，因此时间复杂度为 $O(\log n)$。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +86,7 @@ class Solution:
         return left
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -88,42 +105,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function findPeakElement(nums: number[]): number {
-    let left = 0,
-        right = nums.length - 1;
-    while (left < right) {
-        let mid: number = (left + right) >> 1;
-        if (nums[mid] <= nums[mid + 1]) {
-            left = mid + 1;
-        } else {
-            right = mid;
-        }
-    }
-    return left;
-}
-```
-
-### **Go**
-
-```go
-func findPeakElement(nums []int) int {
-	left, right := 0, len(nums)-1
-	for left < right {
-		mid := (left + right) >> 1
-		if nums[mid] > nums[mid+1] {
-			right = mid
-		} else {
-			left = mid + 1
-		}
-	}
-	return left
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -143,10 +125,42 @@ public:
 };
 ```
 
-### **...**
+#### Go
 
+```go
+func findPeakElement(nums []int) int {
+	left, right := 0, len(nums)-1
+	for left < right {
+		mid := (left + right) >> 1
+		if nums[mid] > nums[mid+1] {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+	return left
+}
 ```
 
+#### TypeScript
+
+```ts
+function findPeakElement(nums: number[]): number {
+    let [left, right] = [0, nums.length - 1];
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (nums[mid] > nums[mid + 1]) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

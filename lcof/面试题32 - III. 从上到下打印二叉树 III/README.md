@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9832%20-%20III.%20%E4%BB%8E%E4%B8%8A%E5%88%B0%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91%20III/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 32 - III. 从上到下打印二叉树 III](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。</p>
 
@@ -33,9 +43,13 @@
 	<li><code>节点总数 &lt;= 1000</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：BFS**
+<!-- solution:start -->
+
+### 方法一：BFS
 
 为了实现锯齿形层序遍历，我们每次将当前层的节点添加到结果数组之前，先判断一下当前结果数组的长度，如果是奇数，就将当前层的节点反转一下。之后把当前层的节点添加到结果数组中即可。
 
@@ -43,7 +57,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -74,7 +88,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -116,7 +130,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -159,7 +173,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -199,44 +213,7 @@ func levelOrder(root *TreeNode) (ans [][]int) {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {number[][]}
- */
-var levelOrder = function (root) {
-    const ans = [];
-    if (!root) {
-        return ans;
-    }
-    const q = [root];
-    while (q.length) {
-        const t = [];
-        for (let n = q.length; n; --n) {
-            const { val, left, right } = q.shift();
-            t.push(val);
-            left && q.push(left);
-            right && q.push(right);
-        }
-        if (ans.length & 1) {
-            t.reverse();
-        }
-        ans.push(t);
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -276,7 +253,7 @@ function levelOrder(root: TreeNode | null): number[][] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -297,9 +274,9 @@ function levelOrder(root: TreeNode | null): number[][] {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::VecDeque;
+use std::rc::Rc;
 impl Solution {
     pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
         let mut res = Vec::new();
@@ -334,7 +311,44 @@ impl Solution {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function (root) {
+    const ans = [];
+    if (!root) {
+        return ans;
+    }
+    const q = [root];
+    while (q.length) {
+        const t = [];
+        for (let n = q.length; n; --n) {
+            const { val, left, right } = q.shift();
+            t.push(val);
+            left && q.push(left);
+            right && q.push(right);
+        }
+        if (ans.length & 1) {
+            t.reverse();
+        }
+        ans.push(t);
+    }
+    return ans;
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -376,10 +390,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

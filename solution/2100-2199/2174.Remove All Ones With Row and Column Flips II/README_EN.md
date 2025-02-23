@@ -1,8 +1,23 @@
-# [2174. Remove All Ones With Row and Column Flips II](https://leetcode.com/problems/remove-all-ones-with-row-and-column-flips-ii)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2174.Remove%20All%20Ones%20With%20Row%20and%20Column%20Flips%20II/README_EN.md
+tags:
+    - Bit Manipulation
+    - Breadth-First Search
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
+# [2174. Remove All Ones With Row and Column Flips II 🔒](https://leetcode.com/problems/remove-all-ones-with-row-and-column-flips-ii)
 
 [中文文档](/solution/2100-2199/2174.Remove%20All%20Ones%20With%20Row%20and%20Column%20Flips%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> <code>m x n</code> <strong>binary</strong> matrix <code>grid</code>.</p>
 
@@ -60,11 +75,17 @@ There are no 1&#39;s to remove so return 0.
 	<li><code>grid[i][j]</code> is either <code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -95,7 +116,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -146,7 +167,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,8 +179,8 @@ public:
             for (int j = 0; j < n; ++j)
                 if (grid[i][j])
                     state |= (1 << (i * n + j));
-        queue<int> q {{state}};
-        unordered_set<int> vis {{state}};
+        queue<int> q{{state}};
+        unordered_set<int> vis{{state}};
         int ans = 0;
         while (!q.empty()) {
             for (int k = q.size(); k > 0; --k) {
@@ -186,64 +207,56 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeOnes(grid [][]int) int {
-    m, n := len(grid), len(grid[0])
-    state := 0
-    for i, row := range grid {
-        for j, v := range row {
-            if v == 1 {
-                state |= 1 << (i * n + j)
-            }
-        }
-    }
-    q := []int{state}
-    vis := map[int]bool{state:true}
-    ans := 0
-    for len(q) > 0 {
-        for k := len(q); k > 0; k-- {
-            state = q[0]
-            if state == 0 {
-                return ans
-            }
-            q = q[1:]
-            for i, row := range grid {
-                for j, v := range row {
-                    if v == 0 {
-                        continue
-                    }
-                    nxt := state
-                    for r := 0; r < m; r++ {
-                        nxt &= ^(1 << (r * n + j))
-                    }
-                    for c := 0; c < n; c++ {
-                        nxt &= ^(1 << (i * n + c))
-                    }
-                    if !vis[nxt] {
-                        vis[nxt] = true
-                        q = append(q, nxt)
-                    }
-                }
-            }
-        }
-        ans++
-    }
-    return -1
+	m, n := len(grid), len(grid[0])
+	state := 0
+	for i, row := range grid {
+		for j, v := range row {
+			if v == 1 {
+				state |= 1 << (i*n + j)
+			}
+		}
+	}
+	q := []int{state}
+	vis := map[int]bool{state: true}
+	ans := 0
+	for len(q) > 0 {
+		for k := len(q); k > 0; k-- {
+			state = q[0]
+			if state == 0 {
+				return ans
+			}
+			q = q[1:]
+			for i, row := range grid {
+				for j, v := range row {
+					if v == 0 {
+						continue
+					}
+					nxt := state
+					for r := 0; r < m; r++ {
+						nxt &= ^(1 << (r*n + j))
+					}
+					for c := 0; c < n; c++ {
+						nxt &= ^(1 << (i*n + c))
+					}
+					if !vis[nxt] {
+						vis[nxt] = true
+						q = append(q, nxt)
+					}
+				}
+			}
+		}
+		ans++
+	}
+	return -1
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

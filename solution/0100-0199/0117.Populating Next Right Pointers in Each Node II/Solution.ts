@@ -15,21 +15,23 @@
  */
 
 function connect(root: Node | null): Node | null {
-    if (root == null) {
-        return root;
+    if (!root) {
+        return null;
     }
-    const queue = [root];
-    while (queue.length !== 0) {
-        const n = queue.length;
-        let pre = null;
-        for (let i = 0; i < n; i++) {
-            const node = queue.shift();
-            node.next = pre;
-            pre = node;
+    const q: Node[] = [root];
+    while (q.length) {
+        const nq: Node[] = [];
+        let p: Node | null = null;
+        for (const node of q) {
+            if (p) {
+                p.next = node;
+            }
+            p = node;
             const { left, right } = node;
-            right && queue.push(right);
-            left && queue.push(left);
+            left && nq.push(left);
+            right && nq.push(right);
         }
+        q.splice(0, q.length, ...nq);
     }
     return root;
 }

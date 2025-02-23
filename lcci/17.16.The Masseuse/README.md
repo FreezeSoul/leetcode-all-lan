@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.16.The%20Masseuse/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 17.16. 按摩师](https://leetcode.cn/problems/the-masseuse-lcci)
 
 [English Version](/lcci/17.16.The%20Masseuse/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。</p>
 
 <p><strong>注意：</strong>本题相对原题稍作改动</p>
@@ -32,11 +41,13 @@
 <strong>解释：</strong> 选择 1 号预约、 3 号预约、 5 号预约和 8 号预约，总时长 = 2 + 4 + 3 + 3 = 12。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义状态 $f[i]$ 表示考虑前 $i$ 个预约，且第 $i$ 个预约被接受的情况下，最长的预约时长；定义状态 $g[i]$ 表示考虑前 $i$ 个预约，且第 $i$ 个预约被拒绝的情况下，最长的预约时长。
 
@@ -57,9 +68,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,9 +79,7 @@ class Solution:
         return max(f, g)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +96,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -107,7 +114,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func massage(nums []int) int {
@@ -117,16 +124,9 @@ func massage(nums []int) int {
 	}
 	return max(f, g)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function massage(nums: number[]): number {
@@ -142,10 +142,28 @@ function massage(nums: number[]): number {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func massage(_ nums: [Int]) -> Int {
+        var f = 0
+        var g = 0
 
+        for x in nums {
+            let ff = g + x
+            let gg = max(f, g)
+            f = ff
+            g = gg
+        }
+
+        return max(f, g)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,23 +1,20 @@
 func minFallingPathSum(grid [][]int) int {
-	const inf = 1 << 30
-	f, g := 0, 0
-	fp := -1
+	f := make([]int, len(grid))
+	const inf = math.MaxInt32
 	for _, row := range grid {
-		ff, gg := inf, inf
-		ffp := -1
-		for j, v := range row {
-			s := f
-			if j == fp {
-				s = g
+		g := slices.Clone(row)
+		for i := range f {
+			t := inf
+			for j := range row {
+				if j != i {
+					t = min(t, f[j])
+				}
 			}
-			s += v
-			if s < ff {
-				ff, gg, ffp = s, ff, j
-			} else if s < gg {
-				gg = s
+			if t != inf {
+				g[i] += t
 			}
 		}
-		f, g, fp = ff, gg, ffp
+		f = g
 	}
-	return f
+	return slices.Min(f)
 }

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2437.Number%20of%20Valid%20Clock%20Times/README_EN.md
+rating: 1426
+source: Biweekly Contest 89 Q1
+tags:
+    - String
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [2437. Number of Valid Clock Times](https://leetcode.com/problems/number-of-valid-clock-times)
 
 [中文文档](/solution/2400-2499/2437.Number%20of%20Valid%20Clock%20Times/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string of length <code>5</code> called <code>time</code>, representing the current time on a digital clock in the format <code>&quot;hh:mm&quot;</code>. The <strong>earliest</strong> possible time is <code>&quot;00:00&quot;</code> and the <strong>latest</strong> possible time is <code>&quot;23:59&quot;</code>.</p>
 
@@ -45,11 +60,23 @@
 	<li>Some of the digits might be replaced with <code>&#39;?&#39;</code> and need to be replaced with digits from <code>0</code> to <code>9</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+We can directly enumerate all times from $00:00$ to $23:59$, then judge whether each time is valid, if so, increment the answer.
+
+After the enumeration ends, return the answer.
+
+The time complexity is $O(24 \times 60)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,24 +84,12 @@ class Solution:
         def check(s: str, t: str) -> bool:
             return all(a == b or b == '?' for a, b in zip(s, t))
 
-        return sum(check(f'{h:02d}:{m:02d}', time) for h in range(24) for m in range(60))
+        return sum(
+            check(f'{h:02d}:{m:02d}', time) for h in range(24) for m in range(60)
+        )
 ```
 
-```python
-class Solution:
-    def countTime(self, time: str) -> int:
-        def f(s: str, m: int) -> int:
-            cnt = 0
-            for i in range(m):
-                a = s[0] == '?' or (int(s[0]) == i // 10)
-                b = s[1] == '?' or (int(s[1]) == i % 10)
-                cnt += a and b
-            return cnt
-
-        return f(time[:2], 24) * f(time[3:], 60)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,25 +113,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countTime(String time) {
-        return f(time.substring(0, 2), 24) * f(time.substring(3), 60);
-    }
-
-    private int f(String s, int m) {
-        int cnt = 0;
-        for (int i = 0; i < m; ++i) {
-            boolean a = s.charAt(0) == '?' || s.charAt(0) - '0' == i / 10;
-            boolean b = s.charAt(1) == '?' || s.charAt(1) - '0' == i % 10;
-            cnt += a && b ? 1 : 0;
-        }
-        return cnt;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,25 +139,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int countTime(string time) {
-        auto f = [](string s, int m) {
-            int cnt = 0;
-            for (int i = 0; i < m; ++i) {
-                bool a = s[0] == '?' || s[0] - '0' == i / 10;
-                bool b = s[1] == '?' || s[1] - '0' == i % 10;
-                cnt += a && b;
-            }
-            return cnt;
-        };
-        return f(time.substr(0, 2), 24) * f(time.substr(3, 2), 60);
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countTime(time string) int {
@@ -182,23 +161,7 @@ func countTime(time string) int {
 }
 ```
 
-```go
-func countTime(time string) int {
-	f := func(s string, m int) (cnt int) {
-		for i := 0; i < m; i++ {
-			a := s[0] == '?' || int(s[0]-'0') == i/10
-			b := s[1] == '?' || int(s[1]-'0') == i%10
-			if a && b {
-				cnt++
-			}
-		}
-		return
-	}
-	return f(time[:2], 24) * f(time[3:], 60)
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countTime(time: string): number {
@@ -220,6 +183,125 @@ function countTime(time: string): number {
 }
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn count_time(time: String) -> i32 {
+        let mut ans = 0;
+
+        for i in 0..24 {
+            for j in 0..60 {
+                let mut ok = true;
+                let t = format!("{:02}:{:02}", i, j);
+
+                for (k, ch) in time.chars().enumerate() {
+                    if ch != '?' && ch != t.chars().nth(k).unwrap() {
+                        ok = false;
+                    }
+                }
+
+                if ok {
+                    ans += 1;
+                }
+            }
+        }
+
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Optimized Enumeration
+
+We can separately enumerate hours and minutes, count how many hours and minutes meet the condition, and then multiply them together.
+
+The time complexity is $O(24 + 60)$, and the space complexity is $O(1)$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countTime(self, time: str) -> int:
+        def f(s: str, m: int) -> int:
+            cnt = 0
+            for i in range(m):
+                a = s[0] == '?' or (int(s[0]) == i // 10)
+                b = s[1] == '?' or (int(s[1]) == i % 10)
+                cnt += a and b
+            return cnt
+
+        return f(time[:2], 24) * f(time[3:], 60)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countTime(String time) {
+        return f(time.substring(0, 2), 24) * f(time.substring(3), 60);
+    }
+
+    private int f(String s, int m) {
+        int cnt = 0;
+        for (int i = 0; i < m; ++i) {
+            boolean a = s.charAt(0) == '?' || s.charAt(0) - '0' == i / 10;
+            boolean b = s.charAt(1) == '?' || s.charAt(1) - '0' == i % 10;
+            cnt += a && b ? 1 : 0;
+        }
+        return cnt;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countTime(string time) {
+        auto f = [](string s, int m) {
+            int cnt = 0;
+            for (int i = 0; i < m; ++i) {
+                bool a = s[0] == '?' || s[0] - '0' == i / 10;
+                bool b = s[1] == '?' || s[1] - '0' == i % 10;
+                cnt += a && b;
+            }
+            return cnt;
+        };
+        return f(time.substr(0, 2), 24) * f(time.substr(3, 2), 60);
+    }
+};
+```
+
+#### Go
+
+```go
+func countTime(time string) int {
+	f := func(s string, m int) (cnt int) {
+		for i := 0; i < m; i++ {
+			a := s[0] == '?' || int(s[0]-'0') == i/10
+			b := s[1] == '?' || int(s[1]-'0') == i%10
+			if a && b {
+				cnt++
+			}
+		}
+		return
+	}
+	return f(time[:2], 24) * f(time[3:], 60)
+}
+```
+
+#### TypeScript
+
 ```ts
 function countTime(time: string): number {
     const f = (s: string, m: number): number => {
@@ -237,10 +319,36 @@ function countTime(time: string): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn count_time(time: String) -> i32 {
+        let f = |s: &str, m: usize| -> i32 {
+            let mut cnt = 0;
+            let first = s.chars().nth(0).unwrap();
+            let second = s.chars().nth(1).unwrap();
 
+            for i in 0..m {
+                let a = first == '?' || (first.to_digit(10).unwrap() as usize) == i / 10;
+
+                let b = second == '?' || (second.to_digit(10).unwrap() as usize) == i % 10;
+
+                if a && b {
+                    cnt += 1;
+                }
+            }
+
+            cnt
+        };
+
+        f(&time[..2], 24) * f(&time[3..], 60)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

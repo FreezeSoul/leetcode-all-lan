@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1943.Describe%20the%20Painting/README_EN.md
+rating: 1969
+source: Biweekly Contest 57 Q3
+tags:
+    - Array
+    - Hash Table
+    - Prefix Sum
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1943. Describe the Painting](https://leetcode.com/problems/describe-the-painting)
 
 [中文文档](/solution/1900-1999/1943.Describe%20the%20Painting/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a long and thin painting that can be represented by a number line. The painting was painted with multiple overlapping segments where each segment was painted with a <strong>unique</strong> color. You are given a 2D integer array <code>segments</code>, where <code>segments[i] = [start<sub>i</sub>, end<sub>i</sub>, color<sub>i</sub>]</code> represents the <strong>half-closed segment</strong> <code>[start<sub>i</sub>, end<sub>i</sub>)</code> with <code>color<sub>i</sub></code> as the color.</p>
 
@@ -76,11 +93,17 @@ Note that returning a single segment [1,7) is incorrect because the mixed color 
 	<li>Each <code>color<sub>i</sub></code> is distinct.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -96,7 +119,7 @@ class Solution:
         return [[s[i][0], s[i + 1][0], s[i][1]] for i in range(n - 1) if s[i][1]]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -127,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,10 +179,8 @@ public:
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

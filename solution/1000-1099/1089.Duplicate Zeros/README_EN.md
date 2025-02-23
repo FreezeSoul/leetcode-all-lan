@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1089.Duplicate%20Zeros/README_EN.md
+rating: 1262
+source: Weekly Contest 141 Q1
+tags:
+    - Array
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [1089. Duplicate Zeros](https://leetcode.com/problems/duplicate-zeros)
 
 [中文文档](/solution/1000-1099/1089.Duplicate%20Zeros/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a fixed-length integer array <code>arr</code>, duplicate each occurrence of zero, shifting the remaining elements to the right.</p>
 
@@ -33,11 +48,17 @@
 	<li><code>0 &lt;= arr[i] &lt;= 9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +84,7 @@ class Solution:
             i, j = i - 1, j - 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func duplicateZeros(arr []int) {
@@ -146,36 +167,7 @@ func duplicateZeros(arr []int) {
 }
 ```
 
-### **C**
-
-```c
-void duplicateZeros(int* arr, int arrSize){
-    int i = 0;
-    int j = 0;
-    while (j < arrSize) {
-        if (arr[i] == 0) {
-            j++;
-        }
-        i++;
-        j++;
-    }
-    i--;
-    j--;
-    while (i >= 0) {
-        if (arr[i] == 0) {
-            if (j < arrSize) {
-                arr[j] = arr[i];
-            }
-            j--;
-        }
-        arr[j] = arr[i];
-        i--;
-        j--;
-    }
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -205,10 +197,37 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+void duplicateZeros(int* arr, int arrSize) {
+    int i = 0;
+    int j = 0;
+    while (j < arrSize) {
+        if (arr[i] == 0) {
+            j++;
+        }
+        i++;
+        j++;
+    }
+    i--;
+    j--;
+    while (i >= 0) {
+        if (arr[i] == 0) {
+            if (j < arrSize) {
+                arr[j] = arr[i];
+            }
+            j--;
+        }
+        arr[j] = arr[i];
+        i--;
+        j--;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

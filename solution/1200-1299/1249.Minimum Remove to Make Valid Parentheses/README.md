@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1249.Minimum%20Remove%20to%20Make%20Valid%20Parentheses/README.md
+rating: 1657
+source: 第 161 场周赛 Q3
+tags:
+    - 栈
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1249. 移除无效的括号](https://leetcode.cn/problems/minimum-remove-to-make-valid-parentheses)
 
 [English Version](/solution/1200-1299/1249.Minimum%20Remove%20to%20Make%20Valid%20Parentheses/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由 <code>'('</code>、<code>')'</code> 和小写字母组成的字符串 <code>s</code>。</p>
 
@@ -54,26 +67,26 @@
 	<li><code>s[i]</code>&nbsp;可能是&nbsp;<code>'('</code>、<code>')'</code>&nbsp;或英文小写字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：两遍扫描**
+### 方法一：两遍扫描
 
-先从左向右扫描，将多余的右括号删除，再从右向左扫描，将多余的左括号删除。
+我们先从左向右扫描，将多余的右括号删除，再从右向左扫描，将多余的左括号删除。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是字符串 $s$ 的长度。
 
 相似题目：
 
--   [678. 有效的括号字符串](/solution/0600-0699/0678.Valid%20Parenthesis%20String/README.md)
--   [2116. 判断一个括号字符串是否有效](/solution/2100-2199/2116.Check%20if%20a%20Parentheses%20String%20Can%20Be%20Valid/README.md)
+-   [678. 有效的括号字符串](https://github.com/doocs/leetcode/blob/main/solution/0600-0699/0678.Valid%20Parenthesis%20String/README.md)
+-   [2116. 判断一个括号字符串是否有效](https://github.com/doocs/leetcode/blob/main/solution/2100-2199/2116.Check%20if%20a%20Parentheses%20String%20Can%20Be%20Valid/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -101,9 +114,7 @@ class Solution:
         return ''.join(ans[::-1])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -141,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -151,8 +162,10 @@ public:
         int x = 0;
         for (char& c : s) {
             if (c == ')' && x == 0) continue;
-            if (c == '(') ++x;
-            else if (c == ')') --x;
+            if (c == '(')
+                ++x;
+            else if (c == ')')
+                --x;
             stk.push_back(c);
         }
         string ans;
@@ -161,8 +174,10 @@ public:
             char c = stk.back();
             stk.pop_back();
             if (c == '(' && x == 0) continue;
-            if (c == ')') ++x;
-            else if (c == '(') --x;
+            if (c == ')')
+                ++x;
+            else if (c == '(')
+                --x;
             ans.push_back(c);
         }
         reverse(ans.begin(), ans.end());
@@ -171,7 +186,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minRemoveToMakeValid(s string) string {
@@ -210,7 +225,7 @@ func minRemoveToMakeValid(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minRemoveToMakeValid(s: string): string {
@@ -248,7 +263,7 @@ function minRemoveToMakeValid(s: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -259,8 +274,12 @@ impl Solution {
             let mut right = 0;
             for c in bs.iter() {
                 match c {
-                    &b'(' => left += 1,
-                    &b')' if right < left => right += 1,
+                    &b'(' => {
+                        left += 1;
+                    }
+                    &b')' if right < left => {
+                        right += 1;
+                    }
                     _ => {}
                 }
             }
@@ -293,10 +312,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

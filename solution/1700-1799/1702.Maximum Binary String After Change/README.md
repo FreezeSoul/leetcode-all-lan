@@ -1,15 +1,29 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1702.Maximum%20Binary%20String%20After%20Change/README.md
+rating: 1825
+source: 第 42 场双周赛 Q3
+tags:
+    - 贪心
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1702. 修改后的最大二进制字符串](https://leetcode.cn/problems/maximum-binary-string-after-change)
 
 [English Version](/solution/1700-1799/1702.Maximum%20Binary%20String%20After%20Change/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二进制字符串 <code>binary</code> ，它仅有 <code>0</code> 或者 <code>1</code> 组成。你可以使用下面的操作任意次对它进行修改：</p>
 
 <ul>
 	<li>操作 1 ：如果二进制串包含子字符串 <code>"00"</code> ，你可以用 <code>"10"</code> 将其替换。
+
     <ul>
     	<li>比方说， <code>"<strong>00</strong>010" -> "<strong>10</strong>010"</code></li>
     </ul>
@@ -19,6 +33,7 @@
     	<li>比方说， <code>"000<strong>10</strong>" -> "000<strong>01</strong>"</code></li>
     </ul>
     </li>
+
 </ul>
 
 <p>请你返回执行上述操作任意次以后能得到的 <strong>最大二进制字符串</strong> 。如果二进制字符串 <code>x</code> 对应的十进制数字大于二进制字符串 <code>y</code> 对应的十进制数字，那么我们称二进制字符串<em> </em><code>x</code><em> </em>大于二进制字符串<em> </em><code>y</code><em> </em>。</p>
@@ -55,23 +70,25 @@
 	<li><code>binary</code> 仅包含 <code>'0'</code> 和 <code>'1'</code> 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：脑筋急转弯**
+### 方法一：脑筋急转弯
 
-我们观察发现，操作 2 可以把所有的 $1$ 都移动到字符串的末尾，而操作 1 可以把所有的 `0000..000` 串变为 `111..110`。
+我们观察发现，操作 $2$ 可以把所有的 $1$ 都移动到字符串的末尾，而操作 $1$ 可以把所有的 `0000..000` 串变为 `111..110`。
 
-因此，要想得到最大的二进制串，我们应该把所有不在开头的 $1$ 移动到字符串末尾，使得字符串变为 `111..11...00..11` 的形式，然后借助操作 1 把中间的 `000..00` 变为 `111..10`。这样我们最终可以得到一个最多包含一个 $0$ 的二进制字符串，这个字符串就是我们要求的最大二进制串。
+因此，要想得到最大的二进制串，我们应该把所有不在开头的 $1$ 移动到字符串末尾，使得字符串变为 `111..11...000..00..11` 的形式，然后借助操作 $1$ 把中间的 `000..00` 变为 `111..10`。这样我们最终可以得到一个最多包含一个 $0$ 的二进制字符串，这个字符串就是我们要求的最大二进制串。
 
-时间复杂度 $O(n)$，忽略答案的空间消耗，空间复杂度 $O(1)$。其中 $n$ 为字符串 `binary` 的长度。
+在代码实现上，我们首先判断字符串是否包含 $0$，如果不包含，直接返回原字符串。否则，我们找到第一个 $0$ 的位置 $k$，加上该位置之后的 $0$ 的个数，得到的就是修改后的字符串的 $0$ 所在的位置，其余位置都是 $1$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是字符串的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,13 +96,11 @@ class Solution:
         k = binary.find('0')
         if k == -1:
             return binary
-        k += binary[k + 1:].count('0')
+        k += binary[k + 1 :].count('0')
         return '1' * k + '0' + '1' * (len(binary) - k - 1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,14 +123,16 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string maximumBinaryString(string binary) {
         int k = binary.find('0');
-        if (k == binary.npos) return binary;
+        if (k == binary.npos) {
+            return binary;
+        }
         int n = binary.size();
         for (int i = k + 1; i < n; ++i) {
             if (binary[i] == '0') {
@@ -127,7 +144,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumBinaryString(binary string) string {
@@ -149,10 +166,55 @@ func maximumBinaryString(binary string) string {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function maximumBinaryString(binary: string): string {
+    let k = binary.indexOf('0');
+    if (k === -1) {
+        return binary;
+    }
+    k += binary.slice(k + 1).split('0').length - 1;
+    return '1'.repeat(k) + '0' + '1'.repeat(binary.length - k - 1);
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn maximum_binary_string(binary: String) -> String {
+        if let Some(k) = binary.find('0') {
+            let k = k + binary[k + 1..].chars().filter(|&c| c == '0').count();
+            return format!(
+                "{}{}{}",
+                "1".repeat(k),
+                "0",
+                "1".repeat(binary.len() - k - 1)
+            );
+        }
+        binary
+    }
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public string MaximumBinaryString(string binary) {
+        int k = binary.IndexOf('0');
+        if (k == -1) {
+            return binary;
+        }
+        k += binary.Substring(k + 1).Count(c => c == '0');
+        return new string('1', k) + '0' + new string('1', binary.Length - k - 1);
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1117.Building%20H2O/README_EN.md
+tags:
+    - Concurrency
+---
+
+<!-- problem:start -->
+
 # [1117. Building H2O](https://leetcode.com/problems/building-h2o)
 
 [中文文档](/solution/1100-1199/1117.Building%20H2O/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are two kinds of threads: <code>oxygen</code> and <code>hydrogen</code>. Your goal is to group these threads to form water molecules.</p>
 
@@ -47,11 +59,17 @@
 	<li>There will be exactly <code>n</code> <code>&#39;O&#39;</code> in <code>water</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 from threading import Semaphore
@@ -76,7 +94,7 @@ class H2O:
         self.h.release(2)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class H2O {
@@ -102,7 +120,7 @@ class H2O {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 #include <semaphore.h>
@@ -140,10 +158,8 @@ public:
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

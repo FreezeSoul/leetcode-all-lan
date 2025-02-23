@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0934.Shortest%20Bridge/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [934. Shortest Bridge](https://leetcode.com/problems/shortest-bridge)
 
 [中文文档](/solution/0900-0999/0934.Shortest%20Bridge/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an <code>n x n</code> binary matrix <code>grid</code> where <code>1</code> represents land and <code>0</code> represents water.</p>
 
@@ -44,13 +59,17 @@
 	<li>There are exactly two islands in <code>grid</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS & BFS.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -83,7 +102,7 @@ class Solution:
             ans += 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -138,7 +157,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -189,7 +208,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestBridge(grid [][]int) (ans int) {
@@ -239,10 +258,8 @@ func shortestBridge(grid [][]int) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

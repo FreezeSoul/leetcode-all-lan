@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2571.Minimum%20Operations%20to%20Reduce%20an%20Integer%20to%200/README.md
+rating: 1649
+source: 第 333 场周赛 Q2
+tags:
+    - 贪心
+    - 位运算
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2571. 将整数减少到零需要的最少操作数](https://leetcode.cn/problems/minimum-operations-to-reduce-an-integer-to-0)
 
 [English Version](/solution/2500-2599/2571.Minimum%20Operations%20to%20Reduce%20an%20Integer%20to%200/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数 <code>n</code> ，你可以执行下述操作 <strong>任意</strong> 次：</p>
 
@@ -50,11 +64,13 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 位运算**
+### 方法一：贪心 + 位运算
 
 我们将整数 $n$ 转换为二进制，从最低位开始：
 
@@ -67,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +103,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -134,7 +146,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minOperations(n int) (ans int) {
@@ -160,10 +172,30 @@ func minOperations(n int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minOperations(n: number): number {
+    let [ans, cnt] = [0, 0];
+    for (; n; n >>= 1) {
+        if (n & 1) {
+            ++cnt;
+        } else if (cnt) {
+            ++ans;
+            cnt = cnt === 1 ? 0 : 1;
+        }
+    }
+    if (cnt === 1) {
+        ++ans;
+    } else if (cnt > 1) {
+        ans += 2;
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

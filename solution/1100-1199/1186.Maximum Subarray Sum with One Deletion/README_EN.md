@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1186.Maximum%20Subarray%20Sum%20with%20One%20Deletion/README_EN.md
+rating: 1799
+source: Weekly Contest 153 Q3
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1186. Maximum Subarray Sum with One Deletion](https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion)
 
 [中文文档](/solution/1100-1199/1186.Maximum%20Subarray%20Sum%20with%20One%20Deletion/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of integers, return the maximum sum for a <strong>non-empty</strong>&nbsp;subarray (contiguous elements) with at most one element deletion.&nbsp;In other words, you want to choose a subarray and optionally delete one element from it so that there is still at least one element left and the&nbsp;sum of the remaining elements is maximum possible.</p>
 
@@ -40,11 +55,23 @@
 	<li><code>-10<sup>4</sup> &lt;= arr[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Preprocessing + Enumeration
+
+We can preprocess the array $\textit{arr}$ to find the maximum subarray sum ending and starting with each element, storing them in arrays $\textit{left}$ and $\textit{right}$, respectively.
+
+If we do not delete any element, then the maximum subarray sum is the maximum value in $\textit{left}[i]$ or $\textit{right}[i]$; if we delete an element, we can enumerate each position $i$ in $[1..n-2]$, calculate the value of $\textit{left}[i-1] + \textit{right}[i+1]$, and take the maximum value.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{arr}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,7 +93,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,44 +145,36 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumSum(arr []int) int {
 	n := len(arr)
 	left := make([]int, n)
 	right := make([]int, n)
-	ans := -(1 << 30)
 	for i, s := 0, 0; i < n; i++ {
 		s = max(s, 0) + arr[i]
 		left[i] = s
-		ans = max(ans, s)
 	}
 	for i, s := n-1, 0; i >= 0; i-- {
 		s = max(s, 0) + arr[i]
 		right[i] = s
 	}
+	ans := slices.Max(left)
 	for i := 1; i < n-1; i++ {
 		ans = max(ans, left[i-1]+right[i+1])
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumSum(arr: number[]): number {
     const n = arr.length;
-    const left: number[] = new Array(n);
-    const right: number[] = new Array(n);
+    const left: number[] = Array(n).fill(0);
+    const right: number[] = Array(n).fill(0);
     for (let i = 0, s = 0; i < n; ++i) {
         s = Math.max(s, 0) + arr[i];
         left[i] = s;
@@ -172,10 +191,35 @@ function maximumSum(arr: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn maximum_sum(arr: Vec<i32>) -> i32 {
+        let n = arr.len();
+        let mut left = vec![0; n];
+        let mut right = vec![0; n];
+        let mut s = 0;
+        for i in 0..n {
+            s = (s.max(0)) + arr[i];
+            left[i] = s;
+        }
+        s = 0;
+        for i in (0..n).rev() {
+            s = (s.max(0)) + arr[i];
+            right[i] = s;
+        }
+        let mut ans = *left.iter().max().unwrap();
+        for i in 1..n - 1 {
+            ans = ans.max(left[i - 1] + right[i + 1]);
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

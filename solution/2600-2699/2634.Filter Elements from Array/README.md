@@ -1,16 +1,33 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2634.Filter%20Elements%20from%20Array/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2634. 过滤数组中的元素](https://leetcode.cn/problems/filter-elements-from-array)
 
 [English Version](/solution/2600-2699/2634.Filter%20Elements%20from%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>请你编写一个函数，该函数接受一个整数数组参数 <code>arr</code> 和一个过滤函数 <code>fn</code>，并返回一个过滤后元素数量较少或元素数量相等的新数组。</p>
+<p>给定一个整数数组&nbsp;<code>arr</code> 和一个过滤函数 <code>fn</code>，并返回一个过滤后的数组 <code>filteredArr</code> 。</p>
 
-<p>返回的数组应该只包含通过过滤函数&nbsp;<code>fn(arr[i]， i)</code> 计算后为真值的元素。</p>
+<p><code>fn</code> 函数接受一个或两个参数：</p>
 
-<p>请你在不使用内置函数&nbsp;<code>Array.filter</code>&nbsp;的前提下解决该问题。</p>
+<ul>
+	<li><code>arr[i]</code> - <code>arr</code> 中的数字</li>
+	<li><code>i</code> - <code>arr[i]</code> 的索引</li>
+</ul>
+
+<p><code>filteredArr</code> 应该只包含使表达式 <code>fn(arr[i], i)</code> 的值为 <strong>真值</strong> 的 <code>arr</code> 中的元素。<strong>真值</strong> 是指 <code>Boolean(value)</code>&nbsp;返回参数为&nbsp;<code>true</code> 的值。</p>
+
+<p>请在不使用内置的 <code>Array.filter</code> 方法的情况下解决该问题。</p>
 
 <p>&nbsp;</p>
 
@@ -51,11 +68,13 @@ const newArray = filter(arr, fn); // [20, 30]
 	<li><code><font face="monospace">-10<sup>9</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>9</sup></font></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：遍历**
+### 方法一：遍历
 
 我们遍历数组 $arr$，对于每个元素 $arr[i]$，如果 $fn(arr[i], i)$ 为真，则将其加入答案数组中。最后返回答案数组即可。
 
@@ -63,9 +82,7 @@ const newArray = filter(arr, fn); // [20, 30]
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 function filter(arr: number[], fn: (n: number, i: number) => any): number[] {
@@ -79,10 +96,8 @@ function filter(arr: number[], fn: (n: number, i: number) => any): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

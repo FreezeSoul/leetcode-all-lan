@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1694.Reformat%20Phone%20Number/README.md
+rating: 1321
+source: 第 220 场周赛 Q1
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1694. 重新格式化电话号码](https://leetcode.cn/problems/reformat-phone-number)
 
 [English Version](/solution/1600-1699/1694.Reformat%20Phone%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串形式的电话号码 <code>number</code> 。<code>number</code> 由数字、空格 <code>' '</code>、和破折号 <code>'-'</code> 组成。</p>
 
@@ -83,13 +95,15 @@
 	<li><code>number</code> 中至少含 <strong>2</strong> 个数字。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：简单模拟**
+### 方法一：简单模拟
 
-先按照题意，去除字符串中的所有空格和破折号。
+我们先按照题意，去除字符串中的所有空格和破折号。
 
 记当前字符串长度为 $n$，然后从前往后遍历字符串，每 $3$ 个字符为一组，将其加入结果字符串中，共取 $n / 3$ 组。
 
@@ -101,9 +115,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -119,9 +131,7 @@ class Solution:
         return "-".join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -143,7 +153,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -177,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func reformatNumber(number string) string {
@@ -198,7 +208,7 @@ func reformatNumber(number string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function reformatNumber(number: string): string {
@@ -206,10 +216,7 @@ function reformatNumber(number: string): string {
     const n = cs.length;
     return cs
         .map((v, i) => {
-            if (
-                ((i + 1) % 3 === 0 && i < n - 2) ||
-                (n % 3 === 1 && n - 3 === i)
-            ) {
+            if (((i + 1) % 3 === 0 && i < n - 2) || (n % 3 === 1 && n - 3 === i)) {
                 return v + '-';
             }
             return v;
@@ -218,7 +225,7 @@ function reformatNumber(number: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -228,7 +235,7 @@ impl Solution {
         cs.iter()
             .enumerate()
             .map(|(i, c)| {
-                if (i + 1) % 3 == 0 && i < n - 2 || n % 3 == 1 && i == n - 3 {
+                if ((i + 1) % 3 == 0 && i < n - 2) || (n % 3 == 1 && i == n - 3) {
                     return c.to_string() + &"-";
                 }
                 c.to_string()
@@ -238,10 +245,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

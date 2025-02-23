@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2161.Partition%20Array%20According%20to%20Given%20Pivot/README_EN.md
+rating: 1337
+source: Biweekly Contest 71 Q2
+tags:
+    - Array
+    - Two Pointers
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2161. Partition Array According to Given Pivot](https://leetcode.com/problems/partition-array-according-to-given-pivot)
 
 [中文文档](/solution/2100-2199/2161.Partition%20Array%20According%20to%20Given%20Pivot/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code> and an integer <code>pivot</code>. Rearrange <code>nums</code> such that the following conditions are satisfied:</p>
 
@@ -11,7 +27,7 @@
 	<li>Every element equal to <code>pivot</code> appears <strong>in between</strong> the elements less than and greater than <code>pivot</code>.</li>
 	<li>The <strong>relative order</strong> of the elements less than <code>pivot</code> and the elements greater than <code>pivot</code> is maintained.
 	<ul>
-		<li>More formally, consider every <code>p<sub>i</sub></code>, <code>p<sub>j</sub></code> where <code>p<sub>i</sub></code> is the new position of the <code>i<sup>th</sup></code> element and <code>p<sub>j</sub></code> is the new position of the <code>j<sup>th</sup></code> element. For elements less than <code>pivot</code>, if <code>i &lt; j</code> and <code>nums[i] &lt; pivot</code> and <code>nums[j] &lt; pivot</code>, then <code>p<sub>i</sub> &lt; p<sub>j</sub></code>. Similarly for elements greater than <code>pivot</code>, if <code>i &lt; j</code> and <code>nums[i] &gt; pivot</code> and <code>nums[j] &gt; pivot</code>, then <code>p<sub>i</sub> &lt; p<sub>j</sub></code>.</li>
+		<li>More formally, consider every <code>p<sub>i</sub></code>, <code>p<sub>j</sub></code> where <code>p<sub>i</sub></code> is the new position of the <code>i<sup>th</sup></code> element and <code>p<sub>j</sub></code> is the new position of the <code>j<sup>th</sup></code> element. If <code>i &lt; j</code> and <strong>both</strong> elements are smaller (<em>or larger</em>) than <code>pivot</code>, then <code>p<sub>i</sub> &lt; p<sub>j</sub></code>.</li>
 	</ul>
 	</li>
 </ul>
@@ -50,11 +66,21 @@ The relative ordering of the elements less than and greater than pivot is also m
 	<li><code>pivot</code> equals to an element of <code>nums</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can traverse the array $\textit{nums}$, sequentially finding all elements less than $\textit{pivot}$, all elements equal to $\textit{pivot}$, and all elements greater than $\textit{pivot}$, then concatenate them in the order required by the problem.
+
+Time complexity $O(n)$, where $n$ is the length of the array $\textit{nums}$. Ignoring the space consumption of the answer array, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +96,7 @@ class Solution:
         return a + b + c
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,25 +124,34 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> pivotArray(vector<int>& nums, int pivot) {
         vector<int> ans;
-        for (int& x : nums)
-            if (x < pivot) ans.push_back(x);
-        for (int& x : nums)
-            if (x == pivot) ans.push_back(x);
-        for (int& x : nums)
-            if (x > pivot) ans.push_back(x);
+        for (int& x : nums) {
+            if (x < pivot) {
+                ans.push_back(x);
+            }
+        }
+        for (int& x : nums) {
+            if (x == pivot) {
+                ans.push_back(x);
+            }
+        }
+        for (int& x : nums) {
+            if (x > pivot) {
+                ans.push_back(x);
+            }
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pivotArray(nums []int, pivot int) []int {
@@ -140,16 +175,32 @@ func pivotArray(nums []int, pivot int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
+function pivotArray(nums: number[], pivot: number): number[] {
+    const ans: number[] = [];
+    for (const x of nums) {
+        if (x < pivot) {
+            ans.push(x);
+        }
+    }
+    for (const x of nums) {
+        if (x === pivot) {
+            ans.push(x);
+        }
+    }
+    for (const x of nums) {
+        if (x > pivot) {
+            ans.push(x);
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

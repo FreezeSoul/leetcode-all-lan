@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2678.Number%20of%20Senior%20Citizens/README_EN.md
+rating: 1198
+source: Biweekly Contest 104 Q1
+tags:
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
 # [2678. Number of Senior Citizens](https://leetcode.com/problems/number-of-senior-citizens)
 
 [中文文档](/solution/2600-2699/2678.Number%20of%20Senior%20Citizens/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array of strings <code>details</code>. Each element of <code>details</code> provides information about a given passenger compressed into a string of length <code>15</code>. The system is such that:</p>
 
@@ -43,11 +58,23 @@
 	<li>The phone numbers and seat numbers of the passengers are distinct.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Traversal and Counting
+
+We can traverse each string $x$ in `details` and convert the $12$th and $13$th characters (indexed at $11$ and $12$) of $x$ to integers, and check if they are greater than $60$. If so, we add one to the answer.
+
+After the traversal, we return the answer.
+
+The time complexity is $O(n)$, where $n$ is the length of `details`. The space complexity is $O(1)`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +82,7 @@ class Solution:
         return sum(int(x[11:13]) > 60 for x in details)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -88,7 +115,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countSeniors(details []string) (ans int) {
@@ -102,10 +129,30 @@ func countSeniors(details []string) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function countSeniors(details: string[]): number {
+    return details.filter(x => +x.slice(11, 13) > 60).length;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn count_seniors(details: Vec<String>) -> i32 {
+        details
+            .iter()
+            .filter_map(|s| s[11..13].parse::<i32>().ok())
+            .filter(|&age| age > 60)
+            .count() as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

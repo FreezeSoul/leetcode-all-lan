@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2685.Count%20the%20Number%20of%20Complete%20Components/README.md
+rating: 1769
+source: 第 345 场周赛 Q4
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 并查集
+    - 图
+---
+
+<!-- problem:start -->
+
 # [2685. 统计完全连通分量的数量](https://leetcode.cn/problems/count-the-number-of-complete-components)
 
 [English Version](/solution/2600-2699/2685.Count%20the%20Number%20of%20Complete%20Components/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>n</code> 。现有一个包含 <code>n</code> 个顶点的 <strong>无向</strong> 图，顶点按从 <code>0</code> 到 <code>n - 1</code> 编号。给你一个二维整数数组 <code>edges</code> 其中 <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> 表示顶点 <code>a<sub>i</sub></code> 和 <code>b<sub>i</sub></code> 之间存在一条 <strong>无向</strong> 边。</p>
 
@@ -51,11 +66,13 @@
 	<li>不存在重复的边</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们先根据题目给定的边建立一个邻接表 $g$，其中 $g[i]$ 表示顶点 $i$ 的邻接点集合。
 
@@ -67,9 +84,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -97,9 +112,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -142,7 +155,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -182,7 +195,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countCompleteComponents(n int, edges [][]int) (ans int) {
@@ -218,10 +231,65 @@ func countCompleteComponents(n int, edges [][]int) (ans int) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二：取巧做法
+
+要解决的问题：
+
+1. 如何保存每一个节点与其它点联通状态
+2. 如何判断多个点是否是一个联通图
+
+对于第一点：实际上就是保存了当前到每个点的联通点集合（包括自己），方便后续判等。
+第二点：有了第一点之后，如果是连通图中的点就有：
+
+1. 此点包含此联通图中所有的点（包括自己）
+2. 并且只包含此联通图中的点
+
+拿示例一举例：
+
+-   5 包含的联通点有且只有自己，所以是连通图
+-   0 包含 0、1、2，同理 1、2 点也是
+-   3 和 4 也是包含自己和彼此
+-   基于以上就有以下代码实现：
+
+<!-- tabs:start -->
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countCompleteComponents(int n, vector<vector<int>>& edges) {
+        int ans = 0;
+        vector<set<int>> m(n + 1, set<int>());
+        for (int i = 0; i < n; i++) {
+            m[i].insert(i);
+        }
+        for (auto x : edges) {
+            m[x[0]].insert(x[1]);
+            m[x[1]].insert(x[0]);
+        }
+        map<set<int>, int> s;
+        for (int i = 0; i < n; i++) {
+            s[m[i]]++;
+        }
+        for (auto& [x, y] : s) {
+            if (y == x.size()) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

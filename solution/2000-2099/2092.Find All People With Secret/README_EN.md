@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2092.Find%20All%20People%20With%20Secret/README_EN.md
+rating: 2003
+source: Weekly Contest 269 Q4
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Union Find
+    - Graph
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2092. Find All People With Secret](https://leetcode.com/problems/find-all-people-with-secret)
 
 [中文文档](/solution/2000-2099/2092.Find%20All%20People%20With%20Secret/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code> indicating there are <code>n</code> people numbered from <code>0</code> to <code>n - 1</code>. You are also given a <strong>0-indexed</strong> 2D integer array <code>meetings</code> where <code>meetings[i] = [x<sub>i</sub>, y<sub>i</sub>, time<sub>i</sub>]</code> indicates that person <code>x<sub>i</sub></code> and person <code>y<sub>i</sub></code> have a meeting at <code>time<sub>i</sub></code>. A person may attend <strong>multiple meetings</strong> at the same time. Finally, you are given an integer <code>firstPerson</code>.</p>
 
@@ -64,13 +82,17 @@ Thus, people 0, 1, 2, 3, and 4 know the secret after all the meetings.
 	<li><code>1 &lt;= firstPerson &lt;= n - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-BFS.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -102,7 +124,7 @@ class Solution:
         return [i for i, v in enumerate(vis) if v]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -153,7 +175,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -202,7 +224,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findAllPeople(n int, meetings [][]int, firstPerson int) []int {
@@ -251,14 +273,10 @@ func findAllPeople(n int, meetings [][]int, firstPerson int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function findAllPeople(
-    n: number,
-    meetings: number[][],
-    firstPerson: number,
-): number[] {
+function findAllPeople(n: number, meetings: number[][], firstPerson: number): number[] {
     let parent: Array<number> = Array.from({ length: n + 1 }, (v, i) => i);
     parent[firstPerson] = 0;
 
@@ -308,10 +326,8 @@ function findAllPeople(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

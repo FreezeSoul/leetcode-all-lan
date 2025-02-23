@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1832.Check%20if%20the%20Sentence%20Is%20Pangram/README_EN.md
+rating: 1166
+source: Weekly Contest 237 Q1
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [1832. Check if the Sentence Is Pangram](https://leetcode.com/problems/check-if-the-sentence-is-pangram)
 
 [中文文档](/solution/1800-1899/1832.Check%20if%20the%20Sentence%20Is%20Pangram/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>pangram</strong> is a sentence where every letter of the English alphabet appears at least once.</p>
 
@@ -32,11 +47,21 @@
 	<li><code>sentence</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Array or Hash Table
+
+Traverse the string `sentence`, use an array or hash table to record the letters that have appeared, and finally check whether there are $26$ letters in the array or hash table.
+
+The time complexity is $O(n)$, and the space complexity is $O(C)$. Where $n$ is the length of the string `sentence`, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -44,16 +69,7 @@ class Solution:
         return len(set(sentence)) == 26
 ```
 
-```python
-class Solution:
-    def checkIfPangram(self, sentence: str) -> bool:
-        mask = 0
-        for c in sentence:
-            mask |= 1 << (ord(c) - ord('a'))
-        return mask == (1 << 26) - 1
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -72,19 +88,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean checkIfPangram(String sentence) {
-        int mask = 0;
-        for (int i = 0; i < sentence.length(); ++i) {
-            mask |= 1 << (sentence.charAt(i) - 'a');
-        }
-        return mask == (1 << 26) - 1;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -92,24 +96,14 @@ public:
     bool checkIfPangram(string sentence) {
         int vis[26] = {0};
         for (char& c : sentence) vis[c - 'a'] = 1;
-        for (int& v : vis) if (!v) return false;
+        for (int& v : vis)
+            if (!v) return false;
         return true;
     }
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool checkIfPangram(string sentence) {
-        int mask = 0;
-        for (char& c : sentence) mask |= 1 << (c - 'a');
-        return mask == (1 << 26) - 1;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func checkIfPangram(sentence string) bool {
@@ -126,17 +120,7 @@ func checkIfPangram(sentence string) bool {
 }
 ```
 
-```go
-func checkIfPangram(sentence string) bool {
-	mask := 0
-	for _, c := range sentence {
-		mask |= 1 << int(c-'a')
-	}
-	return mask == 1<<26-1
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function checkIfPangram(sentence: string): boolean {
@@ -148,17 +132,7 @@ function checkIfPangram(sentence: string): boolean {
 }
 ```
 
-```ts
-function checkIfPangram(sentence: string): boolean {
-    let mark = 0;
-    for (const c of sentence) {
-        mark |= 1 << (c.charCodeAt(0) - 'a'.charCodeAt(0));
-    }
-    return mark === (1 << 26) - 1;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -172,22 +146,10 @@ impl Solution {
 }
 ```
 
-```rust
-impl Solution {
-    pub fn check_if_pangram(sentence: String) -> bool {
-        let mut mark = 0;
-        for c in sentence.as_bytes() {
-            mark |= 1 << *c - b'a';
-        }
-        mark == (1 << 26) - 1
-    }
-}
-```
-
-### **C**
+#### C
 
 ```c
-bool checkIfPangram(char *sentence) {
+bool checkIfPangram(char* sentence) {
     int vis[26] = {0};
     for (int i = 0; sentence[i]; i++) {
         vis[sentence[i] - 'a'] = 1;
@@ -201,8 +163,102 @@ bool checkIfPangram(char *sentence) {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Bit Manipulation
+
+We can also use an integer $mask$ to record the letters that have appeared, where the $i$-th bit of $mask$ indicates whether the $i$-th letter has appeared.
+
+Finally, check whether there are $26$ $1$s in the binary representation of $mask$, that is, check whether $mask$ is equal to $2^{26} - 1$. If so, return `true`, otherwise return `false`.
+
+The time complexity is $O(n)$, where $n$ is the length of the string `sentence`. The space complexity is $O(1)$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def checkIfPangram(self, sentence: str) -> bool:
+        mask = 0
+        for c in sentence:
+            mask |= 1 << (ord(c) - ord('a'))
+        return mask == (1 << 26) - 1
+```
+
+#### Java
+
+```java
+class Solution {
+    public boolean checkIfPangram(String sentence) {
+        int mask = 0;
+        for (int i = 0; i < sentence.length(); ++i) {
+            mask |= 1 << (sentence.charAt(i) - 'a');
+        }
+        return mask == (1 << 26) - 1;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool checkIfPangram(string sentence) {
+        int mask = 0;
+        for (char& c : sentence) mask |= 1 << (c - 'a');
+        return mask == (1 << 26) - 1;
+    }
+};
+```
+
+#### Go
+
+```go
+func checkIfPangram(sentence string) bool {
+	mask := 0
+	for _, c := range sentence {
+		mask |= 1 << int(c-'a')
+	}
+	return mask == 1<<26-1
+}
+```
+
+#### TypeScript
+
+```ts
+function checkIfPangram(sentence: string): boolean {
+    let mark = 0;
+    for (const c of sentence) {
+        mark |= 1 << (c.charCodeAt(0) - 'a'.charCodeAt(0));
+    }
+    return mark === (1 << 26) - 1;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn check_if_pangram(sentence: String) -> bool {
+        let mut mark = 0;
+        for c in sentence.as_bytes() {
+            mark |= 1 << (*c - b'a');
+        }
+        mark == (1 << 26) - 1
+    }
+}
+```
+
+#### C
+
 ```c
-bool checkIfPangram(char *sentence) {
+bool checkIfPangram(char* sentence) {
     int mark = 0;
     for (int i = 0; sentence[i]; i++) {
         mark |= 1 << (sentence[i] - 'a');
@@ -211,10 +267,8 @@ bool checkIfPangram(char *sentence) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

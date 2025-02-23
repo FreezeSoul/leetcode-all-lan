@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2588.Count%20the%20Number%20of%20Beautiful%20Subarrays/README_EN.md
+rating: 1696
+source: Weekly Contest 336 Q3
+tags:
+    - Bit Manipulation
+    - Array
+    - Hash Table
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2588. Count the Number of Beautiful Subarrays](https://leetcode.com/problems/count-the-number-of-beautiful-subarrays)
 
 [中文文档](/solution/2500-2599/2588.Count%20the%20Number%20of%20Beautiful%20Subarrays/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>. In one operation, you can:</p>
 
@@ -50,23 +67,27 @@
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Prefix XOR + Hash Table**
+<!-- solution:start -->
 
-We observe that a subarray can become an array of all $0$ s if and only if the number of $1$s in each bit of all the elements in the subarray is even.
+### Solution 1: Prefix XOR + Hash Table
 
-If there are indices $i$ and $j$ such that $i \lt j$ and the number of $1$s in each bit of the subarray $nums[0,..,i]$ and $nums[0,..,j]$ is the same, then we can make the subarray $nums[i + 1,..,j]$ an array of all $0$ s.
+We observe that a subarray can become an array of all $0$s if and only if the number of $1$s on each binary bit of all elements in the subarray is even.
 
-Therefore, we can use the prefix XOR method and use the hash table $cnt$ to count the number of occurrences of each prefix XOR value. Traverse the array, for each element $x$, calculate the prefix XOR value $mask$, then add the number of occurrences of $mask$ to the answer. Then, add $1$ to the number of occurrences of $mask$.
+If there exist indices $i$ and $j$ such that $i \lt j$ and the subarrays $nums[0,..,i]$ and $nums[0,..,j]$ have the same parity of the number of $1$s on each binary bit, then we can turn the subarray $nums[i + 1,..,j]$ into an array of all $0$s.
 
-Finally, return the answer.
+Therefore, we can use the prefix XOR method and a hash table $cnt$ to count the occurrences of each prefix XOR value. We traverse the array, for each element $x$, we calculate its prefix XOR value $mask$, then add the number of occurrences of $mask$ to the answer. Then, we increase the number of occurrences of $mask$ by $1$.
 
-Time complexity $O(n)$, space complexity $O(n)$, where $n$ is the length of the array $nums$.
+Finally, we return the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -80,7 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -118,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func beautifulSubarrays(nums []int) (ans int64) {
@@ -133,7 +154,7 @@ func beautifulSubarrays(nums []int) (ans int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function beautifulSubarrays(nums: number[]): number {
@@ -150,10 +171,8 @@ function beautifulSubarrays(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

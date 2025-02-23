@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1486.XOR%20Operation%20in%20an%20Array/README_EN.md
+rating: 1180
+source: Weekly Contest 194 Q1
+tags:
+    - Bit Manipulation
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1486. XOR Operation in an Array](https://leetcode.com/problems/xor-operation-in-an-array)
 
 [中文文档](/solution/1400-1499/1486.XOR%20Operation%20in%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code> and an integer <code>start</code>.</p>
 
@@ -37,20 +52,21 @@ Where &quot;^&quot; corresponds to bitwise XOR operator.
 	<li><code>n == nums.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can directly simulate to calculate the XOR result of all elements in the array.
+
+The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-```python
-class Solution:
-    def xorOperation(self, n: int, start: int) -> int:
-        ans = 0
-        for i in range(n):
-            ans ^= start + 2 * i
-        return ans
-```
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +74,7 @@ class Solution:
         return reduce(xor, ((start + 2 * i) for i in range(n)))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +88,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -87,7 +103,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func xorOperation(n int, start int) (ans int) {
@@ -98,10 +114,20 @@ func xorOperation(n int, start int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function xorOperation(n: number, start: number): number {
+    let ans = 0;
+    for (let i = 0; i < n; ++i) {
+        ans ^= start + 2 * i;
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

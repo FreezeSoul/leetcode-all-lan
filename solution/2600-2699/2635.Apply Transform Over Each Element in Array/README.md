@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2635.Apply%20Transform%20Over%20Each%20Element%20in%20Array/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2635. 转换数组中的每个元素](https://leetcode.cn/problems/apply-transform-over-each-element-in-array)
 
 [English Version](/solution/2600-2699/2635.Apply%20Transform%20Over%20Each%20Element%20in%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>编写一个函数，这个函数接收一个整数数组&nbsp;<code>arr</code> 和一个映射函数&nbsp; <code>fn</code>&nbsp;，通过该映射函数返回一个新的数组。</p>
 
@@ -47,15 +57,17 @@ const newArray = map(arr, plusone); // [2,3,4]
 <ul>
 	<li><code>0 &lt;= arr.length &lt;= 1000</code></li>
 	<li><code><font face="monospace">-10<sup>9</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>9</sup></font></code></li>
-	<li><font face="monospace"><code>fn 返回一个数</code></font></li>
+	<li><font face="monospace"><code>fn</code> 返回一个整数。</font></li>
 </ul>
 <span style="display:block"><span style="height:0px"><span style="position:absolute">​​​​​​</span></span></span>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：遍历**
+### 方法一：遍历
 
 我们遍历数组 $arr$，对于每个元素 $arr[i]$，将其替换为 $fn(arr[i], i)$。最后返回数组 $arr$ 即可。
 
@@ -63,9 +75,7 @@ const newArray = map(arr, plusone); // [2,3,4]
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 function map(arr: number[], fn: (n: number, i: number) => number): number[] {
@@ -76,10 +86,8 @@ function map(arr: number[], fn: (n: number, i: number) => number): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

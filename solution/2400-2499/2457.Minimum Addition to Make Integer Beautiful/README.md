@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2457.Minimum%20Addition%20to%20Make%20Integer%20Beautiful/README.md
+rating: 1680
+source: 第 317 场周赛 Q3
+tags:
+    - 贪心
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2457. 美丽整数的最小增量](https://leetcode.cn/problems/minimum-addition-to-make-integer-beautiful)
 
 [English Version](/solution/2400-2499/2457.Minimum%20Addition%20to%20Make%20Integer%20Beautiful/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个正整数 <code>n</code> 和 <code>target</code> 。</p>
 
@@ -44,11 +57,13 @@
 	<li>生成的输入保证总可以使 <code>n</code> 变成一个美丽整数。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 我们定义函数 $f(x)$ 表示一个整数 $x$ 的每一位数字之和，那么题目求的是 $f(n + x) \leq target$ 的最小非负整数 $x$。
 
@@ -71,9 +86,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -96,9 +109,7 @@ class Solution:
         return x
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -127,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,7 +169,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeIntegerBeautiful(n int64, target int) (x int64) {
@@ -181,7 +192,7 @@ func makeIntegerBeautiful(n int64, target int) (x int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makeIntegerBeautiful(n: number, target: number): number {
@@ -207,10 +218,8 @@ function makeIntegerBeautiful(n: number, target: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

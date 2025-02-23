@@ -1,44 +1,31 @@
 class Solution {
 public:
     int numDupDigitsAtMostN(int n) {
-        return n - f(n);
-    }
-
-private:
-    int nums[11];
-    int dp[11][1 << 11];
-
-    int f(int n) {
-        memset(dp, -1, sizeof(dp));
-        int i = -1;
-        for (; n; n /= 10) {
-            nums[++i] = n % 10;
-        }
-        return dfs(i, 0, true, true);
-    }
-
-    int dfs(int pos, int mask, bool lead, bool limit) {
-        if (pos < 0) {
-            return lead ? 0 : 1;
-        }
-        if (!lead && !limit && dp[pos][mask] != -1) {
-            return dp[pos][mask];
-        }
-        int up = limit ? nums[pos] : 9;
-        int ans = 0;
-        for (int i = 0; i <= up; ++i) {
-            if (mask >> i & 1) {
-                continue;
+        string s = to_string(n);
+        int m = s.size();
+        int f[m][1 << 10];
+        memset(f, -1, sizeof(f));
+        auto dfs = [&](this auto&& dfs, int i, int mask, bool lead, bool limit) -> int {
+            if (i >= m) {
+                return lead ^ 1;
             }
-            if (i == 0 && lead) {
-                ans += dfs(pos - 1, mask, lead, limit && i == up);
-            } else {
-                ans += dfs(pos - 1, mask | 1 << i, false, limit && i == up);
+            if (!lead && !limit && f[i][mask] != -1) {
+                return f[i][mask];
             }
-        }
-        if (!lead && !limit) {
-            dp[pos][mask] = ans;
-        }
-        return ans;
+            int up = limit ? s[i] - '0' : 9;
+            int ans = 0;
+            for (int j = 0; j <= up; ++j) {
+                if (lead && j == 0) {
+                    ans += dfs(i + 1, mask, true, limit && j == up);
+                } else if (mask >> j & 1 ^ 1) {
+                    ans += dfs(i + 1, mask | (1 << j), false, limit && j == up);
+                }
+            }
+            if (!lead && !limit) {
+                f[i][mask] = ans;
+            }
+            return ans;
+        };
+        return n - dfs(0, 0, true, true);
     }
 };

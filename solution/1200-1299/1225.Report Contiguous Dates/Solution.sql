@@ -1,44 +1,30 @@
 # Write your MySQL query statement below
-select
-    state as period_state,
-    min(dt) as start_date,
-    max(dt) as end_date
-from
+WITH
+    T AS (
+        SELECT fail_date AS dt, 'failed' AS st
+        FROM Failed
+        WHERE YEAR(fail_date) = 2019
+        UNION ALL
+        SELECT success_date AS dt, 'succeeded' AS st
+        FROM Succeeded
+        WHERE YEAR(success_date) = 2019
+    )
+SELECT
+    st AS period_state,
+    MIN(dt) AS start_date,
+    MAX(dt) AS end_date
+FROM
     (
-        select
+        SELECT
             *,
-            subdate(
+            SUBDATE(
                 dt,
-                rank() over(
-                    partition by state
-                    order by
-                        dt
+                RANK() OVER (
+                    PARTITION BY st
+                    ORDER BY dt
                 )
-            ) as dif
-        from
-            (
-                select
-                    'failed' as state,
-                    fail_date as dt
-                from
-                    failed
-                where
-                    fail_date between '2019-01-01'
-                    and '2019-12-31'
-                union
-                all
-                select
-                    'succeeded' as state,
-                    success_date as dt
-                from
-                    succeeded
-                where
-                    success_date between '2019-01-01'
-                    and '2019-12-31'
-            ) t1
-    ) t2
-group by
-    state,
-    dif
-order by
-    dt
+            ) AS pt
+        FROM T
+    ) AS t
+GROUP BY 1, pt
+ORDER BY 2;

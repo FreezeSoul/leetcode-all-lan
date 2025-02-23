@@ -1,8 +1,24 @@
-# [1429. First Unique Number](https://leetcode.com/problems/first-unique-number)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1429.First%20Unique%20Number/README_EN.md
+tags:
+    - Design
+    - Queue
+    - Array
+    - Hash Table
+    - Data Stream
+---
+
+<!-- problem:start -->
+
+# [1429. First Unique Number 🔒](https://leetcode.com/problems/first-unique-number)
 
 [中文文档](/solution/1400-1499/1429.First%20Unique%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have a queue of integers, you need to retrieve the first unique integer in the queue.</p>
 
@@ -78,15 +94,20 @@ firstUnique.showFirstUnique(); // return -1
 	<li>At most <code>50000</code>&nbsp;calls will be made to <code>showFirstUnique</code>&nbsp;and <code>add</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class FirstUnique:
-
     def __init__(self, nums: List[int]):
         self.cnt = Counter(nums)
         self.unique = OrderedDict({v: 1 for v in nums if self.cnt[v] == 1})
@@ -101,28 +122,6 @@ class FirstUnique:
         elif value in self.unique:
             self.unique.pop(value)
 
-# Your FirstUnique object will be instantiated and called as such:
-# obj = FirstUnique(nums)
-# param_1 = obj.showFirstUnique()
-# obj.add(value)
-```
-
-```python
-class FirstUnique:
-
-    def __init__(self, nums: List[int]):
-        self.cnt = Counter(nums)
-        self.q = deque(nums)
-
-    def showFirstUnique(self) -> int:
-        while self.q and self.cnt[self.q[0]] != 1:
-            self.q.popleft()
-        return -1 if not self.q else self.q[0]
-
-    def add(self, value: int) -> None:
-        self.cnt[value] += 1
-        self.q.append(value)
-
 
 # Your FirstUnique object will be instantiated and called as such:
 # obj = FirstUnique(nums)
@@ -130,7 +129,7 @@ class FirstUnique:
 # obj.add(value)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class FirstUnique {
@@ -170,40 +169,7 @@ class FirstUnique {
  */
 ```
 
-```java
-class FirstUnique {
-    private Map<Integer, Integer> cnt = new HashMap<>();
-    private Deque<Integer> q = new ArrayDeque<>();
-
-    public FirstUnique(int[] nums) {
-        for (int v : nums) {
-            cnt.put(v, cnt.getOrDefault(v, 0) + 1);
-            q.offer(v);
-        }
-    }
-
-    public int showFirstUnique() {
-        while (!q.isEmpty() && cnt.get(q.peekFirst()) != 1) {
-            q.poll();
-        }
-        return q.isEmpty() ? -1 : q.peekFirst();
-    }
-
-    public void add(int value) {
-        cnt.put(value, cnt.getOrDefault(value, 0) + 1);
-        q.offer(value);
-    }
-}
-
-/**
- * Your FirstUnique object will be instantiated and called as such:
- * FirstUnique obj = new FirstUnique(nums);
- * int param_1 = obj.showFirstUnique();
- * obj.add(value);
- */
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class FirstUnique {
@@ -238,7 +204,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type FirstUnique struct {
@@ -277,10 +243,77 @@ func (this *FirstUnique) Add(value int) {
  */
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class FirstUnique:
+    def __init__(self, nums: List[int]):
+        self.cnt = Counter(nums)
+        self.q = deque(nums)
+
+    def showFirstUnique(self) -> int:
+        while self.q and self.cnt[self.q[0]] != 1:
+            self.q.popleft()
+        return -1 if not self.q else self.q[0]
+
+    def add(self, value: int) -> None:
+        self.cnt[value] += 1
+        self.q.append(value)
+
+
+# Your FirstUnique object will be instantiated and called as such:
+# obj = FirstUnique(nums)
+# param_1 = obj.showFirstUnique()
+# obj.add(value)
 ```
 
+#### Java
+
+```java
+class FirstUnique {
+    private Map<Integer, Integer> cnt = new HashMap<>();
+    private Deque<Integer> q = new ArrayDeque<>();
+
+    public FirstUnique(int[] nums) {
+        for (int v : nums) {
+            cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+            q.offer(v);
+        }
+    }
+
+    public int showFirstUnique() {
+        while (!q.isEmpty() && cnt.get(q.peekFirst()) != 1) {
+            q.poll();
+        }
+        return q.isEmpty() ? -1 : q.peekFirst();
+    }
+
+    public void add(int value) {
+        cnt.put(value, cnt.getOrDefault(value, 0) + 1);
+        q.offer(value);
+    }
+}
+
+/**
+ * Your FirstUnique object will be instantiated and called as such:
+ * FirstUnique obj = new FirstUnique(nums);
+ * int param_1 = obj.showFirstUnique();
+ * obj.add(value);
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

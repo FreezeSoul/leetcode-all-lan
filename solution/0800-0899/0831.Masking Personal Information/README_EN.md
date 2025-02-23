@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0831.Masking%20Personal%20Information/README_EN.md
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [831. Masking Personal Information](https://leetcode.com/problems/masking-personal-information)
 
 [中文文档](/solution/0800-0899/0831.Masking%20Personal%20Information/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a personal information string <code>s</code>, representing either an <strong>email address</strong> or a <strong>phone number</strong>. Return <em>the <strong>masked</strong> personal information using the below rules</em>.</p>
 
@@ -98,25 +110,35 @@ Thus, the resulting masked number is &quot;***-***-7890&quot;.
 	</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+According to the problem description, we can first determine whether the string $s$ is an email or a phone number, and then handle it accordingly.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maskPII(self, s: str) -> str:
         if s[0].isalpha():
             s = s.lower()
-            return s[0] + '*****' + s[s.find('@') - 1:]
+            return s[0] + '*****' + s[s.find('@') - 1 :]
         s = ''.join(c for c in s if c.isdigit())
         cnt = len(s) - 10
         suf = '***-***-' + s[-4:]
         return suf if cnt == 0 else f'+{"*" * cnt}-{suf}'
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -142,7 +164,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -171,7 +193,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maskPII(s string) string {
@@ -196,7 +218,7 @@ func maskPII(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maskPII(s: string): string {
@@ -220,10 +242,8 @@ function maskPII(s: string): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

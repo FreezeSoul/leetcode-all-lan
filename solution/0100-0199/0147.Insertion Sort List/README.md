@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0147.Insertion%20Sort%20List/README.md
+tags:
+    - 链表
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [147. 对链表进行插入排序](https://leetcode.cn/problems/insertion-sort-list)
 
 [English Version](/solution/0100-0199/0147.Insertion%20Sort%20List/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定单个链表的头<meta charset="UTF-8" />&nbsp;<code>head</code>&nbsp;，使用 <strong>插入排序</strong> 对链表进行排序，并返回&nbsp;<em>排序后链表的头</em>&nbsp;。</p>
 
@@ -20,13 +31,13 @@
 
 <p>对链表进行插入排序。</p>
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0147.Insertion%20Sort%20List/images/Insertion-sort-example-300px.gif" /></p>
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0147.Insertion%20Sort%20List/images/1724130387-qxfMwx-Insertion-sort-example-300px.gif" /></p>
 
 <p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0147.Insertion%20Sort%20List/images/sort1linked-list.jpg" /></p>
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0147.Insertion%20Sort%20List/images/1724130414-QbPAjl-image.png" /></p>
 
 <pre>
 <strong>输入:</strong> head = [4,2,1,3]
@@ -34,7 +45,7 @@
 
 <p><strong>示例&nbsp;2：</strong></p>
 
-<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0147.Insertion%20Sort%20List/images/sort2linked-list.jpg" /></p>
+<p><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0100-0199/0147.Insertion%20Sort%20List/images/1724130432-zoOvdI-image.png" /></p>
 
 <pre>
 <strong>输入:</strong> head = [-1,5,3,4,0]
@@ -51,22 +62,17 @@
 	<li><code>-5000 &lt;= Node.val &lt;= 5000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-遍历链表，每次将遍历到的结点 cur 与前一个结点 pre 进行值比较：
-
--   若结点 cur 的值比 pre 的大，说明当前 cur 已在正确的位置，直接往下遍历。
--   否则，从链表第一个结点开始遍历，将结点 cur 插入到正确的位置。
-
-依次遍历，直至 cur 指向空，遍历结束。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -95,9 +101,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -138,7 +142,7 @@ class Solution {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -177,10 +181,8 @@ var insertionSortList = function (head) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

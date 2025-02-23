@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2409.Count%20Days%20Spent%20Together/README.md
+rating: 1562
+source: 第 87 场双周赛 Q1
+tags:
+    - 数学
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2409. 统计共同度过的日子数](https://leetcode.cn/problems/count-days-spent-together)
 
 [English Version](/solution/2400-2499/2409.Count%20Days%20Spent%20Together/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>Alice 和 Bob 计划分别去罗马开会。</p>
 
@@ -42,11 +55,13 @@
 	<li>题目测试用例所给出的日期均为 <strong>非闰年</strong> 的有效日期。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们将日期转换为天数，然后计算两个人在罗马的天数。
 
@@ -54,24 +69,22 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def countDaysTogether(self, arriveAlice: str, leaveAlice: str, arriveBob: str, leaveBob: str) -> int:
+    def countDaysTogether(
+        self, arriveAlice: str, leaveAlice: str, arriveBob: str, leaveBob: str
+    ) -> int:
         a = max(arriveAlice, arriveBob)
         b = min(leaveAlice, leaveBob)
         days = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-        x = sum(days[:int(a[:2]) - 1]) + int(a[3:])
-        y = sum(days[:int(b[:2]) - 1]) + int(b[3:])
+        x = sum(days[: int(a[:2]) - 1]) + int(a[3:])
+        y = sum(days[: int(b[:2]) - 1]) + int(b[3:])
         return max(y - x + 1, 0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +137,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countDaysTogether(arriveAlice string, leaveAlice string, arriveBob string, leaveBob string) int {
@@ -155,17 +168,8 @@ func countDaysTogether(arriveAlice string, leaveAlice string, arriveBob string, 
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

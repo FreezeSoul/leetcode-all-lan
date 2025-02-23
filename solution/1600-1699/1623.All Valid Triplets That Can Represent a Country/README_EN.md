@@ -1,8 +1,20 @@
-# [1623. All Valid Triplets That Can Represent a Country](https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1623.All%20Valid%20Triplets%20That%20Can%20Represent%20a%20Country/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1623. All Valid Triplets That Can Represent a Country 🔒](https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country)
 
 [中文文档](/solution/1600-1699/1623.All%20Valid%20Triplets%20That%20Can%20Represent%20a%20Country/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>SchoolA</code></p>
 
@@ -13,7 +25,7 @@
 | student_id    | int     |
 | student_name  | varchar |
 +---------------+---------+
-student_id is the primary key for this table.
+student_id is the column with unique values for this table.
 Each row of this table contains the name and the id of a student in school A.
 All student_name are distinct.
 </pre>
@@ -29,7 +41,7 @@ All student_name are distinct.
 | student_id    | int     |
 | student_name  | varchar |
 +---------------+---------+
-student_id is the primary key for this table.
+student_id is the column with unique values for this table.
 Each row of this table contains the name and the id of a student in school B.
 All student_name are distinct.
 </pre>
@@ -45,7 +57,7 @@ All student_name are distinct.
 | student_id    | int     |
 | student_name  | varchar |
 +---------------+---------+
-student_id is the primary key for this table.
+student_id is the column with unique values for this table.
 Each row of this table contains the name and the id of a student in school C.
 All student_name are distinct.
 </pre>
@@ -61,11 +73,11 @@ All student_name are distinct.
 	<li>The selected students&#39; names and IDs are pairwise distinct (i.e. no two students share the same name, and no two students share the same ID).</li>
 </ul>
 
-<p>Write an SQL query to find all the possible triplets representing the country under the given constraints.</p>
+<p>Write a solution to find all the possible triplets representing the country under the given constraints.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -110,14 +122,39 @@ Let us see all the possible triplets.
 - (Bob, Tom, Alice) --&gt; Valid triplet.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    a.student_name AS member_A,
+    b.student_name AS member_B,
+    c.student_name AS member_C
+FROM
+    SchoolA AS a,
+    SchoolB AS b,
+    SchoolC AS c
+WHERE
+    a.student_name != b.student_name
+    AND a.student_name != c.student_name
+    AND b.student_name != c.student_name
+    AND a.student_id != b.student_id
+    AND a.student_id != c.student_id
+    AND b.student_id != c.student_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

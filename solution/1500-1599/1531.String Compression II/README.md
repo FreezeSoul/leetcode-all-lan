@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1531.String%20Compression%20II/README.md
+rating: 2575
+source: 第 199 场周赛 Q4
+tags:
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1531. 压缩字符串 II](https://leetcode.cn/problems/string-compression-ii)
 
 [English Version](/solution/1500-1599/1531.String%20Compression%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><a href="https://baike.baidu.com/item/%E8%A1%8C%E7%A8%8B%E9%95%BF%E5%BA%A6%E7%BC%96%E7%A0%81/2931940?fr=aladdin" target="_blank">行程长度编码</a> 是一种常用的字符串压缩方法，它将连续的相同字符（重复 2 次或更多次）替换为字符和表示字符计数的数字（行程长度）。例如，用此方法压缩字符串 <code>&quot;aabccc&quot;</code> ，将 <code>&quot;aa&quot;</code> 替换为 <code>&quot;a2&quot;</code> ，<code>&quot;ccc&quot;</code> 替换为` <code>&quot;c3&quot;</code> 。因此压缩后的字符串变为 <code>&quot;a2bc3&quot;</code> 。</p>
 
@@ -46,32 +59,72 @@
 	<li><code>s</code> 仅包含小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
+class Solution {
+    public int getLengthOfOptimalCompression(String s, int k) {
+        // dp[i][k] := the length of the optimal compression of s[i..n) with at most
+        // k deletion
+        dp = new int[s.length()][k + 1];
+        Arrays.stream(dp).forEach(A -> Arrays.fill(A, K_MAX));
+        return compression(s, 0, k);
+    }
 
-```
+    private static final int K_MAX = 101;
+    private int[][] dp;
 
-### **...**
+    private int compression(final String s, int i, int k) {
+        if (k < 0) {
+            return K_MAX;
+        }
+        if (i == s.length() || s.length() - i <= k) {
+            return 0;
+        }
+        if (dp[i][k] != K_MAX) {
+            return dp[i][k];
+        }
+        int maxFreq = 0;
+        int[] count = new int[128];
+        // Make letters in s[i..j] be the same.
+        // Keep the letter that has the maximum frequency in this range and remove
+        // the other letters.
+        for (int j = i; j < s.length(); ++j) {
+            maxFreq = Math.max(maxFreq, ++count[s.charAt(j)]);
+            dp[i][k] = Math.min(
+                dp[i][k], getLength(maxFreq) + compression(s, j + 1, k - (j - i + 1 - maxFreq)));
+        }
+        return dp[i][k];
+    }
 
-```
-
+    // Returns the length to compress `maxFreq`.
+    private int getLength(int maxFreq) {
+        if (maxFreq == 1) {
+            return 1; // c
+        }
+        if (maxFreq < 10) {
+            return 2; // [1-9]c
+        }
+        if (maxFreq < 100) {
+            return 3; // [1-9][0-9]c
+        }
+        return 4; // [1-9][0-9][0-9]c
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

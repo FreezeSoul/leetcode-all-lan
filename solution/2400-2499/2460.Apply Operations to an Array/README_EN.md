@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2460.Apply%20Operations%20to%20an%20Array/README_EN.md
+rating: 1223
+source: Weekly Contest 318 Q1
+tags:
+    - Array
+    - Two Pointers
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2460. Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array)
 
 [中文文档](/solution/2400-2499/2460.Apply%20Operations%20to%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array <code>nums</code> of size <code>n</code> consisting of <strong>non-negative</strong> integers.</p>
 
@@ -53,11 +69,27 @@ After that, we shift the 0&#39;s to the end, which gives the array [1,4,2,0,0,0]
 	<li><code>0 &lt;= nums[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can directly simulate according to the problem description.
+
+First, we traverse the array $nums$. For any two adjacent elements $nums[i]$ and $nums[i+1]$, if $nums[i] = nums[i+1]$, then we double the value of $nums[i]$ and change the value of $nums[i+1]$ to $0$.
+
+Then, we create an answer array $ans$ of length $n$, and put all non-zero elements of $nums$ into $ans$ in order.
+
+Finally, we return the answer array $ans$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $nums$. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +108,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,7 +157,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func applyOperations(nums []int) []int {
@@ -148,7 +180,7 @@ func applyOperations(nums []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function applyOperations(nums: number[]): number[] {
@@ -170,10 +202,35 @@ function applyOperations(nums: number[]): number[] {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn apply_operations(nums: Vec<i32>) -> Vec<i32> {
+        let mut nums = nums;
 
+        for i in 0..nums.len() - 1 {
+            if nums[i] == nums[i + 1] {
+                nums[i] <<= 1;
+                nums[i + 1] = 0;
+            }
+        }
+
+        let mut cur = 0;
+        for i in 0..nums.len() {
+            if nums[i] != 0 {
+                nums.swap(i, cur);
+                cur += 1;
+            }
+        }
+
+        nums
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

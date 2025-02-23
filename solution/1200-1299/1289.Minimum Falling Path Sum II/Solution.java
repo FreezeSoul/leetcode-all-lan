@@ -1,25 +1,21 @@
 class Solution {
     public int minFallingPathSum(int[][] grid) {
-        int f = 0, g = 0;
-        int fp = -1;
+        int n = grid.length;
+        int[] f = new int[n];
         final int inf = 1 << 30;
         for (int[] row : grid) {
-            int ff = inf, gg = inf;
-            int ffp = -1;
-            for (int j = 0; j < row.length; ++j) {
-                int s = (j != fp ? f : g) + row[j];
-                if (s < ff) {
-                    gg = ff;
-                    ff = s;
-                    ffp = j;
-                } else if (s < gg) {
-                    gg = s;
+            int[] g = row.clone();
+            for (int i = 0; i < n; ++i) {
+                int t = inf;
+                for (int j = 0; j < n; ++j) {
+                    if (j != i) {
+                        t = Math.min(t, f[j]);
+                    }
                 }
+                g[i] += (t == inf ? 0 : t);
             }
-            f = ff;
-            g = gg;
-            fp = ffp;
+            f = g;
         }
-        return f;
+        return Arrays.stream(f).min().getAsInt();
     }
 }

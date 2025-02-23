@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2087.Minimum%20Cost%20Homecoming%20of%20a%20Robot%20in%20a%20Grid/README_EN.md
+rating: 1743
+source: Biweekly Contest 66 Q3
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2087. Minimum Cost Homecoming of a Robot in a Grid](https://leetcode.com/problems/minimum-cost-homecoming-of-a-robot-in-a-grid)
 
 [中文文档](/solution/2000-2099/2087.Minimum%20Cost%20Homecoming%20of%20a%20Robot%20in%20a%20Grid/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an <code>m x n</code> grid, where <code>(0, 0)</code> is the top-left cell and <code>(m - 1, n - 1)</code> is the bottom-right cell. You are given an integer array <code>startPos</code> where <code>startPos = [start<sub>row</sub>, start<sub>col</sub>]</code> indicates that <strong>initially</strong>, a <strong>robot</strong> is at the cell <code>(start<sub>row</sub>, start<sub>col</sub>)</code>. You are also given an integer array <code>homePos</code> where <code>homePos = [home<sub>row</sub>, home<sub>col</sub>]</code> indicates that its <strong>home</strong> is at the cell <code>(home<sub>row</sub>, home<sub>col</sub>)</code>.</p>
 
@@ -51,30 +66,42 @@ The total cost is 3 + 2 + 6 + 7 = 18</pre>
 	<li><code>0 &lt;= start<sub>col</sub>, home<sub>col</sub> &lt; n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def minCost(self, startPos: List[int], homePos: List[int], rowCosts: List[int], colCosts: List[int]) -> int:
+    def minCost(
+        self,
+        startPos: List[int],
+        homePos: List[int],
+        rowCosts: List[int],
+        colCosts: List[int],
+    ) -> int:
         i, j = startPos
         x, y = homePos
         ans = 0
         if i < x:
-            ans += sum(rowCosts[i + 1: x + 1])
+            ans += sum(rowCosts[i + 1 : x + 1])
         else:
-            ans += sum(rowCosts[x: i])
+            ans += sum(rowCosts[x:i])
         if j < y:
-            ans += sum(colCosts[j + 1: y + 1])
+            ans += sum(colCosts[j + 1 : y + 1])
         else:
-            ans += sum(colCosts[y: j])
+            ans += sum(colCosts[y:j])
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +156,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCost(startPos []int, homePos []int, rowCosts []int, colCosts []int) (ans int) {
@@ -156,10 +183,8 @@ func sum(nums []int, i, j int) (s int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

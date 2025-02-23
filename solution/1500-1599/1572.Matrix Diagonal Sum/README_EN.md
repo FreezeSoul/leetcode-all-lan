@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1572.Matrix%20Diagonal%20Sum/README_EN.md
+rating: 1280
+source: Biweekly Contest 34 Q1
+tags:
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1572. Matrix Diagonal Sum](https://leetcode.com/problems/matrix-diagonal-sum)
 
 [中文文档](/solution/1500-1599/1572.Matrix%20Diagonal%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a&nbsp;square&nbsp;matrix&nbsp;<code>mat</code>, return the sum of the matrix diagonals.</p>
 
@@ -46,11 +61,23 @@ Notice that element mat[1][1] = 5 is counted only once.
 	<li><code>1 &lt;= mat[i][j] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Row-by-Row Traversal
+
+We can traverse each row $\textit{row}[i]$ of the matrix. For each row, we calculate the elements on the two diagonals, i.e., $\textit{row}[i][i]$ and $\textit{row}[i][n - i - 1]$, where $n$ is the number of rows in the matrix. If $i = n - i - 1$, it means there is only one element on the diagonals of the current row; otherwise, there are two elements. We add these elements to the answer.
+
+After traversing all rows, we get the answer.
+
+The time complexity is $O(n)$, where $n$ is the number of rows in the matrix. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +90,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -79,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -96,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func diagonalSum(mat [][]int) (ans int) {
@@ -111,59 +138,59 @@ func diagonalSum(mat [][]int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function diagonalSum(mat: number[][]): number {
-    const n = mat.length;
     let ans = 0;
-    for (let i = 0; i < n; i++) {
-        ans += mat[i][i] + mat[i][n - 1 - i];
-    }
-    if (n & 1) {
-        ans -= mat[n >> 1][n >> 1];
+    const n = mat.length;
+    for (let i = 0; i < n; ++i) {
+        const j = n - i - 1;
+        ans += mat[i][i] + (i === j ? 0 : mat[i][j]);
     }
     return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn diagonal_sum(mat: Vec<Vec<i32>>) -> i32 {
         let n = mat.len();
         let mut ans = 0;
+
         for i in 0..n {
-            ans += mat[i][i] + mat[n - 1 - i][i];
+            ans += mat[i][i];
+            let j = n - i - 1;
+            if j != i {
+                ans += mat[i][j];
+            }
         }
-        if n & 1 == 1 {
-            ans -= mat[n >> 1][n >> 1];
-        }
+
         ans
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int diagonalSum(int **mat, int matSize, int *matColSize) {
+int diagonalSum(int** mat, int matSize, int* matColSize) {
     int ans = 0;
-    for (int i = 0; i < matSize; i++) {
-        ans += mat[i][i] + mat[i][matSize - 1 - i];
-    }
-    if (matSize & 1) {
-        ans -= mat[matSize >> 1][matSize >> 1];
+    for (int i = 0; i < matSize; ++i) {
+        ans += mat[i][i];
+        int j = matSize - i - 1;
+        if (j != i) {
+            ans += mat[i][j];
+        }
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

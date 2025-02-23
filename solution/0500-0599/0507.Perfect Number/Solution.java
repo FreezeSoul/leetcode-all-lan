@@ -4,7 +4,7 @@ class Solution {
             return false;
         }
         int s = 1;
-        for (int i = 2; i * i <= num; ++i) {
+        for (int i = 2; i <= num / i; ++i) {
             if (num % i == 0) {
                 s += i;
                 if (i != num / i) {

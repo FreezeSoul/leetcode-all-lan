@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9857%20-%20II.%20%E5%92%8C%E4%B8%BAs%E7%9A%84%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B0%E5%BA%8F%E5%88%97/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 57 - II. 和为 s 的连续正数序列](https://leetcode.cn/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>输入一个正整数 <code>target</code> ，输出所有和为 <code>target</code> 的连续正整数序列（至少含有两个数）。</p>
 
@@ -34,9 +44,13 @@
 
 -   `1 <= target <= 10^5`
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：双指针**
+<!-- solution:start -->
+
+### 方法一：双指针
 
 我们可以使用双指针的方法，维护一个区间 $[l,.. r]$，使得区间内的数之和 $s$ 为 target，如果区间内的数之和小于 target，则右指针 $l$ 右移，如果区间内的数之和大于 target，则左指针 $l$ 右移，直到左指针到达 target 的一半为止。
 
@@ -44,7 +58,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +77,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -90,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findContinuousSequence(target int) (ans [][]int) {
@@ -140,7 +154,7 @@ func findContinuousSequence(target int) (ans [][]int) {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -170,7 +184,7 @@ var findContinuousSequence = function (target) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -197,10 +211,37 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func findContinuousSequence(_ target: Int) -> [[Int]] {
+        var l = 1, r = 2
+        var result = [[Int]]()
 
+        while l < r {
+            let sum = (l + r) * (r - l + 1) / 2
+            if sum == target {
+                var sequence = [Int]()
+                for i in l...r {
+                    sequence.append(i)
+                }
+                result.append(sequence)
+                l += 1
+            } else if sum < target {
+                r += 1
+            } else {
+                l += 1
+            }
+        }
+
+        return result
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

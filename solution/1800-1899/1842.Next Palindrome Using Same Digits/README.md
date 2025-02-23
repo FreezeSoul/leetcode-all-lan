@@ -1,10 +1,21 @@
-# [1842. 下个由相同数字构成的回文串](https://leetcode.cn/problems/next-palindrome-using-same-digits)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1842.Next%20Palindrome%20Using%20Same%20Digits/README.md
+tags:
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [1842. 下个由相同数字构成的回文串 🔒](https://leetcode.cn/problems/next-palindrome-using-same-digits)
 
 [English Version](/solution/1800-1899/1842.Next%20Palindrome%20Using%20Same%20Digits/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个很长的数字回文串 <code>num</code> ，返回 <strong>大于</strong> <code>num</code>、<strong>由相同数字重新组合而成的最小</strong> 回文串。</p>
 
@@ -47,32 +58,186 @@
 	<li><code>num</code> 是回文串。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：求前一半的下一个排列
+
+根据题目描述，我们只需要求出前一半的下一个排列，然后遍历前一半，对称赋值后半部分即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
+class Solution:
+    def nextPalindrome(self, num: str) -> str:
+        def next_permutation(nums: List[str]) -> bool:
+            n = len(nums) // 2
+            i = n - 2
+            while i >= 0 and nums[i] >= nums[i + 1]:
+                i -= 1
+            if i < 0:
+                return False
+            j = n - 1
+            while j >= 0 and nums[j] <= nums[i]:
+                j -= 1
+            nums[i], nums[j] = nums[j], nums[i]
+            nums[i + 1 : n] = nums[i + 1 : n][::-1]
+            return True
 
+        nums = list(num)
+        if not next_permutation(nums):
+            return ""
+        n = len(nums)
+        for i in range(n // 2):
+            nums[n - i - 1] = nums[i]
+        return "".join(nums)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
+class Solution {
+    public String nextPalindrome(String num) {
+        char[] nums = num.toCharArray();
+        if (!nextPermutation(nums)) {
+            return "";
+        }
+        int n = nums.length;
+        for (int i = 0; i < n / 2; ++i) {
+            nums[n - 1 - i] = nums[i];
+        }
+        return String.valueOf(nums);
+    }
 
+    private boolean nextPermutation(char[] nums) {
+        int n = nums.length / 2;
+        int i = n - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            --i;
+        }
+        if (i < 0) {
+            return false;
+        }
+        int j = n - 1;
+        while (j >= 0 && nums[i] >= nums[j]) {
+            --j;
+        }
+        swap(nums, i++, j);
+        for (j = n - 1; i < j; ++i, --j) {
+            swap(nums, i, j);
+        }
+        return true;
+    }
+
+    private void swap(char[] nums, int i, int j) {
+        char t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    string nextPalindrome(string num) {
+        int n = num.size();
+        string nums = num.substr(0, n / 2);
+        if (!next_permutation(begin(nums), end(nums))) {
+            return "";
+        }
+        for (int i = 0; i < n / 2; ++i) {
+            num[i] = nums[i];
+            num[n - i - 1] = nums[i];
+        }
+        return num;
+    }
+};
 ```
 
+#### Go
+
+```go
+func nextPalindrome(num string) string {
+	nums := []byte(num)
+	n := len(nums)
+	if !nextPermutation(nums) {
+		return ""
+	}
+	for i := 0; i < n/2; i++ {
+		nums[n-1-i] = nums[i]
+	}
+	return string(nums)
+}
+
+func nextPermutation(nums []byte) bool {
+	n := len(nums) / 2
+	i := n - 2
+	for i >= 0 && nums[i] >= nums[i+1] {
+		i--
+	}
+	if i < 0 {
+		return false
+	}
+	j := n - 1
+	for j >= 0 && nums[j] <= nums[i] {
+		j--
+	}
+	nums[i], nums[j] = nums[j], nums[i]
+	for i, j = i+1, n-1; i < j; i, j = i+1, j-1 {
+		nums[i], nums[j] = nums[j], nums[i]
+	}
+	return true
+}
+```
+
+#### TypeScript
+
+```ts
+function nextPalindrome(num: string): string {
+    const nums = num.split('');
+    const n = nums.length;
+    if (!nextPermutation(nums)) {
+        return '';
+    }
+    for (let i = 0; i < n >> 1; ++i) {
+        nums[n - 1 - i] = nums[i];
+    }
+    return nums.join('');
+}
+
+function nextPermutation(nums: string[]): boolean {
+    const n = nums.length >> 1;
+    let i = n - 2;
+    while (i >= 0 && nums[i] >= nums[i + 1]) {
+        i--;
+    }
+    if (i < 0) {
+        return false;
+    }
+    let j = n - 1;
+    while (j >= 0 && nums[i] >= nums[j]) {
+        j--;
+    }
+    [nums[i], nums[j]] = [nums[j], nums[i]];
+    for (i = i + 1, j = n - 1; i < j; ++i, --j) {
+        [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

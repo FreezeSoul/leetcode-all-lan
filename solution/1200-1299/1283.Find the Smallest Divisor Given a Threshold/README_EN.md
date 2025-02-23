@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1283.Find%20the%20Smallest%20Divisor%20Given%20a%20Threshold/README_EN.md
+rating: 1541
+source: Weekly Contest 166 Q3
+tags:
+    - Array
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [1283. Find the Smallest Divisor Given a Threshold](https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold)
 
 [中文文档](/solution/1200-1299/1283.Find%20the%20Smallest%20Divisor%20Given%20a%20Threshold/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of integers <code>nums</code> and an integer <code>threshold</code>, we will choose a positive integer <code>divisor</code>, divide all the array by it, and sum the division&#39;s result. Find the <strong>smallest</strong> <code>divisor</code> such that the result mentioned above is less than or equal to <code>threshold</code>.</p>
 
@@ -36,92 +51,140 @@ If the divisor is 4 we can get a sum of 7 (1+1+2+3) and if the divisor is 5 the 
 	<li><code>nums.length &lt;= threshold &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Binary Search
+
+Notice that for number $v$, if the sum of results of dividing each number in $nums$ by $v$ is less than or equal to $threshold$, then all values greater than $v$ satisfy the condition. There is a monotonicity, so we can use binary search to find the smallest $v$ that satisfies the condition.
+
+We define the left boundary of the binary search $l=1$, $r=\max(nums)$. Each time we take $mid=(l+r)/2$, calculate the sum of the results of dividing each number in $nums$ by $mid$ $s$, if $s$ is less than or equal to $threshold$, then it means that $mid$ satisfies the condition, we will update $r$ to $mid$, otherwise we will update $l$ to $mid+1$.
+
+Finally, return $l$.
+
+The time complexity is $O(n \times \log M)$, where $n$ is the length of the array $nums$ and $M$ is the maximum value in the array $nums$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def smallestDivisor(self, nums: List[int], threshold: int) -> int:
-        left, right = 1, 10**6
-        while left < right:
-            mid = (left + right) >> 1
-            s = sum((v + mid - 1) // mid for v in nums)
-            if s <= threshold:
-                right = mid
-            else:
-                left = mid + 1
-        return left
+        def f(v: int) -> bool:
+            v += 1
+            return sum((x + v - 1) // v for x in nums) <= threshold
+
+        return bisect_left(range(max(nums)), True, key=f) + 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int smallestDivisor(int[] nums, int threshold) {
-        int left = 1, right = 1000000;
-        while (left < right) {
-            int mid = (left + right) >> 1;
+        int l = 1, r = 1000000;
+        while (l < r) {
+            int mid = (l + r) >> 1;
             int s = 0;
-            for (int v : nums) {
-                s += (v + mid - 1) / mid;
+            for (int x : nums) {
+                s += (x + mid - 1) / mid;
             }
             if (s <= threshold) {
-                right = mid;
+                r = mid;
             } else {
-                left = mid + 1;
+                l = mid + 1;
             }
         }
-        return left;
+        return l;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int smallestDivisor(vector<int>& nums, int threshold) {
-        int left = 1, right = 1e6;
-        while (left < right) {
-            int mid = (left + right) >> 1;
+        int l = 1;
+        int r = *max_element(nums.begin(), nums.end());
+        while (l < r) {
+            int mid = (l + r) >> 1;
             int s = 0;
-            for (int& v : nums) s += (v + mid - 1) / mid;
-            if (s <= threshold)
-                right = mid;
-            else
-                left = mid + 1;
+            for (int x : nums) {
+                s += (x + mid - 1) / mid;
+            }
+            if (s <= threshold) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
         }
-        return left;
+        return l;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func smallestDivisor(nums []int, threshold int) int {
-	left, right := 1, 1000000
-	for left < right {
-		mid := (left + right) >> 1
+	return sort.Search(slices.Max(nums), func(v int) bool {
+		v++
 		s := 0
-		for _, v := range nums {
-			s += (v + mid - 1) / mid
+		for _, x := range nums {
+			s += (x + v - 1) / v
 		}
-		if s <= threshold {
-			right = mid
-		} else {
-			left = mid + 1
-		}
-	}
-	return left
+		return s <= threshold
+	}) + 1
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function smallestDivisor(nums: number[], threshold: number): number {
+    let l = 1;
+    let r = Math.max(...nums);
+    while (l < r) {
+        const mid = (l + r) >> 1;
+        const s = nums.reduce((acc, x) => acc + Math.ceil(x / mid), 0);
+        if (s <= threshold) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    return l;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn smallest_divisor(nums: Vec<i32>, threshold: i32) -> i32 {
+        let mut l = 1;
+        let mut r = *nums.iter().max().unwrap();
+        while l < r {
+            let mid = (l + r) / 2;
+            let s: i32 = nums.iter().map(|&x| (x + mid - 1) / mid).sum();
+            if s <= threshold {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        l
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -130,50 +193,47 @@ func smallestDivisor(nums []int, threshold int) int {
  * @return {number}
  */
 var smallestDivisor = function (nums, threshold) {
-    let left = 1,
-        right = 1000000;
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        let s = 0;
-        for (let v of nums) {
-            s += Math.ceil(v / mid);
-        }
+    let l = 1;
+    let r = Math.max(...nums);
+    while (l < r) {
+        const mid = (l + r) >> 1;
+        const s = nums.reduce((acc, x) => acc + Math.ceil(x / mid), 0);
         if (s <= threshold) {
-            right = mid;
+            r = mid;
         } else {
-            left = mid + 1;
+            l = mid + 1;
         }
     }
-    return left;
+    return l;
 };
 ```
 
-### **TypeScript**
+#### C#
 
-```ts
-function smallestDivisor(nums: number[], threshold: number): number {
-    let left = 1,
-        right = 1000000;
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        let s = 0;
-        for (let v of nums) {
-            s += Math.ceil(v / mid);
+```cs
+public class Solution {
+    public int SmallestDivisor(int[] nums, int threshold) {
+        int l = 1;
+        int r = nums.Max();
+        while (l < r) {
+            int mid = (l + r) >> 1;
+            int s = 0;
+            foreach (int x in nums) {
+                s += (x + mid - 1) / mid;
+            }
+            if (s <= threshold) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
         }
-        if (s <= threshold) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
+        return l;
     }
-    return left;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

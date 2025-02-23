@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1018.Binary%20Prefix%20Divisible%20By%205/README.md
+rating: 1376
+source: 第 130 场周赛 Q1
+tags:
+    - 位运算
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1018. 可被 5 整除的二进制前缀](https://leetcode.cn/problems/binary-prefix-divisible-by-5)
 
 [English Version](/solution/1000-1099/1018.Binary%20Prefix%20Divisible%20By%205/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个二进制数组 <code>nums</code> (&nbsp;<strong>索引从0开始&nbsp;</strong>)。</p>
 
@@ -43,21 +56,21 @@
 	<li><code>nums[i]</code>&nbsp;仅为&nbsp;<code>0</code>&nbsp;或&nbsp;<code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-遍历数组，每一次遍历都将当前数字加到前面的数字上，然后对 $5$ 取模，如果结果为 $0$，则当前数字可以被 $5$ 整除，答案设置为 `true`，否则为 `false`。
+我们用一个变量 $x$ 来表示当前的二进制前缀，然后遍历数组 $nums$，对于每个元素 $v$，我们将 $x$ 左移一位，然后加上 $v$，再对 $5$ 取模，判断是否等于 $0$，如果等于 $0$，则说明当前的二进制前缀可以被 $5$ 整除，我们将 $\textit{true}$ 加入答案数组，否则将 $\textit{false}$ 加入答案数组。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组长度。
+时间复杂度 $O(n)$，忽略答案数组的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,9 +83,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -88,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -105,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func prefixesDivBy5(nums []int) (ans []bool) {
@@ -118,7 +129,7 @@ func prefixesDivBy5(nums []int) (ans []bool) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function prefixesDivBy5(nums: number[]): boolean[] {
@@ -132,10 +143,8 @@ function prefixesDivBy5(nums: number[]): boolean[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

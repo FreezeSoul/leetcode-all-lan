@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0189.Rotate%20Array/README_EN.md
+tags:
+    - Array
+    - Math
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [189. Rotate Array](https://leetcode.com/problems/rotate-array)
 
 [中文文档](/solution/0100-0199/0189.Rotate%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, rotate the array to the right by <code>k</code> steps, where <code>k</code> is non-negative.</p>
 
@@ -45,9 +59,13 @@ rotate 2 steps to the right: [3,99,-1,-100]
 	<li>Could you do it in-place with <code>O(1)</code> extra space?</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Reverse three times**
+<!-- solution:start -->
+
+### Solution 1: Reverse three times
 
 We can assume the length of the array is $n$ and calculate the actual number of steps needed by taking the module of $k$ and $n$, which is $k \bmod n$.
 
@@ -67,7 +85,7 @@ The time complexity is $O(n)$, where $n$ is the length of the array. The space c
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +102,7 @@ class Solution:
         reverse(k, n - 1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rotate(nums []int, k int) {
@@ -141,7 +159,7 @@ func rotate(nums []int, k int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -163,7 +181,43 @@ function rotate(nums: number[], k: number): void {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn rotate(nums: &mut Vec<i32>, k: i32) {
+        let n = nums.len();
+        let k = (k as usize) % n;
+        nums.reverse();
+        nums[..k].reverse();
+        nums[k..].reverse();
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var rotate = function (nums, k) {
+    const n = nums.length;
+    k %= n;
+    const reverse = (i, j) => {
+        for (; i < j; ++i, --j) {
+            [nums[i], nums[j]] = [nums[j], nums[i]];
+        }
+    };
+    reverse(0, n - 1);
+    reverse(0, k - 1);
+    reverse(k, n - 1);
+};
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -188,46 +242,8 @@ public class Solution {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @param {number} k
- * @return {void} Do not return anything, modify nums in-place instead.
- */
-var rotate = function (nums, k) {
-    const n = nums.length;
-    k %= n;
-    const reverse = (i, j) => {
-        for (; i < j; ++i, --j) {
-            [nums[i], nums[j]] = [nums[j], nums[i]];
-        }
-    };
-    reverse(0, n - 1);
-    reverse(0, k - 1);
-    reverse(k, n - 1);
-};
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn rotate(nums: &mut Vec<i32>, k: i32) {
-        let n = nums.len();
-        let k = k as usize % n;
-        nums.reverse();
-        nums[..k].reverse();
-        nums[k..].reverse();
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

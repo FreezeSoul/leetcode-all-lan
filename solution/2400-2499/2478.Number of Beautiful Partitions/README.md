@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2478.Number%20of%20Beautiful%20Partitions/README.md
+rating: 2344
+source: 第 320 场周赛 Q4
+tags:
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2478. 完美分割的方案数](https://leetcode.cn/problems/number-of-beautiful-partitions)
 
 [English Version](/solution/2400-2499/2478.Number%20of%20Beautiful%20Partitions/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串&nbsp;<code>s</code>&nbsp;，每个字符是数字&nbsp;<code>'1'</code>&nbsp;到&nbsp;<code>'9'</code>&nbsp;，再给你两个整数&nbsp;<code>k</code> 和&nbsp;<code>minLength</code>&nbsp;。</p>
 
@@ -58,13 +71,15 @@
 	<li><code>s</code>&nbsp;每个字符都为数字&nbsp;<code>'1'</code>&nbsp;到&nbsp;<code>'9'</code> 之一。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-定义 $f[i][j]$ 表示前 $i$ 个字符分割成 $j$ 段的方案数。初始化 $f[0][0] = 1$，其余 $f[i][j] = 0$。
+我们定义 $f[i][j]$ 表示前 $i$ 个字符分割成 $j$ 段的方案数。初始化 $f[0][0] = 1$，其余 $f[i][j] = 0$。
 
 首先，我们需要判断第 $i$ 个字符是否能成为第 $j$ 段的最后一个字符，它需要同时满足以下条件：
 
@@ -89,9 +104,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -113,14 +126,10 @@ class Solution:
         return f[n][k]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-    private static final int MOD = (int) 1e9 + 7;
-
     public int beautifulPartitions(String s, int k, int minLength) {
         int n = s.length();
         if (!prime(s.charAt(0)) || prime(s.charAt(n - 1))) {
@@ -130,6 +139,7 @@ class Solution {
         int[][] g = new int[n + 1][k + 1];
         f[0][0] = 1;
         g[0][0] = 1;
+        final int mod = (int) 1e9 + 7;
         for (int i = 1; i <= n; ++i) {
             if (i >= minLength && !prime(s.charAt(i - 1)) && (i == n || prime(s.charAt(i)))) {
                 for (int j = 1; j <= k; ++j) {
@@ -137,7 +147,7 @@ class Solution {
                 }
             }
             for (int j = 0; j <= k; ++j) {
-                g[i][j] = (g[i - 1][j] + f[i][j]) % MOD;
+                g[i][j] = (g[i - 1][j] + f[i][j]) % mod;
             }
         }
         return f[n][k];
@@ -149,13 +159,11 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
-    const int mod = 1e9 + 7;
-
     int beautifulPartitions(string s, int k, int minLength) {
         int n = s.size();
         auto prime = [](char c) {
@@ -165,6 +173,7 @@ public:
         vector<vector<int>> f(n + 1, vector<int>(k + 1));
         vector<vector<int>> g(n + 1, vector<int>(k + 1));
         f[0][0] = g[0][0] = 1;
+        const int mod = 1e9 + 7;
         for (int i = 1; i <= n; ++i) {
             if (i >= minLength && !prime(s[i - 1]) && (i == n || prime(s[i]))) {
                 for (int j = 1; j <= k; ++j) {
@@ -180,7 +189,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func beautifulPartitions(s string, k int, minLength int) int {
@@ -213,16 +222,40 @@ func beautifulPartitions(s string, k int, minLength int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
+function beautifulPartitions(s: string, k: number, minLength: number): number {
+    const prime = (c: string): boolean => {
+        return c === '2' || c === '3' || c === '5' || c === '7';
+    };
 
-```
+    const n: number = s.length;
+    if (!prime(s[0]) || prime(s[n - 1])) return 0;
 
-### **...**
+    const f: number[][] = new Array(n + 1).fill(0).map(() => new Array(k + 1).fill(0));
+    const g: number[][] = new Array(n + 1).fill(0).map(() => new Array(k + 1).fill(0));
+    const mod: number = 1e9 + 7;
 
-```
+    f[0][0] = g[0][0] = 1;
 
+    for (let i = 1; i <= n; ++i) {
+        if (i >= minLength && !prime(s[i - 1]) && (i === n || prime(s[i]))) {
+            for (let j = 1; j <= k; ++j) {
+                f[i][j] = g[i - minLength][j - 1];
+            }
+        }
+        for (let j = 0; j <= k; ++j) {
+            g[i][j] = (g[i - 1][j] + f[i][j]) % mod;
+        }
+    }
+
+    return f[n][k];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

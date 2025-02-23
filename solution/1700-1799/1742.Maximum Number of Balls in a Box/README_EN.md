@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1742.Maximum%20Number%20of%20Balls%20in%20a%20Box/README_EN.md
+rating: 1277
+source: Weekly Contest 226 Q1
+tags:
+    - Hash Table
+    - Math
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [1742. Maximum Number of Balls in a Box](https://leetcode.com/problems/maximum-number-of-balls-in-a-box)
 
 [中文文档](/solution/1700-1799/1742.Maximum%20Number%20of%20Balls%20in%20a%20Box/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are working in a ball factory where you have <code>n</code> balls numbered from <code>lowLimit</code> up to <code>highLimit</code> <strong>inclusive</strong> (i.e., <code>n == highLimit - lowLimit + 1</code>), and an infinite number of boxes numbered from <code>1</code> to <code>infinity</code>.</p>
 
@@ -50,11 +66,23 @@ Box 10 has the most number of balls with 2 balls.
 	<li><code>1 &lt;= lowLimit &lt;= highLimit &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Array + Simulation
+
+Observing the problem's data range, the maximum number of balls does not exceed $10^5$, so the maximum sum of the digits of each number is less than $50$. Therefore, we can directly create an array $\textit{cnt}$ of length $50$ to count the number of occurrences of each digit sum.
+
+The answer is the maximum value in the array $\textit{cnt}$.
+
+The time complexity is $O(n \times \log_{10}m)$. Here, $n = \textit{highLimit} - \textit{lowLimit} + 1$, and $m = \textit{highLimit}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +97,7 @@ class Solution:
         return max(cnt)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -107,7 +135,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countBalls(lowLimit int, highLimit int) (ans int) {
@@ -126,10 +154,85 @@ func countBalls(lowLimit int, highLimit int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function countBalls(lowLimit: number, highLimit: number): number {
+    const cnt: number[] = Array(50).fill(0);
+    for (let i = lowLimit; i <= highLimit; ++i) {
+        let y = 0;
+        for (let x = i; x; x = Math.floor(x / 10)) {
+            y += x % 10;
+        }
+        ++cnt[y];
+    }
+    return Math.max(...cnt);
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn count_balls(low_limit: i32, high_limit: i32) -> i32 {
+        let mut cnt = vec![0; 50];
+        for x in low_limit..=high_limit {
+            let mut y = 0;
+            let mut n = x;
+            while n > 0 {
+                y += n % 10;
+                n /= 10;
+            }
+            cnt[y as usize] += 1;
+        }
+        *cnt.iter().max().unwrap()
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number} lowLimit
+ * @param {number} highLimit
+ * @return {number}
+ */
+var countBalls = function (lowLimit, highLimit) {
+    const cnt = Array(50).fill(0);
+    for (let i = lowLimit; i <= highLimit; ++i) {
+        let y = 0;
+        for (let x = i; x; x = Math.floor(x / 10)) {
+            y += x % 10;
+        }
+        ++cnt[y];
+    }
+    return Math.max(...cnt);
+};
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int CountBalls(int lowLimit, int highLimit) {
+        int[] cnt = new int[50];
+        for (int x = lowLimit; x <= highLimit; x++) {
+            int y = 0;
+            int n = x;
+            while (n > 0) {
+                y += n % 10;
+                n /= 10;
+            }
+            cnt[y]++;
+        }
+        return cnt.Max();
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

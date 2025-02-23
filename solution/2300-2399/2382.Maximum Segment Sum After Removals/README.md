@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2382.Maximum%20Segment%20Sum%20After%20Removals/README.md
+rating: 2136
+source: 第 85 场双周赛 Q4
+tags:
+    - 并查集
+    - 数组
+    - 有序集合
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2382. 删除操作后的最大子段和](https://leetcode.cn/problems/maximum-segment-sum-after-removals)
 
 [English Version](/solution/2300-2399/2382.Maximum%20Segment%20Sum%20After%20Removals/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code> 和&nbsp;<code>removeQueries</code>&nbsp;，两者长度都为&nbsp;<code>n</code>&nbsp;。对于第&nbsp;<code>i</code>&nbsp;个查询，<code>nums</code>&nbsp;中位于下标&nbsp;<code>removeQueries[i]</code>&nbsp;处的元素被删除，将 <code>nums</code>&nbsp;分割成更小的子段。</p>
 
@@ -52,11 +67,13 @@
 	<li><code>removeQueries</code>&nbsp;中所有数字 <strong>互不相同</strong>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：逆向思维 + 并查集**
+### 方法一：逆向思维 + 并查集
 
 考虑**从后往前遍历**数组 $removeQueries$ 中的每个元素 $i$，用并查集来维护以 $nums[i]$ 所在的连续子数组的和。
 
@@ -66,13 +83,13 @@
 
 时间复杂度 $O(nlogn)$。其中 $n$ 是 $nums$ 中的元素个数。
 
-相似题目：[2334. 元素值大于变化阈值的子数组](/solution/2300-2399/2334.Subarray%20With%20Elements%20Greater%20Than%20Varying%20Threshold/README.md)
+相似题目：
+
+-   [2334. 元素值大于变化阈值的子数组](https://github.com/doocs/leetcode/blob/main/solution/2300-2399/2334.Subarray%20With%20Elements%20Greater%20Than%20Varying%20Threshold/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +121,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -152,7 +167,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 using ll = long long;
@@ -193,7 +208,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumSegmentSum(nums []int, removeQueries []int) []int64 {
@@ -231,26 +246,10 @@ func maximumSegmentSum(nums []int, removeQueries []int) []int64 {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2483.Minimum%20Penalty%20for%20a%20Shop/README_EN.md
+rating: 1494
+source: Biweekly Contest 92 Q3
+tags:
+    - String
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2483. Minimum Penalty for a Shop](https://leetcode.com/problems/minimum-penalty-for-a-shop)
 
 [中文文档](/solution/2400-2499/2483.Minimum%20Penalty%20for%20a%20Shop/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the customer visit log of a shop represented by a <strong>0-indexed</strong> string <code>customers</code> consisting only of characters <code>&#39;N&#39;</code> and <code>&#39;Y&#39;</code>:</p>
 
@@ -60,11 +75,23 @@ Closing the shop at 2<sup>nd</sup> or 4<sup>th</sup> hour gives a minimum penalt
 	<li><code>customers</code> consists only of characters <code>&#39;Y&#39;</code> and <code>&#39;N&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Sum + Enumeration
+
+First, we calculate how many customers arrive in the first $i$ hours and record it in the prefix sum array $s$.
+
+Then we enumerate the closing time $j$ of the shop, calculate the cost, and take the earliest closing time with the smallest cost.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the length of the string $customers$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -81,7 +108,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -128,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func bestClosingTime(customers string) (ans int) {
@@ -151,10 +178,37 @@ func bestClosingTime(customers string) (ans int) {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn best_closing_time(customers: String) -> i32 {
+        let n = customers.len();
+        let mut penalty = i32::MAX;
+        let mut ret = -1;
+        let mut prefix_sum = vec![0; n + 1];
 
+        // Initialize the vector
+        for (i, c) in customers.chars().enumerate() {
+            prefix_sum[i + 1] = prefix_sum[i] + (if c == 'Y' { 1 } else { 0 });
+        }
+
+        // Calculate the answer
+        for i in 0..=n {
+            if penalty > ((prefix_sum[n] - prefix_sum[i]) as i32) + ((i - prefix_sum[i]) as i32) {
+                penalty = ((prefix_sum[n] - prefix_sum[i]) as i32) + ((i - prefix_sum[i]) as i32);
+                ret = i as i32;
+            }
+        }
+
+        ret
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

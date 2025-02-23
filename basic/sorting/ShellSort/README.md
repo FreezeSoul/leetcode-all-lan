@@ -11,7 +11,7 @@
 
 <!-- tabs:start -->
 
-### **Java**
+#### Java
 
 ```java
 import java.util.Arrays;
@@ -41,33 +41,7 @@ public class ShellSort {
 }
 ```
 
-### **JavaScript**
-
-```js
-function shellSort(arr) {
-    var len = arr.length;
-    var gapSize = Math.floor(len / 2);
-    while (gapSize > 0) {
-        for (var i = gapSize; i < len; i++) {
-            var temp = arr[i];
-            var j = i;
-
-            while (j >= gapSize && arr[j - gapSize] > temp) {
-                arr[j] = arr[j - gapSize];
-                j -= gapSize;
-            }
-            arr[j] = temp;
-        }
-        gapSize = Math.floor(gapSize / 2);
-    }
-    return arr;
-}
-
-let arr = [6, 3, 2, 1, 5];
-console.log(shellSort(arr));
-```
-
-### **Go**
+#### Go
 
 ```go
 package main
@@ -94,7 +68,7 @@ func main() {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 fn shell_sort(nums: &mut Vec<i32>) {
@@ -104,7 +78,7 @@ fn shell_sort(nums: &mut Vec<i32>) {
         for i in gap..n {
             let mut j = i - gap;
             let temp = nums[i];
-            while j >= 0 as usize && nums[j] > temp {
+            while j >= (0 as usize) && nums[j] > temp {
                 nums[j + gap] = nums[j];
                 j -= gap;
             }
@@ -121,15 +95,30 @@ fn main() {
 }
 ```
 
+#### JavaScript
+
+```js
+function shellSort(arr) {
+    var len = arr.length;
+    var gapSize = Math.floor(len / 2);
+    while (gapSize > 0) {
+        for (var i = gapSize; i < len; i++) {
+            var temp = arr[i];
+            var j = i;
+
+            while (j >= gapSize && arr[j - gapSize] > temp) {
+                arr[j] = arr[j - gapSize];
+                j -= gapSize;
+            }
+            arr[j] = temp;
+        }
+        gapSize = Math.floor(gapSize / 2);
+    }
+    return arr;
+}
+
+let arr = [6, 3, 2, 1, 5];
+console.log(shellSort(arr));
+```
+
 <!-- tabs:end -->
-
-## 算法分析
-
-时间复杂度：
-
-希尔排序的时间性能取决于所取“增量”序列的函数，这涉及到一些数学上尚未解决的难题。但是有人通过大量的实验，给出了较好的结果：当 $n$ 较大时，比较和移动的次数约在 $n^{1.25}$ 到 ${1.6n}^{1.25}$ 之间。所以可以这样简单记忆：
-
--   当 $n$ 较小时，希尔排序和插入排序相差不大，都为 $n^2$ 左右。
--   当 $n$ 很大时，时间增长幅度逐渐放缓，平均复杂度是 $O(n\log n)$。
-
-空间复杂度：$O(1)$。

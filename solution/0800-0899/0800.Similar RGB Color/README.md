@@ -1,10 +1,22 @@
-# [800. 相似 RGB 颜色](https://leetcode.cn/problems/similar-rgb-color)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0800.Similar%20RGB%20Color/README.md
+tags:
+    - 数学
+    - 字符串
+    - 枚举
+---
+
+<!-- problem:start -->
+
+# [800. 相似 RGB 颜色 🔒](https://leetcode.cn/problems/similar-rgb-color)
 
 [English Version](/solution/0800-0899/0800.Similar%20RGB%20Color/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>RGB 颜色 <code>"#AABBCC"</code>&nbsp;可以简写成&nbsp;<code>"#ABC"</code> 。</p>
 
@@ -47,15 +59,17 @@
 	<li>对于任何 <code>i &gt; 0</code>，<code>color[i]</code> 都是一个在范围 <code>['0', 'f']</code> 内的 16 进制数</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,9 +84,7 @@ class Solution:
         return f'#{f(a)}{f(b)}{f(c)}'
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +101,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 func similarRGB(color string) string {
@@ -108,10 +120,8 @@ func similarRGB(color string) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,16 +1,30 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1497.Check%20If%20Array%20Pairs%20Are%20Divisible%20by%20k/README.md
+rating: 1787
+source: 第 195 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1497. 检查数组对是否可以被 k 整除](https://leetcode.cn/problems/check-if-array-pairs-are-divisible-by-k)
 
 [English Version](/solution/1400-1499/1497.Check%20If%20Array%20Pairs%20Are%20Divisible%20by%20k/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>arr</code> 和一个整数 <code>k</code> ，其中数组长度是偶数，值为 <code>n</code> 。</p>
 
 <p>现在需要把数组恰好分成 <code>n /&nbsp;2</code> 对，以使每对数字的和都能够被 <code>k</code> 整除。</p>
 
-<p>如果存在这样的分法，请返回 <em>True</em> ；否则，返回 <em>False</em> 。</p>
+<p>如果存在这样的分法，请返回&nbsp;<code>true</code> ；否则，返回<i>&nbsp;</i><code>false</code>。</p>
 
 <p>&nbsp;</p>
 
@@ -50,11 +64,13 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：统计余数**
+### 方法一：统计余数
 
 两个数 $a$ 和 $b$ 的和能被 $k$ 整除，当且仅当这两个数分别对 $k$ 取模的结果之和能被 $k$ 整除。
 
@@ -64,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -75,9 +89,7 @@ class Solution:
         return cnt[0] % 2 == 0 and all(cnt[i] == cnt[k - i] for i in range(1, k))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canArrange(arr []int, k int) bool {
@@ -133,10 +145,44 @@ func canArrange(arr []int, k int) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function canArrange(arr: number[], k: number): boolean {
+    const cnt = Array(k).fill(0);
+
+    for (const x of arr) {
+        cnt[((x % k) + k) % k]++;
+    }
+
+    for (let i = 1; i < k; i++) {
+        if (cnt[i] !== cnt[k - i]) return false;
+    }
+
+    return cnt[0] % 2 === 0;
+}
 ```
 
+#### JavaScript
+
+```js
+function canArrange(arr, k) {
+    const cnt = Array(k).fill(0);
+
+    for (const x of arr) {
+        cnt[((x % k) + k) % k]++;
+    }
+
+    for (let i = 1; i < k; i++) {
+        if (cnt[i] !== cnt[k - i]) return false;
+    }
+
+    return cnt[0] % 2 === 0;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

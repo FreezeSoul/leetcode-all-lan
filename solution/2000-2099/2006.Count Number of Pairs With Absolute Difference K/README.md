@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2006.Count%20Number%20of%20Pairs%20With%20Absolute%20Difference%20K/README.md
+rating: 1271
+source: 第 61 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2006. 差的绝对值为 K 的数对数目](https://leetcode.cn/problems/count-number-of-pairs-with-absolute-difference-k)
 
 [English Version](/solution/2000-2099/2006.Count%20Number%20of%20Pairs%20With%20Absolute%20Difference%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code>&nbsp;和一个整数&nbsp;<code>k</code>&nbsp;，请你返回数对&nbsp;<code>(i, j)</code>&nbsp;的数目，满足&nbsp;<code>i &lt; j</code>&nbsp;且&nbsp;<code>|nums[i] - nums[j]| == k</code>&nbsp;。</p>
 
@@ -55,53 +69,34 @@
 	<li><code>1 &lt;= k &lt;= 99</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：暴力枚举**
+### 方法一：暴力枚举
 
-我们注意到，数组 `nums` 的长度不超过 $200$，因此我们可以枚举所有的数对 $(i, j)$，其中 $i < j$，并判断 $|nums[i] - nums[j]|$ 是否等于 $k$，是则答案加一。
-
-最后返回答案即可。
-
-时间复杂度 $O(n^2)$，空间复杂度 $O(1)$。其中 $n$ 为数组 `nums` 的长度。
-
-**方法二：哈希表或数组**
-
-我们可以使用哈希表或数组记录数组 `nums` 中每个数出现的次数，然后枚举数组 `nums` 中的每个数 $x$，判断 $x + k$ 和 $x - k$ 是否在数组 `nums` 中，是则答案加上 $x+k$ 和 $x-k$ 出现的次数之和。
+我们注意到，数组 $nums$ 的长度不超过 $200$，因此我们可以枚举所有的数对 $(i, j)$，其中 $i < j$，并判断 $|nums[i] - nums[j]|$ 是否等于 $k$，是则答案加一。
 
 最后返回答案即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n^2)$，空间复杂度 $O(1)$。其中 $n$ 为数组 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def countKDifference(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        return sum(abs(nums[i] - nums[j]) == k for i in range(n) for j in range(i + 1, n))
+        return sum(
+            abs(nums[i] - nums[j]) == k for i in range(n) for j in range(i + 1, n)
+        )
 ```
 
-```python
-class Solution:
-    def countKDifference(self, nums: List[int], k: int) -> int:
-        ans = 0
-        cnt = Counter()
-        for num in nums:
-            ans += cnt[num - k] + cnt[num + k]
-            cnt[num] += 1
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,26 +114,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countKDifference(int[] nums, int k) {
-        int ans = 0;
-        int[] cnt = new int[110];
-        for (int num : nums) {
-            if (num >= k) {
-                ans += cnt[num - k];
-            }
-            if (num + k <= 100) {
-                ans += cnt[num + k];
-            }
-            ++cnt[num];
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,27 +132,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int countKDifference(vector<int>& nums, int k) {
-        int ans = 0;
-        int cnt[110]{};
-        for (int num : nums) {
-            if (num >= k) {
-                ans += cnt[num - k];
-            }
-            if (num + k <= 100) {
-                ans += cnt[num + k];
-            }
-            ++cnt[num];
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countKDifference(nums []int, k int) int {
@@ -200,23 +156,7 @@ func abs(x int) int {
 }
 ```
 
-```go
-func countKDifference(nums []int, k int) (ans int) {
-	cnt := [110]int{}
-	for _, num := range nums {
-		if num >= k {
-			ans += cnt[num-k]
-		}
-		if num+k <= 100 {
-			ans += cnt[num+k]
-		}
-		cnt[num]++
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countKDifference(nums: number[], k: number): number {
@@ -230,7 +170,7 @@ function countKDifference(nums: number[], k: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -249,6 +189,98 @@ impl Solution {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：哈希表或数组
+
+我们可以使用哈希表或数组记录数组 $nums$ 中每个数出现的次数，然后枚举数组 $nums$ 中的每个数 $x$，判断 $x + k$ 和 $x - k$ 是否在数组 $nums$ 中，是则答案加上 $x+k$ 和 $x-k$ 出现的次数之和。
+
+最后返回答案即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $nums$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countKDifference(self, nums: List[int], k: int) -> int:
+        ans = 0
+        cnt = Counter()
+        for num in nums:
+            ans += cnt[num - k] + cnt[num + k]
+            cnt[num] += 1
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countKDifference(int[] nums, int k) {
+        int ans = 0;
+        int[] cnt = new int[110];
+        for (int num : nums) {
+            if (num >= k) {
+                ans += cnt[num - k];
+            }
+            if (num + k <= 100) {
+                ans += cnt[num + k];
+            }
+            ++cnt[num];
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countKDifference(vector<int>& nums, int k) {
+        int ans = 0;
+        int cnt[110]{};
+        for (int num : nums) {
+            if (num >= k) {
+                ans += cnt[num - k];
+            }
+            if (num + k <= 100) {
+                ans += cnt[num + k];
+            }
+            ++cnt[num];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countKDifference(nums []int, k int) (ans int) {
+	cnt := [110]int{}
+	for _, num := range nums {
+		if num >= k {
+			ans += cnt[num-k]
+		}
+		if num+k <= 100 {
+			ans += cnt[num+k]
+		}
+		cnt[num]++
+	}
+	return
+}
+```
+
+#### Rust
+
 ```rust
 impl Solution {
     pub fn count_k_difference(nums: Vec<i32>, k: i32) -> i32 {
@@ -259,7 +291,7 @@ impl Solution {
                 res += arr[(num - k) as usize];
             }
             if num + k <= 100 {
-                res += arr[(num + k) as usize]
+                res += arr[(num + k) as usize];
             }
             arr[num as usize] += 1;
         }
@@ -268,10 +300,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

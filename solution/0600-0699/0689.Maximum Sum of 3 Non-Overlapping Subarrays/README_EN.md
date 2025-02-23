@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0689.Maximum%20Sum%20of%203%20Non-Overlapping%20Subarrays/README_EN.md
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [689. Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays)
 
 [中文文档](/solution/0600-0699/0689.Maximum%20Sum%20of%203%20Non-Overlapping%20Subarrays/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> and an integer <code>k</code>, find three non-overlapping subarrays of length <code>k</code> with maximum sum and return them.</p>
 
@@ -15,7 +28,7 @@
 <strong>Input:</strong> nums = [1,2,1,2,6,7,5,1], k = 2
 <strong>Output:</strong> [0,3,5]
 <strong>Explanation:</strong> Subarrays [1, 2], [2, 6], [7, 5] correspond to the starting indices [0, 3, 5].
-We could have also taken [2, 1], but an answer of [1, 3, 5] would be lexicographically larger.
+We could have also taken [2, 1], but an answer of [1, 3, 5] would be lexicographically smaller.
 </pre>
 
 <p><strong class="example">Example 2:</strong></p>
@@ -34,11 +47,21 @@ We could have also taken [2, 1], but an answer of [1, 3, 5] would be lexicograph
 	<li><code>1 &lt;= k &lt;= floor(nums.length / 3)</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sliding Window
+
+We use a sliding window to enumerate the position of the third subarray, while maintaining the maximum sum and its position of the first two non-overlapping subarrays.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $nums$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +90,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,7 +165,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSumOfThreeSubarrays(nums []int, k int) []int {
@@ -177,10 +200,252 @@ func maxSumOfThreeSubarrays(nums []int, k int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function maxSumOfThreeSubarrays(nums: number[], k: number): number[] {
+    const n: number = nums.length;
+    const s: number[] = Array(n + 1).fill(0);
 
+    for (let i = 0; i < n; ++i) {
+        s[i + 1] = s[i] + nums[i];
+    }
+
+    const pre: number[][] = Array(n)
+        .fill([])
+        .map(() => new Array(2).fill(0));
+    const suf: number[][] = Array(n)
+        .fill([])
+        .map(() => new Array(2).fill(0));
+
+    for (let i = 0, t = 0, idx = 0; i < n - k + 1; ++i) {
+        const cur: number = s[i + k] - s[i];
+        if (cur > t) {
+            pre[i + k - 1] = [cur, i];
+            t = cur;
+            idx = i;
+        } else {
+            pre[i + k - 1] = [t, idx];
+        }
+    }
+
+    for (let i = n - k, t = 0, idx = 0; i >= 0; --i) {
+        const cur: number = s[i + k] - s[i];
+        if (cur >= t) {
+            suf[i] = [cur, i];
+            t = cur;
+            idx = i;
+        } else {
+            suf[i] = [t, idx];
+        }
+    }
+
+    let ans: number[] = [];
+    for (let i = k, t = 0; i < n - 2 * k + 1; ++i) {
+        const cur: number = s[i + k] - s[i] + pre[i - 1][0] + suf[i + k][0];
+        if (cur > t) {
+            ans = [pre[i - 1][1], i, suf[i + k][1]];
+            t = cur;
+        }
+    }
+
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Preprocessing Prefix and Suffix + Enumerating Middle Subarray
+
+We can preprocess to get the prefix sum array $s$ of the array $nums$, where $s[i] = \sum_{j=0}^{i-1} nums[j]$. Then for any $i$, $j$, $s[j] - s[i]$ is the sum of the subarray $[i, j)$.
+
+Next, we use dynamic programming to maintain two arrays $pre$ and $suf$ of length $n$, where $pre[i]$ represents the maximum sum and its starting position of the subarray of length $k$ within the range $[0, i]$, and $suf[i]$ represents the maximum sum and its starting position of the subarray of length $k$ within the range $[i, n)$.
+
+Then, we enumerate the starting position $i$ of the middle subarray. The sum of the three subarrays is $pre[i-1][0] + suf[i+k][0] + (s[i+k] - s[i])$, where $pre[i-1][0]$ represents the maximum sum of the subarray of length $k$ within the range $[0, i-1]$, $suf[i+k][0]$ represents the maximum sum of the subarray of length $k$ within the range $[i+k, n)$, and $(s[i+k] - s[i])$ represents the sum of the subarray of length $k$ within the range $[i, i+k)$. We find the starting positions of the three subarrays corresponding to the maximum sum.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $nums$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxSumOfThreeSubarrays(self, nums: List[int], k: int) -> List[int]:
+        n = len(nums)
+        s = list(accumulate(nums, initial=0))
+        pre = [[] for _ in range(n)]
+        suf = [[] for _ in range(n)]
+        t = idx = 0
+        for i in range(n - k + 1):
+            if (cur := s[i + k] - s[i]) > t:
+                pre[i + k - 1] = [cur, i]
+                t, idx = pre[i + k - 1]
+            else:
+                pre[i + k - 1] = [t, idx]
+        t = idx = 0
+        for i in range(n - k, -1, -1):
+            if (cur := s[i + k] - s[i]) >= t:
+                suf[i] = [cur, i]
+                t, idx = suf[i]
+            else:
+                suf[i] = [t, idx]
+        t = 0
+        ans = []
+        for i in range(k, n - 2 * k + 1):
+            if (cur := s[i + k] - s[i] + pre[i - 1][0] + suf[i + k][0]) > t:
+                ans = [pre[i - 1][1], i, suf[i + k][1]]
+                t = cur
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        int n = nums.length;
+        int[] s = new int[n + 1];
+        for (int i = 0; i < n; ++i) {
+            s[i + 1] = s[i] + nums[i];
+        }
+        int[][] pre = new int[n][0];
+        int[][] suf = new int[n][0];
+        for (int i = 0, t = 0, idx = 0; i < n - k + 1; ++i) {
+            int cur = s[i + k] - s[i];
+            if (cur > t) {
+                pre[i + k - 1] = new int[] {cur, i};
+                t = cur;
+                idx = i;
+            } else {
+                pre[i + k - 1] = new int[] {t, idx};
+            }
+        }
+        for (int i = n - k, t = 0, idx = 0; i >= 0; --i) {
+            int cur = s[i + k] - s[i];
+            if (cur >= t) {
+                suf[i] = new int[] {cur, i};
+                t = cur;
+                idx = i;
+            } else {
+                suf[i] = new int[] {t, idx};
+            }
+        }
+        int[] ans = new int[0];
+        for (int i = k, t = 0; i < n - 2 * k + 1; ++i) {
+            int cur = s[i + k] - s[i] + pre[i - 1][0] + suf[i + k][0];
+            if (cur > t) {
+                ans = new int[] {pre[i - 1][1], i, suf[i + k][1]};
+                t = cur;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> maxSumOfThreeSubarrays(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<int> s(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            s[i + 1] = s[i] + nums[i];
+        }
+
+        vector<vector<int>> pre(n, vector<int>(2, 0));
+        vector<vector<int>> suf(n, vector<int>(2, 0));
+
+        for (int i = 0, t = 0, idx = 0; i < n - k + 1; ++i) {
+            int cur = s[i + k] - s[i];
+            if (cur > t) {
+                pre[i + k - 1] = {cur, i};
+                t = cur;
+                idx = i;
+            } else {
+                pre[i + k - 1] = {t, idx};
+            }
+        }
+
+        for (int i = n - k, t = 0, idx = 0; i >= 0; --i) {
+            int cur = s[i + k] - s[i];
+            if (cur >= t) {
+                suf[i] = {cur, i};
+                t = cur;
+                idx = i;
+            } else {
+                suf[i] = {t, idx};
+            }
+        }
+
+        vector<int> ans;
+        for (int i = k, t = 0; i < n - 2 * k + 1; ++i) {
+            int cur = s[i + k] - s[i] + pre[i - 1][0] + suf[i + k][0];
+            if (cur > t) {
+                ans = {pre[i - 1][1], i, suf[i + k][1]};
+                t = cur;
+            }
+        }
+
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxSumOfThreeSubarrays(nums []int, k int) (ans []int) {
+	n := len(nums)
+	s := make([]int, n+1)
+	for i := 0; i < n; i++ {
+		s[i+1] = s[i] + nums[i]
+	}
+
+	pre := make([][]int, n)
+	suf := make([][]int, n)
+
+	for i, t, idx := 0, 0, 0; i < n-k+1; i++ {
+		cur := s[i+k] - s[i]
+		if cur > t {
+			pre[i+k-1] = []int{cur, i}
+			t, idx = cur, i
+		} else {
+			pre[i+k-1] = []int{t, idx}
+		}
+	}
+
+	for i, t, idx := n-k, 0, 0; i >= 0; i-- {
+		cur := s[i+k] - s[i]
+		if cur >= t {
+			suf[i] = []int{cur, i}
+			t, idx = cur, i
+		} else {
+			suf[i] = []int{t, idx}
+		}
+	}
+
+	for i, t := k, 0; i < n-2*k+1; i++ {
+		cur := s[i+k] - s[i] + pre[i-1][0] + suf[i+k][0]
+		if cur > t {
+			ans = []int{pre[i-1][1], i, suf[i+k][1]}
+			t = cur
+		}
+	}
+
+	return
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

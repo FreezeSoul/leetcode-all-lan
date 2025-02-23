@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1139.Largest%201-Bordered%20Square/README.md
+rating: 1744
+source: 第 147 场周赛 Q3
+tags:
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [1139. 最大的以 1 为边界的正方形](https://leetcode.cn/problems/largest-1-bordered-square)
 
 [English Version](/solution/1100-1199/1139.Largest%201-Bordered%20Square/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由若干 <code>0</code> 和 <code>1</code> 组成的二维网格&nbsp;<code>grid</code>，请你找出边界全部由 <code>1</code> 组成的最大 <strong>正方形</strong> 子网格，并返回该子网格中的元素数量。如果不存在，则返回 <code>0</code>。</p>
 
@@ -32,11 +46,13 @@
 	<li><code>grid[i][j]</code> 为&nbsp;<code>0</code>&nbsp;或&nbsp;<code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和 + 枚举**
+### 方法一：前缀和 + 枚举
 
 我们可以使用前缀和的方法预处理出每个位置向下和向右的连续 $1$ 的个数，记为 `down[i][j]` 和 `right[i][j]`。
 
@@ -46,9 +62,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -64,14 +78,17 @@ class Solution:
         for k in range(min(m, n), 0, -1):
             for i in range(m - k + 1):
                 for j in range(n - k + 1):
-                    if down[i][j] >= k and right[i][j] >= k and right[i + k - 1][j] >= k and down[i][j + k - 1] >= k:
+                    if (
+                        down[i][j] >= k
+                        and right[i][j] >= k
+                        and right[i + k - 1][j] >= k
+                        and down[i][j + k - 1] >= k
+                    ):
                         return k * k
         return 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -136,7 +153,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largest1BorderedSquare(grid [][]int) int {
@@ -171,19 +188,10 @@ func largest1BorderedSquare(grid [][]int) int {
 	}
 	return 0
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

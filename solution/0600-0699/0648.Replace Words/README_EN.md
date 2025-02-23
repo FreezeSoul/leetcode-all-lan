@@ -1,12 +1,27 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0648.Replace%20Words/README_EN.md
+tags:
+    - Trie
+    - Array
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [648. Replace Words](https://leetcode.com/problems/replace-words)
 
 [中文文档](/solution/0600-0699/0648.Replace%20Words/README.md)
 
 ## Description
 
-<p>In English, we have a concept called <strong>root</strong>, which can be followed by some other word to form another longer word - let&#39;s call this word <strong>successor</strong>. For example, when the <strong>root</strong> <code>&quot;an&quot;</code> is followed by the <strong>successor</strong> word <code>&quot;other&quot;</code>, we can form a new word <code>&quot;another&quot;</code>.</p>
+<!-- description:start -->
 
-<p>Given a <code>dictionary</code> consisting of many <strong>roots</strong> and a <code>sentence</code> consisting of words separated by spaces, replace all the <strong>successors</strong> in the sentence with the <strong>root</strong> forming it. If a <strong>successor</strong> can be replaced by more than one <strong>root</strong>, replace it with the <strong>root</strong> that has <strong>the shortest length</strong>.</p>
+<p>In English, we have a concept called <strong>root</strong>, which can be followed by some other word to form another longer word - let&#39;s call this word <strong>derivative</strong>. For example, when the <strong>root</strong> <code>&quot;help&quot;</code> is followed by the word <code>&quot;ful&quot;</code>, we can form a derivative <code>&quot;helpful&quot;</code>.</p>
+
+<p>Given a <code>dictionary</code> consisting of many <strong>roots</strong> and a <code>sentence</code> consisting of words separated by spaces, replace all the derivatives in the sentence with the <strong>root</strong> forming it. If a derivative can be replaced by more than one <strong>root</strong>, replace it with the <strong>root</strong> that has <strong>the shortest length</strong>.</p>
 
 <p>Return <em>the <code>sentence</code></em> after the replacement.</p>
 
@@ -40,11 +55,17 @@
 	<li><code>sentence</code> does not have leading or trailing spaces.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Trie:
@@ -85,7 +106,7 @@ class Solution:
         return " ".join(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -107,56 +128,7 @@ class Solution {
 }
 ```
 
-```java
-class Trie {
-    private Trie[] children = new Trie[26];
-    private int ref = -1;
-
-    public void insert(String w, int i) {
-        Trie node = this;
-        for (int j = 0; j < w.length(); ++j) {
-            int idx = w.charAt(j) - 'a';
-            if (node.children[idx] == null) {
-                node.children[idx] = new Trie();
-            }
-            node = node.children[idx];
-        }
-        node.ref = i;
-    }
-
-    public int search(String w) {
-        Trie node = this;
-        for (int j = 0; j < w.length(); ++j) {
-            int idx = w.charAt(j) - 'a';
-            if (node.children[idx] == null) {
-                return -1;
-            }
-            node = node.children[idx];
-            if (node.ref != -1) {
-                return node.ref;
-            }
-        }
-        return -1;
-    }
-}
-
-class Solution {
-    public String replaceWords(List<String> dictionary, String sentence) {
-        Trie trie = new Trie();
-        for (int i = 0; i < dictionary.size(); ++i) {
-            trie.insert(dictionary.get(i), i);
-        }
-        List<String> ans = new ArrayList<>();
-        for (String w : sentence.split("\\s")) {
-            int idx = trie.search(w);
-            ans.add(idx == -1 ? w : dictionary.get(idx));
-        }
-        return String.join(" ", ans);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
@@ -165,7 +137,8 @@ private:
     int ref;
 
 public:
-    Trie(): ref(-1) {
+    Trie()
+        : ref(-1) {
         memset(children, 0, sizeof(children));
     }
 
@@ -217,7 +190,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -274,40 +247,31 @@ func replaceWords(dictionary []string, sentence string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class Trie {
-    private children: Trie[];
-    private ref: number;
+    #children: Record<string, Trie> = {};
+    #ref = -1;
 
-    constructor() {
-        this.children = new Array<Trie>(26);
-        this.ref = -1;
-    }
-
-    public insert(w: string, i: number) {
+    insert(w: string, i: number) {
         let node: Trie = this;
         for (const c of w) {
-            const idx = c.charCodeAt(0) - 97;
-            if (!node.children[idx]) {
-                node.children[idx] = new Trie();
-            }
-            node = node.children[idx];
+            node.#children[c] ??= new Trie();
+            node = node.#children[c];
         }
-        node.ref = i;
+        node.#ref = i;
     }
 
-    public search(w: string): number {
+    search(w: string): number {
         let node: Trie = this;
         for (const c of w) {
-            const idx = c.charCodeAt(0) - 97;
-            if (!node.children[idx]) {
+            if (!node.#children[c]) {
                 return -1;
             }
-            node = node.children[idx];
-            if (node.ref !== -1) {
-                return node.ref;
+            node = node.#children[c];
+            if (node.#ref !== -1) {
+                return node.#ref;
             }
         }
         return -1;
@@ -329,10 +293,112 @@ function replaceWords(dictionary: string[], sentence: string): string {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Trie {
+    private Trie[] children = new Trie[26];
+    private int ref = -1;
+
+    public void insert(String w, int i) {
+        Trie node = this;
+        for (int j = 0; j < w.length(); ++j) {
+            int idx = w.charAt(j) - 'a';
+            if (node.children[idx] == null) {
+                node.children[idx] = new Trie();
+            }
+            node = node.children[idx];
+        }
+        node.ref = i;
+    }
+
+    public int search(String w) {
+        Trie node = this;
+        for (int j = 0; j < w.length(); ++j) {
+            int idx = w.charAt(j) - 'a';
+            if (node.children[idx] == null) {
+                return -1;
+            }
+            node = node.children[idx];
+            if (node.ref != -1) {
+                return node.ref;
+            }
+        }
+        return -1;
+    }
+}
+
+class Solution {
+    public String replaceWords(List<String> dictionary, String sentence) {
+        Trie trie = new Trie();
+        for (int i = 0; i < dictionary.size(); ++i) {
+            trie.insert(dictionary.get(i), i);
+        }
+        List<String> ans = new ArrayList<>();
+        for (String w : sentence.split("\\s")) {
+            int idx = trie.search(w);
+            ans.add(idx == -1 ? w : dictionary.get(idx));
+        }
+        return String.join(" ", ans);
+    }
+}
 ```
 
+#### TypeScript
+
+```ts
+function replaceWords(dictionary: string[], sentence: string): string {
+    const words = sentence.split(' ');
+    const trie: Trie = {};
+    const TERMINAL_MARK = 'TERMINAL_MARK';
+
+    for (const s of dictionary) {
+        let t = trie;
+
+        for (const ch of s) {
+            t[ch] ??= {};
+            t = t[ch] as Trie_;
+        }
+        t[TERMINAL_MARK] = TERMINAL_MARK;
+    }
+
+    for (let i = 0; i < words.length; i++) {
+        const s = words[i];
+        let t = trie;
+
+        for (let j = 0; j < s.length; j++) {
+            const ch = s[j];
+
+            if (!t[ch]) break;
+
+            if ((t[ch] as Trie_)[TERMINAL_MARK]) {
+                words[i] = s.slice(0, j + 1);
+                break;
+            }
+            t = t[ch] as Trie_;
+        }
+    }
+
+    return words.join(' ');
+}
+
+// prettier-ignore
+type Trie = { [key: string]: Trie} | string
+type Trie_ = Exclude<Trie, string>;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

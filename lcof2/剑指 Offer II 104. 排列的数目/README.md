@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20104.%20%E6%8E%92%E5%88%97%E7%9A%84%E6%95%B0%E7%9B%AE/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 104. 排列的数目](https://leetcode.cn/problems/D0F0SV)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个由 <strong>不同</strong>&nbsp;正整数组成的数组 <code>nums</code> ，和一个目标整数 <code>target</code> 。请从 <code>nums</code> 中找出并返回总和为 <code>target</code> 的元素组合的个数。数组中的数字可以在一次排列中出现任意次，但是顺序不同的序列被视作不同的组合。</p>
 
@@ -53,17 +60,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 377&nbsp;题相同：<a href="https://leetcode.cn/problems/combination-sum-iv/">https://leetcode.cn/problems/combination-sum-iv/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-简单动态规划，`dp[i]` 表示总和为 `i` 的元素组合的个数。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,9 +84,7 @@ class Solution:
         return dp[-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -119,7 +124,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func combinationSum4(nums []int, target int) int {
@@ -136,10 +141,29 @@ func combinationSum4(nums []int, target int) int {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func combinationSum4(_ nums: [Int], _ target: Int) -> Int {
+        var dp = [Int](repeating: 0, count: target + 1)
+        dp[0] = 1
 
+        for i in 1...target {
+            for num in nums {
+                if i >= num, dp[i] <= Int.max - dp[i - num] {
+                    dp[i] += dp[i - num]
+                }
+            }
+        }
+
+        return dp[target]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

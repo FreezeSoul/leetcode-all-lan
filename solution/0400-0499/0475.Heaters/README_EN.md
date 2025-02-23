@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0475.Heaters/README_EN.md
+tags:
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [475. Heaters](https://leetcode.com/problems/heaters)
 
 [中文文档](/solution/0400-0499/0475.Heaters/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Winter is coming! During the contest, your first job is to design a standard heater with a fixed warm radius to warm all the houses.</p>
 
@@ -26,7 +41,7 @@
 <pre>
 <strong>Input:</strong> houses = [1,2,3,4], heaters = [1,4]
 <strong>Output:</strong> 1
-<strong>Explanation:</strong> The two heater was placed in the position 1 and 4. We need to use radius 1 standard, then all the houses can be warmed.
+<strong>Explanation:</strong> The two heaters were placed at positions 1 and 4. We need to use a radius 1 standard, then all the houses can be warmed.
 </pre>
 
 <p><strong class="example">Example 3:</strong></p>
@@ -44,11 +59,17 @@
 	<li><code>1 &lt;= houses[i], heaters[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -82,7 +103,7 @@ class Solution:
         return left
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -103,31 +124,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function findRadius(houses: number[], heaters: number[]): number {
-    houses.sort((a, b) => a - b);
-    heaters.sort((a, b) => a - b);
-    const m = houses.length,
-        n = heaters.length;
-    let ans = 0;
-    for (let i = 0, j = 0; i < m; i++) {
-        let cur = Math.abs(houses[i] - heaters[j]);
-        while (
-            j + 1 < n &&
-            Math.abs(houses[i] - heaters[j]) >=
-                Math.abs(houses[i] - heaters[j + 1])
-        ) {
-            cur = Math.min(Math.abs(houses[i] - heaters[++j]), cur);
-        }
-        ans = Math.max(cur, ans);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -164,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findRadius(houses []int, heaters []int) int {
@@ -203,10 +200,31 @@ func findRadius(houses []int, heaters []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function findRadius(houses: number[], heaters: number[]): number {
+    houses.sort((a, b) => a - b);
+    heaters.sort((a, b) => a - b);
+    const m = houses.length,
+        n = heaters.length;
+    let ans = 0;
+    for (let i = 0, j = 0; i < m; i++) {
+        let cur = Math.abs(houses[i] - heaters[j]);
+        while (
+            j + 1 < n &&
+            Math.abs(houses[i] - heaters[j]) >= Math.abs(houses[i] - heaters[j + 1])
+        ) {
+            cur = Math.min(Math.abs(houses[i] - heaters[++j]), cur);
+        }
+        ans = Math.max(cur, ans);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

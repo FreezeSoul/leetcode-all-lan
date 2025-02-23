@@ -1,101 +1,181 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0948.Bag%20of%20Tokens/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Two Pointers
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [948. Bag of Tokens](https://leetcode.com/problems/bag-of-tokens)
 
 [中文文档](/solution/0900-0999/0948.Bag%20of%20Tokens/README.md)
 
 ## Description
 
-<p>You have an initial <strong>power</strong> of <code>power</code>, an initial <strong>score</strong> of <code>0</code>, and a bag of <code>tokens</code> where <code>tokens[i]</code> is the value of the <code>i<sup>th</sup></code> token (0-indexed).</p>
+<!-- description:start -->
 
-<p>Your goal is to maximize your total <strong>score</strong> by potentially playing each token in one of two ways:</p>
+<p>You start with an initial <strong>power</strong> of <code>power</code>, an initial <strong>score</strong> of <code>0</code>, and a bag of tokens given as an integer array <code>tokens</code>, where each&nbsp;<code>tokens[i]</code> denotes the value of token<em><sub>i</sub></em>.</p>
+
+<p>Your goal is to <strong>maximize</strong> the total <strong>score</strong> by strategically playing these tokens. In one move, you can play an <strong>unplayed</strong> token in one of the two ways (but not both for the same token):</p>
 
 <ul>
-	<li>If your current <strong>power</strong> is at least <code>tokens[i]</code>, you may play the <code>i<sup>th</sup></code> token face up, losing <code>tokens[i]</code> <strong>power</strong> and gaining <code>1</code> <strong>score</strong>.</li>
-	<li>If your current <strong>score</strong> is at least <code>1</code>, you may play the <code>i<sup>th</sup></code> token face down, gaining <code>tokens[i]</code> <strong>power</strong> and losing <code>1</code> <strong>score</strong>.</li>
+	<li><strong>Face-up</strong>: If your current power is <strong>at least</strong> <code>tokens[i]</code>, you may play token<em><sub>i</sub></em>, losing <code>tokens[i]</code> power and gaining <code>1</code> score.</li>
+	<li><strong>Face-down</strong>: If your current score is <strong>at least</strong> <code>1</code>, you may play token<em><sub>i</sub></em>, gaining <code>tokens[i]</code> power and losing <code>1</code> score.</li>
 </ul>
 
-<p>Each token may be played <strong>at most</strong> once and <strong>in any order</strong>. You do <strong>not</strong> have to play all the tokens.</p>
-
-<p>Return <em>the largest possible <strong>score</strong> you can achieve after playing any number of tokens</em>.</p>
+<p>Return <em>the <strong>maximum</strong> possible score you can achieve after playing <strong>any</strong> number of tokens</em>.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre>
-<strong>Input:</strong> tokens = [100], power = 50
-<strong>Output:</strong> 0
-<strong>Explanation</strong><strong>:</strong> Playing the only token in the bag is impossible because you either have too little power or too little score.
-</pre>
+<div class="example-block" style="
+    border-color: var(--border-tertiary);
+    border-left-width: 2px;
+    color: var(--text-secondary);
+    font-size: .875rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    overflow: visible;
+    padding-left: 1rem;
+">
+<p><strong>Input:</strong> <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">tokens = [100], power = 50</span></p>
+
+<p><strong>Output:</strong> <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">0</span></p>
+
+<p><strong>Explanation</strong><strong>:</strong> Since your score is <code>0</code> initially, you cannot play the token face-down. You also cannot play it face-up since your power (<code>50</code>) is less than <code>tokens[0]</code>&nbsp;(<code>100</code>).</p>
+</div>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre>
-<strong>Input:</strong> tokens = [100,200], power = 150
-<strong>Output:</strong> 1
-<strong>Explanation:</strong> Play the 0<sup>th</sup> token (100) face up, your power becomes 50 and score becomes 1.
-There is no need to play the 1<sup>st</sup> token since you cannot play it face up to add to your score.
-</pre>
+<div class="example-block" style="
+    border-color: var(--border-tertiary);
+    border-left-width: 2px;
+    color: var(--text-secondary);
+    font-size: .875rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    overflow: visible;
+    padding-left: 1rem;
+">
+<p><strong>Input:</strong> <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">tokens = [200,100], power = 150</span></p>
+
+<p><strong>Output:</strong> <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">1</span></p>
+
+<p><strong>Explanation:</strong> Play token<em><sub>1</sub></em> (<code>100</code>) face-up, reducing your power to&nbsp;<code>50</code> and increasing your score to&nbsp;<code>1</code>.</p>
+
+<p>There is no need to play token<em><sub>0</sub></em>, since you cannot play it face-up to add to your score. The maximum score achievable is <code>1</code>.</p>
+</div>
 
 <p><strong class="example">Example 3:</strong></p>
 
-<pre>
-<strong>Input:</strong> tokens = [100,200,300,400], power = 200
-<strong>Output:</strong> 2
-<strong>Explanation:</strong> Play the tokens in this order to get a score of 2:
-1. Play the 0<sup>th</sup> token (100) face up, your power becomes 100 and score becomes 1.
-2. Play the 3<sup>rd</sup> token (400) face down, your power becomes 500 and score becomes 0.
-3. Play the 1<sup>st</sup> token (200) face up, your power becomes 300 and score becomes 1.
-4. Play the 2<sup>nd </sup>token (300) face up, your power becomes 0 and score becomes 2.
-</pre>
+<div class="example-block" style="
+    border-color: var(--border-tertiary);
+    border-left-width: 2px;
+    color: var(--text-secondary);
+    font-size: .875rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    overflow: visible;
+    padding-left: 1rem;
+">
+<p><strong>Input:</strong> <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">tokens = [100,200,300,400], power = 200</span></p>
+
+<p><strong>Output:</strong> <span class="example-io" style="
+    font-family: Menlo,sans-serif;
+    font-size: 0.85rem;
+">2</span></p>
+
+<p><strong>Explanation:</strong> Play the tokens in this order to get a score of <code>2</code>:</p>
+
+<ol>
+	<li>Play token<em><sub>0</sub></em> (<code>100</code>) face-up, reducing power to <code>100</code> and increasing score to <code>1</code>.</li>
+	<li>Play token<em><sub>3</sub></em> (<code>400</code>) face-down, increasing power to <code>500</code> and reducing score to <code>0</code>.</li>
+	<li>Play token<em><sub>1</sub></em> (<code>200</code>) face-up, reducing power to <code>300</code> and increasing score to <code>1</code>.</li>
+	<li>Play token<em><sub>2</sub></em> (<code>300</code>) face-up, reducing power to <code>0</code> and increasing score to <code>2</code>.</li>
+</ol>
+
+<p><span style="color: var(--text-secondary); font-size: 0.875rem;">The maximum score achievable is </span><code style="color: var(--text-secondary); font-size: 0.875rem;">2</code><span style="color: var(--text-secondary); font-size: 0.875rem;">.</span></p>
+</div>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
 
 <ul>
 	<li><code>0 &lt;= tokens.length &lt;= 1000</code></li>
-	<li><code>0 &lt;= tokens[i],&nbsp;power &lt; 10<sup>4</sup></code></li>
+	<li><code>0 &lt;= tokens[i], power &lt; 10<sup>4</sup></code></li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1: Greedy + Sorting + Two Pointers
+
+There are two ways to use tokens: one is to consume energy to gain points, and the other is to consume points to gain energy. Obviously, we should consume as little energy as possible to gain as many points as possible.
+
+Therefore, we can sort the tokens by the amount of energy they consume, and then use two pointers: one moving from left to right and the other from right to left. In each iteration, we try to consume energy to gain points as much as possible, and then update the maximum score. If the current energy is not enough to consume the current token, we try to consume the current token using points. If the points are not enough to consume the current token, we stop the iteration.
+
+The time complexity is $O(n \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the number of tokens.
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def bagOfTokensScore(self, tokens: List[int], power: int) -> int:
         tokens.sort()
+        ans = score = 0
         i, j = 0, len(tokens) - 1
-        ans = t = 0
         while i <= j:
             if power >= tokens[i]:
                 power -= tokens[i]
-                i, t = i + 1, t + 1
-                ans = max(ans, t)
-            elif t:
+                score, i = score + 1, i + 1
+                ans = max(ans, score)
+            elif score:
                 power += tokens[j]
-                j, t = j - 1, t - 1
+                score, j = score - 1, j - 1
             else:
                 break
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int bagOfTokensScore(int[] tokens, int power) {
         Arrays.sort(tokens);
-        int i = 0, j = tokens.length - 1;
-        int ans = 0, t = 0;
-        while (i <= j) {
+        int ans = 0, score = 0;
+        for (int i = 0, j = tokens.length - 1; i <= j;) {
             if (power >= tokens[i]) {
                 power -= tokens[i++];
-                ++t;
-                ans = Math.max(ans, t);
-            } else if (t > 0) {
+                ans = Math.max(ans, ++score);
+            } else if (score > 0) {
                 power += tokens[j--];
-                --t;
+                --score;
             } else {
                 break;
             }
@@ -105,22 +185,21 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int bagOfTokensScore(vector<int>& tokens, int power) {
         sort(tokens.begin(), tokens.end());
-        int i = 0, j = tokens.size() - 1;
-        int ans = 0, t = 0;
-        while (i <= j) {
+        int ans = 0, score = 0;
+        for (int i = 0, j = tokens.size() - 1; i <= j;) {
             if (power >= tokens[i]) {
                 power -= tokens[i++];
-                ans = max(ans, ++t);
-            } else if (t) {
+                ans = max(ans, ++score);
+            } else if (score > 0) {
                 power += tokens[j--];
-                --t;
+                --score;
             } else {
                 break;
             }
@@ -130,40 +209,55 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func bagOfTokensScore(tokens []int, power int) int {
+func bagOfTokensScore(tokens []int, power int) (ans int) {
 	sort.Ints(tokens)
 	i, j := 0, len(tokens)-1
-	ans, t := 0, 0
+	score := 0
 	for i <= j {
 		if power >= tokens[i] {
 			power -= tokens[i]
-			i, t = i+1, t+1
-			ans = max(ans, t)
-		} else if t > 0 {
+			i++
+			score++
+			ans = max(ans, score)
+		} else if score > 0 {
 			power += tokens[j]
-			j, t = j-1, t-1
+			j--
+			score--
 		} else {
 			break
 		}
 	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function bagOfTokensScore(tokens: number[], power: number): number {
+    tokens.sort((a, b) => a - b);
+    let [i, j] = [0, tokens.length - 1];
+    let [ans, score] = [0, 0];
+    while (i <= j) {
+        if (power >= tokens[i]) {
+            power -= tokens[i++];
+            ans = Math.max(ans, ++score);
+        } else if (score) {
+            power += tokens[j--];
+            score--;
+        } else {
+            break;
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,12 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/08.02.Robot%20in%20a%20Grid/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 08.02. 迷路的机器人](https://leetcode.cn/problems/robot-in-a-grid-lcci)
 
 [English Version](/lcci/08.02.Robot%20in%20a%20Grid/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>设想有个机器人坐在一个网格的左上角，网格 r 行 c 列。机器人只能向下或向右移动，但不能走到一些被禁止的网格（有障碍物）。设计一种算法，寻找机器人从左上角移动到右下角的路径。</p>
-![](./images/robot_maze.png)
+
+![](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcci/08.02.Robot%20in%20a%20Grid/images/robot_maze.png)
+
 <p>网格中的障碍物和空位置分别用 <code>1</code> 和 <code>0</code> 来表示。</p>
 <p>返回一条可行的路径，路径由经过的网格的行号和列号组成。左上角为 0 行 0 列。</p>
 <p><strong>示例&nbsp;1:</strong></p>
@@ -17,16 +28,18 @@
 &nbsp; [0,0,<strong>0</strong>]
 ]
 <strong>输出:</strong> [[0,0],[0,1],[0,2],[1,2],[2,2]]
-<strong>解释: 
+<strong>解释:
 </strong>输入中标粗的位置即为输出表示的路径，即
 0行0列（左上角） -&gt; 0行1列 -&gt; 0行2列 -&gt; 1行2列 -&gt; 2行2列（右下角）</pre>
 <p><strong>说明：</strong><em>r</em>&nbsp;和 <em>c </em>的值均不超过 100。</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们可以使用深度优先搜索来解决本题。我们从左上角开始，向右或向下移动，直到到达右下角。如果在某一步，我们发现当前位置是障碍物，或者当前位置已经在路径中，那么我们就返回，否则我们将当前位置加入路径中，并且标记当前位置为已经访问过，然后继续向右或向下移动。
 
@@ -36,9 +49,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -58,9 +69,7 @@ class Solution:
         return ans if dfs(0, 0) else []
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,7 +109,7 @@ public:
         int m = obstacleGrid.size();
         int n = obstacleGrid[0].size();
         vector<vector<int>> ans;
-        function<bool(int, int)> dfs = [&](int i, int j) -> bool {
+        auto dfs = [&](this auto&& dfs, int i, int j) -> bool {
             if (i >= m || j >= n || obstacleGrid[i][j] == 1) {
                 return false;
             }
@@ -117,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pathWithObstacles(obstacleGrid [][]int) [][]int {
@@ -143,7 +152,7 @@ func pathWithObstacles(obstacleGrid [][]int) [][]int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function pathWithObstacles(obstacleGrid: number[][]): number[][] {
@@ -169,7 +178,7 @@ function pathWithObstacles(obstacleGrid: number[][]): number[][] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -199,10 +208,39 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    private var ans = [[Int]]()
+    private var g: [[Int]] = []
+    private var m: Int = 0
+    private var n: Int = 0
 
+    func pathWithObstacles(_ obstacleGrid: [[Int]]) -> [[Int]] {
+        g = obstacleGrid
+        m = g.count
+        n = g[0].count
+        return dfs(0, 0) ? ans : []
+    }
+
+    private func dfs(_ i: Int, _ j: Int) -> Bool {
+        if i >= m || j >= n || g[i][j] == 1 {
+            return false
+        }
+        ans.append([i, j])
+        g[i][j] = 1
+        if (i == m - 1 && j == n - 1) || dfs(i + 1, j) || dfs(i, j + 1) {
+            return true
+        }
+        ans.removeLast()
+        return false
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1589.Maximum%20Sum%20Obtained%20of%20Any%20Permutation/README_EN.md
+rating: 1871
+source: Biweekly Contest 35 Q2
+tags:
+    - Greedy
+    - Array
+    - Prefix Sum
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1589. Maximum Sum Obtained of Any Permutation](https://leetcode.com/problems/maximum-sum-obtained-of-any-permutation)
 
 [中文文档](/solution/1500-1599/1589.Maximum%20Sum%20Obtained%20of%20Any%20Permutation/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>We have an array of integers, <code>nums</code>, and an array of <code>requests</code> where <code>requests[i] = [start<sub>i</sub>, end<sub>i</sub>]</code>. The <code>i<sup>th</sup></code> request asks for the sum of <code>nums[start<sub>i</sub>] + nums[start<sub>i</sub> + 1] + ... + nums[end<sub>i</sub> - 1] + nums[end<sub>i</sub>]</code>. Both <code>start<sub>i</sub></code> and <code>end<sub>i</sub></code> are <em>0-indexed</em>.</p>
 
@@ -52,11 +69,23 @@ Total sum: 11 + 8 = 19, which is the best that you can do.
 	<li><code>0 &lt;= start<sub>i</sub>&nbsp;&lt;= end<sub>i</sub>&nbsp;&lt;&nbsp;n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Difference Array + Sorting + Greedy
+
+We observe that for a query operation, it returns the sum of all elements in the query interval $[l, r]$. The problem requires the maximum sum of the results of all query operations, which means we need to accumulate the results of all query operations to maximize the sum. Therefore, if an index $i$ appears more frequently in the query operations, we should assign a larger value to index $i$ to maximize the sum of the results of all query operations.
+
+Therefore, we can use the idea of a difference array to count the number of times each index appears in the query operations, then sort these counts in ascending order, and also sort the array $\textit{nums}$ in ascending order. This ensures that the more frequently an index $i$ appears in the query operations, the larger the value $\textit{nums}[i]$ corresponding to that index will be. Next, we only need to multiply the values $\textit{nums}[i]$ corresponding to these indices by the number of times they appear in the query operations, and then sum them up to get the maximum sum of the results of all query operations.
+
+Time complexity $O(n \times \log n)$, space complexity $O(n)$. Where $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -75,7 +104,7 @@ class Solution:
         return sum(a * b for a, b in zip(nums, d)) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +164,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSumRangeQuery(nums []int, requests [][]int) (ans int) {
@@ -159,10 +188,9 @@ func maxSumRangeQuery(nums []int, requests [][]int) (ans int) {
 		ans = (ans + a*b) % mod
 	}
 	return
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxSumRangeQuery(nums: number[], requests: number[][]): number {
@@ -188,10 +216,8 @@ function maxSumRangeQuery(nums: number[], requests: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

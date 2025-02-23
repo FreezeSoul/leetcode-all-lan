@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1700.Number%20of%20Students%20Unable%20to%20Eat%20Lunch/README_EN.md
+rating: 1404
+source: Biweekly Contest 42 Q1
+tags:
+    - Stack
+    - Queue
+    - Array
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1700. Number of Students Unable to Eat Lunch](https://leetcode.com/problems/number-of-students-unable-to-eat-lunch)
 
 [中文文档](/solution/1700-1799/1700.Number%20of%20Students%20Unable%20to%20Eat%20Lunch/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>The school cafeteria offers circular and square sandwiches at lunch break, referred to by numbers <code>0</code> and <code>1</code> respectively. All students stand in a queue. Each student either prefers square or circular sandwiches.</p>
 
@@ -52,11 +69,27 @@ Hence all students are able to eat.
 	<li><code>students[i]</code> is <code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We observe that the positions of the students can be adjusted, but the positions of the sandwiches cannot be adjusted. That is to say, if the sandwich in front is not taken, then all the sandwiches behind cannot be taken.
+
+Therefore, we first use a counter $cnt$ to count the types of sandwiches that students like and their corresponding quantities.
+
+Then we traverse the sandwiches. If we cannot find a student who likes this sandwich in $cnt$, it means that the sandwiches behind cannot be taken, and we return the current number of remaining students.
+
+If the traversal is over, it means that all students have sandwiches to eat, and we return $0$.
+
+The time complexity is $O(n)$, where $n$ is the number of sandwiches. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +102,7 @@ class Solution:
         return 0
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -88,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countStudents(students []int, sandwiches []int) int {
@@ -124,26 +157,7 @@ func countStudents(students []int, sandwiches []int) int {
 }
 ```
 
-### **C**
-
-```c
-int countStudents(int *students, int studentsSize, int *sandwiches, int sandwichesSize) {
-    int count[2] = {0};
-    for (int i = 0; i < studentsSize; i++) {
-        count[students[i]]++;
-    }
-    for (int i = 0; i < sandwichesSize; i++) {
-        int j = sandwiches[i];
-        if (count[j] == 0) {
-            return count[j ^ 1];
-        }
-        count[j]--;
-    }
-    return 0;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countStudents(students: number[], sandwiches: number[]): number {
@@ -161,7 +175,7 @@ function countStudents(students: number[], sandwiches: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -182,10 +196,27 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+int countStudents(int* students, int studentsSize, int* sandwiches, int sandwichesSize) {
+    int count[2] = {0};
+    for (int i = 0; i < studentsSize; i++) {
+        count[students[i]]++;
+    }
+    for (int i = 0; i < sandwichesSize; i++) {
+        int j = sandwiches[i];
+        if (count[j] == 0) {
+            return count[j ^ 1];
+        }
+        count[j]--;
+    }
+    return 0;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

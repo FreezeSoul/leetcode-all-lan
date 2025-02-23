@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0304.Range%20Sum%20Query%202D%20-%20Immutable/README_EN.md
+tags:
+    - Design
+    - Array
+    - Matrix
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [304. Range Sum Query 2D - Immutable](https://leetcode.com/problems/range-sum-query-2d-immutable)
 
 [中文文档](/solution/0300-0399/0304.Range%20Sum%20Query%202D%20-%20Immutable/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a 2D matrix <code>matrix</code>, handle multiple queries of the following type:</p>
 
@@ -50,13 +65,33 @@ numMatrix.sumRegion(1, 2, 2, 4); // return 12 (i.e sum of the blue rectangle)
 	<li>At most <code>10<sup>4</sup></code> calls will be made to <code>sumRegion</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Dynamic programming - 2D preSum.
+<!-- solution:start -->
+
+### Solution 1: Two-dimensional Prefix Sum
+
+We use $s[i + 1][j + 1]$ to represent the sum of all elements in the upper left part of the $i$th row and $j$th column, where indices $i$ and $j$ both start from $0$. We can get the following prefix sum formula:
+
+$$
+s[i + 1][j + 1] = s[i + 1][j] + s[i][j + 1] - s[i][j] + nums[i][j]
+$$
+
+Then, the sum of the elements of the rectangle with $(x_1, y_1)$ and $(x_2, y_2)$ as the upper left corner and lower right corner respectively is:
+
+$$
+s[x_2 + 1][y_2 + 1] - s[x_2 + 1][y_1] - s[x_1][y_2 + 1] + s[x_1][y_1]
+$$
+
+In the initialization method, we preprocess the prefix sum array $s$, and in the query method, we directly return the result of the above formula.
+
+The time complexity for initializing is $O(m \times n)$, and the time complexity for querying is $O(1)$. The space complexity is $O(m \times n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class NumMatrix:
@@ -83,7 +118,7 @@ class NumMatrix:
 # param_1 = obj.sumRegion(row1,col1,row2,col2)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class NumMatrix {
@@ -111,7 +146,7 @@ class NumMatrix {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class NumMatrix {
@@ -140,7 +175,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type NumMatrix struct {
@@ -172,7 +207,105 @@ func (this *NumMatrix) SumRegion(row1 int, col1 int, row2 int, col2 int) int {
  */
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+class NumMatrix {
+    private s: number[][];
+
+    constructor(matrix: number[][]) {
+        const m = matrix.length;
+        const n = matrix[0].length;
+        this.s = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
+        for (let i = 0; i < m; ++i) {
+            for (let j = 0; j < n; ++j) {
+                this.s[i + 1][j + 1] =
+                    this.s[i + 1][j] + this.s[i][j + 1] - this.s[i][j] + matrix[i][j];
+            }
+        }
+    }
+
+    sumRegion(row1: number, col1: number, row2: number, col2: number): number {
+        return (
+            this.s[row2 + 1][col2 + 1] -
+            this.s[row2 + 1][col1] -
+            this.s[row1][col2 + 1] +
+            this.s[row1][col1]
+        );
+    }
+}
+
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * var obj = new NumMatrix(matrix)
+ * var param_1 = obj.sumRegion(row1,col1,row2,col2)
+ */
+```
+
+#### Rust
+
+```rust
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * let obj = NumMatrix::new(matrix);
+ * let ret_1: i32 = obj.sum_region(row1, col1, row2, col2);
+ */
+
+struct NumMatrix {
+    // Of size (N + 1) * (M + 1)
+    prefix_vec: Vec<Vec<i32>>,
+    n: usize,
+    m: usize,
+    is_initialized: bool,
+    ref_vec: Vec<Vec<i32>>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl NumMatrix {
+    fn new(matrix: Vec<Vec<i32>>) -> Self {
+        NumMatrix {
+            prefix_vec: vec![vec![0; matrix[0].len() + 1]; matrix.len() + 1],
+            n: matrix.len(),
+            m: matrix[0].len(),
+            is_initialized: false,
+            ref_vec: matrix,
+        }
+    }
+
+    fn sum_region(&mut self, row1: i32, col1: i32, row2: i32, col2: i32) -> i32 {
+        if !self.is_initialized {
+            self.initialize_prefix_vec();
+        }
+        // Since i32 will let `rustc` complain, just make it happy
+        let row1: usize = row1 as usize;
+        let col1: usize = col1 as usize;
+        let row2: usize = row2 as usize;
+        let col2: usize = col2 as usize;
+        // Return the value in O(1)
+        self.prefix_vec[row2 + 1][col2 + 1]
+            - self.prefix_vec[row2 + 1][col1]
+            - self.prefix_vec[row1][col2 + 1]
+            + self.prefix_vec[row1][col1]
+    }
+
+    fn initialize_prefix_vec(&mut self) {
+        // Initialize the prefix sum vector
+        for i in 0..self.n {
+            for j in 0..self.m {
+                self.prefix_vec[i + 1][j + 1] =
+                    self.prefix_vec[i][j + 1] + self.prefix_vec[i + 1][j] - self.prefix_vec[i][j]
+                        + self.ref_vec[i][j];
+            }
+        }
+        self.is_initialized = true;
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -185,10 +318,7 @@ var NumMatrix = function (matrix) {
     for (let i = 0; i < m; ++i) {
         for (let j = 0; j < n; ++j) {
             this.s[i + 1][j + 1] =
-                this.s[i + 1][j] +
-                this.s[i][j + 1] -
-                this.s[i][j] +
-                matrix[i][j];
+                this.s[i + 1][j] + this.s[i][j + 1] - this.s[i][j] + matrix[i][j];
         }
     }
 };
@@ -216,48 +346,58 @@ NumMatrix.prototype.sumRegion = function (row1, col1, row2, col2) {
  */
 ```
 
-### **TypeScript**
+#### Kotlin
 
-```ts
-class NumMatrix {
-    private s: number[][];
+```kotlin
+class NumMatrix(matrix: Array<IntArray>) {
+    private val n: Int
+    private val m: Int
+    private val matrix: Array<IntArray>
+    private val prefix_sums_matrix: Array<IntArray>
+    private var initialized: Boolean
 
-    constructor(matrix: number[][]) {
-        const m = matrix.length;
-        const n = matrix[0].length;
-        this.s = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
-        for (let i = 0; i < m; ++i) {
-            for (let j = 0; j < n; ++j) {
-                this.s[i + 1][j + 1] =
-                    this.s[i + 1][j] +
-                    this.s[i][j + 1] -
-                    this.s[i][j] +
-                    matrix[i][j];
-            }
-        }
+    init {
+        this.n = matrix.size
+        this.m = matrix[0].size
+        this.matrix = matrix
+        this.prefix_sums_matrix = Array(n + 1) { IntArray(m + 1) }
+        this.initialized = false
     }
 
-    sumRegion(row1: number, col1: number, row2: number, col2: number): number {
-        return (
-            this.s[row2 + 1][col2 + 1] -
-            this.s[row2 + 1][col1] -
-            this.s[row1][col2 + 1] +
-            this.s[row1][col1]
-        );
+    fun sumRegion(row1: Int, col1: Int, row2: Int, col2: Int): Int {
+        this.init()
+        return this.prefix_sums_matrix[row2 + 1][col2 + 1] -
+            this.prefix_sums_matrix[row2 + 1][col1] -
+            this.prefix_sums_matrix[row1][col2 + 1] +
+            this.prefix_sums_matrix[row1][col1]
+    }
+
+    private fun init(): Boolean {
+        if (!this.initialized) {
+            for (i in 0..<this.n) {
+                for (j in 0..<this.m) {
+                    this.prefix_sums_matrix[i + 1][j + 1] =
+                        this.prefix_sums_matrix[i + 1][j] +
+                        this.prefix_sums_matrix[i][j + 1] -
+                        this.prefix_sums_matrix[i][j] +
+                        this.matrix[i][j]
+                }
+            }
+            this.initialized = true
+            return true
+        }
+        return false
     }
 }
 
 /**
- * Your NumMatrix object will be instantiated and called as such:
- * var obj = new NumMatrix(matrix)
- * var param_1 = obj.sumRegion(row1,col1,row2,col2)
+ * Your NumMatrix object will be instantiated and called as such: var obj = NumMatrix(matrix) var
+ * param_1 = obj.sumRegion(row1,col1,row2,col2)
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

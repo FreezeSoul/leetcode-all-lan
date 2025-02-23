@@ -1,8 +1,23 @@
-# [360. Sort Transformed Array](https://leetcode.com/problems/sort-transformed-array)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0360.Sort%20Transformed%20Array/README_EN.md
+tags:
+    - Array
+    - Math
+    - Two Pointers
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [360. Sort Transformed Array 🔒](https://leetcode.com/problems/sort-transformed-array)
 
 [中文文档](/solution/0300-0399/0360.Sort%20Transformed%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a <strong>sorted</strong> integer array <code>nums</code> and three integers <code>a</code>, <code>b</code> and <code>c</code>, apply a quadratic function of the form <code>f(x) = ax<sup>2</sup> + bx + c</code> to each element <code>nums[i]</code> in the array, and return <em>the array in a sorted order</em>.</p>
 
@@ -26,11 +41,17 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you solve it in <code>O(n)</code> time?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +85,7 @@ class Solution:
         return res
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -143,7 +164,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sortTransformedArray(nums []int, a int, b int, c int) []int {
@@ -183,10 +204,8 @@ func f(a, b, c, x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

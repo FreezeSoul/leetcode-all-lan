@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0077.Combinations/README.md
+tags:
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [77. 组合](https://leetcode.cn/problems/combinations)
 
 [English Version](/solution/0000-0099/0077.Combinations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个整数 <code>n</code> 和 <code>k</code>，返回范围 <code>[1, n]</code> 中所有可能的 <code>k</code> 个数的组合。</p>
 
@@ -41,11 +51,13 @@
 	<li><code>1 <= k <= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯（两种方式）**
+### 方法一：回溯（两种方式）
 
 我们设计一个函数 $dfs(i)$，表示从数字 $i$ 开始搜索，当前搜索路径为 $t$，答案为 $ans$。
 
@@ -63,15 +75,13 @@
 
 相似题目：
 
--   [39. 组合总和](/solution/0000-0099/0039.Combination%20Sum/README.md)
--   [40. 组合总和 II](/solution/0000-0099/0040.Combination%20Sum%20II/README.md)
--   [216. 组合总和 III](/solution/0200-0299/0216.Combination%20Sum%20III/README.md)
+-   [39. 组合总和](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0039.Combination%20Sum/README.md)
+-   [40. 组合总和 II](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0040.Combination%20Sum%20II/README.md)
+-   [216. 组合总和 III](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0216.Combination%20Sum%20III/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,29 +103,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def combine(self, n: int, k: int) -> List[List[int]]:
-        def dfs(i: int):
-            if len(t) == k:
-                ans.append(t[:])
-                return
-            if i > n:
-                return
-            for j in range(i, n + 1):
-                t.append(j)
-                dfs(j + 1)
-                t.pop()
-
-        ans = []
-        t = []
-        dfs(1)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -146,6 +134,173 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> ans;
+        vector<int> t;
+        function<void(int)> dfs = [&](int i) {
+            if (t.size() == k) {
+                ans.emplace_back(t);
+                return;
+            }
+            if (i > n) {
+                return;
+            }
+            t.emplace_back(i);
+            dfs(i + 1);
+            t.pop_back();
+            dfs(i + 1);
+        };
+        dfs(1);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func combine(n int, k int) (ans [][]int) {
+	t := []int{}
+	var dfs func(int)
+	dfs = func(i int) {
+		if len(t) == k {
+			ans = append(ans, slices.Clone(t))
+			return
+		}
+		if i > n {
+			return
+		}
+		t = append(t, i)
+		dfs(i + 1)
+		t = t[:len(t)-1]
+		dfs(i + 1)
+	}
+	dfs(1)
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function combine(n: number, k: number): number[][] {
+    const ans: number[][] = [];
+    const t: number[] = [];
+    const dfs = (i: number) => {
+        if (t.length === k) {
+            ans.push(t.slice());
+            return;
+        }
+        if (i > n) {
+            return;
+        }
+        t.push(i);
+        dfs(i + 1);
+        t.pop();
+        dfs(i + 1);
+    };
+    dfs(1);
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    fn dfs(i: i32, n: i32, k: i32, t: &mut Vec<i32>, ans: &mut Vec<Vec<i32>>) {
+        if t.len() == (k as usize) {
+            ans.push(t.clone());
+            return;
+        }
+        if i > n {
+            return;
+        }
+        t.push(i);
+        Self::dfs(i + 1, n, k, t, ans);
+        t.pop();
+        Self::dfs(i + 1, n, k, t, ans);
+    }
+
+    pub fn combine(n: i32, k: i32) -> Vec<Vec<i32>> {
+        let mut ans = vec![];
+        Self::dfs(1, n, k, &mut vec![], &mut ans);
+        ans
+    }
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    private List<IList<int>> ans = new List<IList<int>>();
+    private List<int> t = new List<int>();
+    private int n;
+    private int k;
+
+    public IList<IList<int>> Combine(int n, int k) {
+        this.n = n;
+        this.k = k;
+        dfs(1);
+        return ans;
+    }
+
+    private void dfs(int i) {
+        if (t.Count == k) {
+            ans.Add(new List<int>(t));
+            return;
+        }
+        if (i > n) {
+            return;
+        }
+        t.Add(i);
+        dfs(i + 1);
+        t.RemoveAt(t.Count - 1);
+        dfs(i + 1);
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        def dfs(i: int):
+            if len(t) == k:
+                ans.append(t[:])
+                return
+            if i > n:
+                return
+            for j in range(i, n + 1):
+                t.append(j)
+                dfs(j + 1)
+                t.pop()
+
+        ans = []
+        t = []
+        dfs(1)
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -178,32 +333,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<vector<int>> combine(int n, int k) {
-        vector<vector<int>> ans;
-        vector<int> t;
-        function<void(int)> dfs = [&](int i) {
-            if (t.size() == k) {
-                ans.emplace_back(t);
-                return;
-            }
-            if (i > n) {
-                return;
-            }
-            t.emplace_back(i);
-            dfs(i + 1);
-            t.pop_back();
-            dfs(i + 1);
-        };
-        dfs(1);
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -231,7 +361,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func combine(n int, k int) (ans [][]int) {
@@ -239,33 +369,7 @@ func combine(n int, k int) (ans [][]int) {
 	var dfs func(int)
 	dfs = func(i int) {
 		if len(t) == k {
-			cp := make([]int, len(t))
-			copy(cp, t)
-			ans = append(ans, cp)
-			return
-		}
-		if i > n {
-			return
-		}
-		t = append(t, i)
-		dfs(i + 1)
-		t = t[:len(t)-1]
-		dfs(i + 1)
-	}
-	dfs(1)
-	return
-}
-```
-
-```go
-func combine(n int, k int) (ans [][]int) {
-	t := []int{}
-	var dfs func(int)
-	dfs = func(i int) {
-		if len(t) == k {
-			cp := make([]int, len(t))
-			copy(cp, t)
-			ans = append(ans, cp)
+			ans = append(ans, slices.Clone(t))
 			return
 		}
 		if i > n {
@@ -282,29 +386,7 @@ func combine(n int, k int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function combine(n: number, k: number): number[][] {
-    const ans: number[][] = [];
-    const t: number[] = [];
-    const dfs = (i: number) => {
-        if (t.length === k) {
-            ans.push(t.slice());
-            return;
-        }
-        if (i > n) {
-            return;
-        }
-        t.push(i);
-        dfs(i + 1);
-        t.pop();
-        dfs(i + 1);
-    };
-    dfs(1);
-    return ans;
-}
-```
+#### TypeScript
 
 ```ts
 function combine(n: number, k: number): number[][] {
@@ -329,36 +411,12 @@ function combine(n: number, k: number): number[][] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     fn dfs(i: i32, n: i32, k: i32, t: &mut Vec<i32>, ans: &mut Vec<Vec<i32>>) {
-        if t.len() == k as usize {
-            ans.push(t.clone());
-            return;
-        }
-        if i > n {
-            return;
-        }
-        t.push(i);
-        Self::dfs(i + 1, n, k, t, ans);
-        t.pop();
-        Self::dfs(i + 1, n, k, t, ans);
-    }
-
-    pub fn combine(n: i32, k: i32) -> Vec<Vec<i32>> {
-        let mut ans = vec![];
-        Self::dfs(1, n, k, &mut vec![], &mut ans);
-        ans
-    }
-}
-```
-
-```rust
-impl Solution {
-    fn dfs(i: i32, n: i32, k: i32, t: &mut Vec<i32>, ans: &mut Vec<Vec<i32>>) {
-        if t.len() == k as usize {
+        if t.len() == (k as usize) {
             ans.push(t.clone());
             return;
         }
@@ -380,37 +438,7 @@ impl Solution {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    private List<IList<int>> ans = new List<IList<int>>();
-    private List<int> t = new List<int>();
-    private int n;
-    private int k;
-
-    public IList<IList<int>> Combine(int n, int k) {
-        this.n = n;
-        this.k = k;
-        dfs(1);
-        return ans;
-    }
-
-    private void dfs(int i) {
-        if (t.Count == k) {
-            ans.Add(new List<int>(t));
-            return;
-        }
-        if (i > n) {
-            return;
-        }
-        t.Add(i);
-        dfs(i + 1);
-        t.RemoveAt(t.Count - 1);
-        dfs(i + 1);
-    }
-}
-```
+#### C#
 
 ```cs
 public class Solution {
@@ -443,10 +471,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

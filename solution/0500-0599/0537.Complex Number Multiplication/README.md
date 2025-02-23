@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0537.Complex%20Number%20Multiplication/README.md
+tags:
+    - 数学
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [537. 复数乘法](https://leetcode.cn/problems/complex-number-multiplication)
 
 [English Version](/solution/0500-0599/0537.Complex%20Number%20Multiplication/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><a href="https://baike.baidu.com/item/%E5%A4%8D%E6%95%B0/254365?fr=aladdin" target="_blank">复数</a> 可以用字符串表示，遵循 <code>"<strong>实部</strong>+<strong>虚部</strong>i"</code> 的形式，并满足下述条件：</p>
 
@@ -42,94 +54,84 @@
 	<li><code>num1</code> 和 <code>num2</code> 都是有效的复数表示。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-`(a+bi)(c+di) = ac-bd+(ad+cb)i`。
+### 方法一：模拟
+
+我们可以将复数字符串转换成对应的实部 $a$ 和虚部 $b$，然后根据复数乘法的公式 $(a_1 + b_1i) \times (a_2 + b_2i) = (a_1a_2 - b_1b_2) + (a_1b_2 + a_2b_1)i$ 计算出结果。
+
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def complexNumberMultiply(self, num1: str, num2: str) -> str:
-        a, b = map(int, num1[:-1].split('+'))
-        c, d = map(int, num2[:-1].split('+'))
-        return f'{a * c - b * d}+{a * d + c * b}i'
+        a1, b1 = map(int, num1[:-1].split("+"))
+        a2, b2 = map(int, num2[:-1].split("+"))
+        return f"{a1 * a2 - b1 * b2}+{a1 * b2 + a2 * b1}i"
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public String complexNumberMultiply(String num1, String num2) {
-        String[] c1 = num1.split("\\+|i");
-        String[] c2 = num2.split("\\+|i");
-        int a = Integer.parseInt(c1[0]);
-        int b = Integer.parseInt(c1[1]);
-        int c = Integer.parseInt(c2[0]);
-        int d = Integer.parseInt(c2[1]);
-        return String.format("%d+%di", a * c - b * d, a * d + c * b);
+        int[] x = parse(num1);
+        int[] y = parse(num2);
+        int a1 = x[0], b1 = x[1], a2 = y[0], b2 = y[1];
+        return (a1 * a2 - b1 * b2) + "+" + (a1 * b2 + a2 * b1) + "i";
+    }
+
+    private int[] parse(String s) {
+        var cs = s.substring(0, s.length() - 1).split("\\+");
+        return new int[] {Integer.parseInt(cs[0]), Integer.parseInt(cs[1])};
     }
 }
 ```
 
-### **TypeScript**
-
-```ts
-function complexNumberMultiply(num1: string, num2: string): string {
-    let arr1 = num1.split('+'),
-        arr2 = num2.split('+');
-    let r1 = Number(arr1[0]),
-        r2 = Number(arr2[0]);
-    let v1 = Number(arr1[1].substring(0, arr1[1].length - 1)),
-        v2 = Number(arr2[1].substring(0, arr2[1].length - 1));
-    let ansR = r1 * r2 - v1 * v2;
-    let ansV = r1 * v2 + r2 * v1;
-    return `${ansR}+${ansV}i`;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     string complexNumberMultiply(string num1, string num2) {
-        int a, b, c, d;
-        sscanf(num1.c_str(), "%d+%di", &a, &b);
-        sscanf(num2.c_str(), "%d+%di", &c, &d);
-        return string(to_string(a * c - b * d) + "+" + to_string(a * d + c * b) + "i");
+        int a1, b1, a2, b2;
+        sscanf(num1.c_str(), "%d+%di", &a1, &b1);
+        sscanf(num2.c_str(), "%d+%di", &a2, &b2);
+        return to_string(a1 * a2 - b1 * b2) + "+" + to_string(a1 * b2 + a2 * b1) + "i";
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func complexNumberMultiply(num1, num2 string) string {
-	parse := func(num string) (a, b int) {
-		i := strings.IndexByte(num, '+')
-		a, _ = strconv.Atoi(num[:i])
-		b, _ = strconv.Atoi(num[i+1 : len(num)-1])
-		return
-	}
-	a, b := parse(num1)
-	c, d := parse(num2)
-	return fmt.Sprintf("%d+%di", a*c-b*d, a*d+b*c)
+func complexNumberMultiply(num1 string, num2 string) string {
+	x, _ := strconv.ParseComplex(num1, 64)
+	y, _ := strconv.ParseComplex(num2, 64)
+	return fmt.Sprintf("%d+%di", int(real(x*y)), int(imag(x*y)))
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function complexNumberMultiply(num1: string, num2: string): string {
+    const [a1, b1] = num1.slice(0, -1).split('+').map(Number);
+    const [a2, b2] = num2.slice(0, -1).split('+').map(Number);
+    return `${a1 * a2 - b1 * b2}+${a1 * b2 + a2 * b1}i`;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

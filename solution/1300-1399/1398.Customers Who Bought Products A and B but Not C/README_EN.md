@@ -1,8 +1,20 @@
-# [1398. Customers Who Bought Products A and B but Not C](https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1398.Customers%20Who%20Bought%20Products%20A%20and%20B%20but%20Not%20C/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1398. Customers Who Bought Products A and B but Not C 🔒](https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c)
 
 [中文文档](/solution/1300-1399/1398.Customers%20Who%20Bought%20Products%20A%20and%20B%20but%20Not%20C/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Customers</code></p>
 
@@ -13,7 +25,7 @@
 | customer_id         | int     |
 | customer_name       | varchar |
 +---------------------+---------+
-customer_id is the primary key for this table.
+customer_id is the column with unique values for this table.
 customer_name is the name of the customer.</pre>
 
 <p>&nbsp;</p>
@@ -28,17 +40,17 @@ customer_name is the name of the customer.</pre>
 | customer_id   | int     |
 | product_name  | varchar |
 +---------------+---------+
-order_id is the primary key for this table.
+order_id is the column with unique values for this table.
 customer_id is the id of the customer who bought the product &quot;product_name&quot;.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the customer_id and customer_name of customers who bought products <strong>&quot;A&quot;</strong>, <strong>&quot;B&quot;</strong> but did not buy the product <strong>&quot;C&quot;</strong> since we want to recommend them to purchase this product.</p>
+<p>Write a solution&nbsp;to report the customer_id and customer_name of customers who bought products <strong>&quot;A&quot;</strong>, <strong>&quot;B&quot;</strong> but did not buy the product <strong>&quot;C&quot;</strong> since we want to recommend them to purchase this product.</p>
 
 <p>Return the result table <strong>ordered</strong> by <code>customer_id</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -77,26 +89,33 @@ Orders table:
 <strong>Explanation:</strong> Only the customer_id with id 3 bought the product A and B but not the product C.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: LEFT JOIN + GROUP BY + HAVING
+
+We can use `LEFT JOIN` to join the `Customers` table and the `Orders` table, then group them by `customer_id`, and finally filter out the customers who have purchased products A and B but not product C.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    o.customer_id,
-    c.customer_name
-from
-    orders o
-    left join customers c on o.customer_id = c.customer_id
-group by
-    customer_id
-having
-    sum(if(product_name = 'A', 1, 0)) > 0
-    and sum(if(product_name = 'B', 1, 0)) > 0
-    and sum(if(product_name = 'C', 1, 0)) = 0
+SELECT customer_id, customer_name
+FROM
+    Customers
+    LEFT JOIN Orders USING (customer_id)
+GROUP BY 1
+HAVING SUM(product_name = 'A') > 0 AND SUM(product_name = 'B') > 0 AND SUM(product_name = 'C') = 0
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

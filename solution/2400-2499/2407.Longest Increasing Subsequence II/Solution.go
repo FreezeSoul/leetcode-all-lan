@@ -1,8 +1,5 @@
 func lengthOfLIS(nums []int, k int) int {
-	mx := nums[0]
-	for _, v := range nums {
-		mx = max(mx, v)
-	}
+	mx := slices.Max(nums)
 	tree := newSegmentTree(mx)
 	ans := 1
 	for _, v := range nums {
@@ -75,11 +72,4 @@ func (t *segmentTree) query(u, l, r int) int {
 
 func (t *segmentTree) pushup(u int) {
 	t.tr[u].v = max(t.tr[u<<1].v, t.tr[u<<1|1].v)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }

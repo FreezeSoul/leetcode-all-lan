@@ -1,10 +1,21 @@
-# [2647. 把三角形染成红色](https://leetcode.cn/problems/color-the-triangle-red)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2647.Color%20the%20Triangle%20Red/README.md
+tags:
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
+# [2647. 把三角形染成红色 🔒](https://leetcode.cn/problems/color-the-triangle-red)
 
 [English Version](/solution/2600-2699/2647.Color%20the%20Triangle%20Red/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现给定你一个整数 <code>n</code> 。考虑一个边长为 <code>n</code> 的等边三角形，被分成 <code>n<sup>2</sup></code> 个单位等边三角形。这个三角形有 <code>n</code> 个 <strong>从 1 开始编号</strong> 的行，其中第 <code>i</code> 行有 <code>2i - 1</code> 个单位等边三角形。</p>
 
@@ -22,12 +33,14 @@
 
 <ol>
 	<li>选择一个 <strong>至少有两个</strong> 红色相邻三角形的白色三角形。
+
     <ul>
     	<li>如果没有这样的三角形，请停止算法。</li>
     </ul>
     </li>
     <li>将该三角形涂成 <strong>红色</strong> 。</li>
     <li>回到步骤 1。</li>
+
 </ol>
 
 <p>选择最小的 <code>k</code> 并在运行此算法之前将 <code>k</code> 个三角形涂成红色，使得在算法停止后，所有单元三角形都被涂成红色。</p>
@@ -66,11 +79,13 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：找规律**
+### 方法一：找规律
 
 我们画图观察，可以发现，第一行只有一个三角形，一定要涂色，而从最后一行开始，到第二行结束，每四行的涂色方案是一样的：
 
@@ -89,9 +104,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -113,9 +126,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -142,7 +153,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -170,7 +181,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func colorRed(n int) (ans [][]int) {
@@ -194,7 +205,7 @@ func colorRed(n int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function colorRed(n: number): number[][] {
@@ -218,10 +229,8 @@ function colorRed(n: number): number[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

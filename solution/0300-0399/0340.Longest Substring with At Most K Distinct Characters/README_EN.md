@@ -1,8 +1,22 @@
-# [340. Longest Substring with At Most K Distinct Characters](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0340.Longest%20Substring%20with%20At%20Most%20K%20Distinct%20Characters/README_EN.md
+tags:
+    - Hash Table
+    - String
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
+# [340. Longest Substring with At Most K Distinct Characters 🔒](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters)
 
 [中文文档](/solution/0300-0399/0340.Longest%20Substring%20with%20At%20Most%20K%20Distinct%20Characters/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> and an integer <code>k</code>, return <em>the length of the longest </em><span data-keyword="substring-nonempty"><em>substring</em></span><em> of</em> <code>s</code> <em>that contains at most</em> <code>k</code> <em><strong>distinct</strong> characters</em>.</p>
 
@@ -30,111 +44,127 @@
 	<li><code>0 &lt;= k &lt;= 50</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sliding Window + Hash Table
+
+We can use the idea of a sliding window, with a hash table $\textit{cnt}$ to record the occurrence count of each character within the window, and $\textit{l}$ to denote the left boundary of the window.
+
+Iterate through the string, adding the character at the right boundary to the hash table each time. If the number of distinct characters in the hash table exceeds $k$, remove the character at the left boundary from the hash table, then update the left boundary $\textit{l}$.
+
+Finally, return the length of the string minus the length of the left boundary.
+
+The time complexity is $O(n)$, and the space complexity is $O(k)$. Here, $n$ is the length of the string.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
+        l = 0
         cnt = Counter()
-        n = len(s)
-        ans = j = 0
-        for i, c in enumerate(s):
+        for c in s:
             cnt[c] += 1
-            while len(cnt) > k:
-                cnt[s[j]] -= 1
-                if cnt[s[j]] == 0:
-                    cnt.pop(s[j])
-                j += 1
-            ans = max(ans, i - j + 1)
-        return ans
+            if len(cnt) > k:
+                cnt[s[l]] -= 1
+                if cnt[s[l]] == 0:
+                    del cnt[s[l]]
+                l += 1
+        return len(s) - l
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int lengthOfLongestSubstringKDistinct(String s, int k) {
         Map<Character, Integer> cnt = new HashMap<>();
-        int n = s.length();
-        int ans = 0, j = 0;
-        for (int i = 0; i < n; ++i) {
-            char c = s.charAt(i);
-            cnt.put(c, cnt.getOrDefault(c, 0) + 1);
-            while (cnt.size() > k) {
-                char t = s.charAt(j);
-                cnt.put(t, cnt.getOrDefault(t, 0) - 1);
-                if (cnt.get(t) == 0) {
-                    cnt.remove(t);
+        int l = 0;
+        char[] cs = s.toCharArray();
+        for (char c : cs) {
+            cnt.merge(c, 1, Integer::sum);
+            if (cnt.size() > k) {
+                if (cnt.merge(cs[l], -1, Integer::sum) == 0) {
+                    cnt.remove(cs[l]);
                 }
-                ++j;
+                ++l;
             }
-            ans = Math.max(ans, i - j + 1);
         }
-        return ans;
+        return cs.length - l;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int lengthOfLongestSubstringKDistinct(string s, int k) {
         unordered_map<char, int> cnt;
-        int n = s.size();
-        int ans = 0, j = 0;
-        for (int i = 0; i < n; ++i) {
-            cnt[s[i]]++;
-            while (cnt.size() > k) {
-                if (--cnt[s[j]] == 0) {
-                    cnt.erase(s[j]);
+        int l = 0;
+        for (char& c : s) {
+            ++cnt[c];
+            if (cnt.size() > k) {
+                if (--cnt[s[l]] == 0) {
+                    cnt.erase(s[l]);
                 }
-                ++j;
+                ++l;
             }
-            ans = max(ans, i - j + 1);
         }
-        return ans;
+        return s.size() - l;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func lengthOfLongestSubstringKDistinct(s string, k int) (ans int) {
+func lengthOfLongestSubstringKDistinct(s string, k int) int {
 	cnt := map[byte]int{}
-	j := 0
-	for i := range s {
-		cnt[s[i]]++
-		for len(cnt) > k {
-			cnt[s[j]]--
-			if cnt[s[j]] == 0 {
-				delete(cnt, s[j])
+	l := 0
+	for _, c := range s {
+		cnt[byte(c)]++
+		if len(cnt) > k {
+			cnt[s[l]]--
+			if cnt[s[l]] == 0 {
+				delete(cnt, s[l])
 			}
-			j++
+			l++
 		}
-		ans = max(ans, i-j+1)
 	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return len(s) - l
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function lengthOfLongestSubstringKDistinct(s: string, k: number): number {
+    const cnt: Map<string, number> = new Map();
+    let l = 0;
+    for (const c of s) {
+        cnt.set(c, (cnt.get(c) ?? 0) + 1);
+        if (cnt.size > k) {
+            cnt.set(s[l], cnt.get(s[l])! - 1);
+            if (cnt.get(s[l]) === 0) {
+                cnt.delete(s[l]);
+            }
+            l++;
+        }
+    }
+    return s.length - l;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,18 +1,28 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1800.Maximum%20Ascending%20Subarray%20Sum/README.md
+rating: 1229
+source: 第 233 场周赛 Q1
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1800. 最大升序子数组和](https://leetcode.cn/problems/maximum-ascending-subarray-sum)
 
 [English Version](/solution/1800-1899/1800.Maximum%20Ascending%20Subarray%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个正整数组成的数组 <code>nums</code> ，返回 <code>nums</code> 中一个 <strong>升序 </strong>子数组的最大可能元素和。</p>
+<p>给你一个正整数组成的数组 <code>nums</code> ，返回 <code>nums</code> 中一个 <span data-keyword="strictly-increasing-array">严格递增子数组</span> 的最大可能元素和。</p>
 
 <p>子数组是数组中的一个连续数字序列。</p>
 
-<p>已知子数组 <code>[nums<sub>l</sub>, nums<sub>l+1</sub>, ..., nums<sub>r-1</sub>, nums<sub>r</sub>]</code> ，若对所有 <code>i</code>（<code>l <= i < r</code>），<code>nums<sub>i </sub> < nums<sub>i+1</sub></code> 都成立，则称这一子数组为 <strong>升序</strong> 子数组。注意，大小为 <code>1</code> 的子数组也视作 <strong>升序</strong> 子数组。</p>
-
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
@@ -38,43 +48,36 @@
 <strong>解释：</strong>[10,11,12] 是元素和最大的升序子数组，最大元素和为 33 。 
 </pre>
 
-<p><strong>示例 4：</strong></p>
-
-<pre>
-<strong>输入：</strong>nums = [100,10,1]
-<strong>输出：</strong>100
-</pre>
-
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 <= nums.length <= 100</code></li>
-	<li><code>1 <= nums[i] <= 100</code></li>
+	<li><code>1 &lt;= nums.length &lt;= 100</code></li>
+	<li><code>1 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：直接模拟**
+### 方法一：直接模拟
 
-我们用变量 `t` 记录当前升序子数组的和，用变量 `ans` 记录最大的升序子数组和。
+我们用变量 $t$ 记录当前升序子数组的和，用变量 $ans$ 记录最大的升序子数组和。
 
-遍历数组 `nums`：
+遍历数组 $nums$：
 
-如果当前元素是数组的第一个元素，或者当前元素大于前一个元素，那么将当前元素加入到当前升序子数组的和，即 `t += nums[i]`，并且更新最大升序子数组和 `ans = max(ans, t)`；否则，当前元素不满足升序子数组的条件，那么将当前升序子数组的和 `t` 重置为当前元素，即 `t = nums[i]`。
+如果当前元素是数组的第一个元素，或者当前元素大于前一个元素，那么将当前元素加入到当前升序子数组的和，即 $t = t + nums[i]$，并且更新最大升序子数组和 $ans = \max(ans, t)$；否则，当前元素不满足升序子数组的条件，那么将当前升序子数组的和 $t$ 重置为当前元素，即 $t = nums[i]$。
 
-遍历结束，返回最大升序子数组和 `ans`。
+遍历结束，返回最大升序子数组和 $ans$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +111,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxAscendingSum(nums []int) int {
@@ -149,26 +150,7 @@ func maxAscendingSum(nums []int) int {
 }
 ```
 
-### **C**
-
-```c
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-
-int maxAscendingSum(int* nums, int numsSize){
-    int res = nums[0];
-    int sum = nums[0];
-    for (int i = 1; i < numsSize; i++) {
-        if (nums[i - 1] >= nums[i]) {
-            res = max(res, sum);
-            sum = 0;
-        }
-        sum += nums[i];
-    }
-    return max(res, sum);
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxAscendingSum(nums: number[]): number {
@@ -186,7 +168,7 @@ function maxAscendingSum(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -206,10 +188,27 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
+```c
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 
+int maxAscendingSum(int* nums, int numsSize) {
+    int res = nums[0];
+    int sum = nums[0];
+    for (int i = 1; i < numsSize; i++) {
+        if (nums[i - 1] >= nums[i]) {
+            res = max(res, sum);
+            sum = 0;
+        }
+        sum += nums[i];
+    }
+    return max(res, sum);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

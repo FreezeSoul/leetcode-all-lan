@@ -1,5 +1,4 @@
-func lexicalOrder(n int) []int {
-	var ans []int
+func lexicalOrder(n int) (ans []int) {
 	v := 1
 	for i := 0; i < n; i++ {
 		ans = append(ans, v)
@@ -12,5 +11,5 @@ func lexicalOrder(n int) []int {
 			v++
 		}
 	}
-	return ans
+	return
 }

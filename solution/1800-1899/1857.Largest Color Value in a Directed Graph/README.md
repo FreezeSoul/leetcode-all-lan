@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1857.Largest%20Color%20Value%20in%20a%20Directed%20Graph/README.md
+rating: 2312
+source: 第 240 场周赛 Q4
+tags:
+    - 图
+    - 拓扑排序
+    - 记忆化搜索
+    - 哈希表
+    - 动态规划
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1857. 有向图中最大颜色值](https://leetcode.cn/problems/largest-color-value-in-a-directed-graph)
 
 [English Version](/solution/1800-1899/1857.Largest%20Color%20Value%20in%20a%20Directed%20Graph/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>有向图</strong> ，它含有 <code>n</code> 个节点和 <code>m</code> 条边。节点编号从 <code>0</code> 到 <code>n - 1</code> 。</p>
 
@@ -47,11 +64,13 @@
 	<li><code>0 &lt;= a<sub>j</sub>, b<sub>j</sub> &lt; n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：拓扑排序 + 动态规划**
+### 方法一：拓扑排序 + 动态规划
 
 求出每个点的入度，进行拓扑排序。每个点维护一个长度为 $26$ 的数组，记录每个字母从任意起点到当前点的出现次数。
 
@@ -59,9 +78,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -95,9 +112,7 @@ class Solution:
         return -1 if cnt < n else ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -141,7 +156,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -184,7 +199,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestPathValue(colors string, edges [][]int) int {
@@ -235,19 +250,10 @@ func largestPathValue(colors string, edges [][]int) int {
 	}
 	return -1
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

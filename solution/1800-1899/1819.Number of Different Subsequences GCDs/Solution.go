@@ -1,8 +1,5 @@
 func countDifferentSubsequenceGCDs(nums []int) (ans int) {
-	mx := 0
-	for _, x := range nums {
-		mx = max(mx, x)
-	}
+	mx := slices.Max(nums)
 	vis := make([]bool, mx+1)
 	for _, x := range nums {
 		vis[x] = true
@@ -20,13 +17,6 @@ func countDifferentSubsequenceGCDs(nums []int) (ans int) {
 		}
 	}
 	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
 
 func gcd(a, b int) int {

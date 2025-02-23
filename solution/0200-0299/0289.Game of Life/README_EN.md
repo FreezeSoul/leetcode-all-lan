@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0289.Game%20of%20Life/README_EN.md
+tags:
+    - Array
+    - Matrix
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [289. Game of Life](https://leetcode.com/problems/game-of-life)
 
 [中文文档](/solution/0200-0299/0289.Game%20of%20Life/README.md)
 
 ## Description
 
-<p>According to&nbsp;<a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Wikipedia&#39;s article</a>: &quot;The <b>Game of Life</b>, also known simply as <b>Life</b>, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.&quot;</p>
+<!-- description:start -->
+
+<p>According to <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Wikipedia&#39;s article</a>: &quot;The <b>Game of Life</b>, also known simply as <b>Life</b>, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.&quot;</p>
 
 <p>The board is made up of an <code>m x n</code> grid of cells, where each cell has an initial state: <b>live</b> (represented by a <code>1</code>) or <b>dead</b> (represented by a <code>0</code>). Each cell interacts with its <a href="https://en.wikipedia.org/wiki/Moore_neighborhood" target="_blank">eight neighbors</a> (horizontal, vertical, diagonal) using the following four rules (taken from the above Wikipedia article):</p>
 
@@ -15,7 +29,11 @@
 	<li>Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.</li>
 </ol>
 
-<p><span>The next state is created by applying the above rules simultaneously to every cell in the current state, where births and deaths occur simultaneously. Given the current state of the <code>m x n</code> grid <code>board</code>, return <em>the next state</em>.</span></p>
+<p><span>The next state of the board is determined by applying the above rules simultaneously to every cell in the current state of the <code>m x n</code> grid <code>board</code>. In this process, births and deaths occur <strong>simultaneously</strong>.</span></p>
+
+<p><span>Given the current state of the <code>board</code>, <strong>update</strong> the <code>board</code> to reflect its next state.</span></p>
+
+<p><strong>Note</strong> that you do not need to return anything.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -50,9 +68,13 @@
 	<li>In this question, we represent the board using a 2D array. In principle, the board is infinite, which would cause problems when the active area encroaches upon the border of the array (i.e., live cells reach the border). How would you address these problems?</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: In-place marking**
+<!-- solution:start -->
+
+### Solution 1: In-place marking
 
 Let's define two new states. State $2$ indicates that the living cell becomes dead in the next state, and state $-1$ indicates that the dead cell becomes alive in the next state. Therefore, for the current grid we are traversing, if the grid is greater than $0$, it means that the current grid is a living cell, otherwise it is a dead cell.
 
@@ -64,7 +86,7 @@ The time complexity is $O(m \times n)$, where $m$ and $n$ are the number of rows
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -89,7 +111,7 @@ class Solution:
                     board[i][j] = 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -126,7 +148,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -164,7 +186,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func gameOfLife(board [][]int) {
@@ -200,7 +222,7 @@ func gameOfLife(board [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -240,7 +262,67 @@ function gameOfLife(board: number[][]): void {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+const DIR: [(i32, i32); 8] = [
+    (-1, 0),
+    (1, 0),
+    (0, -1),
+    (0, 1),
+    (-1, -1),
+    (-1, 1),
+    (1, -1),
+    (1, 1),
+];
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn game_of_life(board: &mut Vec<Vec<i32>>) {
+        let n = board.len();
+        let m = board[0].len();
+        let mut weight_vec: Vec<Vec<i32>> = vec![vec![0; m]; n];
+
+        // Initialize the weight vector
+        for i in 0..n {
+            for j in 0..m {
+                if board[i][j] == 0 {
+                    continue;
+                }
+                for (dx, dy) in DIR {
+                    let x = (i as i32) + dx;
+                    let y = (j as i32) + dy;
+                    if Self::check_bounds(x, y, n as i32, m as i32) {
+                        weight_vec[x as usize][y as usize] += 1;
+                    }
+                }
+            }
+        }
+
+        // Update the board
+        for i in 0..n {
+            for j in 0..m {
+                if weight_vec[i][j] < 2 {
+                    board[i][j] = 0;
+                } else if weight_vec[i][j] <= 3 {
+                    if board[i][j] == 0 && weight_vec[i][j] == 3 {
+                        board[i][j] = 1;
+                    }
+                } else {
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    #[allow(dead_code)]
+    fn check_bounds(i: i32, j: i32, n: i32, m: i32) -> bool {
+        i >= 0 && i < n && j >= 0 && j < m
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -279,10 +361,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

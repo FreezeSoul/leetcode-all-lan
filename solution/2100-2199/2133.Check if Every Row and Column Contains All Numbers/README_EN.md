@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2133.Check%20if%20Every%20Row%20and%20Column%20Contains%20All%20Numbers/README_EN.md
+rating: 1264
+source: Weekly Contest 275 Q1
+tags:
+    - Array
+    - Hash Table
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [2133. Check if Every Row and Column Contains All Numbers](https://leetcode.com/problems/check-if-every-row-and-column-contains-all-numbers)
 
 [中文文档](/solution/2100-2199/2133.Check%20if%20Every%20Row%20and%20Column%20Contains%20All%20Numbers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>An <code>n x n</code> matrix is <strong>valid</strong> if every row and every column contains <strong>all</strong> the integers from <code>1</code> to <code>n</code> (<strong>inclusive</strong>).</p>
 
@@ -36,57 +52,52 @@ Hence, we return false.
 	<li><code>1 &lt;= matrix[i][j] &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+Traverse each row and column of the matrix, using a hash table to record whether each number has appeared. If any number appears more than once in a row or column, return `false`; otherwise, return `true`
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the size of the matrix.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def checkValid(self, matrix: List[List[int]]) -> bool:
         n = len(matrix)
-        for i in range(n):
-            seen = [False] * n
-            for j in range(n):
-                v = matrix[i][j] - 1
-                if seen[v]:
-                    return False
-                seen[v] = True
-        for j in range(n):
-            seen = [False] * n
-            for i in range(n):
-                v = matrix[i][j] - 1
-                if seen[v]:
-                    return False
-                seen[v] = True
-        return True
+        return all(len(set(row)) == n for row in chain(matrix, zip(*matrix)))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public boolean checkValid(int[][] matrix) {
         int n = matrix.length;
-        for (int i = 0; i < n; ++i) {
-            boolean[] seen = new boolean[n];
-            for (int j = 0; j < n; ++j) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) {
+        boolean[] vis = new boolean[n + 1];
+        for (var row : matrix) {
+            Arrays.fill(vis, false);
+            for (int x : row) {
+                if (vis[x]) {
                     return false;
                 }
-                seen[v] = true;
+                vis[x] = true;
             }
         }
         for (int j = 0; j < n; ++j) {
-            boolean[] seen = new boolean[n];
+            Arrays.fill(vis, false);
             for (int i = 0; i < n; ++i) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) {
+                if (vis[matrix[i][j]]) {
                     return false;
                 }
-                seen[v] = true;
+                vis[matrix[i][j]] = true;
             }
         }
         return true;
@@ -94,46 +105,30 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function checkValid(matrix: number[][]): boolean {
-    const n = matrix.length;
-    let rows = Array.from({ length: n }, () => new Array(n).fill(false));
-    let cols = Array.from({ length: n }, () => new Array(n).fill(false));
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n; j++) {
-            let cur = matrix[i][j];
-            if (rows[i][cur] || cols[j][cur]) return false;
-            rows[i][cur] = true;
-            cols[j][cur] = true;
-        }
-    }
-    return true;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool checkValid(vector<vector<int>>& matrix) {
         int n = matrix.size();
-        for (int i = 0; i < n; ++i) {
-            vector<bool> seen(n);
-            for (int j = 0; j < n; ++j) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) return false;
-                seen[v] = true;
+        bool vis[n + 1];
+        for (const auto& row : matrix) {
+            memset(vis, false, sizeof(vis));
+            for (int x : row) {
+                if (vis[x]) {
+                    return false;
+                }
+                vis[x] = true;
             }
         }
         for (int j = 0; j < n; ++j) {
-            vector<bool> seen(n);
+            memset(vis, false, sizeof(vis));
             for (int i = 0; i < n; ++i) {
-                int v = matrix[i][j] - 1;
-                if (seen[v]) return false;
-                seen[v] = true;
+                if (vis[matrix[i][j]]) {
+                    return false;
+                }
+                vis[matrix[i][j]] = true;
             }
         }
         return true;
@@ -141,39 +136,63 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkValid(matrix [][]int) bool {
 	n := len(matrix)
-	for i := 0; i < n; i++ {
-		seen := make([]bool, n)
-		for j := 0; j < n; j++ {
-			v := matrix[i][j] - 1
-			if seen[v] {
+	for _, row := range matrix {
+		vis := make([]bool, n+1)
+		for _, x := range row {
+			if vis[x] {
 				return false
 			}
-			seen[v] = true
+			vis[x] = true
 		}
 	}
 	for j := 0; j < n; j++ {
-		seen := make([]bool, n)
+		vis := make([]bool, n+1)
 		for i := 0; i < n; i++ {
-			v := matrix[i][j] - 1
-			if seen[v] {
+			if vis[matrix[i][j]] {
 				return false
 			}
-			seen[v] = true
+			vis[matrix[i][j]] = true
 		}
 	}
 	return true
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function checkValid(matrix: number[][]): boolean {
+    const n = matrix.length;
+    const vis: boolean[] = Array(n + 1).fill(false);
+    for (const row of matrix) {
+        vis.fill(false);
+        for (const x of row) {
+            if (vis[x]) {
+                return false;
+            }
+            vis[x] = true;
+        }
+    }
+    for (let j = 0; j < n; ++j) {
+        vis.fill(false);
+        for (let i = 0; i < n; ++i) {
+            if (vis[matrix[i][j]]) {
+                return false;
+            }
+            vis[matrix[i][j]] = true;
+        }
+    }
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
-# [1607. Sellers With No Sales](https://leetcode.com/problems/sellers-with-no-sales)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1607.Sellers%20With%20No%20Sales/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1607. Sellers With No Sales 🔒](https://leetcode.com/problems/sellers-with-no-sales)
 
 [中文文档](/solution/1600-1699/1607.Sellers%20With%20No%20Sales/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Customer</code></p>
 
@@ -13,7 +25,7 @@
 | customer_id   | int     |
 | customer_name | varchar |
 +---------------+---------+
-customer_id is the primary key for this table.
+customer_id is the column with unique values for this table.
 Each row of this table contains the information of each customer in the WebStore.
 </pre>
 
@@ -31,7 +43,7 @@ Each row of this table contains the information of each customer in the WebStore
 | customer_id   | int     |
 | seller_id     | int     |
 +---------------+---------+
-order_id is the primary key for this table.
+order_id is the column with unique values for this table.
 Each row of this table contains all orders made in the webstore.
 sale_date is the date when the transaction was made between the customer (customer_id) and the seller (seller_id).
 </pre>
@@ -47,17 +59,17 @@ sale_date is the date when the transaction was made between the customer (custom
 | seller_id     | int     |
 | seller_name   | varchar |
 +---------------+---------+
-seller_id is the primary key for this table.
+seller_id is the column with unique values for this table.
 Each row of this table contains the information of each seller.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the names of all sellers who did not make any sales in <code>2020</code>.</p>
+<p>Write a solution to report the names of all sellers who did not make any sales in <code>2020</code>.</p>
 
 <p>Return the result table ordered by <code>seller_name</code> in <strong>ascending order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -102,24 +114,33 @@ Elizabeth made 2 sales in 2020 and 1 sale in 2019.
 Frank made 1 sale in 2019 but no sales in 2020.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: LEFT JOIN + GROUP BY + FILTER
+
+We can use a left join to join the `Seller` table with the `Orders` table on the condition `seller_id`, and then group by `seller_id` to count the number of sales for each seller in the year $2020$. Finally, we can filter out the sellers with zero sales.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    seller_name
-from
-    seller s
-    left join orders o on s.seller_id = o.seller_id
-    and year(sale_date) = '2020'
-where
-    o.seller_id is null
-order by
-    seller_name
+SELECT seller_name
+FROM
+    Seller
+    LEFT JOIN Orders USING (seller_id)
+GROUP BY seller_id
+HAVING IFNULL(SUM(YEAR(sale_date) = 2020), 0) = 0
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

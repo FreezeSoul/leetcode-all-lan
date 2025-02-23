@@ -1,14 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0045.Jump%20Game%20II/README.md
+tags:
+    - 贪心
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [45. 跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii)
 
 [English Version](/solution/0000-0099/0045.Jump%20Game%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个长度为 <code>n</code> 的 <strong>0 索引</strong>整数数组 <code>nums</code>。初始位置为 <code>nums[0]</code>。</p>
 
-<p>每个元素 <code>nums[i]</code> 表示从索引 <code>i</code> 向前跳转的最大长度。换句话说，如果你在 <code>nums[i]</code> 处，你可以跳转到任意 <code>nums[i + j]</code> 处:</p>
+<p>每个元素 <code>nums[i]</code> 表示从索引 <code>i</code> 向后跳转的最大长度。换句话说，如果你在 <code>nums[i]</code> 处，你可以跳转到任意 <code>nums[i + j]</code> 处:</p>
 
 <ul>
 	<li><code>0 &lt;= j &lt;= nums[i]</code>&nbsp;</li>
@@ -45,11 +57,13 @@
 	<li>题目保证可以到达&nbsp;<code>nums[n-1]</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 我们可以用变量 $mx$ 记录当前位置能够到达的最远位置，用变量 $last$ 记录上一次跳跃到的位置，用变量 $ans$ 记录跳跃的次数。
 
@@ -61,15 +75,13 @@
 
 相似题目：
 
--   [55. 跳跃游戏](/solution/0000-0099/0055.Jump%20Game/README.md)
--   [1024. 视频拼接](/solution/1000-1099/1024.Video%20Stitching/README.md)
--   [1326. 灌溉花园的最少水龙头数目](/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README.md)
+-   [55. 跳跃游戏](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0055.Jump%20Game/README.md)
+-   [1024. 视频拼接](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1024.Video%20Stitching/README.md)
+-   [1326. 灌溉花园的最少水龙头数目](https://github.com/doocs/leetcode/blob/main/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +95,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func jump(nums []int) (ans int) {
@@ -136,22 +146,13 @@ func jump(nums []int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function jump(nums: number[]): number {
-    let ans = 0;
-    let mx = 0;
-    let last = 0;
+    let [ans, mx, last] = [0, 0, 0];
     for (let i = 0; i < nums.length - 1; ++i) {
         mx = Math.max(mx, i + nums[i]);
         if (last === i) {
@@ -163,7 +164,27 @@ function jump(nums: number[]): number {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn jump(nums: Vec<i32>) -> i32 {
+        let mut ans = 0;
+        let mut mx = 0;
+        let mut last = 0;
+        for i in 0..(nums.len() - 1) {
+            mx = mx.max(i as i32 + nums[i]);
+            if last == i as i32 {
+                ans += 1;
+                last = mx;
+            }
+        }
+        ans
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -181,50 +202,52 @@ public class Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-#define min(a, b) a < b ? a : b
 int jump(int* nums, int numsSize) {
-    int dp[numsSize];
-    for (int i = 0; i < numsSize; i++) {
-        dp[i] = numsSize;
-    }
-    dp[0] = 0;
-    for (int i = 0; i < numsSize - 1; i++) {
-        for (int j = i + 1; j < (min(i + nums[i] + 1, numsSize)); j++) {
-            dp[j] = min(dp[j], dp[i] + 1);
+    int ans = 0;
+    int mx = 0;
+    int last = 0;
+    for (int i = 0; i < numsSize - 1; ++i) {
+        mx = (mx > i + nums[i]) ? mx : (i + nums[i]);
+        if (last == i) {
+            ++ans;
+            last = mx;
         }
     }
-    return dp[numsSize - 1];
+    return ans;
 }
 ```
 
-### **Rust**
+#### PHP
 
-```rust
-impl Solution {
-    pub fn jump(nums: Vec<i32>) -> i32 {
-        let n = nums.len();
-        let mut dp = vec![i32::MAX; n];
-        dp[0] = 0;
-        for i in 0..n - 1 {
-            for j in 1..=nums[i] as usize {
-                if i + j >= n {
-                    break;
-                }
-                dp[i + j] = dp[i + j].min(dp[i] + 1);
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function jump($nums) {
+        $ans = 0;
+        $mx = 0;
+        $last = 0;
+
+        for ($i = 0; $i < count($nums) - 1; $i++) {
+            $mx = max($mx, $i + $nums[$i]);
+            if ($last == $i) {
+                $ans++;
+                $last = $mx;
             }
         }
-        dp[n - 1]
+
+        return $ans;
     }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2492.Minimum%20Score%20of%20a%20Path%20Between%20Two%20Cities/README.md
+rating: 1679
+source: 第 322 场周赛 Q3
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 并查集
+    - 图
+---
+
+<!-- problem:start -->
+
 # [2492. 两个城市间路径的最小分数](https://leetcode.cn/problems/minimum-score-of-a-path-between-two-cities)
 
 [English Version](/solution/2400-2499/2492.Minimum%20Score%20of%20a%20Path%20Between%20Two%20Cities/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数&nbsp;<code>n</code>&nbsp;，表示总共有&nbsp;<code>n</code>&nbsp;个城市，城市从&nbsp;<code>1</code>&nbsp;到&nbsp;<code>n</code>&nbsp;编号。给你一个二维数组&nbsp;<code>roads</code>&nbsp;，其中&nbsp;<code>roads[i] = [a<sub>i</sub>, b<sub>i</sub>, distance<sub>i</sub>]</code>&nbsp;表示城市&nbsp;<code>a<sub>i</sub></code> 和&nbsp;<code>b<sub>i</sub></code>&nbsp;之间有一条 <strong>双向</strong>&nbsp;道路，道路距离为&nbsp;<code>distance<sub>i</sub></code>&nbsp;。城市构成的图不一定是连通的。</p>
 
@@ -58,27 +73,21 @@
 	<li>城市 <code>1</code>&nbsp;和城市 <code>n</code>&nbsp;之间至少有一条路径。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 根据题目描述，每条边可以经过多次，并且保证节点 $1$ 和节点 $n$ 在同一个连通块中。因此，题目实际上求的是节点 $1$ 所在的连通块的最小边。我们可以用 DFS，从节点 $1$ 开始搜索所有的边，找到最小的边即可。
 
 时间复杂度 $O(n + m)$。其中 $n$ 和 $m$ 分别是节点数和边数。
 
-**方法二：BFS**
-
-我们也可以用 BFS 来求解。
-
-时间复杂度 $O(n + m)$。其中 $n$ 和 $m$ 分别是节点数和边数。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -101,31 +110,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def minScore(self, n: int, roads: List[List[int]]) -> int:
-        g = defaultdict(list)
-        for a, b, d in roads:
-            g[a].append((b, d))
-            g[b].append((a, d))
-        vis = [False] * (n + 1)
-        vis[1] = True
-        ans = inf
-        q = deque([1])
-        while q:
-            for _ in range(len(q)):
-                i = q.popleft()
-                for j, d in g[i]:
-                    ans = min(ans, d)
-                    if not vis[j]:
-                        vis[j] = True
-                        q.append(j)
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -158,6 +143,189 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minScore(int n, vector<vector<int>>& roads) {
+        vector<vector<pair<int, int>>> g(n);
+        bool vis[n];
+        memset(vis, 0, sizeof vis);
+        for (auto& e : roads) {
+            int a = e[0] - 1, b = e[1] - 1, d = e[2];
+            g[a].emplace_back(b, d);
+            g[b].emplace_back(a, d);
+        }
+        int ans = INT_MAX;
+        function<void(int)> dfs = [&](int i) {
+            for (auto [j, d] : g[i]) {
+                ans = min(ans, d);
+                if (!vis[j]) {
+                    vis[j] = true;
+                    dfs(j);
+                }
+            }
+        };
+        dfs(0);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minScore(n int, roads [][]int) int {
+	type pair struct{ i, v int }
+	g := make([][]pair, n)
+	for _, e := range roads {
+		a, b, d := e[0]-1, e[1]-1, e[2]
+		g[a] = append(g[a], pair{b, d})
+		g[b] = append(g[b], pair{a, d})
+	}
+	vis := make([]bool, n)
+	ans := 1 << 30
+	var dfs func(int)
+	dfs = func(i int) {
+		for _, nxt := range g[i] {
+			j, d := nxt.i, nxt.v
+			ans = min(ans, d)
+			if !vis[j] {
+				vis[j] = true
+				dfs(j)
+			}
+		}
+	}
+	dfs(0)
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+function minScore(n: number, roads: number[][]): number {
+    const vis = new Array(n + 1).fill(false);
+    const g = Array.from({ length: n + 1 }, () => []);
+    for (const [a, b, v] of roads) {
+        g[a].push([b, v]);
+        g[b].push([a, v]);
+    }
+    let ans = Infinity;
+    const dfs = (i: number) => {
+        if (vis[i]) {
+            return;
+        }
+        vis[i] = true;
+        for (const [j, v] of g[i]) {
+            ans = Math.min(ans, v);
+            dfs(j);
+        }
+    };
+    dfs(1);
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    fn dfs(i: usize, mut ans: i32, g: &Vec<Vec<(usize, i32)>>, vis: &mut Vec<bool>) -> i32 {
+        if vis[i] {
+            return ans;
+        }
+        vis[i] = true;
+        for (j, v) in g[i].iter() {
+            ans = ans.min(*v.min(&Self::dfs(*j, ans, g, vis)));
+        }
+        ans
+    }
+
+    pub fn min_score(n: i32, roads: Vec<Vec<i32>>) -> i32 {
+        let n = n as usize;
+        let mut vis = vec![false; n + 1];
+        let mut g = vec![Vec::new(); n + 1];
+        for road in roads.iter() {
+            let a = road[0] as usize;
+            let b = road[1] as usize;
+            let v = road[2];
+            g[a].push((b, v));
+            g[b].push((a, v));
+        }
+        Self::dfs(1, i32::MAX, &g, &mut vis)
+    }
+}
+```
+
+#### JavaScript
+
+```js
+var minScore = function (n, roads) {
+    // 构建点到点的映射表
+    const graph = Array.from({ length: n + 1 }, () => new Map());
+    for (let [u, v, w] of roads) {
+        graph[u].set(v, w);
+        graph[v].set(u, w);
+    }
+
+    // DFS
+    const vis = new Array(n).fill(false);
+    let ans = Infinity;
+    var dfs = function (u) {
+        vis[u] = true;
+        for (const [v, w] of graph[u]) {
+            ans = Math.min(ans, w);
+            if (!vis[v]) dfs(v);
+        }
+    };
+    dfs(1);
+
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：BFS
+
+我们也可以用 BFS 来求解。
+
+时间复杂度 $O(n + m)$。其中 $n$ 和 $m$ 分别是节点数和边数。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minScore(self, n: int, roads: List[List[int]]) -> int:
+        g = defaultdict(list)
+        for a, b, d in roads:
+            g[a].append((b, d))
+            g[b].append((a, d))
+        vis = [False] * (n + 1)
+        vis[1] = True
+        ans = inf
+        q = deque([1])
+        while q:
+            for _ in range(len(q)):
+                i = q.popleft()
+                for j, d in g[i]:
+                    ans = min(ans, d)
+                    if not vis[j]:
+                        vis[j] = True
+                        q.append(j)
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -192,35 +360,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minScore(int n, vector<vector<int>>& roads) {
-        vector<vector<pair<int, int>>> g(n);
-        bool vis[n];
-        memset(vis, 0, sizeof vis);
-        for (auto& e : roads) {
-            int a = e[0] - 1, b = e[1] - 1, d = e[2];
-            g[a].emplace_back(b, d);
-            g[b].emplace_back(a, d);
-        }
-        int ans = INT_MAX;
-        function<void(int)> dfs = [&](int i) {
-            for (auto [j, d] : g[i]) {
-                ans = min(ans, d);
-                if (!vis[j]) {
-                    vis[j] = true;
-                    dfs(j);
-                }
-            }
-        };
-        dfs(0);
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -255,41 +395,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func minScore(n int, roads [][]int) int {
-	type pair struct{ i, v int }
-	g := make([][]pair, n)
-	for _, e := range roads {
-		a, b, d := e[0]-1, e[1]-1, e[2]
-		g[a] = append(g[a], pair{b, d})
-		g[b] = append(g[b], pair{a, d})
-	}
-	vis := make([]bool, n)
-	ans := 1 << 30
-	var dfs func(int)
-	dfs = func(i int) {
-		for _, nxt := range g[i] {
-			j, d := nxt.i, nxt.v
-			ans = min(ans, d)
-			if !vis[j] {
-				vis[j] = true
-				dfs(j)
-			}
-		}
-	}
-	dfs(0)
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func minScore(n int, roads [][]int) int {
@@ -320,103 +426,10 @@ func minScore(n int, roads [][]int) int {
 	}
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **JavaScript**
-
-```js
-var minScore = function (n, roads) {
-    // 构建点到点的映射表
-    const graph = Array.from({ length: n + 1 }, () => new Map());
-    for (let [u, v, w] of roads) {
-        graph[u].set(v, w);
-        graph[v].set(u, w);
-    }
-
-    // DFS
-    const vis = new Array(n).fill(false);
-    let ans = Infinity;
-    var dfs = function (u) {
-        vis[u] = true;
-        for (const [v, w] of graph[u]) {
-            ans = Math.min(ans, w);
-            if (!vis[v]) dfs(v);
-        }
-    };
-    dfs(1);
-
-    return ans;
-};
-```
-
-### **TypeScript**
-
-```ts
-function minScore(n: number, roads: number[][]): number {
-    const vis = new Array(n + 1).fill(false);
-    const g = Array.from({ length: n + 1 }, () => []);
-    for (const [a, b, v] of roads) {
-        g[a].push([b, v]);
-        g[b].push([a, v]);
-    }
-    let ans = Infinity;
-    const dfs = (i: number) => {
-        if (vis[i]) {
-            return;
-        }
-        vis[i] = true;
-        for (const [j, v] of g[i]) {
-            ans = Math.min(ans, v);
-            dfs(j);
-        }
-    };
-    dfs(1);
-    return ans;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    fn dfs(i: usize, mut ans: i32, g: &Vec<Vec<(usize, i32)>>, vis: &mut Vec<bool>) -> i32 {
-        if vis[i] {
-            return ans;
-        }
-        vis[i] = true;
-        for (j, v) in g[i].iter() {
-            ans = ans.min(*v.min(&Self::dfs(*j, ans, g, vis)));
-        }
-        ans
-    }
-
-    pub fn min_score(n: i32, roads: Vec<Vec<i32>>) -> i32 {
-        let n = n as usize;
-        let mut vis = vec![false; n + 1];
-        let mut g = vec![Vec::new(); n + 1];
-        for road in roads.iter() {
-            let a = road[0] as usize;
-            let b = road[1] as usize;
-            let v = road[2];
-            g[a].push((b, v));
-            g[b].push((a, v));
-        }
-        Self::dfs(1, i32::MAX, &g, &mut vis)
-    }
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

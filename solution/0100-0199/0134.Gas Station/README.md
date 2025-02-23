@@ -1,16 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0134.Gas%20Station/README.md
+tags:
+    - 贪心
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [134. 加油站](https://leetcode.cn/problems/gas-station)
 
 [English Version](/solution/0100-0199/0134.Gas%20Station/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在一条环路上有 <code>n</code>&nbsp;个加油站，其中第 <code>i</code>&nbsp;个加油站有汽油&nbsp;<code>gas[i]</code><em>&nbsp;</em>升。</p>
 
 <p>你有一辆油箱容量无限的的汽车，从第<em> </em><code>i</code><em> </em>个加油站开往第<em> </em><code>i+1</code><em>&nbsp;</em>个加油站需要消耗汽油&nbsp;<code>cost[i]</code><em>&nbsp;</em>升。你从其中的一个加油站出发，开始时油箱为空。</p>
 
-<p>给定两个整数数组 <code>gas</code> 和 <code>cost</code> ，如果你可以绕环路行驶一周，则返回出发时加油站的编号，否则返回 <code>-1</code> 。如果存在解，则 <strong>保证</strong> 它是 <strong>唯一</strong> 的。</p>
+<p>给定两个整数数组 <code>gas</code> 和 <code>cost</code> ，如果你可以按顺序绕环路行驶一周，则返回出发时加油站的编号，否则返回 <code>-1</code> 。如果存在解，则 <strong>保证</strong> 它是 <strong>唯一</strong> 的。</p>
 
 <p>&nbsp;</p>
 
@@ -52,11 +63,13 @@
 	<li><code>0 &lt;= gas[i], cost[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：从任意起点开始遍历**
+### 方法一：从任意起点开始遍历
 
 我们用 $i$, $j$ 分别标记起点和终点，用 $s$ 表示当前剩余汽油，而 $cnt$ 表示当前行驶过的加油站数量。初始时，我们将起点设在最后一个位置，即 $i=n-1$。
 
@@ -68,9 +81,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +100,7 @@ class Solution:
         return -1 if s < 0 else i
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -138,31 +147,31 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canCompleteCircuit(gas []int, cost []int) int {
-    n := len(gas)
-    i, j := n - 1, n - 1
-    cnt, s := 0, 0
-    for cnt < n {
-        s += gas[j] - cost[j]
-        cnt++
-        j = (j + 1) % n
-        for s < 0 && cnt < n {
-            i--
-            s += gas[i] - cost[i]
-            cnt++
-        }
-    }
-    if s < 0 {
-        return -1
-    }
-    return i
+	n := len(gas)
+	i, j := n-1, n-1
+	cnt, s := 0, 0
+	for cnt < n {
+		s += gas[j] - cost[j]
+		cnt++
+		j = (j + 1) % n
+		for s < 0 && cnt < n {
+			i--
+			s += gas[i] - cost[i]
+			cnt++
+		}
+	}
+	if s < 0 {
+		return -1
+	}
+	return i
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canCompleteCircuit(gas: number[], cost: number[]): number {
@@ -185,7 +194,7 @@ function canCompleteCircuit(gas: number[], cost: number[]): number {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -208,10 +217,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

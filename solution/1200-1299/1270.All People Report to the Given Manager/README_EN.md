@@ -1,8 +1,20 @@
-# [1270. All People Report to the Given Manager](https://leetcode.com/problems/all-people-report-to-the-given-manager)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1270.All%20People%20Report%20to%20the%20Given%20Manager/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1270. All People Report to the Given Manager 🔒](https://leetcode.com/problems/all-people-report-to-the-given-manager)
 
 [中文文档](/solution/1200-1299/1270.All%20People%20Report%20to%20the%20Given%20Manager/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Employees</code></p>
 
@@ -14,20 +26,20 @@
 | employee_name | varchar |
 | manager_id    | int     |
 +---------------+---------+
-employee_id is the primary key for this table.
+employee_id is the column of unique values for this table.
 Each row of this table indicates that the employee with ID employee_id and name employee_name reports his work to his/her direct manager with manager_id
 The head of the company is the employee with employee_id = 1.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find <code>employee_id</code> of all employees that directly or indirectly report their work to the head of the company.</p>
+<p>Write a solution to find <code>employee_id</code> of all employees that directly or indirectly report their work to the head of the company.</p>
 
 <p>The indirect relation between managers <strong>will not exceed three managers</strong> as the company is small.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -64,24 +76,34 @@ The employee with employee_id 7 reports their work indirectly to the head of the
 The employees with employee_id 3, 8, and 9 do not report their work to the head of the company directly or indirectly. 
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Joins
+
+We can use two joins to find all employees who report directly or indirectly to the company CEO.
+
+Specifically, we first use a join to find the `manager_id` of the superior manager for each `manager_id`, and then use another join to find the `manager_id` of the higher-level manager. Finally, if the `manager_id` of the higher-level manager is $1$ and the `employee_id` of the employee is not $1$, it means that the employee reports directly or indirectly to the company CEO.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-
-# Write your MySQL query statement below
-SELECT  e1.employee_id
-FROM Employees e1
-JOIN Employees e2
-ON e1.manager_id = e2.employee_id
-JOIN Employees e3
-ON e2.manager_id = e3.employee_id
-WHERE e1.employee_id != 1
-AND e3.manager_id = 1
+SELECT e1.employee_id
+FROM
+    Employees AS e1
+    JOIN Employees AS e2 ON e1.manager_id = e2.employee_id
+    JOIN Employees AS e3 ON e2.manager_id = e3.employee_id
+WHERE e1.employee_id != 1 AND e3.manager_id = 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

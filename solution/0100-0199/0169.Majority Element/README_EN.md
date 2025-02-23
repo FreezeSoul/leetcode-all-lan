@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0169.Majority%20Element/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Divide and Conquer
+    - Counting
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [169. Majority Element](https://leetcode.com/problems/majority-element)
 
 [中文文档](/solution/0100-0199/0169.Majority%20Element/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array <code>nums</code> of size <code>n</code>, return <em>the majority element</em>.</p>
 
@@ -28,9 +44,13 @@
 <p>&nbsp;</p>
 <strong>Follow-up:</strong> Could you solve the problem in linear time and in <code>O(1)</code> space?
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Moore Voting Algorithm**
+<!-- solution:start -->
+
+### Solution 1: Moore Voting Algorithm
 
 The basic steps of the Moore voting algorithm are as follows:
 
@@ -45,7 +65,7 @@ The time complexity is $O(n)$, where $n$ is the length of the array $nums$. The 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +79,7 @@ class Solution:
         return m
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +98,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +118,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func majorityElement(nums []int) int {
@@ -118,7 +138,7 @@ func majorityElement(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function majorityElement(nums: number[]): number {
@@ -136,7 +156,27 @@ function majorityElement(nums: number[]): number {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn majority_element(nums: Vec<i32>) -> i32 {
+        let mut m = 0;
+        let mut cnt = 0;
+        for &x in nums.iter() {
+            if cnt == 0 {
+                m = x;
+                cnt = 1;
+            } else {
+                cnt += if m == x { 1 } else { -1 };
+            }
+        }
+        m
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -158,7 +198,7 @@ var majorityElement = function (nums) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -177,31 +217,10 @@ public class Solution {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn majority_element(nums: Vec<i32>) -> i32 {
-        let mut m = 0;
-        let mut cnt = 0;
-        for &x in nums.iter() {
-            if cnt == 0 {
-                m = x;
-                cnt = 1;
-            } else {
-                cnt += if m == x { 1 } else { -1 };
-            }
-        }
-        m
-    }
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
-
     /**
      * @param Integer[] $nums
      * @return Integer
@@ -224,10 +243,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

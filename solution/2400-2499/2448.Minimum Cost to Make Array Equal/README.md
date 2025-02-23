@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2448.Minimum%20Cost%20to%20Make%20Array%20Equal/README.md
+rating: 2005
+source: 第 316 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 二分查找
+    - 前缀和
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2448. 使数组相等的最小开销](https://leetcode.cn/problems/minimum-cost-to-make-array-equal)
 
 [English Version](/solution/2400-2499/2448.Minimum%20Cost%20to%20Make%20Array%20Equal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个下标从 <strong>0</strong>&nbsp;开始的数组&nbsp;<code>nums</code> 和&nbsp;<code>cost</code>&nbsp;，分别包含&nbsp;<code>n</code>&nbsp;个&nbsp;<strong>正</strong>&nbsp;整数。</p>
 
@@ -22,7 +38,8 @@
 
 <p><strong>示例 1：</strong></p>
 
-<pre><b>输入：</b>nums = [1,3,5,2], cost = [2,3,1,14]
+<pre>
+<b>输入：</b>nums = [1,3,5,2], cost = [2,3,1,14]
 <b>输出：</b>8
 <b>解释：</b>我们可以执行以下操作使所有元素变为 2 ：
 - 增加第 0 个元素 1 次，开销为 2 。
@@ -34,7 +51,8 @@
 
 <p><strong>示例 2：</strong></p>
 
-<pre><b>输入：</b>nums = [2,2,2,2,2], cost = [4,2,8,1,3]
+<pre>
+<b>输入：</b>nums = [2,2,2,2,2], cost = [4,2,8,1,3]
 <b>输出：</b>0
 <b>解释：</b>数组中所有元素已经全部相等，不需要执行额外的操作。
 </pre>
@@ -47,13 +65,16 @@
 	<li><code>n == nums.length == cost.length</code></li>
 	<li><code>1 &lt;= n &lt;= 10<sup>5</sup></code></li>
 	<li><code>1 &lt;= nums[i], cost[i] &lt;= 10<sup>6</sup></code></li>
+	<li>测试用例确保输出不超过 2<sup>53</sup>-1。</li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和 + 排序 + 枚举**
+### 方法一：前缀和 + 排序 + 枚举
 
 我们记数组 `nums` 所有元素为 $a_1, a_2, \cdots, a_n$，数组 `cost` 所有元素为 $b_1, b_2, \cdots, b_n$。我们不妨令 $a_1 \leq a_2 \leq \cdots \leq a_n$，即数组 `nums` 升序排列。
 
@@ -74,22 +95,9 @@ $$
 
 时间复杂度 $O(n\times \log n)$。其中 $n$ 为数组 `nums` 的长度。主要是排序的时间复杂度。
 
-**方法二：排序 + 中位数**
-
-我们还可以把 $b_i$ 看作是 $a_i$ 的出现次数，那么中位数下标是 $\frac{\sum_{i=1}^{n} b_i}{2}$。把所有数变成中位数，一定是最优的。
-
-时间复杂度 $O(n\times \log n)$。其中 $n$ 为数组 `nums` 的长度。主要是排序的时间复杂度。
-
-相似题目：
-
--   [296. 最佳的碰头地点](/solution/0200-0299/0296.Best%20Meeting%20Point/README.md)
--   [462. 最少移动次数使数组元素相等 II](/solution/0400-0499/0462.Minimum%20Moves%20to%20Equal%20Array%20Elements%20II/README.md)
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -111,21 +119,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def minCost(self, nums: List[int], cost: List[int]) -> int:
-        arr = sorted(zip(nums, cost))
-        mid = sum(cost) // 2
-        s = 0
-        for x, c in arr:
-            s += c
-            if s > mid:
-                return sum(abs(v - x) * c for v, c in arr)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -133,7 +127,7 @@ class Solution {
         int n = nums.length;
         int[][] arr = new int[n][2];
         for (int i = 0; i < n; ++i) {
-            arr[i] = new int[]{nums[i], cost[i]};
+            arr[i] = new int[] {nums[i], cost[i]};
         }
         Arrays.sort(arr, (a, b) -> a[0] - b[0]);
         long[] f = new long[n + 1];
@@ -154,6 +148,151 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+using ll = long long;
+
+class Solution {
+public:
+    long long minCost(vector<int>& nums, vector<int>& cost) {
+        int n = nums.size();
+        vector<pair<int, int>> arr(n);
+        for (int i = 0; i < n; ++i) arr[i] = {nums[i], cost[i]};
+        sort(arr.begin(), arr.end());
+        vector<ll> f(n + 1), g(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            auto [a, b] = arr[i - 1];
+            f[i] = f[i - 1] + 1ll * a * b;
+            g[i] = g[i - 1] + b;
+        }
+        ll ans = 1e18;
+        for (int i = 1; i <= n; ++i) {
+            auto [a, _] = arr[i - 1];
+            ll l = 1ll * a * g[i - 1] - f[i - 1];
+            ll r = f[n] - f[i] - 1ll * a * (g[n] - g[i]);
+            ans = min(ans, l + r);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minCost(nums []int, cost []int) int64 {
+	n := len(nums)
+	type pair struct{ a, b int }
+	arr := make([]pair, n)
+	for i, a := range nums {
+		b := cost[i]
+		arr[i] = pair{a, b}
+	}
+	sort.Slice(arr, func(i, j int) bool { return arr[i].a < arr[j].a })
+	f := make([]int, n+1)
+	g := make([]int, n+1)
+	for i := 1; i <= n; i++ {
+		a, b := arr[i-1].a, arr[i-1].b
+		f[i] = f[i-1] + a*b
+		g[i] = g[i-1] + b
+	}
+	var ans int64 = 1e18
+	for i := 1; i <= n; i++ {
+		a := arr[i-1].a
+		l := a*g[i-1] - f[i-1]
+		r := f[n] - f[i] - a*(g[n]-g[i])
+		ans = min(ans, int64(l+r))
+	}
+	return ans
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn min_cost(nums: Vec<i32>, cost: Vec<i32>) -> i64 {
+        let mut zip_vec: Vec<_> = nums.into_iter().zip(cost.into_iter()).collect();
+
+        // Sort the zip vector based on nums
+        zip_vec.sort_by(|lhs, rhs| lhs.0.cmp(&rhs.0));
+
+        let (nums, cost): (Vec<i32>, Vec<i32>) = zip_vec.into_iter().unzip();
+
+        let mut sum: i64 = 0;
+        for &c in &cost {
+            sum += c as i64;
+        }
+        let middle_cost = (sum + 1) / 2;
+        let mut cur_sum: i64 = 0;
+        let mut i = 0;
+        let n = nums.len();
+
+        while i < n {
+            if (cost[i] as i64) + cur_sum >= middle_cost {
+                break;
+            }
+            cur_sum += cost[i] as i64;
+            i += 1;
+        }
+
+        Self::compute_manhattan_dis(&nums, &cost, nums[i])
+    }
+
+    #[allow(dead_code)]
+    fn compute_manhattan_dis(v: &Vec<i32>, c: &Vec<i32>, e: i32) -> i64 {
+        let mut ret = 0;
+        let n = v.len();
+
+        for i in 0..n {
+            if v[i] == e {
+                continue;
+            }
+            ret += ((v[i] - e).abs() as i64) * (c[i] as i64);
+        }
+
+        ret
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：排序 + 中位数
+
+我们还可以把 $b_i$ 看作是 $a_i$ 的出现次数，那么中位数下标是 $\frac{\sum_{i=1}^{n} b_i}{2}$。把所有数变成中位数，一定是最优的。
+
+时间复杂度 $O(n\times \log n)$。其中 $n$ 为数组 `nums` 的长度。主要是排序的时间复杂度。
+
+相似题目：
+
+-   [296. 最佳的碰头地点](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0296.Best%20Meeting%20Point/README.md)
+-   [462. 最少移动次数使数组元素相等 II](https://github.com/doocs/leetcode/blob/main/solution/0400-0499/0462.Minimum%20Moves%20to%20Equal%20Array%20Elements%20II/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minCost(self, nums: List[int], cost: List[int]) -> int:
+        arr = sorted(zip(nums, cost))
+        mid = sum(cost) // 2
+        s = 0
+        for x, c in arr:
+            s += c
+            if s > mid:
+                return sum(abs(v - x) * c for v, c in arr)
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -189,35 +328,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-using ll = long long;
-
-class Solution {
-public:
-    long long minCost(vector<int>& nums, vector<int>& cost) {
-        int n = nums.size();
-        vector<pair<int, int>> arr(n);
-        for (int i = 0; i < n; ++i) arr[i] = {nums[i], cost[i]};
-        sort(arr.begin(), arr.end());
-        vector<ll> f(n + 1), g(n + 1);
-        for (int i = 1; i <= n; ++i) {
-            auto [a, b] = arr[i - 1];
-            f[i] = f[i - 1] + 1ll * a * b;
-            g[i] = g[i - 1] + b;
-        }
-        ll ans = 1e18;
-        for (int i = 1; i <= n; ++i) {
-            auto [a, _] = arr[i - 1];
-            ll l = 1ll * a * g[i - 1] - f[i - 1];
-            ll r = f[n] - f[i] - 1ll * a * (g[n] - g[i]);
-            ans = min(ans, l + r);
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 using ll = long long;
@@ -245,42 +356,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func minCost(nums []int, cost []int) int64 {
-	n := len(nums)
-	type pair struct{ a, b int }
-	arr := make([]pair, n)
-	for i, a := range nums {
-		b := cost[i]
-		arr[i] = pair{a, b}
-	}
-	sort.Slice(arr, func(i, j int) bool { return arr[i].a < arr[j].a })
-	f := make([]int, n+1)
-	g := make([]int, n+1)
-	for i := 1; i <= n; i++ {
-		a, b := arr[i-1].a, arr[i-1].b
-		f[i] = f[i-1] + a*b
-		g[i] = g[i-1] + b
-	}
-	var ans int64 = 1e18
-	for i := 1; i <= n; i++ {
-		a := arr[i-1].a
-		l := a*g[i-1] - f[i-1]
-		r := f[n] - f[i] - a*(g[n]-g[i])
-		ans = min(ans, int64(l+r))
-	}
-	return ans
-}
-
-func min(a, b int64) int64 {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func minCost(nums []int, cost []int) int64 {
@@ -318,16 +394,8 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

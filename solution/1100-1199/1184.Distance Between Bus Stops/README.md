@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1184.Distance%20Between%20Bus%20Stops/README.md
+rating: 1234
+source: 第 153 场周赛 Q1
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1184. 公交站间的距离](https://leetcode.cn/problems/distance-between-bus-stops)
 
 [English Version](/solution/1100-1199/1184.Distance%20Between%20Bus%20Stops/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>环形公交路线上有&nbsp;<code>n</code>&nbsp;个站，按次序从&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;进行编号。我们已知每一对相邻公交站之间的距离，<code>distance[i]</code>&nbsp;表示编号为&nbsp;<code>i</code>&nbsp;的车站和编号为&nbsp;<code>(i + 1) % n</code>&nbsp;的车站之间的距离。</p>
 
@@ -55,93 +67,121 @@
 	<li><code>0 &lt;= distance[i] &lt;= 10^4</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-我们可以先统计出公交车的总行驶距离 $s$，然后模拟公交车的行驶过程，从出发点开始，每次向右移动一站，直到到达目的地为止。在模拟的过程中，我们可以记录从出发点到目的地的距离 $a$，那么从目的地到出发点的最短距离就是 $\min(a, s - a)$。
+我们可以先统计出公交车的总行驶距离 $s$，然后模拟公交车的行驶过程，从出发点开始，每次向右移动一站，直到到达目的地为止，记录下这个过程中的行驶距离 $t$，最后返回 $t$ 和 $s - t$ 中的最小值即可。
 
-时间复杂度 $O(n)$，其中 $n$ 是公交车站的数量。空间复杂度 $O(1)$。
+时间复杂度 $O(n)$，其中 $n$ 是数组 $\textit{distance}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def distanceBetweenBusStops(self, distance: List[int], start: int, destination: int) -> int:
-        a, n = 0, len(distance)
+    def distanceBetweenBusStops(
+        self, distance: List[int], start: int, destination: int
+    ) -> int:
+        s = sum(distance)
+        t, n = 0, len(distance)
         while start != destination:
-            a += distance[start]
+            t += distance[start]
             start = (start + 1) % n
-        return min(a, sum(distance) - a)
+        return min(t, s - t)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int distanceBetweenBusStops(int[] distance, int start, int destination) {
         int s = Arrays.stream(distance).sum();
-        int n = distance.length;
-        int a = 0;
+        int n = distance.length, t = 0;
         while (start != destination) {
-            a += distance[start];
+            t += distance[start];
             start = (start + 1) % n;
         }
-        return Math.min(a, s - a);
+        return Math.min(t, s - t);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int distanceBetweenBusStops(vector<int>& distance, int start, int destination) {
         int s = accumulate(distance.begin(), distance.end(), 0);
-        int a = 0, n = distance.size();
+        int t = 0, n = distance.size();
         while (start != destination) {
-            a += distance[start];
+            t += distance[start];
             start = (start + 1) % n;
         }
-        return min(a, s - a);
+        return min(t, s - t);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func distanceBetweenBusStops(distance []int, start int, destination int) int {
-	s := 0
+	s, t := 0, 0
 	for _, x := range distance {
 		s += x
 	}
-	a, n := 0, len(distance)
 	for start != destination {
-		a += distance[start]
-		start = (start + 1) % n
+		t += distance[start]
+		start = (start + 1) % len(distance)
 	}
-	return min(a, s-a)
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return min(t, s-t)
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function distanceBetweenBusStops(distance: number[], start: number, destination: number): number {
+    const s = distance.reduce((a, b) => a + b, 0);
+    const n = distance.length;
+    let t = 0;
+    while (start !== destination) {
+        t += distance[start];
+        start = (start + 1) % n;
+    }
+    return Math.min(t, s - t);
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn distance_between_bus_stops(distance: Vec<i32>, start: i32, destination: i32) -> i32 {
+        let s: i32 = distance.iter().sum();
+        let mut t = 0;
+        let n = distance.len();
+        let mut start = start as usize;
+        let destination = destination as usize;
+
+        while start != destination {
+            t += distance[start];
+            start = (start + 1) % n;
+        }
+
+        t.min(s - t)
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -152,39 +192,18 @@ func min(a, b int) int {
  */
 var distanceBetweenBusStops = function (distance, start, destination) {
     const s = distance.reduce((a, b) => a + b, 0);
-    let a = 0;
     const n = distance.length;
-    while (start != destination) {
-        a += distance[start];
+    let t = 0;
+    while (start !== destination) {
+        t += distance[start];
         start = (start + 1) % n;
     }
-    return Math.min(a, s - a);
+    return Math.min(t, s - t);
 };
 ```
 
-### **TypeScript**
-
-```ts
-function distanceBetweenBusStops(
-    distance: number[],
-    start: number,
-    destination: number,
-): number {
-    const s = distance.reduce((a, b) => a + b, 0);
-    let a = 0;
-    const n = distance.length;
-    while (start != destination) {
-        a += distance[start];
-        start = (start + 1) % n;
-    }
-    return Math.min(a, s - a);
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2047.Number%20of%20Valid%20Words%20in%20a%20Sentence/README_EN.md
+rating: 1471
+source: Weekly Contest 264 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2047. Number of Valid Words in a Sentence](https://leetcode.com/problems/number-of-valid-words-in-a-sentence)
 
 [中文文档](/solution/2000-2099/2047.Number%20of%20Valid%20Words%20in%20a%20Sentence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A sentence consists of lowercase letters (<code>&#39;a&#39;</code> to <code>&#39;z&#39;</code>), digits (<code>&#39;0&#39;</code> to <code>&#39;9&#39;</code>), hyphens (<code>&#39;-&#39;</code>), punctuation marks (<code>&#39;!&#39;</code>, <code>&#39;.&#39;</code>, and <code>&#39;,&#39;</code>), and spaces (<code>&#39; &#39;</code>) only. Each sentence can be broken down into <strong>one or more tokens</strong> separated by one or more spaces <code>&#39; &#39;</code>.</p>
 
@@ -55,118 +69,205 @@
 	<li>There will be at least&nbsp;<code>1</code> token.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+First, we split the sentence into words by spaces, and then check each word to determine if it is a valid word.
+
+For each word, we can use a boolean variable $\textit{st}$ to record whether a hyphen has already appeared, and then traverse each character in the word, judging according to the rules described in the problem.
+
+For each character $s[i]$, we have the following cases:
+
+-   If $s[i]$ is a digit, then $s$ is not a valid word, and we return $\text{false}$ directly;
+-   If $s[i]$ is a punctuation mark ('!', '.', ','), and $i < \text{len}(s) - 1$, then $s$ is not a valid word, and we return $\text{false}$ directly;
+-   If $s[i]$ is a hyphen, then we need to check if the following conditions are met:
+    -   The hyphen can only appear once;
+    -   The hyphen cannot appear at the beginning or end of the word;
+    -   Both sides of the hyphen must be letters;
+-   If $s[i]$ is a letter, then we do not need to do anything.
+
+Finally, we count the number of valid words in the sentence.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the sentence.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def countValidWords(self, sentence: str) -> int:
-        def check(token):
-            hyphen = False
-            for i, c in enumerate(token):
-                if c.isdigit() or (c in '!.,' and i < len(token) - 1):
+        def check(s: str) -> bool:
+            st = False
+            for i, c in enumerate(s):
+                if c.isdigit() or (c in "!.," and i < len(s) - 1):
                     return False
-                if c == '-':
+                if c == "-":
                     if (
-                        hyphen
-                        or i == 0
-                        or i == len(token) - 1
-                        or not token[i - 1].islower()
-                        or not token[i + 1].islower()
+                        st
+                        or i in (0, len(s) - 1)
+                        or not s[i - 1].isalpha()
+                        or not s[i + 1].isalpha()
                     ):
                         return False
-                    hyphen = True
+                    st = True
             return True
 
-        return sum(check(token) for token in sentence.split())
+        return sum(check(s) for s in sentence.split())
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int countValidWords(String sentence) {
         int ans = 0;
-        for (String token : sentence.split(" ")) {
-            if (check(token)) {
-                ++ans;
-            }
+        for (String s : sentence.split(" ")) {
+            ans += check(s.toCharArray());
         }
         return ans;
     }
 
-    private boolean check(String token) {
-        int n = token.length();
-        if (n == 0) {
-            return false;
+    private int check(char[] s) {
+        if (s.length == 0) {
+            return 0;
         }
-        boolean hyphen = false;
-        for (int i = 0; i < n; ++i) {
-            char c = token.charAt(i);
-            if (Character.isDigit(c) || (i < n - 1 && (c == '!' || c == '.' || c == ','))) {
-                return false;
+        boolean st = false;
+        for (int i = 0; i < s.length; ++i) {
+            if (Character.isDigit(s[i])) {
+                return 0;
             }
-            if (c == '-') {
-                if (hyphen || i == 0 || i == n - 1 || !Character.isLetter(token.charAt(i - 1))
-                    || !Character.isLetter(token.charAt(i + 1))) {
-                    return false;
+            if ((s[i] == '!' || s[i] == '.' || s[i] == ',') && i < s.length - 1) {
+                return 0;
+            }
+            if (s[i] == '-') {
+                if (st || i == 0 || i == s.length - 1) {
+                    return 0;
                 }
-                hyphen = true;
+                if (!Character.isAlphabetic(s[i - 1]) || !Character.isAlphabetic(s[i + 1])) {
+                    return 0;
+                }
+                st = true;
             }
         }
-        return true;
+        return 1;
     }
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countValidWords(string sentence) {
+        auto check = [](const string& s) -> int {
+            bool st = false;
+            for (int i = 0; i < s.length(); ++i) {
+                if (isdigit(s[i])) {
+                    return 0;
+                }
+                if ((s[i] == '!' || s[i] == '.' || s[i] == ',') && i < s.length() - 1) {
+                    return 0;
+                }
+                if (s[i] == '-') {
+                    if (st || i == 0 || i == s.length() - 1) {
+                        return 0;
+                    }
+                    if (!isalpha(s[i - 1]) || !isalpha(s[i + 1])) {
+                        return 0;
+                    }
+                    st = true;
+                }
+            }
+            return 1;
+        };
+
+        int ans = 0;
+        stringstream ss(sentence);
+        string s;
+        while (ss >> s) {
+            ans += check(s);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countValidWords(sentence string) (ans int) {
+	check := func(s string) int {
+		if len(s) == 0 {
+			return 0
+		}
+		st := false
+		for i, r := range s {
+			if unicode.IsDigit(r) {
+				return 0
+			}
+			if (r == '!' || r == '.' || r == ',') && i < len(s)-1 {
+				return 0
+			}
+			if r == '-' {
+				if st || i == 0 || i == len(s)-1 {
+					return 0
+				}
+				if !unicode.IsLetter(rune(s[i-1])) || !unicode.IsLetter(rune(s[i+1])) {
+					return 0
+				}
+				st = true
+			}
+		}
+		return 1
+	}
+	for _, s := range strings.Fields(sentence) {
+		ans += check(s)
+	}
+	return ans
+}
+```
+
+#### TypeScript
 
 ```ts
 function countValidWords(sentence: string): number {
-    let words = sentence.trim().split(/\s+/);
-    let ans = 0;
-    for (let word of words) {
-        if (isValied(word)) {
-            ans++;
+    const check = (s: string): number => {
+        if (s.length === 0) {
+            return 0;
         }
-    }
-    return ans;
-}
-
-function isValied(str: string): boolean {
-    let n = str.length;
-    let hasLine = false;
-    for (let i = 0; i < n; i++) {
-        const char = str.charAt(i);
-        if (/^[0-9]$/.test(char)) {
-            return false;
-        }
-        if (char == '-') {
-            if (hasLine) return false;
-            else {
-                hasLine = true;
+        let st = false;
+        for (let i = 0; i < s.length; ++i) {
+            if (/\d/.test(s[i])) {
+                return 0;
             }
-            let pre = str.charAt(i - 1),
-                post = str.charAt(i + 1);
-            if (!/^[a-z]$/g.test(pre) || !/^[a-z]$/g.test(post)) {
-                return false;
+            if (['!', '.', ','].includes(s[i]) && i < s.length - 1) {
+                return 0;
+            }
+            if (s[i] === '-') {
+                if (st || [0, s.length - 1].includes(i)) {
+                    return 0;
+                }
+                if (!/[a-zA-Z]/.test(s[i - 1]) || !/[a-zA-Z]/.test(s[i + 1])) {
+                    return 0;
+                }
+                st = true;
             }
         }
-        if (/^[\!\.\,\s]$/.test(char) && i != n - 1) {
-            return false;
-        }
-    }
-    return true;
+        return 1;
+    };
+    return sentence.split(/\s+/).reduce((acc, s) => acc + check(s), 0);
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

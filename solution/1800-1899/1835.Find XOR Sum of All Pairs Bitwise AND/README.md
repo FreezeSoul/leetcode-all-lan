@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1835.Find%20XOR%20Sum%20of%20All%20Pairs%20Bitwise%20AND/README.md
+rating: 1825
+source: 第 237 场周赛 Q4
+tags:
+    - 位运算
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1835. 所有数对按位与结果的异或和](https://leetcode.cn/problems/find-xor-sum-of-all-pairs-bitwise-and)
 
 [English Version](/solution/1800-1899/1835.Find%20XOR%20Sum%20of%20All%20Pairs%20Bitwise%20AND/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>列表的 <strong>异或和</strong>（<strong>XOR sum</strong>）指对所有元素进行按位 <code>XOR</code> 运算的结果。如果列表中仅有一个元素，那么其 <strong>异或和</strong> 就等于该元素。</p>
 
@@ -43,17 +57,19 @@
 	<li><code>0 &lt;= arr1[i], arr2[j] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
-假设数组 `arr1` 的元素分别为 $a_1, a_2, \cdots, a_n$，数组 `arr2` 的元素分别为 $b_1, b_2, \cdots, b_m$，那么题目答案为：
+假设数组 $arr1$ 的元素分别为 $a_1, a_2, \cdots, a_n$，数组 $arr2$ 的元素分别为 $b_1, b_2, \cdots, b_m$，那么题目答案为：
 
 $$
 \begin{aligned}
-\text{ans} &= (a_1 \wedge b_1) \oplus (a_1 \wedge b_2) ... (a_1 \wedge b_m) \\
+\textit{ans} &= (a_1 \wedge b_1) \oplus (a_1 \wedge b_2) ... (a_1 \wedge b_m) \\
 &\quad \oplus (a_2 \wedge b_1) \oplus (a_2 \wedge b_2) ... (a_2 \wedge b_m) \\
 &\quad \oplus \cdots \\
 &\quad \oplus (a_n \wedge b_1) \oplus (a_n \wedge b_2) ... (a_n \wedge b_m) \\
@@ -63,18 +79,16 @@ $$
 由于布尔代数中，异或运算就是不进位的加法，与运算就是乘法，所以上式可以简化为：
 
 $$
-\text{ans} = (a_1 \oplus a_2 \oplus \cdots \oplus a_n) \wedge (b_1 \oplus b_2 \oplus \cdots \oplus b_m)
+\textit{ans} = (a_1 \oplus a_2 \oplus \cdots \oplus a_n) \wedge (b_1 \oplus b_2 \oplus \cdots \oplus b_m)
 $$
 
-即，数组 `arr1` 的异或和与数组 `arr2` 的异或和的与运算结果。
+即，数组 $arr1$ 的异或和与数组 $arr2$ 的异或和的与运算结果。
 
-时间复杂度 $O(n + m)$，空间复杂度 $O(1)$。其中 $n$ 和 $m$ 分别为数组 `arr1` 和 `arr2` 的长度。
+时间复杂度 $O(n + m)$，其中 $n$ 和 $m$ 分别为数组 $arr1$ 和 $arr2$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +98,7 @@ class Solution:
         return a & b
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getXORSum(arr1 []int, arr2 []int) int {
@@ -131,10 +143,18 @@ func getXORSum(arr1 []int, arr2 []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function getXORSum(arr1: number[], arr2: number[]): number {
+    const a = arr1.reduce((acc, x) => acc ^ x);
+    const b = arr2.reduce((acc, x) => acc ^ x);
+    return a & b;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

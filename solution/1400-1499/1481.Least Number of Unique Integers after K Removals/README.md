@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1481.Least%20Number%20of%20Unique%20Integers%20after%20K%20Removals/README.md
+rating: 1284
+source: 第 193 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 哈希表
+    - 计数
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1481. 不同整数的最少数目](https://leetcode.cn/problems/least-number-of-unique-integers-after-k-removals)
 
 [English Version](/solution/1400-1499/1481.Least%20Number%20of%20Unique%20Integers%20after%20K%20Removals/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>arr</code> 和一个整数 <code>k</code> 。现需要从数组中恰好移除 <code>k</code> 个元素，请找出移除后数组中不同整数的最少数目。</p>
 
@@ -36,11 +52,13 @@
 	<li><code>0 &lt;= k&nbsp;&lt;= arr.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 排序**
+### 方法一：哈希表 + 排序
 
 我们用哈希表 $cnt$ 统计数组 $arr$ 中每个整数出现的次数，然后将 $cnt$ 中的值按照从小到大的顺序排序，记录在数组 $nums$ 中。
 
@@ -52,9 +70,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +83,7 @@ class Solution:
         return 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findLeastNumOfUniqueInts(arr []int, k int) int {
@@ -140,19 +154,17 @@ func findLeastNumOfUniqueInts(arr []int, k int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findLeastNumOfUniqueInts(arr: number[], k: number): number {
     const cnt: Map<number, number> = new Map();
     for (const x of arr) {
-        cnt.set(x, (cnt.get(x) || 0) + 1);
+        cnt.set(x, (cnt.get(x) ?? 0) + 1);
     }
-    const nums: number[] = [];
-    for (const [_, v] of cnt) {
-        nums.push(v);
-    }
-    nums.sort((a, b) => a - b);
+
+    const nums = [...cnt.values()].sort((a, b) => a - b);
+
     for (let i = 0; i < nums.length; ++i) {
         k -= nums[i];
         if (k < 0) {
@@ -163,10 +175,8 @@ function findLeastNumOfUniqueInts(arr: number[], k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

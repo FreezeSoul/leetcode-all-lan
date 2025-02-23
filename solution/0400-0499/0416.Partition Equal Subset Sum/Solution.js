@@ -3,21 +3,19 @@
  * @return {boolean}
  */
 var canPartition = function (nums) {
-    let s = 0;
-    for (let v of nums) {
-        s += v;
-    }
-    if (s % 2 != 0) {
+    const s = nums.reduce((a, b) => a + b, 0);
+    if (s % 2 === 1) {
         return false;
     }
-    const m = nums.length;
-    const n = s >> 1;
-    const dp = new Array(n + 1).fill(false);
-    dp[0] = true;
-    for (let i = 1; i <= m; ++i) {
-        for (let j = n; j >= nums[i - 1]; --j) {
-            dp[j] = dp[j] || dp[j - nums[i - 1]];
+    const n = nums.length;
+    const m = s >> 1;
+    const f = Array.from({ length: n + 1 }, () => Array(m + 1).fill(false));
+    f[0][0] = true;
+    for (let i = 1; i <= n; ++i) {
+        const x = nums[i - 1];
+        for (let j = 0; j <= m; ++j) {
+            f[i][j] = f[i - 1][j] || (j >= x && f[i - 1][j - x]);
         }
     }
-    return dp[n];
+    return f[n][m];
 };

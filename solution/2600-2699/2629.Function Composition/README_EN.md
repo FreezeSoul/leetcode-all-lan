@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2629.Function%20Composition/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2629. Function Composition](https://leetcode.com/problems/function-composition)
 
 [中文文档](/solution/2600-2699/2629.Function%20Composition/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of functions&nbsp;<code>[f<span style="font-size: 10.8333px;">1</span>, f<sub>2</sub>, f<sub>3</sub>,&nbsp;..., f<sub>n</sub>]</code>, return&nbsp;a new function&nbsp;<code>fn</code>&nbsp;that is the <strong>function&nbsp;composition</strong> of the array of functions.</p>
 
@@ -52,14 +64,20 @@ The composition of zero functions is the identity function</pre>
 <ul>
 	<li><code><font face="monospace">-1000 &lt;= x &lt;= 1000</font></code></li>
 	<li><code><font face="monospace">0 &lt;= functions.length &lt;= 1000</font></code></li>
-	<li><font face="monospace"><code>all functions accept and return a single integer</code></font></li>
+	<li>all functions accept and return a single integer</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 type F = (x: number) => number;
@@ -76,10 +94,8 @@ function compose(functions: F[]): F {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

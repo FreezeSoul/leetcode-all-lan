@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0837.New%2021%20Game/README_EN.md
+tags:
+    - Math
+    - Dynamic Programming
+    - Sliding Window
+    - Probability and Statistics
+---
+
+<!-- problem:start -->
+
 # [837. New 21 Game](https://leetcode.com/problems/new-21-game)
 
 [中文文档](/solution/0800-0899/0837.New%2021%20Game/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Alice plays the following game, loosely based on the card game <strong>&quot;21&quot;</strong>.</p>
 
@@ -47,11 +62,17 @@ In 6 out of 10 possibilities, she is at or below 6 points.
 	<li><code>1 &lt;= maxPts &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,19 +88,7 @@ class Solution:
         return dfs(0)
 ```
 
-```python
-class Solution:
-    def new21Game(self, n: int, k: int, maxPts: int) -> float:
-        f = [0] * (k + maxPts)
-        for i in range(k, min(n + 1, k + maxPts)):
-            f[i] = 1
-        f[k - 1] = min(n - k + 1, maxPts) / maxPts
-        for i in range(k - 2, -1, -1):
-            f[i] = f[i + 1] + (f[i + 1] - f[i + maxPts + 1]) / maxPts
-        return f[0]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -109,26 +118,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public double new21Game(int n, int k, int maxPts) {
-        if (k == 0) {
-            return 1.0;
-        }
-        double[] f = new double[k + maxPts];
-        for (int i = k; i < Math.min(n + 1, k + maxPts); ++i) {
-            f[i] = 1;
-        }
-        f[k - 1] = Math.min(n - k + 1, maxPts) * 1.0 / maxPts;
-        for (int i = k - 2; i >= 0; --i) {
-            f[i] = f[i + 1] + (f[i + 1] - f[i + maxPts + 1]) / maxPts;
-        }
-        return f[0];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -152,28 +142,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    double new21Game(int n, int k, int maxPts) {
-        if (k == 0) {
-            return 1.0;
-        }
-        double f[k + maxPts];
-        memset(f, 0, sizeof(f));
-        for (int i = k; i < min(n + 1, k + maxPts); ++i) {
-            f[i] = 1;
-        }
-        f[k - 1] = min(n - k + 1, maxPts) * 1.0 / maxPts;
-        for (int i = k - 2; i >= 0; --i) {
-            f[i] = f[i + 1] + (f[i + 1] - f[i + maxPts + 1]) / maxPts;
-        }
-        return f[0];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func new21Game(n int, k int, maxPts int) float64 {
@@ -197,14 +166,98 @@ func new21Game(n int, k int, maxPts int) float64 {
 	}
 	return dfs(0)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function new21Game(n: number, k: number, maxPts: number): number {
+    const f = new Array(k).fill(0);
+    const dfs = (i: number): number => {
+        if (i >= k) {
+            return i <= n ? 1 : 0;
+        }
+        if (i === k - 1) {
+            return Math.min(n - k + 1, maxPts) / maxPts;
+        }
+        if (f[i] !== 0) {
+            return f[i];
+        }
+        return (f[i] = dfs(i + 1) + (dfs(i + 1) - dfs(i + maxPts + 1)) / maxPts);
+    };
+    return dfs(0);
 }
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def new21Game(self, n: int, k: int, maxPts: int) -> float:
+        f = [0] * (k + maxPts)
+        for i in range(k, min(n + 1, k + maxPts)):
+            f[i] = 1
+        f[k - 1] = min(n - k + 1, maxPts) / maxPts
+        for i in range(k - 2, -1, -1):
+            f[i] = f[i + 1] + (f[i + 1] - f[i + maxPts + 1]) / maxPts
+        return f[0]
+```
+
+#### Java
+
+```java
+class Solution {
+    public double new21Game(int n, int k, int maxPts) {
+        if (k == 0) {
+            return 1.0;
+        }
+        double[] f = new double[k + maxPts];
+        for (int i = k; i < Math.min(n + 1, k + maxPts); ++i) {
+            f[i] = 1;
+        }
+        f[k - 1] = Math.min(n - k + 1, maxPts) * 1.0 / maxPts;
+        for (int i = k - 2; i >= 0; --i) {
+            f[i] = f[i + 1] + (f[i + 1] - f[i + maxPts + 1]) / maxPts;
+        }
+        return f[0];
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    double new21Game(int n, int k, int maxPts) {
+        if (k == 0) {
+            return 1.0;
+        }
+        double f[k + maxPts];
+        memset(f, 0, sizeof(f));
+        for (int i = k; i < min(n + 1, k + maxPts); ++i) {
+            f[i] = 1;
+        }
+        f[k - 1] = min(n - k + 1, maxPts) * 1.0 / maxPts;
+        for (int i = k - 2; i >= 0; --i) {
+            f[i] = f[i + 1] + (f[i + 1] - f[i + maxPts + 1]) / maxPts;
+        }
+        return f[0];
+    }
+};
+```
+
+#### Go
 
 ```go
 func new21Game(n int, k int, maxPts int) float64 {
@@ -221,36 +274,9 @@ func new21Game(n int, k int, maxPts int) float64 {
 	}
 	return f[0]
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function new21Game(n: number, k: number, maxPts: number): number {
-    const f = new Array(k).fill(0);
-    const dfs = (i: number): number => {
-        if (i >= k) {
-            return i <= n ? 1 : 0;
-        }
-        if (i === k - 1) {
-            return Math.min(n - k + 1, maxPts) / maxPts;
-        }
-        if (f[i] !== 0) {
-            return f[i];
-        }
-        return (f[i] =
-            dfs(i + 1) + (dfs(i + 1) - dfs(i + maxPts + 1)) / maxPts);
-    };
-    return dfs(0);
-}
-```
+#### TypeScript
 
 ```ts
 function new21Game(n: number, k: number, maxPts: number): number {
@@ -269,10 +295,8 @@ function new21Game(n: number, k: number, maxPts: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

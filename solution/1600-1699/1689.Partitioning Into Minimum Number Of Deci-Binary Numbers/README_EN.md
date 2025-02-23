@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1689.Partitioning%20Into%20Minimum%20Number%20Of%20Deci-Binary%20Numbers/README_EN.md
+rating: 1355
+source: Weekly Contest 219 Q2
+tags:
+    - Greedy
+    - String
+---
+
+<!-- problem:start -->
+
 # [1689. Partitioning Into Minimum Number Of Deci-Binary Numbers](https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers)
 
 [中文文档](/solution/1600-1699/1689.Partitioning%20Into%20Minimum%20Number%20Of%20Deci-Binary%20Numbers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A decimal number is called <strong>deci-binary</strong> if each of its digits is either <code>0</code> or <code>1</code> without any leading zeros. For example, <code>101</code> and <code>1100</code> are <strong>deci-binary</strong>, while <code>112</code> and <code>3001</code> are not.</p>
 
@@ -40,11 +55,21 @@
 	<li><code>n</code> does not contain any leading zeros and represents a positive integer.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Quick Thinking
+
+The problem is equivalent to finding the maximum number in the string.
+
+The time complexity is $O(n)$, where $n$ is the length of the string. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,7 +77,7 @@ class Solution:
         return int(max(n))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -66,20 +91,22 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minPartitions(string n) {
         int ans = 0;
-        for (char& c : n) ans = max(ans, c - '0');
+        for (char& c : n) {
+            ans = max(ans, c - '0');
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minPartitions(n string) (ans int) {
@@ -92,17 +119,15 @@ func minPartitions(n string) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minPartitions(n: string): number {
-    let nums = n.split('').map(d => parseInt(d));
-    let ans = Math.max(...nums);
-    return ans;
+    return Math.max(...n.split('').map(d => parseInt(d)));
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -116,10 +141,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int minPartitions(char *n) {
+int minPartitions(char* n) {
     int ans = 0;
     for (int i = 0; n[i]; i++) {
         int v = n[i] - '0';
@@ -131,10 +156,8 @@ int minPartitions(char *n) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

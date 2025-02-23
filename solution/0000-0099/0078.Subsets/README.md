@@ -1,16 +1,28 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0078.Subsets/README.md
+tags:
+    - 位运算
+    - 数组
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [78. 子集](https://leetcode.cn/problems/subsets)
 
 [English Version](/solution/0000-0099/0078.Subsets/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个整数数组 <code>nums</code> ，数组中的元素 <strong>互不相同</strong> 。返回该数组所有可能的子集（幂集）。</p>
+<p>给你一个整数数组&nbsp;<code>nums</code> ，数组中的元素 <strong>互不相同</strong> 。返回该数组所有可能的<span data-keyword="subset">子集</span>（幂集）。</p>
 
 <p>解集 <strong>不能</strong> 包含重复的子集。你可以按 <strong>任意顺序</strong> 返回解集。</p>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>示例 1：</strong></p>
 
@@ -26,99 +38,200 @@
 <strong>输出：</strong>[[],[0]]
 </pre>
 
-<p> </p>
+<p>&nbsp;</p>
 
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>1 <= nums.length <= 10</code></li>
-	<li><code>-10 <= nums[i] <= 10</code></li>
+	<li><code>1 &lt;= nums.length &lt;= 10</code></li>
+	<li><code>-10 &lt;= nums[i] &lt;= 10</code></li>
 	<li><code>nums</code> 中的所有元素 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归枚举**
+### 方法一：DFS(回溯)
 
-我们设计一个递归函数 $dfs(u, t)$，它的参数为当前枚举到的元素的下标 $u$，以及当前的子集 $t$。
+我们设计一个函数 $dfs(i)$，表示从数组的第 $i$ 个元素开始搜索所有子集。函数 $dfs(i)$ 的执行逻辑如下：
 
-当前枚举到的元素下标为 $u$，我们可以选择将其加入子集 $t$ 中，也可以选择不加入子集 $t$ 中。递归这两种选择，即可得到所有的子集。
+-   如果 $i=n$，表示当前已经搜索结束，将当前得到的子集 $t$ 加入答案数组 $ans$ 中，然后返回；
+-   否则，我们可以选择不选择当前元素，直接执行 $dfs(i+1)$；也可以选择当前元素，即把当前元素 $nums[i]$ 加入子集 $t$，然后执行 $dfs(i+1)$，注意要在执行 $dfs(i+1)$ 以后再将 $nums[i]$ 从子集 $t$ 中移除（回溯）。
 
-时间复杂度 $O(n\times 2^n)$，空间复杂度 $O(n)$。其中 $n$ 为数组的长度。数组中每个元素有两种状态，即选择或不选择，共 $2^n$ 种状态，每种状态需要 $O(n)$ 的时间来构造子集。
-
-**方法二：二进制枚举**
-
-我们可以将方法一中的递归过程改写成迭代的形式，即使用二进制枚举的方法来枚举所有的子集。
-
-我们可以使用 $2^n$ 个二进制数来表示 $n$ 个元素的所有子集，若某个二进制数 `mask` 的第 $i$ 位为 $1$，表示子集中包含数组第 $i$ 个元素 $v$；若为 $0$，表示子集中不包含数组第 $i$ 个元素 $v$。
+在主函数中，我们调用 $dfs(0)$，即从数组的第一个元素开始搜索所有子集。最后返回答案数组 $ans$ 即可。
 
 时间复杂度 $O(n\times 2^n)$，空间复杂度 $O(n)$。其中 $n$ 为数组的长度。一共有 $2^n$ 个子集，每个子集需要 $O(n)$ 的时间来构造。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        def dfs(u, t):
-            if u == len(nums):
+        def dfs(i: int):
+            if i == len(nums):
                 ans.append(t[:])
                 return
-            dfs(u + 1, t)
-            t.append(nums[u])
-            dfs(u + 1, t)
+            dfs(i + 1)
+            t.append(nums[i])
+            dfs(i + 1)
             t.pop()
 
         ans = []
-        dfs(0, [])
+        t = []
+        dfs(0)
         return ans
 ```
+
+#### Java
+
+```java
+class Solution {
+    private List<List<Integer>> ans = new ArrayList<>();
+    private List<Integer> t = new ArrayList<>();
+    private int[] nums;
+
+    public List<List<Integer>> subsets(int[] nums) {
+        this.nums = nums;
+        dfs(0);
+        return ans;
+    }
+
+    private void dfs(int i) {
+        if (i == nums.length) {
+            ans.add(new ArrayList<>(t));
+            return;
+        }
+        dfs(i + 1);
+        t.add(nums[i]);
+        dfs(i + 1);
+        t.remove(t.size() - 1);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> t;
+        function<void(int)> dfs = [&](int i) -> void {
+            if (i == nums.size()) {
+                ans.push_back(t);
+                return;
+            }
+            dfs(i + 1);
+            t.push_back(nums[i]);
+            dfs(i + 1);
+            t.pop_back();
+        };
+        dfs(0);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func subsets(nums []int) (ans [][]int) {
+	t := []int{}
+	var dfs func(int)
+	dfs = func(i int) {
+		if i == len(nums) {
+			ans = append(ans, append([]int(nil), t...))
+			return
+		}
+		dfs(i + 1)
+		t = append(t, nums[i])
+		dfs(i + 1)
+		t = t[:len(t)-1]
+	}
+	dfs(0)
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function subsets(nums: number[]): number[][] {
+    const ans: number[][] = [];
+    const t: number[] = [];
+    const dfs = (i: number) => {
+        if (i === nums.length) {
+            ans.push(t.slice());
+            return;
+        }
+        dfs(i + 1);
+        t.push(nums[i]);
+        dfs(i + 1);
+        t.pop();
+    };
+    dfs(0);
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    fn dfs(i: usize, t: &mut Vec<i32>, ans: &mut Vec<Vec<i32>>, nums: &Vec<i32>) {
+        if i == nums.len() {
+            ans.push(t.clone());
+            return;
+        }
+        Self::dfs(i + 1, t, ans, nums);
+        t.push(nums[i]);
+        Self::dfs(i + 1, t, ans, nums);
+        t.pop();
+    }
+
+    pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        let mut ans = Vec::new();
+        Self::dfs(0, &mut Vec::new(), &mut ans, &nums);
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：二进制枚举
+
+我们也可以使用二进制枚举的方法得到所有的子集。
+
+我们可以使用 $2^n$ 个二进制数来表示 $n$ 个元素的所有子集，对于当前二进制数 $mask$，如果第 $i$ 位为 $1$，表示选择了第 $i$ 个元素，否则表示不选择第 $i$ 个元素。
+
+时间复杂度 $O(n\times 2^n)$，空间复杂度 $O(n)$。其中 $n$ 为数组的长度。一共有 $2^n$ 个子集，每个子集需要 $O(n)$ 的时间来构造。
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
         ans = []
         for mask in range(1 << len(nums)):
-            t = []
-            for i, v in enumerate(nums):
-                if (mask >> i) & 1:
-                    t.append(v)
+            t = [x for i, x in enumerate(nums) if mask >> i & 1]
             ans.append(t)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    private List<List<Integer>> ans = new ArrayList<>();
-    private int[] nums;
-
-    public List<List<Integer>> subsets(int[] nums) {
-        this.nums = nums;
-        dfs(0, new ArrayList<>());
-        return ans;
-    }
-
-    private void dfs(int u, List<Integer> t) {
-        if (u == nums.length) {
-            ans.add(new ArrayList<>(t));
-            return;
-        }
-        dfs(u + 1, t);
-        t.add(nums[u]);
-        dfs(u + 1, t);
-        t.remove(t.size() - 1);
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -139,143 +252,88 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
-        vector<int> t;
-        dfs(0, nums, t, ans);
-        return ans;
-    }
-
-    void dfs(int u, vector<int>& nums, vector<int>& t, vector<vector<int>>& ans) {
-        if (u == nums.size()) {
-            ans.push_back(t);
-            return;
-        }
-        dfs(u + 1, nums, t, ans);
-        t.push_back(nums[u]);
-        dfs(u + 1, nums, t, ans);
-        t.pop_back();
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
-        vector<int> t;
         int n = nums.size();
-        for (int mask = 0; mask < 1 << n; ++mask)
-        {
-            t.clear();
-            for (int i = 0; i < n; ++i)
-            {
-                if ((mask >> i) & 1)
-                {
-                    t.push_back(nums[i]);
+        vector<vector<int>> ans;
+        for (int mask = 0; mask < 1 << n; ++mask) {
+            vector<int> t;
+            for (int i = 0; i < n; ++i) {
+                if (mask >> i & 1) {
+                    t.emplace_back(nums[i]);
                 }
             }
-            ans.push_back(t);
+            ans.emplace_back(t);
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func subsets(nums []int) [][]int {
-	var ans [][]int
-	var dfs func(u int, t []int)
-	dfs = func(u int, t []int) {
-		if u == len(nums) {
-			ans = append(ans, append([]int(nil), t...))
-			return
-		}
-		dfs(u+1, t)
-		t = append(t, nums[u])
-		dfs(u+1, t)
-		t = t[:len(t)-1]
-	}
-	var t []int
-	dfs(0, t)
-	return ans
-}
-```
-
-```go
-func subsets(nums []int) [][]int {
-	var ans [][]int
+func subsets(nums []int) (ans [][]int) {
 	n := len(nums)
 	for mask := 0; mask < 1<<n; mask++ {
 		t := []int{}
-		for i, v := range nums {
-			if ((mask >> i) & 1) == 1 {
-				t = append(t, v)
+		for i, x := range nums {
+			if mask>>i&1 == 1 {
+				t = append(t, x)
 			}
 		}
 		ans = append(ans, t)
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function subsets(nums: number[]): number[][] {
     const n = nums.length;
-    const t: number[] = [];
-    const res: number[][] = [];
-    const dfs = (i: number) => {
-        if (i === n) {
-            res.push([...t]);
-            return;
+    const ans: number[][] = [];
+    for (let mask = 0; mask < 1 << n; ++mask) {
+        const t: number[] = [];
+        for (let i = 0; i < n; ++i) {
+            if (((mask >> i) & 1) === 1) {
+                t.push(nums[i]);
+            }
         }
-        dfs(i + 1);
-        t.push(nums[i]);
-        dfs(i + 1);
-        t.pop();
-    };
-    dfs(0);
-    return res;
+        ans.push(t);
+    }
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
-    fn dfs(i: usize, t: &mut Vec<i32>, res: &mut Vec<Vec<i32>>, nums: &Vec<i32>) {
-        if i == nums.len() {
-            res.push(t.clone());
-            return;
-        }
-        Self::dfs(i + 1, t, res, nums);
-        t.push(nums[i]);
-        Self::dfs(i + 1, t, res, nums);
-        t.pop();
-    }
-
     pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
-        let mut res = Vec::new();
-        Self::dfs(0, &mut Vec::new(), &mut res, &nums);
-        res
+        let n = nums.len();
+        let mut ans = Vec::new();
+        for mask in 0..(1 << n) {
+            let mut t = Vec::new();
+            for i in 0..n {
+                if (mask >> i) & 1 == 1 {
+                    t.push(nums[i]);
+                }
+            }
+            ans.push(t);
+        }
+        ans
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

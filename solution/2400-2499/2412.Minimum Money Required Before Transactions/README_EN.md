@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2412.Minimum%20Money%20Required%20Before%20Transactions/README_EN.md
+rating: 2092
+source: Biweekly Contest 87 Q4
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2412. Minimum Money Required Before Transactions](https://leetcode.com/problems/minimum-money-required-before-transactions)
 
 [中文文档](/solution/2400-2499/2412.Minimum%20Money%20Required%20Before%20Transactions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> 2D integer array <code><font face="monospace">transactions</font></code>, where <code>transactions[i] = [cost<sub>i</sub>, cashback<sub>i</sub>]</code>.</p>
 
@@ -41,11 +57,21 @@ Thus, starting with money = 3, the transactions can be performed in any order.
 	<li><code>0 &lt;= cost<sub>i</sub>, cashback<sub>i</sub> &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+First, we accumulate all negative profits, denoted as $s$. Then, we enumerate each transaction $\text{transactions}[i] = [a, b]$ as the last transaction. If $a > b$, it means the current transaction is a loss, and this transaction has already been included when we accumulated the negative profits earlier. Therefore, we update the answer with $s + b$. Otherwise, we update the answer with $s + a$.
+
+The time complexity is $O(n)$, where $n$ is the number of transactions. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -60,7 +86,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumMoney(transactions [][]int) int64 {
@@ -121,26 +147,72 @@ func minimumMoney(transactions [][]int) int64 {
 	}
 	return int64(ans)
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minimumMoney(transactions: number[][]): number {
+    const s = transactions.reduce((acc, [a, b]) => acc + Math.max(0, a - b), 0);
+    let ans = 0;
+    for (const [a, b] of transactions) {
+        if (a > b) {
+            ans = Math.max(ans, s + b);
+        } else {
+            ans = Math.max(ans, s + a);
+        }
+    }
+    return ans;
 }
 ```
 
-### **TypeScript**
+#### Rust
 
-```ts
-
+```rust
+impl Solution {
+    pub fn minimum_money(transactions: Vec<Vec<i32>>) -> i64 {
+        let mut s: i64 = 0;
+        for transaction in &transactions {
+            let (a, b) = (transaction[0], transaction[1]);
+            s += (a - b).max(0) as i64;
+        }
+        let mut ans = 0;
+        for transaction in &transactions {
+            let (a, b) = (transaction[0], transaction[1]);
+            if a > b {
+                ans = ans.max(s + b as i64);
+            } else {
+                ans = ans.max(s + a as i64);
+            }
+        }
+        ans
+    }
+}
 ```
 
-### **...**
+#### JavaScript
 
-```
-
-
+```js
+/**
+ * @param {number[][]} transactions
+ * @return {number}
+ */
+var minimumMoney = function (transactions) {
+    const s = transactions.reduce((acc, [a, b]) => acc + Math.max(0, a - b), 0);
+    let ans = 0;
+    for (const [a, b] of transactions) {
+        if (a > b) {
+            ans = Math.max(ans, s + b);
+        } else {
+            ans = Math.max(ans, s + a);
+        }
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
-# [1666. Change the Root of a Binary Tree](https://leetcode.com/problems/change-the-root-of-a-binary-tree)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1666.Change%20the%20Root%20of%20a%20Binary%20Tree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
+# [1666. Change the Root of a Binary Tree 🔒](https://leetcode.com/problems/change-the-root-of-a-binary-tree)
 
 [中文文档](/solution/1600-1699/1666.Change%20the%20Root%20of%20a%20Binary%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree and a <code>leaf</code> node, reroot the tree so that the <code>leaf</code> is the new root.</p>
 
@@ -19,7 +33,7 @@
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1600-1699/1666.Change%20the%20Root%20of%20a%20Binary%20Tree/images/fliptree.png" style="width: 400px; height: 298px;" />
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1600-1699/1666.Change%20the%20Root%20of%20a%20Binary%20Tree/images/bt_image_1.png" style="width: 500px; height: 262px;" />
 <pre>
 <strong>Input:</strong> root = [3,5,1,6,2,0,8,null,null,7,4], leaf = 7
 <strong>Output:</strong> [7,2,null,5,4,3,6,null,null,null,1,null,null,0,8]
@@ -42,11 +56,17 @@
 	<li><code>leaf</code> exist in the tree.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 """
@@ -80,7 +100,7 @@ class Solution:
         return leaf
 ```
 
-### **Java**
+#### Java
 
 ```java
 /*
@@ -118,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -134,7 +154,7 @@ public:
 
 class Solution {
 public:
-    Node* flipBinaryTree(Node* root, Node * leaf) {
+    Node* flipBinaryTree(Node* root, Node* leaf) {
         Node* cur = leaf;
         Node* p = cur->parent;
         while (cur != root) {
@@ -158,45 +178,7 @@ public:
 };
 ```
 
-### **C#**
-
-```cs
-/*
-// Definition for a Node.
-public class Node {
-    public int val;
-    public Node left;
-    public Node right;
-    public Node parent;
-}
-*/
-
-public class Solution {
-    public Node FlipBinaryTree(Node root, Node leaf) {
-        Node cur = leaf;
-        Node p = cur.parent;
-        while (cur != root) {
-            Node gp = p.parent;
-            if (cur.left != null) {
-                cur.right = cur.left;
-            }
-            cur.left = p;
-            p.parent = cur;
-            if (p.left == cur) {
-                p.left = null;
-            } else if (p.right == cur) {
-                p.right = null;
-            }
-            cur = p;
-            p = gp;
-        }
-        leaf.parent = null;
-        return leaf;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -236,10 +218,46 @@ var flipBinaryTree = function (root, leaf) {
 };
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+/*
+// Definition for a Node.
+public class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+}
+*/
 
+public class Solution {
+    public Node FlipBinaryTree(Node root, Node leaf) {
+        Node cur = leaf;
+        Node p = cur.parent;
+        while (cur != root) {
+            Node gp = p.parent;
+            if (cur.left != null) {
+                cur.right = cur.left;
+            }
+            cur.left = p;
+            p.parent = cur;
+            if (p.left == cur) {
+                p.left = null;
+            } else if (p.right == cur) {
+                p.right = null;
+            }
+            cur = p;
+            p = gp;
+        }
+        leaf.parent = null;
+        return leaf;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,12 +1,28 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2149.Rearrange%20Array%20Elements%20by%20Sign/README_EN.md
+rating: 1235
+source: Weekly Contest 277 Q2
+tags:
+    - Array
+    - Two Pointers
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2149. Rearrange Array Elements by Sign](https://leetcode.com/problems/rearrange-array-elements-by-sign)
 
 [中文文档](/solution/2100-2199/2149.Rearrange%20Array%20Elements%20by%20Sign/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code> of <strong>even</strong> length consisting of an <strong>equal</strong> number of positive and negative integers.</p>
 
-<p>You should <strong>rearrange</strong> the elements of <code>nums</code> such that the modified array follows the given conditions:</p>
+<p>You should return the array of nums such that the the array follows the given conditions:</p>
 
 <ol>
 	<li>Every <strong>consecutive pair</strong> of integers have <strong>opposite signs</strong>.</li>
@@ -48,41 +64,57 @@ So nums is rearranged to [1,-1].
 	<li><code>nums</code> consists of <strong>equal</strong> number of positive and negative integers.</li>
 </ul>
 
+<p>&nbsp;</p>
+It is not required to do the modifications in-place.
+
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
+
+First, we create an array $\textit{ans}$ of length $n$. Then, we use two pointers $i$ and $j$ to point to the even and odd indices of $\textit{ans}$, respectively, with initial values $i = 0$, $j = 1$.
+
+We iterate through the array $\textit{nums}$. If the current element $x$ is a positive integer, then we place $x$ into $\textit{ans}[i]$ and increase $i$ by $2$; otherwise, we place $x$ into $\textit{ans}[j]$ and increase $j$ by $2$.
+
+Finally, we return $\textit{ans}$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def rearrangeArray(self, nums: List[int]) -> List[int]:
         ans = [0] * len(nums)
         i, j = 0, 1
-        for num in nums:
-            if num > 0:
-                ans[i] = num
+        for x in nums:
+            if x > 0:
+                ans[i] = x
                 i += 2
             else:
-                ans[j] = num
+                ans[j] = x
                 j += 2
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-
     public int[] rearrangeArray(int[] nums) {
         int[] ans = new int[nums.length];
         int i = 0, j = 1;
-        for (int num : nums) {
-            if (num > 0) {
-                ans[i] = num;
+        for (int x : nums) {
+            if (x > 0) {
+                ans[i] = x;
                 i += 2;
             } else {
-                ans[j] = num;
+                ans[j] = x;
                 j += 2;
             }
         }
@@ -91,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -99,12 +131,12 @@ public:
     vector<int> rearrangeArray(vector<int>& nums) {
         vector<int> ans(nums.size());
         int i = 0, j = 1;
-        for (int num : nums) {
-            if (num > 0) {
-                ans[i] = num;
+        for (int x : nums) {
+            if (x > 0) {
+                ans[i] = x;
                 i += 2;
             } else {
-                ans[j] = num;
+                ans[j] = x;
                 j += 2;
             }
         }
@@ -113,18 +145,18 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rearrangeArray(nums []int) []int {
 	ans := make([]int, len(nums))
 	i, j := 0, 1
-	for _, num := range nums {
-		if num > 0 {
-			ans[i] = num
+	for _, x := range nums {
+		if x > 0 {
+			ans[i] = x
 			i += 2
 		} else {
-			ans[j] = num
+			ans[j] = x
 			j += 2
 		}
 	}
@@ -132,19 +164,18 @@ func rearrangeArray(nums []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function rearrangeArray(nums: number[]): number[] {
-    let ans = [];
-    let i = 0,
-        j = 1;
-    for (let num of nums) {
-        if (num > 0) {
-            ans[i] = num;
+    const ans: number[] = Array(nums.length);
+    let [i, j] = [0, 1];
+    for (const x of nums) {
+        if (x > 0) {
+            ans[i] = x;
             i += 2;
         } else {
-            ans[j] = num;
+            ans[j] = x;
             j += 2;
         }
     }
@@ -152,10 +183,8 @@ function rearrangeArray(nums: number[]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

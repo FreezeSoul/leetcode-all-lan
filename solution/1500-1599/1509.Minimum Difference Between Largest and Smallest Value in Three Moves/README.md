@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1509.Minimum%20Difference%20Between%20Largest%20and%20Smallest%20Value%20in%20Three%20Moves/README.md
+rating: 1653
+source: 第 30 场双周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1509. 三次操作后最大值与最小值的最小差](https://leetcode.cn/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves)
 
 [English Version](/solution/1500-1599/1509.Minimum%20Difference%20Between%20Largest%20and%20Smallest%20Value%20in%20Three%20Moves/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组&nbsp;<code>nums</code>&nbsp;。</p>
 
@@ -44,9 +58,9 @@
 <strong>输入：</strong>nums = [3,100,20]
 <strong>输出：</strong>0
 <strong>解释：</strong>我们最多可以走 3 步。
-第一步，将 100 改为 7 。 nums 变成 [4,7,20] 。
-第二步，将 20 改为 7 。 nums 变成 [4,7,7] 。
-第三步，将 4 改为 3 。 nums 变成 [7,7,7] 。
+第一步，将 100 改为 7 。 nums 变成 [3,7,20] 。
+第二步，将 20 改为 7 。 nums 变成 [3,7,7] 。
+第三步，将 3 改为 7 。 nums 变成 [7,7,7] 。
 执行 3 步后，最小值和最大值之间的差值是 7 - 7 = 0。</pre>
 
 <p>&nbsp;</p>
@@ -58,11 +72,13 @@
 	<li><code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 贪心**
+### 方法一：排序 + 贪心
 
 我们可以先判断数组长度是否小于 $5$，如果小于 $5$，那么直接返回 $0$。
 
@@ -72,13 +88,11 @@
 
 相似题目：
 
--   [2567. 修改两个元素的最小分数](/solution/2500-2599/2567.Minimum%20Score%20by%20Changing%20Two%20Elements/README.md)
+-   [2567. 修改两个元素的最小分数](https://github.com/doocs/leetcode/blob/main/solution/2500-2599/2567.Minimum%20Score%20by%20Changing%20Two%20Elements/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -94,9 +108,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -116,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -137,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDifference(nums []int) int {
@@ -153,19 +165,46 @@ func minDifference(nums []int) int {
 	}
 	return ans
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minDifference(nums: number[]): number {
+    if (nums.length < 5) {
+        return 0;
+    }
+    nums.sort((a, b) => a - b);
+    let ans = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < 4; i++) {
+        ans = Math.min(ans, nums.at(i - 4)! - nums[i]);
+    }
+    return ans;
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minDifference = function (nums) {
+    if (nums.length < 5) {
+        return 0;
+    }
+    nums.sort((a, b) => a - b);
+    let ans = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < 4; i++) {
+        ans = Math.min(ans, nums.at(i - 4) - nums[i]);
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

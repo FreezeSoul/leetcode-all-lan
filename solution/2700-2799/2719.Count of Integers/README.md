@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2719.Count%20of%20Integers/README.md
+rating: 2354
+source: 第 348 场周赛 Q4
+tags:
+    - 数学
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2719. 统计整数数目](https://leetcode.cn/problems/count-of-integers)
 
 [English Version](/solution/2700-2799/2719.Count%20of%20Integers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个数字字符串&nbsp;<code>num1</code>&nbsp;和&nbsp;<code>num2</code>&nbsp;，以及两个整数&nbsp;<code>max_sum</code> 和&nbsp;<code>min_sum</code>&nbsp;。如果一个整数&nbsp;<code>x</code>&nbsp;满足以下条件，我们称它是一个好整数：</p>
 
@@ -44,25 +58,29 @@
 	<li><code>1 &lt;= min_sum &lt;= max_sum &lt;= 400</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数位 DP**
+### 方法一：数位 DP
 
-题目实际上求的是区间 $[num1,..num2]$ 中数位和在 $[min\_sum,..max\_sum]$ 的数的个数。对于这种区间 $[l,..r]$ 的问题，我们可以转化为求 $[1,..r]$ 和 $[1,..l-1]$ 的答案，然后相减即可。
+题目实际上求的是区间 $[num1,..num2]$ 中，数位和在 $[min\_sum,..max\_sum]$ 的数的个数。对于这种区间 $[l,..r]$ 的问题，我们可以考虑转化为求 $[1,..r]$ 和 $[1,..l-1]$ 的答案，然后相减即可。
 
 对于 $[1,..r]$ 的答案，我们可以使用数位 DP 来求解。我们设计一个函数 $dfs(pos, s, limit)$ 表示当前处理到第 $pos$ 位，数位和为 $s$，当前数是否有上界限制 $limit$ 的方案数。其中 $pos$ 从高到低枚举。
 
-对于 $dfs(pos, s, limit)$，我们可以枚举当前数位 $i$ 的值，然后递归计算 $dfs(pos+1, s+i, limit\&\&i==up)$，其中 $up$ 表示当前数位的上界。如果 $limit$ 为真，那么 $up$ 就是当前数位的上界，否则 $up$ 为 $9$。如果 $pos$ 大于等于 $num$ 的长度，那么我们就可以判断 $s$ 是否在 $[min\_sum,..max\_sum]$ 的范围内，如果在就返回 $1$，否则返回 $0$。
+对于 $dfs(pos, s, limit)$，我们可以枚举当前数位 $i$ 的值，然后递归计算 $dfs(pos+1, s+i, limit \bigcap  i==up)$，其中 $up$ 表示当前数位的上界。如果 $limit$ 为真，那么 $up$ 就是当前数位的上界，否则 $up$ 为 $9$。如果 $pos$ 大于等于 $num$ 的长度，那么我们就可以判断 $s$ 是否在 $[min\_sum,..max\_sum]$ 的范围内，如果在就返回 $1$，否则返回 $0$。
 
 时间复杂度 $O(10 \times n \times max\_sum)$，空间复杂度 $O(n \times max\_sum)$。其中 $n$ 表示 $num$ 的长度。
 
+相似题目：
+
+-   [2801. 统计范围内的步进数字数目](https://github.com/doocs/leetcode/blob/main/solution/2800-2899/2801.Count%20Stepping%20Numbers%20in%20Range/README.md)
+
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +88,7 @@ class Solution:
         @cache
         def dfs(pos: int, s: int, limit: bool) -> int:
             if pos >= len(num):
-                return 1 if min_sum <= s <= max_sum else 0
+                return int(min_sum <= s <= max_sum)
             up = int(num[pos]) if limit else 9
             return (
                 sum(dfs(pos + 1, s + i, limit and i == up) for i in range(up + 1)) % mod
@@ -78,16 +96,14 @@ class Solution:
 
         mod = 10**9 + 7
         num = num2
-        ans = dfs(0, 0, True)
+        a = dfs(0, 0, True)
         dfs.cache_clear()
         num = str(int(num1) - 1)
-        ans -= dfs(0, 0, True)
-        return ans % mod
+        b = dfs(0, 0, True)
+        return (a - b) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 import java.math.BigInteger;
@@ -104,11 +120,11 @@ class Solution {
         max = max_sum;
         num = num2;
         f = new Integer[23][220];
-        int ans = dfs(0, 0, true);
+        int a = dfs(0, 0, true);
         num = new BigInteger(num1).subtract(BigInteger.ONE).toString();
         f = new Integer[23][220];
-        ans = (ans - dfs(0, 0, true) + mod) % mod;
-        return ans;
+        int b = dfs(0, 0, true);
+        return (a - b + mod) % mod;
     }
 
     private int dfs(int pos, int s, boolean limit) {
@@ -131,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,8 +177,8 @@ public:
             return ans;
         };
 
-        int ans = dfs(0, 0, true);
-        for (int i = num1.size() - 1; i >= 0; --i) {
+        int a = dfs(0, 0, true);
+        for (int i = num1.size() - 1; ~i; --i) {
             if (num1[i] == '0') {
                 num1[i] = '9';
             } else {
@@ -172,13 +188,13 @@ public:
         }
         num = num1;
         memset(f, -1, sizeof(f));
-        ans -= dfs(0, 0, true);
-        return (ans + mod) % mod;
+        int b = dfs(0, 0, true);
+        return (a - b + mod) % mod;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func count(num1 string, num2 string, min_sum int, max_sum int) int {
@@ -214,7 +230,7 @@ func count(num1 string, num2 string, min_sum int, max_sum int) int {
 		}
 		return ans
 	}
-	ans := dfs(0, 0, true)
+	a := dfs(0, 0, true)
 	t := []byte(num1)
 	for i := len(t) - 1; i >= 0; i-- {
 		if t[i] != '0' {
@@ -230,24 +246,17 @@ func count(num1 string, num2 string, min_sum int, max_sum int) int {
 			f[i][j] = -1
 		}
 	}
-	ans -= dfs(0, 0, true)
-	return (ans%mod + mod) % mod
+	b := dfs(0, 0, true)
+	return (a - b + mod) % mod
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function count(
-    num1: string,
-    num2: string,
-    min_sum: number,
-    max_sum: number,
-): number {
+function count(num1: string, num2: string, min_sum: number, max_sum: number): number {
     const mod = 1e9 + 7;
-    let f: number[][] = Array(23)
-        .fill(0)
-        .map(() => Array(220).fill(-1));
+    const f: number[][] = Array.from({ length: 23 }, () => Array(220).fill(-1));
     let num = num2;
     const dfs = (pos: number, s: number, limit: boolean): number => {
         if (pos >= num.length) {
@@ -266,20 +275,16 @@ function count(
         }
         return ans;
     };
-    let ans = dfs(0, 0, true);
+    const a = dfs(0, 0, true);
     num = (BigInt(num1) - 1n).toString();
-    f = Array(23)
-        .fill(0)
-        .map(() => Array(220).fill(-1));
-    ans = (ans - dfs(0, 0, true) + mod) % mod;
-    return ans;
+    f.forEach(v => v.fill(-1));
+    const b = dfs(0, 0, true);
+    return (a - b + mod) % mod;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

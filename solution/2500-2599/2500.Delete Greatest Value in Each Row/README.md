@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2500.Delete%20Greatest%20Value%20in%20Each%20Row/README.md
+rating: 1309
+source: 第 323 场周赛 Q1
+tags:
+    - 数组
+    - 矩阵
+    - 排序
+    - 模拟
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2500. 删除每行中的最大值](https://leetcode.cn/problems/delete-greatest-value-in-each-row)
 
 [English Version](/solution/2500-2599/2500.Delete%20Greatest%20Value%20in%20Each%20Row/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <code>m x n</code> 大小的矩阵 <code>grid</code> ，由若干正整数组成。</p>
 
@@ -58,23 +74,23 @@
 	<li><code>1 &lt;= grid[i][j] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 由于每一次操作都是从每一行中删除最大值，然后取最大值加到答案中，因此我们可以先对每一行进行排序。
 
-然后遍历每一列，取每一列的最大值，然后将其加到答案中即可。
+接下来遍历每一列，取每一列的最大值，然后将其加到答案中即可。
 
-时间复杂度 $O(m \times n \times \log n)$，空间复杂度 $O(1)$。其中 $m$ 和 $n$ 分别是矩阵的行数和列数。
+时间复杂度 $O(m \times n \times \log n)$，空间复杂度 $O(\log n)$。其中 $m$ 和 $n$ 分别是矩阵的行数和列数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +100,7 @@ class Solution:
         return sum(max(col) for col in zip(*grid))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -107,13 +121,15 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int deleteGreatestValue(vector<vector<int>>& grid) {
-        for (auto& row : grid) sort(row.begin(), row.end());
+        for (auto& row : grid) {
+            ranges::sort(row);
+        }
         int ans = 0;
         for (int j = 0; j < grid[0].size(); ++j) {
             int t = 0;
@@ -127,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func deleteGreatestValue(grid [][]int) (ans int) {
@@ -147,10 +163,57 @@ func deleteGreatestValue(grid [][]int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function deleteGreatestValue(grid: number[][]): number {
+    for (const row of grid) {
+        row.sort((a, b) => a - b);
+    }
+
+    let ans = 0;
+    for (let j = 0; j < grid[0].length; ++j) {
+        let t = 0;
+        for (let i = 0; i < grid.length; ++i) {
+            t = Math.max(t, grid[i][j]);
+        }
+        ans += t;
+    }
+
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn delete_greatest_value(grid: Vec<Vec<i32>>) -> i32 {
+        let mut grid = grid;
+        for i in 0..grid.len() {
+            grid[i].sort();
+        }
+
+        let mut ans = 0;
+        for j in 0..grid[0].len() {
+            let mut mx = 0;
+
+            for i in 0..grid.len() {
+                if grid[i][j] > mx {
+                    mx = grid[i][j];
+                }
+            }
+
+            ans += mx;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

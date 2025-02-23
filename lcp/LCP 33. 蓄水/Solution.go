@@ -1,8 +1,5 @@
 func storeWater(bucket []int, vat []int) int {
-	mx := 0
-	for _, x := range vat {
-		mx = max(mx, x)
-	}
+	mx := slices.Max(vat)
 	if mx == 0 {
 		return 0
 	}
@@ -15,18 +12,4 @@ func storeWater(bucket []int, vat []int) int {
 		ans = min(ans, x+y)
 	}
 	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-    if a < b {
-        return a
-    }
-    return b
 }

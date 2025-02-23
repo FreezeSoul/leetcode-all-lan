@@ -1,16 +1,27 @@
-# [254. 因子的组合](https://leetcode.cn/problems/factor-combinations)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0254.Factor%20Combinations/README.md
+tags:
+    - 回溯
+---
+
+<!-- problem:start -->
+
+# [254. 因子的组合 🔒](https://leetcode.cn/problems/factor-combinations)
 
 [English Version](/solution/0200-0299/0254.Factor%20Combinations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>整数可以被看作是其因子的乘积。</p>
 
 <p>例如：</p>
 
-<pre>8 = 2 x 2 x 2;
+<pre>
+8 = 2 x 2 x 2;
   = 2 x 4.</pre>
 
 <p>请实现一个函数，该函数接收一个整数 <em>n</em>&nbsp;并返回该整数所有的因子组合。</p>
@@ -24,18 +35,21 @@
 
 <p><strong>示例 1：</strong></p>
 
-<pre><strong>输入: </strong><code>1</code>
+<pre>
+<strong>输入: </strong><code>1</code>
 <strong>输出: </strong>[]
 </pre>
 
 <p><strong>示例 2：</strong></p>
 
-<pre><strong>输入: </strong><code>37</code>
+<pre>
+<strong>输入: </strong><code>37</code>
 <strong>输出: </strong>[]</pre>
 
 <p><strong>示例 3：</strong></p>
 
-<pre><strong>输入: </strong><code>12</code>
+<pre>
+<strong>输入: </strong><code>12</code>
 <strong>输出:</strong>
 [
   [2, 6],
@@ -45,7 +59,8 @@
 
 <p><strong>示例 4: </strong></p>
 
-<pre><strong>输入: </strong><code>32</code>
+<pre>
+<strong>输入: </strong><code>32</code>
 <strong>输出:</strong>
 [
   [2, 16],
@@ -57,11 +72,21 @@
 ]
 </pre>
 
+<p>&nbsp;</p>
+
+<p><b>提示：</b></p>
+
+<ul>
+	<li><code>1 &lt;= n &lt;= 10<sup>7</sup></code></li>
+</ul>
+
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯**
+### 方法一：回溯
 
 我们设计函数 $dfs(n, i)$，其中 $n$ 表示当前待分解的数，$i$ 表示当前分解的数的最大因子，函数的作用是将 $n$ 分解为若干个因子，其中每个因子都不小于 $i$，并将所有分解结果保存到 $ans$ 中。
 
@@ -71,9 +96,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,15 +111,14 @@ class Solution:
                     dfs(n // j, j)
                     t.pop()
                 j += 1
+
         t = []
         ans = []
         dfs(n, 2)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -125,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -153,7 +175,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getFactors(n int) [][]int {
@@ -162,10 +184,7 @@ func getFactors(n int) [][]int {
 	var dfs func(n, i int)
 	dfs = func(n, i int) {
 		if len(t) > 0 {
-			cp := make([]int, len(t))
-			copy(cp, t)
-			cp = append(cp, n)
-			ans = append(ans, cp)
+			ans = append(ans, append(slices.Clone(t), n))
 		}
 		for j := i; j <= n/j; j++ {
 			if n%j == 0 {
@@ -180,10 +199,8 @@ func getFactors(n int) [][]int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

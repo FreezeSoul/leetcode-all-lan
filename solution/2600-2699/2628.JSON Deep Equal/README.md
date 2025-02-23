@@ -1,14 +1,30 @@
-# [2628. 完全相等的 JSON 字符串](https://leetcode.cn/problems/json-deep-equal)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2628.JSON%20Deep%20Equal/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
+# [2628. 完全相等的 JSON 字符串 🔒](https://leetcode.cn/problems/json-deep-equal)
 
 [English Version](/solution/2600-2699/2628.JSON%20Deep%20Equal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个对象 <code>o1</code> 和 <code>o2</code> ，请你检查它们是否 <strong>完全相等</strong> 。</p>
 
-<p>对于两个 <strong>完全相等</strong> 的对象，它们必须包含相同的键，并且相关的值也必须 <strong>完全相等</strong> 。如果两个对象通过了 <code>===</code> 相等性检查，它们也被认为是 <strong>完全相等</strong> 的。</p>
+<p>对于两个 <strong>完全相等</strong> 的对象，必须满足以下条件：</p>
+
+<ul>
+	<li>如果两个值都是原始类型，它们通过了&nbsp;<code>===</code> 等式检查，则认为这两个值是 <strong>完全相等</strong> 的。</li>
+	<li>如果两个值都是数组，在它们具有相同元素且顺序相同，并且每个元素在这些条件下也 <strong>完全相等&nbsp;</strong>时，认为这两个值是&nbsp;<strong>完全相等</strong>&nbsp;的。</li>
+	<li>如果两个值都是对象，在它们具有相同键，并且每个键关联的值在这些条件下也 <strong>完全相等</strong> 时，认为这两个值是 <strong>完全相等</strong> 的。</li>
+</ul>
 
 <p>你可以假设这两个对象都是 <code>JSON.parse</code> 的输出。换句话说，它们是有效的 <code>JSON</code> 。</p>
 
@@ -57,11 +73,13 @@
 	<li><code>maxNestingDepth &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 我们先判断 `o1` 是否为空，或者 `o1` 是否非对象类型。如果是，则直接返回 `o1` 和 `o2` 是否相等。
 
@@ -77,9 +95,7 @@
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 function areDeeplyEqual(o1: any, o2: any): boolean {
@@ -118,10 +134,8 @@ function areDeeplyEqual(o1: any, o2: any): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

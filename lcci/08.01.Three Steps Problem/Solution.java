@@ -1,15 +1,13 @@
 class Solution {
     public int waysToStep(int n) {
-        if (n < 3) {
-            return n;
-        }
+        final int mod = (int) 1e9 + 7;
         int a = 1, b = 2, c = 4;
-        for (int i = 4; i <= n; ++i) {
+        for (int i = 1; i < n; ++i) {
             int t = a;
             a = b;
             b = c;
-            c = ((a + b) % 1000000007 + t) % 1000000007;
+            c = (((a + b) % mod) + t) % mod;
         }
-        return c;
+        return a;
     }
 }

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2380.Time%20Needed%20to%20Rearrange%20a%20Binary%20String/README_EN.md
+rating: 1481
+source: Biweekly Contest 85 Q2
+tags:
+    - String
+    - Dynamic Programming
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2380. Time Needed to Rearrange a Binary String](https://leetcode.com/problems/time-needed-to-rearrange-a-binary-string)
 
 [中文文档](/solution/2300-2399/2380.Time%20Needed%20to%20Rearrange%20a%20Binary%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a binary string <code>s</code>. In one second, <strong>all</strong> occurrences of <code>&quot;01&quot;</code> are <strong>simultaneously</strong> replaced with <code>&quot;10&quot;</code>. This process <strong>repeats</strong> until no occurrences of <code>&quot;01&quot;</code> exist.</p>
 
@@ -46,11 +62,17 @@ so we return 0.
 
 <p>Can you solve this problem in O(n) time complexity?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,19 +84,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def secondsToRemoveOccurrences(self, s: str) -> int:
-        ans = cnt = 0
-        for c in s:
-            if c == '0':
-                cnt += 1
-            elif cnt:
-                ans = max(ans + 1, cnt)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,23 +112,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int secondsToRemoveOccurrences(String s) {
-        int ans = 0, cnt = 0;
-        for (char c : s.toCharArray()) {
-            if (c == '0') {
-                ++cnt;
-            } else if (cnt > 0) {
-                ans = Math.max(ans + 1, cnt);
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -144,24 +138,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int secondsToRemoveOccurrences(string s) {
-        int ans = 0, cnt = 0;
-        for (char c : s) {
-            if (c == '0') {
-                ++cnt;
-            } else if (cnt) {
-                ans = max(ans + 1, cnt);
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func secondsToRemoveOccurrences(s string) int {
@@ -185,6 +162,69 @@ func secondsToRemoveOccurrences(s string) int {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def secondsToRemoveOccurrences(self, s: str) -> int:
+        ans = cnt = 0
+        for c in s:
+            if c == '0':
+                cnt += 1
+            elif cnt:
+                ans = max(ans + 1, cnt)
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int secondsToRemoveOccurrences(String s) {
+        int ans = 0, cnt = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '0') {
+                ++cnt;
+            } else if (cnt > 0) {
+                ans = Math.max(ans + 1, cnt);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int secondsToRemoveOccurrences(string s) {
+        int ans = 0, cnt = 0;
+        for (char c : s) {
+            if (c == '0') {
+                ++cnt;
+            } else if (cnt) {
+                ans = max(ans + 1, cnt);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
 ```go
 func secondsToRemoveOccurrences(s string) int {
 	ans, cnt := 0, 0
@@ -197,26 +237,10 @@ func secondsToRemoveOccurrences(s string) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

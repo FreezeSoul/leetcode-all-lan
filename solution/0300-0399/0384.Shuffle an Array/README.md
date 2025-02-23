@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0384.Shuffle%20an%20Array/README.md
+tags:
+    - 设计
+    - 数组
+    - 数学
+    - 随机化
+---
+
+<!-- problem:start -->
+
 # [384. 打乱数组](https://leetcode.cn/problems/shuffle-an-array)
 
 [English Version](/solution/0300-0399/0384.Shuffle%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> ，设计算法来打乱一个没有重复元素的数组。打乱后，数组的所有排列应该是&nbsp;<strong>等可能</strong>&nbsp;的。</p>
 
@@ -45,15 +58,17 @@ solution.shuffle();    // 随机返回数组 [1, 2, 3] 打乱后的结果。例�
 	<li>最多可以调用 <code>10<sup>4</sup></code> 次 <code>reset</code> 和 <code>shuffle</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -78,9 +93,7 @@ class Solution:
 # param_2 = obj.shuffle()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -121,7 +134,7 @@ class Solution {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -157,7 +170,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Solution struct {
@@ -190,7 +203,73 @@ func (this *Solution) Shuffle() []int {
  */
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+class Solution {
+    private nums: number[];
+
+    constructor(nums: number[]) {
+        this.nums = nums;
+    }
+
+    reset(): number[] {
+        return this.nums;
+    }
+
+    shuffle(): number[] {
+        const n = this.nums.length;
+        const res = [...this.nums];
+        for (let i = 0; i < n; i++) {
+            const j = Math.floor(Math.random() * n);
+            [res[i], res[j]] = [res[j], res[i]];
+        }
+        return res;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * var obj = new Solution(nums)
+ * var param_1 = obj.reset()
+ * var param_2 = obj.shuffle()
+ */
+```
+
+#### Rust
+
+```rust
+use rand::Rng;
+struct Solution {
+    nums: Vec<i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl Solution {
+    fn new(nums: Vec<i32>) -> Self {
+        Self { nums }
+    }
+
+    fn reset(&self) -> Vec<i32> {
+        self.nums.clone()
+    }
+
+    fn shuffle(&mut self) -> Vec<i32> {
+        let n = self.nums.len();
+        let mut res = self.nums.clone();
+        for i in 0..n {
+            let j = rand::thread_rng().gen_range(0, n);
+            res.swap(i, j);
+        }
+        res
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -231,83 +310,8 @@ Solution.prototype.shuffle = function () {
  */
 ```
 
-### **TypeScript**
-
-```ts
-class Solution {
-    private nums: number[];
-
-    constructor(nums: number[]) {
-        this.nums = nums;
-    }
-
-    reset(): number[] {
-        return this.nums;
-    }
-
-    shuffle(): number[] {
-        const n = this.nums.length;
-        const res = [...this.nums];
-        for (let i = 0; i < n; i++) {
-            const j = Math.floor(Math.random() * n);
-            [res[i], res[j]] = [res[j], res[i]];
-        }
-        return res;
-    }
-}
-
-/**
- * Your Solution object will be instantiated and called as such:
- * var obj = new Solution(nums)
- * var param_1 = obj.reset()
- * var param_2 = obj.shuffle()
- */
-```
-
-### **Rust**
-
-```rust
-use rand::Rng;
-struct Solution {
-    nums: Vec<i32>,
-}
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl Solution {
-    fn new(nums: Vec<i32>) -> Self {
-        Self { nums }
-    }
-
-    fn reset(&self) -> Vec<i32> {
-        self.nums.clone()
-    }
-
-    fn shuffle(&mut self) -> Vec<i32> {
-        let n = self.nums.len();
-        let mut res = self.nums.clone();
-        for i in 0..n {
-            let j = rand::thread_rng().gen_range(0, n);
-            res.swap(i, j);
-        }
-        res
-    }
-}
-
-/**
- * Your Solution object will be instantiated and called as such:
- * let obj = Solution::new(nums);
- * let ret_1: Vec<i32> = obj.reset();
- * let ret_2: Vec<i32> = obj.shuffle();
- */
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,25 @@
-# [1628. Design an Expression Tree With Evaluate Function](https://leetcode.com/problems/design-an-expression-tree-with-evaluate-function)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1628.Design%20an%20Expression%20Tree%20With%20Evaluate%20Function/README_EN.md
+tags:
+    - Stack
+    - Tree
+    - Design
+    - Array
+    - Math
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
+# [1628. Design an Expression Tree With Evaluate Function 🔒](https://leetcode.com/problems/design-an-expression-tree-with-evaluate-function)
 
 [中文文档](/solution/1600-1699/1628.Design%20an%20Expression%20Tree%20With%20Evaluate%20Function/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>postfix</code> tokens of an arithmetic expression, build and return <em>the binary expression tree that represents this expression.</em></p>
 
@@ -46,11 +63,17 @@
 	<li>It is guaranteed that no expression will include division by zero.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 import abc
@@ -118,7 +141,7 @@ ans = expTree.evaluate();
 """
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -199,7 +222,7 @@ class TreeBuilder {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -209,7 +232,7 @@ class TreeBuilder {
 
 class Node {
 public:
-    virtual ~Node() {};
+    virtual ~Node(){};
     virtual int evaluate() const = 0;
 
 protected:
@@ -277,10 +300,8 @@ public:
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

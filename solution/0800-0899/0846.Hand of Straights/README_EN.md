@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0846.Hand%20of%20Straights/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Hash Table
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [846. Hand of Straights](https://leetcode.com/problems/hand-of-straights)
 
 [中文文档](/solution/0800-0899/0846.Hand%20of%20Straights/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size <code>groupSize</code>, and consists of <code>groupSize</code> consecutive cards.</p>
 
@@ -38,11 +53,17 @@
 <p>&nbsp;</p>
 <p><strong>Note:</strong> This question is the same as 1296: <a href="https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/" target="_blank">https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/</a></p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,33 +80,7 @@ class Solution:
         return True
 ```
 
-```python
-from sortedcontainers import SortedDict
-
-
-class Solution:
-    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
-        if len(hand) % groupSize != 0:
-            return False
-        sd = SortedDict()
-        for h in hand:
-            if h in sd:
-                sd[h] += 1
-            else:
-                sd[h] = 1
-        while sd:
-            v = sd.peekitem(0)[0]
-            for i in range(v, v + groupSize):
-                if i not in sd:
-                    return False
-                if sd[i] == 1:
-                    sd.pop(i)
-                else:
-                    sd[i] -= 1
-        return True
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -112,6 +107,120 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        unordered_map<int, int> cnt;
+        for (int& v : hand) ++cnt[v];
+        sort(hand.begin(), hand.end());
+        for (int& v : hand) {
+            if (cnt.count(v)) {
+                for (int x = v; x < v + groupSize; ++x) {
+                    if (!cnt.count(x)) {
+                        return false;
+                    }
+                    if (--cnt[x] == 0) {
+                        cnt.erase(x);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
+```
+
+#### Go
+
+```go
+func isNStraightHand(hand []int, groupSize int) bool {
+	cnt := map[int]int{}
+	for _, v := range hand {
+		cnt[v]++
+	}
+	sort.Ints(hand)
+	for _, v := range hand {
+		if _, ok := cnt[v]; ok {
+			for x := v; x < v+groupSize; x++ {
+				if _, ok := cnt[x]; !ok {
+					return false
+				}
+				cnt[x]--
+				if cnt[x] == 0 {
+					delete(cnt, x)
+				}
+			}
+		}
+	}
+	return true
+}
+```
+
+#### TypeScript
+
+```ts
+function isNStraightHand(hand: number[], groupSize: number) {
+    const cnt: Record<number, number> = {};
+    for (const i of hand) {
+        cnt[i] = (cnt[i] ?? 0) + 1;
+    }
+
+    const keys = Object.keys(cnt).map(Number);
+    for (const i of keys) {
+        while (cnt[i]) {
+            for (let j = i; j < groupSize + i; j++) {
+                if (!cnt[j]) {
+                    return false;
+                }
+                cnt[j]--;
+            }
+        }
+    }
+
+    return true;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        if len(hand) % groupSize != 0:
+            return False
+        sd = SortedDict()
+        for h in hand:
+            if h in sd:
+                sd[h] += 1
+            else:
+                sd[h] = 1
+        while sd:
+            v = sd.peekitem(0)[0]
+            for i in range(v, v + groupSize):
+                if i not in sd:
+                    return False
+                if sd[i] == 1:
+                    sd.pop(i)
+                else:
+                    sd[i] -= 1
+        return True
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -141,31 +250,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool isNStraightHand(vector<int>& hand, int groupSize) {
-        unordered_map<int, int> cnt;
-        for (int& v : hand) ++cnt[v];
-        sort(hand.begin(), hand.end());
-        for (int& v : hand) {
-            if (cnt.count(v)) {
-                for (int x = v; x < v + groupSize; ++x) {
-                    if (!cnt.count(x)) {
-                        return false;
-                    }
-                    if (--cnt[x] == 0) {
-                        cnt.erase(x);
-                    }
-                }
-            }
-        }
-        return true;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -189,31 +274,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func isNStraightHand(hand []int, groupSize int) bool {
-	cnt := map[int]int{}
-	for _, v := range hand {
-		cnt[v]++
-	}
-	sort.Ints(hand)
-	for _, v := range hand {
-		if _, ok := cnt[v]; ok {
-			for x := v; x < v+groupSize; x++ {
-				if _, ok := cnt[x]; !ok {
-					return false
-				}
-				cnt[x]--
-				if cnt[x] == 0 {
-					delete(cnt, x)
-				}
-			}
-		}
-	}
-	return true
-}
-```
+#### Go
 
 ```go
 func isNStraightHand(hand []int, groupSize int) bool {
@@ -245,10 +306,42 @@ func isNStraightHand(hand []int, groupSize int) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function isNStraightHand(hand: number[], groupSize: number): boolean {
+    const n = hand.length;
+    if (n % groupSize) {
+        return false;
+    }
 
+    const groups: number[][] = Array.from({ length: n / groupSize }, () => []);
+    hand.sort((a, b) => a - b);
+
+    for (let i = 0; i < n; i++) {
+        let isPushed = false;
+
+        for (const g of groups) {
+            if (g.length === groupSize || (g.length && hand[i] - g.at(-1)! !== 1)) {
+                continue;
+            }
+
+            g.push(hand[i]);
+            isPushed = true;
+            break;
+        }
+
+        if (!isPushed) {
+            return false;
+        }
+    }
+
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

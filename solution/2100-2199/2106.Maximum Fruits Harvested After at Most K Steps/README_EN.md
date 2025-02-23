@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2106.Maximum%20Fruits%20Harvested%20After%20at%20Most%20K%20Steps/README_EN.md
+rating: 2062
+source: Weekly Contest 271 Q4
+tags:
+    - Array
+    - Binary Search
+    - Prefix Sum
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [2106. Maximum Fruits Harvested After at Most K Steps](https://leetcode.com/problems/maximum-fruits-harvested-after-at-most-k-steps)
 
 [中文文档](/solution/2100-2199/2106.Maximum%20Fruits%20Harvested%20After%20at%20Most%20K%20Steps/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Fruits are available at some positions on an infinite x-axis. You are given a 2D integer array <code>fruits</code> where <code>fruits[i] = [position<sub>i</sub>, amount<sub>i</sub>]</code> depicts <code>amount<sub>i</sub></code> fruits at the position <code>position<sub>i</sub></code>. <code>fruits</code> is already <strong>sorted</strong> by <code>position<sub>i</sub></code> in <strong>ascending order</strong>, and each <code>position<sub>i</sub></code> is <strong>unique</strong>.</p>
 
@@ -59,11 +76,17 @@ You can move at most k = 2 steps and cannot reach any position with fruits.
 	<li><code>0 &lt;= k &lt;= 2 * 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,14 +94,20 @@ class Solution:
         ans = i = s = 0
         for j, (pj, fj) in enumerate(fruits):
             s += fj
-            while i <= j and pj - fruits[i][0] + min(abs(startPos - fruits[i][0]), abs(startPos - fruits[j][0])) > k:
+            while (
+                i <= j
+                and pj
+                - fruits[i][0]
+                + min(abs(startPos - fruits[i][0]), abs(startPos - fruits[j][0]))
+                > k
+            ):
                 s -= fruits[i][1]
                 i += 1
             ans = max(ans, s)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +129,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxTotalFruits(fruits [][]int, startPos int, k int) (ans int) {
@@ -136,20 +165,6 @@ func maxTotalFruits(fruits [][]int, startPos int, k int) (ans int) {
 	return
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -158,14 +173,10 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function maxTotalFruits(
-    fruits: number[][],
-    startPos: number,
-    k: number,
-): number {
+function maxTotalFruits(fruits: number[][], startPos: number, k: number): number {
     let ans = 0;
     let s = 0;
     for (let i = 0, j = 0; j < fruits.length; ++j) {
@@ -175,10 +186,7 @@ function maxTotalFruits(
             i <= j &&
             pj -
                 fruits[i][0] +
-                Math.min(
-                    Math.abs(startPos - fruits[i][0]),
-                    Math.abs(startPos - pj),
-                ) >
+                Math.min(Math.abs(startPos - fruits[i][0]), Math.abs(startPos - pj)) >
                 k
         ) {
             s -= fruits[i++][1];
@@ -189,10 +197,8 @@ function maxTotalFruits(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

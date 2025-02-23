@@ -1,10 +1,23 @@
-# [2174. 通过翻转行或列来去除所有的 1 II](https://leetcode.cn/problems/remove-all-ones-with-row-and-column-flips-ii)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2174.Remove%20All%20Ones%20With%20Row%20and%20Column%20Flips%20II/README.md
+tags:
+    - 位运算
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
+# [2174. 通过翻转行或列来去除所有的 1 II 🔒](https://leetcode.cn/problems/remove-all-ones-with-row-and-column-flips-ii)
 
 [English Version](/solution/2100-2199/2174.Remove%20All%20Ones%20With%20Row%20and%20Column%20Flips%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定&nbsp;<strong>下标从 0 开始&nbsp;</strong>的 <code>m x n</code> <strong>二进制&nbsp;</strong>矩阵 <code>grid</code>。</p>
 
@@ -63,17 +76,17 @@
 	<li><code>grid[i][j]</code> 为&nbsp;<code>0</code>&nbsp;或&nbsp;<code>1</code>。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + BFS**
+### 方法一：状态压缩 + BFS
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +117,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -157,7 +168,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -169,8 +180,8 @@ public:
             for (int j = 0; j < n; ++j)
                 if (grid[i][j])
                     state |= (1 << (i * n + j));
-        queue<int> q {{state}};
-        unordered_set<int> vis {{state}};
+        queue<int> q{{state}};
+        unordered_set<int> vis{{state}};
         int ans = 0;
         while (!q.empty()) {
             for (int k = q.size(); k > 0; --k) {
@@ -197,64 +208,56 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeOnes(grid [][]int) int {
-    m, n := len(grid), len(grid[0])
-    state := 0
-    for i, row := range grid {
-        for j, v := range row {
-            if v == 1 {
-                state |= 1 << (i * n + j)
-            }
-        }
-    }
-    q := []int{state}
-    vis := map[int]bool{state:true}
-    ans := 0
-    for len(q) > 0 {
-        for k := len(q); k > 0; k-- {
-            state = q[0]
-            if state == 0 {
-                return ans
-            }
-            q = q[1:]
-            for i, row := range grid {
-                for j, v := range row {
-                    if v == 0 {
-                        continue
-                    }
-                    nxt := state
-                    for r := 0; r < m; r++ {
-                        nxt &= ^(1 << (r * n + j))
-                    }
-                    for c := 0; c < n; c++ {
-                        nxt &= ^(1 << (i * n + c))
-                    }
-                    if !vis[nxt] {
-                        vis[nxt] = true
-                        q = append(q, nxt)
-                    }
-                }
-            }
-        }
-        ans++
-    }
-    return -1
+	m, n := len(grid), len(grid[0])
+	state := 0
+	for i, row := range grid {
+		for j, v := range row {
+			if v == 1 {
+				state |= 1 << (i*n + j)
+			}
+		}
+	}
+	q := []int{state}
+	vis := map[int]bool{state: true}
+	ans := 0
+	for len(q) > 0 {
+		for k := len(q); k > 0; k-- {
+			state = q[0]
+			if state == 0 {
+				return ans
+			}
+			q = q[1:]
+			for i, row := range grid {
+				for j, v := range row {
+					if v == 0 {
+						continue
+					}
+					nxt := state
+					for r := 0; r < m; r++ {
+						nxt &= ^(1 << (r*n + j))
+					}
+					for c := 0; c < n; c++ {
+						nxt &= ^(1 << (i*n + c))
+					}
+					if !vis[nxt] {
+						vis[nxt] = true
+						q = append(q, nxt)
+					}
+				}
+			}
+		}
+		ans++
+	}
+	return -1
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

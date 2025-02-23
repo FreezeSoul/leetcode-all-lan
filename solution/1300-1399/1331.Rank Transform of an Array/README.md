@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1331.Rank%20Transform%20of%20an%20Array/README.md
+rating: 1355
+source: 第 18 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1331. 数组序号转换](https://leetcode.cn/problems/rank-transform-of-an-array)
 
 [English Version](/solution/1300-1399/1331.Rank%20Transform%20of%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>arr</code> ，请你将数组中的每个元素替换为它们排序后的序号。</p>
 
@@ -46,11 +60,13 @@
 	<li><code>-10<sup>9</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：离散化**
+### 方法一：离散化
 
 我们先复制一个数组 $t$，然后对其进行排序并去重，得到一个长度为 $m$ 且严格单调递增的数组。
 
@@ -60,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +85,7 @@ class Solution:
         return [bisect_right(t, x) for x in arr]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -96,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func arrayRankTransform(arr []int) (ans []int) {
@@ -136,7 +148,7 @@ func arrayRankTransform(arr []int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function arrayRankTransform(arr: number[]): number[] {
@@ -167,10 +179,50 @@ function arrayRankTransform(arr: number[]): number[] {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：排序 + 哈希表
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function arrayRankTransform(arr: number[]): number[] {
+    const sorted = [...new Set(arr)].sort((a, b) => a - b);
+    const map = new Map<number, number>();
+    let c = 1;
+
+    for (const x of sorted) {
+        map.set(x, c++);
+    }
+
+    return arr.map(x => map.get(x)!);
+}
 ```
 
+#### JavaScript
+
+```js
+function arrayRankTransform(arr) {
+    const sorted = [...new Set(arr)].sort((a, b) => a - b);
+    const map = new Map();
+    let c = 1;
+
+    for (const x of sorted) {
+        map.set(x, c++);
+    }
+
+    return arr.map(x => map.get(x));
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
-# [1121. Divide Array Into Increasing Sequences](https://leetcode.com/problems/divide-array-into-increasing-sequences)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1121.Divide%20Array%20Into%20Increasing%20Sequences/README_EN.md
+rating: 1664
+source: Biweekly Contest 4 Q4
+tags:
+    - Array
+    - Counting
+---
+
+<!-- problem:start -->
+
+# [1121. Divide Array Into Increasing Sequences 🔒](https://leetcode.com/problems/divide-array-into-increasing-sequences)
 
 [中文文档](/solution/1100-1199/1121.Divide%20Array%20Into%20Increasing%20Sequences/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> sorted in non-decreasing order and an integer <code>k</code>, return <code>true</code><em> if this array can be divided into one or more disjoint increasing subsequences of length at least </em><code>k</code><em>, or </em><code>false</code><em> otherwise</em>.</p>
 
@@ -32,11 +47,21 @@
 	<li><code>nums</code> is sorted in non-decreasing order.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Quick Thinking
+
+We assume that the array can be divided into $m$ strictly increasing subsequences of length at least $k$. If the number of the most frequent number in the array is $cnt$, then these $cnt$ numbers must be in different subsequences, so $m \geq cnt$. Also, since the length of $m$ subsequences is at least $k$, the fewer the number of subsequences, the better, so $m = cnt$. Therefore, $cnt \times k \leq n$ must be satisfied. Hence, we only need to count the number of the most frequent number $cnt$ in the array, and then judge whether $cnt \times k \leq n$. If it is, return `true`, otherwise return `false`.
+
+The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -45,7 +70,7 @@ class Solution:
         return mx * k <= len(nums)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -60,24 +85,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean canDivideIntoSubsequences(int[] nums, int k) {
-        int cnt = 0;
-        int a = 0;
-        for (int b : nums) {
-            cnt = a == b ? cnt + 1 : 1;
-            if (cnt * k > nums.length) {
-                return false;
-            }
-            a = b;
-        }
-        return true;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -97,7 +105,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canDivideIntoSubsequences(nums []int, k int) bool {
@@ -116,10 +124,37 @@ func canDivideIntoSubsequences(nums []int, k int) bool {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public boolean canDivideIntoSubsequences(int[] nums, int k) {
+        int cnt = 0;
+        int a = 0;
+        for (int b : nums) {
+            cnt = a == b ? cnt + 1 : 1;
+            if (cnt * k > nums.length) {
+                return false;
+            }
+            a = b;
+        }
+        return true;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

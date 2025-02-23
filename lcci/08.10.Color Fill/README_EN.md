@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/08.10.Color%20Fill/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [08.10. Color Fill](https://leetcode.cn/problems/color-fill-lcci)
 
 [中文文档](/lcci/08.10.Color%20Fill/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Implement the &quot;paint fill&quot; function that one might see on many image editing programs. That is, given a screen (represented by a two-dimensional array of colors), a point, and a new color, fill in the surrounding area until the color changes from the original color.</p>
 
@@ -36,15 +46,21 @@ to the starting pixel.</pre>
 	<li>The value of each color in&nbsp;<code>image[i][j]</code>&nbsp;and&nbsp;<code>newColor</code>&nbsp;will be an integer in&nbsp;<code>[0, 65535]</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS or BFS.
+<!-- solution:start -->
 
-> Flood fill, also called seed fill, is a flooding algorithm that determines and alters the area connected to a given node in a multi-dimensional array with some matching attribute. It is used in the "bucket" fill tool of paint programs to fill connected, similarly-colored areas with a different color.
+### Solution 1: DFS
+
+We design a function $dfs(i, j)$ to start filling color from $(i, j)$. If $(i, j)$ is not within the image range, or the color of $(i, j)$ is not the original color, or the color of $(i, j)$ has been filled with the new color, then return. Otherwise, fill the color of $(i, j)$ with the new color, and then recursively search the four directions: up, down, left, and right of $(i, j)$.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Where $m$ and $n$ are the number of rows and columns in the image, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,28 +86,7 @@ class Solution:
         return image
 ```
 
-```python
-class Solution:
-    def floodFill(
-        self, image: List[List[int]], sr: int, sc: int, newColor: int
-    ) -> List[List[int]]:
-        if image[sr][sc] == newColor:
-            return image
-        q = deque([(sr, sc)])
-        oc = image[sr][sc]
-        image[sr][sc] = newColor
-        dirs = (-1, 0, 1, 0, -1)
-        while q:
-            i, j = q.popleft()
-            for a, b in pairwise(dirs):
-                x, y = i + a, j + b
-                if 0 <= x < len(image) and 0 <= y < len(image[0]) and image[x][y] == oc:
-                    q.append((x, y))
-                    image[x][y] = newColor
-        return image
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +104,8 @@ class Solution {
     }
 
     private void dfs(int i, int j) {
-        if (i < 0 || i >= image.length || j < 0 || j >= image[0].length || image[i][j] != oc || image[i][j] == nc) {
+        if (i < 0 || i >= image.length || j < 0 || j >= image[0].length || image[i][j] != oc
+            || image[i][j] == nc) {
             return;
         }
         image[i][j] = nc;
@@ -120,35 +116,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
-        if (image[sr][sc] == newColor) {
-            return image;
-        }
-        Deque<int[]> q = new ArrayDeque<>();
-        q.offer(new int[] {sr, sc});
-        int oc = image[sr][sc];
-        image[sr][sc] = newColor;
-        int[] dirs = {-1, 0, 1, 0, -1};
-        while (!q.isEmpty()) {
-            int[] p = q.poll();
-            int i = p[0], j = p[1];
-            for (int k = 0; k < 4; ++k) {
-                int x = i + dirs[k], y = j + dirs[k + 1];
-                if (x >= 0 && x < image.length && y >= 0 && y < image[0].length
-                    && image[x][y] == oc) {
-                    q.offer(new int[] {x, y});
-                    image[x][y] = newColor;
-                }
-            }
-        }
-        return image;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -172,34 +140,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
-        if (image[sr][sc] == newColor) return image;
-        int oc = image[sr][sc];
-        image[sr][sc] = newColor;
-        queue<pair<int, int>> q;
-        q.push({sr, sc});
-        int dirs[5] = {-1, 0, 1, 0, -1};
-        while (!q.empty()) {
-            auto [a, b] = q.front();
-            q.pop();
-            for (int k = 0; k < 4; ++k) {
-                int x = a + dirs[k];
-                int y = b + dirs[k + 1];
-                if (x >= 0 && x < image.size() && y >= 0 && y < image[0].size() && image[x][y] == oc) {
-                    q.push({x, y});
-                    image[x][y] = newColor;
-                }
-            }
-        }
-        return image;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
@@ -221,31 +162,35 @@ func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
 }
 ```
 
-```go
-func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
-	if image[sr][sc] == newColor {
-		return image
-	}
-	oc := image[sr][sc]
-	q := [][]int{[]int{sr, sc}}
-	image[sr][sc] = newColor
-	dirs := []int{-1, 0, 1, 0, -1}
-	for len(q) > 0 {
-		p := q[0]
-		q = q[1:]
-		for k := 0; k < 4; k++ {
-			x, y := p[0]+dirs[k], p[1]+dirs[k+1]
-			if x >= 0 && x < len(image) && y >= 0 && y < len(image[0]) && image[x][y] == oc {
-				q = append(q, []int{x, y})
-				image[x][y] = newColor
-			}
-		}
-	}
-	return image
+#### TypeScript
+
+```ts
+function floodFill(image: number[][], sr: number, sc: number, newColor: number): number[][] {
+    const dfs = (i: number, j: number): void => {
+        if (i < 0 || i >= m) {
+            return;
+        }
+        if (j < 0 || j >= n) {
+            return;
+        }
+        if (image[i][j] !== oc || image[i][j] === nc) {
+            return;
+        }
+        image[i][j] = nc;
+        for (let k = 0; k < 4; ++k) {
+            dfs(i + dirs[k], j + dirs[k + 1]);
+        }
+    };
+    const dirs: number[] = [-1, 0, 1, 0, -1];
+    const [m, n] = [image.length, image[0].length];
+    const oc = image[sr][sc];
+    const nc = newColor;
+    dfs(sr, sc);
+    return image;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -280,10 +225,184 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    private var dirs = [-1, 0, 1, 0, -1]
+    private var image: [[Int]] = []
+    private var nc: Int = 0
+    private var oc: Int = 0
 
+    func floodFill(_ image: inout [[Int]], _ sr: Int, _ sc: Int, _ newColor: Int) -> [[Int]] {
+        self.nc = newColor
+        self.oc = image[sr][sc]
+        self.image = image
+        dfs(sr, sc)
+        return self.image
+    }
+
+    private func dfs(_ i: Int, _ j: Int) {
+        if i < 0 || i >= image.count || j < 0 || j >= image[0].count || image[i][j] != oc || image[i][j] == nc {
+            return
+        }
+        image[i][j] = nc
+        for k in 0..<4 {
+            dfs(i + dirs[k], j + dirs[k + 1])
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: BFS
+
+We can use the method of breadth-first search. Starting from the initial point, fill the color of the initial point with the new color, and then add the initial point to the queue. Each time a point is taken from the queue, the points in the four directions: up, down, left, and right are added to the queue, until the queue is empty.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Where $m$ and $n$ are the number of rows and columns in the image, respectively.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def floodFill(
+        self, image: List[List[int]], sr: int, sc: int, newColor: int
+    ) -> List[List[int]]:
+        if image[sr][sc] == newColor:
+            return image
+        q = deque([(sr, sc)])
+        oc = image[sr][sc]
+        image[sr][sc] = newColor
+        dirs = (-1, 0, 1, 0, -1)
+        while q:
+            i, j = q.popleft()
+            for a, b in pairwise(dirs):
+                x, y = i + a, j + b
+                if 0 <= x < len(image) and 0 <= y < len(image[0]) and image[x][y] == oc:
+                    q.append((x, y))
+                    image[x][y] = newColor
+        return image
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        if (image[sr][sc] == newColor) {
+            return image;
+        }
+        Deque<int[]> q = new ArrayDeque<>();
+        q.offer(new int[] {sr, sc});
+        int oc = image[sr][sc];
+        image[sr][sc] = newColor;
+        int[] dirs = {-1, 0, 1, 0, -1};
+        while (!q.isEmpty()) {
+            int[] p = q.poll();
+            int i = p[0], j = p[1];
+            for (int k = 0; k < 4; ++k) {
+                int x = i + dirs[k], y = j + dirs[k + 1];
+                if (x >= 0 && x < image.length && y >= 0 && y < image[0].length
+                    && image[x][y] == oc) {
+                    q.offer(new int[] {x, y});
+                    image[x][y] = newColor;
+                }
+            }
+        }
+        return image;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        if (image[sr][sc] == newColor) return image;
+        int oc = image[sr][sc];
+        image[sr][sc] = newColor;
+        queue<pair<int, int>> q;
+        q.push({sr, sc});
+        int dirs[5] = {-1, 0, 1, 0, -1};
+        while (!q.empty()) {
+            auto [a, b] = q.front();
+            q.pop();
+            for (int k = 0; k < 4; ++k) {
+                int x = a + dirs[k];
+                int y = b + dirs[k + 1];
+                if (x >= 0 && x < image.size() && y >= 0 && y < image[0].size() && image[x][y] == oc) {
+                    q.push({x, y});
+                    image[x][y] = newColor;
+                }
+            }
+        }
+        return image;
+    }
+};
+```
+
+#### Go
+
+```go
+func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
+	if image[sr][sc] == newColor {
+		return image
+	}
+	oc := image[sr][sc]
+	q := [][]int{[]int{sr, sc}}
+	image[sr][sc] = newColor
+	dirs := []int{-1, 0, 1, 0, -1}
+	for len(q) > 0 {
+		p := q[0]
+		q = q[1:]
+		for k := 0; k < 4; k++ {
+			x, y := p[0]+dirs[k], p[1]+dirs[k+1]
+			if x >= 0 && x < len(image) && y >= 0 && y < len(image[0]) && image[x][y] == oc {
+				q = append(q, []int{x, y})
+				image[x][y] = newColor
+			}
+		}
+	}
+	return image
+}
+```
+
+#### TypeScript
+
+```ts
+function floodFill(image: number[][], sr: number, sc: number, newColor: number): number[][] {
+    if (image[sr][sc] === newColor) {
+        return image;
+    }
+    const q: number[][] = [[sr, sc]];
+    const oc = image[sr][sc];
+    image[sr][sc] = newColor;
+    const dirs: number[] = [-1, 0, 1, 0, -1];
+    while (q.length) {
+        const [i, j] = q.pop()!;
+        for (let k = 0; k < 4; ++k) {
+            const [x, y] = [i + dirs[k], j + dirs[k + 1]];
+            if (x >= 0 && x < image.length && y >= 0 && y < image[0].length && image[x][y] === oc) {
+                q.push([x, y]);
+                image[x][y] = newColor;
+            }
+        }
+    }
+    return image;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

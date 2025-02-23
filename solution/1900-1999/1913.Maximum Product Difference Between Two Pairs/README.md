@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1913.Maximum%20Product%20Difference%20Between%20Two%20Pairs/README.md
+rating: 1144
+source: 第 247 场周赛 Q1
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1913. 两个数对之间的最大乘积差](https://leetcode.cn/problems/maximum-product-difference-between-two-pairs)
 
 [English Version](/solution/1900-1999/1913.Maximum%20Product%20Difference%20Between%20Two%20Pairs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>两个数对 <code>(a, b)</code> 和 <code>(c, d)</code> 之间的 <strong>乘积差</strong> 定义为 <code>(a * b) - (c * d)</code> 。</p>
 
@@ -43,15 +56,17 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -60,9 +75,7 @@ class Solution:
         return nums[-1] * nums[-2] - nums[0] * nums[1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -74,7 +87,30 @@ class Solution {
 }
 ```
 
-### **JavaScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxProductDifference(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        return nums[n - 1] * nums[n - 2] - nums[0] * nums[1];
+    }
+};
+```
+
+#### Go
+
+```go
+func maxProductDifference(nums []int) int {
+	sort.Ints(nums)
+	n := len(nums)
+	return nums[n-1]*nums[n-2] - nums[0]*nums[1]
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -89,33 +125,8 @@ var maxProductDifference = function (nums) {
 };
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxProductDifference(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int n = nums.size();
-        return nums[n - 1] * nums[n - 2] - nums[0] * nums[1];
-    }
-};
-```
-
-### **Go**
-
-```go
-func maxProductDifference(nums []int) int {
-	sort.Ints(nums)
-	n := len(nums)
-	return nums[n-1]*nums[n-2] - nums[0]*nums[1]
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

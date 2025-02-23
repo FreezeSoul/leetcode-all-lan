@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2614.Prime%20In%20Diagonal/README.md
+rating: 1375
+source: 第 340 场周赛 Q1
+tags:
+    - 数组
+    - 数学
+    - 矩阵
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [2614. 对角线上的质数](https://leetcode.cn/problems/prime-in-diagonal)
 
 [English Version](/solution/2600-2699/2614.Prime%20In%20Diagonal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的二维整数数组 <code>nums</code> 。</p>
 
@@ -49,11 +64,13 @@
 	<li><code>1 &lt;= nums<span style="">[i][j]</span>&nbsp;&lt;= 4*10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学 + 模拟**
+### 方法一：数学 + 模拟
 
 我们实现一个函数 `is_prime`，判断一个数是否为质数。
 
@@ -63,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -85,9 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -152,7 +165,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func diagonalPrime(nums [][]int) (ans int) {
@@ -179,19 +192,47 @@ func isPrime(x int) bool {
 	}
 	return true
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### Rust
+
+```rust
+impl Solution {
+    pub fn diagonal_prime(nums: Vec<Vec<i32>>) -> i32 {
+        let mut ans = 0;
+        let n = nums.len();
+
+        for (i, row) in nums.iter().enumerate() {
+            if Self::is_prime(row[i]) && row[i] > ans {
+                ans = row[i];
+            }
+            if Self::is_prime(row[n - i - 1]) && row[n - i - 1] > ans {
+                ans = row[n - i - 1];
+            }
+        }
+
+        ans
+    }
+
+    fn is_prime(n: i32) -> bool {
+        if n < 2 {
+            return false;
+        }
+
+        let upper = (n as f64).sqrt() as i32;
+        for i in 2..=upper {
+            if n % i == 0 {
+                return false;
+            }
+        }
+
+        true
+    }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

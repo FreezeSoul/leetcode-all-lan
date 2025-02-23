@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2556.Disconnect%20Path%20in%20a%20Binary%20Matrix%20by%20at%20Most%20One%20Flip/README_EN.md
+rating: 2368
+source: Biweekly Contest 97 Q4
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Array
+    - Dynamic Programming
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [2556. Disconnect Path in a Binary Matrix by at Most One Flip](https://leetcode.com/problems/disconnect-path-in-a-binary-matrix-by-at-most-one-flip)
 
 [中文文档](/solution/2500-2599/2556.Disconnect%20Path%20in%20a%20Binary%20Matrix%20by%20at%20Most%20One%20Flip/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> <code>m x n</code> <strong>binary</strong> matrix <code>grid</code>. You can move from a cell <code>(row, col)</code> to any of the cells <code>(row + 1, col)</code> or <code>(row, col + 1)</code> that has the value <code>1</code>.&nbsp;The matrix is <strong>disconnected</strong> if there is no path from <code>(0, 0)</code> to <code>(m - 1, n - 1)</code>.</p>
 
@@ -41,11 +59,25 @@
 	<li><code>grid[0][0] == grid[m - 1][n - 1] == 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two DFS Traversals
+
+First, we perform a DFS traversal to determine whether there is a path from $(0, 0)$ to $(m - 1, n - 1)$, and we denote the result as $a$. During the DFS process, we set the value of the visited cells to $0$ to prevent revisiting.
+
+Next, we set the values of $(0, 0)$ and $(m - 1, n - 1)$ to $1$, and perform another DFS traversal to determine whether there is a path from $(0, 0)$ to $(m - 1, n - 1)$, and we denote the result as $b$. During the DFS process, we set the value of the visited cells to $0$ to avoid revisiting.
+
+Finally, if both $a$ and $b$ are `true`, we return `false`, otherwise, we return `true`.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m \times n)$. Where $m$ and $n$ are the number of rows and columns of the matrix, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,7 +97,7 @@ class Solution:
         return not (a and b)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +129,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +154,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isPossibleToCutPath(grid [][]int) bool {
@@ -145,10 +177,33 @@ func isPossibleToCutPath(grid [][]int) bool {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function isPossibleToCutPath(grid: number[][]): boolean {
+    const m = grid.length;
+    const n = grid[0].length;
 
+    const dfs = (i: number, j: number): boolean => {
+        if (i >= m || j >= n || grid[i][j] !== 1) {
+            return false;
+        }
+        grid[i][j] = 0;
+        if (i === m - 1 && j === n - 1) {
+            return true;
+        }
+        return dfs(i + 1, j) || dfs(i, j + 1);
+    };
+    const a = dfs(0, 0);
+    grid[0][0] = 1;
+    grid[m - 1][n - 1] = 1;
+    const b = dfs(0, 0);
+    return !(a && b);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

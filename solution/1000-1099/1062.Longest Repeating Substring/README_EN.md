@@ -1,8 +1,25 @@
-# [1062. Longest Repeating Substring](https://leetcode.com/problems/longest-repeating-substring)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1062.Longest%20Repeating%20Substring/README_EN.md
+tags:
+    - String
+    - Binary Search
+    - Dynamic Programming
+    - Suffix Array
+    - Hash Function
+    - Rolling Hash
+---
+
+<!-- problem:start -->
+
+# [1062. Longest Repeating Substring 🔒](https://leetcode.com/problems/longest-repeating-substring)
 
 [中文文档](/solution/1000-1099/1062.Longest%20Repeating%20Substring/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, return <em>the length of the longest repeating substrings</em>. If no repeating substring exists, return <code>0</code>.</p>
 
@@ -39,11 +56,17 @@
 	<li><code>s</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +82,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -102,7 +125,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestRepeatingSubstring(s string) int {
@@ -126,19 +149,10 @@ func longestRepeatingSubstring(s string) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
-# [1794. Count Pairs of Equal Substrings With Minimum Difference](https://leetcode.com/problems/count-pairs-of-equal-substrings-with-minimum-difference)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1794.Count%20Pairs%20of%20Equal%20Substrings%20With%20Minimum%20Difference/README_EN.md
+tags:
+    - Greedy
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
+# [1794. Count Pairs of Equal Substrings With Minimum Difference 🔒](https://leetcode.com/problems/count-pairs-of-equal-substrings-with-minimum-difference)
 
 [中文文档](/solution/1700-1799/1794.Count%20Pairs%20of%20Equal%20Substrings%20With%20Minimum%20Difference/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two strings <code>firstString</code> and <code>secondString</code> that are <strong>0-indexed</strong> and consist only of lowercase English letters. Count the number of index quadruples <code>(i,j,a,b)</code> that satisfy the following conditions:</p>
 
@@ -40,11 +54,23 @@
 	<li>Both strings consist only of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Hash Table
+
+The problem actually asks us to find a smallest index $i$ and a largest index $j$ such that $firstString[i]$ equals $secondString[j]$, and the value of $i - j$ is the smallest among all index pairs that meet the conditions.
+
+Therefore, we first use a hash table $last$ to record the index of the last occurrence of each character in $secondString$. Then we traverse $firstString$. For each character $c$, if $c$ has appeared in $secondString$, we calculate $i - last[c]$. If the value of $i - last[c]$ is less than the current minimum value, we update the minimum value and set the answer to 1. If the value of $i - last[c]$ equals the current minimum value, we increment the answer by 1.
+
+The time complexity is $O(m + n)$, and the space complexity is $O(C)$. Here, $m$ and $n$ are the lengths of $firstString$ and $secondString$ respectively, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +88,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countQuadruples(firstString string, secondString string) (ans int) {
@@ -142,10 +168,33 @@ func countQuadruples(firstString string, secondString string) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function countQuadruples(firstString: string, secondString: string): number {
+    const last: number[] = new Array(26).fill(0);
+    for (let i = 0; i < secondString.length; ++i) {
+        last[secondString.charCodeAt(i) - 97] = i + 1;
+    }
+    let [ans, mi] = [0, Infinity];
+    for (let i = 0; i < firstString.length; ++i) {
+        const j = last[firstString.charCodeAt(i) - 97];
+        if (j) {
+            const t = i - j;
+            if (mi > t) {
+                mi = t;
+                ans = 1;
+            } else if (mi === t) {
+                ++ans;
+            }
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

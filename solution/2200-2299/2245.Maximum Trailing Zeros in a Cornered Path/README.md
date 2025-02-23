@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2245.Maximum%20Trailing%20Zeros%20in%20a%20Cornered%20Path/README.md
+rating: 2036
+source: 第 289 场周赛 Q3
+tags:
+    - 数组
+    - 矩阵
+    - 前缀和
+---
+
+<!-- problem:start -->
+
 # [2245. 转角路径的乘积中最多能有几个尾随零](https://leetcode.cn/problems/maximum-trailing-zeros-in-a-cornered-path)
 
 [English Version](/solution/2200-2299/2245.Maximum%20Trailing%20Zeros%20in%20a%20Cornered%20Path/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二维整数数组 <code>grid</code> ，大小为 <code>m x n</code>，其中每个单元格都含一个正整数。</p>
 
@@ -61,11 +75,13 @@
 	<li><code>1 &lt;= grid[i][j] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和 + 枚举拐点**
+### 方法一：前缀和 + 枚举拐点
 
 首先我们要明确，对于一个乘积，尾随零的个数取决于因子中 $2$ 和 $5$ 的个数的较小值。另外，每一条转角路径应该覆盖尽可能多的数，因此，它一定是从某个边界出发，到达某个拐点，再到达另一个边界。
 
@@ -93,9 +109,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -132,9 +146,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -176,7 +188,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -218,7 +230,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxTrailingZeros(grid [][]int) (ans int) {
@@ -262,23 +274,9 @@ func get(m, n int) [][]int {
 	}
 	return f
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxTrailingZeros(grid: number[][]): number {
@@ -308,18 +306,9 @@ function maxTrailingZeros(grid: number[][]): number {
     let ans = 0;
     for (let i = 1; i <= m; ++i) {
         for (let j = 1; j <= n; ++j) {
-            const a = Math.min(
-                r2[i][j] + c2[i - 1][j],
-                r5[i][j] + c5[i - 1][j],
-            );
-            const b = Math.min(
-                r2[i][j] + c2[m][j] - c2[i][j],
-                r5[i][j] + c5[m][j] - c5[i][j],
-            );
-            const c = Math.min(
-                r2[i][n] - r2[i][j] + c2[i][j],
-                r5[i][n] - r5[i][j] + c5[i][j],
-            );
+            const a = Math.min(r2[i][j] + c2[i - 1][j], r5[i][j] + c5[i - 1][j]);
+            const b = Math.min(r2[i][j] + c2[m][j] - c2[i][j], r5[i][j] + c5[m][j] - c5[i][j]);
+            const c = Math.min(r2[i][n] - r2[i][j] + c2[i][j], r5[i][n] - r5[i][j] + c5[i][j]);
             const d = Math.min(
                 r2[i][n] - r2[i][j - 1] + c2[m][j] - c2[i][j],
                 r5[i][n] - r5[i][j - 1] + c5[m][j] - c5[i][j],
@@ -331,10 +320,8 @@ function maxTrailingZeros(grid: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

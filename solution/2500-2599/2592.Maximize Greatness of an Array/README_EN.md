@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2592.Maximize%20Greatness%20of%20an%20Array/README_EN.md
+rating: 1569
+source: Biweekly Contest 100 Q2
+tags:
+    - Greedy
+    - Array
+    - Two Pointers
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2592. Maximize Greatness of an Array](https://leetcode.com/problems/maximize-greatness-of-an-array)
 
 [中文文档](/solution/2500-2599/2592.Maximize%20Greatness%20of%20an%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a 0-indexed integer array <code>nums</code>. You are allowed to permute <code>nums</code> into a new array <code>perm</code> of your choosing.</p>
 
@@ -36,9 +53,13 @@ At indices = 0, 1, and 2, perm[i] &gt; nums[i]. Hence, we return 3.
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Greedy**
+<!-- solution:start -->
+
+### Solution 1: Greedy
 
 We can sort the array $nums$ first.
 
@@ -50,7 +71,7 @@ The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +83,7 @@ class Solution:
         return i
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -79,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximizeGreatness(nums []int) int {
@@ -110,7 +131,7 @@ func maximizeGreatness(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximizeGreatness(nums: number[]): number {
@@ -125,10 +146,8 @@ function maximizeGreatness(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

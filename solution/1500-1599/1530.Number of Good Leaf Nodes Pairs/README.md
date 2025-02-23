@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1530.Number%20of%20Good%20Leaf%20Nodes%20Pairs/README.md
+rating: 1745
+source: 第 199 场周赛 Q3
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1530. 好叶子节点对的数量](https://leetcode.cn/problems/number-of-good-leaf-nodes-pairs)
 
 [English Version](/solution/1500-1599/1530.Number%20of%20Good%20Leaf%20Nodes%20Pairs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你二叉树的根节点 <code>root</code> 和一个整数 <code>distance</code> 。</p>
 
@@ -63,11 +77,13 @@
 	<li><code>1 &lt;= distance &lt;= 10</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 题目求一个二叉树好叶子节点的对数，答案可以拆分为三部分之和：左子树好叶子节点的对数、右子树好叶子节点的对数，以及左子树叶子节点与右子树叶子节点组成的好叶子节点的对数。
 
@@ -77,9 +93,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -101,8 +115,9 @@ class Solution:
 
         if root is None:
             return 0
-        ans = self.countPairs(root.left, distance) + \
-            self.countPairs(root.right, distance)
+        ans = self.countPairs(root.left, distance) + self.countPairs(
+            root.right, distance
+        )
         cnt1 = Counter()
         cnt2 = Counter()
         dfs(root.left, cnt1, 1)
@@ -115,9 +130,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -169,7 +182,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -214,7 +227,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -257,10 +270,95 @@ func dfs(root *TreeNode, cnt []int, i int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function countPairs(root: TreeNode | null, distance: number): number {
+    const pairs: number[][] = [];
+
+    const dfs = (node: TreeNode | null): number[][] => {
+        if (!node) return [];
+        if (!node.left && !node.right) return [[node.val, 1]];
+
+        const left = dfs(node.left);
+        const right = dfs(node.right);
+
+        for (const [x, dx] of left) {
+            for (const [y, dy] of right) {
+                if (dx + dy <= distance) {
+                    pairs.push([x, y]);
+                }
+            }
+        }
+
+        const res: number[][] = [];
+        for (const arr of [left, right]) {
+            for (const x of arr) {
+                if (++x[1] <= distance) res.push(x);
+            }
+        }
+
+        return res;
+    };
+
+    dfs(root);
+
+    return pairs.length;
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} distance
+ * @return {number}
+ */
+var countPairs = function (root, distance) {
+    const pairs = [];
+
+    const dfs = node => {
+        if (!node) return [];
+        if (!node.left && !node.right) return [[node.val, 1]];
+
+        const left = dfs(node.left);
+        const right = dfs(node.right);
+
+        for (const [x, dx] of left) {
+            for (const [y, dy] of right) {
+                if (dx + dy <= distance) {
+                    pairs.push([x, y]);
+                }
+            }
+        }
+
+        const res = [];
+        for (const arr of [left, right]) {
+            for (const x of arr) {
+                if (++x[1] <= distance) res.push(x);
+            }
+        }
+
+        return res;
+    };
+
+    dfs(root);
+
+    return pairs.length;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

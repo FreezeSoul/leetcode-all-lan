@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1626.Best%20Team%20With%20No%20Conflicts/README_EN.md
+rating: 2027
+source: Weekly Contest 211 Q3
+tags:
+    - Array
+    - Dynamic Programming
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1626. Best Team With No Conflicts](https://leetcode.com/problems/best-team-with-no-conflicts)
 
 [中文文档](/solution/1600-1699/1626.Best%20Team%20With%20No%20Conflicts/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are the manager of a basketball team. For the upcoming tournament, you want to choose the team with the highest overall score. The score of the team is the <strong>sum</strong> of scores of all the players in the team.</p>
 
@@ -45,13 +61,17 @@
 	<li><code>1 &lt;= ages[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-LIS.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,6 +86,142 @@ class Solution:
             f[i] += score
         return max(f)
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int bestTeamScore(int[] scores, int[] ages) {
+        int n = ages.length;
+        int[][] arr = new int[n][2];
+        for (int i = 0; i < n; ++i) {
+            arr[i] = new int[] {scores[i], ages[i]};
+        }
+        Arrays.sort(arr, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+        int[] f = new int[n];
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (arr[i][1] >= arr[j][1]) {
+                    f[i] = Math.max(f[i], f[j]);
+                }
+            }
+            f[i] += arr[i][0];
+            ans = Math.max(ans, f[i]);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        int n = ages.size();
+        vector<pair<int, int>> arr(n);
+        for (int i = 0; i < n; ++i) {
+            arr[i] = {scores[i], ages[i]};
+        }
+        sort(arr.begin(), arr.end());
+        vector<int> f(n);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (arr[i].second >= arr[j].second) {
+                    f[i] = max(f[i], f[j]);
+                }
+            }
+            f[i] += arr[i].first;
+        }
+        return *max_element(f.begin(), f.end());
+    }
+};
+```
+
+#### Go
+
+```go
+func bestTeamScore(scores []int, ages []int) int {
+	n := len(ages)
+	arr := make([][2]int, n)
+	for i := range ages {
+		arr[i] = [2]int{scores[i], ages[i]}
+	}
+	sort.Slice(arr, func(i, j int) bool {
+		a, b := arr[i], arr[j]
+		return a[0] < b[0] || a[0] == b[0] && a[1] < b[1]
+	})
+	f := make([]int, n)
+	for i := range arr {
+		for j := 0; j < i; j++ {
+			if arr[i][1] >= arr[j][1] {
+				f[i] = max(f[i], f[j])
+			}
+		}
+		f[i] += arr[i][0]
+	}
+	return slices.Max(f)
+}
+```
+
+#### TypeScript
+
+```ts
+function bestTeamScore(scores: number[], ages: number[]): number {
+    const arr = ages.map((age, i) => [age, scores[i]]);
+    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
+    const n = arr.length;
+    const f = new Array(n).fill(0);
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < i; ++j) {
+            if (arr[i][1] >= arr[j][1]) {
+                f[i] = Math.max(f[i], f[j]);
+            }
+        }
+        f[i] += arr[i][1];
+    }
+    return Math.max(...f);
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} scores
+ * @param {number[]} ages
+ * @return {number}
+ */
+var bestTeamScore = function (scores, ages) {
+    const arr = ages.map((age, i) => [age, scores[i]]);
+    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
+    const n = arr.length;
+    const f = new Array(n).fill(0);
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < i; ++j) {
+            if (arr[i][1] >= arr[j][1]) {
+                f[i] = Math.max(f[i], f[j]);
+            }
+        }
+        f[i] += arr[i][1];
+    }
+    return Math.max(...f);
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class BinaryIndexedTree:
@@ -95,32 +251,7 @@ class Solution:
         return tree.query(m)
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public int bestTeamScore(int[] scores, int[] ages) {
-        int n = ages.length;
-        int[][] arr = new int[n][2];
-        for (int i = 0; i < n; ++i) {
-            arr[i] = new int[] {scores[i], ages[i]};
-        }
-        Arrays.sort(arr, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
-        int[] f = new int[n];
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                if (arr[i][1] >= arr[j][1]) {
-                    f[i] = Math.max(f[i], f[j]);
-                }
-            }
-            f[i] += arr[i][0];
-            ans = Math.max(ans, f[i]);
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -170,36 +301,14 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
-        int n = ages.size();
-        vector<pair<int, int>> arr(n);
-        for (int i = 0; i < n; ++i) {
-            arr[i] = {scores[i], ages[i]};
-        }
-        sort(arr.begin(), arr.end());
-        vector<int> f(n);
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                if (arr[i].second >= arr[j].second) {
-                    f[i] = max(f[i], f[j]);
-                }
-            }
-            f[i] += arr[i].first;
-        }
-        return *max_element(f.begin(), f.end());
-    }
-};
-```
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
 public:
-    BinaryIndexedTree(int _n) : n(_n), c(_n + 1) {}
+    BinaryIndexedTree(int _n)
+        : n(_n)
+        , c(_n + 1) {}
 
     void update(int x, int val) {
         while (x <= n) {
@@ -241,39 +350,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func bestTeamScore(scores []int, ages []int) (ans int) {
-	n := len(ages)
-	arr := make([][2]int, n)
-	for i := range ages {
-		arr[i] = [2]int{scores[i], ages[i]}
-	}
-	sort.Slice(arr, func(i, j int) bool {
-		a, b := arr[i], arr[j]
-		return a[0] < b[0] || a[0] == b[0] && a[1] < b[1]
-	})
-	f := make([]int, n)
-	for i := range arr {
-		for j := 0; j < i; j++ {
-			if arr[i][1] >= arr[j][1] {
-				f[i] = max(f[i], f[j])
-			}
-		}
-		f[i] += arr[i][0]
-		ans = max(ans, f[i])
-	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 type BinaryIndexedTree struct {
@@ -320,64 +397,10 @@ func bestTeamScore(scores []int, ages []int) int {
 	}
 	return tree.query(m)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function bestTeamScore(scores: number[], ages: number[]): number {
-    const arr = ages.map((age, i) => [age, scores[i]]);
-    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
-    const n = arr.length;
-    const f = new Array(n).fill(0);
-    for (let i = 0; i < n; ++i) {
-        for (let j = 0; j < i; ++j) {
-            if (arr[i][1] >= arr[j][1]) {
-                f[i] = Math.max(f[i], f[j]);
-            }
-        }
-        f[i] += arr[i][1];
-    }
-    return Math.max(...f);
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} scores
- * @param {number[]} ages
- * @return {number}
- */
-var bestTeamScore = function (scores, ages) {
-    const arr = ages.map((age, i) => [age, scores[i]]);
-    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
-    const n = arr.length;
-    const f = new Array(n).fill(0);
-    for (let i = 0; i < n; ++i) {
-        for (let j = 0; j < i; ++j) {
-            if (arr[i][1] >= arr[j][1]) {
-                f[i] = Math.max(f[i], f[j]);
-            }
-        }
-        f[i] += arr[i][1];
-    }
-    return Math.max(...f);
-};
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

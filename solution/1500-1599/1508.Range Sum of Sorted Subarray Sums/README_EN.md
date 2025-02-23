@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1508.Range%20Sum%20of%20Sorted%20Subarray%20Sums/README_EN.md
+rating: 1402
+source: Biweekly Contest 30 Q2
+tags:
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1508. Range Sum of Sorted Subarray Sums](https://leetcode.com/problems/range-sum-of-sorted-subarray-sums)
 
 [中文文档](/solution/1500-1599/1508.Range%20Sum%20of%20Sorted%20Subarray%20Sums/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the array <code>nums</code> consisting of <code>n</code> positive integers. You computed the sum of all non-empty continuous subarrays from the array and then sorted them in non-decreasing order, creating a new array of <code>n * (n + 1) / 2</code> numbers.</p>
 
@@ -42,11 +59,21 @@
 	<li><code>1 &lt;= left &lt;= right &lt;= n * (n + 1) / 2</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can generate the array $\textit{arr}$ according to the problem's requirements, then sort the array, and finally calculate the sum of all elements in the range $[\textit{left}-1, \textit{right}-1]$ to get the result.
+
+The time complexity is $O(n^2 \times \log n)$, and the space complexity is $O(n^2)$. Here, $n$ is the length of the array given in the problem.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,10 +86,10 @@ class Solution:
                 arr.append(s)
         arr.sort()
         mod = 10**9 + 7
-        return sum(arr[left - 1: right]) % mod
+        return sum(arr[left - 1 : right]) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -111,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func rangeSum(nums []int, n int, left int, right int) (ans int) {
@@ -132,10 +159,46 @@ func rangeSum(nums []int, n int, left int, right int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function rangeSum(nums: number[], n: number, left: number, right: number): number {
+    let arr = Array((n * (n + 1)) / 2).fill(0);
+    const mod = 10 ** 9 + 7;
+
+    for (let i = 0, s = 0, k = 0; i < n; i++, s = 0) {
+        for (let j = i; j < n; j++, k++) {
+            s += nums[j];
+            arr[k] = s;
+        }
+    }
+
+    arr = arr.sort((a, b) => a - b).slice(left - 1, right);
+    return arr.reduce((acc, cur) => (acc + cur) % mod, 0);
+}
 ```
 
+#### JavaScript
+
+```js
+function rangeSum(nums, n, left, right) {
+    let arr = Array((n * (n + 1)) / 2).fill(0);
+    const mod = 10 ** 9 + 7;
+
+    for (let i = 0, s = 0, k = 0; i < n; i++, s = 0) {
+        for (let j = i; j < n; j++, k++) {
+            s += nums[j];
+            arr[k] = s;
+        }
+    }
+
+    arr = arr.sort((a, b) => a - b).slice(left - 1, right);
+    return arr.reduce((acc, cur) => acc + cur, 0) % mod;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

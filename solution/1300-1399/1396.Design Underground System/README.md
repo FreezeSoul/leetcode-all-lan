@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1396.Design%20Underground%20System/README.md
+rating: 1464
+source: 第 182 场周赛 Q3
+tags:
+    - 设计
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1396. 设计地铁系统](https://leetcode.cn/problems/design-underground-system)
 
 [English Version](/solution/1300-1399/1396.Design%20Underground%20System/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>地铁系统跟踪不同车站之间的乘客出行时间，并使用这一数据来计算从一站到另一站的平均时间。</p>
 
@@ -12,6 +26,7 @@
 
 <ul>
 	<li><code>void checkIn(int id, string stationName, int t)</code>
+
     <ul>
     	<li>通行卡 ID 等于 <code>id</code> 的乘客，在时间 <code>t</code> ，从 <code>stationName</code> 站进入</li>
     	<li>乘客一次只能从一个站进入</li>
@@ -30,6 +45,7 @@
     	<li>在调用 <code>getAverageTime</code> 之前，至少有一名乘客从 <code>startStation</code> 站到达 <code>endStation</code> 站</li>
     </ul>
     </li>
+
 </ul>
 
 <p>你可以假设对 <code>checkIn</code> 和 <code>checkOut</code> 方法的所有调用都是符合逻辑的。如果一名乘客在时间 <code>t<sub>1</sub></code> 进站、时间 <code>t<sub>2</sub></code> 出站，那么 <code>t<sub>1</sub> &lt; t<sub>2</sub></code> 。所有时间都按时间顺序发生。</p>
@@ -96,11 +112,13 @@ undergroundSystem.getAverageTime("Leyton", "Paradise"); // 返回 6.66667 ，(5 
 	<li>与标准答案误差在 <code>10<sup>-5</sup></code> 以内的结果都被视为正确结果</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们用两个哈希表来存储数据，其中：
 
@@ -117,13 +135,10 @@ undergroundSystem.getAverageTime("Leyton", "Paradise"); // 返回 6.66667 ，(5 
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class UndergroundSystem:
-
     def __init__(self):
         self.ts = {}
         self.d = {}
@@ -148,9 +163,7 @@ class UndergroundSystem:
 # param_3 = obj.getAverageTime(startStation,endStation)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class UndergroundSystem {
@@ -190,7 +203,7 @@ class UndergroundSystem {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class UndergroundSystem {
@@ -228,7 +241,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type UndergroundSystem struct {
@@ -282,10 +295,8 @@ type pair struct {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

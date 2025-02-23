@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20111.%20%E8%AE%A1%E7%AE%97%E9%99%A4%E6%B3%95/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 111. 计算除法](https://leetcode.cn/problems/vlzXQL)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个变量对数组 <code>equations</code> 和一个实数值数组 <code>values</code> 作为已知条件，其中 <code>equations[i] = [A<sub>i</sub>, B<sub>i</sub>]</code> 和 <code>values[i]</code> 共同表示等式 <code>A<sub>i</sub> / B<sub>i</sub> = values[i]</code> 。每个 <code>A<sub>i</sub></code> 或 <code>B<sub>i</sub></code> 是一个表示单个变量的字符串。</p>
 
@@ -59,81 +66,23 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 399&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/evaluate-division/">https://leetcode.cn/problems/evaluate-division/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-并查集。
-
-模板 1——朴素并查集：
-
-```python
-# 初始化，p存储每个点的父节点
-p = list(range(n))
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-```
-
-模板 2——维护 size 的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，size只有当节点是祖宗节点时才有意义，表示祖宗节点所在集合中，点的数量
-p = list(range(n))
-size = [1] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-# 合并a和b所在的两个集合
-if find(a) != find(b):
-    size[find(b)] += size[find(a)]
-    p[find(a)] = find(b)
-```
-
-模板 3——维护到祖宗节点距离的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，d[x]存储x到p[x]的距离
-p = list(range(n))
-d = [0] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        t = find(p[x])
-        d[x] += d[p[x]]
-        p[x] = t
-    return p[x]
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-d[find(a)] = distance
-```
-
-对于本题，具备等式关系的所有变量构成同一个集合，同时，需要维护一个权重数组 w，初始时 `w[i] = 1`。对于等式关系如 `a / b = 2`，令 `w[a] = 2`。在 `find()` 查找祖宗节点的时候，同时进行路径压缩，并更新节点权重。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+    def calcEquation(
+        self, equations: List[List[str]], values: List[float], queries: List[List[str]]
+    ) -> List[float]:
         n = len(equations)
         p = list(range(n << 1))
         w = [1.0] * (n << 1)
@@ -172,9 +121,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -234,7 +181,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -285,7 +232,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 var p []int
@@ -345,10 +292,74 @@ func find(x int) int {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    private var parent = [Int]()
+    private var weight = [Double]()
 
+    func calcEquation(
+        _ equations: [[String]],
+        _ values: [Double],
+        _ queries: [[String]]
+    ) -> [Double] {
+        let n = equations.count
+        parent = Array(0..<(n * 2))
+        weight = Array(repeating: 1.0, count: n * 2)
+
+        var map = [String: Int]()
+        var index = 0
+
+        for i in 0..<n {
+            let a = equations[i][0]
+            let b = equations[i][1]
+
+            if map[a] == nil {
+                map[a] = index
+                index += 1
+            }
+            if map[b] == nil {
+                map[b] = index
+                index += 1
+            }
+
+            let pa = find(map[a]!)
+            let pb = find(map[b]!)
+
+            if pa != pb {
+                parent[pa] = pb
+                weight[pa] = weight[map[b]!] * values[i] / weight[map[a]!]
+            }
+        }
+
+        var result = [Double]()
+
+        for query in queries {
+            let (c, d) = (query[0], query[1])
+            if let id1 = map[c], let id2 = map[d], find(id1) == find(id2) {
+                result.append(weight[id1] / weight[id2])
+            } else {
+                result.append(-1.0)
+            }
+        }
+
+        return result
+    }
+
+    private func find(_ x: Int) -> Int {
+        if parent[x] != x {
+            let origin = parent[x]
+            parent[x] = find(parent[x])
+            weight[x] *= weight[origin]
+        }
+        return parent[x]
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

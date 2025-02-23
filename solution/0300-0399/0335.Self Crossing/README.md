@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0335.Self%20Crossing/README.md
+tags:
+    - 几何
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [335. 路径交叉](https://leetcode.cn/problems/self-crossing)
 
 [English Version](/solution/0300-0399/0335.Self%20Crossing/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>distance</code><em> </em>。</p>
 
@@ -43,34 +55,17 @@
 	<li><code>1 &lt;=&nbsp;distance[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-```bash
-                i-2
-    case 1 : i-1┌─┐
-                └─┼─>i
-                 i-3
-
-                   i-2
-    case 2 : i-1 ┌────┐
-                 └─══>┘i-3
-                 i  i-4
-
-    case 3 :    i-4
-               ┌──┐
-               │i<┼─┐
-            i-3│ i-5│i-1
-               └────┘
-                i-2
-```
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +87,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -134,7 +127,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isSelfCrossing(distance []int) bool {
@@ -154,10 +147,27 @@ func isSelfCrossing(distance []int) bool {
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public bool IsSelfCrossing(int[] x) {
+        for (var i = 3; i < x.Length; ++i)
+        {
+            if (x[i] >= x[i - 2] && x[i - 1] <= x[i - 3]) return true;
+            if (i > 3 && x[i] + x[i - 4] >= x[i - 2])
+            {
+                if (x[i - 1] == x[i - 3]) return true;
+                if (i > 4 && x[i - 2] >= x[i - 4] && x[i - 1] <= x[i - 3] && x[i - 1] + x[i - 5] >= x[i - 3]) return true;
+            }
+        }
+        return false;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

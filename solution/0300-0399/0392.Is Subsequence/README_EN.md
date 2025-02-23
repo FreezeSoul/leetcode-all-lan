@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0392.Is%20Subsequence/README_EN.md
+tags:
+    - Two Pointers
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [392. Is Subsequence](https://leetcode.com/problems/is-subsequence)
 
 [中文文档](/solution/0300-0399/0392.Is%20Subsequence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>s</code> and <code>t</code>, return <code>true</code><em> if </em><code>s</code><em> is a <strong>subsequence</strong> of </em><code>t</code><em>, or </em><code>false</code><em> otherwise</em>.</p>
 
@@ -28,9 +42,13 @@
 <p>&nbsp;</p>
 <strong>Follow up:</strong> Suppose there are lots of incoming <code>s</code>, say <code>s<sub>1</sub>, s<sub>2</sub>, ..., s<sub>k</sub></code> where <code>k &gt;= 10<sup>9</sup></code>, and you want to check one by one to see if <code>t</code> has its subsequence. In this scenario, how would you change your code?
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Two Pointers**
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
 
 We define two pointers $i$ and $j$ to point to the initial position of the string $s$ and $t$ respectively. Each time we compare the two characters pointed to by the two pointers, if they are the same, both pointers move right at the same time; if they are not the same, only $j$ moves right. When the pointer $i$ moves to the end of the string $s$, it means that $s$ is the subsequence of $t$.
 
@@ -38,7 +56,7 @@ The time complexity is $O(m + n)$, where $m$ and $n$ are the lengths of the stri
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -51,7 +69,7 @@ class Solution:
         return i == len(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -69,7 +87,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -87,7 +105,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isSubsequence(s string, t string) bool {
@@ -102,7 +120,7 @@ func isSubsequence(s string, t string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isSubsequence(s: string, t: string): boolean {
@@ -118,7 +136,7 @@ function isSubsequence(s: string, t: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -140,23 +158,7 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-bool isSubsequence(char * s, char * t){
-    int m = strlen(s);
-    int n = strlen(t);
-    int i = 0;
-    for (int j = 0; i < m && j < n; ++j) {
-        if (s[i] == t[j]) {
-            ++i;
-        }
-    }
-    return i == m;
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -173,10 +175,24 @@ public class Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+bool isSubsequence(char* s, char* t) {
+    int m = strlen(s);
+    int n = strlen(t);
+    int i = 0;
+    for (int j = 0; i < m && j < n; ++j) {
+        if (s[i] == t[j]) {
+            ++i;
+        }
+    }
+    return i == m;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

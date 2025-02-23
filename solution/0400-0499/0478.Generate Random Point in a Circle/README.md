@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0478.Generate%20Random%20Point%20in%20a%20Circle/README.md
+tags:
+    - 几何
+    - 数学
+    - 拒绝采样
+    - 随机化
+---
+
+<!-- problem:start -->
+
 # [478. 在圆内随机生成点](https://leetcode.cn/problems/generate-random-point-in-a-circle)
 
 [English Version](/solution/0400-0499/0478.Generate%20Random%20Point%20in%20a%20Circle/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定圆的半径和圆心的位置，实现函数 <code>randPoint</code> ，在圆中产生均匀随机点。</p>
 
@@ -40,32 +53,35 @@ solution.randPoint ();//返回[0.36572,0.17248]</pre>
 	<li><code>randPoint</code> 最多被调用&nbsp;<code>3 * 10<sup>4</sup></code>&nbsp;次</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
+class Solution:
+    def __init__(self, radius: float, x_center: float, y_center: float):
+        self.radius = radius
+        self.x_center = x_center
+        self.y_center = y_center
 
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-
-```
-
-### **...**
-
-```
-
+    def randPoint(self) -> List[float]:
+        length = math.sqrt(random.uniform(0, self.radius**2))
+        degree = random.uniform(0, 1) * 2 * math.pi
+        x = self.x_center + length * math.cos(degree)
+        y = self.y_center + length * math.sin(degree)
+        return [x, y]
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

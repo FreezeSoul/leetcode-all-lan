@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0867.Transpose%20Matrix/README_EN.md
+tags:
+    - Array
+    - Matrix
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [867. Transpose Matrix](https://leetcode.com/problems/transpose-matrix)
 
 [中文文档](/solution/0800-0899/0867.Transpose%20Matrix/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a 2D integer array <code>matrix</code>, return <em>the <strong>transpose</strong> of</em> <code>matrix</code>.</p>
 
@@ -36,11 +50,25 @@
 	<li><code>-10<sup>9</sup> &lt;= matrix[i][j] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+Let $m$ be the number of rows and $n$ be the number of columns in the matrix $\textit{matrix}$. According to the definition of transpose, the transposed matrix $\textit{ans}$ will have $n$ rows and $m$ columns.
+
+For any position $(i, j)$ in $\textit{ans}$, it corresponds to the position $(j, i)$ in the matrix $\textit{matrix}$. Therefore, we traverse each element in the matrix $\textit{matrix}$ and transpose it to the corresponding position in $\textit{ans}$.
+
+After the traversal, we return $\textit{ans}$.
+
+The time complexity is $O(m \times n)$, where $m$ and $n$ are the number of rows and columns in the matrix $\textit{matrix}$, respectively. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -48,7 +76,7 @@ class Solution:
         return list(zip(*matrix))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -65,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -73,15 +101,17 @@ public:
     vector<vector<int>> transpose(vector<vector<int>>& matrix) {
         int m = matrix.size(), n = matrix[0].size();
         vector<vector<int>> ans(n, vector<int>(m));
-        for (int i = 0; i < n; ++i)
-            for (int j = 0; j < m; ++j)
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
                 ans[i][j] = matrix[j][i];
+            }
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func transpose(matrix [][]int) [][]int {
@@ -97,7 +127,22 @@ func transpose(matrix [][]int) [][]int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function transpose(matrix: number[][]): number[][] {
+    const [m, n] = [matrix.length, matrix[0].length];
+    const ans: number[][] = Array.from({ length: n }, () => Array(m).fill(0));
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < m; ++j) {
+            ans[i][j] = matrix[j][i];
+        }
+    }
+    return ans;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -105,9 +150,8 @@ func transpose(matrix [][]int) [][]int {
  * @return {number[][]}
  */
 var transpose = function (matrix) {
-    const m = matrix.length;
-    const n = matrix[0].length;
-    const ans = new Array(n).fill(0).map(() => new Array(m).fill(0));
+    const [m, n] = [matrix.length, matrix[0].length];
+    const ans = Array.from({ length: n }, () => Array(m).fill(0));
     for (let i = 0; i < n; ++i) {
         for (let j = 0; j < m; ++j) {
             ans[i][j] = matrix[j][i];
@@ -117,10 +161,8 @@ var transpose = function (matrix) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

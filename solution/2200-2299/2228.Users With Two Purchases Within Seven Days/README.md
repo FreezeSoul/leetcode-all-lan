@@ -1,10 +1,20 @@
-# [2228. 7 天内两次购买的用户](https://leetcode.cn/problems/users-with-two-purchases-within-seven-days)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2228.Users%20With%20Two%20Purchases%20Within%20Seven%20Days/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2228. 7 天内两次购买的用户 🔒](https://leetcode.cn/problems/users-with-two-purchases-within-seven-days)
 
 [English Version](/solution/2200-2299/2228.Users%20With%20Two%20Purchases%20Within%20Seven%20Days/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Purchases</code></p>
 
@@ -16,17 +26,17 @@
 | user_id       | int  |
 | purchase_date | date |
 +---------------+------+
-purchase_id 是该表的主键。
+purchase_id 包含唯一值。
 该表包含用户从某个零售商购买的日期的日志。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一个 SQL 查询，获取&nbsp;<strong>最多&nbsp;</strong>间隔 <code>7</code> 天进行两次购买的用户的 id。</p>
+<p>编写解决方案，获取&nbsp;<strong>最多&nbsp;</strong>间隔 <code>7</code> 天进行两次购买的用户的 id。</p>
 
 <p data-group="1-1">返回<em>按 <code>user_id</code>&nbsp;排序的结果表。</em></p>
 
-<p>查询结果格式如下所示。</p>
+<p>结果格式如下所示。</p>
 
 <p>&nbsp;</p>
 
@@ -57,18 +67,41 @@ Purchases 表:
 用户 5 只购买了 1 次。
 用户 7 在同一天有两次购买，所以我们添加了他们的 ID。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            user_id,
+            DATEDIFF(
+                purchase_date,
+                LAG(purchase_date, 1) OVER (
+                    PARTITION BY user_id
+                    ORDER BY purchase_date
+                )
+            ) AS d
+        FROM Purchases
+    )
+SELECT DISTINCT user_id
+FROM t
+WHERE d <= 7
+ORDER BY user_id;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

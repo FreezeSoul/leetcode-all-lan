@@ -1,8 +1,21 @@
-# [1989. Maximum Number of People That Can Be Caught in Tag](https://leetcode.com/problems/maximum-number-of-people-that-can-be-caught-in-tag)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1989.Maximum%20Number%20of%20People%20That%20Can%20Be%20Caught%20in%20Tag/README_EN.md
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
+# [1989. Maximum Number of People That Can Be Caught in Tag 🔒](https://leetcode.com/problems/maximum-number-of-people-that-can-be-caught-in-tag)
 
 [中文文档](/solution/1900-1999/1989.Maximum%20Number%20of%20People%20That%20Can%20Be%20Caught%20in%20Tag/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are playing a game of tag with your friends. In tag, people are divided into two teams: people who are &quot;it&quot;, and people who are not &quot;it&quot;. The people who are &quot;it&quot; want to catch as many people as possible who are not &quot;it&quot;.</p>
 
@@ -50,11 +63,25 @@ There are no people who are not &quot;it&quot; to catch.
 	<li><code>1 &lt;= dist &lt;= team.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
+
+We can use two pointers $i$ and $j$ to point to the ghost and non-ghost people, initially $i=0$, $j=0$.
+
+Then we traverse the array from left to right. When we encounter a ghost, i.e., $team[i]=1$, if $j \lt n$ and $\textit{team}[j]=1$ or $i - j \gt \textit{dist}$, then move pointer $j$ to the right in a loop. This means we need to find the first non-ghost person such that the distance between $i$ and $j$ does not exceed $\textit{dist}$. If such a person is found, move pointer $j$ one step to the right, indicating that we have caught this person, and increment the answer by one. Continue traversing the array until the entire array is processed.
+
+Finally, return the answer.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{team}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +98,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +121,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -107,7 +134,7 @@ public:
                 while (j < n && (team[j] || i - j > dist)) {
                     ++j;
                 }
-                if (j < n && abs(i -  j) <= dist) {
+                if (j < n && abs(i - j) <= dist) {
                     ++ans;
                     ++j;
                 }
@@ -118,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func catchMaximumAmountofPeople(team []int, dist int) (ans int) {
@@ -145,10 +172,8 @@ func abs(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

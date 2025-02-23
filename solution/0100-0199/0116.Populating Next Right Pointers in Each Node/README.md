@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0116.Populating%20Next%20Right%20Pointers%20in%20Each%20Node/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 链表
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [116. 填充每个节点的下一个右侧节点指针](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node)
 
 [English Version](/solution/0100-0199/0116.Populating%20Next%20Right%20Pointers%20in%20Each%20Node/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个&nbsp;<strong>完美二叉树&nbsp;</strong>，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：</p>
 
@@ -59,29 +73,21 @@ struct Node {
 	<li>使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 使用队列进行层序遍历，每次遍历一层时，将当前层的节点按顺序连接起来。
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
 
-**方法二：DFS**
-
-使用递归进行前序遍历，每次遍历到一个节点时，将其左右子节点按顺序连接起来。
-
-具体地，我们设计一个函数 $dfs(left, right)$，表示将 $left$ 节点的 $next$ 指针指向 $right$ 节点。在函数中，我们首先判断 $left$ 和 $right$ 是否为空，若都不为空，则将 $left.next$ 指向 $right$，然后递归地调用 $dfs(left.left, left.right)$, $dfs(left.right, right.left)$, $dfs(right.left, right.right)$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 """
@@ -114,35 +120,7 @@ class Solution:
         return root
 ```
 
-```python
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
-        self.val = val
-        self.left = left
-        self.right = right
-        self.next = next
-"""
-
-class Solution:
-    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
-        def dfs(left, right):
-            if left is None or right is None:
-                return
-            left.next = right
-            dfs(left.left, left.right)
-            dfs(left.right, right.left)
-            dfs(right.left, right.right)
-
-        if root:
-            dfs(root.left, root.right)
-        return root
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /*
@@ -196,51 +174,7 @@ class Solution {
 }
 ```
 
-```java
-/*
-// Definition for a Node.
-class Node {
-    public int val;
-    public Node left;
-    public Node right;
-    public Node next;
-
-    public Node() {}
-
-    public Node(int _val) {
-        val = _val;
-    }
-
-    public Node(int _val, Node _left, Node _right, Node _next) {
-        val = _val;
-        left = _left;
-        right = _right;
-        next = _next;
-    }
-};
-*/
-
-class Solution {
-    public Node connect(Node root) {
-        if (root != null) {
-            dfs(root.left, root.right);
-        }
-        return root;
-    }
-
-    private void dfs(Node left, Node right) {
-        if (left == null || right == null) {
-            return;
-        }
-        left.next = right;
-        dfs(left.left, left.right);
-        dfs(left.right, right.left);
-        dfs(right.left, right.right);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -290,6 +224,172 @@ public:
 };
 ```
 
+#### Go
+
+```go
+/**
+ * Definition for a Node.
+ * type Node struct {
+ *     Val int
+ *     Left *Node
+ *     Right *Node
+ *     Next *Node
+ * }
+ */
+
+func connect(root *Node) *Node {
+	if root == nil {
+		return root
+	}
+	q := []*Node{root}
+	for len(q) > 0 {
+		var p *Node
+		for n := len(q); n > 0; n-- {
+			node := q[0]
+			q = q[1:]
+			if p != nil {
+				p.Next = node
+			}
+			p = node
+			if node.Left != nil {
+				q = append(q, node.Left)
+			}
+			if node.Right != nil {
+				q = append(q, node.Right)
+			}
+		}
+	}
+	return root
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for Node.
+ * class Node {
+ *     val: number
+ *     left: Node | null
+ *     right: Node | null
+ *     next: Node | null
+ *     constructor(val?: number, left?: Node, right?: Node, next?: Node) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+function connect(root: Node | null): Node | null {
+    if (root == null || root.left == null) {
+        return root;
+    }
+    const { left, right, next } = root;
+    left.next = right;
+    if (next != null) {
+        right.next = next.left;
+    }
+    connect(left);
+    connect(right);
+    return root;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：DFS
+
+使用递归进行前序遍历，每次遍历到一个节点时，将其左右子节点按顺序连接起来。
+
+具体地，我们设计一个函数 $dfs(left, right)$，表示将 $left$ 节点的 $next$ 指针指向 $right$ 节点。在函数中，我们首先判断 $left$ 和 $right$ 是否为空，若都不为空，则将 $left.next$ 指向 $right$，然后递归地调用 $dfs(left.left, left.right)$, $dfs(left.right, right.left)$, $dfs(right.left, right.right)$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为二叉树的节点个数。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+
+
+class Solution:
+    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        def dfs(left, right):
+            if left is None or right is None:
+                return
+            left.next = right
+            dfs(left.left, left.right)
+            dfs(left.right, right.left)
+            dfs(right.left, right.right)
+
+        if root:
+            dfs(root.left, root.right)
+        return root
+```
+
+#### Java
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
+    }
+};
+*/
+
+class Solution {
+    public Node connect(Node root) {
+        if (root != null) {
+            dfs(root.left, root.right);
+        }
+        return root;
+    }
+
+    private void dfs(Node left, Node right) {
+        if (left == null || right == null) {
+            return;
+        }
+        left.next = right;
+        dfs(left.left, left.right);
+        dfs(left.right, right.left);
+        dfs(right.left, right.right);
+    }
+}
+```
+
+#### C++
+
 ```cpp
 /*
 // Definition for a Node.
@@ -329,44 +429,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a Node.
- * type Node struct {
- *     Val int
- *     Left *Node
- *     Right *Node
- *     Next *Node
- * }
- */
-
-func connect(root *Node) *Node {
-	if root == nil {
-		return root
-	}
-	q := []*Node{root}
-	for len(q) > 0 {
-		var p *Node
-		for n := len(q); n > 0; n-- {
-			node := q[0]
-			q = q[1:]
-			if p != nil {
-				p.Next = node
-			}
-			p = node
-			if node.Left != nil {
-				q = append(q, node.Left)
-			}
-			if node.Right != nil {
-				q = append(q, node.Right)
-			}
-		}
-	}
-	return root
-}
-```
+#### Go
 
 ```go
 /**
@@ -397,39 +460,7 @@ func connect(root *Node) *Node {
 }
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for Node.
- * class Node {
- *     val: number
- *     left: Node | null
- *     right: Node | null
- *     next: Node | null
- *     constructor(val?: number, left?: Node, right?: Node, next?: Node) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
- */
-
-function connect(root: Node | null): Node | null {
-    if (root == null || root.left == null) {
-        return root;
-    }
-    const { left, right, next } = root;
-    left.next = right;
-    if (next != null) {
-        right.next = next.left;
-    }
-    connect(left);
-    connect(right);
-    return root;
-}
-```
+#### TypeScript
 
 ```ts
 /**
@@ -468,10 +499,8 @@ function connect(root: Node | null): Node | null {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

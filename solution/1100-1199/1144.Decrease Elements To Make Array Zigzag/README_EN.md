@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1144.Decrease%20Elements%20To%20Make%20Array%20Zigzag/README_EN.md
+rating: 1558
+source: Weekly Contest 148 Q1
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
 # [1144. Decrease Elements To Make Array Zigzag](https://leetcode.com/problems/decrease-elements-to-make-array-zigzag)
 
 [中文文档](/solution/1100-1199/1144.Decrease%20Elements%20To%20Make%20Array%20Zigzag/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array <code>nums</code> of integers, a <em>move</em>&nbsp;consists of choosing any element and <strong>decreasing it by 1</strong>.</p>
 
@@ -39,11 +54,21 @@
 	<li><code>1 &lt;= nums[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration + Greedy
+
+We can separately enumerate the even and odd positions as the elements "smaller than adjacent elements", and then calculate the required number of operations. The minimum of the two is taken.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $nums$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +86,7 @@ class Solution:
         return min(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func movesToMakeZigzag(nums []int) int {
@@ -126,23 +151,31 @@ func movesToMakeZigzag(nums []int) int {
 	}
 	return min(ans[0], ans[1])
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
+#### TypeScript
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+```ts
+function movesToMakeZigzag(nums: number[]): number {
+    const ans: number[] = Array(2).fill(0);
+    const n = nums.length;
+    for (let i = 0; i < 2; ++i) {
+        for (let j = i; j < n; j += 2) {
+            let d = 0;
+            if (j > 0) {
+                d = Math.max(d, nums[j] - nums[j - 1] + 1);
+            }
+            if (j < n - 1) {
+                d = Math.max(d, nums[j] - nums[j + 1] + 1);
+            }
+            ans[i] += d;
+        }
+    }
+    return Math.min(...ans);
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -166,32 +199,8 @@ public class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function movesToMakeZigzag(nums: number[]): number {
-    const ans: number[] = Array(2).fill(0);
-    const n = nums.length;
-    for (let i = 0; i < 2; ++i) {
-        for (let j = i; j < n; j += 2) {
-            let d = 0;
-            if (j > 0) {
-                d = Math.max(d, nums[j] - nums[j - 1] + 1);
-            }
-            if (j < n - 1) {
-                d = Math.max(d, nums[j] - nums[j + 1] + 1);
-            }
-            ans[i] += d;
-        }
-    }
-    return Math.min(...ans);
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

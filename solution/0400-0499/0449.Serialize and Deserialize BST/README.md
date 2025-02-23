@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0449.Serialize%20and%20Deserialize%20BST/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 设计
+    - 二叉搜索树
+    - 字符串
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [449. 序列化和反序列化二叉搜索树](https://leetcode.cn/problems/serialize-and-deserialize-bst)
 
 [English Version](/solution/0400-0499/0449.Serialize%20and%20Deserialize%20BST/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>序列化是将数据结构或对象转换为一系列位的过程，以便它可以存储在文件或内存缓冲区中，或通过网络连接链路传输，以便稍后在同一个或另一个计算机环境中重建。</p>
 
@@ -38,15 +54,23 @@
 	<li>题目数据 <strong>保证</strong> 输入的树是一棵二叉搜索树。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：先序遍历
+
+题目给定的是二叉搜索树，我们知道二叉搜索树的中序遍历是有序的，而通过“先序遍历”和“中序遍历”可以唯一确定一棵二叉树，所以我们可以通过先序遍历的结果和中序遍历的结果来唯一确定一棵二叉搜索树。
+
+在 `serialize` 方法中，我们使用先序遍历的方式将二叉搜索树序列化为空格分隔的字符串，然后在 `deserialize` 方法中，我们将字符串按空格分割为数组，然后使用递归的方式来构建二叉搜索树。递归函数为 $dfs(mi, mx)$，表示当前节点的值必须在 $[mi, mx]$ 之间，如果当前节点的值不在 $[mi, mx]$ 之间，则说明这个节点不是当前递归树的节点，返回 `None`。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉搜索树的节点数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -58,44 +82,37 @@
 
 
 class Codec:
-    def serialize(self, root: TreeNode) -> str:
+    def serialize(self, root: Optional[TreeNode]) -> str:
         """Encodes a tree to a single string."""
 
-        def dfs(root):
+        def dfs(root: Optional[TreeNode]):
             if root is None:
                 return
-            nonlocal t
-            t.append(str(root.val))
-            t.append(',')
+            nums.append(root.val)
             dfs(root.left)
             dfs(root.right)
 
-        if root is None:
-            return ''
-        t = []
+        nums = []
         dfs(root)
-        return ''.join(t[:-1])
+        return " ".join(map(str, nums))
 
-    def deserialize(self, data: str) -> TreeNode:
+    def deserialize(self, data: str) -> Optional[TreeNode]:
         """Decodes your encoded data to tree."""
 
-        def build(s, l, r):
-            if l > r:
+        def dfs(mi: int, mx: int) -> Optional[TreeNode]:
+            nonlocal i
+            if i == len(nums) or not mi <= nums[i] <= mx:
                 return None
-            root = TreeNode(int(s[l]))
-            idx = r + 1
-            for i in range(l + 1, r + 1):
-                if int(s[i]) > root.val:
-                    idx = i
-                    break
-            root.left = build(s, l + 1, idx - 1)
-            root.right = build(s, idx, r)
+            x = nums[i]
+            root = TreeNode(x)
+            i += 1
+            root.left = dfs(mi, x)
+            root.right = dfs(x, mx)
             return root
 
-        if not data:
-            return None
-        s = data.split(',')
-        return build(s, 0, len(s) - 1)
+        nums = list(map(int, data.split()))
+        i = 0
+        return dfs(-inf, inf)
 
 
 # Your Codec object will be instantiated and called as such:
@@ -107,9 +124,7 @@ class Codec:
 # return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -122,24 +137,15 @@ class Codec:
  * }
  */
 public class Codec {
+    private int i;
+    private List<String> nums;
+    private final int inf = 1 << 30;
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
-        if (root == null) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        dfs(root, sb);
-        return sb.substring(0, sb.length() - 1);
-    }
-
-    private void dfs(TreeNode root, StringBuilder sb) {
-        if (root == null) {
-            return;
-        }
-        sb.append(root.val).append(",");
-        dfs(root.left, sb);
-        dfs(root.right, sb);
+        nums = new ArrayList<>();
+        dfs(root);
+        return String.join(" ", nums);
     }
 
     // Decodes your encoded data to tree.
@@ -147,24 +153,32 @@ public class Codec {
         if (data == null || "".equals(data)) {
             return null;
         }
-        String[] s = data.split(",");
-        return build(s, 0, s.length - 1);
+        i = 0;
+        nums = Arrays.asList(data.split(" "));
+        return dfs(-inf, inf);
     }
 
-    private TreeNode build(String[] s, int l, int r) {
-        if (l > r) {
+    private void dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        nums.add(String.valueOf(root.val));
+        dfs(root.left);
+        dfs(root.right);
+    }
+
+    private TreeNode dfs(int mi, int mx) {
+        if (i == nums.size()) {
             return null;
         }
-        int idx = r + 1;
-        TreeNode root = new TreeNode(Integer.valueOf(s[l]));
-        for (int i = l + 1; i <= r; ++i) {
-            if (Integer.valueOf(s[i]) > root.val) {
-                idx = i;
-                break;
-            }
+        int x = Integer.parseInt(nums.get(i));
+        if (x < mi || x > mx) {
+            return null;
         }
-        root.left = build(s, l + 1, idx - 1);
-        root.right = build(s, idx, r);
+        TreeNode root = new TreeNode(x);
+        ++i;
+        root.left = dfs(mi, x);
+        root.right = dfs(x, mx);
         return root;
     }
 }
@@ -177,10 +191,154 @@ public class Codec {
 // return ans;
 ```
 
-### **...**
+#### C++
 
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (!root) {
+            return "";
+        }
+        string data = "";
+        function<void(TreeNode*)> dfs = [&](TreeNode* root) {
+            if (!root) {
+                return;
+            }
+            data += to_string(root->val) + " ";
+            dfs(root->left);
+            dfs(root->right);
+        };
+        dfs(root);
+        data.pop_back();
+        return data;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if (data.empty()) {
+            return nullptr;
+        }
+        vector<int> nums = split(data, ' ');
+        int i = 0;
+        function<TreeNode*(int, int)> dfs = [&](int mi, int mx) -> TreeNode* {
+            if (i == nums.size() || nums[i] < mi || nums[i] > mx) {
+                return nullptr;
+            }
+            int x = nums[i++];
+            TreeNode* root = new TreeNode(x);
+            root->left = dfs(mi, x);
+            root->right = dfs(x, mx);
+            return root;
+        };
+        return dfs(INT_MIN, INT_MAX);
+    }
+
+    vector<int> split(const string& s, char delim) {
+        vector<int> tokens;
+        stringstream ss(s);
+        string token;
+        while (getline(ss, token, delim)) {
+            tokens.push_back(stoi(token));
+        }
+        return tokens;
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec* ser = new Codec();
+// Codec* deser = new Codec();
+// string tree = ser->serialize(root);
+// TreeNode* ans = deser->deserialize(tree);
+// return ans;
 ```
 
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+
+type Codec struct {
+}
+
+func Constructor() Codec {
+	return Codec{}
+}
+
+// Serializes a tree to a single string.
+func (this *Codec) serialize(root *TreeNode) string {
+	if root == nil {
+		return ""
+	}
+	data := &strings.Builder{}
+	var dfs func(*TreeNode)
+	dfs = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		data.WriteString(strconv.Itoa(root.Val))
+		data.WriteByte(' ')
+		dfs(root.Left)
+		dfs(root.Right)
+	}
+	dfs(root)
+	return data.String()[0 : data.Len()-1]
+}
+
+// Deserializes your encoded data to tree.
+func (this *Codec) deserialize(data string) *TreeNode {
+	if data == "" {
+		return nil
+	}
+	vals := strings.Split(data, " ")
+	i := 0
+	var dfs func(int, int) *TreeNode
+	dfs = func(mi, mx int) *TreeNode {
+		if i == len(vals) {
+			return nil
+		}
+		x, _ := strconv.Atoi(vals[i])
+		if x < mi || x > mx {
+			return nil
+		}
+		i++
+		root := &TreeNode{Val: x}
+		root.Left = dfs(mi, x)
+		root.Right = dfs(x, mx)
+		return root
+	}
+	return dfs(math.MinInt64, math.MaxInt64)
+}
+
+/**
+ * Your Codec object will be instantiated and called as such:
+ * ser := Constructor()
+ * deser := Constructor()
+ * tree := ser.serialize(root)
+ * ans := deser.deserialize(tree)
+ * return ans
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

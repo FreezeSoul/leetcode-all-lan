@@ -19,7 +19,9 @@ impl MyLinkedList {
         let mut cur = self.head.as_ref().unwrap();
         while index > 0 {
             match cur.next {
-                None => return -1,
+                None => {
+                    return -1;
+                }
                 Some(ref next) => {
                     cur = next;
                     index -= 1;
@@ -85,14 +87,3 @@ impl MyLinkedList {
         self.head = dummy.next;
     }
 }
-
-
-/**
- * Your MyLinkedList object will be instantiated and called as such:
- * let obj = MyLinkedList::new();
- * let ret_1: i32 = obj.get(index);
- * obj.add_at_head(val);
- * obj.add_at_tail(val);
- * obj.add_at_index(index, val);
- * obj.delete_at_index(index);
- */

@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2622.Cache%20With%20Time%20Limit/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2622. 有时间限制的缓存](https://leetcode.cn/problems/cache-with-time-limit)
 
 [English Version](/solution/2600-2699/2622.Cache%20With%20Time%20Limit/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>编写一个类，它允许获取和设置键-值对，并且每个键都有一个&nbsp;<strong>过期时间</strong>&nbsp;。</p>
 
@@ -22,9 +32,9 @@
 
 <pre>
 <strong>输入：</strong> 
-["TimeLimitedCache", "set", "get", "count", "get"]
-[[], [1, 42, 100], [1], [], [1]]
-[0, 0, 50, 50, 150]
+actions = ["TimeLimitedCache", "set", "get", "count", "get"]
+values = [[], [1, 42, 100], [1], [], [1]]
+timeDeays = [0, 0, 50, 50, 150]
 <strong>输出：</strong> [null, false, 42, 1, -1]
 <strong>解释：</strong>
 在 t=0 时，缓存被构造。
@@ -39,9 +49,9 @@
 
 <pre>
 <strong>输入：</strong>
-["TimeLimitedCache", "set", "set", "get", "get", "get", "count"]
-[[], [1, 42, 50], [1, 50, 100], [1], [1], [1], []]
-[0, 0, 40, 50, 120, 200, 250]
+actions = ["TimeLimitedCache", "set", "set", "get", "get", "get", "count"]
+values = [[], [1, 42, 50], [1, 50, 100], [1], [1], [1], []]
+timeDelays = [0, 0, 40, 50, 120, 200, 250]
 <strong>输出：</strong> [null, false, true, 50, 50, -1]
 <strong>解释：</strong>
 在 t=0 时，缓存被构造。
@@ -59,17 +69,23 @@
 <p><strong>提示：</strong></p>
 
 <ul>
-	<li><code>0 &lt;= key &lt;= 10<sup>9</sup></code></li>
-	<li><code>0 &lt;= value &lt;= 10<sup>9</sup></code></li>
+	<li><code>0 &lt;= key, value &lt;= 10<sup>9</sup></code></li>
 	<li><code>0 &lt;= duration &lt;= 1000</code></li>
-	<li><code>方法调用总数不会超过100</code></li>
+	<li><code>1 &lt;= actions.length &lt;= 100</code></li>
+	<li><code>actions.length === values.length</code></li>
+	<li><code>actions.length === timeDelays.length</code></li>
+	<li><code>0 &lt;= timeDelays[i] &lt;= 1450</code></li>
+	<li><code>actions[i]</code> 是 "TimeLimitedCache"、"set"、"get" 和 "count" 中的一个。</li>
+	<li>第一个操作始终是 "TimeLimitedCache" 而且一定会以 0 毫秒的延迟立即执行</li>
 </ul>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们用哈希表 $cache$ 记录键值对，其中键为整型键 $key$，值为一个数组，数组的第一个元素为整型值 $value$，第二个元素为元素的过期时间 $expire$。
 
@@ -79,45 +95,36 @@
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 class TimeLimitedCache {
-    private cache: Map<number, [value: number, expire: number]> = new Map();
-
-    constructor() {}
+    #cache: Map<number, [value: number, expire: number]> = new Map();
 
     set(key: number, value: number, duration: number): boolean {
-        this.removeExpire();
-        const ans = this.cache.has(key);
-        this.cache.set(key, [value, this.now() + duration]);
-        return ans;
+        const isExist = this.#cache.has(key);
+
+        if (!this.#isExpired(key)) {
+            this.#cache.set(key, [value, Date.now() + duration]);
+        }
+
+        return isExist;
     }
 
     get(key: number): number {
-        this.removeExpire();
-        return this.cache.get(key)?.[0] ?? -1;
+        if (this.#isExpired(key)) return -1;
+        const res = this.#cache.get(key)?.[0] ?? -1;
+        return res;
     }
 
     count(): number {
-        this.removeExpire();
-        return this.cache.size;
+        const xs = Array.from(this.#cache).filter(([key]) => !this.#isExpired(key));
+        return xs.length;
     }
 
-    private now(): number {
-        return new Date().getTime();
-    }
-
-    private removeExpire(): void {
-        const now = this.now();
-        for (const [key, [, expire]] of this.cache) {
-            if (expire <= now) {
-                this.cache.delete(key);
-            }
-        }
-    }
+    #isExpired = (key: number) =>
+        this.#cache.has(key) &&
+        (this.#cache.get(key)?.[1] ?? Number.NEGATIVE_INFINITY) < Date.now();
 }
 
 /**
@@ -129,10 +136,8 @@ class TimeLimitedCache {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

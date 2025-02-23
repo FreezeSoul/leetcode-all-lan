@@ -6,7 +6,6 @@ class Solution:
         for i in range(n - 1, -1, -1):
             s.add(nums[i])
             suf[i] = len(s)
-
         s.clear()
         ans = [0] * n
         for i, x in enumerate(nums):

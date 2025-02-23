@@ -1,8 +1,22 @@
-# [280. Wiggle Sort](https://leetcode.com/problems/wiggle-sort)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0280.Wiggle%20Sort/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [280. Wiggle Sort 🔒](https://leetcode.com/problems/wiggle-sort)
 
 [中文文档](/solution/0200-0299/0280.Wiggle%20Sort/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, reorder it such that <code>nums[0] &lt;= nums[1] &gt;= nums[2] &lt;= nums[3]...</code>.</p>
 
@@ -36,11 +50,17 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you solve the problem in <code>O(n)</code> time complexity?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +75,7 @@ class Solution:
                 nums[i], nums[i - 1] = nums[i - 1], nums[i]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -75,7 +95,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -90,7 +110,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func wiggleSort(nums []int) {
@@ -102,10 +122,8 @@ func wiggleSort(nums []int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

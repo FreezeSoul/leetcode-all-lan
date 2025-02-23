@@ -1,10 +1,29 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2713.Maximum%20Strictly%20Increasing%20Cells%20in%20a%20Matrix/README.md
+rating: 2387
+source: 第 347 场周赛 Q4
+tags:
+    - 记忆化搜索
+    - 数组
+    - 哈希表
+    - 二分查找
+    - 动态规划
+    - 矩阵
+    - 有序集合
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2713. 矩阵中严格递增的单元格数](https://leetcode.cn/problems/maximum-strictly-increasing-cells-in-a-matrix)
 
 [English Version](/solution/2700-2799/2713.Maximum%20Strictly%20Increasing%20Cells%20in%20a%20Matrix/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>1</strong> 开始、大小为 <code>m x n</code> 的整数矩阵 <code>mat</code>，你可以选择任一单元格作为 <strong>起始单元格</strong> 。</p>
 
@@ -57,15 +76,27 @@
 	<li><code>-10<sup>5</sup>&nbsp;&lt;= mat[i][j] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：排序 + 动态规划
+
+根据题目描述，我们顺序移动的单元格的值必须严格递增，因此，我们不妨用一个哈希表 $g$ 来记录每个值对应的所有单元格的位置，然后按照值的大小从小到大遍历。
+
+在这个过程中，我们可以维护两个数组 `rowMax` 和 `colMax`，分别记录每一行和每一列的最大递增长度。初始时，这两个数组的所有元素都为 $0$。
+
+对于每个值对应的所有单元格位置，我们按照位置顺序遍历，对于每个位置 $(i, j)$，我们可以计算出以该位置为终点的最大递增长度为 $1 + \max(\textit{rowMax}[i], \textit{colMax}[j])$，更新答案，然后更新 `rowMax[i]` 和 `colMax[j]`。
+
+最后返回答案即可。
+
+时间复杂度 $O(m \times n \times \log(m \times n))$，空间复杂度 $O(m \times n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +120,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +129,7 @@ class Solution {
         TreeMap<Integer, List<int[]>> g = new TreeMap<>();
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                g.computeIfAbsent(mat[i][j], k -> new ArrayList<>()).add(new int[]{i, j});
+                g.computeIfAbsent(mat[i][j], k -> new ArrayList<>()).add(new int[] {i, j});
             }
         }
         int[] rowMax = new int[m];
@@ -126,7 +155,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -159,7 +188,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxIncreasingCells(mat [][]int) (ans int) {
@@ -191,19 +220,55 @@ func maxIncreasingCells(mat [][]int) (ans int) {
 	}
 	return
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maxIncreasingCells(mat: number[][]): number {
+    const m = mat.length;
+    const n = mat[0].length;
+    const g: { [key: number]: [number, number][] } = {};
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (!g[mat[i][j]]) {
+                g[mat[i][j]] = [];
+            }
+            g[mat[i][j]].push([i, j]);
+        }
+    }
+
+    const rowMax = Array(m).fill(0);
+    const colMax = Array(n).fill(0);
+    let ans = 0;
+
+    const sortedKeys = Object.keys(g)
+        .map(Number)
+        .sort((a, b) => a - b);
+
+    for (const key of sortedKeys) {
+        const pos = g[key];
+        const mx: number[] = [];
+
+        for (const [i, j] of pos) {
+            mx.push(1 + Math.max(rowMax[i], colMax[j]));
+            ans = Math.max(ans, mx[mx.length - 1]);
+        }
+
+        for (let k = 0; k < pos.length; k++) {
+            const [i, j] = pos[k];
+            rowMax[i] = Math.max(rowMax[i], mx[k]);
+            colMax[j] = Math.max(colMax[j], mx[k]);
+        }
+    }
+
+    return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

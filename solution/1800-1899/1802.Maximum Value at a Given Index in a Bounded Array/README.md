@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1802.Maximum%20Value%20at%20a%20Given%20Index%20in%20a%20Bounded%20Array/README.md
+rating: 1929
+source: 第 233 场周赛 Q3
+tags:
+    - 贪心
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [1802. 有界数组中指定下标处的最大值](https://leetcode.cn/problems/maximum-value-at-a-given-index-in-a-bounded-array)
 
 [English Version](/solution/1800-1899/1802.Maximum%20Value%20at%20a%20Given%20Index%20in%20a%20Bounded%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你三个正整数 <code>n</code>、<code>index</code> 和 <code>maxSum</code> 。你需要构造一个同时满足下述所有条件的数组 <code>nums</code>（下标 <strong>从 0 开始</strong> 计数）：</p>
 
@@ -44,11 +57,13 @@
 	<li><code>0 &lt;= index &lt; n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
 根据题目描述，如果我们确定了 $nums[index]$ 的值为 $x$，此时我们可以找到一个最小的数组总和。也就是说，在 $index$ 左侧的数组元素从 $x-1$ 一直递减到 $1$，如果还有剩余的元素，那么剩余的元素都为 $1$；同理，在 $index$ 及右侧的数组元素从 $x$ 一直递减到 $1$，如果还有剩余的元素，那么剩余的元素都为 $1$。
 
@@ -63,19 +78,19 @@
 
 最后将 $left$ 作为答案返回即可。
 
-时间复杂度 $O(\log M)$，空间复杂度 $O(1)$。其中 $M=maxSum$。
+时间复杂度 $O(\log M)$，其中 $M=maxSum$。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def maxValue(self, n: int, index: int, maxSum: int) -> int:
         def sum(x, cnt):
-            return (x + x - cnt + 1) * cnt // 2 if x >= cnt else (x + 1) * x // 2 + cnt - x
+            return (
+                (x + x - cnt + 1) * cnt // 2 if x >= cnt else (x + 1) * x // 2 + cnt - x
+            )
 
         left, right = 1, maxSum
         while left < right:
@@ -87,9 +102,7 @@ class Solution:
         return left
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +148,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxValue(n int, index int, maxSum int) int {
@@ -152,10 +165,8 @@ func maxValue(n int, index int, maxSum int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

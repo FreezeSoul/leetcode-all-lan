@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2009.%20%E6%9C%80%E5%B0%8F%E8%B7%B3%E8%B7%83%E6%AC%A1%E6%95%B0/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 09. 最小跳跃次数](https://leetcode.cn/problems/zui-xiao-tiao-yue-ci-shu)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>为了给刷题的同学一些奖励，力扣团队引入了一个弹簧游戏机。游戏机由 <code>N</code> 个特殊弹簧排成一排，编号为 <code>0</code> 到 <code>N-1</code>。初始有一个小球在编号 <code>0</code> 的弹簧处。若小球在编号为 <code>i</code> 的弹簧处，通过按动弹簧，可以选择把小球向右弹射&nbsp;<code>jump[i]</code> 的距离，或者向左弹射到任意左侧弹簧的位置。也就是说，在编号为 <code>i</code> 弹簧处按动弹簧，小球可以弹向 <code>0</code> 到 <code>i-1</code> 中任意弹簧或者 <code>i+jump[i]</code> 的弹簧（若 <code>i+jump[i]&gt;=N</code> ，则表示小球弹出了机器）。小球位于编号 0 处的弹簧时不能再向左弹。</p>
 
@@ -25,17 +32,17 @@
 	<li><code>1 &lt;= jump[i] &lt;= 10000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS**
+### 方法一：BFS
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -60,9 +67,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +113,7 @@ public:
     int minJump(vector<int>& jump) {
         int n = jump.size();
         vector<bool> vis(n + 1);
-        queue<int> q {{0}};
+        queue<int> q{{0}};
         vis[0] = true;
         int ans = 0, mx = 1;
         while (!q.empty()) {
@@ -136,47 +141,89 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minJump(jump []int) int {
-    n := len(jump)
-    vis := make([]bool, n + 1)
-    q := []int{0}
-    vis[0] = true
-    ans, mx := 0, 1
-    for len(q) > 0 {
-        for t := len(q); t > 0; t-- {
-            i := q[0]
-            q = q[1:]
-            j := i + jump[i]
-            if j >= n {
-                return ans + 1
-            }
-            if !vis[j] {
-                vis[j] = true
-                q = append(q, j)
-            }
-            for j = mx; j < i; j++ {
-                if !vis[j] {
-                    vis[j] = true
-                    q = append(q, j)
-                }
-            }
-            if mx < i + 1 {
-                mx = i + 1
-            }
-        }
-        ans++
-    }
-    return -1
+	n := len(jump)
+	vis := make([]bool, n+1)
+	q := []int{0}
+	vis[0] = true
+	ans, mx := 0, 1
+	for len(q) > 0 {
+		for t := len(q); t > 0; t-- {
+			i := q[0]
+			q = q[1:]
+			j := i + jump[i]
+			if j >= n {
+				return ans + 1
+			}
+			if !vis[j] {
+				vis[j] = true
+				q = append(q, j)
+			}
+			for j = mx; j < i; j++ {
+				if !vis[j] {
+					vis[j] = true
+					q = append(q, j)
+				}
+			}
+			if mx < i+1 {
+				mx = i + 1
+			}
+		}
+		ans++
+	}
+	return -1
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func minJump(_ jump: [Int]) -> Int {
+        let n = jump.count
+        var vis = Array(repeating: false, count: n)
+        var queue = [0]
+        vis[0] = true
+        var ans = 0
+        var maxReach = 1
 
+        while !queue.isEmpty {
+            ans += 1
+            let size = queue.count
+
+            for _ in 0..<size {
+                let i = queue.removeFirst()
+
+                let forwardJump = i + jump[i]
+                if forwardJump >= n {
+                    return ans
+                }
+
+                if !vis[forwardJump] {
+                    queue.append(forwardJump)
+                    vis[forwardJump] = true
+                }
+
+                while maxReach < i {
+                    if !vis[maxReach] {
+                        queue.append(maxReach)
+                        vis[maxReach] = true
+                    }
+                    maxReach += 1
+                }
+            }
+        }
+
+        return -1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

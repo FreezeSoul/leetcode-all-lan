@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1451.Rearrange%20Words%20in%20a%20Sentence/README_EN.md
+rating: 1309
+source: Weekly Contest 189 Q2
+tags:
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1451. Rearrange Words in a Sentence](https://leetcode.com/problems/rearrange-words-in-a-sentence)
 
 [中文文档](/solution/1400-1499/1451.Rearrange%20Words%20in%20a%20Sentence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a sentence&nbsp;<code>text</code> (A&nbsp;<em>sentence</em>&nbsp;is a string of space-separated words) in the following format:</p>
 
@@ -53,11 +68,17 @@ Output is ordered by length and the new first word starts with capital letter.
 	<li><code>1 &lt;= text.length &lt;= 10^5</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +90,7 @@ class Solution:
         return " ".join(words)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func arrangeWords(text string) string {
@@ -122,32 +143,7 @@ func arrangeWords(text string) string {
 }
 ```
 
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param String $text
-     * @return String
-     */
-    function arrangeWords($text) {
-        $text = lcfirst($text);
-        $arr = explode(" ", $text);
-        for ($i = 0; $i < count($arr); $i++) {
-            $hashtable[$i] = strlen($arr[$i]);
-        }
-        asort($hashtable);
-        $key = array_keys($hashtable);
-        $rs = [];
-        for ($j = 0; $j < count($key); $j++) {
-            array_push($rs, $arr[$key[$j]]);
-        }
-        return ucfirst(implode(" ", $rs));
-    }
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function arrangeWords(text: string): string {
@@ -159,7 +155,7 @@ function arrangeWords(text: string): string {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -175,10 +171,33 @@ var arrangeWords = function (text) {
 };
 ```
 
-### **...**
+#### PHP
 
-```
-
+```php
+class Solution {
+    /**
+     * @param String $text
+     * @return String
+     */
+    function arrangeWords($text) {
+        $text = lcfirst($text);
+        $arr = explode(' ', $text);
+        for ($i = 0; $i < count($arr); $i++) {
+            $hashtable[$i] = strlen($arr[$i]);
+        }
+        asort($hashtable);
+        $key = array_keys($hashtable);
+        $rs = [];
+        for ($j = 0; $j < count($key); $j++) {
+            array_push($rs, $arr[$key[$j]]);
+        }
+        return ucfirst(implode(' ', $rs));
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

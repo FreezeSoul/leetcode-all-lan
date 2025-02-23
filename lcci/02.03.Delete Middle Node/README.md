@@ -1,10 +1,18 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/02.03.Delete%20Middle%20Node/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 02.03. 删除中间节点](https://leetcode.cn/problems/delete-middle-node-lcci)
 
 [English Version](/lcci/02.03.Delete%20Middle%20Node/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>若链表中的某个节点，既不是链表头节点，也不是链表尾节点，则称其为该链表的「中间节点」。</p>
 
@@ -23,22 +31,21 @@
 
 <p> </p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-> 此题与本站 [237. 删除链表中的节点](https://leetcode.cn/problems/delete-node-in-a-linked-list/) 题意相同。
+### 方法一：节点赋值
 
-步骤：
+我们可以将当前节点的值替换为下一个节点的值，然后删除下一个节点。这样就可以达到删除当前节点的目的。
 
-1. 将 `node` 下一个节点的值赋给 `node`。
-2. 将 `node` 的 `next` 指向 `next` 的 `next`。
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -50,17 +57,11 @@
 
 class Solution:
     def deleteNode(self, node):
-        """
-        :type node: ListNode
-        :rtype: void Do not return anything, modify node in-place instead.
-        """
         node.val = node.next.val
         node.next = node.next.next
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -79,27 +80,7 @@ class Solution {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} node
- * @return {void} Do not return anything, modify node in-place instead.
- */
-var deleteNode = function (node) {
-    node.val = node.next.val;
-    node.next = node.next.next;
-};
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -119,7 +100,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -135,10 +116,50 @@ func deleteNode(node *ListNode) {
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} node
+ * @return {void} Do not return anything, modify node in-place instead.
+ */
+var deleteNode = function (node) {
+    node.val = node.next.val;
+    node.next = node.next.next;
+};
 ```
 
+#### Swift
+
+```swift
+/**
+*    public class ListNode {
+*        var val: Int
+*        var next: ListNode?
+*        init(_ x: Int) {
+*            self.val = x
+*            self.next = nil
+*        }
+*    }
+*/
+class Solution {
+    func deleteNode(_ node: ListNode?) {
+        guard let node = node, let next = node.next else { return }
+        node.val = next.val
+        node.next = next.next
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

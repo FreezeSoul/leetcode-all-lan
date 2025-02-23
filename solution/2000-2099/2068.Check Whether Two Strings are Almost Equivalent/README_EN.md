@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2068.Check%20Whether%20Two%20Strings%20are%20Almost%20Equivalent/README_EN.md
+rating: 1273
+source: Biweekly Contest 65 Q1
+tags:
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2068. Check Whether Two Strings are Almost Equivalent](https://leetcode.com/problems/check-whether-two-strings-are-almost-equivalent)
 
 [中文文档](/solution/2000-2099/2068.Check%20Whether%20Two%20Strings%20are%20Almost%20Equivalent/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Two strings <code>word1</code> and <code>word2</code> are considered <strong>almost equivalent</strong> if the differences between the frequencies of each letter from <code>&#39;a&#39;</code> to <code>&#39;z&#39;</code> between <code>word1</code> and <code>word2</code> is <strong>at most</strong> <code>3</code>.</p>
 
@@ -55,9 +71,13 @@ The difference is 4, which is more than the allowed 3.
 	<li><code>word1</code> and <code>word2</code> consist only of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Counting**
+<!-- solution:start -->
+
+### Solution 1: Counting
 
 We can create an array $cnt$ of length $26$ to record the difference in the number of times each letter appears in the two strings. Then we traverse $cnt$, if any letter appears the difference in the number of times greater than $3$, then return `false`, otherwise return `true`.
 
@@ -65,7 +85,7 @@ The time complexity is $O(n)$ and the space complexity is $O(C)$. Where $n$ is t
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +96,7 @@ class Solution:
         return all(abs(x) <= 3 for x in cnt.values())
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,7 +141,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func checkAlmostEquivalent(word1 string, word2 string) bool {
@@ -141,7 +161,7 @@ func checkAlmostEquivalent(word1 string, word2 string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function checkAlmostEquivalent(word1: string, word2: string): boolean {
@@ -156,47 +176,7 @@ function checkAlmostEquivalent(word1: string, word2: string): boolean {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public bool CheckAlmostEquivalent(string word1, string word2) {
-        int[] cnt = new int[26];
-        foreach (var c in word1) {
-            cnt[c - 'a']++;
-        }
-        foreach (var c in word2) {
-            cnt[c - 'a']--;
-        }
-        return cnt.All(x => Math.Abs(x) <= 3);
-    }
-}
-```
-
-### **PHP**
-
-```php
-class Solution {
-    /**
-     * @param String $word1
-     * @param String $word2
-     * @return Boolean
-     */
-    function checkAlmostEquivalent($word1, $word2) {
-        for ($i = 0; $i < strlen($word1); $i++) {
-            $hashtable[$word1[$i]] += 1;
-            $hashtable[$word2[$i]] -= 1;
-        }
-        $keys = array_keys($hashtable);
-        for ($j = 0; $j < count($keys); $j++) {
-            if (abs($hashtable[$keys[$j]]) > 3) return false;
-        }
-        return true;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -219,10 +199,50 @@ var checkAlmostEquivalent = function (word1, word2) {
 };
 ```
 
-### **...**
+#### C#
 
+```cs
+public class Solution {
+    public bool CheckAlmostEquivalent(string word1, string word2) {
+        int[] cnt = new int[26];
+        foreach (var c in word1) {
+            cnt[c - 'a']++;
+        }
+        foreach (var c in word2) {
+            cnt[c - 'a']--;
+        }
+        return cnt.All(x => Math.Abs(x) <= 3);
+    }
+}
 ```
 
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param String $word1
+     * @param String $word2
+     * @return Boolean
+     */
+    function checkAlmostEquivalent($word1, $word2) {
+        for ($i = 0; $i < strlen($word1); $i++) {
+            $hashtable[$word1[$i]] += 1;
+            $hashtable[$word2[$i]] -= 1;
+        }
+        $keys = array_keys($hashtable);
+        for ($j = 0; $j < count($keys); $j++) {
+            if (abs($hashtable[$keys[$j]]) > 3) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

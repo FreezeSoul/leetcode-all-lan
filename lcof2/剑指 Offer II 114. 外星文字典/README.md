@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20114.%20%E5%A4%96%E6%98%9F%E6%96%87%E5%AD%97%E5%85%B8/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 114. 外星文字典](https://leetcode.cn/problems/Jf1JuT)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现有一种使用英语字母的外星文语言，这门语言的字母顺序与英语顺序不同。</p>
 
@@ -55,11 +62,13 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 269&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/alien-dictionary/">https://leetcode.cn/problems/alien-dictionary/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：拓扑排序 + BFS**
+### 方法一：拓扑排序 + BFS
 
 用数组 $g$ 记录在火星字典中的字母先后关系，$g[i][j] = true$ 表示字母 $i + 'a'$ 在字母 $j + 'a'$ 的前面；用数组 $s$ 记录当前字典出现过的字母，$cnt$ 表示出现过的字母数。
 
@@ -80,9 +89,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -140,9 +147,7 @@ class Solution:
         return '' if len(ans) < cnt else ''.join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -221,7 +226,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -282,10 +287,142 @@ public:
 };
 ```
 
-### **...**
+#### Go
 
+```go
+func alienOrder(words []string) string {
+	n := len(words)
+	if n == 0 {
+		return ""
+	}
+	if n == 1 {
+		return words[0]
+	}
+	inDegree := make(map[byte]int)
+	graph := make(map[byte][]byte)
+	for _, word := range words {
+		for i := 0; i < len(word); i++ {
+			inDegree[word[i]] = 0
+		}
+	}
+	for i := 0; i < n-1; i++ {
+		w1, w2 := words[i], words[i+1]
+		minLen := len(w1)
+		if len(w2) < minLen {
+			minLen = len(w2)
+		}
+		foundDifference := false
+		for j := 0; j < minLen; j++ {
+			if w1[j] != w2[j] {
+				inDegree[w2[j]]++
+				graph[w1[j]] = append(graph[w1[j]], w2[j])
+				foundDifference = true
+				break
+			}
+		}
+		if !foundDifference && len(w1) > len(w2) {
+			return ""
+		}
+	}
+	queue := make([]byte, 0)
+	for k := range inDegree {
+		if inDegree[k] == 0 {
+			queue = append(queue, k)
+		}
+	}
+	res := make([]byte, 0)
+	for len(queue) > 0 {
+		node := queue[0]
+		queue = queue[1:]
+		res = append(res, node)
+		for _, next := range graph[node] {
+			inDegree[next]--
+			if inDegree[next] == 0 {
+				queue = append(queue, next)
+			}
+		}
+	}
+	if len(res) != len(inDegree) {
+		return ""
+	}
+	return string(res)
+}
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    func alienOrder(_ words: [String]) -> String {
+        var graph = Array(repeating: Set<Int>(), count: 26)
+        var indegree = Array(repeating: 0, count: 26)
+        var seen = Array(repeating: false, count: 26)
+        var letterCount = 0
+
+        for i in 0..<words.count - 1 {
+            for char in words[i] {
+                let index = Int(char.asciiValue! - Character("a").asciiValue!)
+                if !seen[index] {
+                    seen[index] = true
+                    letterCount += 1
+                }
+            }
+            let minLength = min(words[i].count, words[i + 1].count)
+            for j in 0..<minLength {
+                let char1 = words[i][words[i].index(words[i].startIndex, offsetBy: j)]
+                let char2 = words[i + 1][words[i + 1].index(words[i + 1].startIndex, offsetBy: j)]
+
+                if char1 != char2 {
+                    let c1 = Int(char1.asciiValue! - Character("a").asciiValue!)
+                    let c2 = Int(char2.asciiValue! - Character("a").asciiValue!)
+
+                    if !graph[c1].contains(c2) {
+                        graph[c1].insert(c2)
+                        indegree[c2] += 1
+                    }
+                    break
+                }
+
+                if j == minLength - 1 && words[i].count > words[i + 1].count {
+                    return ""
+                }
+            }
+        }
+
+        for char in words[words.count - 1] {
+            let index = Int(char.asciiValue! - Character("a").asciiValue!)
+            if !seen[index] {
+                seen[index] = true
+                letterCount += 1
+            }
+        }
+
+        var queue = [Int]()
+        for i in 0..<26 {
+            if seen[i] && indegree[i] == 0 {
+                queue.append(i)
+            }
+        }
+
+        var order = ""
+        while !queue.isEmpty {
+            let u = queue.removeFirst()
+            order += String(UnicodeScalar(u + Int(Character("a").asciiValue!))!)
+            for v in graph[u] {
+                indegree[v] -= 1
+                if indegree[v] == 0 {
+                    queue.append(v)
+                }
+            }
+        }
+
+        return order.count == letterCount ? order : ""
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

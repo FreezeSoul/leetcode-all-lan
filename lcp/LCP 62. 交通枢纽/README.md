@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2062.%20%E4%BA%A4%E9%80%9A%E6%9E%A2%E7%BA%BD/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 62. 交通枢纽](https://leetcode.cn/problems/D9PW8w)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 为了缓解「力扣嘉年华」期间的人流压力，组委会在活动期间开设了一些交通专线。`path[i] = [a, b]` 表示有一条从地点 `a`通往地点 `b` 的 **单向** 交通专线。
 若存在一个地点，满足以下要求，我们则称之为 **交通枢纽**：
@@ -25,7 +33,7 @@
 > 解释：如下图所示：
 > 地点 `0,1,2` 各有一条通往地点 `3` 的交通专线，
 > 且地点 `3` 不存在任何**通往其他地点**的交通专线。
-> <br><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2062.%20%E4%BA%A4%E9%80%9A%E6%9E%A2%E7%BA%BD/images/1663902572-yOlUCr-image.png" style="width: 200px;" />
+> ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2062.%20%E4%BA%A4%E9%80%9A%E6%9E%A2%E7%BA%BD/images/1663902572-yOlUCr-image.png){:width=200px}
 
 **示例 2：**
 
@@ -34,7 +42,7 @@
 > 输出：`-1`
 >
 > 解释：如下图所示：不存在满足 **交通枢纽** 的地点。
-> <br><img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2062.%20%E4%BA%A4%E9%80%9A%E6%9E%A2%E7%BA%BD/images/1663902595-McsEkY-image.png" style="width: 200px;" />
+> ![image.png](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2062.%20%E4%BA%A4%E9%80%9A%E6%9E%A2%E7%BA%BD/images/1663902595-McsEkY-image.png){:width=200px}
 
 **提示：**
 
@@ -42,11 +50,13 @@
 -   `0 <= path[i][0], path[i][1] <= 1000`
 -   `path[i][0]` 与 `path[i][1]` 不相等
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：统计入度和出度**
+### 方法一：统计入度和出度
 
 我们创建两个数组 $ind$ 和 $outd$，分别用于记录每个点的入度和出度，用哈希表 $s$ 保存每个节点。
 
@@ -58,9 +68,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +91,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -144,7 +150,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func transportationHub(path [][]int) int {
@@ -172,7 +178,7 @@ func transportationHub(path [][]int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function transportationHub(path: number[][]): number {
@@ -199,10 +205,43 @@ function transportationHub(path: number[][]): number {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func transportationHub(_ path: [[Int]]) -> Int {
+        var inDegree = [Int: Int]()
+        var outDegree = [Int: Int]()
+        var nodeSet = Set<Int>()
+        var visitedEdges = Set<String>()
 
+        for p in path {
+            let a = p[0]
+            let b = p[1]
+            let edgeKey = "\(a)-\(b)"
+
+            if !visitedEdges.contains(edgeKey) {
+                visitedEdges.insert(edgeKey)
+                nodeSet.insert(a)
+                nodeSet.insert(b)
+                inDegree[b, default: 0] += 1
+                outDegree[a, default: 0] += 1
+            }
+        }
+
+        for node in nodeSet {
+            if inDegree[node, default: 0] == nodeSet.count - 1 && outDegree[node, default: 0] == 0 {
+                return node
+            }
+        }
+
+        return -1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2363.Merge%20Similar%20Items/README.md
+rating: 1270
+source: 第 84 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 有序集合
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2363. 合并相似的物品](https://leetcode.cn/problems/merge-similar-items)
 
 [English Version](/solution/2300-2399/2363.Merge%20Similar%20Items/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个二维整数数组&nbsp;<code>items1</code> 和&nbsp;<code>items2</code>&nbsp;，表示两个物品集合。每个数组&nbsp;<code>items</code>&nbsp;有以下特质：</p>
 
@@ -66,11 +81,13 @@ value = 7 的物品在 items2 中 weight = 1 ，总重量为 1 。
 	<li><code>items2</code>&nbsp;中每个 <code>value<sub>i</sub></code>&nbsp;都是 <b>唯一的</b>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表或数组**
+### 方法一：哈希表或数组
 
 我们可以用哈希表或数组 `cnt` 统计 `items1` 和 `items2` 中每个物品的总重量，然后从小到大遍历价值，将每个价值以及对应的总重量加入结果数组即可。
 
@@ -78,9 +95,7 @@ value = 7 的物品在 items2 中 weight = 1 ，总重量为 1 。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,9 +108,7 @@ class Solution:
         return sorted(cnt.items())
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -118,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mergeSimilarItems(items1 [][]int, items2 [][]int) (ans [][]int) {
@@ -162,7 +175,7 @@ func mergeSimilarItems(items1 [][]int, items2 [][]int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function mergeSimilarItems(items1: number[][], items2: number[][]): number[][] {
@@ -177,7 +190,7 @@ function mergeSimilarItems(items1: number[][], items2: number[][]): number[][] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -203,7 +216,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
@@ -211,8 +224,8 @@ impl Solution {
  * The sizes of the arrays are returned as *returnColumnSizes array.
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
-int **mergeSimilarItems(int **items1, int items1Size, int *items1ColSize, int **items2, int items2Size,
-                        int *items2ColSize, int *returnSize, int **returnColumnSizes) {
+int** mergeSimilarItems(int** items1, int items1Size, int* items1ColSize, int** items2, int items2Size,
+    int* items2ColSize, int* returnSize, int** returnColumnSizes) {
     int count[1001] = {0};
     for (int i = 0; i < items1Size; i++) {
         count[items1[i][0]] += items1[i][1];
@@ -220,7 +233,7 @@ int **mergeSimilarItems(int **items1, int items1Size, int *items1ColSize, int **
     for (int i = 0; i < items2Size; i++) {
         count[items2[i][0]] += items2[i][1];
     }
-    int **ans = malloc(sizeof(int *) * (items1Size + items2Size));
+    int** ans = malloc(sizeof(int*) * (items1Size + items2Size));
     *returnColumnSizes = malloc(sizeof(int) * (items1Size + items2Size));
     int size = 0;
     for (int i = 0; i < 1001; i++) {
@@ -237,10 +250,8 @@ int **mergeSimilarItems(int **items1, int items1Size, int *items1ColSize, int **
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

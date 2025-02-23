@@ -1,8 +1,22 @@
-# [250. Count Univalue Subtrees](https://leetcode.com/problems/count-univalue-subtrees)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0250.Count%20Univalue%20Subtrees/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
+# [250. Count Univalue Subtrees 🔒](https://leetcode.com/problems/count-univalue-subtrees)
 
 [中文文档](/solution/0200-0299/0250.Count%20Univalue%20Subtrees/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree, return <em>the number of <strong>uni-value</strong> </em><span data-keyword="subtree"><em>subtrees</em></span>.</p>
 
@@ -38,11 +52,17 @@
 	<li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -72,7 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -118,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -159,7 +179,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -194,47 +214,7 @@ func countUnivalSubtrees(root *TreeNode) (ans int) {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {number}
- */
-var countUnivalSubtrees = function (root) {
-    let ans = 0;
-    const dfs = root => {
-        if (!root) {
-            return true;
-        }
-        const l = dfs(root.left);
-        const r = dfs(root.right);
-        if (!l || !r) {
-            return false;
-        }
-        if (root.left && root.left.val !== root.val) {
-            return false;
-        }
-        if (root.right && root.right.val !== root.val) {
-            return false;
-        }
-        ++ans;
-        return true;
-    };
-    dfs(root);
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -276,10 +256,48 @@ function countUnivalSubtrees(root: TreeNode | null): number {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var countUnivalSubtrees = function (root) {
+    let ans = 0;
+    const dfs = root => {
+        if (!root) {
+            return true;
+        }
+        const l = dfs(root.left);
+        const r = dfs(root.right);
+        if (!l || !r) {
+            return false;
+        }
+        if (root.left && root.left.val !== root.val) {
+            return false;
+        }
+        if (root.right && root.right.val !== root.val) {
+            return false;
+        }
+        ++ans;
+        return true;
+    };
+    dfs(root);
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

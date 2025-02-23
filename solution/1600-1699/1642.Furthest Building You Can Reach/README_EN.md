@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1642.Furthest%20Building%20You%20Can%20Reach/README_EN.md
+rating: 1962
+source: Weekly Contest 213 Q3
+tags:
+    - Greedy
+    - Array
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1642. Furthest Building You Can Reach](https://leetcode.com/problems/furthest-building-you-can-reach)
 
 [中文文档](/solution/1600-1699/1642.Furthest%20Building%20You%20Can%20Reach/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>heights</code> representing the heights of buildings, some <code>bricks</code>, and some <code>ladders</code>.</p>
 
@@ -55,11 +71,17 @@ It is impossible to go beyond building 4 because you do not have any more bricks
 	<li><code>0 &lt;= ladders &lt;= heights.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,7 +99,7 @@ class Solution:
         return len(heights) - 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +151,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func furthestBuilding(heights []int, bricks int, ladders int) int {
@@ -153,8 +175,8 @@ func furthestBuilding(heights []int, bricks int, ladders int) int {
 
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -162,10 +184,8 @@ func (h *hp) Pop() interface{} {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

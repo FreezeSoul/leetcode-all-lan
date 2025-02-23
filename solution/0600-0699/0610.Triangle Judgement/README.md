@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0610.Triangle%20Judgement/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [610. 判断三角形](https://leetcode.cn/problems/triangle-judgement)
 
 [English Version](/solution/0600-0699/0610.Triangle%20Judgement/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表:&nbsp;<code>Triangle</code></p>
 
@@ -16,13 +26,13 @@
 | y           | int  |
 | z           | int  |
 +-------------+------+
-(x, y, z)是该表的主键列。
+在 SQL 中，(x, y, z)是该表的主键列。
 该表的每一行包含三个线段的长度。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写一个SQL查询，每三个线段报告它们是否可以形成一个三角形。</p>
+<p>对每三个线段报告它们是否可以形成一个三角形。</p>
 
 <p>以&nbsp;<strong>任意顺序&nbsp;</strong>返回结果表。</p>
 
@@ -49,16 +59,30 @@ Triangle 表:
 | 10 | 20 | 15 | Yes      |
 +----+----+----+----------+</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：IF 语句 + 三角形判断条件
+
+三条边能否构成三角形的条件是：任意两边之和大于第三边。因此，我们可以使用 `IF` 语句来判断是否满足这个条件，如果满足则返回 `Yes`，否则返回 `No`。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    *,
+    IF(x + y > z AND x + z > y AND y + z > x, 'Yes', 'No') AS triangle
+FROM Triangle;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2520.Count%20the%20Digits%20That%20Divide%20a%20Number/README.md
+rating: 1260
+source: 第 326 场周赛 Q1
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2520. 统计能整除数字的位数](https://leetcode.cn/problems/count-the-digits-that-divide-a-number)
 
 [English Version](/solution/2500-2599/2520.Count%20the%20Digits%20That%20Divide%20a%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>num</code> ，返回 <code>num</code> 中能整除 <code>num</code> 的数位的数目。</p>
 
@@ -42,21 +54,23 @@
 	<li><code>num</code> 的数位中不含 <code>0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
-我们直接枚举整数 `num` 的每一位上的数 `val`，若 `val` 能够整除 `num`，那么答案加一。
+我们直接枚举整数 $num$ 的每一位上的数 $val$，若 $val$ 能够整除 $num$，那么答案加一。
+
+枚举结束后，返回答案即可。
 
 时间复杂度 $O(\log num)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -68,9 +82,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +98,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +115,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countDigits(num int) (ans int) {
@@ -116,23 +128,21 @@ func countDigits(num int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countDigits(num: number): number {
     let ans = 0;
-    let cur = num;
-    while (cur !== 0) {
-        if (num % (cur % 10) === 0) {
-            ans++;
+    for (let x = num; x; x = (x / 10) | 0) {
+        if (num % (x % 10) === 0) {
+            ++ans;
         }
-        cur = Math.floor(cur / 10);
     }
     return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -150,7 +160,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 int countDigits(int num) {
@@ -166,10 +176,46 @@ int countDigits(int num) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function countDigits(num: number): number {
+    let ans = 0;
+    for (const s of num.toString()) {
+        if (num % Number(s) === 0) {
+            ans++;
+        }
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn count_digits(num: i32) -> i32 {
+        num.to_string()
+            .chars()
+            .filter(|&c| c != '0')
+            .filter(|&c| num % (c.to_digit(10).unwrap() as i32) == 0)
+            .count() as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

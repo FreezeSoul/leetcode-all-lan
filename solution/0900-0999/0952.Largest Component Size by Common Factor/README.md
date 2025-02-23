@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0952.Largest%20Component%20Size%20by%20Common%20Factor/README.md
+tags:
+    - 并查集
+    - 数组
+    - 哈希表
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [952. 按公因数计算最大组件大小](https://leetcode.cn/problems/largest-component-size-by-common-factor)
 
 [English Version](/solution/0900-0999/0952.Largest%20Component%20Size%20by%20Common%20Factor/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个由不同正整数的组成的非空数组&nbsp;<code>nums</code> ，考虑下面的图：</p>
 
@@ -57,11 +71,13 @@
 	<li><code>nums</code>&nbsp;中所有值都 <strong>不同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学 + 并查集**
+### 方法一：数学 + 并查集
 
 利用“试除法”，对 $nums$ 中的每个数 $v$ 分解因数，然后将每个因数 $i$ 与 $v$ 合并，$v / i$ 与 $v$ 合并。此过程用并查集来维护连通分量。
 
@@ -69,9 +85,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class UnionFind:
@@ -102,9 +116,7 @@ class Solution:
         return max(Counter(uf.find(v) for v in nums).values())
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class UnionFind {
@@ -161,7 +173,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class UnionFind {
@@ -213,14 +225,11 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestComponentSize(nums []int) int {
-	m := 0
-	for _, v := range nums {
-		m = max(m, v)
-	}
+	m := slices.Max(nums)
 	p := make([]int, m+1)
 	for i := range p {
 		p[i] = i
@@ -248,28 +257,17 @@ func largestComponentSize(nums []int) int {
 			i++
 		}
 	}
-	ans := 0
 	cnt := make([]int, m+1)
 	for _, v := range nums {
 		t := find(v)
 		cnt[t]++
-		ans = max(ans, cnt[t])
 	}
-	return ans
+	return slices.Max(cnt)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

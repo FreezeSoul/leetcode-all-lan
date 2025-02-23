@@ -1,15 +1,14 @@
 class Solution {
 public:
     int partitionString(string s) {
-        int ans = 1;
-        int v = 0;
-        for (char c : s) {
-            int i = c - 'a';
-            if ((v >> i) & 1) {
-                v = 0;
+        int ans = 1, mask = 0;
+        for (char& c : s) {
+            int x = c - 'a';
+            if (mask >> x & 1) {
                 ++ans;
+                mask = 0;
             }
-            v |= 1 << i;
+            mask |= 1 << x;
         }
         return ans;
     }

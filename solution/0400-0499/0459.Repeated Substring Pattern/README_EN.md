@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0459.Repeated%20Substring%20Pattern/README_EN.md
+tags:
+    - String
+    - String Matching
+---
+
+<!-- problem:start -->
+
 # [459. Repeated Substring Pattern](https://leetcode.com/problems/repeated-substring-pattern)
 
 [中文文档](/solution/0400-0499/0459.Repeated%20Substring%20Pattern/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, check if it can be constructed by taking a substring of it and appending multiple copies of the substring together.</p>
 
@@ -38,11 +51,17 @@
 	<li><code>s</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -50,7 +69,7 @@ class Solution:
         return (s + s).index(s, 1) < len(s)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -61,7 +80,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -72,7 +91,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func repeatedSubstringPattern(s string) bool {
@@ -80,7 +99,7 @@ func repeatedSubstringPattern(s string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function repeatedSubstringPattern(s: string): boolean {
@@ -88,30 +107,7 @@ function repeatedSubstringPattern(s: string): boolean {
 }
 ```
 
-```ts
-function repeatedSubstringPattern(s: string): boolean {
-    const n = s.length;
-    for (let i = 0; i < n >> 1; i++) {
-        const len = i + 1;
-        if (n % len !== 0) {
-            continue;
-        }
-        const t = s.slice(0, len);
-        let j: number;
-        for (j = len; j < n; j += len) {
-            if (s.slice(j, j + len) !== t) {
-                break;
-            }
-        }
-        if (j === n) {
-            return true;
-        }
-    }
-    return false;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -121,10 +117,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

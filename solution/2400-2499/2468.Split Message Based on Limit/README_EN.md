@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2468.Split%20Message%20Based%20on%20Limit/README_EN.md
+rating: 2381
+source: Biweekly Contest 91 Q4
+tags:
+    - String
+    - Binary Search
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [2468. Split Message Based on Limit](https://leetcode.com/problems/split-message-based-on-limit)
 
 [中文文档](/solution/2400-2499/2468.Split%20Message%20Based%20on%20Limit/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string, <code>message</code>, and a positive integer, <code>limit</code>.</p>
 
@@ -45,11 +61,29 @@ Under the given constraints, the string can be split into two parts:
 	<li><code>1 &lt;= limit &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumerate the Number of Segments + Simulation
+
+We denote the length of the string `message` as $n$, and the number of segments as $k$.
+
+According to the problem, if $k > n$, it means that we can divide the string into more than $n$ segments. Since the length of the string is only $n$, dividing it into more than $n$ segments will inevitably lead to some segments with a length of $0$, which can be deleted. Therefore, we only need to limit the range of $k$ to $[1,.. n]$.
+
+We enumerate the number of segments $k$ from small to large. Let the length of $a$ segments in all segments be $sa$, the length of $b$ segments in all segments be $sb$, and the length of all symbols (including angle brackets and slashes) in all segments be $sc$.
+
+Then the value of $sa$ is ${\textstyle \sum_{j=1}^{k}} len(s_j)$, which can be directly obtained through the prefix sum; the value of $sb$ is $len(str(k)) \times k$; and the value of $sc$ is $3 \times k$.
+
+Therefore, the number of characters that can be filled in all segments is $limit\times k - (sa + sb + sc)$. If this value is greater than or equal to $n$, it means that the string can be divided into $k$ segments, and we can directly construct the answer and return it.
+
+The time complexity is $O(n\times \log n)$, where $n$ is the length of the string `message`. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,14 +99,14 @@ class Solution:
                 i = 0
                 for j in range(1, k + 1):
                     tail = f'<{j}/{k}>'
-                    t = message[i: i + limit - len(tail)] + tail
+                    t = message[i : i + limit - len(tail)] + tail
                     ans.append(t)
                     i += limit - len(tail)
                 return ans
         return []
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -132,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func splitMessage(message string, limit int) (ans []string) {
@@ -156,25 +190,10 @@ func splitMessage(message string, limit int) (ans []string) {
 	}
 	return
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

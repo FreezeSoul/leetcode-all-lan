@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0879.Profitable%20Schemes/README.md
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [879. 盈利计划](https://leetcode.cn/problems/profitable-schemes)
 
 [English Version](/solution/0800-0899/0879.Profitable%20Schemes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>集团里有 <code>n</code> 名员工，他们可以完成各种各样的工作创造利润。</p>
 
@@ -49,11 +60,13 @@
 	<li><code>0 <= profit[i] <= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i, j, k)$，表示从第 $i$ 个工作开始，且当前已经选择了 $j$ 个员工，且当前产生的利润为 $k$，这种情况下的方案数。那么答案就是 $dfs(0, 0, 0)$。
 
@@ -68,25 +81,15 @@
 
 时间复杂度 $O(m \times n \times minProfit)$，空间复杂度 $O(m \times n \times minProfit)$。其中 $m$ 和 $n$ 分别为工作的数量和员工的数量，而 $minProfit$ 为至少产生的利润。
 
-**方法二：动态规划**
-
-我们定义 $f[i][j][k]$ 表示前 $i$ 个工作中，选择了不超过 $j$ 个员工，且至少产生 $k$ 的利润的方案数。初始时 $f[0][j][0] = 1$，表示不选择任何工作，且至少产生 $0$ 的利润的方案数为 $1$。答案即为 $f[m][n][minProfit]$。
-
-对于第 $i$ 个工作，我们可以选择参与或不参与。如果不参与，则 $f[i][j][k] = f[i - 1][j][k]$；如果参与，则 $f[i][j][k] = f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]$。我们需要枚举 $j$ 和 $k$，并将所有的方案数相加。
-
-最终的答案即为 $f[m][n][minProfit]$。
-
-时间复杂度 $O(m \times n \times minProfit)$，空间复杂度 $O(m \times n \times minProfit)$。其中 $m$ 和 $n$ 分别为工作的数量和员工的数量，而 $minProfit$ 为至少产生的利润。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def profitableSchemes(self, n: int, minProfit: int, group: List[int], profit: List[int]) -> int:
+    def profitableSchemes(
+        self, n: int, minProfit: int, group: List[int], profit: List[int]
+    ) -> int:
         @cache
         def dfs(i: int, j: int, k: int) -> int:
             if i >= len(group):
@@ -99,28 +102,7 @@ class Solution:
         return dfs(0, 0, 0)
 ```
 
-```python
-class Solution:
-    def profitableSchemes(self, n: int, minProfit: int, group: List[int], profit: List[int]) -> int:
-        mod = 10**9 + 7
-        m = len(group)
-        f = [[[0] * (minProfit + 1) for _ in range(n + 1)]
-             for _ in range(m + 1)]
-        for j in range(n + 1):
-            f[0][j][0] = 1
-        for i, (x, p) in enumerate(zip(group, profit), 1):
-            for j in range(n + 1):
-                for k in range(minProfit + 1):
-                    f[i][j][k] = f[i - 1][j][k]
-                    if j >= x:
-                        f[i][j][k] = (f[i][j][k] + f[i - 1]
-                                      [j - x][max(0, k - p)]) % mod
-        return f[m][n][minProfit]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -159,34 +141,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
-        final int mod = (int) 1e9 + 7;
-        int m = group.length;
-        int[][][] f = new int[m + 1][n + 1][minProfit + 1];
-        for (int j = 0; j <= n; ++j) {
-            f[0][j][0] = 1;
-        }
-        for (int i = 1; i <= m; ++i) {
-            for (int j = 0; j <= n; ++j) {
-                for (int k = 0; k <= minProfit; ++k) {
-                    f[i][j][k] = f[i - 1][j][k];
-                    if (j >= group[i - 1]) {
-                        f[i][j][k]
-                            = (f[i][j][k]
-                                  + f[i - 1][j - group[i - 1]][Math.max(0, k - profit[i - 1])])
-                            % mod;
-                    }
-                }
-            }
-        }
-        return f[m][n][minProfit];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -215,33 +170,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int profitableSchemes(int n, int minProfit, vector<int>& group, vector<int>& profit) {
-        int m = group.size();
-        int f[m + 1][n + 1][minProfit + 1];
-        memset(f, 0, sizeof(f));
-        for (int j = 0; j <= n; ++j) {
-            f[0][j][0] = 1;
-        }
-        const int mod = 1e9 + 7;
-        for (int i = 1; i <= m; ++i) {
-            for (int j = 0; j <= n; ++j) {
-                for (int k = 0; k <= minProfit; ++k) {
-                    f[i][j][k] = f[i - 1][j][k];
-                    if (j >= group[i - 1]) {
-                        f[i][j][k] = (f[i][j][k] + f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]) % mod;
-                    }
-                }
-            }
-        }
-        return f[m][n][minProfit];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
@@ -278,16 +207,105 @@ func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
 	}
 	return dfs(0, 0, 0)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+我们定义 $f[i][j][k]$ 表示前 $i$ 个工作中，选择了不超过 $j$ 个员工，且至少产生 $k$ 的利润的方案数。初始时 $f[0][j][0] = 1$，表示不选择任何工作，且至少产生 $0$ 的利润的方案数为 $1$。答案即为 $f[m][n][minProfit]$。
+
+对于第 $i$ 个工作，我们可以选择参与或不参与。如果不参与，则 $f[i][j][k] = f[i - 1][j][k]$；如果参与，则 $f[i][j][k] = f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]$。我们需要枚举 $j$ 和 $k$，并将所有的方案数相加。
+
+最终的答案即为 $f[m][n][minProfit]$。
+
+时间复杂度 $O(m \times n \times minProfit)$，空间复杂度 $O(m \times n \times minProfit)$。其中 $m$ 和 $n$ 分别为工作的数量和员工的数量，而 $minProfit$ 为至少产生的利润。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def profitableSchemes(
+        self, n: int, minProfit: int, group: List[int], profit: List[int]
+    ) -> int:
+        mod = 10**9 + 7
+        m = len(group)
+        f = [[[0] * (minProfit + 1) for _ in range(n + 1)] for _ in range(m + 1)]
+        for j in range(n + 1):
+            f[0][j][0] = 1
+        for i, (x, p) in enumerate(zip(group, profit), 1):
+            for j in range(n + 1):
+                for k in range(minProfit + 1):
+                    f[i][j][k] = f[i - 1][j][k]
+                    if j >= x:
+                        f[i][j][k] = (f[i][j][k] + f[i - 1][j - x][max(0, k - p)]) % mod
+        return f[m][n][minProfit]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        final int mod = (int) 1e9 + 7;
+        int m = group.length;
+        int[][][] f = new int[m + 1][n + 1][minProfit + 1];
+        for (int j = 0; j <= n; ++j) {
+            f[0][j][0] = 1;
+        }
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                for (int k = 0; k <= minProfit; ++k) {
+                    f[i][j][k] = f[i - 1][j][k];
+                    if (j >= group[i - 1]) {
+                        f[i][j][k]
+                            = (f[i][j][k]
+                                  + f[i - 1][j - group[i - 1]][Math.max(0, k - profit[i - 1])])
+                            % mod;
+                    }
+                }
+            }
+        }
+        return f[m][n][minProfit];
+    }
 }
 ```
 
-### **Go**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int profitableSchemes(int n, int minProfit, vector<int>& group, vector<int>& profit) {
+        int m = group.size();
+        int f[m + 1][n + 1][minProfit + 1];
+        memset(f, 0, sizeof(f));
+        for (int j = 0; j <= n; ++j) {
+            f[0][j][0] = 1;
+        }
+        const int mod = 1e9 + 7;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                for (int k = 0; k <= minProfit; ++k) {
+                    f[i][j][k] = f[i - 1][j][k];
+                    if (j >= group[i - 1]) {
+                        f[i][j][k] = (f[i][j][k] + f[i - 1][j - group[i - 1]][max(0, k - profit[i - 1])]) % mod;
+                    }
+                }
+            }
+        }
+        return f[m][n][minProfit];
+    }
+};
+```
+
+#### Go
 
 ```go
 func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
@@ -316,19 +334,10 @@ func profitableSchemes(n int, minProfit int, group []int, profit []int) int {
 	}
 	return f[m][n][minProfit]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1003.Check%20If%20Word%20Is%20Valid%20After%20Substitutions/README_EN.md
+rating: 1426
+source: Weekly Contest 126 Q2
+tags:
+    - Stack
+    - String
+---
+
+<!-- problem:start -->
+
 # [1003. Check If Word Is Valid After Substitutions](https://leetcode.com/problems/check-if-word-is-valid-after-substitutions)
 
 [中文文档](/solution/1000-1099/1003.Check%20If%20Word%20Is%20Valid%20After%20Substitutions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, determine if it is <strong>valid</strong>.</p>
 
@@ -50,21 +65,25 @@ Thus, &quot;abcabcababcc&quot; is valid.
 	<li><code>s</code> consists of letters <code>&#39;a&#39;</code>, <code>&#39;b&#39;</code>, and <code>&#39;c&#39;</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Stack**
+<!-- solution:start -->
 
-If the string is valid, it's length must be the multiple of $3$.
+### Solution 1: Stack
 
-We traverse the string and push every character into the stack $t$. If the size of stack $t$ is greater than or equal to $3$ and the top three elements of stack $t$ constitute the string `"abc"`, we pop the top three elements. Then we continue to traverse the next character of the string $s$.
+We observe the operations in the problem and find that each time a string $\textit{"abc"}$ is inserted at any position in the string. Therefore, after each insertion operation, the length of the string increases by $3$. If the string $s$ is valid, its length must be a multiple of $3$. Thus, we first check the length of the string $s$. If it is not a multiple of $3$, then $s$ must be invalid, and we can directly return $\textit{false}$.
 
-When the traversal is over, if the stack $t$ is empty, the string $s$ is valid, return `true`, otherwise return `false`.
+Next, we traverse each character $c$ in the string $s$. We first push the character $c$ onto the stack $t$. If the length of the stack $t$ is greater than or equal to $3$, and the top three elements of the stack form the string $\textit{"abc"}$, then we pop the top three elements from the stack. We then continue to traverse the next character in the string $s$.
 
-The time complexity is $O(n)$ and the space complexity is $O(n)$. Where $n$ is the length of the string $s$.
+After the traversal, if the stack $t$ is empty, it means the string $s$ is valid, and we return $\textit{true}$; otherwise, we return $\textit{false}$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -79,7 +98,7 @@ class Solution:
         return not t
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -120,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isValid(s string) bool {
@@ -138,7 +157,7 @@ func isValid(s string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isValid(s: string): boolean {
@@ -156,10 +175,8 @@ function isValid(s: string): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

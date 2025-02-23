@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1711.Count%20Good%20Meals/README_EN.md
+rating: 1797
+source: Weekly Contest 222 Q2
+tags:
+    - Array
+    - Hash Table
+---
+
+<!-- problem:start -->
+
 # [1711. Count Good Meals](https://leetcode.com/problems/count-good-meals)
 
 [中文文档](/solution/1700-1799/1711.Count%20Good%20Meals/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>good meal</strong> is a meal that contains <strong>exactly two different food items</strong> with a sum of deliciousness equal to a power of two.</p>
 
@@ -37,11 +52,35 @@ Their respective sums are 4, 8, 8, and 16, all of which are powers of 2.
 	<li><code>0 &lt;= deliciousness[i] &lt;= 2<sup>20</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Enumeration of Powers of Two
+
+According to the problem, we need to count the number of combinations in the array where the sum of two numbers is a power of $2$. Directly enumerating all combinations has a time complexity of $O(n^2)$, which will definitely time out.
+
+We can traverse the array and use a hash table $cnt$ to maintain the number of occurrences of each element $d$ in the array.
+
+For each element, we enumerate the powers of two $s$ as the sum of two numbers from small to large, and add the number of occurrences of $s - d$ in the hash table to the answer. Then increase the number of occurrences of the current element $d$ by one.
+
+After the traversal ends, return the answer.
+
+The time complexity is $O(n \times \log M)$, where $n$ is the length of the array `deliciousness`, and $M$ is the upper limit of the elements. For this problem, the upper limit $M=2^{20}$.
+
+We can also use a hash table $cnt$ to count the number of occurrences of each element in the array first.
+
+Then enumerate the powers of two $s$ as the sum of two numbers from small to large. For each $s$, traverse each key-value pair $(a, m)$ in the hash table. If $s - a$ is also in the hash table, and $s - a \neq a$, then add $m \times cnt[s - a]$ to the answer; if $s - a = a$, then add $m \times (m - 1)$ to the answer.
+
+Finally, divide the answer by $2$, modulo $10^9 + 7$, and return.
+
+The time complexity is the same as the method above.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,21 +98,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def countPairs(self, deliciousness: List[int]) -> int:
-        mod = 10**9 + 7
-        cnt = Counter(deliciousness)
-        ans = 0
-        for i in range(22):
-            s = 1 << i
-            for a, m in cnt.items():
-                if (b := s - a) in cnt:
-                    ans += m * (m - 1) if a == b else m * cnt[b]
-        return (ans >> 1) % mod
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -93,6 +118,73 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    const int mod = 1e9 + 7;
+
+    int countPairs(vector<int>& deliciousness) {
+        int mx = *max_element(deliciousness.begin(), deliciousness.end()) << 1;
+        unordered_map<int, int> cnt;
+        int ans = 0;
+        for (auto& d : deliciousness) {
+            for (int s = 1; s <= mx; s <<= 1) {
+                ans = (ans + cnt[s - d]) % mod;
+            }
+            ++cnt[d];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countPairs(deliciousness []int) (ans int) {
+	mx := slices.Max(deliciousness) << 1
+	const mod int = 1e9 + 7
+	cnt := map[int]int{}
+	for _, d := range deliciousness {
+		for s := 1; s <= mx; s <<= 1 {
+			ans = (ans + cnt[s-d]) % mod
+		}
+		cnt[d]++
+	}
+	return
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countPairs(self, deliciousness: List[int]) -> int:
+        mod = 10**9 + 7
+        cnt = Counter(deliciousness)
+        ans = 0
+        for i in range(22):
+            s = 1 << i
+            for a, m in cnt.items():
+                if (b := s - a) in cnt:
+                    ans += m * (m - 1) if a == b else m * cnt[b]
+        return (ans >> 1) % mod
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -121,27 +213,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    const int mod = 1e9 + 7;
-
-    int countPairs(vector<int>& deliciousness) {
-        int mx = *max_element(deliciousness.begin(), deliciousness.end()) << 1;
-        unordered_map<int, int> cnt;
-        int ans = 0;
-        for (auto& d : deliciousness) {
-            for (int s = 1; s <= mx; s <<= 1) {
-                ans = (ans + cnt[s - d]) % mod;
-            }
-            ++cnt[d];
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -166,63 +238,35 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPairs(deliciousness []int) (ans int) {
-	mx := 0
-	for _, d := range deliciousness {
-		mx = max(mx, d)
-	}
-	mx <<= 1
-	const mod int = 1e9 + 7
 	cnt := map[int]int{}
 	for _, d := range deliciousness {
-		for s := 1; s <= mx; s <<= 1 {
-			ans = (ans + cnt[s-d]) % mod
-		}
 		cnt[d]++
 	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
+	const mod int = 1e9 + 7
+	for i := 0; i < 22; i++ {
+		s := 1 << i
+		for a, m := range cnt {
+			b := s - a
+			if n, ok := cnt[b]; ok {
+				if a == b {
+					ans += m * (m - 1)
+				} else {
+					ans += m * n
+				}
+			}
+		}
 	}
-	return b
+	ans >>= 1
+	return ans % mod
 }
-```
-
-```go
-func countPairs(deliciousness []int) (ans int) {
-    cnt := map[int]int{}
-    for _, d := range deliciousness {
-        cnt[d]++
-    }
-    const mod int = 1e9 + 7
-    for i := 0; i < 22; i++ {
-        s := 1 << i
-        for a, m := range cnt {
-            b := s - a
-            if n, ok := cnt[b]; ok {
-                if a == b {
-                    ans += m * (m - 1)
-                } else {
-                    ans += m * n
-                }
-            }
-        }
-    }
-    ans >>= 1
-    return ans % mod
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

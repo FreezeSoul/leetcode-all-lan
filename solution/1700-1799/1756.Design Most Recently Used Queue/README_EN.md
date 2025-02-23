@@ -1,8 +1,25 @@
-# [1756. Design Most Recently Used Queue](https://leetcode.com/problems/design-most-recently-used-queue)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1756.Design%20Most%20Recently%20Used%20Queue/README_EN.md
+tags:
+    - Stack
+    - Design
+    - Binary Indexed Tree
+    - Array
+    - Hash Table
+    - Ordered Set
+---
+
+<!-- problem:start -->
+
+# [1756. Design Most Recently Used Queue 🔒](https://leetcode.com/problems/design-most-recently-used-queue)
 
 [中文文档](/solution/1700-1799/1756.Design%20Most%20Recently%20Used%20Queue/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a queue-like data structure that moves the most recently used element to the end of the queue.</p>
 
@@ -43,73 +60,36 @@ mRUQueue.fetch(8); // The 8<sup>th</sup> element (2) is already at the end of th
 <p>&nbsp;</p>
 <strong>Follow up:</strong> Finding an <code>O(n)</code> algorithm per <code>fetch</code> is a bit easy. Can you find an algorithm with a better complexity for each <code>fetch</code> call?
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class MRUQueue:
-
     def __init__(self, n: int):
         self.q = list(range(1, n + 1))
 
     def fetch(self, k: int) -> int:
         ans = self.q[k - 1]
-        self.q[k - 1: k] = []
+        self.q[k - 1 : k] = []
         self.q.append(ans)
         return ans
 
-# Your MRUQueue object will be instantiated and called as such:
-# obj = MRUQueue(n)
-# param_1 = obj.fetch(k)
-```
-
-```python
-class BinaryIndexedTree:
-    def __init__(self, n: int):
-        self.n = n
-        self.c = [0] * (n + 1)
-
-    def update(self, x: int, v: int):
-        while x <= self.n:
-            self.c[x] += v
-            x += x & -x
-
-    def query(self, x: int) -> int:
-        s = 0
-        while x:
-            s += self.c[x]
-            x -= x & -x
-        return s
-
-
-class MRUQueue:
-
-    def __init__(self, n: int):
-        self.q = list(range(n + 1))
-        self.tree = BinaryIndexedTree(n + 2010)
-
-    def fetch(self, k: int) -> int:
-        l, r = 1, len(self.q)
-        while l < r:
-            mid = (l + r) >> 1
-            if mid - self.tree.query(mid) >= k:
-                r = mid
-            else:
-                l = mid + 1
-        x = self.q[l]
-        self.q.append(x)
-        self.tree.update(l, 1)
-        return x
 
 # Your MRUQueue object will be instantiated and called as such:
 # obj = MRUQueue(n)
 # param_1 = obj.fetch(k)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -176,7 +156,7 @@ class MRUQueue {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
@@ -242,7 +222,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type BinaryIndexedTree struct {
@@ -307,7 +287,7 @@ func (this *MRUQueue) Fetch(k int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class BinaryIndexedTree {
@@ -373,10 +353,63 @@ class MRUQueue {
  */
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class BinaryIndexedTree:
+    def __init__(self, n: int):
+        self.n = n
+        self.c = [0] * (n + 1)
+
+    def update(self, x: int, v: int):
+        while x <= self.n:
+            self.c[x] += v
+            x += x & -x
+
+    def query(self, x: int) -> int:
+        s = 0
+        while x:
+            s += self.c[x]
+            x -= x & -x
+        return s
+
+
+class MRUQueue:
+    def __init__(self, n: int):
+        self.q = list(range(n + 1))
+        self.tree = BinaryIndexedTree(n + 2010)
+
+    def fetch(self, k: int) -> int:
+        l, r = 1, len(self.q)
+        while l < r:
+            mid = (l + r) >> 1
+            if mid - self.tree.query(mid) >= k:
+                r = mid
+            else:
+                l = mid + 1
+        x = self.q[l]
+        self.q.append(x)
+        self.tree.update(l, 1)
+        return x
+
+
+# Your MRUQueue object will be instantiated and called as such:
+# obj = MRUQueue(n)
+# param_1 = obj.fetch(k)
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

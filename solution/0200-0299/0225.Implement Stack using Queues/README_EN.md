@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0225.Implement%20Stack%20using%20Queues/README_EN.md
+tags:
+    - Stack
+    - Design
+    - Queue
+---
+
+<!-- problem:start -->
+
 # [225. Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues)
 
 [中文文档](/solution/0200-0299/0225.Implement%20Stack%20using%20Queues/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal stack (<code>push</code>, <code>top</code>, <code>pop</code>, and <code>empty</code>).</p>
 
@@ -53,15 +67,29 @@ myStack.empty(); // return False
 <p>&nbsp;</p>
 <p><strong>Follow-up:</strong> Can you implement the stack using only one queue?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Queues
+
+We use two queues $q_1$ and $q_2$, where $q_1$ is used to store the elements in the stack, and $q_2$ is used to assist in implementing the stack operations.
+
+-   `push` operation: Push the element into $q_2$, then pop the elements in $q_1$ one by one and push them into $q_2$, finally swap the references of $q_1$ and $q_2$. The time complexity is $O(n)$.
+-   `pop` operation: Directly pop the front element of $q_1$. The time complexity is $O(1)$.
+-   `top` operation: Directly return the front element of $q_1$. The time complexity is $O(1)$.
+-   `empty` operation: Check whether $q_1$ is empty. The time complexity is $O(1)$.
+
+The space complexity is $O(n)$, where $n$ is the number of elements in the stack.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class MyStack:
-
     def __init__(self):
         self.q1 = deque()
         self.q2 = deque()
@@ -90,11 +118,9 @@ class MyStack:
 # param_4 = obj.empty()
 ```
 
-### **Java**
+#### Java
 
 ```java
-import java.util.Deque;
-
 class MyStack {
     private Deque<Integer> q1 = new ArrayDeque<>();
     private Deque<Integer> q2 = new ArrayDeque<>();
@@ -135,13 +161,12 @@ class MyStack {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class MyStack {
 public:
     MyStack() {
-
     }
 
     void push(int x) {
@@ -182,7 +207,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type MyStack struct {
@@ -227,7 +252,7 @@ func (this *MyStack) Empty() bool {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class MyStack {
@@ -267,10 +292,62 @@ class MyStack {
  */
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+use std::collections::VecDeque;
 
+struct MyStack {
+    /// There could only be two status at all time
+    /// 1. One contains N elements, the other is empty
+    /// 2. One contains N - 1 elements, the other contains exactly 1 element
+    q_1: VecDeque<i32>,
+    q_2: VecDeque<i32>,
+    // Either 1 or 2, originally begins from 1
+    index: i32,
+}
+
+impl MyStack {
+    fn new() -> Self {
+        Self {
+            q_1: VecDeque::new(),
+            q_2: VecDeque::new(),
+            index: 1,
+        }
+    }
+
+    fn move_data(&mut self) {
+        // Always move from q1 to q2
+        assert!(self.q_2.len() == 1);
+        while !self.q_1.is_empty() {
+            self.q_2.push_back(self.q_1.pop_front().unwrap());
+        }
+        let tmp = self.q_1.clone();
+        self.q_1 = self.q_2.clone();
+        self.q_2 = tmp;
+    }
+
+    fn push(&mut self, x: i32) {
+        self.q_2.push_back(x);
+        self.move_data();
+    }
+
+    fn pop(&mut self) -> i32 {
+        self.q_1.pop_front().unwrap()
+    }
+
+    fn top(&mut self) -> i32 {
+        *self.q_1.front().unwrap()
+    }
+
+    fn empty(&self) -> bool {
+        self.q_1.is_empty()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

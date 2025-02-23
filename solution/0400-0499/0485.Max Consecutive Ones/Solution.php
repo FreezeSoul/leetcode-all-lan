@@ -4,14 +4,17 @@ class Solution {
      * @return Integer
      */
     function findMaxConsecutiveOnes($nums) {
-        $tmp = $max = 0;
-        for ($i = 0; $i < count($nums); $i++) {
-            if ($nums[$i] == 1) $tmp++;
-            else {
-                $max = max($tmp, $max);
-                $tmp = 0;
+        $ans = $cnt = 0;
+
+        foreach ($nums as $x) {
+            if ($x == 1) {
+                $cnt += 1;
+                $ans = max($ans, $cnt);
+            } else {
+                $cnt = 0;
             }
         }
-        return max($tmp, $max);
+
+        return $ans;
     }
 }

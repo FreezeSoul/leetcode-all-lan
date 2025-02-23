@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0292.Nim%20Game/README.md
+tags:
+    - 脑筋急转弯
+    - 数学
+    - 博弈
+---
+
+<!-- problem:start -->
+
 # [292. Nim 游戏](https://leetcode.cn/problems/nim-game)
 
 [English Version](/solution/0200-0299/0292.Nim%20Game/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你和你的朋友，两个人一起玩&nbsp;<a href="https://baike.baidu.com/item/Nim游戏/6737105" target="_blank">Nim 游戏</a>：</p>
 
@@ -53,29 +65,30 @@
 	<li><code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学推理**
+### 方法一：找规律
 
 第一个得到 $4$ 的倍数（即 $n$ 能被 $4$ 整除）的将会输掉比赛。
 
 证明：
 
-1. 当 $n=4$，无论第一个玩家选择 $1/2/3$ 哪个数字，第二个玩家总能选择剩下的数字，**第一个玩家将会输掉比赛**。
-1. 当 $4<n<8$，即 ($n=5,6,7$)，第一个玩家可以相应地将数字减少为 $4$，那么 $4$ 这个死亡数字给到了第二个玩家，第二个玩家将会输掉比赛。
-1. 当 $n=8$，无论第一个玩家选择 $1/2/3$ 哪个数字，都会把 $4<n<8$ 的数字留给第二个，**第一个玩家将会输掉比赛**。
+1. 当 $n \lt 4$ 时，第一个玩家可以直接拿走所有的石头，所以第一个玩家将会赢得比赛。
+1. 当 $n = 4$，无论第一个玩家选择 $1, 2, 3$ 哪个数字，第二个玩家总能选择剩下的数字，所以第一个玩家将会输掉比赛。
+1. 当 $4 \lt n \lt 8$ 时，即 $n = 5, 6, 7$，第一个玩家可以相应地将数字减少为 $4$，那么 $4$ 这个死亡数字给到了第二个玩家，第二个玩家将会输掉比赛。
+1. 当 $n = 8$，无论第一个玩家选择 $1, 2, 3$ 哪个数字，都会把 $4 \lt n \lt 8$ 的数字留给第二个，所以第一个玩家将会输掉比赛。
 1. ...
 1. 依次类推，当玩家拿到 $n$ 这个数字，且 $n$ 能被 $4$ 整除，他将会输掉比赛，否则他将赢得比赛。
 
-时间复杂度 $O(1)$。
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +96,7 @@ class Solution:
         return n % 4 != 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,15 +106,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function canWinNim(n: number): boolean {
-    return n % 4 != 0;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +117,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canWinNim(n int) bool {
@@ -122,7 +125,15 @@ func canWinNim(n int) bool {
 }
 ```
 
-### **Rust**
+#### TypeScript
+
+```ts
+function canWinNim(n: number): boolean {
+    return n % 4 != 0;
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
@@ -132,10 +143,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

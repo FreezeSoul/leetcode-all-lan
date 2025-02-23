@@ -3,11 +3,11 @@ impl Solution {
         let mut l = 0;
         let mut r = nums.len() - 1;
         while l < r {
-            let mid = l + r >> 1;
-            if nums[mid] == nums[mid ^ 1] {
-                l = mid + 1;
-            } else {
+            let mid = (l + r) >> 1;
+            if nums[mid] != nums[mid ^ 1] {
                 r = mid;
+            } else {
+                l = mid + 1;
             }
         }
         nums[l]

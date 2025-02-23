@@ -1,10 +1,24 @@
-# [1133. 最大唯一数](https://leetcode.cn/problems/largest-unique-number)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1133.Largest%20Unique%20Number/README.md
+rating: 1226
+source: 第 5 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [1133. 最大唯一数 🔒](https://leetcode.cn/problems/largest-unique-number)
 
 [English Version](/solution/1100-1199/1133.Largest%20Unique%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>A</code>，请找出并返回在该数组中仅出现一次的最大整数。</p>
 
@@ -37,11 +51,13 @@
 	<li><code>0 &lt;= A[i] &lt;= 1000</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数 + 倒序遍历**
+### 方法一：计数 + 倒序遍历
 
 注意到题目的数据范围，我们可以使用一个长度为 $1001$ 的数组来统计每个数字出现的次数，然后倒序遍历数组，找到第一个出现次数为 $1$ 的数字即可。如果没有找到，则返回 $-1$。
 
@@ -49,16 +65,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def largestUniqueNumber(self, nums: List[int]) -> int:
-        cnt = Counter(nums)
-        return next((x for x in range(1000, -1, -1) if cnt[x] == 1), -1)
-```
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +74,7 @@ class Solution:
         return max((x for x, v in cnt.items() if v == 1), default=-1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -88,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +113,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestUniqueNumber(nums []int) int {
@@ -125,37 +130,16 @@ func largestUniqueNumber(nums []int) int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var largestUniqueNumber = function (nums) {
-    const cnt = new Array(1001).fill(0);
-    for (const x of nums) {
-        ++cnt[x];
-    }
-    for (let x = 1000; x >= 0; --x) {
-        if (cnt[x] == 1) {
-            return x;
-        }
-    }
-    return -1;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function largestUniqueNumber(nums: number[]): number {
-    const cnt = new Array(1001).fill(0);
+    const cnt = Array(1001).fill(0);
     for (const x of nums) {
         ++cnt[x];
     }
     for (let x = 1000; x >= 0; --x) {
-        if (cnt[x] == 1) {
+        if (cnt[x] === 1) {
             return x;
         }
     }
@@ -163,10 +147,29 @@ function largestUniqueNumber(nums: number[]): number {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var largestUniqueNumber = function (nums) {
+    const cnt = Array(1001).fill(0);
+    for (const x of nums) {
+        ++cnt[x];
+    }
+    for (let x = 1000; x >= 0; --x) {
+        if (cnt[x] === 1) {
+            return x;
+        }
+    }
+    return -1;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

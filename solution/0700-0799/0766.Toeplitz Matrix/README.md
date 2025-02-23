@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0766.Toeplitz%20Matrix/README.md
+tags:
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [766. 托普利茨矩阵](https://leetcode.cn/problems/toeplitz-matrix)
 
 [English Version](/solution/0700-0799/0766.Toeplitz%20Matrix/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <code>m x n</code> 的矩阵 <code>matrix</code> 。如果这个矩阵是托普利茨矩阵，返回 <code>true</code> ；否则，返回<em> </em><code>false</code><em> 。</em></p>
 
@@ -51,11 +62,13 @@
 	<li>如果矩阵太大，以至于一次只能将不完整的一行加载到内存中，该怎么办？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：一次遍历**
+### 方法一：一次遍历
 
 遍历矩阵，若出现元素与其左上角的元素不等的情况，返回 `false`。否则，遍历结束后返回 `true`。
 
@@ -63,20 +76,20 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def isToeplitzMatrix(self, matrix: List[List[int]]) -> bool:
         m, n = len(matrix), len(matrix[0])
-        return all(matrix[i][j] == matrix[i - 1][j - 1] for i in range(1, m) for j in range(1, n))
+        return all(
+            matrix[i][j] == matrix[i - 1][j - 1]
+            for i in range(1, m)
+            for j in range(1, n)
+        )
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isToeplitzMatrix(matrix [][]int) bool {
@@ -129,7 +142,7 @@ func isToeplitzMatrix(matrix [][]int) bool {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -150,10 +163,8 @@ var isToeplitzMatrix = function (matrix) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1095.Find%20in%20Mountain%20Array/README_EN.md
+rating: 1827
+source: Weekly Contest 142 Q3
+tags:
+    - Array
+    - Binary Search
+    - Interactive
+---
+
+<!-- problem:start -->
+
 # [1095. Find in Mountain Array](https://leetcode.com/problems/find-in-mountain-array)
 
 [中文文档](/solution/1000-1099/1095.Find%20in%20Mountain%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p><em>(This problem is an <strong>interactive problem</strong>.)</em></p>
 
@@ -33,14 +49,14 @@
 <p><strong class="example">Example 1:</strong></p>
 
 <pre>
-<strong>Input:</strong> array = [1,2,3,4,5,3,1], target = 3
+<strong>Input:</strong> mountainArr = [1,2,3,4,5,3,1], target = 3
 <strong>Output:</strong> 2
 <strong>Explanation:</strong> 3 exists in the array, at index=2 and index=5. Return the minimum index, which is 2.</pre>
 
 <p><strong class="example">Example 2:</strong></p>
 
 <pre>
-<strong>Input:</strong> array = [0,1,2,4,2,1], target = 3
+<strong>Input:</strong> mountainArr = [0,1,2,4,2,1], target = 3
 <strong>Output:</strong> -1
 <strong>Explanation:</strong> 3 does not exist in <code>the array,</code> so we return -1.
 </pre>
@@ -49,16 +65,22 @@
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>3 &lt;= mountain_arr.length() &lt;= 10<sup>4</sup></code></li>
+	<li><code>3 &lt;= mountainArr.length() &lt;= 10<sup>4</sup></code></li>
 	<li><code>0 &lt;= target &lt;= 10<sup>9</sup></code></li>
-	<li><code>0 &lt;= mountain_arr.get(index) &lt;= 10<sup>9</sup></code></li>
+	<li><code>0 &lt;= mountainArr.get(index) &lt;= 10<sup>9</sup></code></li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # """
@@ -68,6 +90,7 @@
 # class MountainArray:
 #    def get(self, index: int) -> int:
 #    def length(self) -> int:
+
 
 class Solution:
     def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
@@ -92,7 +115,7 @@ class Solution:
         return search(l + 1, n - 1, -1) if ans == -1 else ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -139,7 +162,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -154,7 +177,7 @@ class Solution {
 
 class Solution {
 public:
-    int findInMountainArray(int target, MountainArray &mountainArr) {
+    int findInMountainArray(int target, MountainArray& mountainArr) {
         int n = mountainArr.length();
         int l = 0, r = n - 1;
         while (l < r) {
@@ -182,7 +205,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -228,7 +251,7 @@ func findInMountainArray(target int, mountainArr *MountainArray) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -269,10 +292,60 @@ function findInMountainArray(target: number, mountainArr: MountainArray) {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn find_in_mountain_array(target: i32, mountain_arr: &MountainArray) -> i32 {
+        let n = mountain_arr.length();
 
+        // First find the maximum element in the array
+        let mut l = 0;
+        let mut r = n - 1;
+
+        while l < r {
+            let mid = (l + r) >> 1;
+            if mountain_arr.get(mid) > mountain_arr.get(mid + 1) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+
+        let left = Self::binary_search(mountain_arr, 0, l, 1, target);
+
+        if left == -1 {
+            Self::binary_search(mountain_arr, l, n - 1, -1, target)
+        } else {
+            left
+        }
+    }
+
+    #[allow(dead_code)]
+    fn binary_search(m: &MountainArray, mut l: i32, mut r: i32, k: i32, target: i32) -> i32 {
+        let n = m.length();
+
+        while l < r {
+            let mid = (l + r) >> 1;
+            if k * m.get(mid) >= k * target {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+
+        if m.get(l) == target {
+            l
+        } else {
+            -1
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

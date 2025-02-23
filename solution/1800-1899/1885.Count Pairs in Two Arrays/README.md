@@ -1,10 +1,23 @@
-# [1885. 统计数对](https://leetcode.cn/problems/count-pairs-in-two-arrays)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1885.Count%20Pairs%20in%20Two%20Arrays/README.md
+tags:
+    - 数组
+    - 双指针
+    - 二分查找
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [1885. 统计数对 🔒](https://leetcode.cn/problems/count-pairs-in-two-arrays)
 
 [English Version](/solution/1800-1899/1885.Count%20Pairs%20in%20Two%20Arrays/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个长度为 <code>n</code> 的整数数组 <code>nums1</code>&nbsp;和&nbsp;<code>nums2</code> ，找出所有满足 <code>i &lt; j</code> 且 <code>nums1[i] + nums1[j] &gt; nums2[i] + nums2[j]</code>&nbsp;的数对 <code>(i, j)</code> 。</p>
 
@@ -42,113 +55,189 @@
 	<li><code>1 &lt;= nums1[i], nums2[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 二分查找**
+### 方法一：排序 + 双指针
 
-`nums1[i] + nums1[j] > nums2[i] + nums2[j]` 可以转换为 `nums1[i] - nums2[i] > -(nums1[j] - nums2[j])`。
+我们可以将题目的不等式转化为 $\textit{nums1}[i] - \textit{nums2}[i] + \textit{nums1}[j] - \textit{nums2}[j] > 0$，即 $\textit{nums}[i] + \textit{nums}[j] > 0$，其中 $\textit{nums}[i] = \textit{nums1}[i] - \textit{nums2}[i]$。
 
-因此，对 nums1 和 nums2 求对应元素的差值，得到 d 数组，题目就是求 `d[i] > -d[j]` 的所有数对个数。
+即对于数组 $\textit{nums}$，我们要找到所有满足 $\textit{nums}[i] + \textit{nums}[j] > 0$ 的数对 $(i, j)$。
+
+我们不妨对数组 $\textit{nums}$ 进行排序，然后使用双指针的方法，初始化左指针 $l = 0$，右指针 $r = n - 1$。每一次，我们判断 $\textit{nums}[l] + \textit{nums}[r]$ 是否小于等于 $0$，如果是，我们循环将左指针右移，直到 $\textit{nums}[l] + \textit{nums}[r] > 0$，此时，以 $l$, $l + 1$, $l + 2$, $\cdots$, $r - 1$ 为左指针，且 $r$ 为右指针的所有数对都满足条件，共有 $r - l$ 个数对，我们将其加入答案中。然后将右指针左移，继续进行上述操作，直到 $l \ge r$。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为数组的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def countPairs(self, nums1: List[int], nums2: List[int]) -> int:
-        n = len(nums1)
-        d = [nums1[i] - nums2[i] for i in range(n)]
-        d.sort()
-        return sum(n - bisect_right(d, -v, lo=i + 1) for i, v in enumerate(d))
+        nums = [a - b for a, b in zip(nums1, nums2)]
+        nums.sort()
+        l, r = 0, len(nums) - 1
+        ans = 0
+        while l < r:
+            while l < r and nums[l] + nums[r] <= 0:
+                l += 1
+            ans += r - l
+            r -= 1
+        return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public long countPairs(int[] nums1, int[] nums2) {
         int n = nums1.length;
-        int[] d = new int[n];
+        int[] nums = new int[n];
         for (int i = 0; i < n; ++i) {
-            d[i] = nums1[i] - nums2[i];
+            nums[i] = nums1[i] - nums2[i];
         }
-        Arrays.sort(d);
+        Arrays.sort(nums);
+        int l = 0, r = n - 1;
         long ans = 0;
-        for (int i = 0; i < n; ++i) {
-            int left = i + 1, right = n;
-            while (left < right) {
-                int mid = (left + right) >> 1;
-                if (d[mid] > -d[i]) {
-                    right = mid;
-                } else {
-                    left = mid + 1;
-                }
+        while (l < r) {
+            while (l < r && nums[l] + nums[r] <= 0) {
+                ++l;
             }
-            ans += n - left;
+            ans += r - l;
+            --r;
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long countPairs(vector<int>& nums1, vector<int>& nums2) {
         int n = nums1.size();
-        vector<int> d(n);
-        for (int i = 0; i < n; ++i) d[i] = nums1[i] - nums2[i];
-        sort(d.begin(), d.end());
-        long long ans = 0;
+        vector<int> nums(n);
         for (int i = 0; i < n; ++i) {
-            int j = upper_bound(d.begin() + i + 1, d.end(), -d[i]) - d.begin();
-            ans += n - j;
+            nums[i] = nums1[i] - nums2[i];
+        }
+        ranges::sort(nums);
+        int l = 0, r = n - 1;
+        long long ans = 0;
+        while (l < r) {
+            while (l < r && nums[l] + nums[r] <= 0) {
+                ++l;
+            }
+            ans += r - l;
+            --r;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func countPairs(nums1 []int, nums2 []int) int64 {
+func countPairs(nums1 []int, nums2 []int) (ans int64) {
 	n := len(nums1)
-	d := make([]int, n)
-	for i, v := range nums1 {
-		d[i] = v - nums2[i]
+	nums := make([]int, n)
+	for i, x := range nums1 {
+		nums[i] = x - nums2[i]
 	}
-	sort.Ints(d)
-	var ans int64
-	for i, v := range d {
-		left, right := i+1, n
-		for left < right {
-			mid := (left + right) >> 1
-			if d[mid] > -v {
-				right = mid
-			} else {
-				left = mid + 1
-			}
+	sort.Ints(nums)
+	l, r := 0, n-1
+	for l < r {
+		for l < r && nums[l]+nums[r] <= 0 {
+			l++
 		}
-		ans += int64(n - left)
+		ans += int64(r - l)
+		r--
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function countPairs(nums1: number[], nums2: number[]): number {
+    const n = nums1.length;
+    const nums: number[] = [];
+    for (let i = 0; i < n; ++i) {
+        nums.push(nums1[i] - nums2[i]);
+    }
+    nums.sort((a, b) => a - b);
+    let ans = 0;
+    let [l, r] = [0, n - 1];
+    while (l < r) {
+        while (l < r && nums[l] + nums[r] <= 0) {
+            ++l;
+        }
+        ans += r - l;
+        --r;
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn count_pairs(nums1: Vec<i32>, nums2: Vec<i32>) -> i64 {
+        let mut nums: Vec<i32> = nums1.iter().zip(nums2.iter()).map(|(a, b)| a - b).collect();
+        nums.sort();
+        let mut l = 0;
+        let mut r = nums.len() - 1;
+        let mut ans = 0;
+        while l < r {
+            while l < r && nums[l] + nums[r] <= 0 {
+                l += 1;
+            }
+            ans += (r - l) as i64;
+            r -= 1;
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number}
+ */
+var countPairs = function (nums1, nums2) {
+    const n = nums1.length;
+    const nums = [];
+    for (let i = 0; i < n; ++i) {
+        nums.push(nums1[i] - nums2[i]);
+    }
+    nums.sort((a, b) => a - b);
+    let ans = 0;
+    let [l, r] = [0, n - 1];
+    while (l < r) {
+        while (l < r && nums[l] + nums[r] <= 0) {
+            ++l;
+        }
+        ans += r - l;
+        --r;
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20034.%20%E5%A4%96%E6%98%9F%E8%AF%AD%E8%A8%80%E6%98%AF%E5%90%A6%E6%8E%92%E5%BA%8F/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 034. 外星语言是否排序](https://leetcode.cn/problems/lwyVBB)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>某种外星语也使用英文小写字母，但可能顺序 <code>order</code> 不同。字母表的顺序（<code>order</code>）是一些小写字母的排列。</p>
 
@@ -47,17 +54,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 953&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/verifying-an-alien-dictionary/">https://leetcode.cn/problems/verifying-an-alien-dictionary/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用数组或哈希表存放字母顺序。依次遍历单词列表，检测相邻两单词是否满足字典序。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,9 +88,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -114,31 +119,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function isAlienSorted(words: string[], order: string): boolean {
-    let charMap = new Map();
-    for (let i = 0; i < order.length; i++) {
-        charMap.set(order[i], i);
-    }
-    function compare(str1: string, str2: string): boolean {
-        const n = Math.min(str1.length, str2.length);
-        for (let i = 0; i < n; i++) {
-            let k1 = str1[i],
-                k2 = str2[i];
-            if (k1 != k2) return charMap.get(k1) < charMap.get(k2);
-        }
-        return n == str1.length;
-    }
-    for (let i = 1; i < words.length; i++) {
-        if (!compare(words[i - 1], words[i])) return false;
-    }
-    return true;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -165,7 +146,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isAlienSorted(words []string, order string) bool {
@@ -192,19 +173,68 @@ func isAlienSorted(words []string, order string) bool {
 	}
 	return true
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function isAlienSorted(words: string[], order: string): boolean {
+    let charMap = new Map();
+    for (let i = 0; i < order.length; i++) {
+        charMap.set(order[i], i);
+    }
+    function compare(str1: string, str2: string): boolean {
+        const n = Math.min(str1.length, str2.length);
+        for (let i = 0; i < n; i++) {
+            let k1 = str1[i],
+                k2 = str2[i];
+            if (k1 != k2) return charMap.get(k1) < charMap.get(k2);
+        }
+        return n == str1.length;
+    }
+    for (let i = 1; i < words.length; i++) {
+        if (!compare(words[i - 1], words[i])) return false;
+    }
+    return true;
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func isAlienSorted(_ words: [String], _ order: String) -> Bool {
+        var index = [Character: Int]()
 
+        for (i, char) in order.enumerated() {
+            index[char] = i
+        }
+
+        for i in 0..<words.count - 1 {
+            let w1 = Array(words[i])
+            let w2 = Array(words[i + 1])
+            let l1 = w1.count
+            let l2 = w2.count
+
+            for j in 0..<max(l1, l2) {
+                let i1 = j >= l1 ? -1 : index[w1[j]]!
+                let i2 = j >= l2 ? -1 : index[w2[j]]!
+
+                if i1 > i2 {
+                    return false
+                }
+                if i1 < i2 {
+                    break
+                }
+            }
+        }
+        return true
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

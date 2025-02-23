@@ -1,8 +1,20 @@
-# [615. Average Salary Departments VS Company](https://leetcode.com/problems/average-salary-departments-vs-company)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0615.Average%20Salary%20Departments%20VS%20Company/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [615. Average Salary Departments VS Company 🔒](https://leetcode.com/problems/average-salary-departments-vs-company)
 
 [中文文档](/solution/0600-0699/0615.Average%20Salary%20Departments%20VS%20Company/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Salary</code></p>
 
@@ -15,9 +27,9 @@
 | amount      | int  |
 | pay_date    | date |
 +-------------+------+
-id is the primary key column for this table.
+In SQL, id is the primary key column for this table.
 Each row of this table indicates the salary of an employee in one month.
-employee_id is a foreign key from the Employee table.
+employee_id is a foreign key (reference column) from the Employee table.
 </pre>
 
 <p>&nbsp;</p>
@@ -31,17 +43,17 @@ employee_id is a foreign key from the Employee table.
 | employee_id   | int  |
 | department_id | int  |
 +---------------+------+
-employee_id is the primary key column for this table.
+In SQL, employee_id is the primary key column for this table.
 Each row of this table indicates the department of an employee.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the comparison result <strong>(higher/lower/same)</strong> of the average salary of employees in a department to the company&#39;s average salary.</p>
+<p>Find the comparison result <strong>(higher/lower/same)</strong> of the average salary of employees in a department to the company&#39;s average salary.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -84,14 +96,85 @@ The average salary of department &#39;2&#39; is (6000 + 10000)/2 = 8000, which i
 With he same formula for the average salary comparison in February, the result is &#39;same&#39; since both the department &#39;1&#39; and &#39;2&#39; have the same average salary with the company, which is 7000.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
-```
-
+```sql
+# Write your MySQL query statement below
+WITH
+    t AS (
+        SELECT
+            DATE_FORMAT(pay_date, '%Y-%m') AS pay_month,
+            department_id,
+            AVG(amount) OVER (PARTITION BY pay_date) AS company_avg_amount,
+            AVG(amount) OVER (PARTITION BY pay_date, department_id) AS department_avg_amount
+        FROM
+            Salary AS s
+            JOIN Employee AS e ON s.employee_id = e.employee_id
+    )
+SELECT DISTINCT
+    pay_month,
+    department_id,
+    CASE
+        WHEN company_avg_amount = department_avg_amount THEN 'same'
+        WHEN company_avg_amount < department_avg_amount THEN 'higher'
+        ELSE 'lower'
+    END AS comparison
+FROM t;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT *
+        FROM
+            Salary
+            JOIN Employee USING (employee_id)
+    ),
+    T AS (
+        SELECT
+            DATE_FORMAT(pay_date, '%Y-%m') AS pay_month,
+            department_id,
+            AVG(amount) OVER (PARTITION BY pay_date, department_id) AS department_avg,
+            AVG(amount) OVER (PARTITION BY pay_date) AS company_avg
+        FROM S
+    )
+SELECT
+    pay_month,
+    department_id,
+    CASE
+        WHEN AVG(department_avg) > AVG(company_avg) THEN 'higher'
+        WHEN AVG(department_avg) < AVG(company_avg) THEN 'lower'
+        ELSE 'same'
+    END AS comparison
+FROM T
+GROUP BY 1, 2;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

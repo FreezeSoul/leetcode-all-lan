@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2357.Make%20Array%20Zero%20by%20Subtracting%20Equal%20Amounts/README.md
+rating: 1225
+source: 第 304 场周赛 Q1
+tags:
+    - 贪心
+    - 数组
+    - 哈希表
+    - 排序
+    - 模拟
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2357. 使数组中所有元素都等于零](https://leetcode.cn/problems/make-array-zero-by-subtracting-equal-amounts)
 
 [English Version](/solution/2300-2399/2357.Make%20Array%20Zero%20by%20Subtracting%20Equal%20Amounts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个非负整数数组 <code>nums</code> 。在一步操作中，你必须：</p>
 
@@ -44,11 +61,13 @@
 	<li><code>0 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表或数组**
+### 方法一：哈希表或数组
 
 我们观察到，每一次操作，都可以把数组 `nums` 中相同且非零的元素减少到 $0$，因此，我们只需要统计数组 `nums` 中有多少个不同的非零元素，即为最少操作数。统计不同的非零元素，可以使用哈希表或数组来实现。
 
@@ -56,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -66,9 +83,7 @@ class Solution:
         return len({x for x in nums if x})
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -87,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -107,7 +122,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumOperations(nums []int) (ans int) {
@@ -122,7 +137,7 @@ func minimumOperations(nums []int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumOperations(nums: number[]): number {
@@ -132,7 +147,7 @@ function minimumOperations(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -145,10 +160,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int minimumOperations(int *nums, int numsSize) {
+int minimumOperations(int* nums, int numsSize) {
     int vis[101] = {0};
     vis[0] = 1;
     int ans = 0;
@@ -163,10 +178,8 @@ int minimumOperations(int *nums, int numsSize) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

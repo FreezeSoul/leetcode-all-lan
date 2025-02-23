@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2414.Length%20of%20the%20Longest%20Alphabetical%20Continuous%20Substring/README_EN.md
+rating: 1221
+source: Weekly Contest 311 Q2
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2414. Length of the Longest Alphabetical Continuous Substring](https://leetcode.com/problems/length-of-the-longest-alphabetical-continuous-substring)
 
 [中文文档](/solution/2400-2499/2414.Length%20of%20the%20Longest%20Alphabetical%20Continuous%20Substring/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>An <strong>alphabetical continuous string</strong> is a string consisting of consecutive letters in the alphabet. In other words, it is any substring of the string <code>&quot;abcdefghijklmnopqrstuvwxyz&quot;</code>.</p>
 
@@ -38,149 +52,152 @@
 	<li><code>s</code> consists of only English lowercase letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Single Pass
+
+We can traverse the string $s$ and use a variable $\textit{ans}$ to record the length of the longest lexicographically consecutive substring, and another variable $\textit{cnt}$ to record the length of the current consecutive substring. Initially, $\textit{ans} = \textit{cnt} = 1$.
+
+Next, we start traversing the string $s$ from the character at index $1$. For each character $s[i]$, if $s[i] - s[i - 1] = 1$, it means the current character and the previous character are consecutive. In this case, $\textit{cnt} = \textit{cnt} + 1$, and we update $\textit{ans} = \max(\textit{ans}, \textit{cnt})$. Otherwise, it means the current character and the previous character are not consecutive, so $\textit{cnt} = 1$.
+
+Finally, we return $\textit{ans}$.
+
+The time complexity is $O(n)$, where $n$ is the length of the string $s$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def longestContinuousSubstring(self, s: str) -> int:
-        ans = 0
-        i, j = 0, 1
-        while j < len(s):
-            ans = max(ans, j - i)
-            if ord(s[j]) - ord(s[j - 1]) != 1:
-                i = j
-            j += 1
-        ans = max(ans, j - i)
+        ans = cnt = 1
+        for x, y in pairwise(map(ord, s)):
+            if y - x == 1:
+                cnt += 1
+                ans = max(ans, cnt)
+            else:
+                cnt = 1
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int longestContinuousSubstring(String s) {
-        int ans = 0;
-        int i = 0, j = 1;
-        for (; j < s.length(); ++j) {
-            ans = Math.max(ans, j - i);
-            if (s.charAt(j) - s.charAt(j - 1) != 1) {
-                i = j;
+        int ans = 1, cnt = 1;
+        for (int i = 1; i < s.length(); ++i) {
+            if (s.charAt(i) - s.charAt(i - 1) == 1) {
+                ans = Math.max(ans, ++cnt);
+            } else {
+                cnt = 1;
             }
         }
-        ans = Math.max(ans, j - i);
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int longestContinuousSubstring(string s) {
-        int ans = 0;
-        int i = 0, j = 1;
-        for (; j < s.size(); ++j) {
-            ans = max(ans, j - i);
-            if (s[j] - s[j - 1] != 1) {
-                i = j;
+        int ans = 1, cnt = 1;
+        for (int i = 1; i < s.size(); ++i) {
+            if (s[i] - s[i - 1] == 1) {
+                ans = max(ans, ++cnt);
+            } else {
+                cnt = 1;
             }
         }
-        ans = max(ans, j - i);
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestContinuousSubstring(s string) int {
-	ans := 0
-	i, j := 0, 1
-	for ; j < len(s); j++ {
-		ans = max(ans, j-i)
-		if s[j]-s[j-1] != 1 {
-			i = j
+	ans, cnt := 1, 1
+	for i := range s[1:] {
+		if s[i+1]-s[i] == 1 {
+			cnt++
+			ans = max(ans, cnt)
+		} else {
+			cnt = 1
 		}
 	}
-	ans = max(ans, j-i)
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **C**
-
-```c
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-
-int longestContinuousSubstring(char *s) {
-    int n = strlen(s);
-    int i = 0;
-    int res = 1;
-    for (int j = 1; j < n; j++) {
-        if (s[j] - s[j - 1] != 1) {
-            res = max(res, j - i);
-            i = j;
-        }
-    }
-    return max(res, n - i);
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestContinuousSubstring(s: string): number {
-    const n = s.length;
-    let res = 1;
-    let i = 0;
-    for (let j = 1; j < n; j++) {
-        if (s[j].charCodeAt(0) - s[j - 1].charCodeAt(0) !== 1) {
-            res = Math.max(res, j - i);
-            i = j;
+    let [ans, cnt] = [1, 1];
+    for (let i = 1; i < s.length; ++i) {
+        if (s.charCodeAt(i) - s.charCodeAt(i - 1) === 1) {
+            ans = Math.max(ans, ++cnt);
+        } else {
+            cnt = 1;
         }
     }
-    return Math.max(res, n - i);
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn longest_continuous_substring(s: String) -> i32 {
+        let mut ans = 1;
+        let mut cnt = 1;
         let s = s.as_bytes();
-        let n = s.len();
-        let mut res = 1;
-        let mut i = 0;
-        for j in 1..n {
-            if s[j] - s[j - 1] != 1 {
-                res = res.max(j - i);
-                i = j;
+        for i in 1..s.len() {
+            if s[i] - s[i - 1] == 1 {
+                cnt += 1;
+                ans = ans.max(cnt);
+            } else {
+                cnt = 1;
             }
         }
-        res.max(n - i) as i32
+        ans
     }
 }
 ```
 
-### **...**
+#### C
 
-```
+```c
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 
+int longestContinuousSubstring(char* s) {
+    int n = strlen(s);
+    int ans = 1, cnt = 1;
+    for (int i = 1; i < n; ++i) {
+        if (s[i] - s[i - 1] == 1) {
+            ++cnt;
+            ans = max(ans, cnt);
+        } else {
+            cnt = 1;
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1075.Project%20Employees%20I/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1075. Project Employees I](https://leetcode.com/problems/project-employees-i)
 
 [中文文档](/solution/1000-1099/1075.Project%20Employees%20I/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Project</code></p>
 
@@ -76,20 +88,29 @@ Employee table:
 <strong>Explanation:</strong> The average experience years for the first project is (3 + 2 + 1) / 3 = 2.00 and for the second project is (3 + 2) / 2 = 2.50
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-# Write your MySQL query statement below
-SELECT  project_id
-       ,round(AVG(experience_years),2) AS average_years
-FROM Project p
-LEFT JOIN Employee e
-ON p.employee_id = e.employee_id
-GROUP BY  project_id
+# Write your MySQL query statement
+SELECT project_id, ROUND(AVG(experience_years), 2) AS average_years
+FROM
+    Project
+    JOIN Employee USING (employee_id)
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

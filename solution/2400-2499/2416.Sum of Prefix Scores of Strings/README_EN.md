@@ -1,12 +1,29 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2416.Sum%20of%20Prefix%20Scores%20of%20Strings/README_EN.md
+rating: 1725
+source: Weekly Contest 311 Q4
+tags:
+    - Trie
+    - Array
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2416. Sum of Prefix Scores of Strings](https://leetcode.com/problems/sum-of-prefix-scores-of-strings)
 
 [中文文档](/solution/2400-2499/2416.Sum%20of%20Prefix%20Scores%20of%20Strings/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>You are given an array <code>words</code> of size <code>n</code> consisting of <strong>non-empty</strong> strings.</p>
 
-<p>We define the <strong>score</strong> of a string <code>word</code> as the <strong>number</strong> of strings <code>words[i]</code> such that <code>word</code> is a <strong>prefix</strong> of <code>words[i]</code>.</p>
+<p>We define the <strong>score</strong> of a string <code>term</code> as the <strong>number</strong> of strings <code>words[i]</code> such that <code>term</code> is a <strong>prefix</strong> of <code>words[i]</code>.</p>
 
 <ul>
 	<li>For example, if <code>words = [&quot;a&quot;, &quot;ab&quot;, &quot;abc&quot;, &quot;cab&quot;]</code>, then the score of <code>&quot;ab&quot;</code> is <code>2</code>, since <code>&quot;ab&quot;</code> is a prefix of both <code>&quot;ab&quot;</code> and <code>&quot;abc&quot;</code>.</li>
@@ -56,14 +73,38 @@ Each prefix has a score of one, so the total is answer[0] = 1 + 1 + 1 + 1 = 4.
 	<li><code>words[i]</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Prefix Tree
+
+We can use a prefix tree to maintain all prefixes of the strings and count the occurrences of each prefix.
+
+Define the prefix tree node structure `Trie`, which includes two properties:
+
+-   `children`: An array of length 26 used to store the current node's children.
+-   `cnt`: The occurrence count of the current node.
+
+Define two methods for the prefix tree:
+
+-   `insert`: Inserts a string, adding its prefixes into the prefix tree.
+-   `search`: Searches for a string and returns the occurrence count of its prefixes.
+
+We traverse all strings, inserting each string into the prefix tree. Then we traverse all strings again, calling the `search` method for each string and summing up the occurrence counts of each prefix.
+
+Time complexity is $O(L)$, and space complexity is $O(L)$, where $L$ is the total length of all strings.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Trie:
+    __slots__ = "children", "cnt"
+
     def __init__(self):
         self.children = [None] * 26
         self.cnt = 0
@@ -71,7 +112,7 @@ class Trie:
     def insert(self, w):
         node = self
         for c in w:
-            idx = ord(c) - ord('a')
+            idx = ord(c) - ord("a")
             if node.children[idx] is None:
                 node.children[idx] = Trie()
             node = node.children[idx]
@@ -81,7 +122,7 @@ class Trie:
         node = self
         ans = 0
         for c in w:
-            idx = ord(c) - ord('a')
+            idx = ord(c) - ord("a")
             if node.children[idx] is None:
                 return ans
             node = node.children[idx]
@@ -97,7 +138,7 @@ class Solution:
         return [trie.search(w) for w in words]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Trie {
@@ -146,24 +187,22 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Trie {
 private:
-    vector<Trie*> children;
-    int cnt;
+    Trie* children[26]{};
+    int cnt = 0;
 
 public:
-    Trie()
-        : children(26)
-        , cnt(0) { }
-
     void insert(string& w) {
         Trie* node = this;
         for (char c : w) {
             int idx = c - 'a';
-            if (!node->children[idx]) node->children[idx] = new Trie();
+            if (!node->children[idx]) {
+                node->children[idx] = new Trie();
+            }
             node = node->children[idx];
             ++node->cnt;
         }
@@ -174,7 +213,9 @@ public:
         int ans = 0;
         for (char c : w) {
             int idx = c - 'a';
-            if (!node->children[idx]) return ans;
+            if (!node->children[idx]) {
+                return ans;
+            }
             node = node->children[idx];
             ans += node->cnt;
         }
@@ -198,7 +239,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -248,31 +289,7 @@ func sumPrefixScores(words []string) []int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function sumPrefixScores(words: string[]): number[] {
-    const map = new Map();
-
-    for (const word of words) {
-        const n = word.length;
-        for (let i = 1; i <= n; i++) {
-            const s = word.slice(0, i);
-            map.set(s, (map.get(s) ?? 0) + 1);
-        }
-    }
-
-    return words.map(word => {
-        const n = word.length;
-        let count = 0;
-        for (let i = 1; i <= n; i++) {
-            const s = word.slice(0, i);
-            count += map.get(s);
-        }
-        return count;
-    });
-}
-```
+#### TypeScript
 
 ```ts
 class Trie {
@@ -316,19 +333,59 @@ function sumPrefixScores(words: string[]): number[] {
     for (const w of words) {
         trie.insert(w);
     }
-    let ans = [];
-    for (const w of words) {
-        ans.push(trie.search(w));
-    }
-    return ans;
+    return words.map(w => trie.search(w));
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+class Trie {
+    constructor() {
+        this.children = {};
+        this.cnt = 0;
+    }
 
+    insert(w) {
+        let node = this;
+        for (const c of w) {
+            if (!node.children[c]) {
+                node.children[c] = new Trie();
+            }
+            node = node.children[c];
+            node.cnt++;
+        }
+    }
 
+    search(w) {
+        let node = this;
+        let ans = 0;
+        for (const c of w) {
+            if (!node.children[c]) {
+                return ans;
+            }
+            node = node.children[c];
+            ans += node.cnt;
+        }
+        return ans;
+    }
+}
+
+/**
+ * @param {string[]} words
+ * @return {number[]}
+ */
+var sumPrefixScores = function (words) {
+    const trie = new Trie();
+    for (const w of words) {
+        trie.insert(w);
+    }
+    return words.map(w => trie.search(w));
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

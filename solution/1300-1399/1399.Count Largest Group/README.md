@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1399.Count%20Largest%20Group/README.md
+rating: 1341
+source: 第 23 场双周赛 Q1
+tags:
+    - 哈希表
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [1399. 统计最大组的数目](https://leetcode.cn/problems/count-largest-group)
 
 [English Version](/solution/1300-1399/1399.Count%20Largest%20Group/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数 <code>n</code>&nbsp;。请你先求出从 <code>1</code>&nbsp;到 <code>n</code> 的每个整数 10 进制表示下的数位和（每一位上的数字相加），然后把数位和相等的数字放到同一个组中。</p>
 
@@ -47,11 +60,13 @@
 	<li><code>1 &lt;= n &lt;= 10^4</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表或数组**
+### 方法一：哈希表或数组
 
 我们注意到数字范围不超过 $10^4$，因此数位和的范围也不超过 $9 \times 4 = 36$，因此我们可以用哈希表或者一个长度为 $40$ 的数组 $cnt$ 来统计每个数位和的个数，用一个变量 $mx$ 表示最大的数位和个数。
 
@@ -63,9 +78,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +99,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -139,7 +150,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countLargestGroup(n int) (ans int) {
@@ -162,7 +173,7 @@ func countLargestGroup(n int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countLargestGroup(n: number): number {
@@ -186,10 +197,8 @@ function countLargestGroup(n: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

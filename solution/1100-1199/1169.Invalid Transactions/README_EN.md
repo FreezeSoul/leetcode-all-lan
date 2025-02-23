@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1169.Invalid%20Transactions/README_EN.md
+rating: 1658
+source: Weekly Contest 151 Q1
+tags:
+    - Array
+    - Hash Table
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1169. Invalid Transactions](https://leetcode.com/problems/invalid-transactions)
 
 [中文文档](/solution/1100-1199/1169.Invalid%20Transactions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A transaction is possibly invalid if:</p>
 
@@ -48,11 +65,27 @@
 	<li>Each <code>{amount}</code> consist of digits, and represent an integer between <code>0</code> and <code>2000</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Simulation
+
+We traverse the transaction list. For each transaction, if the amount is greater than 1000, or if the transaction has the same name but different cities and the time interval does not exceed 60 minutes, then add it to the answer.
+
+Specifically, we use a hash table `d` to record each transaction, where the key is the transaction name, and the value is a list. Each element in the list is a tuple `(time, city, index)`, indicating that a transaction with the number `index` was conducted in the city `city` at the moment `time`. At the same time, we use a hash table `idx` to record the transaction number in the answer.
+
+We traverse the transaction list. For each transaction, we first add it to the hash table `d`, and then judge whether its amount is greater than 1000. If so, add its number to the answer. Then we traverse the transactions in the hash table `d`. If the transaction names are the same but the cities are different and the time interval does not exceed 60 minutes, add its number to the answer.
+
+Finally, we traverse the transaction numbers in the answer and add the corresponding transactions to the answer.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the length of the transaction list.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +105,7 @@ class Solution:
         return [transactions[i] for i in idx]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +150,7 @@ class Item {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,7 +194,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func invalidTransactions(transactions []string) (ans []string) {
@@ -203,10 +236,8 @@ type tuple struct {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

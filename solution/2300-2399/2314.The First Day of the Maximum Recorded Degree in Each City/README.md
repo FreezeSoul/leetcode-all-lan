@@ -1,10 +1,20 @@
-# [2314. 每个城市最高气温的第一天](https://leetcode.cn/problems/the-first-day-of-the-maximum-recorded-degree-in-each-city)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2314.The%20First%20Day%20of%20the%20Maximum%20Recorded%20Degree%20in%20Each%20City/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2314. 每个城市最高气温的第一天 🔒](https://leetcode.cn/problems/the-first-day-of-the-maximum-recorded-degree-in-each-city)
 
 [English Version](/solution/2300-2399/2314.The%20First%20Day%20of%20the%20Maximum%20Recorded%20Degree%20in%20Each%20City/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Weather</code></p>
 
@@ -16,14 +26,14 @@
 | day         | date |
 | degree      | int  |
 +-------------+------+
-(city_id, day) 是该表的主键。
+(city_id, day) 是该表的主键（具有唯一值的列的组合）。
 该表中的每一行都包含某一天某个城市的天气程度。
 所有的学位都是在 2022 年获得的。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写一个 SQL 来查询每个城市中有最高温度记录的日子。如果同一城市多次记录最高气温，则返回其中最早的一天。</p>
+<p>编写解决方案，找出每个城市中有最高温度记录的日子。如果同一城市多次记录最高气温，则返回其中最早的一天。</p>
 
 <p>返回按 <code>city_id</code> <strong>升序排序&nbsp;</strong>的结果表。</p>
 
@@ -61,18 +71,38 @@ Weather 表:
 城市 3 的最高气温记录在 2022-12-07 年，为-6 度。
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            *,
+            RANK() OVER (
+                PARTITION BY city_id
+                ORDER BY degree DESC, day
+            ) AS rk
+        FROM Weather
+    )
+SELECT city_id, day, degree
+FROM T
+WHERE rk = 1
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

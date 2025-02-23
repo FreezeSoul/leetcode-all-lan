@@ -1,8 +1,20 @@
-# [579. Find Cumulative Salary of an Employee](https://leetcode.com/problems/find-cumulative-salary-of-an-employee)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0579.Find%20Cumulative%20Salary%20of%20an%20Employee/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [579. Find Cumulative Salary of an Employee 🔒](https://leetcode.com/problems/find-cumulative-salary-of-an-employee)
 
 [中文文档](/solution/0500-0599/0579.Find%20Cumulative%20Salary%20of%20an%20Employee/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Employee</code></p>
 
@@ -14,13 +26,13 @@
 | month       | int  |
 | salary      | int  |
 +-------------+------+
-(id, month) is the primary key for this table.
+(id, month) is the primary key (combination of columns with unique values) for this table.
 Each row in the table indicates the salary of an employee in one month during the year 2020.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to calculate the <strong>cumulative salary summary</strong> for every employee in a single unified table.</p>
+<p>Write a solution&nbsp;to calculate the <strong>cumulative salary summary</strong> for every employee in a single unified table.</p>
 
 <p>The <strong>cumulative salary summary</strong> for an employee can be calculated as follows:</p>
 
@@ -32,7 +44,7 @@ Each row in the table indicates the salary of an employee in one month during th
 
 <p>Return the result table ordered by <code>id</code> in <strong>ascending order</strong>. In case of a tie, order it by <code>month</code> in <strong>descending order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -106,37 +118,78 @@ So the cumulative salary summary for this employee is:
 +----+-------+--------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
+SELECT
     id,
     month,
-    sum(salary) over (
-        partition by id
-        order by
-            month range 2 preceding
-    ) as Salary
-from
-    employee
-where
-    (id, month) not in (
-        select
+    SUM(salary) OVER (
+        PARTITION BY id
+        ORDER BY month
+        RANGE 2 PRECEDING
+    ) AS Salary
+FROM employee
+WHERE
+    (id, month) NOT IN (
+        SELECT
             id,
-            max(month)
-        from
-            Employee
-        group by
-            id
+            MAX(month)
+        FROM Employee
+        GROUP BY id
     )
-order by
-    id,
-    month desc
+ORDER BY id, month DESC;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            id,
+            month,
+            SUM(salary) OVER (
+                PARTITION BY id
+                ORDER BY month
+                RANGE 2 PRECEDING
+            ) AS salary,
+            RANK() OVER (
+                PARTITION BY id
+                ORDER BY month DESC
+            ) AS rk
+        FROM Employee
+    )
+SELECT id, month, salary
+FROM T
+WHERE rk > 1
+ORDER BY 1, 2 DESC;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

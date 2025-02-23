@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1227.Airplane%20Seat%20Assignment%20Probability/README.md
+tags:
+    - 脑筋急转弯
+    - 数学
+    - 动态规划
+    - 概率与统计
+---
+
+<!-- problem:start -->
+
 # [1227. 飞机座位分配概率](https://leetcode.cn/problems/airplane-seat-assignment-probability)
 
 [English Version](/solution/1200-1299/1227.Airplane%20Seat%20Assignment%20Probability/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有 <code>n</code> 位乘客即将登机，飞机正好有 <code>n</code> 个座位。第一位乘客的票丢了，他随便选了一个座位坐下。</p>
 
@@ -44,17 +57,19 @@
 	<li><code>1 &lt;= n &lt;= 10^5</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 用 $f(n)$ 表示当有 $n$ 位乘客登机时，第 $n$ 位乘客坐在自己的座位上的概率。从最简单的情况开始考虑：
 
--   当 $n=1$ 时，只有 $1$ 位乘客和 $1$ 个座位，因此第 $1$ 位乘客只能坐在第 $1$ 个座位上，$f(1)=1$；
+当 $n=1$ 时，只有 $1$ 位乘客和 $1$ 个座位，因此第 $1$ 位乘客只能坐在第 $1$ 个座位上，$f(1)=1$；
 
--   当 $n=2$ 时，有 $2$ 个座位，每个座位有 $0.5$ 的概率被第 $1$ 位乘客选中，当第 $1$ 位乘客选中座位之后，第 $2$ 位乘客只能选择剩下的座位，因此第 $2$ 位乘客有 $0.5$ 的概率坐在自己的座位上，$f(2)=0.5$。
+当 $n=2$ 时，有 $2$ 个座位，每个座位有 $0.5$ 的概率被第 $1$ 位乘客选中，当第 $1$ 位乘客选中座位之后，第 $2$ 位乘客只能选择剩下的座位，因此第 $2$ 位乘客有 $0.5$ 的概率坐在自己的座位上，$f(2)=0.5$。
 
 当 $n>2$ 时，如何计算 $f(n)$ 的值？考虑第 $1$ 位乘客选择的座位，有以下三种情况。
 
@@ -127,11 +142,11 @@ f(n) = \begin{cases}
 \end{cases}
 $$
 
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
+
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -139,9 +154,7 @@ class Solution:
         return 1 if n == 1 else 0.5
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -151,7 +164,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -162,7 +175,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func nthPersonGetsNthSeat(n int) float64 {
@@ -173,10 +186,26 @@ func nthPersonGetsNthSeat(n int) float64 {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function nthPersonGetsNthSeat(n: number): number {
+    return n === 1 ? 1 : 0.5;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn nth_person_gets_nth_seat(n: i32) -> f64 {
+        return if n == 1 { 1.0 } else { 0.5 };
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

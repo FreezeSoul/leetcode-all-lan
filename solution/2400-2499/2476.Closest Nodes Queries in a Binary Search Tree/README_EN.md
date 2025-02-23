@@ -1,8 +1,27 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2476.Closest%20Nodes%20Queries%20in%20a%20Binary%20Search%20Tree/README_EN.md
+rating: 1596
+source: Weekly Contest 320 Q2
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Search Tree
+    - Array
+    - Binary Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [2476. Closest Nodes Queries in a Binary Search Tree](https://leetcode.com/problems/closest-nodes-queries-in-a-binary-search-tree)
 
 [中文文档](/solution/2400-2499/2476.Closest%20Nodes%20Queries%20in%20a%20Binary%20Search%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the <code>root</code> of a <strong>binary search tree </strong>and an array <code>queries</code> of size <code>n</code> consisting of positive integers.</p>
 
@@ -46,11 +65,21 @@
 	<li><code>1 &lt;= queries[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: In-order Traversal + Binary Search
+
+Since the problem provides a binary search tree, we can obtain a sorted array through in-order traversal. Then for each query, we can find the maximum value less than or equal to the query value and the minimum value greater than or equal to the query value through binary search.
+
+The time complexity is $O(n + m \times \log n)$, and the space complexity is $O(n)$. Here, $n$ and $m$ are the number of nodes in the binary search tree and the number of queries, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -60,8 +89,10 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def closestNodes(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:
-        def dfs(root):
+    def closestNodes(
+        self, root: Optional[TreeNode], queries: List[int]
+    ) -> List[List[int]]:
+        def dfs(root: Optional[TreeNode]):
             if root is None:
                 return
             dfs(root.left)
@@ -71,16 +102,16 @@ class Solution:
         nums = []
         dfs(root)
         ans = []
-        for v in queries:
-            i = bisect_right(nums, v) - 1
-            j = bisect_left(nums, v)
+        for x in queries:
+            i = bisect_left(nums, x + 1) - 1
+            j = bisect_left(nums, x)
             mi = nums[i] if 0 <= i < len(nums) else -1
             mx = nums[j] if 0 <= j < len(nums) else -1
             ans.append([mi, mx])
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -104,27 +135,16 @@ class Solution {
     public List<List<Integer>> closestNodes(TreeNode root, List<Integer> queries) {
         dfs(root);
         List<List<Integer>> ans = new ArrayList<>();
-        for (int v : queries) {
-            int i = search(v + 1) - 1;
-            int j = search(v);
+        for (int x : queries) {
+            int i = Collections.binarySearch(nums, x + 1);
+            int j = Collections.binarySearch(nums, x);
+            i = i < 0 ? -i - 2 : i - 1;
+            j = j < 0 ? -j - 1 : j;
             int mi = i >= 0 && i < nums.size() ? nums.get(i) : -1;
             int mx = j >= 0 && j < nums.size() ? nums.get(j) : -1;
-            ans.add(Arrays.asList(mi, mx));
+            ans.add(List.of(mi, mx));
         }
         return ans;
-    }
-
-    private int search(int x) {
-        int left = 0, right = nums.size();
-        while (left < right) {
-            int mid = (left + right) >> 1;
-            if (nums.get(mid) >= x) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return left;
     }
 
     private void dfs(TreeNode root) {
@@ -138,7 +158,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -156,18 +176,20 @@ class Solution {
 public:
     vector<vector<int>> closestNodes(TreeNode* root, vector<int>& queries) {
         vector<int> nums;
-        function<void(TreeNode* root)> dfs = [&](TreeNode* root) {
-            if (!root) return;
+        function<void(TreeNode*)> dfs = [&](TreeNode* root) {
+            if (!root) {
+                return;
+            }
             dfs(root->left);
-            nums.emplace_back(root->val);
+            nums.push_back(root->val);
             dfs(root->right);
         };
         dfs(root);
         vector<vector<int>> ans;
         int n = nums.size();
-        for (int& v : queries) {
-            int i = upper_bound(nums.begin(), nums.end(), v) - nums.begin() - 1;
-            int j = lower_bound(nums.begin(), nums.end(), v) - nums.begin();
+        for (int& x : queries) {
+            int i = lower_bound(nums.begin(), nums.end(), x + 1) - nums.begin() - 1;
+            int j = lower_bound(nums.begin(), nums.end(), x) - nums.begin();
             int mi = i >= 0 && i < n ? nums[i] : -1;
             int mx = j >= 0 && j < n ? nums[j] : -1;
             ans.push_back({mi, mx});
@@ -177,7 +199,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -200,15 +222,14 @@ func closestNodes(root *TreeNode, queries []int) (ans [][]int) {
 		dfs(root.Right)
 	}
 	dfs(root)
-	n := len(nums)
-	for _, v := range queries {
-		i := sort.SearchInts(nums, v+1) - 1
-		j := sort.SearchInts(nums, v)
+	for _, x := range queries {
+		i := sort.SearchInts(nums, x+1) - 1
+		j := sort.SearchInts(nums, x)
 		mi, mx := -1, -1
-		if i >= 0 && i < n {
+		if i >= 0 {
 			mi = nums[i]
 		}
-		if j >= 0 && j < n {
+		if j < len(nums) {
 			mx = nums[j]
 		}
 		ans = append(ans, []int{mi, mx})
@@ -217,16 +238,105 @@ func closestNodes(root *TreeNode, queries []int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
 
+function closestNodes(root: TreeNode | null, queries: number[]): number[][] {
+    const nums: number[] = [];
+    const dfs = (root: TreeNode | null) => {
+        if (!root) {
+            return;
+        }
+        dfs(root.left);
+        nums.push(root.val);
+        dfs(root.right);
+    };
+    const search = (x: number): number => {
+        let [l, r] = [0, nums.length];
+        while (l < r) {
+            const mid = (l + r) >> 1;
+            if (nums[mid] >= x) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    };
+    dfs(root);
+    const ans: number[][] = [];
+    for (const x of queries) {
+        const i = search(x + 1) - 1;
+        const j = search(x);
+        const mi = i >= 0 ? nums[i] : -1;
+        const mx = j < nums.length ? nums[j] : -1;
+        ans.push([mi, mx]);
+    }
+    return ans;
+}
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    private List<int> nums = new List<int>();
 
+    public IList<IList<int>> ClosestNodes(TreeNode root, IList<int> queries) {
+        Dfs(root);
+        List<IList<int>> ans = new List<IList<int>>();
+        foreach (int x in queries) {
+            int i = nums.BinarySearch(x + 1);
+            int j = nums.BinarySearch(x);
+            i = i < 0 ? -i - 2 : i - 1;
+            j = j < 0 ? -j - 1 : j;
+            int mi = i >= 0 && i < nums.Count ? nums[i] : -1;
+            int mx = j >= 0 && j < nums.Count ? nums[j] : -1;
+            ans.Add(new List<int> {mi, mx});
+        }
+        return ans;
+    }
+
+    private void Dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        Dfs(root.left);
+        nums.Add(root.val);
+        Dfs(root.right);
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1679.Max%20Number%20of%20K-Sum%20Pairs/README.md
+rating: 1345
+source: 第 218 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1679. K 和数对的最大数目](https://leetcode.cn/problems/max-number-of-k-sum-pairs)
 
 [English Version](/solution/1600-1699/1679.Max%20Number%20of%20K-Sum%20Pairs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> 。</p>
 
@@ -43,13 +58,15 @@
 	<li><code>1 <= k <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
-我们对 `nums` 进行排序。然后 $l$, $r$ 分别指向 `nums` 首尾元素，判断两整数之和 $s$ 与 $k$ 的大小关系。
+我们对 $nums$ 进行排序。然后 $l$, $r$ 分别指向 $nums$ 首尾元素，判断两整数之和 $s$ 与 $k$ 的大小关系。
 
 -   若 $s = k$，说明找到了两个整数，满足和为 $k$，答案加一，然后 $l$, $r$ 向中间移动；
 -   若 $s \gt k$，则 $r$ 指针向左移动；
@@ -58,23 +75,11 @@
 
 循环结束，返回答案。
 
-时间复杂度 $O(n\times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为 `nums` 的长度。
-
-**方法二：哈希表**
-
-我们使用哈希表 `cnt` 记录当前剩余整数及其出现的次数。
-
-遍历 `nums`，对于当前整数 $x$，判断 $k - x$ 是否在 `cnt` 中，若存在，则说明找到了两个整数，满足和为 $k$，答案加一，然后将 $k - x$ 的出现次数减一；否则，将 $x$ 的出现次数加一。
-
-遍历结束，返回答案。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 `nums` 的长度。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为 $nums$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,23 +98,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def maxOperations(self, nums: List[int], k: int) -> int:
-        cnt = Counter()
-        ans = 0
-        for x in nums:
-            if cnt[k - x]:
-                ans += 1
-                cnt[k - x] -= 1
-            else:
-                cnt[x] += 1
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -134,27 +123,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int maxOperations(int[] nums, int k) {
-        Map<Integer, Integer> cnt = new HashMap<>();
-        int ans = 0;
-        for (int x : nums) {
-            if (cnt.containsKey(k - x)) {
-                ++ans;
-                if (cnt.merge(k - x, -1, Integer::sum) == 0) {
-                    cnt.remove(k - x);
-                }
-            } else {
-                cnt.merge(x, 1, Integer::sum);
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -179,26 +148,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int maxOperations(vector<int>& nums, int k) {
-        unordered_map<int, int> cnt;
-        int ans = 0;
-        for (int& x : nums) {
-            if (cnt[k - x]) {
-                --cnt[k - x];
-                ++ans;
-            } else {
-                ++cnt[x];
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func maxOperations(nums []int, k int) int {
@@ -220,22 +170,7 @@ func maxOperations(nums []int, k int) int {
 }
 ```
 
-```go
-func maxOperations(nums []int, k int) (ans int) {
-	cnt := map[int]int{}
-	for _, x := range nums {
-		if cnt[k-x] > 0 {
-			cnt[k-x]--
-			ans++
-		} else {
-			cnt[x]++
-		}
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxOperations(nums: number[], k: number): number {
@@ -253,10 +188,156 @@ function maxOperations(nums: number[], k: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn max_operations(nums: Vec<i32>, k: i32) -> i32 {
+        let mut nums = nums.clone();
+        nums.sort();
+        let (mut l, mut r, mut ans) = (0, nums.len() - 1, 0);
+        while l < r {
+            match nums[l] + nums[r] {
+                sum if sum == k => {
+                    ans += 1;
+                    l += 1;
+                    r -= 1;
+                }
+                sum if sum > k => {
+                    r -= 1;
+                }
+                _ => {
+                    l += 1;
+                }
+            }
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：哈希表
+
+我们使用哈希表 $cnt$ 记录当前剩余整数及其出现的次数。
+
+遍历 $nums$，对于当前整数 $x$，判断 $k - x$ 是否在 $cnt$ 中，若存在，则说明找到了两个整数，满足和为 $k$，答案加一，然后将 $k - x$ 的出现次数减一；否则，将 $x$ 的出现次数加一。
+
+遍历结束，返回答案。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为 $nums$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxOperations(self, nums: List[int], k: int) -> int:
+        cnt = Counter()
+        ans = 0
+        for x in nums:
+            if cnt[k - x]:
+                ans += 1
+                cnt[k - x] -= 1
+            else:
+                cnt[x] += 1
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int maxOperations(int[] nums, int k) {
+        Map<Integer, Integer> cnt = new HashMap<>();
+        int ans = 0;
+        for (int x : nums) {
+            if (cnt.containsKey(k - x)) {
+                ++ans;
+                if (cnt.merge(k - x, -1, Integer::sum) == 0) {
+                    cnt.remove(k - x);
+                }
+            } else {
+                cnt.merge(x, 1, Integer::sum);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxOperations(vector<int>& nums, int k) {
+        unordered_map<int, int> cnt;
+        int ans = 0;
+        for (int& x : nums) {
+            if (cnt[k - x]) {
+                --cnt[k - x];
+                ++ans;
+            } else {
+                ++cnt[x];
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxOperations(nums []int, k int) (ans int) {
+	cnt := map[int]int{}
+	for _, x := range nums {
+		if cnt[k-x] > 0 {
+			cnt[k-x]--
+			ans++
+		} else {
+			cnt[x]++
+		}
+	}
+	return
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_operations(nums: Vec<i32>, k: i32) -> i32 {
+        let mut cnt = std::collections::HashMap::new();
+        let mut ans = 0;
+        for x in nums {
+            let m = k - x;
+            if let Some(v) = cnt.get_mut(&m) {
+                ans += 1;
+                *v -= 1;
+                if *v == 0 {
+                    cnt.remove(&m);
+                }
+            } else if let Some(v) = cnt.get_mut(&x) {
+                *v += 1;
+            } else {
+                cnt.insert(x, 1);
+            }
+        }
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

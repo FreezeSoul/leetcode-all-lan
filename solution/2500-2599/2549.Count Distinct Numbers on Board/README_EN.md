@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2549.Count%20Distinct%20Numbers%20on%20Board/README_EN.md
+rating: 1265
+source: Weekly Contest 330 Q1
+tags:
+    - Array
+    - Hash Table
+    - Math
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2549. Count Distinct Numbers on Board](https://leetcode.com/problems/count-distinct-numbers-on-board)
 
 [中文文档](/solution/2500-2599/2549.Count%20Distinct%20Numbers%20on%20Board/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a positive integer <code>n</code>, that is initially placed on a board. Every day, for <code>10<sup>9</sup></code> days, you perform the following procedure:</p>
 
@@ -49,11 +66,23 @@ After a billion days, the only two distinct numbers on the board are 2 and 3.
 	<li><code>1 &lt;= n &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Lateral Thinking
+
+Since every operation on the number $n$ on the desktop will also cause the number $n-1$ to appear on the desktop, the final numbers on the desktop are $[2,...n]$, that is, $n-1$ numbers.
+
+Note that $n$ could be $1$, so it needs to be specially judged.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +90,7 @@ class Solution:
         return max(1, n - 1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -71,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -82,18 +111,15 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func distinctIntegers(n int) int {
-	if n == 1 {
-		return 1
-	}
-	return n - 1
+	return max(1, n-1)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function distinctIntegers(n: number): number {
@@ -101,10 +127,18 @@ function distinctIntegers(n: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn distinct_integers(n: i32) -> i32 {
+        (1).max(n - 1)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1907.Count%20Salary%20Categories/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1907. 按分类统计薪水](https://leetcode.cn/problems/count-salary-categories)
 
 [English Version](/solution/1900-1999/1907.Count%20Salary%20Categories/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Accounts</code></p>
 
@@ -15,13 +25,13 @@
 | account_id  | int  |
 | income      | int  |
 +-------------+------+
-account_id&nbsp;是这个表的主键。
+在 SQL 中，account_id&nbsp;是这个表的主键。
 每一行都包含一个银行帐户的月收入的信息。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写出一个&nbsp;SQL&nbsp;查询，来报告每个工资类别的银行账户数量。&nbsp;工资类别如下：</p>
+<p>查询每个工资类别的银行账户数量。&nbsp;工资类别如下：</p>
 
 <ul>
 	<li><code>"Low Salary"</code>：所有工资 <strong>严格低于</strong> <code>20000</code> 美元。</li>
@@ -61,22 +71,79 @@ Accounts 表:
 | High Salary    | 3              |
 +----------------+----------------+
 <strong>解释：</strong>
-低薪: 数量为 2.
+低薪: 有一个账户 2.
 中等薪水: 没有.
 高薪: 有三个账户，他们是 3, 6和 8.</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：构建临时表 + 分组统计 + 左连接
+
+我们可以先构建一个临时表，包含所有工资类别，然后再统计每个工资类别的银行账户数量。最后我们使用左连接，将临时表和统计结果表连接起来，这样就可以保证结果表中包含所有工资类别。
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    S AS (
+        SELECT 'Low Salary' AS category
+        UNION
+        SELECT 'Average Salary'
+        UNION
+        SELECT 'High Salary'
+    ),
+    T AS (
+        SELECT
+            CASE
+                WHEN income < 20000 THEN "Low Salary"
+                WHEN income > 50000 THEN 'High Salary'
+                ELSE 'Average Salary'
+            END AS category,
+            COUNT(1) AS accounts_count
+        FROM Accounts
+        GROUP BY 1
+    )
+SELECT category, IFNULL(accounts_count, 0) AS accounts_count
+FROM
+    S
+    LEFT JOIN T USING (category);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：筛选 + 合并
+
+我们可以分别筛选出每个工资类别的银行账户数量，然后再将结果合并起来。这里我们使用 `UNION` 来合并结果。
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+SELECT 'Low Salary' AS category, IFNULL(SUM(income < 20000), 0) AS accounts_count FROM Accounts
+UNION
+SELECT
+    'Average Salary' AS category,
+    IFNULL(SUM(income BETWEEN 20000 AND 50000), 0) AS accounts_count
+FROM Accounts
+UNION
+SELECT 'High Salary' AS category, IFNULL(SUM(income > 50000), 0) AS accounts_count FROM Accounts;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

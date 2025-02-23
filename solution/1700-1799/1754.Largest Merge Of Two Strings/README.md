@@ -1,15 +1,30 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1754.Largest%20Merge%20Of%20Two%20Strings/README.md
+rating: 1828
+source: 第 227 场周赛 Q3
+tags:
+    - 贪心
+    - 双指针
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1754. 构造字典序最大的合并字符串](https://leetcode.cn/problems/largest-merge-of-two-strings)
 
 [English Version](/solution/1700-1799/1754.Largest%20Merge%20Of%20Two%20Strings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串 <code>word1</code> 和 <code>word2</code> 。你需要按下述方式构造一个新字符串 <code>merge</code> ：如果 <code>word1</code> 或 <code>word2</code> 非空，选择 <strong>下面选项之一</strong> 继续操作：</p>
 
 <ul>
 	<li>如果 <code>word1</code> 非空，将 <code>word1</code> 中的第一个字符附加到 <code>merge</code> 的末尾，并将其从 <code>word1</code> 中移除。
+
     <ul>
     	<li>例如，<code>word1 = "abc" </code>且 <code>merge = "dv"</code> ，在执行此选项操作之后，<code>word1 = "bc"</code> ，同时 <code>merge = "dva"</code> 。</li>
     </ul>
@@ -19,6 +34,7 @@
     	<li>例如，<code>word2 = "abc" </code>且 <code>merge = ""</code> ，在执行此选项操作之后，<code>word2 = "bc"</code> ，同时 <code>merge = "a"</code> 。</li>
     </ul>
     </li>
+
 </ul>
 
 <p>返回你可以构造的字典序 <strong>最大</strong> 的合并字符串<em> </em><code>merge</code><em> 。</em></p>
@@ -57,11 +73,13 @@
 	<li><code>word1</code> 和 <code>word2</code> 仅由小写英文组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 双指针**
+### 方法一：贪心 + 双指针
 
 我们用指针 $i$ 和 $j$ 分别指向字符串 `word1` 和 `word2` 的第一个字符。然后循环，每次比较 $word1[i:]$ 和 $word2[j:]$ 的大小，如果 $word1[i:]$ 比 $word2[j:]$ 大，那么我们就将 $word1[i]$ 加入答案，否则我们就将 $word2[j]$ 加入答案。循环，直至 $i$ 到达字符串 `word1` 的末尾，或者 $j$ 到达字符串 `word2` 的末尾。
 
@@ -71,9 +89,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +108,7 @@ class Solution:
         return "".join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +147,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestMerge(word1 string, word2 string) string {
@@ -155,7 +169,7 @@ func largestMerge(word1 string, word2 string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function largestMerge(word1: string, word2: string): string {
@@ -173,7 +187,7 @@ function largestMerge(word1: string, word2: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -201,15 +215,15 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-char *largestMerge(char *word1, char *word2) {
+char* largestMerge(char* word1, char* word2) {
     int m = strlen(word1);
     int n = strlen(word2);
     int i = 0;
     int j = 0;
-    char *ans = malloc((m + n + 1) * sizeof(char));
+    char* ans = malloc((m + n + 1) * sizeof(char));
     while (i < m && j < n) {
         int k = 0;
         while (word1[i + k] && word2[j + k] && word1[i + k] == word2[j + k]) {
@@ -236,10 +250,8 @@ char *largestMerge(char *word1, char *word2) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

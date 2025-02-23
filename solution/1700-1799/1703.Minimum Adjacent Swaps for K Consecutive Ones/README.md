@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1703.Minimum%20Adjacent%20Swaps%20for%20K%20Consecutive%20Ones/README.md
+rating: 2466
+source: 第 42 场双周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 前缀和
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [1703. 得到连续 K 个 1 的最少相邻交换次数](https://leetcode.cn/problems/minimum-adjacent-swaps-for-k-consecutive-ones)
 
 [English Version](/solution/1700-1799/1703.Minimum%20Adjacent%20Swaps%20for%20K%20Consecutive%20Ones/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> 。 <code>nums</code> 仅包含 <code>0</code> 和 <code>1</code> 。每一次移动，你可以选择 <strong>相邻</strong> 两个数字并将它们交换。</p>
 
@@ -43,25 +58,25 @@
 	<li><code>1 &lt;= k &lt;= sum(nums)</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀和 + 中位数枚举**
+### 方法一：前缀和 + 中位数枚举
 
-我们可以将数组 `nums` 中的 `1` 的下标存入数组 `arr` 中。接下来，我们预处理数组 `arr` 的前缀和数组 `s`，其中 `s[i]` 表示数组 `arr` 中前 $i$ 个元素的和。
+我们可以将数组 $nums$ 中的 $1$ 的下标存入数组 $arr$ 中。接下来，我们预处理数组 $arr$ 的前缀和数组 $s$，其中 $s[i]$ 表示数组 $arr$ 中前 $i$ 个元素的和。
 
 对于长度为 $k$ 的子数组，左侧（包含中位数）的元素个数 $x=\frac{k+1}{2}$，右侧的元素个数为 $y=k-x$。
 
-我们枚举中位数的下标 $i$，其中 $x-1\leq i\leq len(arr)-y$，那么左侧数组的前缀和 $ls=s[i+1]-s[i+1-x]$，右侧数组的前缀和 $rs=s[i+1+y]-s[i+1]$。当前中位数在 `nums` 中的下标为 $j=arr[i]$，将左侧 $x$ 个元素移动到 $[j-x+1,..j]$ 所需要的操作次数为 $a=(j+j-x+1)\times\frac{x}{2}-ls$，将右侧 $y$ 个元素移动到 $[j+1,..j+y]$ 所需要的操作次数为 $b=rs-(j+1+j+y)\times\frac{y}{2}$，那么总的操作次数为 $a+b$，我们取所有总的操作次数的最小值即可。
+我们枚举中位数的下标 $i$，其中 $x-1\leq i\leq len(arr)-y$，那么左侧数组的前缀和 $ls=s[i+1]-s[i+1-x]$，右侧数组的前缀和 $rs=s[i+1+y]-s[i+1]$。当前中位数在 $nums$ 中的下标为 $j=arr[i]$，将左侧 $x$ 个元素移动到 $[j-x+1,..j]$ 所需要的操作次数为 $a=(j+j-x+1)\times\frac{x}{2}-ls$，将右侧 $y$ 个元素移动到 $[j+1,..j+y]$ 所需要的操作次数为 $b=rs-(j+1+j+y)\times\frac{y}{2}$，那么总的操作次数为 $a+b$，我们取所有总的操作次数的最小值即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(m)$。其中 $n$ 和 $m$ 分别为数组 `nums` 的长度以及数组 `nums` 中 `1` 的个数。
+时间复杂度 $O(n)$，空间复杂度 $O(m)$。其中 $n$ 和 $m$ 分别为数组 $nums$ 的长度以及数组 $nums$ 中 $1$ 的个数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -81,9 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -116,7 +129,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -150,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minMoves(nums []int, k int) int {
@@ -177,19 +190,10 @@ func minMoves(nums []int, k int) int {
 	}
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1200.Minimum%20Absolute%20Difference/README.md
+rating: 1198
+source: 第 155 场周赛 Q1
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1200. 最小绝对差](https://leetcode.cn/problems/minimum-absolute-difference)
 
 [English Version](/solution/1200-1299/1200.Minimum%20Absolute%20Difference/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你个整数数组&nbsp;<code>arr</code>，其中每个元素都 <strong>不相同</strong>。</p>
 
@@ -50,11 +63,13 @@
 	<li><code>-10^6 &lt;= arr[i] &lt;= 10^6</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 根据题目描述，我们需要找出数组 $arr$ 中任意两个元素的最小绝对差，因此我们可以先对数组 $arr$ 排序，随后遍历相邻元素，得到最小绝对差 $mi$。
 
@@ -64,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +89,7 @@ class Solution:
         return [[a, b] for a, b in pairwise(arr) if b - a == mi]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +111,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +134,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumAbsDifference(arr []int) (ans [][]int) {
@@ -144,7 +155,7 @@ func minimumAbsDifference(arr []int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumAbsDifference(arr: number[]): number[][] {
@@ -164,10 +175,8 @@ function minimumAbsDifference(arr: number[]): number[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

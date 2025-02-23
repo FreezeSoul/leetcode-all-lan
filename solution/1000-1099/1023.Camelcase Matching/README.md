@@ -1,14 +1,30 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1023.Camelcase%20Matching/README.md
+rating: 1537
+source: 第 131 场周赛 Q3
+tags:
+    - 字典树
+    - 数组
+    - 双指针
+    - 字符串
+    - 字符串匹配
+---
+
+<!-- problem:start -->
+
 # [1023. 驼峰式匹配](https://leetcode.cn/problems/camelcase-matching)
 
 [English Version](/solution/1000-1099/1023.Camelcase%20Matching/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>queries</code>，和一个表示模式的字符串&nbsp;<code>pattern</code>，请你返回一个布尔数组 <code>answer</code> 。只有在待查项&nbsp;<code>queries[i]</code> 与模式串&nbsp;<code>pattern</code> 匹配时，&nbsp;<code>answer[i]</code>&nbsp;才为 <code>true</code>，否则为 <code>false</code>。</p>
 
-<p>如果可以将<strong>小写字母</strong>插入模式串&nbsp;<code>pattern</code>&nbsp;得到待查询项&nbsp;<code>query</code>，那么待查询项与给定模式串匹配。可以在任何位置插入每个字符，也可以不插入字符。</p>
+<p>如果可以将&nbsp;<strong>小写字母&nbsp;</strong>插入模式串&nbsp;<code>pattern</code>&nbsp;得到待查询项&nbsp;<code>queries[i]</code>，那么待查询项与给定模式串匹配。您可以在模式串中的任何位置插入字符，也可以选择不插入任何字符。</p>
 
 <p>&nbsp;</p>
 
@@ -51,11 +67,13 @@
 	<li><code>queries[i]</code> 和 <code>pattern</code> 由英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：双指针
 
 我们可以遍历 `queries` 中的每个字符串，判断其是否与 `pattern` 匹配，若匹配则将 `true` 加入答案数组，否则加入 `false`。
 
@@ -69,9 +87,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +108,7 @@ class Solution:
         return [check(q, pattern) for q in queries]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -125,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,7 +170,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func camelMatch(queries []string, pattern string) (ans []bool) {
@@ -183,7 +197,7 @@ func camelMatch(queries []string, pattern string) (ans []bool) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function camelMatch(queries: string[], pattern: string): boolean[] {
@@ -213,10 +227,8 @@ function camelMatch(queries: string[], pattern: string): boolean[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

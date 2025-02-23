@@ -1,8 +1,20 @@
-# [1322. Ads Performance](https://leetcode.com/problems/ads-performance)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1322.Ads%20Performance/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1322. Ads Performance 🔒](https://leetcode.com/problems/ads-performance)
 
 [中文文档](/solution/1300-1399/1322.Ads%20Performance/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Ads</code></p>
 
@@ -14,9 +26,9 @@
 | user_id       | int     |
 | action        | enum    |
 +---------------+---------+
-(ad_id, user_id) is the primary key for this table.
+(ad_id, user_id) is the primary key (combination of columns with unique values) for this table.
 Each row of this table contains the ID of an Ad, the ID of a user, and the action taken by this user regarding this Ad.
-The action column is an ENUM type of (&#39;Clicked&#39;, &#39;Viewed&#39;, &#39;Ignored&#39;).
+The action column is an ENUM (category) type of (&#39;Clicked&#39;, &#39;Viewed&#39;, &#39;Ignored&#39;).
 </pre>
 
 <p>&nbsp;</p>
@@ -25,11 +37,11 @@ The action column is an ENUM type of (&#39;Clicked&#39;, &#39;Viewed&#39;, &#39;
 
 <p>Performance of the Ad is measured using Click-Through Rate (CTR) where:</p>
 <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1300-1399/1322.Ads%20Performance/images/sql1.png" style="width: 600px; height: 54px;" />
-<p>Write an SQL query to find the <code>ctr</code> of each Ad. <strong>Round</strong> <code>ctr</code> to <strong>two decimal points</strong>.</p>
+<p>Write a solution&nbsp;to find the <code>ctr</code> of each Ad. <strong>Round</strong> <code>ctr</code> to <strong>two decimal points</strong>.</p>
 
 <p>Return the result table ordered by <code>ctr</code> in <strong>descending order</strong> and by <code>ad_id</code> in <strong>ascending order</strong> in case of a tie.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -68,24 +80,29 @@ for ad_id = 5, ctr = 0.00, Note that ad_id = 5 has no clicks or views.
 Note that we do not care about Ignored Ads.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 SELECT
-  ad_id,
-  Ifnull(ROUND(AVG(CASE
-    WHEN action = 'Clicked' THEN 1
-    WHEN action = 'Viewed' THEN 0
-    ELSE NULL
-  END) * 100, 2), 0) AS ctr
-FROM ads
-GROUP BY ad_id
-ORDER BY ctr DESC,
-ad_id ASC;
+    ad_id,
+    ROUND(IFNULL(SUM(action = 'Clicked') / SUM(action IN('Clicked', 'Viewed')) * 100, 0), 2) AS ctr
+FROM Ads
+GROUP BY 1
+ORDER BY 2 DESC, 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

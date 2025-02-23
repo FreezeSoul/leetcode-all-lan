@@ -1,8 +1,22 @@
-# [2229. Check if an Array Is Consecutive](https://leetcode.com/problems/check-if-an-array-is-consecutive)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2229.Check%20if%20an%20Array%20Is%20Consecutive/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [2229. Check if an Array Is Consecutive 🔒](https://leetcode.com/problems/check-if-an-array-is-consecutive)
 
 [中文文档](/solution/2200-2299/2229.Check%20if%20an%20Array%20Is%20Consecutive/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return <code>true</code> <em>if </em><code>nums</code><em> is <strong>consecutive</strong>, otherwise return </em><code>false</code><em>.</em></p>
 
@@ -50,93 +64,131 @@ Therefore, nums is consecutive.
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We can use a hash table $\textit{s}$ to store all the elements in the array $\textit{nums}$, and use two variables $\textit{mi}$ and $\textit{mx}$ to represent the minimum and maximum values in the array, respectively.
+
+If all elements in the array are distinct and the length of the array equals the difference between the maximum and minimum values plus $1$, then the array is consecutive, and we return $\textit{true}$; otherwise, we return $\textit{false}$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def isConsecutive(self, nums: List[int]) -> bool:
         mi, mx = min(nums), max(nums)
-        n = len(nums)
-        return len(set(nums)) == n and mx == mi + n - 1
+        return len(set(nums)) == mx - mi + 1 == len(nums)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public boolean isConsecutive(int[] nums) {
-        int mi = nums[0];
-        int mx = nums[0];
+        int mi = nums[0], mx = 0;
         Set<Integer> s = new HashSet<>();
-        for (int v : nums) {
-            mi = Math.min(mi, v);
-            mx = Math.max(mx, v);
-            s.add(v);
+        for (int x : nums) {
+            if (!s.add(x)) {
+                return false;
+            }
+            mi = Math.min(mi, x);
+            mx = Math.max(mx, x);
         }
-        int n = nums.length;
-        return s.size() == n && mx == mi + n - 1;
+        return mx - mi + 1 == nums.length;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool isConsecutive(vector<int>& nums) {
-        unordered_set<int> s(nums.begin(), nums.end());
-        int mi = *min_element(nums.begin(), nums.end());
-        int mx = *max_element(nums.begin(), nums.end());
-        int n = nums.size();
-        return s.size() == n && mx == mi + n - 1;
+        unordered_set<int> s;
+        int mi = nums[0], mx = 0;
+        for (int x : nums) {
+            if (s.contains(x)) {
+                return false;
+            }
+            s.insert(x);
+            mi = min(mi, x);
+            mx = max(mx, x);
+        }
+        return mx - mi + 1 == nums.size();
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isConsecutive(nums []int) bool {
-	s := make(map[int]bool)
-	mi, mx := nums[0], nums[0]
-	for _, v := range nums {
-		s[v] = true
-		mi = min(mi, v)
-		mx = max(mx, v)
+	s := map[int]bool{}
+	mi, mx := nums[0], 0
+	for _, x := range nums {
+		if s[x] {
+			return false
+		}
+		s[x] = true
+		mi = min(mi, x)
+		mx = max(mx, x)
 	}
-	return len(s) == len(nums) && mx == mi+len(nums)-1
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return mx-mi+1 == len(nums)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function isConsecutive(nums: number[]): boolean {
+    let [mi, mx] = [nums[0], 0];
+    const s = new Set<number>();
+    for (const x of nums) {
+        if (s.has(x)) {
+            return false;
+        }
+        s.add(x);
+        mi = Math.min(mi, x);
+        mx = Math.max(mx, x);
+    }
+    return mx - mi + 1 === nums.length;
+}
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var isConsecutive = function (nums) {
+    let [mi, mx] = [nums[0], 0];
+    const s = new Set();
+    for (const x of nums) {
+        if (s.has(x)) {
+            return false;
+        }
+        s.add(x);
+        mi = Math.min(mi, x);
+        mx = Math.max(mx, x);
+    }
+    return mx - mi + 1 === nums.length;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

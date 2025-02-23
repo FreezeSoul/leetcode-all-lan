@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1218.Longest%20Arithmetic%20Subsequence%20of%20Given%20Difference/README.md
+rating: 1597
+source: 第 157 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1218. 最长定差子序列](https://leetcode.cn/problems/longest-arithmetic-subsequence-of-given-difference)
 
 [English Version](/solution/1200-1299/1218.Longest%20Arithmetic%20Subsequence%20of%20Given%20Difference/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>arr</code> 和一个整数 <code>difference</code>，请你找出并返回 <code>arr</code> 中最长等差子序列的长度，该子序列中相邻元素之间的差等于 <code>difference</code> 。</p>
 
@@ -44,86 +58,113 @@
 	<li><code>-10<sup>4</sup> <= arr[i], difference <= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-时间复杂度 $O(n)$。
+我们可以使用哈希表 $f$ 来存储以 $x$ 结尾的最长等差子序列的长度。
+
+遍历数组 $\textit{arr}$，对于每个元素 $x$，我们更新 $f[x]$ 为 $f[x - \textit{difference}] + 1$。
+
+遍历结束后，我们返回 $f$ 中的最大值作为答案返回即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{arr}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def longestSubsequence(self, arr: List[int], difference: int) -> int:
-        dp, ans = defaultdict(int), 1
-        for num in arr:
-            dp[num] = dp[num - difference] + 1
-            ans = max(ans, dp[num])
-        return ans
+        f = defaultdict(int)
+        for x in arr:
+            f[x] = f[x - difference] + 1
+        return max(f.values())
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int longestSubsequence(int[] arr, int difference) {
-        Map<Integer, Integer> dp = new HashMap<>();
-        int ans = 1;
-        for (int num : arr) {
-            dp.put(num, dp.getOrDefault(num - difference, 0) + 1);
-            ans = Math.max(ans, dp.get(num));
+        Map<Integer, Integer> f = new HashMap<>();
+        int ans = 0;
+        for (int x : arr) {
+            f.put(x, f.getOrDefault(x - difference, 0) + 1);
+            ans = Math.max(ans, f.get(x));
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int longestSubsequence(vector<int>& arr, int difference) {
-        unordered_map<int, int> dp;
-        int ans = 1;
-        for (int num : arr) {
-            dp[num] = dp[num - difference] + 1;
-            ans = max(ans, dp[num]);
+        unordered_map<int, int> f;
+        int ans = 0;
+        for (int x : arr) {
+            f[x] = f[x - difference] + 1;
+            ans = max(ans, f[x]);
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func longestSubsequence(arr []int, difference int) int {
-	dp, ans := make(map[int]int), 1
-	for _, num := range arr {
-		dp[num] = dp[num-difference] + 1
-		ans = max(ans, dp[num])
+func longestSubsequence(arr []int, difference int) (ans int) {
+	f := map[int]int{}
+	for _, x := range arr {
+		f[x] = f[x-difference] + 1
+		ans = max(ans, f[x])
 	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn longest_subsequence(arr: Vec<i32>, difference: i32) -> i32 {
+        let mut f = HashMap::new();
+        let mut ans = 0;
+        for &x in &arr {
+            let count = f.get(&(x - difference)).unwrap_or(&0) + 1;
+            f.insert(x, count);
+            ans = ans.max(count);
+        }
+        ans
+    }
+}
+```
+
+#### TypeScript
+
+```ts
+function longestSubsequence(arr: number[], difference: number): number {
+    const f: Map<number, number> = new Map();
+    for (const x of arr) {
+        f.set(x, (f.get(x - difference) ?? 0) + 1);
+    }
+    return Math.max(...f.values());
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -132,20 +173,16 @@ func max(a, b int) int {
  * @return {number}
  */
 var longestSubsequence = function (arr, difference) {
-    let ans = 1;
-    const dp = new Map();
-    for (const v of arr) {
-        dp.set(v, (dp.get(v - difference) || 0) + 1);
-        ans = Math.max(ans, dp.get(v));
+    const f = new Map();
+    for (const x of arr) {
+        f.set(x, (f.get(x - difference) || 0) + 1);
     }
-    return ans;
+    return Math.max(...f.values());
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

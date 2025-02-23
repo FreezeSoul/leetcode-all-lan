@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1968.Array%20With%20Elements%20Not%20Equal%20to%20Average%20of%20Neighbors/README.md
+rating: 1499
+source: 第 254 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1968. 构造元素不等于两相邻元素平均值的数组](https://leetcode.cn/problems/array-with-elements-not-equal-to-average-of-neighbors)
 
 [English Version](/solution/1900-1999/1968.Array%20With%20Elements%20Not%20Equal%20to%20Average%20of%20Neighbors/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>下标从 0 开始</strong> 的数组 <code>nums</code> ，数组由若干 <strong>互不相同的</strong> 整数组成。你打算重新排列数组中的元素以满足：重排后，数组中的每个元素都 <strong>不等于</strong> 其两侧相邻元素的 <strong>平均值</strong> 。</p>
 
@@ -43,26 +57,28 @@ i=3, nums[i] = 2, 两相邻元素平均值为 (6+0) / 2 = 3
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
-**方法二：随机打乱**
+由于数组中的元素是互不相同的，我们可以先对数组进行排序，然后将数组分成两部分，将前一半的元素放到答案数组中的偶数位置，将后一半的元素放到答案数组中的奇数位置。这样，对于每个元素，它的两个相邻元素都不会等于它的平均值。
+
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 $\textit{nums}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def rearrangeArray(self, nums: List[int]) -> List[int]:
         nums.sort()
         n = len(nums)
-        m = (n + 1) >> 1
+        m = (n + 1) // 2
         ans = []
         for i in range(m):
             ans.append(nums[i])
@@ -71,9 +87,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,63 +107,64 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> rearrangeArray(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
+        ranges::sort(nums);
         vector<int> ans;
         int n = nums.size();
         int m = (n + 1) >> 1;
         for (int i = 0; i < m; ++i) {
             ans.push_back(nums[i]);
-            if (i + m < n) ans.push_back(nums[i + m]);
+            if (i + m < n) {
+                ans.push_back(nums[i + m]);
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func rearrangeArray(nums []int) []int {
+func rearrangeArray(nums []int) (ans []int) {
 	sort.Ints(nums)
 	n := len(nums)
 	m := (n + 1) >> 1
-	var ans []int
 	for i := 0; i < m; i++ {
 		ans = append(ans, nums[i])
 		if i+m < n {
 			ans = append(ans, nums[i+m])
 		}
 	}
-	return ans
+	return
 }
 ```
 
-```go
-func rearrangeArray(nums []int) []int {
-	rand.Seed(time.Now().UnixNano())
-outer:
-	for {
-		rand.Shuffle(len(nums), func(i, j int) { nums[i], nums[j] = nums[j], nums[i] })
-		for i := 1; i < len(nums)-1; i++ {
-			if nums[i]*2 == nums[i-1]+nums[i+1] {
-				continue outer
-			}
-		}
-		return nums
-	}
+#### TypeScript
+
+```ts
+function rearrangeArray(nums: number[]): number[] {
+    nums.sort((a, b) => a - b);
+    const n = nums.length;
+    const m = (n + 1) >> 1;
+    const ans: number[] = [];
+    for (let i = 0; i < m; i++) {
+        ans.push(nums[i]);
+        if (i + m < n) {
+            ans.push(nums[i + m]);
+        }
+    }
+    return ans;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

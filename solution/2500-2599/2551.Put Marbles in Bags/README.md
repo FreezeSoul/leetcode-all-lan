@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2551.Put%20Marbles%20in%20Bags/README.md
+rating: 2042
+source: 第 330 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2551. 将珠子放入背包中](https://leetcode.cn/problems/put-marbles-in-bags)
 
 [English Version](/solution/2500-2599/2551.Put%20Marbles%20in%20Bags/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有&nbsp;<code>k</code>&nbsp;个背包。给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>weights</code>&nbsp;，其中&nbsp;<code>weights[i]</code>&nbsp;是第&nbsp;<code>i</code>&nbsp;个珠子的重量。同时给你整数 <code>k</code>&nbsp;。</p>
 
@@ -49,11 +64,13 @@
 	<li><code>1 &lt;= weights[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：问题转化 + 排序**
+### 方法一：问题转化 + 排序
 
 我们可以将问题转化为：将数组 `weights` 分成 $k$ 个连续的子数组，也就是说，我们要找到 $k-1$ 个分割点，每个分割点的价格是分割点左右两个元素的和，求最大的 $k-1$ 个分割点的价格之和与最小的 $k-1$ 个分割点的价格之和的差值，即为答案。
 
@@ -63,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +89,7 @@ class Solution:
         return sum(arr[len(arr) - k + 1 :]) - sum(arr[: k - 1])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -119,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func putMarbles(weights []int, k int) (ans int64) {
@@ -136,7 +149,7 @@ func putMarbles(weights []int, k int) (ans int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function putMarbles(weights: number[], k: number): number {
@@ -154,10 +167,8 @@ function putMarbles(weights: number[], k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

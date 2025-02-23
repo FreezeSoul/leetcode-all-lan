@@ -1,10 +1,20 @@
-# [1990. 统计实验的数量](https://leetcode.cn/problems/count-the-number-of-experiments)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1990.Count%20the%20Number%20of%20Experiments/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1990. 统计实验的数量 🔒](https://leetcode.cn/problems/count-the-number-of-experiments)
 
 [English Version](/solution/1900-1999/1990.Count%20the%20Number%20of%20Experiments/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Experiments</code></p>
 
@@ -68,18 +78,50 @@ Experiments table:
 在 "Web" 平台上，我们做了两个"Reading" 实验和一个"Programming" 实验.
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    P AS (
+        SELECT 'Android' AS platform
+        UNION
+        SELECT 'IOS'
+        UNION
+        SELECT 'Web'
+    ),
+    Exp AS (
+        SELECT 'Reading' AS experiment_name
+        UNION
+        SELECT 'Sports'
+        UNION
+        SELECT 'Programming'
+    ),
+    T AS (
+        SELECT *
+        FROM
+            P,
+            Exp
+    )
+SELECT platform, experiment_name, COUNT(experiment_id) AS num_experiments
+FROM
+    T AS t
+    LEFT JOIN Experiments USING (platform, experiment_name)
+GROUP BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

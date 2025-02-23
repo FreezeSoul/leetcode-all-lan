@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0761.Special%20Binary%20String/README.md
+tags:
+    - 递归
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [761. 特殊的二进制序列](https://leetcode.cn/problems/special-binary-string)
 
 [English Version](/solution/0700-0799/0761.Special%20Binary%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>特殊的二进制序列是具有以下两个性质的二进制序列：</p>
 
@@ -34,11 +45,13 @@
 	<li><code>S</code>&nbsp;保证为一个满足上述定义的<em>特殊 </em>的二进制序列。</li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归 + 排序**
+### 方法一：递归 + 排序
 
 我们可以把特殊的二进制序列看作“有效的括号”，$1$ 代表左括号，$0$ 代表右括号。例如，"11011000" 可以看作："(()(()))"。
 
@@ -50,9 +63,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,9 +83,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,13 +123,13 @@ public:
                 j = i + 1;
             }
         }
-        sort(ans.begin(), ans.end(), greater<string> {});
+        sort(ans.begin(), ans.end(), greater<string>{});
         return accumulate(ans.begin(), ans.end(), ""s);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeLargestSpecial(s string) string {
@@ -145,10 +154,8 @@ func makeLargestSpecial(s string) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

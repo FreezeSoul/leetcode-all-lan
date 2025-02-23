@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2335.Minimum%20Amount%20of%20Time%20to%20Fill%20Cups/README.md
+rating: 1360
+source: 第 301 场周赛 Q1
+tags:
+    - 贪心
+    - 数组
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2335. 装满杯子需要的最短总时长](https://leetcode.cn/problems/minimum-amount-of-time-to-fill-cups)
 
 [English Version](/solution/2300-2399/2335.Minimum%20Amount%20of%20Time%20to%20Fill%20Cups/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现有一台饮水机，可以制备冷水、温水和热水。每秒钟，可以装满 <code>2</code> 杯 <strong>不同</strong> 类型的水或者 <code>1</code> 杯任意类型的水。</p>
 
@@ -54,30 +69,21 @@
 	<li><code>0 &lt;= amount[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 排序**
+### 方法一：贪心 + 排序
 
 我们可以每次贪心地选择其中较大的两个数进行减一操作（最多减为 $0$），直至所有数变为 $0$。
 
 时间复杂度 $O(S)$，空间复杂度 $O(1)$。其中 $S$ 为数组 `amount` 中所有数的和，本题中 $S \leq 300$。
 
-**方法二：贪心 + 分类讨论**
-
-我们可以将数组 `amount` 排序，设 $a$, $b$, $c$ 分别为数组 `amount` 中的三个数，有以下两种情况：
-
--   如果 $a + b \leq c$，此时我们只需要 $c$ 次操作即可将所有数变为 $0$，因此答案为 $c$。
--   如果 $a + b > c$，每一次操作我们都可以将其中两个数减一，最终匹配完，或者剩下最后一个数（取决于总和是偶数还是奇数），因此答案为 $\left \lfloor \frac{a + b + c + 1}{2}  \right \rfloor$。
-
-时间复杂度 $O(1)$，空间复杂度 $O(1)$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,18 +97,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def fillCups(self, amount: List[int]) -> int:
-        amount.sort()
-        if amount[0] + amount[1] <= amount[2]:
-            return amount[2]
-        return (sum(amount) + 1) // 2
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,19 +114,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int fillCups(int[] amount) {
-        Arrays.sort(amount);
-        if (amount[0] + amount[1] <= amount[2]) {
-            return amount[2];
-        }
-        return (amount[0] + amount[1] + amount[2] + 1) / 2;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -149,20 +132,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int fillCups(vector<int>& amount) {
-        sort(amount.begin(), amount.end());
-        if (amount[0] + amount[1] <= amount[2]) {
-            return amount[2];
-        }
-        return (amount[0] + amount[1] + amount[2] + 1) / 2;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func fillCups(amount []int) int {
@@ -179,17 +149,7 @@ func fillCups(amount []int) int {
 }
 ```
 
-```go
-func fillCups(amount []int) int {
-	sort.Ints(amount)
-	if amount[0]+amount[1] <= amount[2] {
-		return amount[2]
-	}
-	return (amount[0] + amount[1] + amount[2] + 1) / 2
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function fillCups(amount: number[]): number {
@@ -201,7 +161,7 @@ function fillCups(amount: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -214,13 +174,79 @@ impl Solution {
         (dif + 1) / 2 + amount[2]
     }
 }
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：贪心 + 分类讨论
+
+我们可以将数组 `amount` 排序，设 $a$, $b$, $c$ 分别为数组 `amount` 中的三个数，有以下两种情况：
+
+-   如果 $a + b \leq c$，此时我们只需要 $c$ 次操作即可将所有数变为 $0$，因此答案为 $c$。
+-   如果 $a + b > c$，每一次操作我们都可以将其中两个数减一，最终匹配完，或者剩下最后一个数（取决于总和是偶数还是奇数），因此答案为 $\left \lfloor \frac{a + b + c + 1}{2}  \right \rfloor$。
+
+时间复杂度 $O(1)$，空间复杂度 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def fillCups(self, amount: List[int]) -> int:
+        amount.sort()
+        if amount[0] + amount[1] <= amount[2]:
+            return amount[2]
+        return (sum(amount) + 1) // 2
+```
+
+#### Java
+
+```java
+class Solution {
+    public int fillCups(int[] amount) {
+        Arrays.sort(amount);
+        if (amount[0] + amount[1] <= amount[2]) {
+            return amount[2];
+        }
+        return (amount[0] + amount[1] + amount[2] + 1) / 2;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int fillCups(vector<int>& amount) {
+        sort(amount.begin(), amount.end());
+        if (amount[0] + amount[1] <= amount[2]) {
+            return amount[2];
+        }
+        return (amount[0] + amount[1] + amount[2] + 1) / 2;
+    }
+};
+```
+
+#### Go
+
+```go
+func fillCups(amount []int) int {
+	sort.Ints(amount)
+	if amount[0]+amount[1] <= amount[2] {
+		return amount[2]
+	}
+	return (amount[0] + amount[1] + amount[2] + 1) / 2
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

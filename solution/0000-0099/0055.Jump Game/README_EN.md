@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0055.Jump%20Game/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [55. Jump Game](https://leetcode.com/problems/jump-game)
 
 [中文文档](/solution/0000-0099/0055.Jump%20Game/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>. You are initially positioned at the array&#39;s <strong>first index</strong>, and each element in the array represents your maximum jump length at that position.</p>
 
@@ -33,21 +47,31 @@
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Greedy**
+<!-- solution:start -->
 
-We use a variable $mx$ to maintain the farthest index that can be reached, initially $mx = 0$.
+### Solution 1: Greedy
 
-We traverse the array from left to right, for each position $i$ we are currently traversing, if $mx \lt i$, it means that the current position cannot be reached, directly return `false`. Otherwise, the farthest position that can be reached from position $i$ by jumping is $i+nums[i]$, we use $i+nums[i]$ to update the value of $mx$, that is $mx = \max(mx, i + nums[i])$.
+We use a variable $mx$ to maintain the farthest index that can currently be reached, initially $mx = 0$.
 
-When the traversal ends, return `true` directly.
+We traverse the array from left to right. For each position $i$ we traverse, if $mx < i$, it means that the current position cannot be reached, so we directly return `false`. Otherwise, the farthest position that we can reach by jumping from position $i$ is $i+nums[i]$, we use $i+nums[i]$ to update the value of $mx$, that is, $mx = \max(mx, i + nums[i])$.
+
+At the end of the traversal, we directly return `true`.
 
 The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
 
+Similar problems:
+
+-   [45. Jump Game II](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0045.Jump%20Game%20II/README_EN.md)
+-   [1024. Video Stitching](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1024.Video%20Stitching/README_EN.md)
+-   [1326. Minimum Number of Taps to Open to Water a Garden](https://github.com/doocs/leetcode/blob/main/solution/1300-1399/1326.Minimum%20Number%20of%20Taps%20to%20Open%20to%20Water%20a%20Garden/README_EN.md)
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -60,7 +84,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -77,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,7 +119,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canJump(nums []int) bool {
@@ -108,16 +132,9 @@ func canJump(nums []int) bool {
 	}
 	return true
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canJump(nums: number[]): boolean {
@@ -132,7 +149,28 @@ function canJump(nums: number[]): boolean {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn can_jump(nums: Vec<i32>) -> bool {
+        let n = nums.len();
+        let mut mx = 0;
+
+        for i in 0..n {
+            if mx < i {
+                return false;
+            }
+            mx = std::cmp::max(mx, i + (nums[i] as usize));
+        }
+
+        true
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -151,7 +189,7 @@ var canJump = function (nums) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -168,10 +206,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

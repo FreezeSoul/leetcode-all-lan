@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2120.Execution%20of%20All%20Suffix%20Instructions%20Staying%20in%20a%20Grid/README_EN.md
+rating: 1379
+source: Weekly Contest 273 Q2
+tags:
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2120. Execution of All Suffix Instructions Staying in a Grid](https://leetcode.com/problems/execution-of-all-suffix-instructions-staying-in-a-grid)
 
 [中文文档](/solution/2100-2199/2120.Execution%20of%20All%20Suffix%20Instructions%20Staying%20in%20a%20Grid/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an <code>n x n</code> grid, with the top-left cell at <code>(0, 0)</code> and the bottom-right cell at <code>(n - 1, n - 1)</code>. You are given the integer <code>n</code> and an integer array <code>startPos</code> where <code>startPos = [start<sub>row</sub>, start<sub>col</sub>]</code> indicates that a robot is initially at cell <code>(start<sub>row</sub>, start<sub>col</sub>)</code>.</p>
 
@@ -63,11 +78,17 @@
 	<li><code>s</code> consists of <code>&#39;L&#39;</code>, <code>&#39;R&#39;</code>, <code>&#39;U&#39;</code>, and <code>&#39;D&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -88,7 +109,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -121,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -153,7 +174,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func executeInstructions(n int, startPos []int, s string) []int {
@@ -183,14 +204,10 @@ func executeInstructions(n int, startPos []int, s string) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function executeInstructions(
-    n: number,
-    startPos: number[],
-    s: string,
-): number[] {
+function executeInstructions(n: number, startPos: number[], s: string): number[] {
     const m = s.length;
     const ans = new Array(m);
     for (let i = 0; i < m; i++) {
@@ -217,7 +234,7 @@ function executeInstructions(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -231,10 +248,18 @@ impl Solution {
             let mut j = i;
             while j < m {
                 match s[j] {
-                    b'U' => y -= 1,
-                    b'D' => y += 1,
-                    b'L' => x -= 1,
-                    _ => x += 1,
+                    b'U' => {
+                        y -= 1;
+                    }
+                    b'D' => {
+                        y += 1;
+                    }
+                    b'L' => {
+                        x -= 1;
+                    }
+                    _ => {
+                        x += 1;
+                    }
                 }
                 if y == -1 || y == n || x == -1 || x == n {
                     break;
@@ -248,15 +273,15 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *executeInstructions(int n, int *startPos, int startPosSize, char *s, int *returnSize) {
+int* executeInstructions(int n, int* startPos, int startPosSize, char* s, int* returnSize) {
     int m = strlen(s);
-    int *ans = malloc(sizeof(int) * m);
+    int* ans = malloc(sizeof(int) * m);
     for (int i = 0; i < m; i++) {
         int y = startPos[0];
         int x = startPos[1];
@@ -282,10 +307,8 @@ int *executeInstructions(int n, int *startPos, int startPosSize, char *s, int *r
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

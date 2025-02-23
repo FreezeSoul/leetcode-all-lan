@@ -17,7 +17,7 @@ class Solution {
             }
             return node;
         }
-        while (node.parent != null && node == node.parent.right) {
+        while (node.parent != null && node.parent.right == node) {
             node = node.parent;
         }
         return node.parent;

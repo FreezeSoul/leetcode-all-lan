@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0402.Remove%20K%20Digits/README.md
+tags:
+    - 栈
+    - 贪心
+    - 字符串
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [402. 移掉 K 位数字](https://leetcode.cn/problems/remove-k-digits)
 
 [English Version](/solution/0400-0499/0402.Remove%20K%20Digits/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个以字符串表示的非负整数 <code>num</code> 和一个整数 <code>k</code> ，移除这个数中的 <code>k</code><em> </em>位数字，使得剩下的数字最小。请你以字符串形式返回这个最小的数字。</p>
  
@@ -43,11 +56,13 @@
 	<li>除了 <strong>0</strong> 本身之外，<code>num</code> 不含任何前导零</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心算法**
+### 方法一：贪心算法
 
 前置知识：两个相同位数的数字大小关系取决于第一个不同位的数的大小。
 
@@ -62,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,7 +92,7 @@ class Solution:
         return ''.join(stk[:remain]).lstrip('0') or '0'
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +136,6 @@ public:
         }
         int i = 0;
         for (; i < stk.size() && stk[i] == '0'; ++i) {
-
         }
         string ans = stk.substr(i);
         return ans == "" ? "0" : ans;
@@ -131,7 +143,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeKdigits(num string, k int) string {
@@ -154,27 +166,27 @@ func removeKdigits(num string, k int) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function removeKdigits(num: string, k: number): string {
-    let nums = [...num];
-    while (k > 0) {
-        let idx = 0;
-        while (idx < nums.length - 1 && nums[idx + 1] >= nums[idx]) {
-            idx++;
+    const stk: string[] = [];
+    for (const c of num) {
+        while (k && stk.length > 0 && stk[stk.length - 1] > c) {
+            stk.pop();
+            k--;
         }
-        nums.splice(idx, 1);
-        k--;
+        stk.push(c);
     }
-    return nums.join('').replace(/^0*/g, '') || '0';
+    while (k--) {
+        stk.pop();
+    }
+    return stk.join('').replace(/^0*/g, '') || '0';
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

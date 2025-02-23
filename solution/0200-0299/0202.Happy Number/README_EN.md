@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0202.Happy%20Number/README_EN.md
+tags:
+    - Hash Table
+    - Math
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [202. Happy Number](https://leetcode.com/problems/happy-number)
 
 [中文文档](/solution/0200-0299/0202.Happy%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write an algorithm to determine if a number <code>n</code> is happy.</p>
 
@@ -43,11 +57,17 @@
 	<li><code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,23 +83,7 @@ class Solution:
         return n == 1
 ```
 
-```python
-class Solution:
-    def isHappy(self, n: int) -> bool:
-        def next(x):
-            y = 0
-            while x:
-                x, v = divmod(x, 10)
-                y += v * v
-            return y
-
-        slow, fast = n, next(n)
-        while slow != fast:
-            slow, fast = next(slow), next(next(fast))
-        return slow == 1
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,28 +103,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean isHappy(int n) {
-        int slow = n, fast = next(n);
-        while (slow != fast) {
-            slow = next(slow);
-            fast = next(next(fast));
-        }
-        return slow == 1;
-    }
-
-    private int next(int x) {
-        int y = 0;
-        for (; x > 0; x /= 10) {
-            y += (x % 10) * (x % 10);
-        }
-        return y;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -140,28 +123,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool isHappy(int n) {
-        auto next = [](int x) {
-            int y = 0;
-            for (; x; x /= 10) {
-                y += pow(x % 10, 2);
-            }
-            return y;
-        };
-        int slow = n, fast = next(n);
-        while (slow != fast) {
-            slow = next(slow);
-            fast = next(next(fast));
-        }
-        return slow == 1;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func isHappy(n int) bool {
@@ -178,24 +140,7 @@ func isHappy(n int) bool {
 }
 ```
 
-```go
-func isHappy(n int) bool {
-	next := func(x int) (y int) {
-		for ; x > 0; x /= 10 {
-			y += (x % 10) * (x % 10)
-		}
-		return
-	}
-	slow, fast := n, next(n)
-	for slow != fast {
-		slow = next(slow)
-		fast = next(next(fast))
-	}
-	return slow == 1
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isHappy(n: number): boolean {
@@ -220,28 +165,7 @@ function isHappy(n: number): boolean {
 }
 ```
 
-```ts
-function isHappy(n: number): boolean {
-    const getNext = (n: number) => {
-        let res = 0;
-        while (n !== 0) {
-            res += (n % 10) ** 2;
-            n = Math.floor(n / 10);
-        }
-        return res;
-    };
-
-    let slow = n;
-    let fast = getNext(n);
-    while (slow !== fast) {
-        slow = getNext(slow);
-        fast = getNext(getNext(fast));
-    }
-    return fast === 1;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -270,29 +194,7 @@ impl Solution {
 }
 ```
 
-```rust
-impl Solution {
-    pub fn is_happy(n: i32) -> bool {
-        let get_next = |mut n: i32| {
-            let mut res = 0;
-            while n != 0 {
-                res += (n % 10).pow(2);
-                n /= 10;
-            }
-            res
-        };
-        let mut slow = n;
-        let mut fast = get_next(n);
-        while slow != fast {
-            slow = get_next(slow);
-            fast = get_next(get_next(fast));
-        }
-        slow == 1
-    }
-}
-```
-
-### **C**
+#### C
 
 ```c
 int getNext(int n) {
@@ -315,10 +217,148 @@ bool isHappy(int n) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        def next(x):
+            y = 0
+            while x:
+                x, v = divmod(x, 10)
+                y += v * v
+            return y
+
+        slow, fast = n, next(n)
+        while slow != fast:
+            slow, fast = next(slow), next(next(fast))
+        return slow == 1
 ```
 
+#### Java
+
+```java
+class Solution {
+    public boolean isHappy(int n) {
+        int slow = n, fast = next(n);
+        while (slow != fast) {
+            slow = next(slow);
+            fast = next(next(fast));
+        }
+        return slow == 1;
+    }
+
+    private int next(int x) {
+        int y = 0;
+        for (; x > 0; x /= 10) {
+            y += (x % 10) * (x % 10);
+        }
+        return y;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isHappy(int n) {
+        auto next = [](int x) {
+            int y = 0;
+            for (; x; x /= 10) {
+                y += pow(x % 10, 2);
+            }
+            return y;
+        };
+        int slow = n, fast = next(n);
+        while (slow != fast) {
+            slow = next(slow);
+            fast = next(next(fast));
+        }
+        return slow == 1;
+    }
+};
+```
+
+#### Go
+
+```go
+func isHappy(n int) bool {
+	next := func(x int) (y int) {
+		for ; x > 0; x /= 10 {
+			y += (x % 10) * (x % 10)
+		}
+		return
+	}
+	slow, fast := n, next(n)
+	for slow != fast {
+		slow = next(slow)
+		fast = next(next(fast))
+	}
+	return slow == 1
+}
+```
+
+#### TypeScript
+
+```ts
+function isHappy(n: number): boolean {
+    const getNext = (n: number) => {
+        let res = 0;
+        while (n !== 0) {
+            res += (n % 10) ** 2;
+            n = Math.floor(n / 10);
+        }
+        return res;
+    };
+
+    let slow = n;
+    let fast = getNext(n);
+    while (slow !== fast) {
+        slow = getNext(slow);
+        fast = getNext(getNext(fast));
+    }
+    return fast === 1;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn is_happy(n: i32) -> bool {
+        let get_next = |mut n: i32| {
+            let mut res = 0;
+            while n != 0 {
+                res += (n % 10).pow(2);
+                n /= 10;
+            }
+            res
+        };
+        let mut slow = n;
+        let mut fast = get_next(n);
+        while slow != fast {
+            slow = get_next(slow);
+            fast = get_next(get_next(fast));
+        }
+        slow == 1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

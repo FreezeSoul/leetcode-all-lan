@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2013.Detect%20Squares/README.md
+rating: 1841
+source: 第 259 场周赛 Q3
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2013. 检测正方形](https://leetcode.cn/problems/detect-squares)
 
 [English Version](/solution/2000-2099/2013.Detect%20Squares/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个在 X-Y 平面上的点构成的数据流。设计一个满足下述要求的算法：</p>
 
@@ -59,11 +74,13 @@ detectSquares.count([11, 10]); // 返回 2 。你可以选择：
 	<li>调用&nbsp;<code>add</code> 和 <code>count</code> 的 <strong>总次数</strong> 最多为 <code>5000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们可以用一个哈希表 $cnt$ 维护所有点的信息，其中 $cnt[x][y]$ 表示点 $(x, y)$ 的个数。
 
@@ -75,9 +92,7 @@ detectSquares.count([11, 10]); // 返回 2 。你可以选择：
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class DetectSquares:
@@ -107,9 +122,7 @@ class DetectSquares:
 # param_2 = obj.count(point)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class DetectSquares {
@@ -153,13 +166,12 @@ class DetectSquares {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class DetectSquares {
 public:
     DetectSquares() {
-
     }
 
     void add(vector<int> point) {
@@ -196,7 +208,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type DetectSquares struct {
@@ -237,10 +249,8 @@ func (this *DetectSquares) Count(point []int) (ans int) {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

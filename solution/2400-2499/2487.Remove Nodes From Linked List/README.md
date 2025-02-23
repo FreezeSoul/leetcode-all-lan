@@ -1,14 +1,29 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2487.Remove%20Nodes%20From%20Linked%20List/README.md
+rating: 1454
+source: 第 321 场周赛 Q3
+tags:
+    - 栈
+    - 递归
+    - 链表
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [2487. 从链表中移除节点](https://leetcode.cn/problems/remove-nodes-from-linked-list)
 
 [English Version](/solution/2400-2499/2487.Remove%20Nodes%20From%20Linked%20List/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个链表的头节点 <code>head</code> 。</p>
 
-<p>对于列表中的每个节点 <code>node</code> ，如果其右侧存在一个具有 <strong>严格更大</strong> 值的节点，则移除 <code>node</code> 。</p>
+<p>移除每个右侧有一个更大数值的节点。</p>
 
 <p>返回修改后链表的头节点<em> </em><code>head</code><em> </em>。</p>
 
@@ -44,21 +59,29 @@
 	<li><code>1 &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈模拟**
+### 方法一：单调栈模拟
 
-我们可以先将链表中的节点值存入数组，然后遍历数组，维护一个从栈底到栈顶单调递减的栈，如果当前元素比栈顶元素大，则将栈顶元素出栈，直到当前元素小于等于栈顶元素，将当前元素入栈。最后将栈中的元素逆序，构造得到的链表即为答案。
+我们可以先将链表中的节点值存入数组 $nums$，然后遍历数组 $nums$，维护一个从栈底到栈顶单调递减的栈 $stk$，如果当前元素比栈顶元素大，则将栈顶元素出栈，直到当前元素小于等于栈顶元素，将当前元素入栈。
 
-时间复杂度为 $O(n)$，空间复杂度为 $O(n)$。
+最后，我们从栈底到栈顶构造出结果链表，即为答案。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是链表的长度。
+
+我们也可以不使用数组 $nums$，直接遍历链表，维护一个从栈底到栈顶单调递减的栈 $stk$，如果当前元素比栈顶元素大，则将栈顶元素出栈，直到当前元素小于等于栈顶元素。然后，如果栈不为空，则将栈顶元素的 $next$ 指针指向当前元素，否则将答案链表的虚拟头节点的 $next$ 指针指向当前元素。最后，将当前元素入栈，继续遍历链表。
+
+遍历结束后，将虚拟头节点的 $next$ 指针作为答案返回。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是链表的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -85,9 +108,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -109,15 +130,15 @@ class Solution {
         }
         Deque<Integer> stk = new ArrayDeque<>();
         for (int v : nums) {
-            while (!stk.isEmpty() && stk.peek() < v) {
-                stk.pop();
+            while (!stk.isEmpty() && stk.peekLast() < v) {
+                stk.pollLast();
             }
-            stk.push(v);
+            stk.offerLast(v);
         }
         ListNode dummy = new ListNode();
         head = dummy;
         while (!stk.isEmpty()) {
-            head.next = new ListNode(stk.pollLast());
+            head.next = new ListNode(stk.pollFirst());
             head = head.next;
         }
         return dummy.next;
@@ -125,7 +146,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -164,7 +185,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -197,10 +218,191 @@ func removeNodes(head *ListNode) *ListNode {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
 
+function removeNodes(head: ListNode | null): ListNode | null {
+    const nums = [];
+    for (; head; head = head.next) {
+        nums.push(head.val);
+    }
+    const stk: number[] = [];
+    for (const v of nums) {
+        while (stk.length && stk.at(-1)! < v) {
+            stk.pop();
+        }
+        stk.push(v);
+    }
+    const dummy = new ListNode();
+    head = dummy;
+    for (const v of stk) {
+        head.next = new ListNode(v);
+        head = head.next;
+    }
+    return dummy.next;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(inf, head)
+        cur = head
+        stk = [dummy]
+        while cur:
+            while stk[-1].val < cur.val:
+                stk.pop()
+            stk[-1].next = cur
+            stk.append(cur)
+            cur = cur.next
+        return dummy.next
+```
+
+#### Java
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNodes(ListNode head) {
+        ListNode dummy = new ListNode(1 << 30, head);
+        Deque<ListNode> stk = new ArrayDeque<>();
+        stk.offerLast(dummy);
+        for (ListNode cur = head; cur != null; cur = cur.next) {
+            while (stk.peekLast().val < cur.val) {
+                stk.pollLast();
+            }
+            stk.peekLast().next = cur;
+            stk.offerLast(cur);
+        }
+        return dummy.next;
+    }
+}
+```
+
+#### C++
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNodes(ListNode* head) {
+        ListNode* dummy = new ListNode(1e9, head);
+        ListNode* cur = head;
+        vector<ListNode*> stk = {dummy};
+        for (ListNode* cur = head; cur; cur = cur->next) {
+            while (stk.back()->val < cur->val) {
+                stk.pop_back();
+            }
+            stk.back()->next = cur;
+            stk.push_back(cur);
+        }
+        return dummy->next;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func removeNodes(head *ListNode) *ListNode {
+	dummy := &ListNode{1 << 30, head}
+	stk := []*ListNode{dummy}
+	for cur := head; cur != nil; cur = cur.Next {
+		for stk[len(stk)-1].Val < cur.Val {
+			stk = stk[:len(stk)-1]
+		}
+		stk[len(stk)-1].Next = cur
+		stk = append(stk, cur)
+	}
+	return dummy.Next
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+function removeNodes(head: ListNode | null): ListNode | null {
+    const dummy = new ListNode(Infinity, head);
+    const stk: ListNode[] = [dummy];
+    for (let cur = head; cur; cur = cur.next) {
+        while (stk.at(-1)!.val < cur.val) {
+            stk.pop();
+        }
+        stk.at(-1)!.next = cur;
+        stk.push(cur);
+    }
+    return dummy.next;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

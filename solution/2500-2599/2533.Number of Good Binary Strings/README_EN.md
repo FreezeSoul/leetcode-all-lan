@@ -1,8 +1,20 @@
-# [2533. Number of Good Binary Strings](https://leetcode.com/problems/number-of-good-binary-strings)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2533.Number%20of%20Good%20Binary%20Strings/README_EN.md
+tags:
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
+# [2533. Number of Good Binary Strings 🔒](https://leetcode.com/problems/number-of-good-binary-strings)
 
 [中文文档](/solution/2500-2599/2533.Number%20of%20Good%20Binary%20Strings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given four integers <code>minLength</code>, <code>maxLength</code>, <code>oneGroup</code> and <code>zeroGroup</code>.</p>
 
@@ -17,7 +29,7 @@
 	</li>
 	<li>The size of each block of consecutive <code>0</code>&#39;s is a multiple of <code>zeroGroup</code>.
 	<ul>
-		<li>For example, in a binary string <code><u>00</u>11<u>0</u>1111<u>00</u></code> sizes of each block of consecutive ones are <code>[2,1,2]</code>.</li>
+		<li>For example, in a binary string <code><u>00</u>11<u>0</u>1111<u>00</u></code> sizes of each block of consecutive zeros are <code>[2,1,2]</code>.</li>
 	</ul>
 	</li>
 </ul>
@@ -53,15 +65,36 @@ It can be proven that there is only 1 good string satisfying all conditions.
 	<li><code>1 &lt;= oneGroup, zeroGroup &lt;= maxLength</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i]$ as the number of strings of length $i$ that meet the condition. The state transition equation is:
+
+$$
+f[i] = \begin{cases}
+1 & i = 0 \\
+f[i - oneGroup] + f[i - zeroGroup] & i \geq 1
+\end{cases}
+$$
+
+The final answer is $f[minLength] + f[minLength + 1] + \cdots + f[maxLength]$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n=maxLength$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def goodBinaryStrings(self, minLength: int, maxLength: int, oneGroup: int, zeroGroup: int) -> int:
+    def goodBinaryStrings(
+        self, minLength: int, maxLength: int, oneGroup: int, zeroGroup: int
+    ) -> int:
         mod = 10**9 + 7
         f = [1] + [0] * maxLength
         for i in range(1, len(f)):
@@ -73,7 +106,7 @@ class Solution:
         return sum(f[minLength:]) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -98,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,7 +158,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func goodBinaryStrings(minLength int, maxLength int, oneGroup int, zeroGroup int) (ans int) {
@@ -148,10 +181,33 @@ func goodBinaryStrings(minLength int, maxLength int, oneGroup int, zeroGroup int
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function goodBinaryStrings(
+    minLength: number,
+    maxLength: number,
+    oneGroup: number,
+    zeroGroup: number,
+): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[] = Array(maxLength + 1).fill(0);
+    f[0] = 1;
+    for (let i = 1; i <= maxLength; ++i) {
+        if (i >= oneGroup) {
+            f[i] += f[i - oneGroup];
+        }
+        if (i >= zeroGroup) {
+            f[i] += f[i - zeroGroup];
+        }
+        f[i] %= mod;
+    }
+    return f.slice(minLength).reduce((a, b) => a + b, 0) % mod;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

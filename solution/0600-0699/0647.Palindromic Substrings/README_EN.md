@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0647.Palindromic%20Substrings/README_EN.md
+tags:
+    - Two Pointers
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [647. Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings)
 
 [中文文档](/solution/0600-0699/0647.Palindromic%20Substrings/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, return <em>the number of <strong>palindromic substrings</strong> in it</em>.</p>
 
@@ -35,11 +49,17 @@
 	<li><code>s</code> consists of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,6 +72,98 @@ class Solution:
                 i, j = i - 1, j + 1
         return ans
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int countSubstrings(String s) {
+        int ans = 0;
+        int n = s.length();
+        for (int k = 0; k < n * 2 - 1; ++k) {
+            int i = k / 2, j = (k + 1) / 2;
+            while (i >= 0 && j < n && s.charAt(i) == s.charAt(j)) {
+                ++ans;
+                --i;
+                ++j;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countSubstrings(string s) {
+        int ans = 0;
+        int n = s.size();
+        for (int k = 0; k < n * 2 - 1; ++k) {
+            int i = k / 2, j = (k + 1) / 2;
+            while (~i && j < n && s[i] == s[j]) {
+                ++ans;
+                --i;
+                ++j;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countSubstrings(s string) int {
+	ans, n := 0, len(s)
+	for k := 0; k < n*2-1; k++ {
+		i, j := k/2, (k+1)/2
+		for i >= 0 && j < n && s[i] == s[j] {
+			ans++
+			i, j = i-1, j+1
+		}
+	}
+	return ans
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var countSubstrings = function (s) {
+    let ans = 0;
+    const n = s.length;
+    for (let k = 0; k < n * 2 - 1; ++k) {
+        let i = k >> 1;
+        let j = (k + 1) >> 1;
+        while (~i && j < n && s[i] == s[j]) {
+            ++ans;
+            --i;
+            ++j;
+        }
+    }
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -72,25 +184,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public int countSubstrings(String s) {
-        int ans = 0;
-        int n = s.length();
-        for (int k = 0; k < n * 2 - 1; ++k) {
-            int i = k / 2, j = (k + 1) / 2;
-            while (i >= 0 && j < n && s.charAt(i) == s.charAt(j)) {
-                ++ans;
-                --i;
-                ++j;
-            }
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -120,70 +214,8 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int countSubstrings(string s) {
-        int ans = 0;
-        int n = s.size();
-        for (int k = 0; k < n * 2 - 1; ++k) {
-            int i = k / 2, j = (k + 1) / 2;
-            while (~i && j < n && s[i] == s[j]) {
-                ++ans;
-                --i;
-                ++j;
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-```go
-func countSubstrings(s string) int {
-	ans, n := 0, len(s)
-	for k := 0; k < n*2-1; k++ {
-		i, j := k/2, (k+1)/2
-		for i >= 0 && j < n && s[i] == s[j] {
-			ans++
-			i, j = i-1, j+1
-		}
-	}
-	return ans
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {string} s
- * @return {number}
- */
-var countSubstrings = function (s) {
-    let ans = 0;
-    const n = s.length;
-    for (let k = 0; k < n * 2 - 1; ++k) {
-        let i = k >> 1;
-        let j = (k + 1) >> 1;
-        while (~i && j < n && s[i] == s[j]) {
-            ++ans;
-            --i;
-            ++j;
-        }
-    }
-    return ans;
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

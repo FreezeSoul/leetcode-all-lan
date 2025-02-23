@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0767.Reorganize%20String/README.md
+tags:
+    - 贪心
+    - 哈希表
+    - 字符串
+    - 计数
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [767. 重构字符串](https://leetcode.cn/problems/reorganize-string)
 
 [English Version](/solution/0700-0799/0767.Reorganize%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串&nbsp;<code>s</code>&nbsp;，检查是否能重新排布其中的字母，使得两相邻的字符不同。</p>
 
@@ -35,11 +50,13 @@
 	<li><code>s</code> 只包含小写字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 利用哈希表 cnt 统计字符串 s 中每个字符出现的次数。
 
@@ -47,26 +64,9 @@
 
 否则，按字符出现频率从大到小遍历，依次间隔 1 个位置填充字符。若位置大于等于 n，则重置为 1 继续填充。
 
-**方法二：贪心 + 哈希表 + 优先队列（大根堆）**
-
-先用哈希表 `cnt` 统计每个字母出现的次数，然后构建一个大根堆 `pq`，其中每个元素是一个 `(v, c)` 的元组，其中 `c` 是字母，`v` 是字母出现的次数。
-
-重排字符串时，我们每次从堆顶弹出一个元素 `(v, c)`，将 `c` 添加到结果字符串中，并将 `(v-1, c)` 放入队列 `q` 中。当队列 `q` 的长度达到 $k$ （本题中 $k$ 为 2）及以上时，弹出队首元素，若此时 `v` 大于 0，则将队首元素放入堆中。循环，直至堆为空。
-
-最后判断结果字符串的长度，若与 `s` 长度相等，则返回结果字符串，否则返回空串。
-
-时间复杂度 $O(n\log n)$，其中 $n$ 是字符串 `s` 的长度。
-
-相似题目：
-
--   [358. K 距离间隔重排字符串](/solution/0300-0399/0358.Rearrange%20String%20k%20Distance%20Apart/README.md)
--   [1054. 距离相等的条形码](/solution/1000-1099/1054.Distant%20Barcodes/README.md)
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -88,31 +88,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-```python
-class Solution:
-    def reorganizeString(self, s: str) -> str:
-        return self.rearrangeString(s, 2)
-
-    def rearrangeString(self, s: str, k: int) -> str:
-        h = [(-v, c) for c, v in Counter(s).items()]
-        heapify(h)
-        q = deque()
-        ans = []
-        while h:
-            v, c = heappop(h)
-            v *= -1
-            ans.append(c)
-            q.append((v - 1, c))
-            if len(q) >= k:
-                w, c = q.popleft()
-                if w:
-                    heappush(h, (-w, c))
-        return "" if len(ans) != len(s) else "".join(ans)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -159,6 +135,180 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    string reorganizeString(string s) {
+        vector<int> cnt(26);
+        for (char& c : s) ++cnt[c - 'a'];
+        int mx = *max_element(cnt.begin(), cnt.end());
+        int n = s.size();
+        if (mx > (n + 1) / 2) return "";
+        vector<vector<int>> m;
+        for (int i = 0; i < 26; ++i) {
+            if (cnt[i]) m.push_back({cnt[i], i});
+        }
+        sort(m.begin(), m.end());
+        reverse(m.begin(), m.end());
+        string ans = s;
+        int k = 0;
+        for (auto& e : m) {
+            int v = e[0], i = e[1];
+            while (v--) {
+                ans[k] = 'a' + i;
+                k += 2;
+                if (k >= n) k = 1;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func reorganizeString(s string) string {
+	cnt := make([]int, 26)
+	for _, c := range s {
+		t := c - 'a'
+		cnt[t]++
+	}
+	mx := slices.Max(cnt)
+	n := len(s)
+	if mx > (n+1)/2 {
+		return ""
+	}
+	m := [][]int{}
+	for i, v := range cnt {
+		if v > 0 {
+			m = append(m, []int{v, i})
+		}
+	}
+	sort.Slice(m, func(i, j int) bool {
+		return m[i][0] > m[j][0]
+	})
+	ans := make([]byte, n)
+	k := 0
+	for _, e := range m {
+		v, i := e[0], e[1]
+		for v > 0 {
+			ans[k] = byte('a' + i)
+			k += 2
+			if k >= n {
+				k = 1
+			}
+			v--
+		}
+	}
+	return string(ans)
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::{BinaryHeap, HashMap, VecDeque};
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn reorganize_string(s: String) -> String {
+        let mut map = HashMap::new();
+        let mut pq = BinaryHeap::new();
+        let mut ret = String::new();
+        let mut queue = VecDeque::new();
+        let n = s.len();
+
+        // Initialize the HashMap
+        for c in s.chars() {
+            map.entry(c)
+                .and_modify(|e| {
+                    *e += 1;
+                })
+                .or_insert(1);
+        }
+
+        // Initialize the binary heap
+        for (k, v) in map.iter() {
+            if 2 * *v - 1 > n {
+                return "".to_string();
+            } else {
+                pq.push((*v, *k));
+            }
+        }
+
+        while !pq.is_empty() {
+            let (v, k) = pq.pop().unwrap();
+            ret.push(k);
+            queue.push_back((v - 1, k));
+            if queue.len() == 2 {
+                let (v, k) = queue.pop_front().unwrap();
+                if v != 0 {
+                    pq.push((v, k));
+                }
+            }
+        }
+
+        if ret.len() == n {
+            ret
+        } else {
+            "".to_string()
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：贪心 + 哈希表 + 优先队列（大根堆）
+
+先用哈希表 `cnt` 统计每个字母出现的次数，然后构建一个大根堆 `pq`，其中每个元素是一个 `(v, c)` 的元组，其中 `c` 是字母，`v` 是字母出现的次数。
+
+重排字符串时，我们每次从堆顶弹出一个元素 `(v, c)`，将 `c` 添加到结果字符串中，并将 `(v-1, c)` 放入队列 `q` 中。当队列 `q` 的长度达到 $k$ （本题中 $k$ 为 2）及以上时，弹出队首元素，若此时 `v` 大于 0，则将队首元素放入堆中。循环，直至堆为空。
+
+最后判断结果字符串的长度，若与 `s` 长度相等，则返回结果字符串，否则返回空串。
+
+时间复杂度 $O(n\log n)$，其中 $n$ 是字符串 `s` 的长度。
+
+相似题目：
+
+-   [358. K 距离间隔重排字符串](https://github.com/doocs/leetcode/blob/main/solution/0300-0399/0358.Rearrange%20String%20k%20Distance%20Apart/README.md)
+-   [1054. 距离相等的条形码](https://github.com/doocs/leetcode/blob/main/solution/1000-1099/1054.Distant%20Barcodes/README.md)
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def reorganizeString(self, s: str) -> str:
+        return self.rearrangeString(s, 2)
+
+    def rearrangeString(self, s: str, k: int) -> str:
+        h = [(-v, c) for c, v in Counter(s).items()]
+        heapify(h)
+        q = deque()
+        ans = []
+        while h:
+            v, c = heappop(h)
+            v *= -1
+            ans.append(c)
+            q.append((v - 1, c))
+            if len(q) >= k:
+                w, c = q.popleft()
+                if w:
+                    heappush(h, (-w, c))
+        return "" if len(ans) != len(s) else "".join(ans)
+```
+
+#### Java
+
 ```java
 class Solution {
     public String reorganizeString(String s) {
@@ -196,37 +346,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    string reorganizeString(string s) {
-        vector<int> cnt(26);
-        for (char& c : s) ++cnt[c - 'a'];
-        int mx = *max_element(cnt.begin(), cnt.end());
-        int n = s.size();
-        if (mx > (n + 1) / 2) return "";
-        vector<vector<int>> m;
-        for (int i = 0; i < 26; ++i) {
-            if (cnt[i]) m.push_back({cnt[i], i});
-        }
-        sort(m.begin(), m.end());
-        reverse(m.begin(), m.end());
-        string ans = s;
-        int k = 0;
-        for (auto& e : m) {
-            int v = e[0], i = e[1];
-            while (v--) {
-                ans[k] = 'a' + i;
-                k += 2;
-                if (k >= n) k = 1;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -260,53 +380,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func reorganizeString(s string) string {
-	cnt := make([]int, 26)
-	mx := 0
-	for _, c := range s {
-		t := c - 'a'
-		cnt[t]++
-		mx = max(mx, cnt[t])
-	}
-	n := len(s)
-	if mx > (n+1)/2 {
-		return ""
-	}
-	m := [][]int{}
-	for i, v := range cnt {
-		if v > 0 {
-			m = append(m, []int{v, i})
-		}
-	}
-	sort.Slice(m, func(i, j int) bool {
-		return m[i][0] > m[j][0]
-	})
-	ans := make([]byte, n)
-	k := 0
-	for _, e := range m {
-		v, i := e[0], e[1]
-		for v > 0 {
-			ans[k] = byte('a' + i)
-			k += 2
-			if k >= n {
-				k = 1
-			}
-			v--
-		}
-	}
-	return string(ans)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func reorganizeString(s string) string {
@@ -355,15 +429,13 @@ func (h hp) Less(i, j int) bool {
 	a, b := h[i], h[j]
 	return a.v > b.v
 }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
-```
-
-### **...**
-
-```
-
+func (h hp) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)   { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

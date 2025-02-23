@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0876.Middle%20of%20the%20Linked%20List/README.md
+tags:
+    - 链表
+    - 双指针
+---
+
+<!-- problem:start -->
+
 # [876. 链表的中间结点](https://leetcode.cn/problems/middle-of-the-linked-list)
 
 [English Version](/solution/0800-0899/0876.Middle%20of%20the%20Linked%20List/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你单链表的头结点 <code>head</code> ，请你找出并返回链表的中间结点。</p>
 
@@ -37,11 +48,13 @@
 	<li><code>1 &lt;= Node.val &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：快慢指针**
+### 方法一：快慢指针
 
 定义快慢指针 `fast` 和 `slow`，初始时均指向链表的头结点。
 
@@ -51,9 +64,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -69,9 +80,7 @@ class Solution:
         return slow
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -96,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -122,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -141,7 +150,7 @@ func middleNode(head *ListNode) *ListNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -167,7 +176,7 @@ function middleNode(head: ListNode | null): ListNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -199,30 +208,7 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     struct ListNode *next;
- * };
- */
-
-
-struct ListNode *middleNode(struct ListNode *head) {
-    struct ListNode *fast = head;
-    struct ListNode *slow = head;
-    while (fast && fast->next) {
-        fast = fast->next->next;
-        slow = slow->next;
-    }
-    return slow;
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 /**
@@ -237,7 +223,6 @@ struct ListNode *middleNode(struct ListNode *head) {
  * }
  */
 class Solution {
-
     /**
      * @param ListNode $head
      * @return ListNode
@@ -259,10 +244,30 @@ class Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
+```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
 
+struct ListNode* middleNode(struct ListNode* head) {
+    struct ListNode* fast = head;
+    struct ListNode* slow = head;
+    while (fast && fast->next) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    return slow;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

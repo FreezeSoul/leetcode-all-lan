@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1340.Jump%20Game%20V/README.md
+rating: 1866
+source: 第 174 场周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1340. 跳跃游戏 V](https://leetcode.cn/problems/jump-game-v)
 
 [English Version](/solution/1300-1399/1340.Jump%20Game%20V/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>arr</code> 和一个整数&nbsp;<code>d</code> 。每一步你可以从下标&nbsp;<code>i</code>&nbsp;跳到：</p>
 
@@ -68,11 +82,13 @@
 	<li><code>1 &lt;= d &lt;= arr.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 我们设计一个函数 $dfs(i)$，表示从下标 $i$ 开始跳跃能够访问的最大下标数。我们可以枚举 $i$ 的所有合法的跳跃目标 $j$，即 $i - d \leq j \leq i + d$，并且 $arr[i] \gt arr[j]$。对于每个合法的 $j$，我们可以递归地计算 $dfs(j)$，并取其中的最大值。最终的答案即为所有 $i$ 的 $dfs(i)$ 的最大值。
 
@@ -80,23 +96,9 @@
 
 时间复杂度 $O(n \times d)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $arr$ 的长度。
 
-**方法二：排序 + 动态规划**
-
-我们可以将数组 $arr$ 中的每个元素 $x$ 与其下标 $i$ 组成一个元组 $(x, i)$，并将这些元组按照 $x$ 从小到大排序。
-
-接下来定义 $f[i]$ 表示从下标 $i$ 开始跳跃能够访问的最大下标数。初始时 $f[i] = 1$，即每个下标都可以单独作为一次跳跃。
-
-我们可以按照元组 $(x, i)$ 的顺序枚举 $i$，并枚举 $i$ 的所有合法的跳跃目标 $j$，即 $i - d \leq j \leq i + d$，并且 $arr[i] \gt arr[j]$。对于每个合法的 $j$，我们可以更新 $f[i]$ 的值，即 $f[i] = \max(f[i], 1 + f[j])$。
-
-最终的答案即为 $\max_{0 \leq i \lt n} f[i]$。
-
-时间复杂度 $O(n \log n + n \times d)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $arr$ 的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -118,26 +120,7 @@ class Solution:
         return max(dfs(i) for i in range(n))
 ```
 
-```python
-class Solution:
-    def maxJumps(self, arr: List[int], d: int) -> int:
-        n = len(arr)
-        f = [1] * n
-        for x, i in sorted(zip(arr, range(n))):
-            for j in range(i - 1, -1, -1):
-                if i - j > d or arr[j] >= x:
-                    break
-                f[i] = max(f[i], 1 + f[j])
-            for j in range(i + 1, n):
-                if j - i > d or arr[j] >= x:
-                    break
-                f[i] = max(f[i], 1 + f[j])
-        return max(f)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -180,39 +163,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int maxJumps(int[] arr, int d) {
-        int n = arr.length;
-        Integer[] idx = new Integer[n];
-        for (int i = 0; i < n; ++i) {
-            idx[i] = i;
-        }
-        Arrays.sort(idx, (i, j) -> arr[i] - arr[j]);
-        int[] f = new int[n];
-        Arrays.fill(f, 1);
-        int ans = 0;
-        for (int i : idx) {
-            for (int j = i - 1; j >= 0; --j) {
-                if (i - j > d || arr[j] >= arr[i]) {
-                    break;
-                }
-                f[i] = Math.max(f[i], 1 + f[j]);
-            }
-            for (int j = i + 1; j < n; ++j) {
-                if (j - i > d || arr[j] >= arr[i]) {
-                    break;
-                }
-                f[i] = Math.max(f[i], 1 + f[j]);
-            }
-            ans = Math.max(ans, f[i]);
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -249,35 +200,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int maxJumps(vector<int>& arr, int d) {
-        int n = arr.size();
-        vector<int> idx(n);
-        iota(idx.begin(), idx.end(), 0);
-        sort(idx.begin(), idx.end(), [&](int i, int j) { return arr[i] < arr[j]; });
-        vector<int> f(n, 1);
-        for (int i : idx) {
-            for (int j = i - 1; j >= 0; --j) {
-                if (i - j > d || arr[j] >= arr[i]) {
-                    break;
-                }
-                f[i] = max(f[i], 1 + f[j]);
-            }
-            for (int j = i + 1; j < n; ++j) {
-                if (j - i > d || arr[j] >= arr[i]) {
-                    break;
-                }
-                f[i] = max(f[i], 1 + f[j]);
-            }
-        }
-        return *max_element(f.begin(), f.end());
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func maxJumps(arr []int, d int) (ans int) {
@@ -309,17 +232,115 @@ func maxJumps(arr []int, d int) (ans int) {
 	}
 	return
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：排序 + 动态规划
+
+我们可以将数组 $arr$ 中的每个元素 $x$ 与其下标 $i$ 组成一个元组 $(x, i)$，并将这些元组按照 $x$ 从小到大排序。
+
+接下来定义 $f[i]$ 表示从下标 $i$ 开始跳跃能够访问的最大下标数。初始时 $f[i] = 1$，即每个下标都可以单独作为一次跳跃。
+
+我们可以按照元组 $(x, i)$ 的顺序枚举 $i$，并枚举 $i$ 的所有合法的跳跃目标 $j$，即 $i - d \leq j \leq i + d$，并且 $arr[i] \gt arr[j]$。对于每个合法的 $j$，我们可以更新 $f[i]$ 的值，即 $f[i] = \max(f[i], 1 + f[j])$。
+
+最终的答案即为 $\max_{0 \leq i \lt n} f[i]$。
+
+时间复杂度 $O(n \log n + n \times d)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $arr$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        n = len(arr)
+        f = [1] * n
+        for x, i in sorted(zip(arr, range(n))):
+            for j in range(i - 1, -1, -1):
+                if i - j > d or arr[j] >= x:
+                    break
+                f[i] = max(f[i], 1 + f[j])
+            for j in range(i + 1, n):
+                if j - i > d or arr[j] >= x:
+                    break
+                f[i] = max(f[i], 1 + f[j])
+        return max(f)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int maxJumps(int[] arr, int d) {
+        int n = arr.length;
+        Integer[] idx = new Integer[n];
+        for (int i = 0; i < n; ++i) {
+            idx[i] = i;
+        }
+        Arrays.sort(idx, (i, j) -> arr[i] - arr[j]);
+        int[] f = new int[n];
+        Arrays.fill(f, 1);
+        int ans = 0;
+        for (int i : idx) {
+            for (int j = i - 1; j >= 0; --j) {
+                if (i - j > d || arr[j] >= arr[i]) {
+                    break;
+                }
+                f[i] = Math.max(f[i], 1 + f[j]);
+            }
+            for (int j = i + 1; j < n; ++j) {
+                if (j - i > d || arr[j] >= arr[i]) {
+                    break;
+                }
+                f[i] = Math.max(f[i], 1 + f[j]);
+            }
+            ans = Math.max(ans, f[i]);
+        }
+        return ans;
+    }
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxJumps(vector<int>& arr, int d) {
+        int n = arr.size();
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&](int i, int j) { return arr[i] < arr[j]; });
+        vector<int> f(n, 1);
+        for (int i : idx) {
+            for (int j = i - 1; j >= 0; --j) {
+                if (i - j > d || arr[j] >= arr[i]) {
+                    break;
+                }
+                f[i] = max(f[i], 1 + f[j]);
+            }
+            for (int j = i + 1; j < n; ++j) {
+                if (j - i > d || arr[j] >= arr[i]) {
+                    break;
+                }
+                f[i] = max(f[i], 1 + f[j]);
+            }
+        }
+        return *max_element(f.begin(), f.end());
+    }
+};
+```
+
+#### Go
+
 ```go
-func maxJumps(arr []int, d int) (ans int) {
+func maxJumps(arr []int, d int) int {
 	n := len(arr)
 	idx := make([]int, n)
 	f := make([]int, n)
@@ -341,23 +362,13 @@ func maxJumps(arr []int, d int) (ans int) {
 			}
 			f[i] = max(f[i], 1+f[j])
 		}
-		ans = max(ans, f[i])
 	}
-	return
+	return slices.Max(f)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

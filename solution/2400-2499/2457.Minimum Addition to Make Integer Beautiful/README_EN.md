@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2457.Minimum%20Addition%20to%20Make%20Integer%20Beautiful/README_EN.md
+rating: 1680
+source: Weekly Contest 317 Q3
+tags:
+    - Greedy
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2457. Minimum Addition to Make Integer Beautiful](https://leetcode.com/problems/minimum-addition-to-make-integer-beautiful)
 
 [中文文档](/solution/2400-2499/2457.Minimum%20Addition%20to%20Make%20Integer%20Beautiful/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two positive integers <code>n</code> and <code>target</code>.</p>
 
@@ -44,11 +59,36 @@
 	<li>The input will be generated such that it is always possible to make <code>n</code> beautiful.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy Algorithm
+
+We define a function $f(x)$ to represent the sum of the digits of an integer $x$. The problem is to find the minimum non-negative integer $x$ such that $f(n + x) \leq target$.
+
+If the sum of the digits of $y = n+x$ is greater than $target$, we can loop through the following operations to reduce the sum of the digits of $y$ to less than or equal to $target$:
+
+-   Find the lowest non-zero digit of $y$, reduce it to $0$, and add $1$ to the digit one place higher;
+-   Update $x$ and continue the above operation until the sum of the digits of $n+x$ is less than or equal to $target$.
+
+After the loop ends, return $x$.
+
+For example, if $n=467$ and $target=6$, the change process of $n$ is as follows:
+
+$$
+\begin{aligned}
+& 467 \rightarrow 470 \rightarrow 500 \\
+\end{aligned}
+$$
+
+The time complexity is $O(\log^2 n)$, where $n$ is the integer given in the problem. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +111,7 @@ class Solution:
         return x
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func makeIntegerBeautiful(n int64, target int) (x int64) {
@@ -154,7 +194,7 @@ func makeIntegerBeautiful(n int64, target int) (x int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function makeIntegerBeautiful(n: number, target: number): number {
@@ -180,10 +220,8 @@ function makeIntegerBeautiful(n: number, target: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

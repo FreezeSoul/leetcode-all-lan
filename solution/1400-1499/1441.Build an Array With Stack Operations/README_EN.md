@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1441.Build%20an%20Array%20With%20Stack%20Operations/README_EN.md
+rating: 1180
+source: Weekly Contest 188 Q1
+tags:
+    - Stack
+    - Array
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1441. Build an Array With Stack Operations](https://leetcode.com/problems/build-an-array-with-stack-operations)
 
 [中文文档](/solution/1400-1499/1441.Build%20an%20Array%20With%20Stack%20Operations/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>target</code> and an integer <code>n</code>.</p>
 
@@ -71,11 +87,17 @@ The answers that read integer 3 from the stream are not accepted.
 	<li><code>target</code> is strictly increasing.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -90,7 +112,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +151,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func buildArray(target []int, n int) []string {
@@ -145,32 +167,7 @@ func buildArray(target []int, n int) []string {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-char **buildArray(int *target, int targetSize, int n, int *returnSize) {
-    char **res = (char **) malloc(sizeof(char *) * n * 2);
-    int cur = 1;
-    int i = 0;
-    for (int j = 0; j < targetSize; j++) {
-        while (++cur < target[j]) {
-            res[i] = (char *) malloc(sizeof(char) * 8);
-            strcpy(res[i++], "Push");
-            res[i] = (char *) malloc(sizeof(char) * 8);
-            strcpy(res[i++], "Pop");
-        }
-        res[i] = (char *) malloc(sizeof(char) * 8);
-        strcpy(res[i++], "Push");
-    }
-    *returnSize = i;
-    return res;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function buildArray(target: number[], n: number): string[] {
@@ -186,7 +183,7 @@ function buildArray(target: number[], n: number): string[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -207,10 +204,33 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+char** buildArray(int* target, int targetSize, int n, int* returnSize) {
+    char** res = (char**) malloc(sizeof(char*) * n * 2);
+    int cur = 1;
+    int i = 0;
+    for (int j = 0; j < targetSize; j++) {
+        while (++cur < target[j]) {
+            res[i] = (char*) malloc(sizeof(char) * 8);
+            strcpy(res[i++], "Push");
+            res[i] = (char*) malloc(sizeof(char) * 8);
+            strcpy(res[i++], "Pop");
+        }
+        res[i] = (char*) malloc(sizeof(char) * 8);
+        strcpy(res[i++], "Push");
+    }
+    *returnSize = i;
+    return res;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

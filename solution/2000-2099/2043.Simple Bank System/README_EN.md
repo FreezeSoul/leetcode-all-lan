@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2043.Simple%20Bank%20System/README_EN.md
+rating: 1356
+source: Weekly Contest 263 Q2
+tags:
+    - Design
+    - Array
+    - Hash Table
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2043. Simple Bank System](https://leetcode.com/problems/simple-bank-system)
 
 [中文文档](/solution/2000-2099/2043.Simple%20Bank%20System/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have been tasked with writing a program for a popular bank that will automate all its incoming transactions (transfer, deposit, and withdraw). The bank has <code>n</code> accounts numbered from <code>1</code> to <code>n</code>. The initial balance of each account is stored in a <strong>0-indexed</strong> integer array <code>balance</code>, with the <code>(i + 1)<sup>th</sup></code> account having an initial balance of <code>balance[i]</code>.</p>
 
@@ -55,11 +72,26 @@ bank.withdraw(10, 50);   // return false, it is invalid because account 10 does 
 	<li>At most <code>10<sup>4</sup></code> calls will be made to <strong>each</strong> function <code>transfer</code>, <code>deposit</code>, <code>withdraw</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+According to the problem description, we can use an array `balance` to simulate the balance of bank accounts. The array index starts from 0, and the value of the array represents the balance of the account.
+
+-   During initialization, we assign the `balance` array to the member variable `this.balance`, and assign the length of `balance` to the member variable `this.n`.
+-   In the `transfer` function, if `account1` or `account2` is greater than `n` or `balance[account1 - 1]` is less than `money`, return `false`. Otherwise, subtract `money` from `balance[account1 - 1]`, add `money` to `balance[account2 - 1]`, and return `true`.
+-   In the `deposit` function, if `account` is greater than `n`, return `false`. Otherwise, add `money` to `balance[account - 1]`, and return `true`.
+-   In the `withdraw` function, if `account` is greater than `n` or `balance[account - 1]` is less than `money`, return `false`. Otherwise, subtract `money` from `balance[account - 1]`, and return `true`.
+
+The time complexity of the above operations is $O(1)$, and the space complexity is $O(n)$. Here, $n$ is the length of `balance`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Bank:
@@ -94,7 +126,7 @@ class Bank:
 # param_3 = obj.withdraw(account,money)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Bank {
@@ -141,55 +173,7 @@ class Bank {
  */
 ```
 
-### **TypeScript**
-
-```ts
-class Bank {
-    balance: number[];
-    constructor(balance: number[]) {
-        this.balance = balance;
-    }
-
-    transfer(account1: number, account2: number, money: number): boolean {
-        if (
-            account1 > this.balance.length ||
-            account2 > this.balance.length ||
-            money > this.balance[account1 - 1]
-        )
-            return false;
-        this.balance[account1 - 1] -= money;
-        this.balance[account2 - 1] += money;
-        return true;
-    }
-
-    deposit(account: number, money: number): boolean {
-        if (account > this.balance.length) return false;
-        this.balance[account - 1] += money;
-        return true;
-    }
-
-    withdraw(account: number, money: number): boolean {
-        if (
-            account > this.balance.length ||
-            money > this.balance[account - 1]
-        ) {
-            return false;
-        }
-        this.balance[account - 1] -= money;
-        return true;
-    }
-}
-
-/**
- * Your Bank object will be instantiated and called as such:
- * var obj = new Bank(balance)
- * var param_1 = obj.transfer(account1,account2,money)
- * var param_2 = obj.deposit(account,money)
- * var param_3 = obj.withdraw(account,money)
- */
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Bank {
@@ -231,7 +215,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Bank struct {
@@ -277,7 +261,52 @@ func (this *Bank) Withdraw(account int, money int64) bool {
  */
 ```
 
-### **Rust**
+#### TypeScript
+
+```ts
+class Bank {
+    balance: number[];
+    constructor(balance: number[]) {
+        this.balance = balance;
+    }
+
+    transfer(account1: number, account2: number, money: number): boolean {
+        if (
+            account1 > this.balance.length ||
+            account2 > this.balance.length ||
+            money > this.balance[account1 - 1]
+        )
+            return false;
+        this.balance[account1 - 1] -= money;
+        this.balance[account2 - 1] += money;
+        return true;
+    }
+
+    deposit(account: number, money: number): boolean {
+        if (account > this.balance.length) return false;
+        this.balance[account - 1] += money;
+        return true;
+    }
+
+    withdraw(account: number, money: number): boolean {
+        if (account > this.balance.length || money > this.balance[account - 1]) {
+            return false;
+        }
+        this.balance[account - 1] -= money;
+        return true;
+    }
+}
+
+/**
+ * Your Bank object will be instantiated and called as such:
+ * var obj = new Bank(balance)
+ * var param_1 = obj.transfer(account1,account2,money)
+ * var param_2 = obj.deposit(account,money)
+ * var param_3 = obj.withdraw(account,money)
+ */
+```
+
+#### Rust
 
 ```rust
 struct Bank {
@@ -307,7 +336,7 @@ impl Bank {
     }
 
     fn deposit(&mut self, account: i32, money: i64) -> bool {
-        let (account,  n) = (account as usize, self.balance.len());
+        let (account, n) = (account as usize, self.balance.len());
         if n < account {
             return false;
         }
@@ -316,7 +345,7 @@ impl Bank {
     }
 
     fn withdraw(&mut self, account: i32, money: i64) -> bool {
-        let (account,  n) = (account as usize, self.balance.len());
+        let (account, n) = (account as usize, self.balance.len());
         if n < account {
             return false;
         }
@@ -327,20 +356,10 @@ impl Bank {
         true
     }
 }
-
-/**
- * Your Bank object will be instantiated and called as such:
- * let obj = Bank::new(balance);
- * let ret_1: bool = obj.transfer(account1, account2, money);
- * let ret_2: bool = obj.deposit(account, money);
- * let ret_3: bool = obj.withdraw(account, money);
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

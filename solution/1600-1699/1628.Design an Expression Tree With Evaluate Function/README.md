@@ -1,10 +1,25 @@
-# [1628. 设计带解析函数的表达式树](https://leetcode.cn/problems/design-an-expression-tree-with-evaluate-function)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1628.Design%20an%20Expression%20Tree%20With%20Evaluate%20Function/README.md
+tags:
+    - 栈
+    - 树
+    - 设计
+    - 数组
+    - 数学
+    - 二叉树
+---
+
+<!-- problem:start -->
+
+# [1628. 设计带解析函数的表达式树 🔒](https://leetcode.cn/problems/design-an-expression-tree-with-evaluate-function)
 
 [English Version](/solution/1600-1699/1628.Design%20an%20Expression%20Tree%20With%20Evaluate%20Function/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个算术表达式的后缀表示法的标记（token）&nbsp;<code>postfix</code>&nbsp;，构造并返回该表达式对应的二叉表达式树。</p>
 
@@ -54,15 +69,17 @@
 	<li>保证表达式不包含除以零的操作。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 import abc
@@ -130,9 +147,7 @@ ans = expTree.evaluate();
 """
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -213,7 +228,7 @@ class TreeBuilder {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -223,7 +238,7 @@ class TreeBuilder {
 
 class Node {
 public:
-    virtual ~Node() {};
+    virtual ~Node(){};
     virtual int evaluate() const = 0;
 
 protected:
@@ -291,10 +306,8 @@ public:
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

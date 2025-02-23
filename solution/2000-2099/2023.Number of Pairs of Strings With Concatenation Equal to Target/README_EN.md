@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2023.Number%20of%20Pairs%20of%20Strings%20With%20Concatenation%20Equal%20to%20Target/README_EN.md
+rating: 1341
+source: Biweekly Contest 62 Q2
+tags:
+    - Array
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2023. Number of Pairs of Strings With Concatenation Equal to Target](https://leetcode.com/problems/number-of-pairs-of-strings-with-concatenation-equal-to-target)
 
 [中文文档](/solution/2000-2099/2023.Number%20of%20Pairs%20of%20Strings%20With%20Concatenation%20Equal%20to%20Target/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of <strong>digit</strong> strings <code>nums</code> and a <strong>digit</strong> string <code>target</code>, return <em>the number of pairs of indices </em><code>(i, j)</code><em> (where </em><code>i != j</code><em>) such that the <strong>concatenation</strong> of </em><code>nums[i] + nums[j]</code><em> equals </em><code>target</code>.</p>
 
@@ -54,11 +71,21 @@
 	<li><code>nums[i]</code> and <code>target</code> do not have leading zeros.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+Traverse the array `nums`, for each $i$, enumerate all $j$, if $i \neq j$ and $nums[i] + nums[j] = target$, then increment the answer by one.
+
+The time complexity is $O(n^2 \times m)$, where $n$ and $m$ are the lengths of the array `nums` and the string `target`, respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,21 +96,7 @@ class Solution:
         )
 ```
 
-```python
-class Solution:
-    def numOfPairs(self, nums: List[str], target: str) -> int:
-        cnt = Counter(nums)
-        ans = 0
-        for i in range(1, len(target)):
-            a, b = target[:i], target[i:]
-            if a != b:
-                ans += cnt[a] * cnt[b]
-            else:
-                ans += cnt[a] * (cnt[a] - 1)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,12 +115,77 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numOfPairs(vector<string>& nums, string target) {
+        int n = nums.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (i != j && nums[i] + nums[j] == target) ++ans;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func numOfPairs(nums []string, target string) (ans int) {
+	for i, a := range nums {
+		for j, b := range nums {
+			if i != j && a+b == target {
+				ans++
+			}
+		}
+	}
+	return ans
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Hash Table
+
+We can use a hash table to count the occurrence of each string in the array `nums`, then traverse all prefixes and suffixes of the string `target`. If both the prefix and suffix are in the hash table, then increment the answer by the product of their occurrences.
+
+The time complexity is $O(n + m^2)$, and the space complexity is $O(n)$. Here, $n$ and $m$ are the lengths of the array `nums` and the string `target`, respectively.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numOfPairs(self, nums: List[str], target: str) -> int:
+        cnt = Counter(nums)
+        ans = 0
+        for i in range(1, len(target)):
+            a, b = target[:i], target[i:]
+            if a != b:
+                ans += cnt[a] * cnt[b]
+            else:
+                ans += cnt[a] * (cnt[a] - 1)
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int numOfPairs(String[] nums, String target) {
         Map<String, Integer> cnt = new HashMap<>();
         for (String x : nums) {
-            cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+            cnt.merge(x, 1, Integer::sum);
         }
         int ans = 0;
         for (int i = 1; i < target.length(); ++i) {
@@ -126,23 +204,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int numOfPairs(vector<string>& nums, string target) {
-        int n = nums.size();
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (i != j && nums[i] + nums[j] == target) ++ans;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -166,20 +228,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func numOfPairs(nums []string, target string) (ans int) {
-	for i, a := range nums {
-		for j, b := range nums {
-			if i != j && a+b == target {
-				ans++
-			}
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func numOfPairs(nums []string, target string) (ans int) {
@@ -199,10 +248,8 @@ func numOfPairs(nums []string, target string) (ans int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

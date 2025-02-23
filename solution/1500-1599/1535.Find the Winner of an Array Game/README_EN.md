@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1535.Find%20the%20Winner%20of%20an%20Array%20Game/README_EN.md
+rating: 1433
+source: Weekly Contest 200 Q2
+tags:
+    - Array
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1535. Find the Winner of an Array Game](https://leetcode.com/problems/find-the-winner-of-an-array-game)
 
 [中文文档](/solution/1500-1599/1535.Find%20the%20Winner%20of%20an%20Array%20Game/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>arr</code> of <strong>distinct</strong> integers and an integer <code>k</code>.</p>
 
@@ -45,26 +60,152 @@ So we can see that 4 rounds will be played and 5 is the winner because it wins 2
 	<li><code>1 &lt;= k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Quick Thinking
+
+We notice that each time the first two elements of the array are compared, regardless of the result, the next comparison will always be between the next element in the array and the current winner. Therefore, if we have looped $n-1$ times, the final winner must be the maximum element in the array. Otherwise, if an element has won consecutively $k$ times, then this element is the final winner.
+
+The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
+
+Similar problems:
+
+-   [1535. Find the Winner of an Array Game](https://github.com/doocs/leetcode/blob/main/solution/3100-3199/3175.Find%20The%20First%20Player%20to%20win%20K%20Games%20in%20a%20Row/README_EN.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-
+class Solution:
+    def getWinner(self, arr: List[int], k: int) -> int:
+        mx = arr[0]
+        cnt = 0
+        for x in arr[1:]:
+            if mx < x:
+                mx = x
+                cnt = 1
+            else:
+                cnt += 1
+            if cnt == k:
+                break
+        return mx
 ```
 
-### **Java**
+#### Java
 
 ```java
-
+class Solution {
+    public int getWinner(int[] arr, int k) {
+        int mx = arr[0];
+        for (int i = 1, cnt = 0; i < arr.length; ++i) {
+            if (mx < arr[i]) {
+                mx = arr[i];
+                cnt = 1;
+            } else {
+                ++cnt;
+            }
+            if (cnt == k) {
+                break;
+            }
+        }
+        return mx;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int getWinner(vector<int>& arr, int k) {
+        int mx = arr[0];
+        for (int i = 1, cnt = 0; i < arr.size(); ++i) {
+            if (mx < arr[i]) {
+                mx = arr[i];
+                cnt = 1;
+            } else {
+                ++cnt;
+            }
+            if (cnt == k) {
+                break;
+            }
+        }
+        return mx;
+    }
+};
 ```
 
+#### Go
+
+```go
+func getWinner(arr []int, k int) int {
+	mx, cnt := arr[0], 0
+	for _, x := range arr[1:] {
+		if mx < x {
+			mx = x
+			cnt = 1
+		} else {
+			cnt++
+		}
+		if cnt == k {
+			break
+		}
+	}
+	return mx
+}
+```
+
+#### TypeScript
+
+```ts
+function getWinner(arr: number[], k: number): number {
+    let mx = arr[0];
+    let cnt = 0;
+    for (const x of arr.slice(1)) {
+        if (mx < x) {
+            mx = x;
+            cnt = 1;
+        } else {
+            ++cnt;
+        }
+        if (cnt === k) {
+            break;
+        }
+    }
+    return mx;
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int GetWinner(int[] arr, int k) {
+        int maxElement = arr[0], count = 0;
+        for (int i = 1; i < arr.Length; i++) {
+            if (maxElement < arr[i]) {
+                maxElement = arr[i];
+                count = 1;
+            } else {
+                count++;
+            }
+            if (count == k) {
+                break;
+            }
+        }
+        return maxElement;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

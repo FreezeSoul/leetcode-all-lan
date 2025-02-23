@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0817.Linked%20List%20Components/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 链表
+---
+
+<!-- problem:start -->
+
 # [817. 链表组件](https://leetcode.cn/problems/linked-list-components)
 
 [English Version](/solution/0800-0899/0817.Linked%20List%20Components/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定链表头结点&nbsp;<code>head</code>，该链表上的每个结点都有一个 <strong>唯一的整型值</strong> 。同时给定列表&nbsp;<code>nums</code>，该列表是上述链表中整型值的一个子集。</p>
 
@@ -44,11 +56,13 @@
 	<li><code>nums</code> 中所有值 <strong>不同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 链表一次遍历**
+### 方法一：哈希表 + 链表一次遍历
 
 题目中需要判断链表中节点的值是否在数组 `nums` 中，因此我们可以使用哈希表 $s$ 存储数组 `nums` 中的值。
 
@@ -58,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -81,9 +93,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -117,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -145,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -176,38 +186,7 @@ func numComponents(head *ListNode, nums []int) int {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
- * }
- */
-/**
- * @param {ListNode} head
- * @param {number[]} nums
- * @return {number}
- */
-var numComponents = function (head, nums) {
-    const s = new Set(nums);
-    let ans = 0;
-    while (head) {
-        while (head && !s.has(head.val)) {
-            head = head.next;
-        }
-        ans += head != null;
-        while (head && s.has(head.val)) {
-            head = head.next;
-        }
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -242,7 +221,7 @@ function numComponents(head: ListNode | null, nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -284,10 +263,39 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number[]} nums
+ * @return {number}
+ */
+var numComponents = function (head, nums) {
+    const s = new Set(nums);
+    let ans = 0;
+    while (head) {
+        while (head && !s.has(head.val)) {
+            head = head.next;
+        }
+        ans += head != null;
+        while (head && s.has(head.val)) {
+            head = head.next;
+        }
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

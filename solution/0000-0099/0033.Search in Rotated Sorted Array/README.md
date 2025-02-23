@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0033.Search%20in%20Rotated%20Sorted%20Array/README.md
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [33. 搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array)
 
 [English Version](/solution/0000-0099/0033.Search%20in%20Rotated%20Sorted%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>整数数组 <code>nums</code> 按升序排列，数组中的值 <strong>互不相同</strong> 。</p>
 
@@ -19,14 +30,14 @@
 <p><strong>示例 1：</strong></p>
 
 <pre>
-<strong>输入：</strong>nums = [4,5,6,7,0,1,2], target = 0
+<strong>输入：</strong>nums = [<code>4,5,6,7,0,1,2]</code>, target = 0
 <strong>输出：</strong>4
 </pre>
 
 <p><strong>示例&nbsp;2：</strong></p>
 
 <pre>
-<strong>输入：</strong>nums = [4,5,6,7,0,1,2], target = 3
+<strong>输入：</strong>nums = [<code>4,5,6,7,0,1,2]</code>, target = 3
 <strong>输出：</strong>-1</pre>
 
 <p><strong>示例 3：</strong></p>
@@ -48,30 +59,32 @@
 	<li><code>-10<sup>4</sup> &lt;= target &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
-我们使用二分，将数组分割成 `[left, mid]`, `[mid + 1, right]` 两部分，这时候可以发现，其中有一部分一定是有序的。
+我们使用二分，将数组分割成 $[left,.. mid]$, $[mid + 1,.. right]$ 两部分，这时候可以发现，其中有一部分一定是有序的。
 
-因此，我们可以根据有序的那一部分，判断 `target` 是否在这一部分中：
+因此，我们可以根据有序的那一部分，判断 $target$ 是否在这一部分中：
 
--   若 `[0, mid]` 范围内的元素构成有序数组：
-    -   若满足 `nums[0] <= target <= nums[mid]`，那么我们搜索范围可以缩小为 `[left, mid]`；
-    -   否则，在 `[mid + 1, right]` 中查找；
--   若 `[mid + 1, n - 1]` 范围内的元素构成有序数组：
-    -   若满足 `nums[mid] < target <= nums[n - 1]`，那么我们搜索范围可以缩小为 `[mid + 1, right]`；
-    -   否则，在 `[left, mid]` 中查找。
+-   若 $[0,.. mid]$ 范围内的元素构成有序数组：
+    -   若满足 $nums[0] \leq target \leq nums[mid]$，那么我们搜索范围可以缩小为 $[left,.. mid]$；
+    -   否则，在 $[mid + 1,.. right]$ 中查找；
+-   若 $[mid + 1, n - 1]$ 范围内的元素构成有序数组：
+    -   若满足 $nums[mid] \lt target \leq nums[n - 1]$，那么我们搜索范围可以缩小为 $[mid + 1,.. right]$；
+    -   否则，在 $[left,.. mid]$ 中查找。
 
-二分查找终止条件是 `left >= right`，若结束后发现 `nums[left]` 与 `target` 不等，说明数组中不存在值为 `target` 的元素，返回 -1，否则返回下标 left。
+二分查找终止条件是 $left \geq right$，若结束后发现 $nums[left]$ 与 $target$ 不等，说明数组中不存在值为 $target$ 的元素，返回 $-1$，否则返回下标 $left$。
+
+时间复杂度 $O(\log n)$，其中 $n$ 是数组 $nums$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,9 +106,7 @@ class Solution:
         return left if nums[left] == target else -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -123,9 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### C++
 
 ```cpp
 class Solution {
@@ -152,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func search(nums []int, target int) int {
@@ -181,7 +190,66 @@ func search(nums []int, target int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function search(nums: number[], target: number): number {
+    const n = nums.length;
+    let left = 0,
+        right = n - 1;
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (nums[0] <= nums[mid]) {
+            if (nums[0] <= target && target <= nums[mid]) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        } else {
+            if (nums[mid] < target && target <= nums[n - 1]) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+    }
+    return nums[left] == target ? left : -1;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
+        let mut l = 0;
+        let mut r = nums.len() - 1;
+        while l <= r {
+            let mid = (l + r) >> 1;
+            if nums[mid] == target {
+                return mid as i32;
+            }
+
+            if nums[l] <= nums[mid] {
+                if target < nums[mid] && target >= nums[l] {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
+                if target > nums[mid] && target <= nums[r] {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+        }
+        -1
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -213,69 +281,58 @@ var search = function (nums, target) {
 };
 ```
 
-### **Rust**
+#### C#
 
-```rust
-impl Solution {
-    pub fn search(nums: Vec<i32>, target: i32) -> i32 {
-        let mut l = 0;
-        let mut r = nums.len() - 1;
-        while l <= r {
-            let mid = l + r >> 1;
-            if nums[mid] == target {
-                return mid as i32;
-            }
-
-            if nums[l] <= nums[mid] {
-                if target < nums[mid] && target >= nums[l] {
-                    r = mid - 1;
+```cs
+public class Solution {
+    public int Search(int[] nums, int target) {
+        int n = nums.Length;
+        int left = 0, right = n - 1;
+        while (left < right) {
+            int mid = (left + right) >> 1;
+            if (nums[0] <= nums[mid]) {
+                if (nums[0] <= target && target <= nums[mid]) {
+                    right = mid;
                 } else {
-                    l = mid + 1;
+                    left = mid + 1;
                 }
             } else {
-                if target > nums[mid] && target <= nums[r] {
-                    l = mid + 1;
+                if (nums[mid] < target && target <= nums[n - 1]) {
+                    left = mid + 1;
                 } else {
-                    r = mid - 1;
+                    right = mid;
                 }
             }
         }
-        -1
+        return nums[left] == target ? left : -1;
     }
 }
 ```
 
-### **TypeScript**
+#### PHP
 
-```ts
-function search(nums: number[], target: number): number {
-    const n = nums.length;
-    let left = 0,
-        right = n - 1;
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        if (nums[0] <= nums[mid]) {
-            if (nums[0] <= target && target <= nums[mid]) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        } else {
-            if (nums[mid] < target && target <= nums[n - 1]) {
-                left = mid + 1;
-            } else {
-                right = mid;
+```php
+class Solution {
+    /**
+     * @param integer[] $nums
+     * @param integer $target
+     * @return integer
+     */
+
+    function search($nums, $target) {
+        $foundKey = -1;
+        foreach ($nums as $key => $value) {
+            if ($value === $target) {
+                $foundKey = $key;
             }
         }
+        return $foundKey;
     }
-    return nums[left] == target ? left : -1;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

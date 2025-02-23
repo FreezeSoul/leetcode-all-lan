@@ -1,8 +1,22 @@
-# [157. Read N Characters Given Read4](https://leetcode.com/problems/read-n-characters-given-read4)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0157.Read%20N%20Characters%20Given%20Read4/README_EN.md
+tags:
+    - Array
+    - Interactive
+    - Simulation
+---
+
+<!-- problem:start -->
+
+# [157. Read N Characters Given Read4 🔒](https://leetcode.com/problems/read-n-characters-given-read4)
 
 [中文文档](/solution/0100-0199/0157.Read%20N%20Characters%20Given%20Read4/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a <code>file</code> and assume that you can only read the file using a given method <code>read4</code>, implement a method to read <code>n</code> characters.</p>
 
@@ -93,11 +107,17 @@ Note that &quot;abc&quot; is the file&#39;s content, not buf. buf is the destina
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 """
@@ -136,7 +156,7 @@ class Solution:
         return i
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -167,7 +187,7 @@ public class Solution extends Reader4 {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -182,7 +202,7 @@ public:
      * @param n   Number of characters to read
      * @return    The number of actual characters read
      */
-    int read(char *buf, int n) {
+    int read(char* buf, int n) {
         char buf4[4];
         int i = 0, v = 5;
         while (v >= 4) {
@@ -199,7 +219,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -235,10 +255,8 @@ var solution = func(read4 func([]byte) int) func([]byte, int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

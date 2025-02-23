@@ -1,31 +1,58 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0584.Find%20Customer%20Referee/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [584. 寻找用户推荐人](https://leetcode.cn/problems/find-customer-referee)
 
 [English Version](/solution/0500-0599/0584.Find%20Customer%20Referee/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给定表 <code>customer</code> ，里面保存了所有客户信息和他们的推荐人。</p>
-
-<pre>
-+------+------+-----------+
-| id   | name | referee_id|
-+------+------+-----------+
-|    1 | Will |      NULL |
-|    2 | Jane |      NULL |
-|    3 | Alex |         2 |
-|    4 | Bill |      NULL |
-|    5 | Zack |         1 |
-|    6 | Mark |         2 |
-+------+------+-----------+
-</pre>
-
-<p>写一个查询语句，返回一个客户列表，列表中客户的推荐人的编号都 <strong>不是 </strong>2。</p>
-
-<p>对于上面的示例数据，结果为：</p>
+<p>表:&nbsp;<code>Customer</code></p>
 
 <pre>
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| referee_id  | int     |
++-------------+---------+
+在 SQL 中，id 是该表的主键列。
+该表的每一行表示一个客户的 id、姓名以及推荐他们的客户的 id。</pre>
+
+<p>找出那些 <strong>没有被</strong> <code>id = 2</code> 的客户 <strong>推荐</strong> 的客户的姓名。</p>
+
+<p>以 <strong>任意顺序</strong> 返回结果表。</p>
+
+<p>结果格式如下所示。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例 1：</strong></p>
+
+<pre>
+<b>输入：</b> 
+Customer 表:
++----+------+------------+
+| id | name | referee_id |
++----+------+------------+
+| 1  | Will | null       |
+| 2  | Jane | null       |
+| 3  | Alex | 2          |
+| 4  | Bill | null       |
+| 5  | Zack | 1          |
+| 6  | Mark | 2          |
++----+------+------------+
+<b>输出：</b>
 +------+
 | name |
 +------+
@@ -33,35 +60,31 @@
 | Jane |
 | Bill |
 | Zack |
-+------+
-</pre>
++------+</pre>
+
+<!-- description:end -->
 
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：条件过滤
+
+我们可以直接筛选出 `referee_id` 不为 `2` 的客户姓名。注意，`referee_id` 为 `NULL` 的客户也应该被筛选出来。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT
-    name
-FROM
-    Customer
-WHERE
-    referee_id != 2 OR referee_id IS NULL;
-```
-
-MySQL 可使用 `IFNULL()`：
-
-```sql
-SELECT
-    name
-FROM
-    customer
-WHERE
-    IFNULL(referee_id, 0) != 2;
+# Write your MySQL query statement below
+SELECT name
+FROM Customer
+WHERE IFNULL(referee_id, 0) != 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1610.Maximum%20Number%20of%20Visible%20Points/README.md
+rating: 2147
+source: 第 209 场周赛 Q3
+tags:
+    - 几何
+    - 数组
+    - 数学
+    - 排序
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [1610. 可见点的最大数目](https://leetcode.cn/problems/maximum-number-of-visible-points)
 
 [English Version](/solution/1600-1699/1610.Maximum%20Number%20of%20Visible%20Points/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个点数组 <code>points</code> 和一个表示角度的整数 <code>angle</code> ，你的位置是 <code>location</code> ，其中 <code>location = [pos<sub>x</sub>, pos<sub>y</sub>]</code> 且 <code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code> 都表示 X-Y 平面上的整数坐标。</p>
 
@@ -57,23 +73,17 @@
 	<li><code>0 <= pos<sub>x</sub>, pos<sub>y</sub>, x<sub>i</sub>, y<sub>i</sub> <= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-根据题目我们得知，需要求出在视角范围 `[d - angle/2, d + angle / 2]` 范围内覆盖的最多点的数量。视角可以转换为相对于 location `(x, y)` 的极角。
-
-可以排除与 location 重合的点，将剩下的所有点 p 的坐标 `(xi, yi)` 转换为相对于 `(x, y)` 的极角。可以利用 `atan2` 函数，`atan2` 返回值范围是 `[−π,π]`，覆盖范围是 2π。
-
-求出极角后，按照大小进行排序。因为可以循环，所以把整个数组所有元素加上 2π 接在数组后面。
-
-接下来利用双指针找出覆盖最多点的区间即可。最后返回时，要把重合的点加上。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -96,9 +106,7 @@ class Solution:
         return mx + same
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -132,7 +140,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -163,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func visiblePoints(points [][]int, angle int, location []int) int {
@@ -191,19 +199,10 @@ func visiblePoints(points [][]int, angle int, location []int) int {
 	}
 	return same + mx
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

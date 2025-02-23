@@ -1,35 +1,48 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0857.Minimum%20Cost%20to%20Hire%20K%20Workers/README.md
+tags:
+    - 贪心
+    - 数组
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [857. 雇佣 K 名工人的最低成本](https://leetcode.cn/problems/minimum-cost-to-hire-k-workers)
 
 [English Version](/solution/0800-0899/0857.Minimum%20Cost%20to%20Hire%20K%20Workers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有 <code>n</code>&nbsp;名工人。&nbsp;给定两个数组&nbsp;<code>quality</code>&nbsp;和&nbsp;<code>wage</code>&nbsp;，其中，<code>quality[i]</code>&nbsp;表示第&nbsp;<code>i</code>&nbsp;名工人的工作质量，其最低期望工资为&nbsp;<code>wage[i]</code>&nbsp;。</p>
 
-<p>现在我们想雇佣&nbsp;<code>k</code>&nbsp;名工人组成一个<em>工资组。</em>在雇佣&nbsp;一组 <code>k</code>&nbsp;名工人时，我们必须按照下述规则向他们支付工资：</p>
+<p>现在我们想雇佣&nbsp;<code>k</code>&nbsp;名工人组成一个&nbsp;<strong>工资组</strong><em>。</em>在雇佣&nbsp;一组 <code>k</code>&nbsp;名工人时，我们必须按照下述规则向他们支付工资：</p>
 
 <ol>
 	<li>对工资组中的每名工人，应当按其工作质量与同组其他工人的工作质量的比例来支付工资。</li>
 	<li>工资组中的每名工人至少应当得到他们的最低期望工资。</li>
 </ol>
 
-<p>给定整数 <code>k</code> ，返回 <em>组成满足上述条件的付费群体所需的最小金额&nbsp;</em>。在实际答案的&nbsp;<code>10<sup>-5</sup></code>&nbsp;以内的答案将被接受。。</p>
+<p>给定整数 <code>k</code> ，返回 <em>组成满足上述条件的付费群体所需的最小金额&nbsp;</em>。与实际答案误差相差在&nbsp;<code>10<sup>-5</sup></code>&nbsp;以内的答案将被接受。</p>
 
 <p>&nbsp;</p>
 
 <ol>
 </ol>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
 <pre>
 <strong>输入： </strong>quality = [10,20,5], wage = [70,50,30], k = 2
 <strong>输出： </strong>105.00000
 <strong>解释：</strong> 我们向 0 号工人支付 70，向 2 号工人支付 35。</pre>
 
-<p><strong>示例 2：</strong></p>
+<p><strong class="example">示例 2：</strong></p>
 
 <pre>
 <strong>输入： </strong>quality = [3,1,10,10,1], wage = [4,8,2,2,7], k = 3
@@ -46,11 +59,13 @@
 	<li><code>1 &lt;= quality[i], wage[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 优先队列（大根堆）**
+### 方法一：贪心 + 优先队列（大根堆）
 
 我们假设选取了某一个工资组，总工作质量为 `tot`，总支付金额为 `c`。每个工人的工作质量为 $q_i$，工资为 $w_i$。那么，对于此工资组的每个工人，均满足 $c\times \frac{q_i}{tot} \ge w_i$。即 $c\ge tot\times \frac{w_i}{q_i}$。
 
@@ -60,17 +75,19 @@
 
 时间复杂度 $O(n\log n)$，空间复杂度 $O(n)$。其中 $n$ 是工人数。
 
-相似题目：[1383. 最大的团队表现值](/solution/1300-1399/1383.Maximum%20Performance%20of%20a%20Team/README.md)
+相似题目：
+
+-   [1383. 最大的团队表现值](https://github.com/doocs/leetcode/blob/main/solution/1300-1399/1383.Maximum%20Performance%20of%20a%20Team/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def mincostToHireWorkers(self, quality: List[int], wage: List[int], k: int) -> float:
+    def mincostToHireWorkers(
+        self, quality: List[int], wage: List[int], k: int
+    ) -> float:
         t = sorted(zip(quality, wage), key=lambda x: x[1] / x[0])
         ans, tot = inf, 0
         h = []
@@ -83,9 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -122,7 +137,7 @@ class Pair {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -151,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mincostToHireWorkers(quality []int, wage []int, k int) float64 {
@@ -174,13 +189,6 @@ func mincostToHireWorkers(quality []int, wage []int, k int) float64 {
 	return ans
 }
 
-func min(a, b float64) float64 {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 type pair struct {
 	x float64
 	q int
@@ -188,8 +196,8 @@ type pair struct {
 
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -198,10 +206,8 @@ func (h *hp) Pop() interface{} {
 func (h *hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

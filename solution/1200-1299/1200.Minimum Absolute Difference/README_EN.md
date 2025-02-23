@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1200.Minimum%20Absolute%20Difference/README_EN.md
+rating: 1198
+source: Weekly Contest 155 Q1
+tags:
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1200. Minimum Absolute Difference](https://leetcode.com/problems/minimum-absolute-difference)
 
 [中文文档](/solution/1200-1299/1200.Minimum%20Absolute%20Difference/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of <strong>distinct</strong> integers <code>arr</code>, find all pairs of elements with the minimum absolute difference of any two elements.</p>
 
@@ -44,11 +59,23 @@
 	<li><code>-10<sup>6</sup> &lt;= arr[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting
+
+According to the problem description, we need to find the minimum absolute difference between any two elements in the array $arr$. Therefore, we can first sort the array $arr$, then traverse the adjacent elements to get the minimum absolute difference $mi$.
+
+Finally, we traverse the adjacent elements again to find all pairs of elements where the minimum absolute difference equals $mi$.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the length of the array $arr$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +85,7 @@ class Solution:
         return [[a, b] for a, b in pairwise(arr) if b - a == mi]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -80,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumAbsDifference(arr []int) (ans [][]int) {
@@ -124,7 +151,7 @@ func minimumAbsDifference(arr []int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumAbsDifference(arr: number[]): number[][] {
@@ -144,10 +171,8 @@ function minimumAbsDifference(arr: number[]): number[][] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

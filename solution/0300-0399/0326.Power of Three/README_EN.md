@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0326.Power%20of%20Three/README_EN.md
+tags:
+    - Recursion
+    - Math
+---
+
+<!-- problem:start -->
+
 # [326. Power of Three](https://leetcode.com/problems/power-of-three)
 
 [中文文档](/solution/0300-0399/0326.Power%20of%20Three/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code>, return <em><code>true</code> if it is a power of three. Otherwise, return <code>false</code></em>.</p>
 
@@ -43,11 +56,17 @@
 <p>&nbsp;</p>
 <strong>Follow up:</strong> Could you solve it without loops/recursion?
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,13 +78,7 @@ class Solution:
         return n == 1
 ```
 
-```python
-class Solution:
-    def isPowerOfThree(self, n: int) -> bool:
-        return n > 0 and 1162261467 % n == 0
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -81,15 +94,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean isPowerOfThree(int n) {
-        return n > 0 && 1162261467 % n == 0;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,16 +111,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool isPowerOfThree(int n) {
-        return n > 0 && 1162261467 % n == 0;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func isPowerOfThree(n int) bool {
@@ -129,13 +125,7 @@ func isPowerOfThree(n int) bool {
 }
 ```
 
-```go
-func isPowerOfThree(n int) bool {
-	return n > 0 && 1162261467%n == 0
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isPowerOfThree(n: number): boolean {
@@ -143,7 +133,7 @@ function isPowerOfThree(n: number): boolean {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -155,10 +145,55 @@ var isPowerOfThree = function (n) {
 };
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isPowerOfThree(self, n: int) -> bool:
+        return n > 0 and 1162261467 % n == 0
 ```
 
+#### Java
+
+```java
+class Solution {
+    public boolean isPowerOfThree(int n) {
+        return n > 0 && 1162261467 % n == 0;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        return n > 0 && 1162261467 % n == 0;
+    }
+};
+```
+
+#### Go
+
+```go
+func isPowerOfThree(n int) bool {
+	return n > 0 && 1162261467%n == 0
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

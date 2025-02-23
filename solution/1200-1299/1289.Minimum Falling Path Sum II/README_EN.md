@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1289.Minimum%20Falling%20Path%20Sum%20II/README_EN.md
+rating: 1697
+source: Biweekly Contest 15 Q4
+tags:
+    - Array
+    - Dynamic Programming
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1289. Minimum Falling Path Sum II](https://leetcode.com/problems/minimum-falling-path-sum-ii)
 
 [中文文档](/solution/1200-1299/1289.Minimum%20Falling%20Path%20Sum%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an <code>n x n</code> integer matrix <code>grid</code>, return <em>the minimum sum of a <strong>falling path with non-zero shifts</strong></em>.</p>
 
@@ -12,7 +28,7 @@
 <p><strong class="example">Example 1:</strong></p>
 <img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/1200-1299/1289.Minimum%20Falling%20Path%20Sum%20II/images/falling-grid.jpg" style="width: 244px; height: 245px;" />
 <pre>
-<strong>Input:</strong> arr = [[1,2,3],[4,5,6],[7,8,9]]
+<strong>Input:</strong> grid = [[1,2,3],[4,5,6],[7,8,9]]
 <strong>Output:</strong> 13
 <strong>Explanation:</strong> 
 The possible falling paths are:
@@ -38,225 +54,176 @@ The falling path with the smallest sum is&nbsp;[1,5,7], so the answer is&nbsp;13
 	<li><code>-99 &lt;= grid[i][j] &lt;= 99</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i][j]$ to represent the minimum sum of the first $i$ rows, with the last number in the $j$-th column. The state transition equation is:
+
+$$
+f[i][j] = \min_{k \neq j} f[i - 1][k] + grid[i - 1][j]
+$$
+
+where $k$ represents the column of the number in the $(i - 1)$-th row, and the number in the $i$-th row and $j$-th column is $grid[i - 1][j]$.
+
+The final answer is the minimum value in $f[n]$.
+
+The time complexity is $O(n^3)$, and the space complexity is $O(n^2)$. Here, $n$ is the number of rows in the matrix.
+
+We note that the state $f[i][j]$ only depends on $f[i - 1][k]$, so we can use a rolling array to optimize the space complexity to $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minFallingPathSum(self, grid: List[List[int]]) -> int:
         n = len(grid)
-        f = [[0] * n for _ in range(n + 1)]
-        for i, row in enumerate(grid, 1):
-            for j, v in enumerate(row):
-                x = min((f[i - 1][k] for k in range(n) if k != j), default=0)
-                f[i][j] = v + x
-        return min(f[n])
-```
-
-```python
-class Solution:
-    def minFallingPathSum(self, grid: List[List[int]]) -> int:
-        f = g = 0
-        fp = -1
+        f = [0] * n
         for row in grid:
-            ff = gg = inf
-            ffp = -1
-            for j, v in enumerate(row):
-                s = (g if j == fp else f) + v
-                if s < ff:
-                    gg = ff
-                    ff = s
-                    ffp = j
-                elif s < gg:
-                    gg = s
-            f, g, fp = ff, gg, ffp
-        return f
+            g = row[:]
+            for i in range(n):
+                g[i] += min((f[j] for j in range(n) if j != i), default=0)
+            f = g
+        return min(f)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int minFallingPathSum(int[][] grid) {
         int n = grid.length;
-        int[][] f = new int[n + 1][n];
-        final int inf = 1 << 30;
-        for (int i = 1; i <= n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                int x = inf;
-                for (int k = 0; k < n; ++k) {
-                    if (k != j) {
-                        x = Math.min(x, f[i - 1][k]);
-                    }
-                }
-                f[i][j] = grid[i - 1][j] + (x == inf ? 0 : x);
-            }
-        }
-        int ans = inf;
-        for (int x : f[n]) {
-            ans = Math.min(ans, x);
-        }
-        return ans;
-    }
-}
-```
-
-```java
-class Solution {
-    public int minFallingPathSum(int[][] grid) {
-        int f = 0, g = 0;
-        int fp = -1;
+        int[] f = new int[n];
         final int inf = 1 << 30;
         for (int[] row : grid) {
-            int ff = inf, gg = inf;
-            int ffp = -1;
-            for (int j = 0; j < row.length; ++j) {
-                int s = (j != fp ? f : g) + row[j];
-                if (s < ff) {
-                    gg = ff;
-                    ff = s;
-                    ffp = j;
-                } else if (s < gg) {
-                    gg = s;
-                }
-            }
-            f = ff;
-            g = gg;
-            fp = ffp;
-        }
-        return f;
-    }
-}
-```
-
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minFallingPathSum(vector<vector<int>>& grid) {
-        int n = grid.size();
-        int f[n + 1][n];
-        memset(f, 0, sizeof(f));
-        const int inf = 1 << 30;
-        for (int i = 1; i <= n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                int x = inf;
-                for (int k = 0; k < n; ++k) {
-                    if (k != j) {
-                        x = min(x, f[i - 1][k]);
+            int[] g = row.clone();
+            for (int i = 0; i < n; ++i) {
+                int t = inf;
+                for (int j = 0; j < n; ++j) {
+                    if (j != i) {
+                        t = Math.min(t, f[j]);
                     }
                 }
-                f[i][j] = grid[i - 1][j] + (x == inf ? 0 : x);
+                g[i] += (t == inf ? 0 : t);
             }
+            f = g;
         }
-        return *min_element(f[n], f[n] + n);
+        return Arrays.stream(f).min().getAsInt();
     }
-};
+}
 ```
+
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minFallingPathSum(vector<vector<int>>& grid) {
         int n = grid.size();
-        int f = 0, g = 0, fp = -1;
-        const int inf = 1 << 30;
-        for (auto& row : grid) {
-            int ff = inf, gg = inf;
-            int ffp = -1;
-            for (int j = 0; j < n; ++j) {
-                int s = (fp != j ? f : g) + row[j];
-                if (s < ff) {
-                    gg = ff;
-                    ff = s;
-                    ffp = j;
-                } else if (s < gg) {
-                    gg = s;
+        vector<int> f(n);
+        const int inf = 1e9;
+        for (const auto& row : grid) {
+            vector<int> g = row;
+            for (int i = 0; i < n; ++i) {
+                int t = inf;
+                for (int j = 0; j < n; ++j) {
+                    if (j != i) {
+                        t = min(t, f[j]);
+                    }
                 }
+                g[i] += (t == inf ? 0 : t);
             }
-            f = ff;
-            g = gg;
-            fp = ffp;
+            f = move(g);
         }
-        return f;
+        return ranges::min(f);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minFallingPathSum(grid [][]int) int {
-	n := len(grid)
-	f := make([][]int, n+1)
-	for i := range f {
-		f[i] = make([]int, n)
-	}
-	const inf = 1 << 30
-	for i, row := range grid {
-		i++
-		for j, v := range row {
-			x := inf
-			for k := range row {
-				if k != j {
-					x = min(x, f[i-1][k])
+	f := make([]int, len(grid))
+	const inf = math.MaxInt32
+	for _, row := range grid {
+		g := slices.Clone(row)
+		for i := range f {
+			t := inf
+			for j := range row {
+				if j != i {
+					t = min(t, f[j])
 				}
 			}
-			if x == inf {
-				x = 0
-			}
-			f[i][j] = v + x
-		}
-	}
-	ans := inf
-	for _, x := range f[n] {
-		ans = min(ans, x)
-	}
-	return ans
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-```go
-func minFallingPathSum(grid [][]int) int {
-	const inf = 1 << 30
-	f, g := 0, 0
-	fp := -1
-	for _, row := range grid {
-		ff, gg := inf, inf
-		ffp := -1
-		for j, v := range row {
-			s := f
-			if j == fp {
-				s = g
-			}
-			s += v
-			if s < ff {
-				ff, gg, ffp = s, ff, j
-			} else if s < gg {
-				gg = s
+			if t != inf {
+				g[i] += t
 			}
 		}
-		f, g, fp = ff, gg, ffp
+		f = g
 	}
-	return f
+	return slices.Min(f)
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function minFallingPathSum(grid: number[][]): number {
+    const n = grid.length;
+    const f: number[] = Array(n).fill(0);
+    for (const row of grid) {
+        const g = [...row];
+        for (let i = 0; i < n; ++i) {
+            let t = Infinity;
+            for (let j = 0; j < n; ++j) {
+                if (j !== i) {
+                    t = Math.min(t, f[j]);
+                }
+            }
+            g[i] += t === Infinity ? 0 : t;
+        }
+        f.splice(0, n, ...g);
+    }
+    return Math.min(...f);
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_falling_path_sum(grid: Vec<Vec<i32>>) -> i32 {
+        let n = grid.len();
+        let mut f = vec![0; n];
+        let inf = i32::MAX;
+
+        for row in grid {
+            let mut g = row.clone();
+            for i in 0..n {
+                let mut t = inf;
+                for j in 0..n {
+                    if j != i {
+                        t = t.min(f[j]);
+                    }
+                }
+                g[i] += if t == inf { 0 } else { t };
+            }
+            f = g;
+        }
+
+        *f.iter().min().unwrap()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

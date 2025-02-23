@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1335.Minimum%20Difficulty%20of%20a%20Job%20Schedule/README_EN.md
+rating: 2034
+source: Weekly Contest 173 Q4
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1335. Minimum Difficulty of a Job Schedule](https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule)
 
 [中文文档](/solution/1300-1399/1335.Minimum%20Difficulty%20of%20a%20Job%20Schedule/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You want to schedule a list of jobs in <code>d</code> days. Jobs are dependent (i.e To work on the <code>i<sup>th</sup></code> job, you have to finish all the jobs <code>j</code> where <code>0 &lt;= j &lt; i</code>).</p>
 
@@ -48,9 +63,13 @@ The difficulty of the schedule = 6 + 1 = 7
 	<li><code>1 &lt;= d &lt;= 10</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Dynamic Programming**
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
 
 We define $f[i][j]$ as the minimum difficulty to finish the first $i$ jobs within $j$ days. Initially $f[0][0] = 0$, and all other $f[i][j]$ are $\infty$.
 
@@ -66,7 +85,7 @@ The time complexity is $O(n^2 \times d)$, and the space complexity is $O(n \time
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -83,7 +102,7 @@ class Solution:
         return -1 if f[n][d] >= inf else f[n][d]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +152,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDifficulty(jobDifficulty []int, d int) int {
@@ -161,31 +180,15 @@ func minDifficulty(jobDifficulty []int, d int) int {
 	}
 	return f[n][d]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minDifficulty(jobDifficulty: number[], d: number): number {
     const n = jobDifficulty.length;
     const inf = 1 << 30;
-    const f: number[][] = new Array(n + 1)
-        .fill(0)
-        .map(() => new Array(d + 1).fill(inf));
+    const f: number[][] = new Array(n + 1).fill(0).map(() => new Array(d + 1).fill(inf));
     f[0][0] = 0;
     for (let i = 1; i <= n; ++i) {
         for (let j = 1; j <= Math.min(d, i); ++j) {
@@ -200,10 +203,8 @@ function minDifficulty(jobDifficulty: number[], d: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

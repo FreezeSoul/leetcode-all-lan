@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0099.Recover%20Binary%20Search%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉搜索树
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree)
 
 [English Version](/solution/0000-0099/0099.Recover%20Binary%20Search%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你二叉搜索树的根节点 <code>root</code> ，该树中的 <strong>恰好</strong> 两个节点的值被错误地交换。<em>请在不改变其结构的情况下，恢复这棵树&nbsp;</em>。</p>
 
@@ -38,11 +51,13 @@
 
 <p><strong>进阶：</strong>使用 <code>O(n)</code> 空间复杂度的解法很容易实现。你能想出一个只使用&nbsp;<code>O(1)</code> 空间的解决方案吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：中序遍历**
+### 方法一：中序遍历
 
 中序遍历二叉搜索树，得到的序列是递增的。如果有两个节点的值被错误地交换，那么中序遍历得到的序列中，一定会出现两个逆序对。我们用 `first` 和 `second` 分别记录这两个逆序对中较小值和较大值的节点，最后交换这两个节点的值即可。
 
@@ -50,9 +65,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -66,6 +79,7 @@ class Solution:
         """
         Do not return anything, modify root in-place instead.
         """
+
         def dfs(root):
             if root is None:
                 return
@@ -83,9 +97,7 @@ class Solution:
         first.val, second.val = second.val, first.val
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -132,7 +144,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -152,7 +164,7 @@ public:
         TreeNode* prev = nullptr;
         TreeNode* first = nullptr;
         TreeNode* second = nullptr;
-        function<void(TreeNode* root)> dfs = [&](TreeNode* root) {
+        function<void(TreeNode * root)> dfs = [&](TreeNode* root) {
             if (!root) return;
             dfs(root->left);
             if (prev && prev->val > root->val) {
@@ -168,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -201,7 +213,47 @@ func recoverTree(root *TreeNode) {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {void} Do not return anything, modify root in-place instead.
+ */
+var recoverTree = function (root) {
+    let prev = null;
+    let first = null;
+    let second = null;
+    function dfs(root) {
+        if (!root) {
+            return;
+        }
+        dfs(root.left);
+        if (prev && prev.val > root.val) {
+            if (!first) {
+                first = prev;
+            }
+            second = root;
+        }
+        prev = root;
+        dfs(root.right);
+    }
+    dfs(root);
+    const t = first.val;
+    first.val = second.val;
+    second.val = t;
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -244,50 +296,8 @@ public class Solution {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {void} Do not return anything, modify root in-place instead.
- */
-var recoverTree = function (root) {
-    let prev = null;
-    let first = null;
-    let second = null;
-    function dfs(root) {
-        if (!root) {
-            return;
-        }
-        dfs(root.left);
-        if (prev && prev.val > root.val) {
-            if (!first) {
-                first = prev;
-            }
-            second = root;
-        }
-        prev = root;
-        dfs(root.right);
-    }
-    dfs(root);
-    const t = first.val;
-    first.val = second.val;
-    second.val = t;
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

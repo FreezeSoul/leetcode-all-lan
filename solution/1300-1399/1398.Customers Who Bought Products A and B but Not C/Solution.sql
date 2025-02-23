@@ -1,13 +1,8 @@
 # Write your MySQL query statement below
-select
-    o.customer_id,
-    c.customer_name
-from
-    orders o
-    left join customers c on o.customer_id = c.customer_id
-group by
-    customer_id
-having
-    sum(if(product_name = 'A', 1, 0)) > 0
-    and sum(if(product_name = 'B', 1, 0)) > 0
-    and sum(if(product_name = 'C', 1, 0)) = 0
+SELECT customer_id, customer_name
+FROM
+    Customers
+    LEFT JOIN Orders USING (customer_id)
+GROUP BY 1
+HAVING SUM(product_name = 'A') > 0 AND SUM(product_name = 'B') > 0 AND SUM(product_name = 'C') = 0
+ORDER BY 1;

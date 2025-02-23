@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2461.Maximum%20Sum%20of%20Distinct%20Subarrays%20With%20Length%20K/README.md
+rating: 1552
+source: 第 318 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 滑动窗口
+---
+
+<!-- problem:start -->
+
 # [2461. 长度为 K 子数组中的最大和](https://leetcode.cn/problems/maximum-sum-of-distinct-subarrays-with-length-k)
 
 [English Version](/solution/2400-2499/2461.Maximum%20Sum%20of%20Distinct%20Subarrays%20With%20Length%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> 。请你从 <code>nums</code> 中满足下述条件的全部子数组中找出最大子数组和：</p>
 
@@ -50,11 +64,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：滑动窗口 + 哈希表**
+### 方法一：滑动窗口 + 哈希表
 
 我们维护一个长度为 $k$ 的滑动窗口，用哈希表 $cnt$ 记录窗口中每个数字出现的次数，用变量 $s$ 记录窗口中所有数字的和。每次滑动窗口，如果窗口中的数字都不重复，那么更新答案。
 
@@ -62,9 +78,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,19 +88,16 @@ class Solution:
         ans = s if len(cnt) == k else 0
         for i in range(k, len(nums)):
             cnt[nums[i]] += 1
-            s += nums[i]
             cnt[nums[i - k]] -= 1
-            s -= nums[i - k]
             if cnt[nums[i - k]] == 0:
-                del cnt[nums[i - k]]
+                cnt.pop(nums[i - k])
+            s += nums[i] - nums[i - k]
             if len(cnt) == k:
                 ans = max(ans, s)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -101,11 +112,10 @@ class Solution {
         long ans = cnt.size() == k ? s : 0;
         for (int i = k; i < n; ++i) {
             cnt.merge(nums[i], 1, Integer::sum);
-            s += nums[i];
             if (cnt.merge(nums[i - k], -1, Integer::sum) == 0) {
                 cnt.remove(nums[i - k]);
             }
-            s -= nums[i - k];
+            s += nums[i] - nums[i - k];
             if (cnt.size() == k) {
                 ans = Math.max(ans, s);
             }
@@ -115,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -126,18 +136,16 @@ public:
         unordered_map<int, ll> cnt;
         ll s = 0;
         for (int i = 0; i < k; ++i) {
-            cnt[nums[i]]++;
+            ++cnt[nums[i]];
             s += nums[i];
         }
         ll ans = cnt.size() == k ? s : 0;
         for (int i = k; i < n; ++i) {
-            cnt[nums[i]]++;
-            s += nums[i];
-            cnt[nums[i - k]]--;
-            s -= nums[i - k];
-            if (cnt[nums[i - k]] == 0) {
+            ++cnt[nums[i]];
+            if (--cnt[nums[i - k]] == 0) {
                 cnt.erase(nums[i - k]);
             }
+            s += nums[i] - nums[i - k];
             if (cnt.size() == k) {
                 ans = max(ans, s);
             }
@@ -147,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumSubarraySum(nums []int, k int) (ans int64) {
@@ -163,12 +171,11 @@ func maximumSubarraySum(nums []int, k int) (ans int64) {
 	}
 	for i := k; i < n; i++ {
 		cnt[nums[i]]++
-		s += int64(nums[i])
 		cnt[nums[i-k]]--
-		s -= int64(nums[i-k])
 		if cnt[nums[i-k]] == 0 {
 			delete(cnt, nums[i-k])
 		}
+		s += int64(nums[i] - nums[i-k])
 		if len(cnt) == k && ans < s {
 			ans = s
 		}
@@ -177,7 +184,7 @@ func maximumSubarraySum(nums []int, k int) (ans int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumSubarraySum(nums: number[], k: number): number {
@@ -191,12 +198,11 @@ function maximumSubarraySum(nums: number[], k: number): number {
     let ans = cnt.size === k ? s : 0;
     for (let i = k; i < n; ++i) {
         cnt.set(nums[i], (cnt.get(nums[i]) ?? 0) + 1);
-        s += nums[i];
         cnt.set(nums[i - k], cnt.get(nums[i - k])! - 1);
-        s -= nums[i - k];
         if (cnt.get(nums[i - k]) === 0) {
             cnt.delete(nums[i - k]);
         }
+        s += nums[i] - nums[i - k];
         if (cnt.size === k) {
             ans = Math.max(ans, s);
         }
@@ -205,10 +211,52 @@ function maximumSubarraySum(nums: number[], k: number): number {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+public class Solution {
+    public long MaximumSubarraySum(int[] nums, int k) {
+        int n = nums.Length;
+        Dictionary<int, int> cnt = new Dictionary<int, int>(k);
+        long s = 0;
 
+        for (int i = 0; i < k; ++i) {
+            if (!cnt.ContainsKey(nums[i])) {
+                cnt[nums[i]] = 1;
+            }
+            else {
+                cnt[nums[i]]++;
+            }
+            s += nums[i];
+        }
+
+        long ans = cnt.Count == k ? s : 0;
+
+        for (int i = k; i < n; ++i) {
+            if (!cnt.ContainsKey(nums[i])) {
+                cnt[nums[i]] = 1;
+            }
+            else {
+                cnt[nums[i]]++;
+            }
+            if (--cnt[nums[i - k]] == 0) {
+                cnt.Remove(nums[i - k]);
+            }
+
+            s += nums[i] - nums[i - k];
+
+            if (cnt.Count == k) {
+                ans = Math.Max(ans, s);
+            }
+        }
+
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

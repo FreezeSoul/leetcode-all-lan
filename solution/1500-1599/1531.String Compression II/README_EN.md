@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1531.String%20Compression%20II/README_EN.md
+rating: 2575
+source: Weekly Contest 199 Q4
+tags:
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1531. String Compression II](https://leetcode.com/problems/string-compression-ii)
 
 [中文文档](/solution/1500-1599/1531.String%20Compression%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p><a href="http://en.wikipedia.org/wiki/Run-length_encoding">Run-length encoding</a> is a string compression method that works by&nbsp;replacing consecutive identical characters (repeated 2 or more times) with the concatenation of the character and the number marking the count of the characters (length of the run). For example, to compress the string&nbsp;<code>&quot;aabccc&quot;</code>&nbsp;we replace <font face="monospace"><code>&quot;aa&quot;</code></font>&nbsp;by&nbsp;<font face="monospace"><code>&quot;a2&quot;</code></font>&nbsp;and replace <font face="monospace"><code>&quot;ccc&quot;</code></font>&nbsp;by&nbsp;<font face="monospace"><code>&quot;c3&quot;</code></font>. Thus the compressed string becomes <font face="monospace"><code>&quot;a2bc3&quot;</code>.</font></p>
 
@@ -45,26 +60,72 @@
 	<li><code>s</code> contains only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
-
-```python
-
-```
-
-### **Java**
+#### Java
 
 ```java
+class Solution {
+    public int getLengthOfOptimalCompression(String s, int k) {
+        // dp[i][k] := the length of the optimal compression of s[i..n) with at most
+        // k deletion
+        dp = new int[s.length()][k + 1];
+        Arrays.stream(dp).forEach(A -> Arrays.fill(A, K_MAX));
+        return compression(s, 0, k);
+    }
 
-```
+    private static final int K_MAX = 101;
+    private int[][] dp;
 
-### **...**
+    private int compression(final String s, int i, int k) {
+        if (k < 0) {
+            return K_MAX;
+        }
+        if (i == s.length() || s.length() - i <= k) {
+            return 0;
+        }
+        if (dp[i][k] != K_MAX) {
+            return dp[i][k];
+        }
+        int maxFreq = 0;
+        int[] count = new int[128];
+        // Make letters in s[i..j] be the same.
+        // Keep the letter that has the maximum frequency in this range and remove
+        // the other letters.
+        for (int j = i; j < s.length(); ++j) {
+            maxFreq = Math.max(maxFreq, ++count[s.charAt(j)]);
+            dp[i][k] = Math.min(
+                dp[i][k], getLength(maxFreq) + compression(s, j + 1, k - (j - i + 1 - maxFreq)));
+        }
+        return dp[i][k];
+    }
 
-```
-
+    // Returns the length to compress `maxFreq`.
+    private int getLength(int maxFreq) {
+        if (maxFreq == 1) {
+            return 1; // c
+        }
+        if (maxFreq < 10) {
+            return 2; // [1-9]c
+        }
+        if (maxFreq < 100) {
+            return 3; // [1-9][0-9]c
+        }
+        return 4; // [1-9][0-9][0-9]c
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

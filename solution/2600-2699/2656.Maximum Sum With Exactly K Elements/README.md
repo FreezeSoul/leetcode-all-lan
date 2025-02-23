@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2656.Maximum%20Sum%20With%20Exactly%20K%20Elements/README.md
+rating: 1213
+source: 第 103 场双周赛 Q1
+tags:
+    - 贪心
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2656. K 个元素的最大和](https://leetcode.cn/problems/maximum-sum-with-exactly-k-elements)
 
 [English Version](/solution/2600-2699/2656.Maximum%20Sum%20With%20Exactly%20K%20Elements/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code> 和一个整数&nbsp;<code>k</code>&nbsp;。你需要执行以下操作<strong>&nbsp;恰好</strong> <code>k</code>&nbsp;次，最大化你的得分：</p>
 
@@ -54,11 +67,13 @@
 	<li><code>1 &lt;= k &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 数学**
+### 方法一：贪心 + 数学
 
 我们注意到，要使得最终的得分最大，我们应该尽可能地使得每次选择的元素最大。因此，我们第一次选择数组中的最大元素 $x$，第二次选择 $x+1$，第三次选择 $x+2$，以此类推，直到第 $k$ 次选择 $x+k-1$。这样的选择方式可以保证每次选择的元素都是当前数组中的最大值，因此最终的得分也是最大的。答案即为 $k$ 个 $x$ 的和加上 $0+1+2+\cdots+(k-1)$，即 $k \times x + (k - 1) \times k / 2$。
 
@@ -66,9 +81,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,9 +90,7 @@ class Solution:
         return k * x + k * (k - 1) // 2
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -93,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -105,26 +116,16 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximizeSum(nums []int, k int) int {
-	x := 0
-	for _, v := range nums {
-		x = max(x, v)
-	}
+	x := slices.Max(nums)
 	return k*x + k*(k-1)/2
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximizeSum(nums: number[], k: number): number {
@@ -133,10 +134,48 @@ function maximizeSum(nums: number[], k: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn maximize_sum(nums: Vec<i32>, k: i32) -> i32 {
+        let mut mx = 0;
 
+        for &n in &nums {
+            if n > mx {
+                mx = n;
+            }
+        }
+
+        ((0 + k - 1) * k) / 2 + k * mx
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn maximize_sum(nums: Vec<i32>, k: i32) -> i32 {
+        let mx = *nums.iter().max().unwrap_or(&0);
+
+        ((0 + k - 1) * k) / 2 + k * mx
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

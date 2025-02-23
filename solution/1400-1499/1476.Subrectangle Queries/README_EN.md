@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1476.Subrectangle%20Queries/README_EN.md
+rating: 1326
+source: Biweekly Contest 28 Q2
+tags:
+    - Design
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1476. Subrectangle Queries](https://leetcode.com/problems/subrectangle-queries)
 
 [中文文档](/solution/1400-1499/1476.Subrectangle%20Queries/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Implement the class <code>SubrectangleQueries</code>&nbsp;which receives a <code>rows x cols</code> rectangle as a matrix of integers in the constructor and supports two methods:</p>
 
@@ -86,13 +102,17 @@ subrectangleQueries.getValue(2, 2); // return 20
 	<li><code>0 &lt;= col &lt; cols</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Use history list to save the updated record.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class SubrectangleQueries:
@@ -118,7 +138,7 @@ class SubrectangleQueries:
 # param_2 = obj.getValue(row,col)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class SubrectangleQueries {
@@ -151,7 +171,7 @@ class SubrectangleQueries {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class SubrectangleQueries {
@@ -186,7 +206,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type SubrectangleQueries struct {
@@ -220,7 +240,7 @@ func (this *SubrectangleQueries) GetValue(row int, col int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class SubrectangleQueries {
@@ -260,10 +280,8 @@ class SubrectangleQueries {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

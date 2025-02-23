@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1828.Queries%20on%20Number%20of%20Points%20Inside%20a%20Circle/README_EN.md
+rating: 1380
+source: Biweekly Contest 50 Q2
+tags:
+    - Geometry
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1828. Queries on Number of Points Inside a Circle](https://leetcode.com/problems/queries-on-number-of-points-inside-a-circle)
 
 [中文文档](/solution/1800-1899/1828.Queries%20on%20Number%20of%20Points%20Inside%20a%20Circle/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>points</code> where <code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code> is the coordinates of the <code>i<sup>th</sup></code> point on a 2D plane. Multiple points can have the <strong>same</strong> coordinates.</p>
 
@@ -48,11 +64,21 @@ queries[0] is green, queries[1] is red, queries[2] is blue, and queries[3] is pu
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Could you find the answer for each query in better complexity than <code>O(n)</code>?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration
+
+Enumerate all the circles $(x, y, r)$. For each circle, calculate the number of points within the circle to get the answer.
+
+The time complexity is $O(m \times n)$, where $m$ and $n$ are the lengths of the arrays `queries` and `points` respectively. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +95,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +139,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPoints(points [][]int, queries [][]int) (ans []int) {
@@ -133,7 +159,7 @@ func countPoints(points [][]int, queries [][]int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countPoints(points: number[][], queries: number[][]): number[] {
@@ -149,7 +175,7 @@ function countPoints(points: number[][], queries: number[][]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -162,7 +188,7 @@ impl Solution {
                 let r = v[2].pow(2);
                 let mut count = 0;
                 for p in points.iter() {
-                    if ((p[0] - cx).pow(2) + (p[1] - cy).pow(2)) <= r {
+                    if (p[0] - cx).pow(2) + (p[1] - cy).pow(2) <= r {
                         count += 1;
                     }
                 }
@@ -173,15 +199,15 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *countPoints(int **points, int pointsSize, int *pointsColSize, int **queries, int queriesSize, int *queriesColSize,
-                 int *returnSize) {
-    int *ans = malloc(sizeof(int) * queriesSize);
+int* countPoints(int** points, int pointsSize, int* pointsColSize, int** queries, int queriesSize, int* queriesColSize,
+    int* returnSize) {
+    int* ans = malloc(sizeof(int) * queriesSize);
     for (int i = 0; i < queriesSize; i++) {
         int cx = queries[i][0];
         int cy = queries[i][1];
@@ -199,10 +225,8 @@ int *countPoints(int **points, int pointsSize, int *pointsColSize, int **queries
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

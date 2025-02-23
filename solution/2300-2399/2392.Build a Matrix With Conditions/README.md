@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2392.Build%20a%20Matrix%20With%20Conditions/README.md
+rating: 1960
+source: 第 308 场周赛 Q4
+tags:
+    - 图
+    - 拓扑排序
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2392. 给定条件下构造矩阵](https://leetcode.cn/problems/build-a-matrix-with-conditions)
 
 [English Version](/solution/2300-2399/2392.Build%20a%20Matrix%20With%20Conditions/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个 <strong>正</strong>&nbsp;整数&nbsp;<code>k</code>&nbsp;，同时给你：</p>
 
@@ -65,11 +80,13 @@
 	<li><code>left<sub>i</sub> != right<sub>i</sub></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：拓扑排序**
+### 方法一：拓扑排序
 
 利用拓扑排序，找到一个合法的 `row` 序列和 `col` 序列，然后根据这两个序列构造出矩阵。
 
@@ -77,13 +94,13 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def buildMatrix(self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]) -> List[List[int]]:
+    def buildMatrix(
+        self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]
+    ) -> List[List[int]]:
         def f(cond):
             g = defaultdict(list)
             indeg = [0] * (k + 1)
@@ -115,9 +132,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -173,7 +188,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -228,7 +243,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func buildMatrix(k int, rowConditions [][]int, colConditions [][]int) [][]int {
@@ -286,14 +301,10 @@ func buildMatrix(k int, rowConditions [][]int, colConditions [][]int) [][]int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function buildMatrix(
-    k: number,
-    rowConditions: number[][],
-    colConditions: number[][],
-): number[][] {
+function buildMatrix(k: number, rowConditions: number[][], colConditions: number[][]): number[][] {
     function f(cond) {
         const g = Array.from({ length: k + 1 }, () => []);
         const indeg = new Array(k + 1).fill(0);
@@ -337,11 +348,8 @@ function buildMatrix(
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

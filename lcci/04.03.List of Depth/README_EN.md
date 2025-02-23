@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/04.03.List%20of%20Depth/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [04.03. List of Depth](https://leetcode.cn/problems/list-of-depth-lcci)
 
 [中文文档](/lcci/04.03.List%20of%20Depth/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a binary tree, design an algorithm which creates a linked list of all the nodes at each depth (e.g., if you have a tree with depth D, you&#39;ll have D linked lists). Return a array containing all the linked lists.</p>
 
@@ -36,13 +46,21 @@
 
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
 
-Level order traversal.
+<!-- solution:start -->
+
+### Solution 1: BFS Level Order Traversal
+
+We can use the BFS level order traversal method. For each level, we store the values of the current level's nodes into a list, and then add the list to the result array.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -57,28 +75,27 @@ Level order traversal.
 #     def __init__(self, x):
 #         self.val = x
 #         self.next = None
+
+
 class Solution:
     def listOfDepth(self, tree: TreeNode) -> List[ListNode]:
-        q = [tree]
         ans = []
+        q = deque([tree])
         while q:
-            n = len(q)
-            head = ListNode(-1)
-            tail = head
-            for i in range(n):
-                front = q.pop(0)
-                node = ListNode(front.val)
-                tail.next = node
-                tail = node
-                if front.left:
-                    q.append(front.left)
-                if front.right:
-                    q.append(front.right)
-            ans.append(head.next)
+            dummy = cur = ListNode(0)
+            for _ in range(len(q)):
+                node = q.popleft()
+                cur.next = ListNode(node.val)
+                cur = cur.next
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            ans.append(dummy.next)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -100,33 +117,31 @@ class Solution:
  */
 class Solution {
     public ListNode[] listOfDepth(TreeNode tree) {
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(tree);
         List<ListNode> ans = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            int n = queue.size();
-            ListNode head = new ListNode(-1);
-            ListNode tail = head;
-            for (int i = 0; i < n; i++) {
-                TreeNode front = queue.poll();
-                ListNode node = new ListNode(front.val);
-                tail.next = node;
-                tail = node;
-                if (front.left != null) {
-                    queue.offer(front.left);
+        Deque<TreeNode> q = new ArrayDeque<>();
+        q.offer(tree);
+        while (!q.isEmpty()) {
+            ListNode dummy = new ListNode(0);
+            ListNode cur = dummy;
+            for (int k = q.size(); k > 0; --k) {
+                TreeNode node = q.poll();
+                cur.next = new ListNode(node.val);
+                cur = cur.next;
+                if (node.left != null) {
+                    q.offer(node.left);
                 }
-                if (front.right != null) {
-                    queue.offer(front.right);
+                if (node.right != null) {
+                    q.offer(node.right);
                 }
             }
-            ans.add(head.next);
+            ans.add(dummy.next);
         }
         return ans.toArray(new ListNode[0]);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -150,36 +165,30 @@ class Solution {
 public:
     vector<ListNode*> listOfDepth(TreeNode* tree) {
         vector<ListNode*> ans;
-        if (tree == nullptr) {
-            return ans;
-        }
-        queue<TreeNode*> q;
-        q.push(tree);
+        queue<TreeNode*> q{{tree}};
         while (!q.empty()) {
-            int n = q.size();
-            ListNode* head = new ListNode(-1);
-            ListNode* tail = head;
-            for (int i = 0; i < n; ++i) {
-                TreeNode* front = q.front();
+            ListNode* dummy = new ListNode(0);
+            ListNode* cur = dummy;
+            for (int k = q.size(); k; --k) {
+                TreeNode* node = q.front();
                 q.pop();
-                ListNode* node = new ListNode(front->val);
-                tail->next = node;
-                tail = node;
-                if (front->left != nullptr) {
-                    q.push(front->left);
+                cur->next = new ListNode(node->val);
+                cur = cur->next;
+                if (node->left) {
+                    q.push(node->left);
                 }
-                if (front->right != nullptr) {
-                    q.push(front->right);
+                if (node->right) {
+                    q.push(node->right);
                 }
             }
-            ans.push_back(head->next);
+            ans.push_back(dummy->next);
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -197,34 +206,30 @@ public:
  *     Next *ListNode
  * }
  */
-func listOfDepth(tree *TreeNode) []*ListNode {
-	queue := make([]*TreeNode, 0)
-	queue = append(queue, tree)
-	ans := make([]*ListNode, 0)
-	for len(queue) > 0 {
-		n := len(queue)
-		head := new(ListNode)
-		tail := head
-		for i := 0; i < n; i++ {
-			front := queue[0]
-			queue = queue[1:]
-			node := &ListNode{Val: front.Val}
-			tail.Next = node
-			tail = node
-			if front.Left != nil {
-				queue = append(queue, front.Left)
+func listOfDepth(tree *TreeNode) (ans []*ListNode) {
+	q := []*TreeNode{tree}
+	for len(q) > 0 {
+		dummy := &ListNode{}
+		cur := dummy
+		for k := len(q); k > 0; k-- {
+			node := q[0]
+			q = q[1:]
+			cur.Next = &ListNode{Val: node.Val}
+			cur = cur.Next
+			if node.Left != nil {
+				q = append(q, node.Left)
 			}
-			if front.Right != nil {
-				queue = append(queue, front.Right)
+			if node.Right != nil {
+				q = append(q, node.Right)
 			}
 		}
-		ans = append(ans, head.Next)
+		ans = append(ans, dummy.Next)
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -254,29 +259,25 @@ func listOfDepth(tree *TreeNode) []*ListNode {
  */
 
 function listOfDepth(tree: TreeNode | null): Array<ListNode | null> {
-    const res = [];
-    if (tree == null) {
-        return res;
-    }
-    const queue = [tree];
-    while (queue.length !== 0) {
-        const n = queue.length;
+    const ans: Array<ListNode | null> = [];
+    const q: Array<TreeNode | null> = [tree];
+    while (q.length) {
         const dummy = new ListNode();
         let cur = dummy;
-        for (let i = 0; i < n; i++) {
-            const { val, left, right } = queue.shift();
-            left && queue.push(left);
-            right && queue.push(right);
+        for (let k = q.length; k; --k) {
+            const { val, left, right } = q.shift()!;
             cur.next = new ListNode(val);
             cur = cur.next;
+            left && q.push(left);
+            right && q.push(right);
         }
-        res.push(dummy.next);
+        ans.push(dummy.next);
     }
-    return res;
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -313,9 +314,9 @@ function listOfDepth(tree: TreeNode | null): Array<ListNode | null> {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::VecDeque;
+use std::rc::Rc;
 impl Solution {
     pub fn list_of_depth(tree: Option<Rc<RefCell<TreeNode>>>) -> Vec<Option<Box<ListNode>>> {
         let mut res = vec![];
@@ -348,10 +349,66 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* class TreeNode {
+*    var val: Int
+*    var left: TreeNode?
+*    var right: TreeNode?
+*
+*    init(_ val: Int) {
+*        self.val = val
+*        self.left = nil
+*        self.right = nil
+*    }
+*  }
+*/
 
+/* class ListNode {
+*    var val: Int
+*    var next: ListNode?
+*
+*    init(_ val: Int) {
+*        self.val = val
+*        self.next = nil
+*    }
+*  }
+*/
+
+class Solution {
+    func listOfDepth(_ tree: TreeNode?) -> [ListNode?] {
+        var ans = [ListNode?]()
+        guard let tree = tree else { return ans }
+
+        var q = [TreeNode]()
+        q.append(tree)
+
+        while !q.isEmpty {
+            let dummy = ListNode(0)
+            var cur = dummy
+            for _ in 0..<q.count {
+                let node = q.removeFirst()
+                cur.next = ListNode(node.val)
+                cur = cur.next!
+
+                if let left = node.left {
+                    q.append(left)
+                }
+                if let right = node.right {
+                    q.append(right)
+                }
+            }
+            ans.append(dummy.next)
+        }
+
+        return ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

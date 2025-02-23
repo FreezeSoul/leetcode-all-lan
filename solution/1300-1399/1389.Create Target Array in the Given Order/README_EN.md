@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1389.Create%20Target%20Array%20in%20the%20Given%20Order/README_EN.md
+rating: 1208
+source: Weekly Contest 181 Q1
+tags:
+    - Array
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1389. Create Target Array in the Given Order](https://leetcode.com/problems/create-target-array-in-the-given-order)
 
 [中文文档](/solution/1300-1399/1389.Create%20Target%20Array%20in%20the%20Given%20Order/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two arrays of integers&nbsp;<code>nums</code> and <code>index</code>. Your task is to create <em>target</em> array under the following rules:</p>
 
@@ -62,22 +77,32 @@ nums       index     target
 	<li><code>0 &lt;= index[i] &lt;= i</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We create a list $target$ to store the target array. Since the problem guarantees that the insertion position always exists, we can directly insert in the given order into the corresponding position.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Where $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def createTargetArray(self, nums: List[int], index: List[int]) -> List[int]:
         target = []
-        for i in range(len(nums)):
-            target.insert(index[i], nums[i])
+        for x, i in zip(nums, index):
+            target.insert(i, x)
         return target
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,28 +112,17 @@ class Solution {
         for (int i = 0; i < n; ++i) {
             target.add(index[i], nums[i]);
         }
-        int[] res = new int[n];
+        // return target.stream().mapToInt(i -> i).toArray();
+        int[] ans = new int[n];
         for (int i = 0; i < n; ++i) {
-            res[i] = target.get(i);
+            ans[i] = target.get(i);
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **TypeScript**
-
-```ts
-function createTargetArray(nums: number[], index: number[]): number[] {
-    let ans = [];
-    for (let i = 0; i < nums.length; i++) {
-        ans.splice(index[i], 0, nums[i]);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,23 +137,33 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func createTargetArray(nums []int, index []int) []int {
 	target := make([]int, len(nums))
-	for i, v := range nums {
+	for i, x := range nums {
 		copy(target[index[i]+1:], target[index[i]:])
-		target[index[i]] = v
+		target[index[i]] = x
 	}
 	return target
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function createTargetArray(nums: number[], index: number[]): number[] {
+    const ans: number[] = [];
+    for (let i = 0; i < nums.length; i++) {
+        ans.splice(index[i], 0, nums[i]);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

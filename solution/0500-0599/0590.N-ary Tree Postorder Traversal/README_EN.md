@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0590.N-ary%20Tree%20Postorder%20Traversal/README_EN.md
+tags:
+    - Stack
+    - Tree
+    - Depth-First Search
+---
+
+<!-- problem:start -->
+
 # [590. N-ary Tree Postorder Traversal](https://leetcode.com/problems/n-ary-tree-postorder-traversal)
 
 [中文文档](/solution/0500-0599/0590.N-ary%20Tree%20Postorder%20Traversal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of an n-ary tree, return <em>the postorder traversal of its nodes&#39; values</em>.</p>
 
@@ -35,11 +49,21 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Recursive solution is trivial, could you do it iteratively?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Recursion
+
+We can recursively traverse the entire tree. For each node, we first recursively call the function for each of the node's children, then add the node's value to the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 """
@@ -65,6 +89,166 @@ class Solution:
         return ans
 ```
 
+#### Java
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+
+class Solution {
+    private List<Integer> ans = new ArrayList<>();
+
+    public List<Integer> postorder(Node root) {
+        dfs(root);
+        return ans;
+    }
+
+    private void dfs(Node root) {
+        if (root == null) {
+            return;
+        }
+        for (Node child : root.children) {
+            dfs(child);
+        }
+        ans.add(root.val);
+    }
+}
+```
+
+#### C++
+
+```cpp
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> children;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+    }
+
+    Node(int _val, vector<Node*> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+
+class Solution {
+public:
+    vector<int> postorder(Node* root) {
+        vector<int> ans;
+        function<void(Node*)> dfs = [&](Node* root) {
+            if (!root) {
+                return;
+            }
+            for (auto& child : root->children) {
+                dfs(child);
+            }
+            ans.push_back(root->val);
+        };
+        dfs(root);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a Node.
+ * type Node struct {
+ *     Val int
+ *     Children []*Node
+ * }
+ */
+
+func postorder(root *Node) (ans []int) {
+	var dfs func(*Node)
+	dfs = func(root *Node) {
+		if root == nil {
+			return
+		}
+		for _, child := range root.Children {
+			dfs(child)
+		}
+		ans = append(ans, root.Val)
+	}
+	dfs(root)
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for node.
+ * class Node {
+ *     val: number
+ *     children: Node[]
+ *     constructor(val?: number) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.children = []
+ *     }
+ * }
+ */
+
+function postorder(root: Node | null): number[] {
+    const ans: number[] = [];
+    const dfs = (root: Node | null) => {
+        if (!root) {
+            return;
+        }
+        for (const child of root.children) {
+            dfs(child);
+        }
+        ans.push(root.val);
+    };
+    dfs(root);
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Iteration (Stack Implementation)
+
+We can also solve this problem iteratively.
+
+We use a stack to help us get the post-order traversal. We first push the root node into the stack. Since the post-order traversal is left subtree, right subtree, root, and the characteristic of the stack is first in last out, we first add the node's value to the answer, then push each of the node's children into the stack in the order from left to right. This way, we can get the traversal result of root, right subtree, left subtree. Finally, we reverse the answer to get the post-order traversal result.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes.
+
+<!-- tabs:start -->
+
+#### Python3
+
 ```python
 """
 # Definition for a Node.
@@ -89,49 +273,7 @@ class Solution:
         return ans[::-1]
 ```
 
-### **Java**
-
-```java
-/*
-// Definition for a Node.
-class Node {
-    public int val;
-    public List<Node> children;
-
-    public Node() {}
-
-    public Node(int _val) {
-        val = _val;
-    }
-
-    public Node(int _val, List<Node> _children) {
-        val = _val;
-        children = _children;
-    }
-};
-*/
-
-class Solution {
-
-    private List<Integer> ans;
-
-    public List<Integer> postorder(Node root) {
-        ans = new ArrayList<>();
-        dfs(root);
-        return ans;
-    }
-
-    private void dfs(Node root) {
-        if (root == null) {
-            return;
-        }
-        for (Node child : root.children) {
-            dfs(child);
-        }
-        ans.add(root.val);
-    }
-}
-```
+#### Java
 
 ```java
 /*
@@ -173,7 +315,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /*
@@ -200,51 +342,17 @@ class Solution {
 public:
     vector<int> postorder(Node* root) {
         vector<int> ans;
-        dfs(root, ans);
-        return ans;
-    }
-
-    void dfs(Node* root, vector<int>& ans) {
-        if (!root) return;
-        for (auto& child : root->children) dfs(child, ans);
-        ans.push_back(root->val);
-    }
-};
-```
-
-```cpp
-/*
-// Definition for a Node.
-class Node {
-public:
-    int val;
-    vector<Node*> children;
-
-    Node() {}
-
-    Node(int _val) {
-        val = _val;
-    }
-
-    Node(int _val, vector<Node*> _children) {
-        val = _val;
-        children = _children;
-    }
-};
-*/
-
-class Solution {
-public:
-    vector<int> postorder(Node* root) {
-        vector<int> ans;
-        if (!root) return ans;
+        if (!root) {
+            return ans;
+        }
         stack<Node*> stk{{root}};
-        while (!stk.empty())
-        {
+        while (!stk.empty()) {
             root = stk.top();
             ans.push_back(root->val);
             stk.pop();
-            for (Node* child : root->children) stk.push(child);
+            for (Node* child : root->children) {
+                stk.push(child);
+            }
         }
         reverse(ans.begin(), ans.end());
         return ans;
@@ -252,33 +360,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a Node.
- * type Node struct {
- *     Val int
- *     Children []*Node
- * }
- */
-
-func postorder(root *Node) []int {
-	var ans []int
-	var dfs func(root *Node)
-	dfs = func(root *Node) {
-		if root == nil {
-			return
-		}
-		for _, child := range root.Children {
-			dfs(child)
-		}
-		ans = append(ans, root.Val)
-	}
-	dfs(root)
-	return ans
-}
-```
+#### Go
 
 ```go
 /**
@@ -307,7 +389,7 @@ func postorder(root *Node) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -323,59 +405,22 @@ func postorder(root *Node) []int {
  */
 
 function postorder(root: Node | null): number[] {
-    const res = [];
-    const dfs = (root: Node | null) => {
-        if (root == null) {
-            return;
-        }
-        for (const node of root.children) {
-            dfs(node);
-        }
-        res.push(root.val);
-    };
-    dfs(root);
-    return res;
-}
-```
-
-```ts
-/**
- * Definition for node.
- * class Node {
- *     val: number
- *     children: Node[]
- *     constructor(val?: number) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.children = []
- *     }
- * }
- */
-
-function postorder(root: Node | null): number[] {
-    const res = [];
-    if (root == null) {
-        return res;
+    const ans: number[] = [];
+    if (!root) {
+        return ans;
     }
-    const stack = [root];
-    while (stack.length !== 0) {
-        const target = stack[stack.length - 1];
-        if (target.children == null) {
-            res.push(stack.pop().val);
-        } else {
-            for (let i = target.children.length - 1; i >= 0; i--) {
-                stack.push(target.children[i]);
-            }
-            target.children = null;
-        }
+    const stk: Node[] = [root];
+    while (stk.length) {
+        const { val, children } = stk.pop()!;
+        ans.push(val);
+        stk.push(...children);
     }
-    return res;
+    return ans.reverse();
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

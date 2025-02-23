@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1025.Divisor%20Game/README.md
+rating: 1435
+source: 第 132 场周赛 Q1
+tags:
+    - 脑筋急转弯
+    - 数学
+    - 动态规划
+    - 博弈
+---
+
+<!-- problem:start -->
+
 # [1025. 除数博弈](https://leetcode.cn/problems/divisor-game)
 
 [English Version](/solution/1000-1099/1025.Divisor%20Game/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>爱丽丝和鲍勃一起玩游戏，他们轮流行动。爱丽丝先手开局。</p>
 
@@ -48,11 +63,13 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学归纳法**
+### 方法一：数学归纳法
 
 -   当 $n=1$，先手败
 -   当 $n=2$，先手拿 $1$，剩下 $1$，后手败，先手胜
@@ -75,9 +92,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -85,9 +100,7 @@ class Solution:
         return n % 2 == 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +121,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func divisorGame(n int) bool {
@@ -116,10 +129,16 @@ func divisorGame(n int) bool {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+var divisorGame = function (n) {
+    return n % 2 === 0;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

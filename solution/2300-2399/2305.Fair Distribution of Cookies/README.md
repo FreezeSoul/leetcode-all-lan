@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2305.Fair%20Distribution%20of%20Cookies/README.md
+rating: 1886
+source: 第 297 场周赛 Q3
+tags:
+    - 位运算
+    - 数组
+    - 动态规划
+    - 回溯
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [2305. 公平分发饼干](https://leetcode.cn/problems/fair-distribution-of-cookies)
 
 [English Version](/solution/2300-2399/2305.Fair%20Distribution%20of%20Cookies/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>cookies</code> ，其中 <code>cookies[i]</code> 表示在第 <code>i</code> 个零食包中的饼干数量。另给你一个整数 <code>k</code> 表示等待分发零食包的孩子数量，<strong>所有</strong> 零食包都需要分发。在同一个零食包中的所有饼干都必须分发给同一个孩子，不能分开。</p>
 
@@ -47,11 +63,13 @@
 	<li><code>2 &lt;= k &lt;= cookies.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯 + 剪枝**
+### 方法一：回溯 + 剪枝
 
 我们先对数组 $cookies$ 进行降序排序（减少搜索次数），然后创建一个长度为 $k$ 的数组 $cnt$，用于存储每个孩子分到的饼干数量。另外，用变量 $ans$ 维护当前的最小不公平程度，初始化一个很大的值。
 
@@ -61,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,9 +103,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -132,7 +146,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -163,7 +177,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func distributeCookies(cookies []int, k int) int {
@@ -173,10 +187,7 @@ func distributeCookies(cookies []int, k int) int {
 	var dfs func(int)
 	dfs = func(i int) {
 		if i >= len(cookies) {
-			ans = 0
-			for _, v := range cnt {
-				ans = max(ans, v)
-			}
+			ans = slices.Max(cnt)
 			return
 		}
 		for j := 0; j < k; j++ {
@@ -191,16 +202,9 @@ func distributeCookies(cookies []int, k int) int {
 	dfs(0)
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function distributeCookies(cookies: number[], k: number): number {
@@ -225,10 +229,8 @@ function distributeCookies(cookies: number[], k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

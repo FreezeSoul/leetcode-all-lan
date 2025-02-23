@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0169.Majority%20Element/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 分治
+    - 计数
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [169. 多数元素](https://leetcode.cn/problems/majority-element)
 
 [English Version](/solution/0100-0199/0169.Majority%20Element/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个大小为 <code>n</code><em> </em>的数组&nbsp;<code>nums</code> ，返回其中的多数元素。多数元素是指在数组中出现次数 <strong>大于</strong>&nbsp;<code>⌊ n/2 ⌋</code>&nbsp;的元素。</p>
 
@@ -38,11 +52,13 @@
 
 <p><strong>进阶：</strong>尝试设计时间复杂度为 O(n)、空间复杂度为 O(1) 的算法解决此问题。</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：摩尔投票法**
+### 方法一：摩尔投票法
 
 摩尔投票法的基本步骤如下：
 
@@ -57,9 +73,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -73,9 +87,7 @@ class Solution:
         return m
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func majorityElement(nums []int) int {
@@ -134,7 +146,7 @@ func majorityElement(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function majorityElement(nums: number[]): number {
@@ -152,7 +164,27 @@ function majorityElement(nums: number[]): number {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn majority_element(nums: Vec<i32>) -> i32 {
+        let mut m = 0;
+        let mut cnt = 0;
+        for &x in nums.iter() {
+            if cnt == 0 {
+                m = x;
+                cnt = 1;
+            } else {
+                cnt += if m == x { 1 } else { -1 };
+            }
+        }
+        m
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -174,7 +206,7 @@ var majorityElement = function (nums) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -193,31 +225,10 @@ public class Solution {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn majority_element(nums: Vec<i32>) -> i32 {
-        let mut m = 0;
-        let mut cnt = 0;
-        for &x in nums.iter() {
-            if cnt == 0 {
-                m = x;
-                cnt = 1;
-            } else {
-                cnt += if m == x { 1 } else { -1 };
-            }
-        }
-        m
-    }
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
-
     /**
      * @param Integer[] $nums
      * @return Integer
@@ -240,10 +251,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

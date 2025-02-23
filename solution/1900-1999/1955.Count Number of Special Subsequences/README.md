@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1955.Count%20Number%20of%20Special%20Subsequences/README.md
+rating: 2125
+source: 第 252 场周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1955. 统计特殊子序列的数目](https://leetcode.cn/problems/count-number-of-special-subsequences)
 
 [English Version](/solution/1900-1999/1955.Count%20Number%20of%20Special%20Subsequences/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p><strong>特殊序列</strong> 是由&nbsp;<strong>正整数</strong>&nbsp;个 <code>0</code>&nbsp;，紧接着&nbsp;<strong>正整数</strong>&nbsp;个 <code>1</code>&nbsp;，最后 <strong>正整数</strong>&nbsp;个 <code>2</code>&nbsp;组成的序列。</p>
 
@@ -59,32 +72,314 @@
 	<li><code>0 &lt;= nums[i] &lt;= 2</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：动态规划
+
+我们定义 $f[i][j]$ 表示前 $i+1$ 个元素中，以 $j$ 结尾的特殊子序列的个数。初始时 $f[i][j]=0$，如果 $nums[0]=0$，则 $f[0][0]=1$。
+
+对于 $i \gt 0$，我们考虑 $nums[i]$ 的值：
+
+如果 $nums[i] = 0$：如果我们不选择 $nums[i]$，则 $f[i][0] = f[i-1][0]$；如果我们选择 $nums[i]$，那么 $f[i][0]=f[i-1][0]+1$，因为我们可以在任何一个以 $0$ 结尾的特殊子序列后面加上一个 $0$ 得到一个新的特殊子序列，也可以将 $nums[i]$ 单独作为一个特殊子序列。因此 $f[i][0] = 2 \times f[i - 1][0] + 1$。其余的 $f[i][j]$ 与 $f[i-1][j]$ 相等。
+
+如果 $nums[i] = 1$：如果我们不选择 $nums[i]$，则 $f[i][1] = f[i-1][1]$；如果我们选择 $nums[i]$，那么 $f[i][1]=f[i-1][1]+f[i-1][0]$，因为我们可以在任何一个以 $0$ 或 $1$ 结尾的特殊子序列后面加上一个 $1$ 得到一个新的特殊子序列。因此 $f[i][1] = f[i-1][1] + 2 \times f[i - 1][0]$。其余的 $f[i][j]$ 与 $f[i-1][j]$ 相等。
+
+如果 $nums[i] = 2$：如果我们不选择 $nums[i]$，则 $f[i][2] = f[i-1][2]$；如果我们选择 $nums[i]$，那么 $f[i][2]=f[i-1][2]+f[i-1][1]$，因为我们可以在任何一个以 $1$ 或 $2$ 结尾的特殊子序列后面加上一个 $2$ 得到一个新的特殊子序列。因此 $f[i][2] = f[i-1][2] + 2 \times f[i - 1][1]$。其余的 $f[i][j]$ 与 $f[i-1][j]$ 相等。
+
+综上，我们可以得到如下的状态转移方程：
+
+$$
+\begin{aligned}
+f[i][0] &= 2 \times f[i - 1][0] + 1, \quad nums[i] = 0 \\
+f[i][1] &= f[i-1][1] + 2 \times f[i - 1][0], \quad nums[i] = 1 \\
+f[i][2] &= f[i-1][2] + 2 \times f[i - 1][1], \quad nums[i] = 2 \\
+f[i][j] &= f[i-1][j], \quad nums[i] \neq j
+\end{aligned}
+$$
+
+最终的答案即为 $f[n-1][2]$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 $nums$ 的长度。
+
+我们注意到，上述的状态转移方程中，$f[i][j]$ 的值仅与 $f[i-1][j]$ 有关，因此我们可以去掉第一维，将空间复杂度优化到 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-
+class Solution:
+    def countSpecialSubsequences(self, nums: List[int]) -> int:
+        mod = 10**9 + 7
+        n = len(nums)
+        f = [[0] * 3 for _ in range(n)]
+        f[0][0] = nums[0] == 0
+        for i in range(1, n):
+            if nums[i] == 0:
+                f[i][0] = (2 * f[i - 1][0] + 1) % mod
+                f[i][1] = f[i - 1][1]
+                f[i][2] = f[i - 1][2]
+            elif nums[i] == 1:
+                f[i][0] = f[i - 1][0]
+                f[i][1] = (f[i - 1][0] + 2 * f[i - 1][1]) % mod
+                f[i][2] = f[i - 1][2]
+            else:
+                f[i][0] = f[i - 1][0]
+                f[i][1] = f[i - 1][1]
+                f[i][2] = (f[i - 1][1] + 2 * f[i - 1][2]) % mod
+        return f[n - 1][2]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
+class Solution {
+    public int countSpecialSubsequences(int[] nums) {
+        final int mod = (int) 1e9 + 7;
+        int n = nums.length;
+        int[][] f = new int[n][3];
+        f[0][0] = nums[0] == 0 ? 1 : 0;
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] == 0) {
+                f[i][0] = (2 * f[i - 1][0] % mod + 1) % mod;
+                f[i][1] = f[i - 1][1];
+                f[i][2] = f[i - 1][2];
+            } else if (nums[i] == 1) {
+                f[i][0] = f[i - 1][0];
+                f[i][1] = (f[i - 1][0] + 2 * f[i - 1][1] % mod) % mod;
+                f[i][2] = f[i - 1][2];
+            } else {
+                f[i][0] = f[i - 1][0];
+                f[i][1] = f[i - 1][1];
+                f[i][2] = (f[i - 1][1] + 2 * f[i - 1][2] % mod) % mod;
+            }
+        }
+        return f[n - 1][2];
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int countSpecialSubsequences(vector<int>& nums) {
+        const int mod = 1e9 + 7;
+        int n = nums.size();
+        int f[n][3];
+        memset(f, 0, sizeof(f));
+        f[0][0] = nums[0] == 0;
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] == 0) {
+                f[i][0] = (2 * f[i - 1][0] % mod + 1) % mod;
+                f[i][1] = f[i - 1][1];
+                f[i][2] = f[i - 1][2];
+            } else if (nums[i] == 1) {
+                f[i][0] = f[i - 1][0];
+                f[i][1] = (f[i - 1][0] + 2 * f[i - 1][1] % mod) % mod;
+                f[i][2] = f[i - 1][2];
+            } else {
+                f[i][0] = f[i - 1][0];
+                f[i][1] = f[i - 1][1];
+                f[i][2] = (f[i - 1][1] + 2 * f[i - 1][2] % mod) % mod;
+            }
+        }
+        return f[n - 1][2];
+    }
+};
 ```
 
+#### Go
+
+```go
+func countSpecialSubsequences(nums []int) int {
+	const mod = 1e9 + 7
+	n := len(nums)
+	f := make([][3]int, n)
+	if nums[0] == 0 {
+		f[0][0] = 1
+	}
+	for i := 1; i < n; i++ {
+		if nums[i] == 0 {
+			f[i][0] = (2*f[i-1][0] + 1) % mod
+			f[i][1] = f[i-1][1]
+			f[i][2] = f[i-1][2]
+		} else if nums[i] == 1 {
+			f[i][0] = f[i-1][0]
+			f[i][1] = (f[i-1][0] + 2*f[i-1][1]) % mod
+			f[i][2] = f[i-1][2]
+		} else {
+			f[i][0] = f[i-1][0]
+			f[i][1] = f[i-1][1]
+			f[i][2] = (f[i-1][1] + 2*f[i-1][2]) % mod
+		}
+	}
+	return f[n-1][2]
+}
+```
+
+#### TypeScript
+
+```ts
+function countSpecialSubsequences(nums: number[]): number {
+    const mod = 1e9 + 7;
+    const n = nums.length;
+    const f: number[][] = Array(n)
+        .fill(0)
+        .map(() => Array(3).fill(0));
+    f[0][0] = nums[0] === 0 ? 1 : 0;
+    for (let i = 1; i < n; ++i) {
+        if (nums[i] === 0) {
+            f[i][0] = (((2 * f[i - 1][0]) % mod) + 1) % mod;
+            f[i][1] = f[i - 1][1];
+            f[i][2] = f[i - 1][2];
+        } else if (nums[i] === 1) {
+            f[i][0] = f[i - 1][0];
+            f[i][1] = (f[i - 1][0] + ((2 * f[i - 1][1]) % mod)) % mod;
+            f[i][2] = f[i - 1][2];
+        } else {
+            f[i][0] = f[i - 1][0];
+            f[i][1] = f[i - 1][1];
+            f[i][2] = (f[i - 1][1] + ((2 * f[i - 1][2]) % mod)) % mod;
+        }
+    }
+    return f[n - 1][2];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countSpecialSubsequences(self, nums: List[int]) -> int:
+        mod = 10**9 + 7
+        n = len(nums)
+        f = [0] * 3
+        f[0] = nums[0] == 0
+        for i in range(1, n):
+            if nums[i] == 0:
+                f[0] = (2 * f[0] + 1) % mod
+            elif nums[i] == 1:
+                f[1] = (f[0] + 2 * f[1]) % mod
+            else:
+                f[2] = (f[1] + 2 * f[2]) % mod
+        return f[2]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countSpecialSubsequences(int[] nums) {
+        final int mod = (int) 1e9 + 7;
+        int n = nums.length;
+        int[] f = new int[3];
+        f[0] = nums[0] == 0 ? 1 : 0;
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] == 0) {
+                f[0] = (2 * f[0] % mod + 1) % mod;
+            } else if (nums[i] == 1) {
+                f[1] = (f[0] + 2 * f[1] % mod) % mod;
+            } else {
+                f[2] = (f[1] + 2 * f[2] % mod) % mod;
+            }
+        }
+        return f[2];
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countSpecialSubsequences(vector<int>& nums) {
+        const int mod = 1e9 + 7;
+        int n = nums.size();
+        int f[3]{0};
+        f[0] = nums[0] == 0;
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] == 0) {
+                f[0] = (2 * f[0] % mod + 1) % mod;
+            } else if (nums[i] == 1) {
+                f[1] = (f[0] + 2 * f[1] % mod) % mod;
+            } else {
+                f[2] = (f[1] + 2 * f[2] % mod) % mod;
+            }
+        }
+        return f[2];
+    }
+};
+```
+
+#### Go
+
+```go
+func countSpecialSubsequences(nums []int) int {
+	const mod = 1e9 + 7
+	n := len(nums)
+	f := [3]int{}
+	if nums[0] == 0 {
+		f[0] = 1
+	}
+	for i := 1; i < n; i++ {
+		if nums[i] == 0 {
+			f[0] = (2*f[0] + 1) % mod
+		} else if nums[i] == 1 {
+			f[1] = (f[0] + 2*f[1]) % mod
+		} else {
+			f[2] = (f[1] + 2*f[2]) % mod
+		}
+	}
+	return f[2]
+}
+```
+
+#### TypeScript
+
+```ts
+function countSpecialSubsequences(nums: number[]): number {
+    const mod = 1e9 + 7;
+    const n = nums.length;
+    const f: number[] = [0, 0, 0];
+    f[0] = nums[0] === 0 ? 1 : 0;
+    for (let i = 1; i < n; ++i) {
+        if (nums[i] === 0) {
+            f[0] = (((2 * f[0]) % mod) + 1) % mod;
+            f[1] = f[1];
+            f[2] = f[2];
+        } else if (nums[i] === 1) {
+            f[0] = f[0];
+            f[1] = (f[0] + ((2 * f[1]) % mod)) % mod;
+            f[2] = f[2];
+        } else {
+            f[0] = f[0];
+            f[1] = f[1];
+            f[2] = (f[1] + ((2 * f[2]) % mod)) % mod;
+        }
+    }
+    return f[2];
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0109.Convert%20Sorted%20List%20to%20Binary%20Search%20Tree/README_EN.md
+tags:
+    - Tree
+    - Binary Search Tree
+    - Linked List
+    - Divide and Conquer
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [109. Convert Sorted List to Binary Search Tree](https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree)
 
 [中文文档](/solution/0100-0199/0109.Convert%20Sorted%20List%20to%20Binary%20Search%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>head</code> of a singly linked list where elements are sorted in <strong>ascending order</strong>, convert <em>it to a </em><span data-keyword="height-balanced"><strong><em>height-balanced</em></strong></span> <em>binary search tree</em>.</p>
 
@@ -30,11 +46,17 @@
 	<li><code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -65,7 +87,7 @@ class Solution:
         return buildBST(nums, 0, len(nums) - 1)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -115,7 +137,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -163,49 +185,47 @@ private:
 };
 ```
 
-### **JavaScript**
+#### Go
 
-```js
+```go
 /**
  * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
  * }
  */
 /**
  * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
  * }
  */
-/**
- * @param {ListNode} head
- * @return {TreeNode}
- */
-var sortedListToBST = function (head) {
-    const buildBST = (nums, start, end) => {
-        if (start > end) {
-            return null;
-        }
-        const mid = (start + end) >> 1;
-        const root = new TreeNode(nums[mid]);
-        root.left = buildBST(nums, start, mid - 1);
-        root.right = buildBST(nums, mid + 1, end);
-        return root;
-    };
+func sortedListToBST(head *ListNode) *TreeNode {
+	nums := []int{}
+	for head != nil {
+		nums = append(nums, head.Val)
+		head = head.Next
+	}
+	return buildBST(nums, 0, len(nums)-1)
+}
 
-    const nums = new Array();
-    for (; head != null; head = head.next) {
-        nums.push(head.val);
-    }
-    return buildBST(nums, 0, nums.length - 1);
-};
+func buildBST(nums []int, start, end int) *TreeNode {
+	if start > end {
+		return nil
+	}
+	mid := (start + end) >> 1
+	return &TreeNode{
+		Val:   nums[mid],
+		Left:  buildBST(nums, start, mid-1),
+		Right: buildBST(nums, mid+1, end),
+	}
+}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -257,7 +277,7 @@ function sortedListToBST(head: ListNode | null): TreeNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -294,11 +314,11 @@ function sortedListToBST(head: ListNode | null): TreeNode | null {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn build(vals: &Vec<i32>, start: usize, end: usize) -> Option<Rc<RefCell<TreeNode>>> {
-        if (start == end) {
+        if start == end {
             return None;
         }
         let mid = (start + end) >> 1;
@@ -321,7 +341,49 @@ impl Solution {
 }
 ```
 
-### **C**
+#### JavaScript
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {TreeNode}
+ */
+var sortedListToBST = function (head) {
+    const buildBST = (nums, start, end) => {
+        if (start > end) {
+            return null;
+        }
+        const mid = (start + end) >> 1;
+        const root = new TreeNode(nums[mid]);
+        root.left = buildBST(nums, start, mid - 1);
+        root.right = buildBST(nums, mid + 1, end);
+        return root;
+    };
+
+    const nums = new Array();
+    for (; head != null; head = head.next) {
+        nums.push(head.val);
+    }
+    return buildBST(nums, 0, nums.length - 1);
+};
+```
+
+#### C
 
 ```c
 /**
@@ -339,9 +401,9 @@ impl Solution {
  *     struct TreeNode *right;
  * };
  */
-struct ListNode *find(struct ListNode *start, struct ListNode *end) {
-    struct ListNode *fast = start;
-    struct ListNode *slow = start;
+struct ListNode* find(struct ListNode* start, struct ListNode* end) {
+    struct ListNode* fast = start;
+    struct ListNode* slow = start;
     while (fast != end && fast->next != end) {
         fast = fast->next->next;
         slow = slow->next;
@@ -349,67 +411,25 @@ struct ListNode *find(struct ListNode *start, struct ListNode *end) {
     return slow;
 }
 
-struct TreeNode *bulid(struct ListNode *start, struct ListNode *end) {
+struct TreeNode* bulid(struct ListNode* start, struct ListNode* end) {
     if (start == end) {
         return NULL;
     }
-    struct ListNode *node = find(start, end);
-    struct TreeNode *ans = malloc(sizeof(struct TreeNode));
+    struct ListNode* node = find(start, end);
+    struct TreeNode* ans = malloc(sizeof(struct TreeNode));
     ans->val = node->val;
     ans->left = bulid(start, node);
     ans->right = bulid(node->next, end);
     return ans;
 }
 
-struct TreeNode *sortedListToBST(struct ListNode *head) {
+struct TreeNode* sortedListToBST(struct ListNode* head) {
     return bulid(head, NULL);
 }
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func sortedListToBST(head *ListNode) *TreeNode {
-	nums := []int{}
-	for head != nil {
-		nums = append(nums, head.Val)
-		head = head.Next
-	}
-	return buildBST(nums, 0, len(nums)-1)
-}
-
-func buildBST(nums []int, start, end int) *TreeNode {
-	if start > end {
-		return nil
-	}
-	mid := (start + end) >> 1
-	return &TreeNode{
-		Val:   nums[mid],
-		Left:  buildBST(nums, start, mid-1),
-		Right: buildBST(nums, mid+1, end),
-	}
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,35 +1,50 @@
-# [1445. 苹果和桔子](https://leetcode.cn/problems/apples-oranges)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1445.Apples%20%26%20Oranges/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1445. 苹果和桔子 🔒](https://leetcode.cn/problems/apples-oranges)
 
 [English Version](/solution/1400-1499/1445.Apples%20%26%20Oranges/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Sales</code></p>
 
-<pre>+---------------+---------+
+<pre>
++---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
 | sale_date     | date    |
 | fruit         | enum    | 
 | sold_num      | int     | 
 +---------------+---------+
-(sale_date,fruit) 是该表主键.
-该表包含了每一天中&quot;苹果&quot; 和 &quot;桔子&quot;的销售情况.
+(sale_date, fruit) 是该表主键(具有唯一值的列的组合)。
+该表包含了每一天中"苹果" 和 "桔子"的销售情况。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写一个 SQL&nbsp;查询,&nbsp;报告每一天&nbsp;<strong>苹果</strong>&nbsp;和&nbsp;<strong>桔子</strong>&nbsp;销售的数目的差异.</p>
+<p>编写解决方案报告每一天&nbsp;<strong>苹果</strong>&nbsp;和&nbsp;<strong>桔子</strong>&nbsp;销售的数目的差异.</p>
 
-<p>返回的结果表,&nbsp;按照格式为&nbsp;(&#39;YYYY-MM-DD&#39;) 的 <code>sale_date</code> 排序.</p>
+<p>返回的结果表,&nbsp;按照格式为&nbsp;('YYYY-MM-DD') 的 <code>sale_date</code> 排序.</p>
 
-<p>查询结果表如下例所示:</p>
+<p>返回结果表如下例所示:</p>
 
 <p>&nbsp;</p>
 
-<pre><code>Sales</code> 表:
+<p><strong>示例 1：</strong></p>
+
+<pre>
+<code><strong>输入：</strong>
+Sales</code> 表:
 +------------+------------+-------------+
 | sale_date  | fruit      | sold_num    |
 +------------+------------+-------------+
@@ -42,8 +57,7 @@
 | 2020-05-04 | apples     | 15          |
 | 2020-05-04 | oranges    | 16          |
 +------------+------------+-------------+
-
-Result 表:
+<strong>输出：</strong>
 +------------+--------------+
 | sale_date  | diff         |
 +------------+--------------+
@@ -52,34 +66,39 @@ Result 表:
 | 2020-05-03 | 20           |
 | 2020-05-04 | -1           |
 +------------+--------------+
-
+<strong>解释：</strong>
 在 2020-05-01, 卖了 10 个苹果 和 8 个桔子 (差异为 10 - 8 = 2).
 在 2020-05-02, 卖了 15 个苹果 和 15 个桔子 (差异为 15 - 15 = 0).
 在 2020-05-03, 卖了 20 个苹果 和 0 个桔子 (差异为 20 - 0 = 20).
 在 2020-05-04, 卖了 15 个苹果 和 16 个桔子 (差异为 15 - 16 = -1).
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-`CASE WHEN` + `GROUP BY`。
+### 方法一：分组求和
+
+我们可以将数据按照日期分组，然后用 `sum` 函数求出每天苹果和桔子 🔒 的销售差异。如果是苹果，我们就用正数表示，如果是桔子，我们就用负数表示。最后我们按照日期排序即可。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
 SELECT
-    sale_date AS SALE_DATE,
-    sum(
-        CASE WHEN fruit = 'oranges' THEN -sold_num ELSE sold_num END
-    ) AS DIFF
-FROM
-    Sales
-GROUP BY sale_date
-ORDER BY sale_date;
+    sale_date,
+    SUM(IF(fruit = 'apples', sold_num, -sold_num)) AS diff
+FROM Sales
+GROUP BY 1
+ORDER BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

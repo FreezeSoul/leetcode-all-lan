@@ -1,12 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0316.Remove%20Duplicate%20Letters/README.md
+tags:
+    - 栈
+    - 贪心
+    - 字符串
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters)
 
 [English Version](/solution/0300-0399/0316.Remove%20Duplicate%20Letters/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个字符串 <code>s</code> ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 <strong>返回结果的字典序最小</strong>（要求不能打乱其他字符的相对位置）。</p>
+<p>给你一个字符串 <code>s</code> ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 <strong>返回结果的<span data-keyword="lexicographically-smaller-string-alien">字典序</span>最小</strong>（要求不能打乱其他字符的相对位置）。</p>
 
 <p>&nbsp;</p>
 
@@ -36,11 +49,13 @@
 
 <p><strong>注意：</strong>该题与 1081 <a href="https://leetcode.cn/problems/smallest-subsequence-of-distinct-characters">https://leetcode.cn/problems/smallest-subsequence-of-distinct-characters</a> 相同</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：栈**
+### 方法一：栈
 
 我们用一个数组 `last` 记录每个字符最后一次出现的位置，用栈来保存结果字符串，用一个数组 `vis` 或者一个整型变量 `mask` 记录当前字符是否在栈中。
 
@@ -48,13 +63,11 @@
 
 最后将栈中元素拼接成字符串作为结果返回。
 
-时间复杂度 $O(n)$。其中 $n$ 为字符串 $s$ 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串 $s$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,31 +85,7 @@ class Solution:
         return ''.join(stk)
 ```
 
-```python
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        count, in_stack = [0] * 128, [False] * 128
-        stack = []
-        for c in s:
-            count[ord(c)] += 1
-        for c in s:
-            count[ord(c)] -= 1
-            if in_stack[ord(c)]:
-                continue
-            while len(stack) and stack[-1] > c:
-                peek = stack[-1]
-                if count[ord(peek)] < 1:
-                    break
-                in_stack[ord(peek)] = False
-                stack.pop()
-            stack.append(c)
-            in_stack[ord(c)] = True
-        return ''.join(stack)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -128,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,7 +147,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func removeDuplicateLetters(s string) string {
@@ -182,6 +171,42 @@ func removeDuplicateLetters(s string) string {
 	return string(stk)
 }
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        count, in_stack = [0] * 128, [False] * 128
+        stack = []
+        for c in s:
+            count[ord(c)] += 1
+        for c in s:
+            count[ord(c)] -= 1
+            if in_stack[ord(c)]:
+                continue
+            while len(stack) and stack[-1] > c:
+                peek = stack[-1]
+                if count[ord(peek)] < 1:
+                    break
+                in_stack[ord(peek)] = False
+                stack.pop()
+            stack.append(c)
+            in_stack[ord(c)] = True
+        return ''.join(stack)
+```
+
+#### Go
 
 ```go
 func removeDuplicateLetters(s string) string {
@@ -207,10 +232,8 @@ func removeDuplicateLetters(s string) string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1478.Allocate%20Mailboxes/README.md
+rating: 2190
+source: 第 28 场双周赛 Q4
+tags:
+    - 数组
+    - 数学
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1478. 安排邮筒](https://leetcode.cn/problems/allocate-mailboxes)
 
 [English Version](/solution/1400-1499/1478.Allocate%20Mailboxes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个房屋数组<code>houses</code>&nbsp;和一个整数&nbsp;<code>k</code>&nbsp;，其中&nbsp;<code>houses[i]</code>&nbsp;是第 <code>i</code>&nbsp;栋房子在一条街上的位置，现需要在这条街上安排 <code>k</code>&nbsp;个邮筒。</p>
 
@@ -58,11 +73,13 @@
 	<li>数组&nbsp;<code>houses</code>&nbsp;中的整数互不相同。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示前 $i+1$ 栋房子，安排了 $j$ 个邮筒时，每栋房子与离它最近的邮筒之间的距离的最小总和。初始时 $f[i][j]=\infty$，答案即为 $f[n-1][k]$。
 
@@ -82,9 +99,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +119,7 @@ class Solution:
         return f[-1][k]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -137,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -167,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDistance(houses []int, k int) int {
@@ -198,19 +211,10 @@ func minDistance(houses []int, k int) int {
 	}
 	return f[n-1][k]
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

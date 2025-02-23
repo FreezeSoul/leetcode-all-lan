@@ -1,15 +1,38 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1261.Find%20Elements%20in%20a%20Contaminated%20Binary%20Tree/README_EN.md
+rating: 1439
+source: Weekly Contest 163 Q2
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+    - Design
+    - Hash Table
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [1261. Find Elements in a Contaminated Binary Tree](https://leetcode.com/problems/find-elements-in-a-contaminated-binary-tree)
 
 [中文文档](/solution/1200-1299/1261.Find%20Elements%20in%20a%20Contaminated%20Binary%20Tree/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>Given a binary tree with the following rules:</p>
 
 <ol>
 	<li><code>root.val == 0</code></li>
-	<li>If <code>treeNode.val == x</code> and <code>treeNode.left != null</code>, then <code>treeNode.left.val == 2 * x + 1</code></li>
-	<li>If <code>treeNode.val == x</code> and <code>treeNode.right != null</code>, then <code>treeNode.right.val == 2 * x + 2</code></li>
+	<li>For any <code>treeNode</code>:
+	<ol type="a">
+		<li>If <code>treeNode.val</code> has a value <code>x</code> and <code>treeNode.left != null</code>, then <code>treeNode.left.val == 2 * x + 1</code></li>
+		<li>If <code>treeNode.val</code> has a value <code>x</code> and <code>treeNode.right != null</code>, then <code>treeNode.right.val == 2 * x + 2</code></li>
+	</ol>
+	</li>
 </ol>
 
 <p>Now the binary tree is contaminated, which means all <code>treeNode.val</code> have been changed to <code>-1</code>.</p>
@@ -76,11 +99,21 @@ findElements.find(5); // return True
 	<li><code>0 &lt;= target &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: DFS + Hash Table
+
+First, we traverse the binary tree using DFS, restore the node values to their original values, and store all node values in a hash table. Then, when searching, we only need to check if the target value exists in the hash table.
+
+In terms of time complexity, it takes $O(n)$ time to traverse the binary tree during initialization, and $O(1)$ time to check if the target value exists in the hash table during search. The space complexity is $O(n)$, where $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -92,8 +125,8 @@ findElements.find(5); // return True
 class FindElements:
 
     def __init__(self, root: Optional[TreeNode]):
-        def dfs(root):
-            self.vis.add(root.val)
+        def dfs(root: Optional[TreeNode]):
+            self.s.add(root.val)
             if root.left:
                 root.left.val = root.val * 2 + 1
                 dfs(root.left)
@@ -102,11 +135,11 @@ class FindElements:
                 dfs(root.right)
 
         root.val = 0
-        self.vis = set()
+        self.s = set()
         dfs(root)
 
     def find(self, target: int) -> bool:
-        return target in self.vis
+        return target in self.s
 
 
 # Your FindElements object will be instantiated and called as such:
@@ -114,7 +147,7 @@ class FindElements:
 # param_1 = obj.find(target)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -133,15 +166,19 @@ class FindElements:
  * }
  */
 class FindElements {
-    private Set<Integer> vis = new HashSet<>();
+    private Set<Integer> s = new HashSet<>();
 
     public FindElements(TreeNode root) {
         root.val = 0;
         dfs(root);
     }
 
+    public boolean find(int target) {
+        return s.contains(target);
+    }
+
     private void dfs(TreeNode root) {
-        vis.add(root.val);
+        s.add(root.val);
         if (root.left != null) {
             root.left.val = root.val * 2 + 1;
             dfs(root.left);
@@ -150,10 +187,6 @@ class FindElements {
             root.right.val = root.val * 2 + 2;
             dfs(root.right);
         }
-    }
-
-    public boolean find(int target) {
-        return vis.contains(target);
     }
 }
 
@@ -164,7 +197,7 @@ class FindElements {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -182,26 +215,27 @@ class FindElements {
 public:
     FindElements(TreeNode* root) {
         root->val = 0;
-        function<void(TreeNode*)> dfs = [&](TreeNode* root) {
-            vis.insert(root->val);
-            if (root->left) {
-                root->left->val = root->val * 2 + 1;
-                dfs(root->left);
-            }
-            if (root->right) {
-                root->right->val = root->val * 2 + 2;
-                dfs(root->right);
-            }
-        };
         dfs(root);
     }
 
     bool find(int target) {
-        return vis.count(target);
+        return s.contains(target);
     }
 
 private:
-    unordered_set<int> vis;
+    unordered_set<int> s;
+
+    void dfs(TreeNode* root) {
+        s.insert(root->val);
+        if (root->left) {
+            root->left->val = root->val * 2 + 1;
+            dfs(root->left);
+        }
+        if (root->right) {
+            root->right->val = root->val * 2 + 2;
+            dfs(root->right);
+        }
+    };
 };
 
 /**
@@ -211,7 +245,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -223,15 +257,15 @@ private:
  * }
  */
 type FindElements struct {
-	vis map[int]bool
+	s map[int]bool
 }
 
 func Constructor(root *TreeNode) FindElements {
 	root.Val = 0
-	vis := map[int]bool{}
+	s := map[int]bool{}
 	var dfs func(*TreeNode)
 	dfs = func(root *TreeNode) {
-		vis[root.Val] = true
+		s[root.Val] = true
 		if root.Left != nil {
 			root.Left.Val = root.Val*2 + 1
 			dfs(root.Left)
@@ -242,11 +276,11 @@ func Constructor(root *TreeNode) FindElements {
 		}
 	}
 	dfs(root)
-	return FindElements{vis}
+	return FindElements{s}
 }
 
 func (this *FindElements) Find(target int) bool {
-	return this.vis[target]
+	return this.s[target]
 }
 
 /**
@@ -256,10 +290,101 @@ func (this *FindElements) Find(target int) bool {
  */
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+class FindElements {
+    readonly #s = new Set<number>();
+
+    constructor(root: TreeNode | null) {
+        root.val = 0;
+
+        const dfs = (node: TreeNode | null, x = 0) => {
+            if (!node) return;
+
+            this.#s.add(x);
+            dfs(node.left, x * 2 + 1);
+            dfs(node.right, x * 2 + 2);
+        };
+
+        dfs(root);
+    }
+
+    find(target: number): boolean {
+        return this.#s.has(target);
+    }
+}
+
+/**
+ * Your FindElements object will be instantiated and called as such:
+ * var obj = new FindElements(root)
+ * var param_1 = obj.find(target)
+ */
 ```
 
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+
+const s = Symbol.for('s');
+
+/**
+ * @param {TreeNode} root
+ */
+var FindElements = function (root) {
+    root.val = 0;
+    this[s] = new Set();
+
+    const dfs = (node, x = 0) => {
+        if (!node) return;
+
+        this[s].add(x);
+        dfs(node.left, x * 2 + 1);
+        dfs(node.right, x * 2 + 2);
+    };
+
+    dfs(root);
+};
+
+/**
+ * @param {number} target
+ * @return {boolean}
+ */
+FindElements.prototype.find = function (target) {
+    return this[s].has(target);
+};
+
+/**
+ * Your FindElements object will be instantiated and called as such:
+ * var obj = new FindElements(root)
+ * var param_1 = obj.find(target)
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

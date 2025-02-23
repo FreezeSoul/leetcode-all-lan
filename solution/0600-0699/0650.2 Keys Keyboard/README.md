@@ -1,10 +1,21 @@
-# [650. 只有两个键的键盘](https://leetcode.cn/problems/2-keys-keyboard)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0650.2%20Keys%20Keyboard/README.md
+tags:
+    - 数学
+    - 动态规划
+---
+
+<!-- problem:start -->
+
+# [650. 两个键的键盘](https://leetcode.cn/problems/2-keys-keyboard)
 
 [English Version](/solution/0600-0699/0650.2%20Keys%20Keyboard/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>最初记事本上只有一个字符 <code>'A'</code> 。你每次可以对这个记事本进行两种操作：</p>
 
@@ -44,11 +55,13 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 定义 $dfs(i)$ 为输出 $i$ 个字符的最少操作次数。初始化 `dfs(1)=0`。
 
@@ -60,21 +73,9 @@ $$
 
 时间复杂度 $O(n\sqrt{n})$。
 
-**方法二：动态规划**
-
-记忆化搜索也可以改成动态规划。
-
-$$
-dp[i]=\min _{j \mid i} (dp[\frac{i}{j}]+j, i), 2\leq j\lt i
-$$
-
-时间复杂度 $O(n\sqrt{n})$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,23 +94,7 @@ class Solution:
         return dfs(n)
 ```
 
-```python
-class Solution:
-    def minSteps(self, n: int) -> int:
-        dp = list(range(n + 1))
-        dp[1] = 0
-        for i in range(2, n + 1):
-            j = 2
-            while j * j <= i:
-                if i % j == 0:
-                    dp[i] = min(dp[i], dp[i // j] + j)
-                j += 1
-        return dp[-1]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -140,42 +125,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int minSteps(int n) {
-        int[] dp = new int[n + 1];
-        for (int i = 0; i < n + 1; ++i) {
-            dp[i] = i;
-        }
-        dp[1] = 0;
-        for (int i = 2; i < n + 1; ++i) {
-            for (int j = 2; j * j <= i; ++j) {
-                if (i % j == 0) {
-                    dp[i] = Math.min(dp[i], dp[i / j] + j);
-                }
-            }
-        }
-        return dp[n];
-    }
-}
-```
-
-```java
-class Solution {
-    public int minSteps(int n) {
-        int res = 0;
-        for (int i = 2; n > 1; ++i) {
-            while (n % i == 0) {
-                res += i;
-                n /= i;
-            }
-        }
-        return res;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -202,26 +152,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int minSteps(int n) {
-        vector<int> dp(n + 1);
-        iota(dp.begin(), dp.end(), 0);
-        dp[1] = 0;
-        for (int i = 2; i < n + 1; ++i) {
-            for (int j = 2; j * j <= i; ++j) {
-                if (i % j == 0) {
-                    dp[i] = min(dp[i], dp[i / j] + j);
-                }
-            }
-        }
-        return dp[n];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func minSteps(n int) int {
@@ -247,14 +178,86 @@ func minSteps(n int) int {
 	}
 	return dfs(n)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+记忆化搜索也可以改成动态规划。
+
+$$
+dp[i]=\min _{j \mid i} (dp[\frac{i}{j}]+j, i), 2\leq j\lt i
+$$
+
+时间复杂度 $O(n\sqrt{n})$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minSteps(self, n: int) -> int:
+        dp = list(range(n + 1))
+        dp[1] = 0
+        for i in range(2, n + 1):
+            j = 2
+            while j * j <= i:
+                if i % j == 0:
+                    dp[i] = min(dp[i], dp[i // j] + j)
+                j += 1
+        return dp[-1]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int minSteps(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 0; i < n + 1; ++i) {
+            dp[i] = i;
+        }
+        dp[1] = 0;
+        for (int i = 2; i < n + 1; ++i) {
+            for (int j = 2; j * j <= i; ++j) {
+                if (i % j == 0) {
+                    dp[i] = Math.min(dp[i], dp[i / j] + j);
+                }
+            }
+        }
+        return dp[n];
+    }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minSteps(int n) {
+        vector<int> dp(n + 1);
+        iota(dp.begin(), dp.end(), 0);
+        dp[1] = 0;
+        for (int i = 2; i < n + 1; ++i) {
+            for (int j = 2; j * j <= i; ++j) {
+                if (i % j == 0) {
+                    dp[i] = min(dp[i], dp[i / j] + j);
+                }
+            }
+        }
+        return dp[n];
+    }
+};
+```
+
+#### Go
 
 ```go
 func minSteps(n int) int {
@@ -272,19 +275,79 @@ func minSteps(n int) int {
 	}
 	return dp[n]
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minSteps(n: number): number {
+    const dp = Array(n + 1).fill(1000);
+    dp[1] = 0;
+
+    for (let i = 2; i <= n; i++) {
+        for (let j = 1, half = i / 2; j <= half; j++) {
+            if (i % j === 0) {
+                dp[i] = Math.min(dp[i], dp[j] + i / j);
+            }
+        }
+    }
+
+    return dp[n];
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var minSteps = function (n) {
+    const dp = Array(n + 1).fill(1000);
+    dp[1] = 0;
 
+    for (let i = 2; i <= n; i++) {
+        for (let j = 1, half = i / 2; j <= half; j++) {
+            if (i % j === 0) {
+                dp[i] = Math.min(dp[i], dp[j] + i / j);
+            }
+        }
+    }
+
+    return dp[n];
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public int minSteps(int n) {
+        int res = 0;
+        for (int i = 2; n > 1; ++i) {
+            while (n % i == 0) {
+                res += i;
+                n /= i;
+            }
+        }
+        return res;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2033.%20%E8%93%84%E6%B0%B4/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 33. 蓄水](https://leetcode.cn/problems/o8SXZn)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 给定 N 个无限容量且初始均空的水缸，每个水缸配有一个水桶用来打水，第 `i` 个水缸配备的水桶容量记作 `bucket[i]`。小扣有以下两种操作：
 
@@ -22,7 +30,7 @@
 > 解释：
 > 第 1 次操作升级 bucket[0]；
 > 第 2 ~ 4 次操作均选择蓄水，即可完成蓄水要求。
-> ![vat1.gif](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2033.%20蓄水/images/1616122992-RkDxoL-vat1.gif)
+> ![vat1.gif](https://fastly.jsdelivr.net/gh/doocs/leetcode@main/lcp/LCP%2033.%20%E8%93%84%E6%B0%B4/images/1616122992-RkDxoL-vat1.gif)
 
 **示例 2：**
 
@@ -39,11 +47,13 @@
 -   `1 <= bucket.length == vat.length <= 100`
 -   `0 <= bucket[i], vat[i] <= 10^4`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 枚举**
+### 方法一：贪心 + 枚举
 
 题目中涉及两个操作：升级水桶、蓄水。我们应该贪心地把升级水桶的操作放在前面，这样在蓄水时，每次能蓄水的量就会更多，操作次数就会更少。
 
@@ -55,9 +65,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,9 +80,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,14 +127,11 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func storeWater(bucket []int, vat []int) int {
-	mx := 0
-	for _, x := range vat {
-		mx = max(mx, x)
-	}
+	mx := slices.Max(vat)
 	if mx == 0 {
 		return 0
 	}
@@ -142,23 +145,9 @@ func storeWater(bucket []int, vat []int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-    if a < b {
-        return a
-    }
-    return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function storeWater(bucket: number[], vat: number[]): number {
@@ -179,10 +168,36 @@ function storeWater(bucket: number[], vat: number[]): number {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func storeWater(_ bucket: [Int], _ vat: [Int]) -> Int {
+        let maxVat = vat.max() ?? 0
+        if maxVat == 0 {
+            return 0
+        }
 
+        let n = vat.count
+        var ans = Int.max
+
+        for x in 1...maxVat {
+            var y = 0
+            for i in 0..<n {
+                if vat[i] > 0 {
+                    y += max(0, (vat[i] + x - 1) / x - bucket[i])
+                }
+            }
+            ans = min(ans, x + y)
+        }
+
+        return ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

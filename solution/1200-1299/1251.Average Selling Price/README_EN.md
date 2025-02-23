@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1251.Average%20Selling%20Price/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [1251. Average Selling Price](https://leetcode.com/problems/average-selling-price)
 
 [中文文档](/solution/1200-1299/1251.Average%20Selling%20Price/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Prices</code></p>
 
@@ -15,7 +27,7 @@
 | end_date      | date    |
 | price         | int     |
 +---------------+---------+
-(product_id, start_date, end_date) is the primary key for this table.
+(product_id, start_date, end_date) is the primary key (combination of columns with unique values) for this table.
 Each row of this table indicates the price of the product_id in the period from start_date to end_date.
 For each product_id there will be no two overlapping periods. That means there will be no two intersecting periods for the same product_id.
 </pre>
@@ -32,17 +44,17 @@ For each product_id there will be no two overlapping periods. That means there w
 | purchase_date | date    |
 | units         | int     |
 +---------------+---------+
-There is no primary key for this table, it may contain duplicates.
+This table may contain duplicate rows.
 Each row of this table indicates the date, units, and product_id of each product sold. 
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to find the average selling price for each product. <code>average_price</code> should be <strong>rounded to 2 decimal places</strong>.</p>
+<p>Write a solution to find the average selling price for each product. <code>average_price</code> should be <strong>rounded to 2 decimal places</strong>. If a product does not have any sold units, its average selling price is assumed to be 0.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -80,21 +92,34 @@ Average selling price for product 1 = ((100 * 5) + (15 * 20)) / 115 = 6.96
 Average selling price for product 2 = ((200 * 15) + (30 * 30)) / 230 = 16.96
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Left Join + Grouping
+
+We can use a left join to join the `Prices` table and the `UnitsSold` table on `product_id`, and the condition that `purchase_date` is between `start_date` and `end_date`. Then, we can use `GROUP BY` to group by `product_id` for aggregation, and use the `AVG` function to calculate the average price. Note that if a product has no sales records, the `AVG` function will return `NULL`, so we can use the `IFNULL` function to convert it to $0$.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT p.product_id,
-       Round(( Sum(u.units * p.price) + 0.0 ) / ( Sum(units) + 0.0 ), 2)
-       average_price
-FROM   Prices p
-       INNER JOIN UnitsSold u
-               ON p.product_id = u.product_id
-WHERE  u.purchase_date BETWEEN p.start_date AND p.end_date
-GROUP  BY p.product_id;
+# Write your MySQL query statement below
+SELECT
+    p.product_id,
+    IFNULL(ROUND(SUM(price * units) / SUM(units), 2), 0) AS average_price
+FROM
+    Prices AS p
+    LEFT JOIN UnitsSold AS u
+        ON p.product_id = u.product_id AND purchase_date BETWEEN start_date AND end_date
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

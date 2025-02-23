@@ -1,7 +1,14 @@
 class Solution:
     def maxProfit(self, prices: List[int], fee: int) -> int:
-        f1, f2 = -prices[0], 0
-        for price in prices[1:]:
-            f1 = max(f1, f2 - price)
-            f2 = max(f2, f1 + price - fee)
-        return f2
+        @cache
+        def dfs(i: int, j: int) -> int:
+            if i >= len(prices):
+                return 0
+            ans = dfs(i + 1, j)
+            if j:
+                ans = max(ans, prices[i] + dfs(i + 1, 0) - fee)
+            else:
+                ans = max(ans, -prices[i] + dfs(i + 1, 1))
+            return ans
+
+        return dfs(0, 0)

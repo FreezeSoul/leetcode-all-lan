@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2317.Maximum%20XOR%20After%20Operations/README_EN.md
+rating: 1678
+source: Biweekly Contest 81 Q3
+tags:
+    - Bit Manipulation
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2317. Maximum XOR After Operations](https://leetcode.com/problems/maximum-xor-after-operations)
 
 [中文文档](/solution/2300-2399/2317.Maximum%20XOR%20After%20Operations/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>. In one operation, select <strong>any</strong> non-negative integer <code>x</code> and an index <code>i</code>, then <strong>update</strong> <code>nums[i]</code> to be equal to <code>nums[i] AND (nums[i] XOR x)</code>.</p>
 
@@ -38,11 +54,17 @@ It can be shown that 11 is the maximum possible bitwise XOR.</pre>
 	<li><code>0 &lt;= nums[i] &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -50,7 +72,7 @@ class Solution:
         return reduce(or_, nums)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -64,7 +86,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -79,7 +101,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumXOR(nums []int) (ans int) {
@@ -90,7 +112,7 @@ func maximumXOR(nums []int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumXOR(nums: number[]): number {
@@ -102,10 +124,8 @@ function maximumXOR(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

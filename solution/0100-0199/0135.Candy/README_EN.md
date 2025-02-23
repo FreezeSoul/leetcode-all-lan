@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0135.Candy/README_EN.md
+tags:
+    - Greedy
+    - Array
+---
+
+<!-- problem:start -->
+
 # [135. Candy](https://leetcode.com/problems/candy)
 
 [中文文档](/solution/0100-0199/0135.Candy/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are <code>n</code> children standing in a line. Each child is assigned a rating value given in the integer array <code>ratings</code>.</p>
 
@@ -42,9 +55,13 @@ The third child gets 1 candy because it satisfies the above two conditions.
 	<li><code>0 &lt;= ratings[i] &lt;= 2 * 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Two traversals**
+<!-- solution:start -->
+
+### Solution 1: Two traversals
 
 We initialize two arrays $left$ and $right$, where $left[i]$ represents the minimum number of candies the current child should get when the current child's score is higher than the left child's score, and $right[i]$ represents the minimum number of candies the current child should get when the current child's score is higher than the right child's score. Initially, $left[i]=1$, $right[i]=1$.
 
@@ -56,7 +73,7 @@ Time complexity $O(n)$, space complexity $O(n)$. Where $n$ is the length of the 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -73,7 +90,7 @@ class Solution:
         return sum(max(a, b) for a, b in zip(left, right))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +147,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func candy(ratings []int) int {
@@ -158,16 +175,9 @@ func candy(ratings []int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function candy(ratings: number[]): number {
@@ -192,7 +202,7 @@ function candy(ratings: number[]): number {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -221,10 +231,50 @@ public class Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public int candy(int[] ratings) {
+        int n = ratings.length;
+        int up = 0;
+        int down = 0;
+        int peak = 0;
+        int candies = 1;
+        for (int i = 1; i < n; i++) {
+            if (ratings[i - 1] < ratings[i]) {
+                up++;
+                peak = up + 1;
+                down = 0;
+                candies += peak;
+            } else if (ratings[i] == ratings[i - 1]) {
+                peak = 0;
+                up = 0;
+                down = 0;
+                candies++;
+            } else {
+                down++;
+                up = 0;
+                candies += down + (peak > down ? 0 : 1);
+            }
+        }
+        return candies;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

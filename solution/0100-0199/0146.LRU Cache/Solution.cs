@@ -1,111 +1,76 @@
-﻿// https://leetcode.com/problems/lru-cache/
+public class LRUCache {
+    private int size;
+    private int capacity;
+    private Dictionary<int, Node> cache = new Dictionary<int, Node>();
+    private Node head = new Node();
+    private Node tail = new Node();
 
-using System.Collections.Generic;
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        head.Next = tail;
+        tail.Prev = head;
+    }
 
-public class LRUCache
-{
-    class Node
-    {
+    public int Get(int key) {
+        if (!cache.ContainsKey(key)) {
+            return -1;
+        }
+        Node node = cache[key];
+        RemoveNode(node);
+        AddToHead(node);
+        return node.Val;
+    }
+
+    public void Put(int key, int value) {
+        if (cache.ContainsKey(key)) {
+            Node node = cache[key];
+            RemoveNode(node);
+            node.Val = value;
+            AddToHead(node);
+        } else {
+            Node node = new Node(key, value);
+            cache[key] = node;
+            AddToHead(node);
+            if (++size > capacity) {
+                node = tail.Prev;
+                cache.Remove(node.Key);
+                RemoveNode(node);
+                --size;
+            }
+        }
+    }
+
+    private void RemoveNode(Node node) {
+        node.Prev.Next = node.Next;
+        node.Next.Prev = node.Prev;
+    }
+
+    private void AddToHead(Node node) {
+        node.Next = head.Next;
+        node.Prev = head;
+        head.Next = node;
+        node.Next.Prev = node;
+    }
+
+    // Node class to represent each entry in the cache.
+    private class Node {
+        public int Key;
+        public int Val;
         public Node Prev;
         public Node Next;
-        public int Key;
-        public int Value;
-    }
 
-    private Node _head;
-    private Node _tail;
-    private Dictionary<int, Node> keyMap;
-    private readonly int _capacity;
+        public Node() {}
 
-    public LRUCache(int capacity)
-    {
-        _capacity = capacity;
-        keyMap = new Dictionary<int, Node>();
-    }
-
-    public int Get(int key)
-    {
-        Node node;
-        if (keyMap.TryGetValue(key, out node))
-        {
-            MoveToHead(node);
-            return node.Value;
-        }
-        return -1;
-    }
-
-    public void Put(int key, int value)
-    {
-        Node node;
-        if (keyMap.TryGetValue(key, out node))
-        {
-            MoveToHead(node);
-            node.Value = value;
-        }
-        else
-        {
-            if (keyMap.Count == _capacity)
-            {
-                if (_capacity > 0)
-                {
-                    keyMap.Remove(_tail.Key);
-                    RemoveTail();
-                }
-                else
-                {
-                    return;
-                }
-            }
-            node = new Node() { Key = key, Value = value };
-            keyMap.Add(key, node);
-            MoveToHead(node);
-        }
-    }
-
-    private void MoveToHead(Node node)
-    {
-        if (_head != node)
-        {
-            if (_head == null)
-            {
-                _head = node;
-                _tail = node;
-            }
-            else
-            {
-                if (_tail == node)
-                {
-                    _tail = node.Prev;
-                }
-                if (node.Next != null)
-                {
-                    node.Next.Prev = node.Prev;
-                }
-                if (node.Prev != null)
-                {
-                    node.Prev.Next = node.Next;
-                }
-                node.Next = _head;
-                _head.Prev = node;
-                _head = node;
-            }
-        }
-    }
-
-    private void RemoveTail()
-    {
-        if (_tail != null)
-        {
-            if (_tail.Prev == null)
-            {
-                _head = null;
-                _tail = null;
-            }
-            else
-            {
-                _tail = _tail.Prev;
-                _tail.Next = null;
-            }
+        public Node(int key, int val) {
+            Key = key;
+            Val = val;
         }
     }
 }
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.Get(key);
+ * obj.Put(key,value);
+ */

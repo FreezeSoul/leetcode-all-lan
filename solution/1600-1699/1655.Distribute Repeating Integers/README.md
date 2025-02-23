@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1655.Distribute%20Repeating%20Integers/README.md
+rating: 2307
+source: 第 39 场双周赛 Q4
+tags:
+    - 位运算
+    - 数组
+    - 动态规划
+    - 回溯
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [1655. 分配重复整数](https://leetcode.cn/problems/distribute-repeating-integers)
 
 [English Version](/solution/1600-1699/1655.Distribute%20Repeating%20Integers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个长度为&nbsp;<code>n</code>&nbsp;的整数数组&nbsp;<code>nums</code>&nbsp;，这个数组中至多有&nbsp;<code>50</code>&nbsp;个不同的值。同时你有 <code>m</code>&nbsp;个顾客的订单 <code>quantity</code>&nbsp;，其中，整数&nbsp;<code>quantity[i]</code>&nbsp;是第&nbsp;<code>i</code>&nbsp;位顾客订单的数目。请你判断是否能将 <code>nums</code>&nbsp;中的整数分配给这些顾客，且满足：</p>
 
@@ -56,11 +72,13 @@
 	<li><code>nums</code>&nbsp;中至多有&nbsp;<code>50</code>&nbsp;个不同的数字。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩动态规划 + 子集枚举**
+### 方法一：状态压缩动态规划 + 子集枚举
 
 我们先统计数组 $nums$ 中每个数字出现的次数，记录在哈希表 $cnt$ 中，然后将哈希表中的值存入数组 $arr$ 中，我们记数组 $arr$ 的长度为 $n$。
 
@@ -78,9 +96,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -114,9 +130,7 @@ class Solution:
         return f[-1][-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -166,7 +180,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -218,7 +232,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canDistribute(nums []int, quantity []int) bool {
@@ -266,7 +280,7 @@ func canDistribute(nums []int, quantity []int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canDistribute(nums: number[], quantity: number[]): boolean {
@@ -289,9 +303,7 @@ function canDistribute(nums: number[], quantity: number[]): boolean {
     for (const [_, v] of cnt) {
         arr.push(v);
     }
-    const f: boolean[][] = new Array(n)
-        .fill(false)
-        .map(() => new Array(1 << m).fill(false));
+    const f: boolean[][] = new Array(n).fill(false).map(() => new Array(1 << m).fill(false));
     for (let i = 0; i < n; ++i) {
         f[i][0] = true;
     }
@@ -302,8 +314,7 @@ function canDistribute(nums: number[], quantity: number[]): boolean {
                 continue;
             }
             for (let k = j; k > 0; k = (k - 1) & j) {
-                const ok1: boolean =
-                    (i == 0 && j == k) || (i > 0 && f[i - 1][j ^ k]);
+                const ok1: boolean = (i == 0 && j == k) || (i > 0 && f[i - 1][j ^ k]);
                 const ok2: boolean = s[k] <= arr[i];
                 if (ok1 && ok2) {
                     f[i][j] = true;
@@ -316,10 +327,8 @@ function canDistribute(nums: number[], quantity: number[]): boolean {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

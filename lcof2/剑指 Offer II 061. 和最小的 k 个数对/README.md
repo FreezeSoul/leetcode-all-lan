@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20061.%20%E5%92%8C%E6%9C%80%E5%B0%8F%E7%9A%84%20k%20%E4%B8%AA%E6%95%B0%E5%AF%B9/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 061. 和最小的 k 个数对](https://leetcode.cn/problems/qn8gGX)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定两个以升序排列的整数数组 <code>nums1</code> 和<strong> </strong><code>nums2</code><strong>&nbsp;</strong>,&nbsp;以及一个整数 <code>k</code><strong>&nbsp;</strong>。</p>
 
@@ -53,17 +60,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 373&nbsp;题相同：<a href="https://leetcode.cn/problems/find-k-pairs-with-smallest-sums/">https://leetcode.cn/problems/find-k-pairs-with-smallest-sums/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-大顶堆
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +86,7 @@ class Solution:
         return [p for _, p in hp]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -101,39 +106,7 @@ class Solution {
 }
 ```
 
-### **Go**
-
-```go
-type pairHeap [][]int
-
-func (a pairHeap) Len() int            { return len(a) }
-func (a pairHeap) Swap(i, j int)       { a[i], a[j] = a[j], a[i] }
-func (a pairHeap) Less(i, j int) bool  { return a[i][0]+a[i][1] > a[j][0]+a[j][1] }
-func (a *pairHeap) Push(x interface{}) { *a = append(*a, x.([]int)) }
-func (a *pairHeap) Pop() interface{}   { l := len(*a); tmp := (*a)[l-1]; *a = (*a)[:l-1]; return tmp }
-
-func kSmallestPairs(nums1 []int, nums2 []int, k int) [][]int {
-	var hp pairHeap
-	for _, x := range nums1[:min(k, len(nums1))] {
-		for _, y := range nums2[:min(k, len(nums2))] {
-			heap.Push(&hp, []int{x, y})
-			if len(hp) > k {
-				heap.Pop(&hp)
-			}
-		}
-	}
-	return hp
-}
-
-func min(x, y int) int {
-	if x < y {
-		return x
-	}
-	return y
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -159,10 +132,33 @@ public:
 };
 ```
 
-### **...**
+#### Go
 
-```
+```go
+type pairHeap [][]int
 
+func (a pairHeap) Len() int           { return len(a) }
+func (a pairHeap) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a pairHeap) Less(i, j int) bool { return a[i][0]+a[i][1] > a[j][0]+a[j][1] }
+func (a *pairHeap) Push(x any)        { *a = append(*a, x.([]int)) }
+func (a *pairHeap) Pop() any          { l := len(*a); tmp := (*a)[l-1]; *a = (*a)[:l-1]; return tmp }
+
+func kSmallestPairs(nums1 []int, nums2 []int, k int) [][]int {
+	var hp pairHeap
+	for _, x := range nums1[:min(k, len(nums1))] {
+		for _, y := range nums2[:min(k, len(nums2))] {
+			heap.Push(&hp, []int{x, y})
+			if len(hp) > k {
+				heap.Pop(&hp)
+			}
+		}
+	}
+	return hp
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

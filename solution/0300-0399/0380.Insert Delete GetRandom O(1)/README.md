@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0380.Insert%20Delete%20GetRandom%20O%281%29/README.md
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+    - 数学
+    - 随机化
+---
+
+<!-- problem:start -->
+
 # [380. O(1) 时间插入、删除和获取随机元素](https://leetcode.cn/problems/insert-delete-getrandom-o1)
 
 [English Version](/solution/0300-0399/0380.Insert%20Delete%20GetRandom%20O%281%29/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>实现<code>RandomizedSet</code> 类：</p>
 
@@ -53,11 +67,13 @@ randomizedSet.getRandom(); // 由于 2 是集合中唯一的数字，getRandom �
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 动态列表**
+### 方法一：哈希表 + 动态列表
 
 我们定义一个动态列表 $q$，用于存储集合中的元素，定义一个哈希表 $d$，用于存储每个元素在 $q$ 中的下标。
 
@@ -71,13 +87,10 @@ randomizedSet.getRandom(); // 由于 2 是集合中唯一的数字，getRandom �
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class RandomizedSet:
-
     def __init__(self):
         self.d = {}
         self.q = []
@@ -110,9 +123,7 @@ class RandomizedSet:
 # param_3 = obj.getRandom()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class RandomizedSet {
@@ -158,13 +169,12 @@ class RandomizedSet {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class RandomizedSet {
 public:
     RandomizedSet() {
-
     }
 
     bool insert(int val) {
@@ -206,7 +216,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type RandomizedSet struct {
@@ -252,7 +262,7 @@ func (this *RandomizedSet) GetRandom() int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class RandomizedSet {
@@ -296,26 +306,24 @@ class RandomizedSet {
  */
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
-use std::collections::HashSet;
 use rand::Rng;
+use std::collections::HashSet;
 
 struct RandomizedSet {
-    list: HashSet<i32>
+    list: HashSet<i32>,
 }
-
 
 /**
  * `&self` means the method takes an immutable reference.
  * If you need a mutable reference, change it to `&mut self` instead.
  */
 impl RandomizedSet {
-
     fn new() -> Self {
         Self {
-            list: HashSet::new()
+            list: HashSet::new(),
         }
     }
 
@@ -332,17 +340,9 @@ impl RandomizedSet {
         *self.list.iter().collect::<Vec<&i32>>()[i]
     }
 }
-
-/**
- * Your RandomizedSet object will be instantiated and called as such:
- * let obj = RandomizedSet::new();
- * let ret_1: bool = obj.insert(val);
- * let ret_2: bool = obj.remove(val);
- * let ret_3: i32 = obj.get_random();
- */
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class RandomizedSet {
@@ -388,10 +388,8 @@ public class RandomizedSet {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

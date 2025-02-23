@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1615.Maximal%20Network%20Rank/README_EN.md
+rating: 1521
+source: Weekly Contest 210 Q2
+tags:
+    - Graph
+---
+
+<!-- problem:start -->
+
 # [1615. Maximal Network Rank](https://leetcode.com/problems/maximal-network-rank)
 
 [中文文档](/solution/1600-1699/1615.Maximal%20Network%20Rank/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an infrastructure of <code>n</code> cities with some number of <code>roads</code> connecting these cities. Each <code>roads[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that there is a bidirectional road between cities <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code>.</p>
 
@@ -53,26 +67,23 @@
 	<li>Each&nbsp;pair of cities has <strong>at most one</strong> road connecting them.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We can use a one-dimensional array $\textit{cnt}$ to record the degree of each city and a two-dimensional array $\textit{g}$ to record whether there is a road between each pair of cities. If there is a road between city $a$ and city $b$, then $\textit{g}[a][b] = \textit{g}[b][a] = 1$; otherwise, $\textit{g}[a][b] = \textit{g}[b][a] = 0$.
+
+Next, we enumerate each pair of cities $(a, b)$, where $a \lt b$, and calculate their network rank, which is $\textit{cnt}[a] + \textit{cnt}[b] - \textit{g}[a][b]$. The maximum value among these is the answer.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n^2)$. Here, $n$ is the number of cities.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-```python
-class Solution:
-    def maximalNetworkRank(self, n: int, roads: List[List[int]]) -> int:
-        g = defaultdict(set)
-        for a, b in roads:
-            g[a].add(b)
-            g[b].add(a)
-        ans = 0
-        for a in range(n):
-            for b in range(a + 1, n):
-                if (t := len(g[a]) + len(g[b]) - (a in g[b])) > ans:
-                    ans = t
-        return ans
-```
+#### Python3
 
 ```python
 class Solution:
@@ -86,7 +97,7 @@ class Solution:
         return max(cnt[a] + cnt[b] - g[a][b] for a in range(n) for b in range(a + 1, n))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -138,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximalNetworkRank(n int, roads [][]int) (ans int) {
@@ -160,21 +171,14 @@ func maximalNetworkRank(n int, roads [][]int) (ans int) {
 	}
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximalNetworkRank(n: number, roads: number[][]): number {
-    const g: number[][] = Array.from(new Array(n), () => new Array(n).fill(0));
-    const cnt: number[] = new Array(n).fill(0);
+    const g: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
+    const cnt: number[] = Array(n).fill(0);
     for (const [a, b] of roads) {
         g[a][b] = 1;
         g[b][a] = 1;
@@ -191,10 +195,8 @@ function maximalNetworkRank(n: number, roads: number[][]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

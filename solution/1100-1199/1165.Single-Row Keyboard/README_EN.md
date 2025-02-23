@@ -1,8 +1,23 @@
-# [1165. Single-Row Keyboard](https://leetcode.com/problems/single-row-keyboard)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1165.Single-Row%20Keyboard/README_EN.md
+rating: 1199
+source: Biweekly Contest 7 Q1
+tags:
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
+# [1165. Single-Row Keyboard 🔒](https://leetcode.com/problems/single-row-keyboard)
 
 [中文文档](/solution/1100-1199/1165.Single-Row%20Keyboard/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a special keyboard with <strong>all keys in a single row</strong>.</p>
 
@@ -37,11 +52,25 @@ Total time = 2 + 1 + 1 = 4.
 	<li><code>word[i]</code> is an English lowercase letter.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table or Array
+
+We can use a hash table or an array $pos$ of length $26$ to store the position of each character on the keyboard, where $pos[c]$ represents the position of character $c$ on the keyboard.
+
+Then we traverse the string $word$, using a variable $i$ to record the current position of the finger, initially $i = 0$. Each time, we calculate the position $j$ of the current character $c$ on the keyboard, and increase the answer by $|i - j|$, then update $i$ to $j$. Continue to traverse the next character until the entire string $word$ is traversed.
+
+After traversing the string $word$, we can get the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(C)$. Here, $n$ is the length of the string $word$, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -54,7 +83,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -74,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,7 +124,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func calculateTime(keyboard string, word string) (ans int) {
@@ -120,7 +149,7 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function calculateTime(keyboard: string, word: string): number {
@@ -139,10 +168,8 @@ function calculateTime(keyboard: string, word: string): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

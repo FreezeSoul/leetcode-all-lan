@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0585.Investments%20in%202016/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [585. Investments in 2016](https://leetcode.com/problems/investments-in-2016)
 
 [中文文档](/solution/0500-0599/0585.Investments%20in%202016/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Insurance</code></p>
 
@@ -16,7 +28,7 @@
 | lat         | float |
 | lon         | float |
 +-------------+-------+
-pid is the primary key column for this table.
+pid is the primary key (column with unique values) for this table.
 Each row of this table contains information about one policy where:
 pid is the policyholder&#39;s policy ID.
 tiv_2015 is the total investment value in 2015 and tiv_2016 is the total investment value in 2016.
@@ -26,16 +38,16 @@ lon is the longitude of the policy holder&#39;s city. It&#39;s guaranteed that l
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the sum of all total investment values in 2016 <code>tiv_2016</code>, for all policyholders who:</p>
+<p>Write a solution to report the sum of all total investment values in 2016 <code>tiv_2016</code>, for all policyholders who:</p>
 
 <ul>
 	<li>have the same <code>tiv_2015</code> value as one or more other policyholders, and</li>
-	<li>are not located in the same city like any other policyholder (i.e., the (<code>lat, lon</code>) attribute pairs must be unique).</li>
+	<li>are not located in the same city as any other policyholder (i.e., the (<code>lat, lon</code>) attribute pairs must be unique).</li>
 </ul>
 
 <p>Round <code>tiv_2016</code> to <strong>two decimal places</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -65,29 +77,35 @@ The second record does not meet any of the two criteria. Its tiv_2015 is not lik
 So, the result is the sum of tiv_2016 of the first and last record, which is 45.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-with t as (
-    select
-        tiv_2016,
-        count(pid) over(partition by tiv_2015) as cnt1,
-        count(pid) over(partition by concat(lat, lon)) as cnt2
-    from
-        Insurance
-)
-select
-    round(sum(TIV_2016), 2) tiv_2016
-from
-    t
-where
-    cnt1 != 1
-    and cnt2 = 1;
+WITH
+    T AS (
+        SELECT
+            tiv_2016,
+            COUNT(1) OVER (PARTITION BY tiv_2015) AS cnt1,
+            COUNT(1) OVER (PARTITION BY lat, lon) AS cnt2
+        FROM Insurance
+    )
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM T
+WHERE cnt1 > 1 AND cnt2 = 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

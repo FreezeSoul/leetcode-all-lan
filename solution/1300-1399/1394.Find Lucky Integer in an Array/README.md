@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1394.Find%20Lucky%20Integer%20in%20an%20Array/README.md
+rating: 1118
+source: 第 182 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1394. 找出数组中的幸运数](https://leetcode.cn/problems/find-lucky-integer-in-an-array)
 
 [English Version](/solution/1300-1399/1394.Find%20Lucky%20Integer%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在整数数组中，如果一个整数的出现频次和它的数值大小相等，我们就称这个整数为「幸运数」。</p>
 
@@ -59,11 +73,13 @@
 	<li><code>1 &lt;= arr[i] &lt;= 500</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 我们可以用哈希表或数组 $cnt$ 统计 $arr$ 中每个数字出现的次数，然后遍历 $cnt$，找到满足 $cnt[x] = x$ 的最大的 $x$ 即可。如果没有这样的 $x$，则返回 $-1$。
 
@@ -71,9 +87,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findLucky(arr []int) int {
@@ -148,7 +160,25 @@ func findLucky(arr []int) int {
 }
 ```
 
-### **PHP**
+#### TypeScript
+
+```ts
+function findLucky(arr: number[]): number {
+    const cnt = Array(510).fill(0);
+    for (const x of arr) {
+        ++cnt[x];
+    }
+    let ans = -1;
+    for (let x = 1; x < cnt.length; ++x) {
+        if (cnt[x] === x) {
+            ans = x;
+        }
+    }
+    return ans;
+}
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -163,35 +193,17 @@ class Solution {
         }
         $keys = array_keys($hashtable);
         for ($j = 0; $j < count($keys); $j++) {
-            if ($hashtable[$keys[$j]] == $keys[$j]) $max = max($max, $keys[$j]);
+            if ($hashtable[$keys[$j]] == $keys[$j]) {
+                $max = max($max, $keys[$j]);
+            }
         }
         return $max;
     }
 }
 ```
 
-### **TypeScript**
-
-```ts
-function findLucky(arr: number[]): number {
-    const cnt = new Array(510).fill(0);
-    for (const x of arr) {
-        ++cnt[x];
-    }
-    let ans = -1;
-    for (let x = 1; x < cnt.length; ++x) {
-        if (cnt[x] === x) {
-            ans = x;
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

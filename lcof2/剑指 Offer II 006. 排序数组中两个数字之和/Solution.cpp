@@ -1,23 +1,12 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& numbers, int target) {
-        int i = 0;
-        int j = numbers.size() - 1;
-        vector<int> res;
-
-        while (i < j) {
-            int sum = numbers[i] + numbers[j];
-            if (sum < target) {
-                i++;
-            } else if (sum > target) {
-                j--;
-            } else {
-                res.push_back(i);
-                res.push_back(j);
-                break;
+        for (int i = 0, n = numbers.size();; ++i) {
+            int x = target - numbers[i];
+            int j = lower_bound(numbers.begin() + i + 1, numbers.end(), x) - numbers.begin();
+            if (j < n && numbers[j] == x) {
+                return {i, j};
             }
         }
-
-        return res;
     }
 };

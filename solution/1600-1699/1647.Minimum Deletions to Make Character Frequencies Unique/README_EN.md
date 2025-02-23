@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1647.Minimum%20Deletions%20to%20Make%20Character%20Frequencies%20Unique/README_EN.md
+rating: 1509
+source: Weekly Contest 214 Q2
+tags:
+    - Greedy
+    - Hash Table
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1647. Minimum Deletions to Make Character Frequencies Unique](https://leetcode.com/problems/minimum-deletions-to-make-character-frequencies-unique)
 
 [中文文档](/solution/1600-1699/1647.Minimum%20Deletions%20to%20Make%20Character%20Frequencies%20Unique/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A string <code>s</code> is called <strong>good</strong> if there are no two different characters in <code>s</code> that have the same <strong>frequency</strong>.</p>
 
@@ -44,11 +61,27 @@ Note that we only care about characters that are still in the string at the end 
 	<li><code>s</code>&nbsp;contains only lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Array + Sorting
+
+First, we use an array $\textit{cnt}$ of length $26$ to count the occurrences of each letter in the string $s$.
+
+Then, we sort the array $\textit{cnt}$ in descending order. We define a variable $\textit{pre}$ to record the current number of occurrences of the letter.
+
+Next, we traverse each element $v$ in the array $\textit{cnt}$. If the current $\textit{pre}$ is $0$, we directly add $v$ to the answer. Otherwise, if $v \geq \textit{pre}$, we add $v - \textit{pre} + 1$ to the answer and decrement $\textit{pre}$ by $1$. Otherwise, we directly update $\textit{pre}$ to $v$. Then, we continue to the next element.
+
+After traversing, we return the answer.
+
+The time complexity is $O(n + |\Sigma| \times \log |\Sigma|)$, and the space complexity is $O(|\Sigma|)$. Here, $n$ is the length of the string $s$, and $|\Sigma|$ is the size of the alphabet. In this problem, $|\Sigma| = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,20 +99,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def minDeletions(self, s: str) -> int:
-        cnt = Counter(s)
-        vals = sorted(cnt.values(), reverse=True)
-        ans = 0
-        for i in range(1, len(vals)):
-            while vals[i] >= vals[i - 1] and vals[i] > 0:
-                vals[i] -= 1
-                ans += 1
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,6 +120,121 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minDeletions(string s) {
+        vector<int> cnt(26);
+        for (char& c : s) ++cnt[c - 'a'];
+        sort(cnt.rbegin(), cnt.rend());
+        int ans = 0;
+        for (int i = 1; i < 26; ++i) {
+            while (cnt[i] >= cnt[i - 1] && cnt[i] > 0) {
+                --cnt[i];
+                ++ans;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func minDeletions(s string) (ans int) {
+	cnt := make([]int, 26)
+	for _, c := range s {
+		cnt[c-'a']++
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(cnt)))
+	for i := 1; i < 26; i++ {
+		for cnt[i] >= cnt[i-1] && cnt[i] > 0 {
+			cnt[i]--
+			ans++
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function minDeletions(s: string): number {
+    let map = {};
+    for (let c of s) {
+        map[c] = (map[c] || 0) + 1;
+    }
+    let ans = 0;
+    let vals: number[] = Object.values(map);
+    vals.sort((a, b) => a - b);
+    for (let i = 1; i < vals.length; ++i) {
+        while (vals[i] > 0 && i != vals.indexOf(vals[i])) {
+            --vals[i];
+            ++ans;
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn min_deletions(s: String) -> i32 {
+        let mut cnt = vec![0; 26];
+        let mut ans = 0;
+
+        for c in s.chars() {
+            cnt[((c as u8) - ('a' as u8)) as usize] += 1;
+        }
+
+        cnt.sort_by(|&lhs, &rhs| rhs.cmp(&lhs));
+
+        for i in 1..26 {
+            while cnt[i] >= cnt[i - 1] && cnt[i] > 0 {
+                cnt[i] -= 1;
+                ans += 1;
+            }
+        }
+
+        ans
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        cnt = Counter(s)
+        vals = sorted(cnt.values(), reverse=True)
+        ans = 0
+        for i in range(1, len(vals)):
+            while vals[i] >= vals[i - 1] and vals[i] > 0:
+                vals[i] -= 1
+                ans += 1
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -126,26 +261,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int minDeletions(string s) {
-        vector<int> cnt(26);
-        for (char& c : s) ++cnt[c - 'a'];
-        sort(cnt.rbegin(), cnt.rend());
-        int ans = 0;
-        for (int i = 1; i < 26; ++i) {
-            while (cnt[i] >= cnt[i - 1] && cnt[i] > 0) {
-                --cnt[i];
-                ++ans;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -170,24 +286,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func minDeletions(s string) (ans int) {
-	cnt := make([]int, 26)
-	for _, c := range s {
-		cnt[c-'a']++
-	}
-	sort.Sort(sort.Reverse(sort.IntSlice(cnt)))
-	for i := 1; i < 26; i++ {
-		for cnt[i] >= cnt[i-1] && cnt[i] > 0 {
-			cnt[i]--
-			ans++
-		}
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func minDeletions(s string) (ans int) {
@@ -211,31 +310,8 @@ func minDeletions(s string) (ans int) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function minDeletions(s: string): number {
-    let map = {};
-    for (let c of s) {
-        map[c] = (map[c] || 0) + 1;
-    }
-    let ans = 0;
-    let vals: number[] = Object.values(map);
-    vals.sort((a, b) => a - b);
-    for (let i = 1; i < vals.length; ++i) {
-        while (vals[i] > 0 && i != vals.indexOf(vals[i])) {
-            --vals[i];
-            ++ans;
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1833.Maximum%20Ice%20Cream%20Bars/README_EN.md
+rating: 1252
+source: Weekly Contest 237 Q2
+tags:
+    - Greedy
+    - Array
+    - Counting Sort
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1833. Maximum Ice Cream Bars](https://leetcode.com/problems/maximum-ice-cream-bars)
 
 [中文文档](/solution/1800-1899/1833.Maximum%20Ice%20Cream%20Bars/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>It is a sweltering summer day, and a boy wants to buy some ice cream bars.</p>
 
@@ -49,13 +66,23 @@
 	<li><code>1 &lt;= coins &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Pay attention to the data range. The question can easily mislead us to use the 01 backpack (it will overtime). In fact, this question is a simple "greedy problem" (choose low-priced ice cream first)
+<!-- solution:start -->
+
+### Solution 1: Greedy + Sorting
+
+To buy as many ice creams as possible, and they can be purchased in any order, we should prioritize choosing ice creams with lower prices.
+
+Sort the $costs$ array, and then start buying from the ice cream with the lowest price, one by one, until it is no longer possible to buy, and return the number of ice creams that can be bought.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$, where $n$ is the length of the $costs$ array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +95,7 @@ class Solution:
         return len(costs)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxIceCream(costs []int, coins int) int {
@@ -118,7 +145,23 @@ func maxIceCream(costs []int, coins int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function maxIceCream(costs: number[], coins: number): number {
+    costs.sort((a, b) => a - b);
+    const n = costs.length;
+    for (let i = 0; i < n; ++i) {
+        if (coins < costs[i]) {
+            return i;
+        }
+        coins -= costs[i];
+    }
+    return n;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -139,10 +182,8 @@ var maxIceCream = function (costs, coins) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

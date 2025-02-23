@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2136.Earliest%20Possible%20Day%20of%20Full%20Bloom/README_EN.md
+rating: 2033
+source: Weekly Contest 275 Q4
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2136. Earliest Possible Day of Full Bloom](https://leetcode.com/problems/earliest-possible-day-of-full-bloom)
 
 [中文文档](/solution/2100-2199/2136.Earliest%20Possible%20Day%20of%20Full%20Bloom/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have <code>n</code> flower seeds. Every seed must be planted first before it can begin to grow, then bloom. Planting a seed takes time and so does the growth of a seed. You are given two <strong>0-indexed</strong> integer arrays <code>plantTime</code> and <code>growTime</code>, of length <code>n</code> each:</p>
 
@@ -61,101 +77,128 @@ Thus, on day 2, all the seeds are blooming.
 	<li><code>1 &lt;= plantTime[i], growTime[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Sorting
+
+According to the problem description, we know that only one seed can be planted per day. Therefore, regardless of the planting order, the sum of the planting times for all seeds is always equal to $\sum_{i=0}^{n-1} plantTime[i]$. To make all seeds bloom as soon as possible, we should prioritize planting the seeds with the longest growth time. Hence, we can sort all seeds by their growth time in descending order and then plant them in sequence.
+
+The time complexity is $O(n \log n)$, and the space complexity is $O(n)$, where $n$ is the number of seeds.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def earliestFullBloom(self, plantTime: List[int], growTime: List[int]) -> int:
         ans = t = 0
-        for a, b in sorted(zip(plantTime, growTime), key=lambda x: -x[1]):
-            t += a
-            ans = max(ans, t + b)
+        for pt, gt in sorted(zip(plantTime, growTime), key=lambda x: -x[1]):
+            t += pt
+            ans = max(ans, t + gt)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int earliestFullBloom(int[] plantTime, int[] growTime) {
         int n = plantTime.length;
-        int[][] arr = new int[n][2];
-        for (int i = 0; i < n; ++i) {
-            arr[i] = new int[] {plantTime[i], growTime[i]};
+        Integer[] idx = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            idx[i] = i;
         }
-        Arrays.sort(arr, (a, b) -> b[1] - a[1]);
-        int ans = 0;
-        int t = 0;
-        for (int[] e : arr) {
-            t += e[0];
-            ans = Math.max(ans, t + e[1]);
+        Arrays.sort(idx, (i, j) -> growTime[j] - growTime[i]);
+        int ans = 0, t = 0;
+        for (int i : idx) {
+            t += plantTime[i];
+            ans = Math.max(ans, t + growTime[i]);
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int earliestFullBloom(vector<int>& plantTime, vector<int>& growTime) {
         int n = plantTime.size();
-        vector<pair<int, int>> arr;
-        for (int i = 0; i < n; ++i) arr.push_back({-growTime[i], plantTime[i]});
-        sort(arr.begin(), arr.end());
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&](int i, int j) { return growTime[j] < growTime[i]; });
         int ans = 0, t = 0;
-        for (auto [a, b] : arr) {
-            t += b;
-            ans = max(ans, t - a);
+        for (int i : idx) {
+            t += plantTime[i];
+            ans = max(ans, t + growTime[i]);
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func earliestFullBloom(plantTime []int, growTime []int) int {
-	arr := [][]int{}
-	for i, a := range plantTime {
-		arr = append(arr, []int{a, growTime[i]})
+func earliestFullBloom(plantTime []int, growTime []int) (ans int) {
+	n := len(plantTime)
+	idx := make([]int, n)
+	for i := range idx {
+		idx[i] = i
 	}
-	sort.Slice(arr, func(i, j int) bool {
-		return arr[i][1] > arr[j][1]
-	})
-	ans, t := 0, 0
-	for _, e := range arr {
-		t += e[0]
-		ans = max(ans, t+e[1])
+	sort.Slice(idx, func(i, j int) bool { return growTime[idx[j]] < growTime[idx[i]] })
+	t := 0
+	for _, i := range idx {
+		t += plantTime[i]
+		ans = max(ans, t+growTime[i])
 	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function earliestFullBloom(plantTime: number[], growTime: number[]): number {
+    const n = plantTime.length;
+    const idx: number[] = Array.from({ length: n }, (_, i) => i);
+    idx.sort((i, j) => growTime[j] - growTime[i]);
+    let [ans, t] = [0, 0];
+    for (const i of idx) {
+        t += plantTime[i];
+        ans = Math.max(ans, t + growTime[i]);
+    }
+    return ans;
+}
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn earliest_full_bloom(plant_time: Vec<i32>, grow_time: Vec<i32>) -> i32 {
+        let mut idx: Vec<usize> = (0..plant_time.len()).collect();
+        idx.sort_by_key(|&i| -&grow_time[i]);
+        let mut ans = 0;
+        let mut t = 0;
+        for &i in &idx {
+            t += plant_time[i];
+            ans = ans.max(t + grow_time[i]);
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

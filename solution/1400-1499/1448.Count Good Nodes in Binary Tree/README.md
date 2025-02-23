@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1448.Count%20Good%20Nodes%20in%20Binary%20Tree/README.md
+rating: 1360
+source: 第 26 场双周赛 Q3
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1448. 统计二叉树中好节点的数目](https://leetcode.cn/problems/count-good-nodes-in-binary-tree)
 
 [English Version](/solution/1400-1499/1448.Count%20Good%20Nodes%20in%20Binary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵根为&nbsp;<code>root</code>&nbsp;的二叉树，请你返回二叉树中好节点的数目。</p>
 
@@ -47,17 +62,31 @@
 	<li>每个节点权值的范围是&nbsp;<code>[-10^4, 10^4]</code>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-DFS，利用 mx 变量记录已经访问过的节点的最大值，与当前将要访问的节点 root 比较大小。
+### 方法一：DFS
+
+我们设计一个函数 $dfs(root, mx)$，表示从当前节点 $root$ 开始搜索好节点，其中 $mx$ 表示从根节点到当前节点的路径（不包括当前节点）上的最大值。
+
+函数 $dfs(root, mx)$ 的执行逻辑如下：
+
+如果 $root$ 为空，说明搜索结束，直接返回；
+
+否则，我们判断 $root.val$ 与 $mx$ 的大小关系。如果 $mx \leq root.val$，说明 $root$ 是好节点，答案加一，并且我们需要更新 $mx$ 的值为 $root.val$。
+
+接下来，我们递归调用 $dfs(root.left, mx)$ 和 $dfs(root.right, mx)$。
+
+在主函数中，我们调用 $dfs(root, -10^6)$，其中 $-10^6$ 表示负无穷，因为题目中说明了每个节点权值的范围是 $[-10^4, 10^4]$，所以 $-10^6$ 肯定是一个比所有节点权值都小的值，这样就能保证 $dfs(root, -10^6)$ 一定会把根节点 $root$ 算作好节点。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -68,7 +97,7 @@ DFS，利用 mx 变量记录已经访问过的节点的最大值，与当前将�
 #         self.right = right
 class Solution:
     def goodNodes(self, root: TreeNode) -> int:
-        def dfs(root, mx):
+        def dfs(root: TreeNode, mx: int):
             if root is None:
                 return
             nonlocal ans
@@ -79,13 +108,11 @@ class Solution:
             dfs(root.right, mx)
 
         ans = 0
-        dfs(root, -10000)
+        dfs(root, -1000000)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -104,11 +131,10 @@ class Solution:
  * }
  */
 class Solution {
-    private int ans;
+    private int ans = 0;
 
     public int goodNodes(TreeNode root) {
-        ans = 0;
-        dfs(root, -10000);
+        dfs(root, -100000);
         return ans;
     }
 
@@ -126,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -142,27 +168,26 @@ class Solution {
  */
 class Solution {
 public:
-    int ans;
-
     int goodNodes(TreeNode* root) {
-        ans = 0;
-        dfs(root, -10000);
+        int ans = 0;
+        function<void(TreeNode*, int)> dfs = [&](TreeNode* root, int mx) {
+            if (!root) {
+                return;
+            }
+            if (mx <= root->val) {
+                ++ans;
+                mx = root->val;
+            }
+            dfs(root->left, mx);
+            dfs(root->right, mx);
+        };
+        dfs(root, -1e6);
         return ans;
-    }
-
-    void dfs(TreeNode* root, int mx) {
-        if (!root) return;
-        if (mx <= root->val) {
-            ++ans;
-            mx = root->val;
-        }
-        dfs(root->left, mx);
-        dfs(root->right, mx);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -173,9 +198,8 @@ public:
  *     Right *TreeNode
  * }
  */
-func goodNodes(root *TreeNode) int {
-	ans := 0
-	var dfs func(root *TreeNode, mx int)
+func goodNodes(root *TreeNode) (ans int) {
+	var dfs func(*TreeNode, int)
 	dfs = func(root *TreeNode, mx int) {
 		if root == nil {
 			return
@@ -187,15 +211,48 @@ func goodNodes(root *TreeNode) int {
 		dfs(root.Left, mx)
 		dfs(root.Right, mx)
 	}
-	dfs(root, -10000)
-	return ans
+	dfs(root, -10001)
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
 
+function goodNodes(root: TreeNode | null): number {
+    let ans = 0;
+    const dfs = (root: TreeNode | null, mx: number) => {
+        if (!root) {
+            return;
+        }
+        if (mx <= root.val) {
+            ++ans;
+            mx = root.val;
+        }
+        dfs(root.left, mx);
+        dfs(root.right, mx);
+    };
+    dfs(root, -1e6);
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9810-%20II.%20%E9%9D%92%E8%9B%99%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 10- II. 青蛙跳台阶问题](https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 <code>n</code>&nbsp;级的台阶总共有多少种跳法。</p>
 
@@ -33,9 +43,13 @@
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：递推**
+<!-- solution:start -->
+
+### 方法一：递推
 
 青蛙想上第 $n$ 级台阶，可从第 $n-1$ 级台阶跳一级上去，也可从第 $n-2$ 级台阶跳两级上去，即 $f(n) = f(n-1) + f(n-2)$。这实际上可以转换为斐波那契数列的问题。
 
@@ -45,7 +59,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +70,7 @@ class Solution:
         return a
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +86,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -89,7 +103,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numWays(n int) int {
@@ -101,7 +115,34 @@ func numWays(n int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function numWays(n: number): number {
+    let a = 0;
+    let b = 1;
+    for (let i = 0; i < n; i++) {
+        [a, b] = [b, (a + b) % 1000000007];
+    }
+    return b;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn num_ways(n: i32) -> i32 {
+        let mut tup = (0, 1);
+        for _ in 0..n {
+            tup = (tup.1, (tup.0 + tup.1) % 1000000007);
+        }
+        tup.1
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -117,34 +158,7 @@ var numWays = function (n) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function numWays(n: number): number {
-    let a = 0;
-    let b = 1;
-    for (let i = 0; i < n; i++) {
-        [a, b] = [b, (a + b) % 1000000007];
-    }
-    return b;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn num_ways(n: i32) -> i32 {
-        let mut tup = (0, 1);
-        for _ in 0..n {
-            tup = (tup.1, (tup.0 + tup.1) % 1000000007);
-        }
-        tup.1
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -160,10 +174,27 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
-
+```swift
+class Solution {
+    func numWays(_ n: Int) -> Int {
+        var a = 1
+        var b = 1
+        var count = n
+        while count > 0 {
+            let c = (a + b) % 1000000007
+            a = b
+            b = c
+            count -= 1
+        }
+        return a
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

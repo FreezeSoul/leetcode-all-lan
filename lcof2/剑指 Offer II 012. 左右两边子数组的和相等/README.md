@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20012.%20%E5%B7%A6%E5%8F%B3%E4%B8%A4%E8%BE%B9%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E5%92%8C%E7%9B%B8%E7%AD%89/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 012. 左右两边子数组的和相等](https://leetcode.cn/problems/tvdfij)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code> ，请计算数组的 <strong>中心下标 </strong>。</p>
 
@@ -56,97 +63,191 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 724&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/find-pivot-index/">https://leetcode.cn/problems/find-pivot-index/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用前缀和进行预处理，避免重复计算
+### 方法一：前缀和
+
+我们定义变量 $left$ 表示数组 $nums$ 中下标 $i$ 左侧元素之和，变量 $right$ 表示数组 $nums$ 中下标 $i$ 右侧元素之和。初始时 $left = 0$, $right = \sum_{i = 0}^{n - 1} nums[i]$。
+
+遍历数组 $nums$，对于当前遍历到的数字 $x$，我们更新 $right = right - x$，此时如果 $left=right$，说明当前下标 $i$ 就是中间位置，直接返回即可。否则，我们更新 $left = left + x$，继续遍历下一个数字。
+
+遍历结束，如果没有找到中间位置，返回 $-1$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 $nums$ 的长度。
+
+相似题目：
+
+-   [1991. 找到数组的中间位置](https://github.com/doocs/leetcode/blob/main/solution/1900-1999/1991.Find%20the%20Middle%20Index%20in%20Array/README.md)
+-   [2574. 左右元素和的差值](https://github.com/doocs/leetcode/blob/main/solution/2500-2599/2574.Left%20and%20Right%20Sum%20Differences/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def pivotIndex(self, nums: List[int]) -> int:
-        n = len(nums)
-        sum = [0 for _ in range(n + 1)]
-        for i in range(1, n + 1):
-            sum[i] = sum[i - 1] + nums[i - 1]
-        for i in range(0, n):
-            if sum[i] == sum[n] - sum[i + 1]:
+        left, right = 0, sum(nums)
+        for i, x in enumerate(nums):
+            right -= x
+            if left == right:
                 return i
+            left += x
         return -1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int pivotIndex(int[] nums) {
-        int n = nums.length;
-        int[] sum = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            sum[i] = sum[i - 1] + nums[i - 1];
+        int left = 0, right = 0;
+        for (int x : nums) {
+            right += x;
         }
-        for (int i = 0; i < n; i++) {
-            if (sum[i] == sum[n] - sum[i + 1]) {
+        int n = nums.length;
+        for (int i = 0; i < n; ++i) {
+            right -= nums[i];
+            if (left == right) {
                 return i;
             }
+            left += nums[i];
         }
         return -1;
     }
 }
 ```
 
-### **Go**
-
-```go
-func pivotIndex(nums []int) int {
-	n := len(nums)
-	sum := make([]int, n+1)
-	for i := 1; i <= n; i++ {
-		sum[i] = sum[i-1] + nums[i-1]
-	}
-	for i := 0; i < n; i++ {
-		if sum[i] == sum[n]-sum[i+1] {
-			return i
-		}
-	}
-	return -1
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int pivotIndex(vector<int>& nums) {
-        int sum = 0;
-        int total = 0;
-        for (int num : nums)
-            sum += num;
-
-        for (int i = 0; i < nums.size(); i++) {
-            total += nums[i];
-            if (total - nums[i] == sum - total)
+        int left = 0;
+        int right = accumulate(nums.begin(), nums.end(), 0);
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            right -= nums[i];
+            if (left == right) {
                 return i;
+            }
+            left += nums[i];
         }
-
         return -1;
     }
 };
 ```
 
-### **...**
+#### Go
 
+```go
+func pivotIndex(nums []int) int {
+	left, right := 0, 0
+	for _, x := range nums {
+		right += x
+	}
+	for i, x := range nums {
+		right -= x
+		if left == right {
+			return i
+		}
+		left += x
+	}
+	return -1
+}
 ```
 
+#### TypeScript
+
+```ts
+function pivotIndex(nums: number[]): number {
+    let left = 0;
+    let right = nums.reduce((a, b) => a + b, 0);
+    const n = nums.length;
+    for (let i = 0; i < n; ++i) {
+        right -= nums[i];
+        if (left === right) {
+            return i;
+        }
+        left += nums[i];
+    }
+    return -1;
+}
+```
+
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer
+     */
+    function pivotIndex($nums) {
+        $left = 0;
+        $right = array_sum($nums);
+        for ($i = 0; $i < count($nums); $i++) {
+            $right -= $nums[$i];
+            if ($left == $right) {
+                return $i;
+            }
+            $left += $nums[$i];
+        }
+        return -1;
+    }
+}
+```
+
+#### C
+
+```c
+int pivotIndex(int* nums, int numsSize) {
+    int left, right;
+    left = 0;
+    right = 0;
+
+    for (int i = 0; i < numsSize; i++) {
+        right += nums[i];
+    }
+
+    for (int i = 0; i < numsSize; i++) {
+        right -= nums[i];
+        if (right == left)
+            return i;
+        left += nums[i];
+    }
+
+    return -1;
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    func pivotIndex(_ nums: [Int]) -> Int {
+        var leftSum = 0
+        var rightSum = nums.reduce(0, +)
+
+        for i in 0..<nums.count {
+            rightSum -= nums[i]
+            if leftSum == rightSum {
+                return i
+            }
+            leftSum += nums[i]
+        }
+        return -1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

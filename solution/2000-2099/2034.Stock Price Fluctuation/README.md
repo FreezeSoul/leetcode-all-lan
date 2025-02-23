@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2034.Stock%20Price%20Fluctuation/README.md
+rating: 1831
+source: 第 262 场周赛 Q3
+tags:
+    - 设计
+    - 哈希表
+    - 数据流
+    - 有序集合
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2034. 股票价格波动](https://leetcode.cn/problems/stock-price-fluctuation)
 
 [English Version](/solution/2000-2099/2034.Stock%20Price%20Fluctuation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一支股票价格的数据流。数据流中每一条记录包含一个 <strong>时间戳</strong>&nbsp;和该时间点股票对应的 <strong>价格</strong>&nbsp;。</p>
 
@@ -62,46 +78,55 @@ stockPrice.minimum();     // 返回 2 ，最低价格时间戳为 4 ，价格为
 	<li><code>current</code>，<code>maximum</code>&nbsp;和&nbsp;<code>minimum</code>&nbsp;被调用时，<code>update</code>&nbsp;操作 <strong>至少</strong>&nbsp;已经被调用过 <strong>一次</strong>&nbsp;。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：哈希表 + 有序集合
+
+我们定义以下几个数据结构或变量，其中：
+
+-   `d`：表示一个哈希表，用于存储时间戳和对应的价格；
+-   `ls`：表示一个有序集合，用于存储所有的价格；
+-   `last`：表示最后一次更新的时间戳。
+
+那么，我们可以得到以下几个操作：
+
+-   `update(timestamp, price)`：更新时间戳 `timestamp` 对应的价格为 `price`。如果 `timestamp` 已经存在，那么我们需要先将其对应的价格从有序集合中删除，再将其更新为 `price`。否则，我们直接将其更新为 `price`。然后，我们需要更新 `last` 为 `max(last, timestamp)`。时间复杂度为 $O(\log n)$。
+-   `current()`：返回 `last` 对应的价格。时间复杂度为 $O(1)$。
+-   `maximum()`：返回有序集合中的最大值。时间复杂度为 $O(\log n)$。
+-   `minimum()`：返回有序集合中的最小值。时间复杂度为 $O(\log n)$。
+
+空间复杂度为 $O(n)$。其中，$n$ 为 `update` 操作的次数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedDict
-
-
 class StockPrice:
     def __init__(self):
-        self.last_ts = 0
-        self.mp = {}
-        self.counter = SortedDict()
+        self.d = {}
+        self.ls = SortedList()
+        self.last = 0
 
     def update(self, timestamp: int, price: int) -> None:
-        if timestamp in self.mp:
-            old_price = self.mp[timestamp]
-            self.counter[old_price] -= 1
-            if self.counter[old_price] == 0:
-                del self.counter[old_price]
-        if price not in self.counter:
-            self.counter[price] = 0
-        self.counter[price] += 1
-        self.mp[timestamp] = price
-        self.last_ts = max(self.last_ts, timestamp)
+        if timestamp in self.d:
+            self.ls.remove(self.d[timestamp])
+        self.d[timestamp] = price
+        self.ls.add(price)
+        self.last = max(self.last, timestamp)
 
     def current(self) -> int:
-        return self.mp[self.last_ts]
+        return self.d[self.last]
 
     def maximum(self) -> int:
-        return self.counter.keys()[-1]
+        return self.ls[-1]
 
     def minimum(self) -> int:
-        return self.counter.keys()[0]
+        return self.ls[0]
 
 
 # Your StockPrice object will be instantiated and called as such:
@@ -112,42 +137,39 @@ class StockPrice:
 # param_4 = obj.minimum()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class StockPrice {
-    private int lastTs;
-    private Map<Integer, Integer> mp = new HashMap<>();
-    private TreeMap<Integer, Integer> counter = new TreeMap<>();
+    private Map<Integer, Integer> d = new HashMap<>();
+    private TreeMap<Integer, Integer> ls = new TreeMap<>();
+    private int last;
 
     public StockPrice() {
     }
 
     public void update(int timestamp, int price) {
-        if (mp.containsKey(timestamp)) {
-            int oldPrice = mp.get(timestamp);
-            counter.put(oldPrice, counter.get(oldPrice) - 1);
-            if (counter.get(oldPrice) == 0) {
-                counter.remove(oldPrice);
+        if (d.containsKey(timestamp)) {
+            int old = d.get(timestamp);
+            if (ls.merge(old, -1, Integer::sum) == 0) {
+                ls.remove(old);
             }
         }
-        mp.put(timestamp, price);
-        counter.put(price, counter.getOrDefault(price, 0) + 1);
-        lastTs = Math.max(lastTs, timestamp);
+        d.put(timestamp, price);
+        ls.merge(price, 1, Integer::sum);
+        last = Math.max(last, timestamp);
     }
 
     public int current() {
-        return mp.get(lastTs);
+        return d.get(last);
     }
 
     public int maximum() {
-        return counter.lastKey();
+        return ls.lastKey();
     }
 
     public int minimum() {
-        return counter.firstKey();
+        return ls.firstKey();
     }
 }
 
@@ -161,40 +183,39 @@ class StockPrice {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class StockPrice {
 public:
-    int lastTs;
-    unordered_map<int, int> mp;
-    map<int, int> counter;
-
     StockPrice() {
     }
 
     void update(int timestamp, int price) {
-        if (mp.count(timestamp)) {
-            int oldPrice = mp[timestamp];
-            --counter[oldPrice];
-            if (counter[oldPrice] == 0) counter.erase(oldPrice);
+        if (d.count(timestamp)) {
+            ls.erase(ls.find(d[timestamp]));
         }
-        mp[timestamp] = price;
-        ++counter[price];
-        lastTs = max(lastTs, timestamp);
+        d[timestamp] = price;
+        ls.insert(price);
+        last = max(last, timestamp);
     }
 
     int current() {
-        return mp[lastTs];
+        return d[last];
     }
 
     int maximum() {
-        return counter.rbegin()->first;
+        return *ls.rbegin();
     }
 
     int minimum() {
-        return counter.begin()->first;
+        return *ls.begin();
     }
+
+private:
+    unordered_map<int, int> d;
+    multiset<int> ls;
+    int last = 0;
 };
 
 /**
@@ -207,56 +228,54 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type StockPrice struct {
-	lastTs  int
-	mp      map[int]int
-	counter *redblacktree.Tree
+	d    map[int]int
+	ls   *redblacktree.Tree
+	last int
 }
 
 func Constructor() StockPrice {
 	return StockPrice{
-		mp:      make(map[int]int),
-		counter: redblacktree.NewWithIntComparator(),
+		d:    make(map[int]int),
+		ls:   redblacktree.NewWithIntComparator(),
+		last: 0,
 	}
 }
 
 func (this *StockPrice) Update(timestamp int, price int) {
-	if timestamp > this.lastTs {
-		this.lastTs = timestamp
-	}
-	if old, ok := this.mp[timestamp]; ok {
-		cnt := getInt(this.counter, old)
-		if cnt == 1 {
-			this.counter.Remove(old)
+	merge := func(rbt *redblacktree.Tree, key, value int) {
+		if v, ok := rbt.Get(key); ok {
+			nxt := v.(int) + value
+			if nxt == 0 {
+				rbt.Remove(key)
+			} else {
+				rbt.Put(key, nxt)
+			}
 		} else {
-			this.counter.Put(old, cnt-1)
+			rbt.Put(key, value)
 		}
 	}
-	this.mp[timestamp] = price
-	this.counter.Put(price, getInt(this.counter, price)+1)
+	if v, ok := this.d[timestamp]; ok {
+		merge(this.ls, v, -1)
+	}
+	this.d[timestamp] = price
+	merge(this.ls, price, 1)
+	this.last = max(this.last, timestamp)
 }
 
 func (this *StockPrice) Current() int {
-	return this.mp[this.lastTs]
+	return this.d[this.last]
 }
 
 func (this *StockPrice) Maximum() int {
-	return this.counter.Right().Key.(int)
+	return this.ls.Right().Key.(int)
 }
 
 func (this *StockPrice) Minimum() int {
-	return this.counter.Left().Key.(int)
-}
-
-func getInt(rbt *redblacktree.Tree, key int) int {
-	val, found := rbt.Get(key)
-	if !found {
-		return 0
-	}
-	return val.(int)
+	return this.ls.Left().Key.(int)
 }
 
 /**
@@ -269,10 +288,8 @@ func getInt(rbt *redblacktree.Tree, key int) int {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

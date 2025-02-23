@@ -1,10 +1,24 @@
-# [1660. 纠正二叉树](https://leetcode.cn/problems/correct-a-binary-tree)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1660.Correct%20a%20Binary%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 哈希表
+    - 二叉树
+---
+
+<!-- problem:start -->
+
+# [1660. 纠正二叉树 🔒](https://leetcode.cn/problems/correct-a-binary-tree)
 
 [English Version](/solution/1600-1699/1660.Correct%20a%20Binary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你有一棵二叉树，这棵二叉树有个小问题，其中<strong>有且只有一个</strong>无效节点，它的右子节点错误地指向了与其在<strong>同一层</strong>且在其<strong>右侧</strong>的一个其他节点。</p>
 
@@ -58,11 +72,13 @@
 	<li><code>fromNode.right</code> 在测试用例的树中建立后为 <code>null</code> 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们设计一个函数 $dfs(root)$，用于处理以 $root$ 为根的子树。如果 $root$ 为 $null$ 或者 $root.right$ 已经被访问过，说明 $root$ 为无效节点，返回 $null$。否则，递归处理 $root.right$ 和 $root.left$，并返回 $root$。
 
@@ -72,9 +88,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -97,9 +111,7 @@ class Solution:
         return dfs(root)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -136,7 +148,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -168,7 +180,7 @@ public:
 };
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -200,10 +212,8 @@ var correctBinaryTree = function (root) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

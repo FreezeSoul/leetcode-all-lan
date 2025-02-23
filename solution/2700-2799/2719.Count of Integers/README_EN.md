@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2719.Count%20of%20Integers/README_EN.md
+rating: 2354
+source: Weekly Contest 348 Q4
+tags:
+    - Math
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [2719. Count of Integers](https://leetcode.com/problems/count-of-integers)
 
 [中文文档](/solution/2700-2799/2719.Count%20of%20Integers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two numeric strings <code>num1</code> and <code>num2</code> and two integers <code>max_sum</code> and <code>min_sum</code>. We denote an integer <code>x</code> to be <em>good</em> if:</p>
 
@@ -19,7 +35,7 @@
 <p><strong class="example">Example 1:</strong></p>
 
 <pre>
-<strong>Input:</strong> num1 = &quot;1&quot;, num2 = &quot;12&quot;, min_num = 1, max_num = 8
+<strong>Input:</strong> num1 = &quot;1&quot;, num2 = &quot;12&quot;, <code>min_sum</code> = 1, max_sum = 8
 <strong>Output:</strong> 11
 <strong>Explanation:</strong> There are 11 integers whose sum of digits lies between 1 and 8 are 1,2,3,4,5,6,7,8,10,11, and 12. Thus, we return 11.
 </pre>
@@ -27,7 +43,7 @@
 <p><strong class="example">Example 2:</strong></p>
 
 <pre>
-<strong>Input:</strong> num1 = &quot;1&quot;, num2 = &quot;5&quot;, min_num = 1, max_num = 5
+<strong>Input:</strong> num1 = &quot;1&quot;, num2 = &quot;5&quot;, <code>min_sum</code> = 1, max_sum = 5
 <strong>Output:</strong> 5
 <strong>Explanation:</strong> The 5 integers whose sum of digits lies between 1 and 5 are 1,2,3,4, and 5. Thus, we return 5.
 </pre>
@@ -40,11 +56,29 @@
 	<li><code>1 &lt;= min_sum &lt;= max_sum &lt;= 400</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Digit DP
+
+The problem is actually asking for the number of integers in the range $[num1,..num2]$ whose digit sum is in the range $[min\_sum,..max\_sum]$. For this kind of range $[l,..r]$ problem, we can consider transforming it into finding the answers for $[1,..r]$ and $[1,..l-1]$, and then subtracting the latter from the former.
+
+For the answer to $[1,..r]$, we can use digit DP to solve it. We design a function $dfs(pos, s, limit)$, which represents the number of schemes when we are currently processing the $pos$th digit, the digit sum is $s$, and whether the current number has an upper limit $limit$. Here, $pos$ is enumerated from high to low.
+
+For $dfs(pos, s, limit)$, we can enumerate the value of the current digit $i$, and then recursively calculate $dfs(pos+1, s+i, limit \bigcap  i==up)$, where $up$ represents the upper limit of the current digit. If $limit$ is true, then $up$ is the upper limit of the current digit, otherwise $up$ is $9$. If $pos$ is greater than or equal to the length of $num$, then we can judge whether $s$ is in the range $[min\_sum,..max\_sum]$. If it is, return $1$, otherwise return $0$.
+
+The time complexity is $O(10 \times n \times max\_sum)$, and the space complexity is $O(n \times max\_sum)$. Here, $n$ represents the length of $num$.
+
+Similar problems:
+
+-   [2801. Count Stepping Numbers in Range](https://github.com/doocs/leetcode/blob/main/solution/2800-2899/2801.Count%20Stepping%20Numbers%20in%20Range/README_EN.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,7 +86,7 @@ class Solution:
         @cache
         def dfs(pos: int, s: int, limit: bool) -> int:
             if pos >= len(num):
-                return 1 if min_sum <= s <= max_sum else 0
+                return int(min_sum <= s <= max_sum)
             up = int(num[pos]) if limit else 9
             return (
                 sum(dfs(pos + 1, s + i, limit and i == up) for i in range(up + 1)) % mod
@@ -60,14 +94,14 @@ class Solution:
 
         mod = 10**9 + 7
         num = num2
-        ans = dfs(0, 0, True)
+        a = dfs(0, 0, True)
         dfs.cache_clear()
         num = str(int(num1) - 1)
-        ans -= dfs(0, 0, True)
-        return ans % mod
+        b = dfs(0, 0, True)
+        return (a - b) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 import java.math.BigInteger;
@@ -84,11 +118,11 @@ class Solution {
         max = max_sum;
         num = num2;
         f = new Integer[23][220];
-        int ans = dfs(0, 0, true);
+        int a = dfs(0, 0, true);
         num = new BigInteger(num1).subtract(BigInteger.ONE).toString();
         f = new Integer[23][220];
-        ans = (ans - dfs(0, 0, true) + mod) % mod;
-        return ans;
+        int b = dfs(0, 0, true);
+        return (a - b + mod) % mod;
     }
 
     private int dfs(int pos, int s, boolean limit) {
@@ -111,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -141,8 +175,8 @@ public:
             return ans;
         };
 
-        int ans = dfs(0, 0, true);
-        for (int i = num1.size() - 1; i >= 0; --i) {
+        int a = dfs(0, 0, true);
+        for (int i = num1.size() - 1; ~i; --i) {
             if (num1[i] == '0') {
                 num1[i] = '9';
             } else {
@@ -152,13 +186,13 @@ public:
         }
         num = num1;
         memset(f, -1, sizeof(f));
-        ans -= dfs(0, 0, true);
-        return (ans + mod) % mod;
+        int b = dfs(0, 0, true);
+        return (a - b + mod) % mod;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func count(num1 string, num2 string, min_sum int, max_sum int) int {
@@ -194,7 +228,7 @@ func count(num1 string, num2 string, min_sum int, max_sum int) int {
 		}
 		return ans
 	}
-	ans := dfs(0, 0, true)
+	a := dfs(0, 0, true)
 	t := []byte(num1)
 	for i := len(t) - 1; i >= 0; i-- {
 		if t[i] != '0' {
@@ -210,24 +244,17 @@ func count(num1 string, num2 string, min_sum int, max_sum int) int {
 			f[i][j] = -1
 		}
 	}
-	ans -= dfs(0, 0, true)
-	return (ans%mod + mod) % mod
+	b := dfs(0, 0, true)
+	return (a - b + mod) % mod
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function count(
-    num1: string,
-    num2: string,
-    min_sum: number,
-    max_sum: number,
-): number {
+function count(num1: string, num2: string, min_sum: number, max_sum: number): number {
     const mod = 1e9 + 7;
-    let f: number[][] = Array(23)
-        .fill(0)
-        .map(() => Array(220).fill(-1));
+    const f: number[][] = Array.from({ length: 23 }, () => Array(220).fill(-1));
     let num = num2;
     const dfs = (pos: number, s: number, limit: boolean): number => {
         if (pos >= num.length) {
@@ -246,20 +273,16 @@ function count(
         }
         return ans;
     };
-    let ans = dfs(0, 0, true);
+    const a = dfs(0, 0, true);
     num = (BigInt(num1) - 1n).toString();
-    f = Array(23)
-        .fill(0)
-        .map(() => Array(220).fill(-1));
-    ans = (ans - dfs(0, 0, true) + mod) % mod;
-    return ans;
+    f.forEach(v => v.fill(-1));
+    const b = dfs(0, 0, true);
+    return (a - b + mod) % mod;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

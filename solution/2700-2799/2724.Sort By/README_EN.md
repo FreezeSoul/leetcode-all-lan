@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2724.Sort%20By/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2724. Sort By](https://leetcode.com/problems/sort-by)
 
 [中文文档](/solution/2700-2799/2724.Sort%20By/README.md)
 
 ## Description
 
-<p>Given an array <code>arr</code> and a function <code>fn</code>, return a sorted array <code>sortedArr</code>. You can assume&nbsp;<code>fn</code>&nbsp;only returns numbers and those numbers determine the sort order of&nbsp;<code>sortedArr</code>. <code>sortedArray</code> must be sorted in <strong>ascending order</strong> by <code>fn</code> output.</p>
+<!-- description:start -->
+
+<p>Given an array <code>arr</code> and a function <code>fn</code>, return a sorted array <code>sortedArr</code>. You can assume&nbsp;<code>fn</code>&nbsp;only returns numbers and those numbers determine the sort order of&nbsp;<code>sortedArr</code>. <code>sortedArr</code> must be sorted in <strong>ascending order</strong> by <code>fn</code> output.</p>
 
 <p>You may assume that <code>fn</code> will never duplicate numbers for a given array.</p>
 
@@ -37,16 +49,22 @@
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>arr is a valid JSON array</code></li>
-	<li><code>fn is a function that returns a number</code></li>
+	<li><code>arr</code> is a valid JSON array</li>
+	<li><code>fn</code> is a function that returns a number</li>
 	<li><code>1 &lt;=&nbsp;arr.length &lt;= 5 * 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sortBy(arr: any[], fn: Function): any[] {
@@ -55,3 +73,7 @@ function sortBy(arr: any[], fn: Function): any[] {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

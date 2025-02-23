@@ -1,8 +1,22 @@
-# [2378. Choose Edges to Maximize Score in a Tree](https://leetcode.com/problems/choose-edges-to-maximize-score-in-a-tree)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2378.Choose%20Edges%20to%20Maximize%20Score%20in%20a%20Tree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
+# [2378. Choose Edges to Maximize Score in a Tree 🔒](https://leetcode.com/problems/choose-edges-to-maximize-score-in-a-tree)
 
 [中文文档](/solution/2300-2399/2378.Choose%20Edges%20to%20Maximize%20Score%20in%20a%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>weighted</strong> tree consisting of <code>n</code> nodes numbered from <code>0</code> to <code>n - 1</code>.</p>
 
@@ -57,11 +71,28 @@ Note that we cannot choose more than one edge because all edges are adjacent to 
 	<li><code>edges</code> represents a valid tree.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Tree DP
+
+We design a function $dfs(i)$, which represents the maximum sum of the weights of selected edges in the subtree rooted at node $i$, such that no two selected edges are adjacent. This function returns two values $(a, b)$. The first value $a$ represents the sum of the weights of selected edges when the edge between the current node $i$ and its parent node is selected. The second value $b$ represents the sum of the weights of selected edges when the edge between the current node $i$ and its parent node is not selected.
+
+We can observe the following for the current node $i$:
+
+-   If the edge between $i$ and its parent node is selected, then none of the edges between $i$ and its child nodes can be selected. In this case, the value of $a$ for the current node is the sum of the $b$ values of all its child nodes.
+-   If the edge between $i$ and its parent node is not selected, then we can select at most one edge between $i$ and its child nodes. In this case, the value of $b$ for the current node is the sum of the $a$ values of the selected child nodes and the $b$ values of the unselected child nodes, plus the weight of the edge between $i$ and the selected child node.
+
+We call the function $dfs(0)$, and the second value returned is the answer, which is the sum of the weights of selected edges when the edge between the root node and its parent node is not selected.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -82,7 +113,7 @@ class Solution:
         return dfs(0)[1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +145,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -144,7 +175,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxScore(edges [][]int) int64 {
@@ -169,26 +200,10 @@ func maxScore(edges [][]int) int64 {
 	}
 	return int64(dfs(0)[1])
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

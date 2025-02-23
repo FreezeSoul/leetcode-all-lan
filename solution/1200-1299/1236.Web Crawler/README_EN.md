@@ -1,8 +1,23 @@
-# [1236. Web Crawler](https://leetcode.com/problems/web-crawler)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1236.Web%20Crawler/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - String
+    - Interactive
+---
+
+<!-- problem:start -->
+
+# [1236. Web Crawler 🔒](https://leetcode.com/problems/web-crawler)
 
 [中文文档](/solution/1200-1299/1236.Web%20Crawler/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a url <code>startUrl</code> and an interface <code>HtmlParser</code>, implement a web&nbsp;crawler to crawl all links that are under the&nbsp;<strong>same hostname</strong> as&nbsp;<code>startUrl</code>.&nbsp;</p>
 
@@ -87,13 +102,17 @@ startUrl = &quot;http://news.google.com&quot;
 	<li>You may assume there&#39;re&nbsp;no duplicates in url library.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # """
@@ -127,7 +146,7 @@ class Solution:
         return list(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -166,7 +185,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -209,7 +228,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -244,10 +263,8 @@ func crawl(startUrl string, htmlParser HtmlParser) []string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

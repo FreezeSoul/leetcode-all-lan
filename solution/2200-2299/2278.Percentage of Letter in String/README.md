@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2278.Percentage%20of%20Letter%20in%20String/README.md
+rating: 1161
+source: 第 294 场周赛 Q1
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2278. 字母在字符串中的百分比](https://leetcode.cn/problems/percentage-of-letter-in-string)
 
 [English Version](/solution/2200-2299/2278.Percentage%20of%20Letter%20in%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>s</code> 和一个字符 <code>letter</code> ，返回在 <code>s</code> 中等于&nbsp;<code>letter</code>&nbsp;字符所占的 <strong>百分比</strong> ，向下取整到最接近的百分比。</p>
 
@@ -37,15 +49,21 @@
 	<li><code>letter</code> 是一个小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：计数
+
+我们可以遍历字符串 $\textit{s}$，统计其中等于 $\textit{letter}$ 的字符的个数，然后根据公式 $\textit{count} \times 100 \, / \, \textit{len}(\textit{s})$ 计算百分比。
+
+时间复杂度 $O(n)$，其中 $n$ 为字符串 $\textit{s}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -53,9 +71,7 @@ class Solution:
         return s.count(letter) * 100 // len(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -71,66 +87,47 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int percentageLetter(string s, char letter) {
-        int cnt = 0;
-        for (char& c : s) cnt += c == letter;
-        return cnt * 100 / s.size();
+        return 100 * ranges::count(s, letter) / s.size();
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func percentageLetter(s string, letter byte) int {
-	cnt := 0
-	for i := range s {
-		if s[i] == letter {
-			cnt++
-		}
-	}
-	return cnt * 100 / len(s)
+	return strings.Count(s, string(letter)) * 100 / len(s)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function percentageLetter(s: string, letter: string): number {
-    let count = 0;
-    let total = s.length;
-    for (let i of s) {
-        if (i === letter) count++;
-    }
-    return Math.floor((count / total) * 100);
+    const count = s.split('').filter(c => c === letter).length;
+    return Math.floor((100 * count) / s.length);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn percentage_letter(s: String, letter: char) -> i32 {
-        let mut count = 0;
-        for c in s.chars() {
-            if c == letter {
-                count += 1;
-            }
-        }
-        (count * 100 / s.len()) as i32
+        let count = s.chars().filter(|&c| c == letter).count();
+        (100 * count as i32 / s.len() as i32) as i32
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

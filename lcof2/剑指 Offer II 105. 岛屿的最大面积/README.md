@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20105.%20%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 105. 岛屿的最大面积](https://leetcode.cn/problems/ZL6zAn)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个由&nbsp;<code>0</code> 和 <code>1</code> 组成的非空二维数组&nbsp;<code>grid</code>&nbsp;，用来表示海洋岛屿地图。</p>
 
@@ -42,133 +49,48 @@
 
 <p>注意：本题与主站 695&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/max-area-of-island/">https://leetcode.cn/problems/max-area-of-island/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
-**方法二：并查集**
+我们可以遍历每一个格子 $(i, j)$，从每个格子开始进行深度优先搜索，如果搜索到的格子是陆地，就将当前格子标记为已访问，并且继续搜索上、下、左、右四个方向的格子。搜索结束后，计算标记的陆地的数量，即为岛屿的面积。我们找出最大的岛屿面积即为答案。
 
-并查集模板：
-
-模板 1——朴素并查集：
-
-```python
-# 初始化，p存储每个点的父节点
-p = list(range(n))
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-```
-
-模板 2——维护 size 的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，size只有当节点是祖宗节点时才有意义，表示祖宗节点所在集合中，点的数量
-p = list(range(n))
-size = [1] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        # 路径压缩
-        p[x] = find(p[x])
-    return p[x]
-
-# 合并a和b所在的两个集合
-if find(a) != find(b):
-    size[find(b)] += size[find(a)]
-    p[find(a)] = find(b)
-```
-
-模板 3——维护到祖宗节点距离的并查集：
-
-```python
-# 初始化，p存储每个点的父节点，d[x]存储x到p[x]的距离
-p = list(range(n))
-d = [0] * n
-
-# 返回x的祖宗节点
-def find(x):
-    if p[x] != x:
-        t = find(p[x])
-        d[x] += d[p[x]]
-        p[x] = t
-    return p[x]
-
-# 合并a和b所在的两个集合
-p[find(a)] = find(b)
-d[find(a)] = distance
-```
+时间复杂度 $O(m \times n)$，空间复杂度 $O(m \times n)$。其中 $m$ 和 $n$ 分别是二维数组的行数和列数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-DFS：
+#### Python3
 
 ```python
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        def dfs(i, j):
-            grid[i][j] = 0
+        def dfs(i: int, j: int) -> int:
+            if grid[i][j] == 0:
+                return 0
             ans = 1
-            for a, b in [[0, -1], [0, 1], [-1, 0], [1, 0]]:
+            grid[i][j] = 0
+            dirs = (-1, 0, 1, 0, -1)
+            for a, b in pairwise(dirs):
                 x, y = i + a, j + b
-                if 0 <= x < m and 0 <= y < n and grid[x][y] == 1:
+                if 0 <= x < m and 0 <= y < n:
                     ans += dfs(x, y)
             return ans
 
         m, n = len(grid), len(grid[0])
-        return max([dfs(i, j) for i in range(m) for j in range(n) if grid[i][j] == 1], default=0)
+        return max(dfs(i, j) for i in range(m) for j in range(n))
 ```
 
-并查集：
-
-```python
-class Solution:
-    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        def find(x):
-            if p[x] != x:
-                p[x] = find(p[x])
-            return p[x]
-
-        m, n = len(grid), len(grid[0])
-        p = list(range(m * n))
-        size = [1] * (m * n)
-        for i in range(m):
-            for j in range(n):
-                if grid[i][j] == 1:
-                    for a, b in [[0, 1], [1, 0]]:
-                        x, y = i + a, j + b
-                        if 0 <= x < m and 0 <= y < n and grid[x][y] == 1 and find(i * n + j) != find(x * n + y):
-                            size[find(x * n + y)] += size[find(i * n + j)]
-                            p[find(i * n + j)] = find(x * n + y)
-        return max([size[i * n + j] for i in range(m) for j in range(n) if grid[i][j] == 1], default=0)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-DFS：
+#### Java
 
 ```java
 class Solution {
-    private int[][] grid;
     private int m;
     private int n;
+    private int[][] grid;
 
     public int maxAreaOfIsland(int[][] grid) {
         m = grid.length;
@@ -177,22 +99,22 @@ class Solution {
         int ans = 0;
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 1) {
-                    ans = Math.max(ans, dfs(i, j));
-                }
+                ans = Math.max(ans, dfs(i, j));
             }
         }
         return ans;
     }
 
     private int dfs(int i, int j) {
+        if (grid[i][j] == 0) {
+            return 0;
+        }
+        int ans = 1;
         grid[i][j] = 0;
         int[] dirs = {-1, 0, 1, 0, -1};
-        int ans = 1;
         for (int k = 0; k < 4; ++k) {
-            int x = i + dirs[k];
-            int y = j + dirs[k + 1];
-            if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1) {
+            int x = i + dirs[k], y = j + dirs[k + 1];
+            if (x >= 0 && x < m && y >= 0 && y < n) {
                 ans += dfs(x, y);
             }
         }
@@ -201,321 +123,179 @@ class Solution {
 }
 ```
 
-并查集：
-
-```java
-class Solution {
-    private int[] p;
-    private int[] size;
-
-    public int maxAreaOfIsland(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        p = new int[m * n];
-        size = new int[m * n];
-        for (int i = 0; i < p.length; ++i) {
-            p[i] = i;
-            size[i] = 1;
-        }
-        int[] dirs = {0, 1, 0};
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 1) {
-                    for (int k = 0; k < 2; ++k) {
-                        int x = i + dirs[k];
-                        int y = j + dirs[k + 1];
-                        if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1
-                            && find(i * n + j) != find(x * n + y)) {
-                            size[find(x * n + y)] += size[find(i * n + j)];
-                            p[find(i * n + j)] = find(x * n + y);
-                        }
-                    }
-                }
-            }
-        }
-        int ans = 0;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 1) {
-                    ans = Math.max(ans, size[i * n + j]);
-                }
-            }
-        }
-        return ans;
-    }
-
-    private int find(int x) {
-        if (p[x] != x) {
-            p[x] = find(p[x]);
-        }
-        return p[x];
-    }
-}
-```
-
-### **TypeScript**
-
-DFS：
-
-```ts
-function maxAreaOfIsland(grid: number[][]): number {
-    const m = grid.length;
-    const n = grid[0].length;
-    let ans = 0;
-    const dirs = [-1, 0, 1, 0, -1];
-    let dfs = function (i, j) {
-        grid[i][j] = 0;
-        let ans = 1;
-        for (let k = 0; k < 4; ++k) {
-            const x = i + dirs[k];
-            const y = j + dirs[k + 1];
-            if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1) {
-                ans += dfs(x, y);
-            }
-        }
-        return ans;
-    };
-    for (let i = 0; i < m; ++i) {
-        for (let j = 0; j < n; ++j) {
-            if (grid[i][j] == 1) {
-                ans = Math.max(ans, dfs(i, j));
-            }
-        }
-    }
-    return ans;
-}
-```
-
-并查集：
-
-```ts
-function maxAreaOfIsland(grid: number[][]): number {
-    const m = grid.length;
-    const n = grid[0].length;
-    let p = new Array(m * n);
-    for (let i = 0; i < p.length; ++i) {
-        p[i] = i;
-    }
-    let size = new Array(m * n).fill(1);
-    let find = function (x) {
-        if (p[x] != x) {
-            p[x] = find(p[x]);
-        }
-        return p[x];
-    };
-    const dirs = [1, 0, 1];
-    for (let i = 0; i < m; ++i) {
-        for (let j = 0; j < n; ++j) {
-            if (grid[i][j] == 1) {
-                for (let k = 0; k < 2; ++k) {
-                    const x = i + dirs[k];
-                    const y = j + dirs[k + 1];
-                    if (
-                        x >= 0 &&
-                        x < m &&
-                        y >= 0 &&
-                        y < n &&
-                        grid[x][y] == 1 &&
-                        find(x * n + y) != find(i * n + j)
-                    ) {
-                        size[find(x * n + y)] += size[find(i * n + j)];
-                        p[find(i * n + j)] = find(x * n + y);
-                    }
-                }
-            }
-        }
-    }
-    let ans = 0;
-    for (let i = 0; i < m; ++i) {
-        for (let j = 0; j < n; ++j) {
-            if (grid[i][j] == 1) {
-                ans = Math.max(ans, size[i * n + j]);
-            }
-        }
-    }
-    return ans;
-}
-```
-
-### **C++**
-
-DFS：
+#### C++
 
 ```cpp
 class Solution {
 public:
-    int m;
-    int n;
-
     int maxAreaOfIsland(vector<vector<int>>& grid) {
-        m = grid.size();
-        n = grid[0].size();
+        int m = grid.size(), n = grid[0].size();
+        int dirs[5] = {-1, 0, 1, 0, -1};
         int ans = 0;
-        for (int i = 0; i < m; ++i)
-            for (int j = 0; j < n; ++j)
-                if (grid[i][j] == 1)
-                    ans = max(ans, dfs(i, j, grid));
-        return ans;
-    }
-
-    int dfs(int i, int j, vector<vector<int>>& grid) {
-        grid[i][j] = 0;
-        int ans = 1;
-        vector<int> dirs = {-1, 0, 1, 0, -1};
-        for (int k = 0; k < 4; ++k) {
-            int x = i + dirs[k];
-            int y = j + dirs[k + 1];
-            if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1)
-                ans += dfs(x, y, grid);
+        function<int(int, int)> dfs = [&](int i, int j) {
+            if (grid[i][j] == 0) {
+                return 0;
+            }
+            int ans = 1;
+            grid[i][j] = 0;
+            for (int k = 0; k < 4; ++k) {
+                int x = i + dirs[k], y = j + dirs[k + 1];
+                if (x >= 0 && x < m && y >= 0 && y < n) {
+                    ans += dfs(x, y);
+                }
+            }
+            return ans;
+        };
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                ans = max(ans, dfs(i, j));
+            }
         }
         return ans;
     }
 };
 ```
 
-并查集：
-
-```cpp
-class Solution {
-public:
-    vector<int> p;
-    vector<int> size;
-
-    int maxAreaOfIsland(vector<vector<int>>& grid) {
-        int m = grid.size();
-        int n = grid[0].size();
-        p.resize(m * n);
-        size.resize(m * n, 1);
-        for (int i = 0; i < p.size(); ++i) p[i] = i;
-        vector<int> dirs = {0, 1, 0};
-        for (int i = 0; i < m; ++i)
-        {
-            for (int j = 0; j < n; ++j)
-            {
-                if (grid[i][j])
-                {
-                    for (int k = 0; k < 2; ++k)
-                    {
-                        int x = i + dirs[k];
-                        int y = j + dirs[k + 1];
-                        if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] && find(i * n + j) != find(x * n + y))
-                        {
-                            size[find(x * n + y)] += size[find(i * n + j)];
-                            p[find(i * n + j)] = find(x * n + y);
-                        }
-                    }
-                }
-            }
-        }
-        int ans = 0;
-        for (int i = 0; i < m; ++i)
-            for (int j = 0; j < n; ++j)
-                if (grid[i][j])
-                    ans = max(ans, size[i * n + j]);
-        return ans;
-    }
-
-    int find(int x) {
-        if (p[x] != x) p[x] = find(p[x]);
-        return p[x];
-    }
-};
-```
-
-### **Go**
-
-DFS：
+#### Go
 
 ```go
-func maxAreaOfIsland(grid [][]int) int {
+func maxAreaOfIsland(grid [][]int) (ans int) {
 	m, n := len(grid), len(grid[0])
-	dirs := []int{-1, 0, 1, 0, -1}
+	dirs := [5]int{-1, 0, 1, 0, -1}
 	var dfs func(i, j int) int
 	dfs = func(i, j int) int {
-		grid[i][j] = 0
+		if grid[i][j] == 0 {
+			return 0
+		}
 		ans := 1
+		grid[i][j] = 0
 		for k := 0; k < 4; k++ {
 			x, y := i+dirs[k], j+dirs[k+1]
-			if x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1 {
+			if x >= 0 && x < m && y >= 0 && y < n {
 				ans += dfs(x, y)
 			}
 		}
 		return ans
 	}
-	ans := 0
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if grid[i][j] == 1 {
-				ans = max(ans, dfs(i, j))
-			}
+	for i := range grid {
+		for j := range grid[i] {
+			ans = max(ans, dfs(i, j))
 		}
 	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return
 }
 ```
 
-并查集：
+#### TypeScript
 
-```go
-func maxAreaOfIsland(grid [][]int) int {
-	m, n := len(grid), len(grid[0])
-	p := make([]int, m*n)
-	size := make([]int, m*n)
-	for i := range p {
-		p[i] = i
-		size[i] = 1
-	}
-	var find func(x int) int
-	find = func(x int) int {
-		if p[x] != x {
-			p[x] = find(p[x])
-		}
-		return p[x]
-	}
-	dirs := []int{1, 0, 1}
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if grid[i][j] == 1 {
-				for k := 0; k < 2; k++ {
-					x, y := i+dirs[k], j+dirs[k+1]
-					if x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1 && find(i*n+j) != find(x*n+y) {
-						size[find(x*n+y)] += size[find(i*n+j)]
-						p[find(i*n+j)] = find(x*n + y)
-					}
-				}
-			}
-		}
-	}
-	ans := 0
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if grid[i][j] == 1 {
-				ans = max(ans, size[i*n+j])
-			}
-		}
-	}
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+```ts
+function maxAreaOfIsland(grid: number[][]): number {
+    const m = grid.length;
+    const n = grid[0].length;
+    const dirs = [-1, 0, 1, 0, -1];
+    const dfs = (i: number, j: number): number => {
+        if (grid[i][j] === 0) {
+            return 0;
+        }
+        let ans = 1;
+        grid[i][j] = 0;
+        for (let k = 0; k < 4; ++k) {
+            const [x, y] = [i + dirs[k], j + dirs[k + 1]];
+            if (x >= 0 && x < m && y >= 0 && y < n) {
+                ans += dfs(x, y);
+            }
+        }
+        return ans;
+    };
+    let ans = 0;
+    for (let i = 0; i < m; ++i) {
+        for (let j = 0; j < n; ++j) {
+            ans = Math.max(ans, dfs(i, j));
+        }
+    }
+    return ans;
 }
 ```
 
-### **...**
+#### Rust
 
+```rust
+impl Solution {
+    fn dfs(grid: &mut Vec<Vec<i32>>, i: usize, j: usize) -> i32 {
+        if i == grid.len() || j == grid[0].len() || grid[i][j] == 0 {
+            return 0;
+        }
+        grid[i][j] = 0;
+        let mut res = 1 + Self::dfs(grid, i + 1, j) + Self::dfs(grid, i, j + 1);
+        if i != 0 {
+            res += Self::dfs(grid, i - 1, j);
+        }
+        if j != 0 {
+            res += Self::dfs(grid, i, j - 1);
+        }
+        res
+    }
+
+    pub fn max_area_of_island(mut grid: Vec<Vec<i32>>) -> i32 {
+        let m = grid.len();
+        let n = grid[0].len();
+        let mut res = 0;
+        for i in 0..m {
+            for j in 0..n {
+                res = res.max(Self::dfs(&mut grid, i, j));
+            }
+        }
+        res
+    }
+}
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    private var m = 0
+    private var n = 0
+    private var grid: [[Int]] = []
+
+    func maxAreaOfIsland(_ grid: [[Int]]) -> Int {
+        self.m = grid.count
+        self.n = grid[0].count
+        self.grid = grid
+        var maxArea = 0
+
+        for i in 0..<m {
+            for j in 0..<n {
+                maxArea = max(maxArea, dfs(i, j))
+            }
+        }
+
+        return maxArea
+    }
+
+    private func dfs(_ i: Int, _ j: Int) -> Int {
+        if grid[i][j] == 0 {
+            return 0
+        }
+
+        var area = 1
+        grid[i][j] = 0
+        let dirs = [-1, 0, 1, 0, -1]
+
+        for k in 0..<4 {
+            let x = i + dirs[k], y = j + dirs[k + 1]
+            if x >= 0 && x < m && y >= 0 && y < n {
+                area += dfs(x, y)
+            }
+        }
+
+        return area
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

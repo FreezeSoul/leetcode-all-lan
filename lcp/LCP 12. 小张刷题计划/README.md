@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2012.%20%E5%B0%8F%E5%BC%A0%E5%88%B7%E9%A2%98%E8%AE%A1%E5%88%92/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 12. 小张刷题计划](https://leetcode.cn/problems/xiao-zhang-shua-ti-ji-hua)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>为了提高自己的代码能力，小张制定了 <code>LeetCode</code> 刷题计划，他选中了 <code>LeetCode</code> 题库中的 <code>n</code> 道题，编号从 <code>0</code> 到 <code>n-1</code>，并计划在 <code>m</code> 天内<strong>按照题目编号顺序</strong>刷完所有的题目（注意，小张不能用多天完成同一题）。</p>
 
@@ -40,11 +47,13 @@
 	<li><code>1 &lt;= m &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 二分查找**
+### 方法一：贪心 + 二分查找
 
 我们可以将题意转换为，将题目最多分成 $m$ 组，每一组去掉最大值后不超过 $T$ ，求最小的满足条件的 $T$。
 
@@ -58,9 +67,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +86,7 @@ class Solution:
         return bisect_left(range(sum(time)), True, key=check)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -118,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -155,7 +160,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minTime(time []int, m int) int {
@@ -177,19 +182,81 @@ func minTime(time []int, m int) int {
 		return d <= m
 	})
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minTime(time: number[], m: number): number {
+    let left = 0;
+    let right = time.reduce((a, b) => a + b);
+    const check = (t: number): boolean => {
+        let s = 0;
+        let mx = 0;
+        let d = 1;
+        for (const x of time) {
+            s += x;
+            mx = Math.max(mx, x);
+            if (s - mx > t) {
+                s = x;
+                mx = x;
+                d++;
+            }
+        }
+        return d <= m;
+    };
+    while (left < right) {
+        const mid = (left + right) >> 1;
+        if (check(mid)) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func minTime(_ time: [Int], _ m: Int) -> Int {
+        var left = 0
+        var right = time.reduce(0, +)
 
+        while left < right {
+            let mid = (left + right) / 2
+            if check(mid, time, m) {
+                right = mid
+            } else {
+                left = mid + 1
+            }
+        }
+        return left
+    }
+
+    private func check(_ t: Int, _ time: [Int], _ m: Int) -> Bool {
+        var sum = 0
+        var maxTime = 0
+        var days = 1
+
+        for x in time {
+            sum += x
+            maxTime = max(maxTime, x)
+            if sum - maxTime > t {
+                sum = x
+                maxTime = x
+                days += 1
+            }
+        }
+        return days <= m
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

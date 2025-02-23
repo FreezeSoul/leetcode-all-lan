@@ -1,8 +1,20 @@
-# [1076. Project Employees II](https://leetcode.com/problems/project-employees-ii)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1076.Project%20Employees%20II/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1076. Project Employees II 🔒](https://leetcode.com/problems/project-employees-ii)
 
 [中文文档](/solution/1000-1099/1076.Project%20Employees%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Project</code></p>
 
@@ -13,8 +25,8 @@
 | project_id  | int     |
 | employee_id | int     |
 +-------------+---------+
-(project_id, employee_id) is the primary key of this table.
-employee_id is a foreign key to <code>Employee</code> table.
+(project_id, employee_id) is the primary key (combination of columns with unique values) of this table.
+employee_id is a foreign key (reference column) to <code>Employee</code> table.
 Each row of this table indicates that the employee with employee_id is working on the project with project_id.
 </pre>
 
@@ -30,17 +42,17 @@ Each row of this table indicates that the employee with employee_id is working o
 | name             | varchar |
 | experience_years | int     |
 +------------------+---------+
-employee_id is the primary key of this table.
+employee_id is the primary key (column with unique values) of this table.
 Each row of this table contains information about one employee.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query that reports all the <strong>projects</strong> that have the most employees.</p>
+<p>Write a solution to report all the <strong>projects</strong> that have the most employees.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -75,34 +87,60 @@ Employee table:
 <strong>Explanation:</strong> The first project has 3 employees while the second one has 2.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT  project_id
-FROM Project p
-GROUP BY  project_id
-HAVING COUNT(employee_id) >= all(
-SELECT  COUNT(employee_id)
+SELECT project_id
 FROM Project
-GROUP BY  project_id )
-```
-
-```sql
-# Write your MySQL query statement below
-SELECT  project_id
-FROM
-(
-	SELECT  project_id
-	       ,dense_rank() over(order by COUNT(employee_id) desc) AS rk
-	FROM Project
-	GROUP BY  project_id
-) t
-WHERE rk = 1
+GROUP BY 1
+HAVING
+    COUNT(1) >= all(
+        SELECT COUNT(1)
+        FROM Project
+        GROUP BY project_id
+    );
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            project_id,
+            RANK() OVER (ORDER BY COUNT(employee_id) DESC) AS rk
+        FROM Project
+        GROUP BY 1
+    )
+SELECT project_id
+FROM T
+WHERE rk = 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

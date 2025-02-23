@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2680.Maximum%20OR/README_EN.md
+rating: 1912
+source: Biweekly Contest 104 Q3
+tags:
+    - Greedy
+    - Bit Manipulation
+    - Array
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [2680. Maximum OR](https://leetcode.com/problems/maximum-or)
 
 [中文文档](/solution/2600-2699/2680.Maximum%20OR/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>nums</code> of length <code>n</code> and an integer <code>k</code>. In an operation, you can choose an element and multiply it by <code>2</code>.</p>
 
@@ -36,11 +53,25 @@
 	<li><code>1 &lt;= k &lt;= 15</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Preprocessing
+
+We notice that in order to maximize the answer, we should apply $k$ times of bitwise OR to the same number.
+
+First, we preprocess the suffix OR value array $suf$ of the array $nums$, where $suf[i]$ represents the bitwise OR value of $nums[i], nums[i + 1], \cdots, nums[n - 1]$.
+
+Next, we traverse the array $nums$ from left to right, and maintain the current prefix OR value $pre$. For the current position $i$, we perform $k$ times of bitwise left shift on $nums[i]$, i.e., $nums[i] \times 2^k$, and perform bitwise OR operation with $pre$ to obtain the intermediate result. Then, we perform bitwise OR operation with $suf[i + 1]$ to obtain the maximum OR value with $nums[i]$ as the last number. By enumerating all possible positions $i$, we can obtain the final answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $nums$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +87,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -76,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumOr(nums []int, k int) int64 {
@@ -114,19 +145,53 @@ func maximumOr(nums []int, k int) int64 {
 	}
 	return int64(ans)
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maximumOr(nums: number[], k: number): number {
+    const n = nums.length;
+    const suf: bigint[] = Array(n + 1).fill(0n);
+    for (let i = n - 1; i >= 0; i--) {
+        suf[i] = suf[i + 1] | BigInt(nums[i]);
+    }
+    let [ans, pre] = [0, 0n];
+    for (let i = 0; i < n; i++) {
+        ans = Math.max(Number(ans), Number(pre | (BigInt(nums[i]) << BigInt(k)) | suf[i + 1]));
+        pre |= BigInt(nums[i]);
+    }
+    return ans;
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn maximum_or(nums: Vec<i32>, k: i32) -> i64 {
+        let n = nums.len();
+        let mut suf = vec![0; n + 1];
 
+        for i in (0..n).rev() {
+            suf[i] = suf[i + 1] | (nums[i] as i64);
+        }
+
+        let mut ans = 0i64;
+        let mut pre = 0i64;
+        let k64 = k as i64;
+        for i in 0..n {
+            ans = ans.max(pre | ((nums[i] as i64) << k64) | suf[i + 1]);
+            pre |= nums[i] as i64;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

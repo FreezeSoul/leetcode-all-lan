@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1805.Number%20of%20Different%20Integers%20in%20a%20String/README.md
+rating: 1333
+source: 第 234 场周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1805. 字符串中不同整数的数目](https://leetcode.cn/problems/number-of-different-integers-in-a-string)
 
 [English Version](/solution/1800-1899/1805.Number%20of%20Different%20Integers%20in%20a%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>word</code> ，该字符串由数字和小写英文字母组成。</p>
 
@@ -48,11 +61,13 @@
 	<li><code>word</code> 由数字和小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针 + 模拟**
+### 方法一：双指针 + 模拟
 
 遍历字符串 `word`，找到每个整数的起始位置和结束位置，截取出这一个子串，将其存入哈希表 $s$ 中。
 
@@ -64,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,15 +93,13 @@ class Solution:
                 j = i
                 while j < n and word[j].isdigit():
                     j += 1
-                s.add(word[i: j])
+                s.add(word[i:j])
                 i = j
             i += 1
         return len(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +146,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numDifferentIntegers(word string) int {
@@ -158,7 +169,7 @@ func numDifferentIntegers(word string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numDifferentIntegers(word: string): number {
@@ -173,7 +184,7 @@ function numDifferentIntegers(word: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -203,10 +214,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

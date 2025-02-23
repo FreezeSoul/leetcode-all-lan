@@ -1,10 +1,9 @@
 class Solution:
     def partitionString(self, s: str) -> int:
-        ans, v = 1, 0
-        for c in s:
-            i = ord(c) - ord('a')
-            if (v >> i) & 1:
-                v = 0
+        ans, mask = 1, 0
+        for x in map(lambda c: ord(c) - ord("a"), s):
+            if mask >> x & 1:
                 ans += 1
-            v |= 1 << i
+                mask = 0
+            mask |= 1 << x
         return ans

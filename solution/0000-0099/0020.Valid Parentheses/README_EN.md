@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0020.Valid%20Parentheses/README_EN.md
+tags:
+    - Stack
+    - String
+---
+
+<!-- problem:start -->
+
 # [20. Valid Parentheses](https://leetcode.com/problems/valid-parentheses)
 
 [中文文档](/solution/0000-0099/0020.Valid%20Parentheses/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> containing just the characters <code>&#39;(&#39;</code>, <code>&#39;)&#39;</code>, <code>&#39;{&#39;</code>, <code>&#39;}&#39;</code>, <code>&#39;[&#39;</code> and <code>&#39;]&#39;</code>, determine if the input string is valid.</p>
 
@@ -17,24 +30,35 @@
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre>
-<strong>Input:</strong> s = &quot;()&quot;
-<strong>Output:</strong> true
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;()&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">true</span></p>
+</div>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre>
-<strong>Input:</strong> s = &quot;()[]{}&quot;
-<strong>Output:</strong> true
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;()[]{}&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">true</span></p>
+</div>
 
 <p><strong class="example">Example 3:</strong></p>
 
-<pre>
-<strong>Input:</strong> s = &quot;(]&quot;
-<strong>Output:</strong> false
-</pre>
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;(]&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">false</span></p>
+</div>
+
+<p><strong class="example">Example 4:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">s = &quot;([])&quot;</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">true</span></p>
+</div>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
@@ -44,11 +68,27 @@
 	<li><code>s</code> consists of parentheses only <code>&#39;()[]{}&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Stack
+
+Traverse the bracket string $s$. When encountering a left bracket, push the current left bracket into the stack; when encountering a right bracket, pop the top element of the stack (if the stack is empty, directly return `false`), and judge whether it matches. If it does not match, directly return `false`.
+
+Alternatively, when encountering a left bracket, you can push the corresponding right bracket into the stack; when encountering a right bracket, pop the top element of the stack (if the stack is empty, directly return `false`), and judge whether they are equal. If they do not match, directly return `false`.
+
+> The difference between the two methods is only the timing of bracket conversion, one is when pushing into the stack, and the other is when popping out of the stack.
+
+At the end of the traversal, if the stack is empty, it means the bracket string is valid, return `true`; otherwise, return `false`.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the bracket string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,7 +103,7 @@ class Solution:
         return not stk
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -109,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isValid(s string) bool {
@@ -131,7 +171,53 @@ func match(l, r rune) bool {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+const map = new Map([
+    ['(', ')'],
+    ['[', ']'],
+    ['{', '}'],
+]);
+
+function isValid(s: string): boolean {
+    const stack = [];
+    for (const c of s) {
+        if (map.has(c)) {
+            stack.push(map.get(c));
+        } else if (stack.pop() !== c) {
+            return false;
+        }
+    }
+    return stack.length === 0;
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn is_valid(s: String) -> bool {
+        let mut map = HashMap::new();
+        map.insert('(', ')');
+        map.insert('[', ']');
+        map.insert('{', '}');
+        let mut stack = vec![];
+        for c in s.chars() {
+            if map.contains_key(&c) {
+                stack.push(map[&c]);
+            } else if stack.pop().unwrap_or(' ') != c {
+                return false;
+            }
+        }
+        stack.len() == 0
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -153,15 +239,33 @@ var isValid = function (s) {
 };
 
 function match(l, r) {
-    return (
-        (l == '(' && r == ')') ||
-        (l == '[' && r == ']') ||
-        (l == '{' && r == '}')
-    );
+    return (l == '(' && r == ')') || (l == '[' && r == ']') || (l == '{' && r == '}');
 }
 ```
 
-### **Ruby**
+#### C#
+
+```cs
+public class Solution {
+    public bool IsValid(string s) {
+        Stack<char> stk = new Stack<char>();
+        foreach (var c in s.ToCharArray()) {
+            if (c == '(') {
+                stk.Push(')');
+            } else if (c == '[') {
+                stk.Push(']');
+            } else if (c == '{') {
+                stk.Push('}');
+            } else if (stk.Count == 0 || stk.Pop() != c) {
+                return false;
+            }
+        }
+        return stk.Count == 0;
+    }
+}
+```
+
+#### Ruby
 
 ```rb
 # @param {String} s
@@ -188,56 +292,41 @@ def is_valid(s)
 end
 ```
 
-### **TypeScript**
+#### PHP
 
-```ts
-const map = new Map([
-    ['(', ')'],
-    ['[', ']'],
-    ['{', '}'],
-]);
+```php
+class Solution {
+    /**
+     * @param string $s
+     * @return boolean
+     */
 
-function isValid(s: string): boolean {
-    const stack = [];
-    for (const c of s) {
-        if (map.has(c)) {
-            stack.push(map.get(c));
-        } else if (stack.pop() !== c) {
-            return false;
-        }
-    }
-    return stack.length === 0;
-}
-```
+    function isValid($s) {
+        $stack = [];
+        $brackets = [
+            ')' => '(',
+            '}' => '{',
+            ']' => '[',
+        ];
 
-### **Rust**
-
-```rust
-use std::collections::HashMap;
-
-impl Solution {
-    pub fn is_valid(s: String) -> bool {
-        let mut map = HashMap::new();
-        map.insert('(', ')');
-        map.insert('[', ']');
-        map.insert('{', '}');
-        let mut stack = vec![];
-        for c in s.chars() {
-            if map.contains_key(&c) {
-                stack.push(map[&c]);
-            } else if stack.pop().unwrap_or(' ') != c {
-                return false;
+        for ($i = 0; $i < strlen($s); $i++) {
+            $char = $s[$i];
+            if (array_key_exists($char, $brackets)) {
+                if (empty($stack) || $stack[count($stack) - 1] !== $brackets[$char]) {
+                    return false;
+                }
+                array_pop($stack);
+            } else {
+                array_push($stack, $char);
             }
         }
-        stack.len() == 0
+        return empty($stack);
     }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1286.Iterator%20for%20Combination/README_EN.md
+rating: 1591
+source: Biweekly Contest 15 Q3
+tags:
+    - Design
+    - String
+    - Backtracking
+    - Iterator
+---
+
+<!-- problem:start -->
+
 # [1286. Iterator for Combination](https://leetcode.com/problems/iterator-for-combination)
 
 [中文文档](/solution/1200-1299/1286.Iterator%20for%20Combination/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design the <code>CombinationIterator</code> class:</p>
 
@@ -42,11 +59,17 @@ itr.hasNext(); // return False
 	<li>It is guaranteed that all calls of the function <code>next</code> are valid.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class CombinationIterator:
@@ -84,37 +107,7 @@ class CombinationIterator:
 # param_2 = obj.hasNext()
 ```
 
-```python
-class CombinationIterator:
-
-    def __init__(self, characters: str, combinationLength: int):
-        self.curr = (1 << len(characters)) - 1
-        self.size = combinationLength
-        self.cs = characters[::-1]
-
-    def next(self) -> str:
-        while self.curr >= 0 and self.curr.bit_count() != self.size:
-            self.curr -= 1
-        ans = []
-        for i in range(len(self.cs)):
-            if (self.curr >> i) & 1:
-                ans.append(self.cs[i])
-        self.curr -= 1
-        return ''.join(ans[::-1])
-
-    def hasNext(self) -> bool:
-        while self.curr >= 0 and self.curr.bit_count() != self.size:
-            self.curr -= 1
-        return self.curr >= 0
-
-
-# Your CombinationIterator object will be instantiated and called as such:
-# obj = CombinationIterator(characters, combinationLength)
-# param_1 = obj.next()
-# param_2 = obj.hasNext()
-```
-
-### **Java**
+#### Java
 
 ```java
 class CombinationIterator {
@@ -163,53 +156,7 @@ class CombinationIterator {
  */
 ```
 
-```java
-class CombinationIterator {
-    private int curr;
-    private int size;
-    private char[] cs;
-
-    public CombinationIterator(String characters, int combinationLength) {
-        int n = characters.length();
-        curr = (1 << n) - 1;
-        size = combinationLength;
-        cs = new char[n];
-        for (int i = 0; i < n; ++i) {
-            cs[i] = characters.charAt(n - i - 1);
-        }
-    }
-
-    public String next() {
-        while (curr >= 0 && Integer.bitCount(curr) != size) {
-            --curr;
-        }
-        StringBuilder ans = new StringBuilder();
-        for (int i = 0; i < cs.length; ++i) {
-            if (((curr >> i) & 1) == 1) {
-                ans.append(cs[i]);
-            }
-        }
-        --curr;
-        return ans.reverse().toString();
-    }
-
-    public boolean hasNext() {
-        while (curr >= 0 && Integer.bitCount(curr) != size) {
-            --curr;
-        }
-        return curr >= 0;
-    }
-}
-
-/**
- * Your CombinationIterator object will be instantiated and called as such:
- * CombinationIterator obj = new CombinationIterator(characters, combinationLength);
- * String param_1 = obj.next();
- * boolean param_2 = obj.hasNext();
- */
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class CombinationIterator {
@@ -258,49 +205,7 @@ public:
  */
 ```
 
-```cpp
-class CombinationIterator {
-public:
-    int size;
-    string cs;
-    int curr;
-
-    CombinationIterator(string characters, int combinationLength) {
-        int n = characters.size();
-        curr = (1 << n) - 1;
-        reverse(characters.begin(), characters.end());
-        cs = characters;
-        size = combinationLength;
-    }
-
-    string next() {
-        while (curr >= 0 && __builtin_popcount(curr) != size) --curr;
-        string ans;
-        for (int i = 0; i < cs.size(); ++i) {
-            if ((curr >> i) & 1) {
-                ans += cs[i];
-            }
-        }
-        reverse(ans.begin(), ans.end());
-        --curr;
-        return ans;
-    }
-
-    bool hasNext() {
-        while (curr >= 0 && __builtin_popcount(curr) != size) --curr;
-        return curr >= 0;
-    }
-};
-
-/**
- * Your CombinationIterator object will be instantiated and called as such:
- * CombinationIterator* obj = new CombinationIterator(characters, combinationLength);
- * string param_1 = obj->next();
- * bool param_2 = obj->hasNext();
- */
-```
-
-### **Go**
+#### Go
 
 ```go
 type CombinationIterator struct {
@@ -347,6 +252,141 @@ func (this *CombinationIterator) HasNext() bool {
  * param_2 := obj.HasNext();
  */
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class CombinationIterator:
+    def __init__(self, characters: str, combinationLength: int):
+        self.curr = (1 << len(characters)) - 1
+        self.size = combinationLength
+        self.cs = characters[::-1]
+
+    def next(self) -> str:
+        while self.curr >= 0 and self.curr.bit_count() != self.size:
+            self.curr -= 1
+        ans = []
+        for i in range(len(self.cs)):
+            if (self.curr >> i) & 1:
+                ans.append(self.cs[i])
+        self.curr -= 1
+        return ''.join(ans[::-1])
+
+    def hasNext(self) -> bool:
+        while self.curr >= 0 and self.curr.bit_count() != self.size:
+            self.curr -= 1
+        return self.curr >= 0
+
+
+# Your CombinationIterator object will be instantiated and called as such:
+# obj = CombinationIterator(characters, combinationLength)
+# param_1 = obj.next()
+# param_2 = obj.hasNext()
+```
+
+#### Java
+
+```java
+class CombinationIterator {
+    private int curr;
+    private int size;
+    private char[] cs;
+
+    public CombinationIterator(String characters, int combinationLength) {
+        int n = characters.length();
+        curr = (1 << n) - 1;
+        size = combinationLength;
+        cs = new char[n];
+        for (int i = 0; i < n; ++i) {
+            cs[i] = characters.charAt(n - i - 1);
+        }
+    }
+
+    public String next() {
+        while (curr >= 0 && Integer.bitCount(curr) != size) {
+            --curr;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i = 0; i < cs.length; ++i) {
+            if (((curr >> i) & 1) == 1) {
+                ans.append(cs[i]);
+            }
+        }
+        --curr;
+        return ans.reverse().toString();
+    }
+
+    public boolean hasNext() {
+        while (curr >= 0 && Integer.bitCount(curr) != size) {
+            --curr;
+        }
+        return curr >= 0;
+    }
+}
+
+/**
+ * Your CombinationIterator object will be instantiated and called as such:
+ * CombinationIterator obj = new CombinationIterator(characters, combinationLength);
+ * String param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */
+```
+
+#### C++
+
+```cpp
+class CombinationIterator {
+public:
+    int size;
+    string cs;
+    int curr;
+
+    CombinationIterator(string characters, int combinationLength) {
+        int n = characters.size();
+        curr = (1 << n) - 1;
+        reverse(characters.begin(), characters.end());
+        cs = characters;
+        size = combinationLength;
+    }
+
+    string next() {
+        while (curr >= 0 && __builtin_popcount(curr) != size) --curr;
+        string ans;
+        for (int i = 0; i < cs.size(); ++i) {
+            if ((curr >> i) & 1) {
+                ans += cs[i];
+            }
+        }
+        reverse(ans.begin(), ans.end());
+        --curr;
+        return ans;
+    }
+
+    bool hasNext() {
+        while (curr >= 0 && __builtin_popcount(curr) != size) --curr;
+        return curr >= 0;
+    }
+};
+
+/**
+ * Your CombinationIterator object will be instantiated and called as such:
+ * CombinationIterator* obj = new CombinationIterator(characters, combinationLength);
+ * string param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
+```
+
+#### Go
 
 ```go
 type CombinationIterator struct {
@@ -398,10 +438,8 @@ func (this *CombinationIterator) HasNext() bool {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

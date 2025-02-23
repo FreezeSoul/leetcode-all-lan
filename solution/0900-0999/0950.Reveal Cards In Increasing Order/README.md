@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0950.Reveal%20Cards%20In%20Increasing%20Order/README.md
+tags:
+    - 队列
+    - 数组
+    - 排序
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [950. 按递增顺序显示卡牌](https://leetcode.cn/problems/reveal-cards-in-increasing-order)
 
 [English Version](/solution/0900-0999/0950.Reveal%20Cards%20In%20Increasing%20Order/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>牌组中的每张卡牌都对应有一个唯一的整数。你可以按你想要的顺序对这套卡片进行排序。</p>
 
@@ -51,11 +64,13 @@
 	<li>对于所有的&nbsp;<code>i != j</code>，<code>A[i] != A[j]</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：队列模拟**
+### 方法一：队列模拟
 
 根据题目描述，我们知道，数组 `deck` 逆序排列后的序列就是最终的结果。我们可以从最终结果入手，逆向推导出卡片顺序。
 
@@ -67,9 +82,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,9 +95,7 @@ class Solution:
         return list(q)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +118,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func deckRevealedIncreasing(deck []int) []int {
@@ -143,10 +154,8 @@ func deckRevealedIncreasing(deck []int) []int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

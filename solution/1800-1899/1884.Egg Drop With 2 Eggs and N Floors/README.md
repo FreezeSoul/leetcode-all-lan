@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1884.Egg%20Drop%20With%202%20Eggs%20and%20N%20Floors/README.md
+tags:
+    - 数学
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1884. 鸡蛋掉落-两枚鸡蛋](https://leetcode.cn/problems/egg-drop-with-2-eggs-and-n-floors)
 
 [English Version](/solution/1800-1899/1884.Egg%20Drop%20With%202%20Eggs%20and%20N%20Floors/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你 <strong>2&nbsp;枚相同 </strong>的鸡蛋，和一栋从第 <code>1</code>&nbsp;层到第 <code>n</code> 层共有 <code>n</code> 层楼的建筑。</p>
 
@@ -48,32 +59,117 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：动态规划
+
+我们定义 $f[i]$ 表示有两枚鸡蛋，在 $i$ 层楼中确定 $f$ 的最小操作次数。初始时 $f[0] = 0$，其余 $f[i] = +\infty$。答案为 $f[n]$。
+
+考虑 $f[i]$，我们可以枚举第一枚鸡蛋从第 $j$ 层楼扔下，其中 $1 \leq j \leq i$，此时有两种情况：
+
+-   鸡蛋碎了，此时我们剩余一枚鸡蛋，需要在 $j - 1$ 层楼中确定 $f$，这需要 $j - 1$ 次操作，因此总操作次数为 $1 + (j - 1)$；
+-   鸡蛋没碎，此时我们剩余两枚鸡蛋，需要在 $i - j$ 层楼中确定 $f$，这需要 $f[i - j]$ 次操作，因此总操作次数为 $1 + f[i - j]$。
+
+综上，我们可以得到状态转移方程：
+
+$$
+f[i] = \min_{1 \leq j \leq i} \{1 + \max(j - 1, f[i - j])\}
+$$
+
+最后，我们返回 $f[n]$ 即可。
+
+时间复杂度 $O(n^2)$，空间复杂度 $O(n)$。其中 $n$ 为楼层数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-
+class Solution:
+    def twoEggDrop(self, n: int) -> int:
+        f = [0] + [inf] * n
+        for i in range(1, n + 1):
+            for j in range(1, i + 1):
+                f[i] = min(f[i], 1 + max(j - 1, f[i - j]))
+        return f[n]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
+class Solution {
+    public int twoEggDrop(int n) {
+        int[] f = new int[n + 1];
+        Arrays.fill(f, 1 << 29);
+        f[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                f[i] = Math.min(f[i], 1 + Math.max(j - 1, f[i - j]));
+            }
+        }
+        return f[n];
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int twoEggDrop(int n) {
+        int f[n + 1];
+        memset(f, 0x3f, sizeof(f));
+        f[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                f[i] = min(f[i], 1 + max(j - 1, f[i - j]));
+            }
+        }
+        return f[n];
+    }
+};
 ```
 
+#### Go
+
+```go
+func twoEggDrop(n int) int {
+	f := make([]int, n+1)
+	for i := range f {
+		f[i] = 1 << 29
+	}
+	f[0] = 0
+	for i := 1; i <= n; i++ {
+		for j := 1; j <= i; j++ {
+			f[i] = min(f[i], 1+max(j-1, f[i-j]))
+		}
+	}
+	return f[n]
+}
+```
+
+#### TypeScript
+
+```ts
+function twoEggDrop(n: number): number {
+    const f: number[] = Array(n + 1).fill(Infinity);
+    f[0] = 0;
+    for (let i = 1; i <= n; ++i) {
+        for (let j = 1; j <= i; ++j) {
+            f[i] = Math.min(f[i], 1 + Math.max(j - 1, f[i - j]));
+        }
+    }
+    return f[n];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

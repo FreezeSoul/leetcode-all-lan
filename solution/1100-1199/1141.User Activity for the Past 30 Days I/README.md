@@ -1,12 +1,22 @@
-# [1141. 查询近 30 天活跃用户数](https://leetcode.cn/problems/user-activity-for-the-past-30-days-i)
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1141.User%20Activity%20for%20the%20Past%2030%20Days%20I/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1141. 查询近30天活跃用户数](https://leetcode.cn/problems/user-activity-for-the-past-30-days-i)
 
 [English Version](/solution/1100-1199/1141.User%20Activity%20for%20the%20Past%2030%20Days%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>活动记录表：<code>Activity</code></p>
+<p>表：<code>Activity</code></p>
 
 <pre>
 +---------------+---------+
@@ -17,19 +27,19 @@
 | activity_date | date    |
 | activity_type | enum    |
 +---------------+---------+
-该表是用户在社交网站的活动记录。
-该表没有主键，可能包含重复数据。
-activity_type 字段为以下四种值 ('open_session', 'end_session', 'scroll_down', 'send_message')。
-每个 session_id 只属于一个用户。
+该表没有包含重复数据。
+activity_type 列是 ENUM(category) 类型， 从 ('open_session'， 'end_session'， 'scroll_down'， 'send_message') 取值。
+该表记录社交媒体网站的用户活动。
+注意，每个会话只属于一个用户。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>请写SQL查询出截至&nbsp;<code>2019-07-27</code>（包含2019-07-27），近<strong>&nbsp;</strong><code>30</code> 天的每日活跃用户数（当天只要有一条活动记录，即为活跃用户）。</p>
+<p>编写解决方案，统计截至&nbsp;<code>2019-07-27</code>（包含2019-07-27），近<strong>&nbsp;</strong><code>30</code> 天的每日活跃用户数（当天只要有一条活动记录，即为活跃用户）。</p>
 
 <p>以 <strong>任意顺序</strong> 返回结果表。</p>
 
-<p>查询结果示例如下。</p>
+<p>结果示例如下。</p>
 
 <p>&nbsp;</p>
 
@@ -62,25 +72,30 @@ Activity table:
 +------------+--------------+ <strong>
 解释：</strong>注意非活跃用户的记录不需要展示。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：GROUP BY + HAVING
+
+我们查询出所有在 `2019-07-27` 且在 $30$ 天内的所有活动记录，然后按照日期分组，统计每天的去重活跃用户数。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-SELECT
-    activity_date AS day,
-    COUNT(DISTINCT user_id) AS active_users
-FROM
-    Activity
-WHERE
-    DATEDIFF('2019-07-27', activity_date) >= 0 and
-    DATEDIFF('2019-07-27', activity_date) < 30
-GROUP BY
-    activity_date;
+# Write your MySQL query statement below
+SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
+FROM Activity
+WHERE activity_date <= '2019-07-27' AND DATEDIFF('2019-07-27', activity_date) < 30
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

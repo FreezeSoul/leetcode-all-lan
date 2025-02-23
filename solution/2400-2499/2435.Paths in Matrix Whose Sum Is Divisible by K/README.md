@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2435.Paths%20in%20Matrix%20Whose%20Sum%20Is%20Divisible%20by%20K/README.md
+rating: 1951
+source: 第 314 场周赛 Q4
+tags:
+    - 数组
+    - 动态规划
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2435. 矩阵中和能被 K 整除的路径](https://leetcode.cn/problems/paths-in-matrix-whose-sum-is-divisible-by-k)
 
 [English Version](/solution/2400-2499/2435.Paths%20in%20Matrix%20Whose%20Sum%20Is%20Divisible%20by%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的&nbsp;<code>m x n</code>&nbsp;整数矩阵&nbsp;<code>grid</code>&nbsp;和一个整数&nbsp;<code>k</code>&nbsp;。你从起点&nbsp;<code>(0, 0)</code>&nbsp;出发，每一步只能往 <strong>下</strong>&nbsp;或者往 <strong>右</strong>&nbsp;，你想要到达终点&nbsp;<code>(m - 1, n - 1)</code>&nbsp;。</p>
 
@@ -50,11 +64,13 @@
 	<li><code>1 &lt;= k &lt;= 50</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 设计函数 `dfs(i, j, s)` 表示从 `(i, j)` 出发，初始路径和模 $k$ 的结果为 $s$ 的路径数目。
 
@@ -66,29 +82,11 @@ $$
 
 答案为 `dfs(0, 0, 0)`。记忆化搜索即可。
 
-时间复杂度 $O(m\times n\times k)$，空间复杂度 $O(m\times n\times k)$。其中 $m$ 和 $n$ 分别为矩阵的行数和列数，而 $k$ 为给定的整数。
-
-**方法二：动态规划**
-
-我们也可以使用动态规划求解。
-
-定义状态 $dp[i][j][s]$ 表示从起点 $(0, 0)$ 出发，到达位置 $(i, j)$，路径和模 $k$ 等于 $s$ 的路径数目。
-
-初始值 $dp[0][0][grid[0][0] \bmod k] = 1$，答案为 $dp[m - 1][n - 1][0]$。
-
-我们可以得到状态转移方程：
-
-$$
-dp[i][j][s] = dp[i - 1][j][(s - grid[i][j])\bmod k] + dp[i][j - 1][(s - grid[i][j])\bmod k]
-$$
-
-时间复杂度 $O(m\times n\times k)$，空间复杂度 $O(m\times n\times k)$。其中 $m$ 和 $n$ 分别为矩阵的行数和列数，而 $k$ 为给定的整数。
+时间复杂度 $O(m \times n \times k)$，空间复杂度 $O(m \times n \times k)$。其中 $m$ 和 $n$ 分别为矩阵的行数和列数，而 $k$ 为给定的整数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -110,28 +108,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def numberOfPaths(self, grid: List[List[int]], k: int) -> int:
-        m, n = len(grid), len(grid[0])
-        dp = [[[0] * k for _ in range(n)] for _ in range(m)]
-        dp[0][0][grid[0][0] % k] = 1
-        mod = 10**9 + 7
-        for i in range(m):
-            for j in range(n):
-                for s in range(k):
-                    t = ((s - grid[i][j] % k) + k) % k
-                    if i:
-                        dp[i][j][s] += dp[i - 1][j][t]
-                    if j:
-                        dp[i][j][s] += dp[i][j - 1][t]
-                    dp[i][j][s] %= mod
-        return dp[-1][-1][0]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -175,34 +152,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    private static final int MOD = (int) 1e9 + 7;
-
-    public int numberOfPaths(int[][] grid, int k) {
-        int m = grid.length, n = grid[0].length;
-        int[][][] dp = new int[m][n][k];
-        dp[0][0][grid[0][0] % k] = 1;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                for (int s = 0; s < k; ++s) {
-                    int t = ((s - grid[i][j] % k) + k) % k;
-                    if (i > 0) {
-                        dp[i][j][s] += dp[i - 1][j][t];
-                    }
-                    if (j > 0) {
-                        dp[i][j][s] += dp[i][j - 1][t];
-                    }
-                    dp[i][j][s] %= MOD;
-                }
-            }
-        }
-        return dp[m - 1][n - 1][0];
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -227,31 +177,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    const int mod = 1e9 + 7;
-
-    int numberOfPaths(vector<vector<int>>& grid, int k) {
-        int m = grid.size(), n = grid[0].size();
-        vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int>(k)));
-        dp[0][0][grid[0][0] % k] = 1;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                for (int s = 0; s < k; ++s) {
-                    int t = ((s - grid[i][j] % k) + k) % k;
-                    if (i) dp[i][j][s] += dp[i - 1][j][t];
-                    if (j) dp[i][j][s] += dp[i][j - 1][t];
-                    dp[i][j][s] %= mod;
-                }
-            }
-        }
-        return dp[m - 1][n - 1][0];
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func numberOfPaths(grid [][]int, k int) int {
@@ -291,6 +217,132 @@ func numberOfPaths(grid [][]int, k int) int {
 }
 ```
 
+#### TypeScript
+
+```ts
+function numberOfPaths(grid: number[][], k: number): number {
+    const MOD = 10 ** 9 + 7;
+    const m = grid.length,
+        n = grid[0].length;
+    let ans = Array.from({ length: m + 1 }, () =>
+        Array.from({ length: n + 1 }, () => new Array(k).fill(0)),
+    );
+    ans[0][1][0] = 1;
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            for (let v = 0; v < k; v++) {
+                let key = (grid[i][j] + v) % k;
+                ans[i + 1][j + 1][key] =
+                    (ans[i][j + 1][v] + ans[i + 1][j][v] + ans[i + 1][j + 1][key]) % MOD;
+            }
+        }
+    }
+    return ans[m][n][0];
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+我们也可以使用动态规划求解。
+
+定义状态 $dp[i][j][s]$ 表示从起点 $(0, 0)$ 出发，到达位置 $(i, j)$，路径和模 $k$ 等于 $s$ 的路径数目。
+
+初始值 $dp[0][0][grid[0][0] \bmod k] = 1$，答案为 $dp[m - 1][n - 1][0]$。
+
+我们可以得到状态转移方程：
+
+$$
+dp[i][j][s] = dp[i - 1][j][(s - grid[i][j])\bmod k] + dp[i][j - 1][(s - grid[i][j])\bmod k]
+$$
+
+时间复杂度 $O(m \times n \times k)$，空间复杂度 $O(m \times n \times k)$。其中 $m$ 和 $n$ 分别为矩阵的行数和列数，而 $k$ 为给定的整数。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numberOfPaths(self, grid: List[List[int]], k: int) -> int:
+        m, n = len(grid), len(grid[0])
+        dp = [[[0] * k for _ in range(n)] for _ in range(m)]
+        dp[0][0][grid[0][0] % k] = 1
+        mod = 10**9 + 7
+        for i in range(m):
+            for j in range(n):
+                for s in range(k):
+                    t = ((s - grid[i][j] % k) + k) % k
+                    if i:
+                        dp[i][j][s] += dp[i - 1][j][t]
+                    if j:
+                        dp[i][j][s] += dp[i][j - 1][t]
+                    dp[i][j][s] %= mod
+        return dp[-1][-1][0]
+```
+
+#### Java
+
+```java
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int numberOfPaths(int[][] grid, int k) {
+        int m = grid.length, n = grid[0].length;
+        int[][][] dp = new int[m][n][k];
+        dp[0][0][grid[0][0] % k] = 1;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                for (int s = 0; s < k; ++s) {
+                    int t = ((s - grid[i][j] % k) + k) % k;
+                    if (i > 0) {
+                        dp[i][j][s] += dp[i - 1][j][t];
+                    }
+                    if (j > 0) {
+                        dp[i][j][s] += dp[i][j - 1][t];
+                    }
+                    dp[i][j][s] %= MOD;
+                }
+            }
+        }
+        return dp[m - 1][n - 1][0];
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    const int mod = 1e9 + 7;
+
+    int numberOfPaths(vector<vector<int>>& grid, int k) {
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int>(k)));
+        dp[0][0][grid[0][0] % k] = 1;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                for (int s = 0; s < k; ++s) {
+                    int t = ((s - grid[i][j] % k) + k) % k;
+                    if (i) dp[i][j][s] += dp[i - 1][j][t];
+                    if (j) dp[i][j][s] += dp[i][j - 1][t];
+                    dp[i][j][s] %= mod;
+                }
+            }
+        }
+        return dp[m - 1][n - 1][0];
+    }
+};
+```
+
+#### Go
+
 ```go
 func numberOfPaths(grid [][]int, k int) int {
 	m, n := len(grid), len(grid[0])
@@ -321,37 +373,8 @@ func numberOfPaths(grid [][]int, k int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function numberOfPaths(grid: number[][], k: number): number {
-    const MOD = 10 ** 9 + 7;
-    const m = grid.length,
-        n = grid[0].length;
-    let ans = Array.from({ length: m + 1 }, () =>
-        Array.from({ length: n + 1 }, () => new Array(k).fill(0)),
-    );
-    ans[0][1][0] = 1;
-    for (let i = 0; i < m; i++) {
-        for (let j = 0; j < n; j++) {
-            for (let v = 0; v < k; v++) {
-                let key = (grid[i][j] + v) % k;
-                ans[i + 1][j + 1][key] =
-                    (ans[i][j + 1][v] +
-                        ans[i + 1][j][v] +
-                        ans[i + 1][j + 1][key]) %
-                    MOD;
-            }
-        }
-    }
-    return ans[m][n][0];
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

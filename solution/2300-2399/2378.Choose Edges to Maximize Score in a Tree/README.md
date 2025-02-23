@@ -1,10 +1,22 @@
-# [2378. 选择边来最大化树的得分](https://leetcode.cn/problems/choose-edges-to-maximize-score-in-a-tree)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2378.Choose%20Edges%20to%20Maximize%20Score%20in%20a%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 动态规划
+---
+
+<!-- problem:start -->
+
+# [2378. 选择边来最大化树的得分 🔒](https://leetcode.cn/problems/choose-edges-to-maximize-score-in-a-tree)
 
 [English Version](/solution/2300-2399/2378.Choose%20Edges%20to%20Maximize%20Score%20in%20a%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个&nbsp;<strong>加权&nbsp;</strong>树，由 <code>n</code> 个节点组成，从 <code>0</code> 到 <code>n - 1</code>。</p>
 
@@ -63,11 +75,13 @@
 	<li><code>edges</code> 表示有效的树。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：树形 DP**
+### 方法一：树形 DP
 
 我们设计一个函数 $dfs(i)$，表示以节点 $i$ 为根的子树中，选择一些边，使得所选的两条边都不相邻，所选边的权值之和最大。该函数返回了两个值 $(a, b)$，第一个值 $a$ 表示当前节点 $i$ 与其父节点之间的边被选中时，所选边的权值之和；第二个值 $b$ 表示当前节点 $i$ 与其父节点之间的边不被选中时，所选边的权值之和。
 
@@ -82,9 +96,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -105,9 +117,7 @@ class Solution:
         return dfs(0)[1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -139,7 +149,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -169,7 +179,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxScore(edges [][]int) int64 {
@@ -194,26 +204,10 @@ func maxScore(edges [][]int) int64 {
 	}
 	return int64(dfs(0)[1])
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

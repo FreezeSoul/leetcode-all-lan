@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0730.Count%20Different%20Palindromic%20Subsequences/README_EN.md
+tags:
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [730. Count Different Palindromic Subsequences](https://leetcode.com/problems/count-different-palindromic-subsequences)
 
 [中文文档](/solution/0700-0799/0730.Count%20Different%20Palindromic%20Subsequences/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string s, return <em>the number of different non-empty palindromic subsequences in</em> <code>s</code>. Since the answer may be very large, return it <strong>modulo</strong> <code>10<sup>9</sup> + 7</code>.</p>
 
@@ -38,11 +51,17 @@ Note that &#39;bcb&#39; is counted only once, even though it occurs twice.
 	<li><code>s[i]</code> is either <code>&#39;a&#39;</code>, <code>&#39;b&#39;</code>, <code>&#39;c&#39;</code>, or <code>&#39;d&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +87,7 @@ class Solution:
         return sum(dp[0][-1]) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +127,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 using ll = long long;
@@ -137,12 +156,12 @@ public:
             }
         }
         ll ans = accumulate(dp[0][n - 1].begin(), dp[0][n - 1].end(), 0ll);
-        return (int)(ans % mod);
+        return (int) (ans % mod);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPalindromicSubsequences(s string) int {
@@ -183,10 +202,8 @@ func countPalindromicSubsequences(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

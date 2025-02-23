@@ -1,13 +1,13 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        def dfs(i):
-            if i == n:
+        def dfs(i: int):
+            if i >= n:
                 ans.append(t[:])
                 return
-            for j in range(n):
+            for j, x in enumerate(nums):
                 if not vis[j]:
                     vis[j] = True
-                    t[i] = nums[j]
+                    t[i] = x
                     dfs(i + 1)
                     vis[j] = False
 

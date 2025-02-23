@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0334.Increasing%20Triplet%20Subsequence/README.md
+tags:
+    - 贪心
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [334. 递增的三元子序列](https://leetcode.cn/problems/increasing-triplet-subsequence)
 
 [English Version](/solution/0300-0399/0334.Increasing%20Triplet%20Subsequence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code> ，判断这个数组中是否存在长度为 <code>3</code> 的递增子序列。</p>
 
@@ -48,17 +59,17 @@
 
 <p><strong>进阶：</strong>你能实现时间复杂度为 <code>O(n)</code> ，空间复杂度为 <code>O(1)</code> 的解决方案吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用 min, mid 记录遍历过程中遇到的最小值以及中间值，若出现 num > mid，说明找到了满足题目的三元组，返回 true；否则遍历结束返回 false。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -74,9 +85,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,28 +111,45 @@ class Solution {
 }
 ```
 
-空间优化：
+#### C++
 
-```java
+```cpp
 class Solution {
-    public boolean increasingTriplet(int[] nums) {
-        int min = Integer.MAX_VALUE, mid = Integer.MAX_VALUE;
+public:
+    bool increasingTriplet(vector<int>& nums) {
+        int mi = INT_MAX, mid = INT_MAX;
         for (int num : nums) {
-            if (num > mid) {
-                return true;
-            }
-            if (num <= min) {
-                min = num;
-            } else {
+            if (num > mid) return true;
+            if (num <= mi)
+                mi = num;
+            else
                 mid = num;
-            }
         }
         return false;
     }
+};
+```
+
+#### Go
+
+```go
+func increasingTriplet(nums []int) bool {
+	min, mid := math.MaxInt32, math.MaxInt32
+	for _, num := range nums {
+		if num > mid {
+			return true
+		}
+		if num <= min {
+			min = num
+		} else {
+			mid = num
+		}
+	}
+	return false
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function increasingTriplet(nums: number[]): boolean {
@@ -144,45 +170,7 @@ function increasingTriplet(nums: number[]): boolean {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool increasingTriplet(vector<int>& nums) {
-        int mi = INT_MAX, mid = INT_MAX;
-        for (int num : nums) {
-            if (num > mid) return true;
-            if (num <= mi)
-                mi = num;
-            else
-                mid = num;
-        }
-        return false;
-    }
-};
-```
-
-### **Go**
-
-```go
-func increasingTriplet(nums []int) bool {
-	min, mid := math.MaxInt32, math.MaxInt32
-	for _, num := range nums {
-		if num > mid {
-			return true
-		}
-		if num <= min {
-			min = num
-		} else {
-			mid = num
-		}
-	}
-	return false
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -207,10 +195,39 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        int min = Integer.MAX_VALUE, mid = Integer.MAX_VALUE;
+        for (int num : nums) {
+            if (num > mid) {
+                return true;
+            }
+            if (num <= min) {
+                min = num;
+            } else {
+                mid = num;
+            }
+        }
+        return false;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

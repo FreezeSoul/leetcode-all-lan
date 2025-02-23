@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0876.Middle%20of%20the%20Linked%20List/README_EN.md
+tags:
+    - Linked List
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [876. Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list)
 
 [中文文档](/solution/0800-0899/0876.Middle%20of%20the%20Linked%20List/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>head</code> of a singly linked list, return <em>the middle node of the linked list</em>.</p>
 
@@ -33,11 +46,17 @@
 	<li><code>1 &lt;= Node.val &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -53,7 +72,7 @@ class Solution:
         return slow
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -78,7 +97,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -104,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -123,7 +142,7 @@ func middleNode(head *ListNode) *ListNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -149,7 +168,7 @@ function middleNode(head: ListNode | null): ListNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -181,30 +200,7 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     struct ListNode *next;
- * };
- */
-
-
-struct ListNode *middleNode(struct ListNode *head) {
-    struct ListNode *fast = head;
-    struct ListNode *slow = head;
-    while (fast && fast->next) {
-        fast = fast->next->next;
-        slow = slow->next;
-    }
-    return slow;
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 /**
@@ -240,10 +236,30 @@ class Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
+```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
 
+struct ListNode* middleNode(struct ListNode* head) {
+    struct ListNode* fast = head;
+    struct ListNode* slow = head;
+    while (fast && fast->next) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    return slow;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

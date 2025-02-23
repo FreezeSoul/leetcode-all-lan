@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1962.Remove%20Stones%20to%20Minimize%20the%20Total/README.md
+rating: 1418
+source: 第 253 场周赛 Q2
+tags:
+    - 贪心
+    - 数组
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1962. 移除石子使总数最小](https://leetcode.cn/problems/remove-stones-to-minimize-the-total)
 
 [English Version](/solution/1900-1999/1962.Remove%20Stones%20to%20Minimize%20the%20Total/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>piles</code> ，数组 <strong>下标从 0 开始</strong> ，其中 <code>piles[i]</code> 表示第 <code>i</code> 堆石子中的石子数量。另给你一个整数 <code>k</code> ，请你执行下述操作 <strong>恰好</strong> <code>k</code> 次：</p>
 
@@ -53,100 +67,106 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（大根堆）**
+### 方法一：贪心 + 优先队列（大根堆）
+
+根据题目描述，为了使得剩下的石子总数最小，我们需要尽可能多地移除石子堆中的石子。因此，每次应该选择数量最多的石子堆进行移除。
+
+我们创建一个优先队列（大根堆） $pq$，用于存储石子堆的数量。初始时，将所有石子堆的数量加入优先队列。
+
+接下来，我们进行 $k$ 次操作。在每一次操作中，我们取出优先队列的堆顶元素 $x$，将 $x$ 减半后重新加入优先队列。
+
+在进行了 $k$ 次操作后，优先队列中所有元素的和即为答案。
+
+时间复杂度 $O(n + k \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `piles` 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minStoneSum(self, piles: List[int], k: int) -> int:
-        h = []
-        for p in piles:
-            heappush(h, -p)
+        pq = [-x for x in piles]
+        heapify(pq)
         for _ in range(k):
-            p = -heappop(h)
-            heappush(h, -((p + 1) >> 1))
-        return -sum(h)
+            heapreplace(pq, pq[0] // 2)
+        return -sum(pq)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int minStoneSum(int[] piles, int k) {
-        PriorityQueue<Integer> q = new PriorityQueue<>((a, b) -> (b - a));
-        for (int p : piles) {
-            q.offer(p);
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        for (int x : piles) {
+            pq.offer(x);
         }
         while (k-- > 0) {
-            int p = q.poll();
-            q.offer((p + 1) >> 1);
+            int x = pq.poll();
+            pq.offer(x - x / 2);
         }
         int ans = 0;
-        while (!q.isEmpty()) {
-            ans += q.poll();
+        while (!pq.isEmpty()) {
+            ans += pq.poll();
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minStoneSum(vector<int>& piles, int k) {
-        priority_queue<int> q;
-        for (int& p : piles) q.push(p);
+        priority_queue<int> pq;
+        for (int x : piles) {
+            pq.push(x);
+        }
         while (k--) {
-            int p = q.top();
-            q.pop();
-            q.push((p + 1) >> 1);
+            int x = pq.top();
+            pq.pop();
+            pq.push(x - x / 2);
         }
         int ans = 0;
-        while (!q.empty()) {
-            ans += q.top();
-            q.pop();
+        while (!pq.empty()) {
+            ans += pq.top();
+            pq.pop();
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func minStoneSum(piles []int, k int) int {
-    q := &hp{piles}
-    heap.Init(q)
-    for k > 0 {
-        p := q.pop()
-        q.push((p + 1) >> 1)
-        k--
-    }
-    ans := 0
-    for q.Len() > 0 {
-        ans += q.pop()
-    }
-    return ans
+func minStoneSum(piles []int, k int) (ans int) {
+	pq := &hp{piles}
+	heap.Init(pq)
+	for ; k > 0; k-- {
+		x := pq.pop()
+		pq.push(x - x/2)
+	}
+	for pq.Len() > 0 {
+		ans += pq.pop()
+	}
+	return
 }
 
 type hp struct{ sort.IntSlice }
 
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] > h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -156,10 +176,24 @@ func (h *hp) push(v int) { heap.Push(h, v) }
 func (h *hp) pop() int   { return heap.Pop(h).(int) }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function minStoneSum(piles: number[], k: number): number {
+    const pq = new MaxPriorityQueue();
+    for (const x of piles) {
+        pq.enqueue(x);
+    }
+    while (k--) {
+        pq.enqueue((pq.dequeue().element + 1) >> 1);
+    }
 
+    return pq.toArray().reduce((a, b) => a + b.element, 0);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

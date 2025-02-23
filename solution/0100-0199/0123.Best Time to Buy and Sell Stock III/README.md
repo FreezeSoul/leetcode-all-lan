@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0123.Best%20Time%20to%20Buy%20and%20Sell%20Stock%20III/README.md
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [123. 买卖股票的最佳时机 III](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii)
 
 [English Version](/solution/0100-0199/0123.Best%20Time%20to%20Buy%20and%20Sell%20Stock%20III/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个数组，它的第<em> </em><code>i</code> 个元素是一支给定的股票在第 <code>i</code><em> </em>天的价格。</p>
 
@@ -55,11 +66,13 @@
 	<li><code>0 <= prices[i] <= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义以下几个变量，其中：
 
@@ -70,15 +83,13 @@
 
 遍历过程中，直接使用 `f1`, `f2`, `f3`, `f4` 计算，考虑的是在同一天买入和卖出时，收益是 $0$，不会对答案产生影响。
 
-最后返回 `f2` 即可。
+最后返回 `f4` 即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 `prices` 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为数组 `prices` 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,9 +104,7 @@ class Solution:
         return f4
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +122,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,36 +140,67 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxProfit(prices []int) int {
-    f1, f2, f3, f4 := -prices[0], 0, -prices[0], 0
-    for i := 1; i < len(prices); i++ {
-        f1 = max(f1, -prices[i])
-        f2 = max(f2, f1 + prices[i])
-        f3 = max(f3, f2 - prices[i])
-        f4 = max(f4, f3 + prices[i])
-    }
-    return f4
-}
-
-func max(a, b int) int {
-    if a > b {
-        return a
-    }
-    return b
+	f1, f2, f3, f4 := -prices[0], 0, -prices[0], 0
+	for i := 1; i < len(prices); i++ {
+		f1 = max(f1, -prices[i])
+		f2 = max(f2, f1+prices[i])
+		f3 = max(f3, f2-prices[i])
+		f4 = max(f4, f3+prices[i])
+	}
+	return f4
 }
 ```
 
-### **C#**
+#### TypeScript
+
+```ts
+function maxProfit(prices: number[]): number {
+    let [f1, f2, f3, f4] = [-prices[0], 0, -prices[0], 0];
+    for (let i = 1; i < prices.length; ++i) {
+        f1 = Math.max(f1, -prices[i]);
+        f2 = Math.max(f2, f1 + prices[i]);
+        f3 = Math.max(f3, f2 - prices[i]);
+        f4 = Math.max(f4, f3 + prices[i]);
+    }
+    return f4;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn max_profit(prices: Vec<i32>) -> i32 {
+        let mut f1 = -prices[0];
+        let mut f2 = 0;
+        let mut f3 = -prices[0];
+        let mut f4 = 0;
+        let n = prices.len();
+
+        for i in 1..n {
+            f1 = std::cmp::max(f1, -prices[i]);
+            f2 = std::cmp::max(f2, f1 + prices[i]);
+            f3 = std::cmp::max(f3, f2 - prices[i]);
+            f4 = std::cmp::max(f4, f3 + prices[i]);
+        }
+
+        f4
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
     public int MaxProfit(int[] prices) {
         int f1 = -prices[0], f2 = 0, f3 = -prices[0], f4 = 0;
-        for (int i = 1; i < prices.Length; ++i)
-        {
+        for (int i = 1; i < prices.Length; ++i) {
             f1 = Math.Max(f1, -prices[i]);
             f2 = Math.Max(f2, f1 + prices[i]);
             f3 = Math.Max(f3, f2 - prices[i]);
@@ -171,10 +211,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

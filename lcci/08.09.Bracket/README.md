@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/08.09.Bracket/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 08.09. 括号](https://leetcode.cn/problems/bracket-lcci)
 
 [English Version](/lcci/08.09.Bracket/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>括号。设计一种算法，打印n对括号的所有合法的（例如，开闭一一对应）组合。</p>
 
 <p>说明：解集不能包含重复的子集。</p>
@@ -21,11 +30,13 @@
 ]
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS + 剪枝**
+### 方法一：DFS + 剪枝
 
 题目中 $n$ 的范围为 $[1, 8]$，因此我们直接通过“暴力搜索 + 剪枝”的方式快速解决本题。
 
@@ -40,9 +51,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -61,9 +70,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -90,15 +97,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> generateParenthesis(int n) {
         vector<string> ans;
-        function<void(int, int, string)> dfs;
-        dfs = [&](int l, int r, string t) {
+        auto dfs = [&](this auto&& dfs, int l, int r, string t) {
             if (l > n || r > n || l < r) return;
             if (l == n && r == n) {
                 ans.push_back(t);
@@ -113,7 +119,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func generateParenthesis(n int) []string {
@@ -135,32 +141,7 @@ func generateParenthesis(n int) []string {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number} n
- * @return {string[]}
- */
-var generateParenthesis = function (n) {
-    function dfs(l, r, t) {
-        if (l > n || r > n || l < r) {
-            return;
-        }
-        if (l == n && r == n) {
-            ans.push(t);
-            return;
-        }
-        dfs(l + 1, r, t + '(');
-        dfs(l, r + 1, t + ')');
-    }
-    let ans = [];
-    dfs(0, 0, '');
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function generateParenthesis(n: number): string[] {
@@ -181,7 +162,7 @@ function generateParenthesis(n: number): string[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -210,10 +191,60 @@ impl Solution {
 }
 ```
 
-### **...**
+#### JavaScript
 
+```js
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function (n) {
+    function dfs(l, r, t) {
+        if (l > n || r > n || l < r) {
+            return;
+        }
+        if (l == n && r == n) {
+            ans.push(t);
+            return;
+        }
+        dfs(l + 1, r, t + '(');
+        dfs(l, r + 1, t + ')');
+    }
+    let ans = [];
+    dfs(0, 0, '');
+    return ans;
+};
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    private var ans: [String] = []
+    private var n: Int = 0
+
+    func generateParenthesis(_ n: Int) -> [String] {
+        self.n = n
+        dfs(l: 0, r: 0, t: "")
+        return ans
+    }
+
+    private func dfs(l: Int, r: Int, t: String) {
+        if l > n || r > n || l < r {
+            return
+        }
+        if l == n && r == n {
+            ans.append(t)
+            return
+        }
+        dfs(l: l + 1, r: r, t: t + "(")
+        dfs(l: l, r: r + 1, t: t + ")")
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

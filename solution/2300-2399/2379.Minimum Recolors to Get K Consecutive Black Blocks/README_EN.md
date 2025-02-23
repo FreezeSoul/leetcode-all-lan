@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2379.Minimum%20Recolors%20to%20Get%20K%20Consecutive%20Black%20Blocks/README_EN.md
+rating: 1360
+source: Biweekly Contest 85 Q1
+tags:
+    - String
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [2379. Minimum Recolors to Get K Consecutive Black Blocks](https://leetcode.com/problems/minimum-recolors-to-get-k-consecutive-black-blocks)
 
 [中文文档](/solution/2300-2399/2379.Minimum%20Recolors%20to%20Get%20K%20Consecutive%20Black%20Blocks/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> string <code>blocks</code> of length <code>n</code>, where <code>blocks[i]</code> is either <code>&#39;W&#39;</code> or <code>&#39;B&#39;</code>, representing the color of the <code>i<sup>th</sup></code> block. The characters <code>&#39;W&#39;</code> and <code>&#39;B&#39;</code> denote the colors white and black, respectively.</p>
 
@@ -45,11 +60,25 @@ Therefore, we return 0.
 	<li><code>1 &lt;= k &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sliding Window
+
+We observe that what the problem actually asks for is the minimum number of white blocks in a sliding window of size $k$.
+
+Therefore, we only need to traverse the string $blocks$, use a variable $cnt$ to count the number of white blocks in the current window, and then use a variable $ans$ to maintain the minimum value.
+
+After the traversal ends, we can get the answer.
+
+The time complexity is $O(n)$, where $n$ is the length of the string $blocks$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +91,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +111,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumRecolors(blocks string, k int) int {
@@ -121,7 +150,7 @@ func minimumRecolors(blocks string, k int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumRecolors(blocks: string, k: number): number {
@@ -139,7 +168,7 @@ function minimumRecolors(blocks: string, k: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -168,12 +197,43 @@ impl Solution {
 }
 ```
 
-### **C**
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param String $blocks
+     * @param Integer $k
+     * @return Integer
+     */
+    function minimumRecolors($blocks, $k) {
+        $cnt = 0;
+        for ($i = 0; $i < $k; $i++) {
+            if ($blocks[$i] === 'W') {
+                $cnt++;
+            }
+        }
+        $min = $cnt;
+        for ($i = $k; $i < strlen($blocks); $i++) {
+            if ($blocks[$i] === 'W') {
+                $cnt++;
+            }
+            if ($blocks[$i - $k] === 'W') {
+                $cnt--;
+            }
+            $min = min($min, $cnt);
+        }
+        return $min;
+    }
+}
+```
+
+#### C
 
 ```c
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-int minimumRecolors(char *blocks, int k) {
+int minimumRecolors(char* blocks, int k) {
     int n = strlen(blocks);
     int count = 0;
     for (int i = 0; i < k; i++) {
@@ -189,11 +249,8 @@ int minimumRecolors(char *blocks, int k) {
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

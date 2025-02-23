@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2028.Find%20Missing%20Observations/README_EN.md
+rating: 1444
+source: Weekly Contest 261 Q2
+tags:
+    - Array
+    - Math
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2028. Find Missing Observations](https://leetcode.com/problems/find-missing-observations)
 
 [中文文档](/solution/2000-2099/2028.Find%20Missing%20Observations/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have observations of <code>n + m</code> <strong>6-sided</strong> dice rolls with each face numbered from <code>1</code> to <code>6</code>. <code>n</code> of the observations went missing, and you only have the observations of <code>m</code> rolls. Fortunately, you have also calculated the <strong>average value</strong> of the <code>n + m</code> rolls.</p>
 
@@ -48,11 +64,25 @@
 	<li><code>1 &lt;= rolls[i], mean &lt;= 6</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Construction
+
+According to the problem description, the sum of all numbers is $(n + m) \times \textit{mean}$, and the sum of known numbers is $\sum_{i=0}^{m-1} \textit{rolls}[i]$. Therefore, the sum of the missing numbers is $s = (n + m) \times \textit{mean} - \sum_{i=0}^{m-1} \textit{rolls}[i]$.
+
+If $s \gt n \times 6$ or $s \lt n$, it means there is no answer that satisfies the conditions, so we return an empty array.
+
+Otherwise, we can evenly distribute $s$ to $n$ numbers, that is, the value of each number is $s / n$, and the value of $s \bmod n$ numbers is increased by $1$.
+
+The time complexity is $O(n + m)$, where $n$ and $m$ are the number of missing numbers and known numbers, respectively. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +97,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -90,97 +120,27 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function missingRolls(rolls: number[], mean: number, n: number): number[] {
-    const len = rolls.length + n;
-    const sum = rolls.reduce((p, v) => p + v);
-    const max = n * 6;
-    const min = n;
-    if ((sum + max) / len < mean || (sum + min) / len > mean) {
-        return [];
-    }
-
-    const res = new Array(n);
-    for (let i = min; i <= max; i++) {
-        if ((sum + i) / len === mean) {
-            const num = Math.floor(i / n);
-            res.fill(num);
-            let count = i - n * num;
-            let j = 0;
-            while (count != 0) {
-                if (res[j] === 6) {
-                    j++;
-                } else {
-                    res[j]++;
-                    count--;
-                }
-            }
-            break;
-        }
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn missing_rolls(rolls: Vec<i32>, mean: i32, n: i32) -> Vec<i32> {
-        let n = n as usize;
-        let mean = mean as usize;
-        let len = rolls.len() + n;
-        let sum: i32 = rolls.iter().sum();
-        let sum = sum as usize;
-        let max = n * 6;
-        let min = n;
-        if (sum + max) < mean * len || (sum + min) > mean * len {
-            return vec![];
-        }
-
-        let mut res = vec![0; n];
-        for i in min..=max {
-            if (sum + i) / len == mean {
-                let num = i / n;
-                res.fill(num as i32);
-                let mut count = i - n * num;
-                let mut j = 0;
-                while count != 0 {
-                    if res[j] == 6 {
-                        j += 1;
-                    } else {
-                        res[j] += 1;
-                        count -= 1;
-                    }
-                }
-                break;
-            }
-        }
-        res
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> missingRolls(vector<int>& rolls, int mean, int n) {
         int m = rolls.size();
-        int s = (n + m) * mean;
-        for (int& v : rolls) s -= v;
-        if (s > n * 6 || s < n) return {};
+        int s = (n + m) * mean - accumulate(rolls.begin(), rolls.end(), 0);
+        if (s > n * 6 || s < n) {
+            return {};
+        }
         vector<int> ans(n, s / n);
-        for (int i = 0; i < s % n; ++i) ++ans[i];
+        for (int i = 0; i < s % n; ++i) {
+            ++ans[i];
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func missingRolls(rolls []int, mean int, n int) []int {
@@ -203,10 +163,47 @@ func missingRolls(rolls []int, mean int, n int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function missingRolls(rolls: number[], mean: number, n: number): number[] {
+    const m = rolls.length;
+    const s = (n + m) * mean - rolls.reduce((a, b) => a + b, 0);
+    if (s > n * 6 || s < n) {
+        return [];
+    }
+    const ans: number[] = Array(n).fill((s / n) | 0);
+    for (let i = 0; i < s % n; ++i) {
+        ans[i]++;
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn missing_rolls(rolls: Vec<i32>, mean: i32, n: i32) -> Vec<i32> {
+        let m = rolls.len() as i32;
+        let s = (n + m) * mean - rolls.iter().sum::<i32>();
+
+        if s > n * 6 || s < n {
+            return vec![];
+        }
+
+        let mut ans = vec![s / n; n as usize];
+        for i in 0..(s % n) as usize {
+            ans[i] += 1;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

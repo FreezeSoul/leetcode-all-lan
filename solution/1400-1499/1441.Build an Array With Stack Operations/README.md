@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1441.Build%20an%20Array%20With%20Stack%20Operations/README.md
+rating: 1180
+source: 第 188 场周赛 Q1
+tags:
+    - 栈
+    - 数组
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [1441. 用栈操作构建数组](https://leetcode.cn/problems/build-an-array-with-stack-operations)
 
 [English Version](/solution/1400-1499/1441.Build%20an%20Array%20With%20Stack%20Operations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组 <code>target</code> 和一个整数 <code>n</code>。每次迭代，需要从&nbsp; <code>list = { 1 , 2 , 3 ..., n }</code> 中依次读取一个数字。</p>
 
@@ -59,11 +73,13 @@
 	<li><code>target</code> 严格递增</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们定义 $cur$ 表示当前已经从 `list` 中读取到的数字，初始时 $cur = 0$，用一个数组 $ans$ 存储答案。
 
@@ -75,9 +91,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +106,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -113,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +145,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func buildArray(target []int, n int) []string {
@@ -149,32 +161,7 @@ func buildArray(target []int, n int) []string {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-char **buildArray(int *target, int targetSize, int n, int *returnSize) {
-    char **res = (char **) malloc(sizeof(char *) * n * 2);
-    int cur = 1;
-    int i = 0;
-    for (int j = 0; j < targetSize; j++) {
-        while (++cur < target[j]) {
-            res[i] = (char *) malloc(sizeof(char) * 8);
-            strcpy(res[i++], "Push");
-            res[i] = (char *) malloc(sizeof(char) * 8);
-            strcpy(res[i++], "Pop");
-        }
-        res[i] = (char *) malloc(sizeof(char) * 8);
-        strcpy(res[i++], "Push");
-    }
-    *returnSize = i;
-    return res;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function buildArray(target: number[], n: number): string[] {
@@ -190,7 +177,7 @@ function buildArray(target: number[], n: number): string[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -211,10 +198,33 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+char** buildArray(int* target, int targetSize, int n, int* returnSize) {
+    char** res = (char**) malloc(sizeof(char*) * n * 2);
+    int cur = 1;
+    int i = 0;
+    for (int j = 0; j < targetSize; j++) {
+        while (++cur < target[j]) {
+            res[i] = (char*) malloc(sizeof(char) * 8);
+            strcpy(res[i++], "Push");
+            res[i] = (char*) malloc(sizeof(char) * 8);
+            strcpy(res[i++], "Pop");
+        }
+        res[i] = (char*) malloc(sizeof(char) * 8);
+        strcpy(res[i++], "Push");
+    }
+    *returnSize = i;
+    return res;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
-# [267. 回文排列 II](https://leetcode.cn/problems/palindrome-permutation-ii)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0267.Palindrome%20Permutation%20II/README.md
+tags:
+    - 哈希表
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
+# [267. 回文排列 II 🔒](https://leetcode.cn/problems/palindrome-permutation-ii)
 
 [English Version](/solution/0200-0299/0267.Palindrome%20Permutation%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个字符串 <code>s</code>&nbsp;，返回 <em>其重新排列组合后可能构成的所有回文字符串，并去除重复的组合</em>&nbsp;。</p>
 
@@ -36,11 +48,13 @@
 	<li><code>s</code>&nbsp;仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯**
+### 方法一：回溯
 
 回文排列需要满足至多有一个字符出现奇数次数。若不满足条件，答案提前返回。
 
@@ -50,9 +64,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,9 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -125,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -166,7 +176,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func generatePalindromes(s string) []string {
@@ -204,10 +214,8 @@ func generatePalindromes(s string) []string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

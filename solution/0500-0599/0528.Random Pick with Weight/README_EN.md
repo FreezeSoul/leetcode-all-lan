@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0528.Random%20Pick%20with%20Weight/README_EN.md
+tags:
+    - Array
+    - Math
+    - Binary Search
+    - Prefix Sum
+    - Randomized
+---
+
+<!-- problem:start -->
+
 # [528. Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight)
 
 [中文文档](/solution/0500-0599/0528.Random%20Pick%20with%20Weight/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> array of positive integers <code>w</code> where <code>w[i]</code> describes the <strong>weight</strong> of the <code>i<sup>th</sup></code> index.</p>
 
@@ -64,11 +80,17 @@ and so on.
 	<li><code>pickIndex</code> will be called at most <code>10<sup>4</sup></code> times.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -94,7 +116,7 @@ class Solution:
 # param_1 = obj.pickIndex()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -131,7 +153,7 @@ class Solution {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -166,7 +188,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Solution struct {
@@ -204,7 +226,46 @@ func (this *Solution) PickIndex() int {
  */
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+use rand::{thread_rng, Rng};
+
+struct Solution {
+    sum: Vec<i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl Solution {
+    fn new(w: Vec<i32>) -> Self {
+        let n = w.len();
+        let mut sum = vec![0; n + 1];
+        for i in 1..=n {
+            sum[i] = sum[i - 1] + w[i - 1];
+        }
+        Self { sum }
+    }
+
+    fn pick_index(&self) -> i32 {
+        let x = thread_rng().gen_range(1, self.sum.last().unwrap() + 1);
+        let (mut left, mut right) = (1, self.sum.len() - 1);
+        while left < right {
+            let mid = (left + right) >> 1;
+            if self.sum[mid] < x {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        (left - 1) as i32
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -244,55 +305,8 @@ Solution.prototype.pickIndex = function () {
  */
 ```
 
-### **Rust**
-
-```rust
-use rand::{thread_rng, Rng};
-
-struct Solution {
-    sum: Vec<i32>,
-}
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl Solution {
-    fn new(w: Vec<i32>) -> Self {
-        let n = w.len();
-        let mut sum = vec![0; n + 1];
-        for i in 1..=n {
-            sum[i] = sum[i - 1] + w[i - 1];
-        }
-        Self { sum }
-    }
-
-    fn pick_index(&self) -> i32 {
-        let x = thread_rng().gen_range(1, self.sum.last().unwrap() + 1);
-        let (mut left, mut right) = (1, self.sum.len() - 1);
-        while left < right {
-            let mid = (left + right) >> 1;
-            if self.sum[mid] < x {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-        (left - 1) as i32
-    }
-}
-
-/**
- * Your Solution object will be instantiated and called as such:
- * let obj = Solution::new(w);
- * let ret_1: i32 = obj.pick_index();
- */
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

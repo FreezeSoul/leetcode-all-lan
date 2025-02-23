@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0457.Circular%20Array%20Loop/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+---
+
+<!-- problem:start -->
+
 # [457. 环形数组是否存在循环](https://leetcode.cn/problems/circular-array-loop)
 
 [English Version](/solution/0400-0499/0457.Circular%20Array%20Loop/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>存在一个不含 <code>0</code> 的<strong> 环形 </strong>数组&nbsp;<code>nums</code> ，每个 <code>nums[i]</code> 都表示位于下标 <code>i</code> 的角色应该向前或向后移动的下标个数：</p>
 
@@ -27,29 +39,33 @@
 
 <p>&nbsp;</p>
 
-<p><strong>示例 1：</strong></p>
-
+<p><strong class="example">示例 1：</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0400-0499/0457.Circular%20Array%20Loop/images/1723688159-qYjpWT-image.png" style="width: 402px; height: 289px;" />
 <pre>
 <strong>输入：</strong>nums = [2,-1,1,2,2]
 <strong>输出：</strong>true
-<strong>解释：</strong>存在循环，按下标 0 -&gt; 2 -&gt; 3 -&gt; 0 。循环长度为 3 。
+<strong>解释：</strong>图片展示了节点间如何连接。白色节点向前跳跃，而红色节点向后跳跃。
+我们可以看到存在循环，按下标 0 -&gt; 2 -&gt; 3 -&gt; 0 --&gt; ...，并且其中的所有节点都是白色（以相同方向跳跃）。
 </pre>
 
-<p><strong>示例 2：</strong></p>
-
+<p><strong class="example">示例 2：</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0400-0499/0457.Circular%20Array%20Loop/images/1723688183-lRSkjp-image.png" style="width: 402px; height: 390px;" />
 <pre>
-<strong>输入：</strong>nums = [-1,2]
+<strong>输入：</strong>nums = [-1,-2,-3,-4,-5,6]
 <strong>输出：</strong>false
-<strong>解释：</strong>按下标 1 -&gt; 1 -&gt; 1 ... 的运动无法构成循环，因为循环的长度为 1 。根据定义，循环的长度必须大于 1 。
+<strong>解释：</strong>图片展示了节点间如何连接。白色节点向前跳跃，而红色节点向后跳跃。
+唯一的循环长度为 1，所以返回 false。
 </pre>
 
-<p><strong>示例 3:</strong></p>
-
+<p><strong class="example">示例 3：</strong></p>
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/0400-0499/0457.Circular%20Array%20Loop/images/1723688199-nhaMuF-image.png" style="width: 497px; height: 242px;" />
 <pre>
-<strong>输入：</strong>nums = [-2,1,-1,-2,-2]
-<strong>输出：</strong>false
-<strong>解释：</strong>按下标 1 -&gt; 2 -&gt; 1 -&gt; ... 的运动无法构成循环，因为 nums[1] 是正数，而 nums[2] 是负数。
-所有 nums[seq[j]] 应当不是全正就是全负。</pre>
+<strong>输入：</strong>nums = [1,-1,5,1,4]
+<strong>输出：</strong>true
+<strong>解释：</strong>图片展示了节点间如何连接。白色节点向前跳跃，而红色节点向后跳跃。
+我们可以看到存在循环，按下标 0 --&gt; 1 --&gt; 0 --&gt; ...，当它的大小大于 1 时，它有一个向前跳的节点和一个向后跳的节点，所以 <strong>它不是一个循环</strong>。
+我们可以看到存在循环，按下标 3 --&gt; 4 --&gt; 3 --&gt; ...，并且其中的所有节点都是白色（以相同方向跳跃）。
+</pre>
 
 <p>&nbsp;</p>
 
@@ -65,17 +81,17 @@
 
 <p><strong>进阶：</strong>你能设计一个时间复杂度为 <code>O(n)</code> 且额外空间复杂度为 <code>O(1)</code> 的算法吗？</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-快慢指针。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -102,9 +118,7 @@ class Solution:
         return False
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -144,7 +158,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -178,7 +192,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func circularArrayLoop(nums []int) bool {
@@ -211,10 +225,8 @@ func next(nums []int, i int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

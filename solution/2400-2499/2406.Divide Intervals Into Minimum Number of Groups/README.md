@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2406.Divide%20Intervals%20Into%20Minimum%20Number%20of%20Groups/README.md
+rating: 1713
+source: 第 310 场周赛 Q3
+tags:
+    - 贪心
+    - 数组
+    - 双指针
+    - 前缀和
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2406. 将区间分为最少组数](https://leetcode.cn/problems/divide-intervals-into-minimum-number-of-groups)
 
 [English Version](/solution/2400-2499/2406.Divide%20Intervals%20Into%20Minimum%20Number%20of%20Groups/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二维整数数组&nbsp;<code>intervals</code>&nbsp;，其中&nbsp;<code>intervals[i] = [left<sub>i</sub>, right<sub>i</sub>]</code>&nbsp;表示 <strong>闭</strong>&nbsp;区间&nbsp;<code>[left<sub>i</sub>, right<sub>i</sub>]</code>&nbsp;。</p>
 
@@ -45,39 +62,39 @@
 	<li><code>1 &lt;= left<sub>i</sub> &lt;= right<sub>i</sub> &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 优先队列（小根堆）**
+### 方法一：贪心 + 优先队列（小根堆）
 
-先将区间按左端点排序，用小根堆维护每组的最右端点（堆顶是所有组的最右端点的最小值）。遍历每个区间：
+我们先将区间按左端点排序，用小根堆维护每组的最右端点（堆顶是所有组的最右端点的最小值）。
+
+接下来，我们遍历每个区间：
 
 -   若当前区间左端点大于堆顶元素，说明当前区间可以加入到堆顶元素所在的组中，我们直接弹出堆顶元素，然后将当前区间的右端点放入堆中；
 -   否则，说明当前没有组能容纳当前区间，那么我们就新建一个组，将当前区间的右端点放入堆中。
 
-时间复杂度 $O(n\log n)$。其中 $n$ 是数组 `intervals` 的长度。
+时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 是数组 `intervals` 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minGroups(self, intervals: List[List[int]]) -> int:
-        h = []
-        for a, b in sorted(intervals):
-            if h and h[0] < a:
-                heappop(h)
-            heappush(h, b)
-        return len(h)
+        q = []
+        for left, right in sorted(intervals):
+            if q and q[0] < left:
+                heappop(q)
+            heappush(q, right)
+        return len(q)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minGroups(intervals [][]int) int {
@@ -131,8 +148,8 @@ func minGroups(intervals [][]int) int {
 
 type hp struct{ sort.IntSlice }
 
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h *hp) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -140,17 +157,24 @@ func (h *hp) Pop() interface{} {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
-```
-
-### **...**
-
-```
-
-
+function minGroups(intervals: number[][]): number {
+    intervals.sort((a, b) => a[0] - b[0]);
+    const q = new PriorityQueue({ compare: (a, b) => a - b });
+    for (const [left, right] of intervals) {
+        if (!q.isEmpty() && q.front() < left) {
+            q.dequeue();
+        }
+        q.enqueue(right);
+    }
+    return q.size();
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

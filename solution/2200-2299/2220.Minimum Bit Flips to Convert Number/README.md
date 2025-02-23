@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2220.Minimum%20Bit%20Flips%20to%20Convert%20Number/README.md
+rating: 1282
+source: 第 75 场双周赛 Q1
+tags:
+    - 位运算
+---
+
+<!-- problem:start -->
+
 # [2220. 转换数字的最少位翻转次数](https://leetcode.cn/problems/minimum-bit-flips-to-convert-number)
 
 [English Version](/solution/2200-2299/2220.Minimum%20Bit%20Flips%20to%20Convert%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>一次 <strong>位翻转</strong>&nbsp;定义为将数字&nbsp;<code>x</code>&nbsp;二进制中的一个位进行 <strong>翻转</strong>&nbsp;操作，即将&nbsp;<code>0</code>&nbsp;变成&nbsp;<code>1</code>&nbsp;，或者将&nbsp;<code>1</code>&nbsp;变成&nbsp;<code>0</code>&nbsp;。</p>
 
@@ -47,124 +59,126 @@
 	<li><code>0 &lt;= start, goal &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<p>&nbsp;</p>
+
+<p><strong>注意：</strong>本题与&nbsp;<a href="https://leetcode.cn/problems/hamming-distance/">461. 汉明距离</a>&nbsp;相同。</p>
+
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：位运算
+
+根据题目描述，我们只需要计算 $\textit{start} \oplus \textit{goal}$ 的二进制表示中有多少个 1 即可。
+
+时间复杂度 $O(\log n)$，其中 $n$ 是题目中整数的大小。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def minBitFlips(self, start: int, goal: int) -> int:
-        t = start ^ goal
-        ans = 0
-        while t:
-            ans += t & 1
-            t >>= 1
-        return ans
+        return (start ^ goal).bit_count()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int minBitFlips(int start, int goal) {
-        int t = start ^ goal;
-        int ans = 0;
-        while (t != 0) {
-            ans += t & 1;
-            t >>= 1;
-        }
-        return ans;
+        return Integer.bitCount(start ^ goal);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minBitFlips(int start, int goal) {
-        int t = start ^ goal;
-        int ans = 0;
-        while (t) {
-            ans += t & 1;
-            t >>= 1;
-        }
-        return ans;
+        return __builtin_popcount(start ^ goal);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minBitFlips(start int, goal int) int {
-	t := start ^ goal
-	ans := 0
-	for t != 0 {
-		ans += t & 1
-		t >>= 1
-	}
-	return ans
+	return bits.OnesCount(uint(start ^ goal))
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minBitFlips(start: number, goal: number): number {
-    let tmp = start ^ goal;
-    let ans = 0;
-    while (tmp !== 0) {
-        ans += tmp & 1;
-        tmp >>= 1;
-    }
-    return ans;
+    return bitCount(start ^ goal);
+}
+
+function bitCount(i: number): number {
+    i = i - ((i >>> 1) & 0x55555555);
+    i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
+    i = (i + (i >>> 4)) & 0x0f0f0f0f;
+    i = i + (i >>> 8);
+    i = i + (i >>> 16);
+    return i & 0x3f;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn min_bit_flips(start: i32, goal: i32) -> i32 {
-        let mut tmp = start ^ goal;
-        let mut ans = 0;
-        while tmp != 0 {
-            ans += tmp & 1;
-            tmp >>= 1;
-        }
-        ans
+        (start ^ goal).count_ones() as i32
     }
 }
 ```
 
-### **C**
+#### JavaScript
+
+```js
+/**
+ * @param {number} start
+ * @param {number} goal
+ * @return {number}
+ */
+var minBitFlips = function (start, goal) {
+    return bitCount(start ^ goal);
+};
+
+function bitCount(i) {
+    i = i - ((i >>> 1) & 0x55555555);
+    i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
+    i = (i + (i >>> 4)) & 0x0f0f0f0f;
+    i = i + (i >>> 8);
+    i = i + (i >>> 16);
+    return i & 0x3f;
+}
+```
+
+#### C
 
 ```c
 int minBitFlips(int start, int goal) {
-    int tmp = start ^ goal;
+    int x = start ^ goal;
     int ans = 0;
-    while (tmp) {
-        ans += tmp & 1;
-        tmp >>= 1;
+    while (x) {
+        ans += (x & 1);
+        x >>= 1;
     }
     return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

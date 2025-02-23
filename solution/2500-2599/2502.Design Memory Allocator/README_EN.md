@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2502.Design%20Memory%20Allocator/README_EN.md
+rating: 1745
+source: Weekly Contest 323 Q3
+tags:
+    - Design
+    - Array
+    - Hash Table
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [2502. Design Memory Allocator](https://leetcode.com/problems/design-memory-allocator)
 
 [中文文档](/solution/2500-2599/2502.Design%20Memory%20Allocator/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code> representing the size of a <strong>0-indexed</strong> memory array. All memory units are initially free.</p>
 
@@ -25,7 +42,7 @@
 <ul>
 	<li><code>Allocator(int n)</code> Initializes an <code>Allocator</code> object with a memory array of size <code>n</code>.</li>
 	<li><code>int allocate(int size, int mID)</code> Find the <strong>leftmost</strong> block of <code>size</code> <strong>consecutive</strong> free memory units and allocate it with the id <code>mID</code>. Return the block&#39;s first index. If such a block does not exist, return <code>-1</code>.</li>
-	<li><code>int free(int mID)</code> Free all memory units with the id <code>mID</code>. Return the number of memory units you have freed.</li>
+	<li><code>int freeMemory(int mID)</code> Free all memory units with the id <code>mID</code>. Return the number of memory units you have freed.</li>
 </ul>
 
 <p>&nbsp;</p>
@@ -33,7 +50,7 @@
 
 <pre>
 <strong>Input</strong>
-[&quot;Allocator&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;free&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;free&quot;, &quot;allocate&quot;, &quot;free&quot;]
+[&quot;Allocator&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;freeMemory&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;allocate&quot;, &quot;freeMemory&quot;, &quot;allocate&quot;, &quot;freeMemory&quot;]
 [[10], [1, 1], [1, 2], [1, 3], [2], [3, 4], [1, 1], [1, 1], [1], [10, 2], [7]]
 <strong>Output</strong>
 [null, 0, 1, 2, 1, 3, 1, 6, 3, -1, 0]
@@ -43,13 +60,13 @@ Allocator loc = new Allocator(10); // Initialize a memory array of size 10. All 
 loc.allocate(1, 1); // The leftmost block&#39;s first index is 0. The memory array becomes [<strong>1</strong>,_,_,_,_,_,_,_,_,_]. We return 0.
 loc.allocate(1, 2); // The leftmost block&#39;s first index is 1. The memory array becomes [1,<strong>2</strong>,_,_,_,_,_,_,_,_]. We return 1.
 loc.allocate(1, 3); // The leftmost block&#39;s first index is 2. The memory array becomes [1,2,<strong>3</strong>,_,_,_,_,_,_,_]. We return 2.
-loc.free(2); // Free all memory units with mID 2. The memory array becomes [1,_, 3,_,_,_,_,_,_,_]. We return 1 since there is only 1 unit with mID 2.
+loc.freeMemory(2); // Free all memory units with mID 2. The memory array becomes [1,_, 3,_,_,_,_,_,_,_]. We return 1 since there is only 1 unit with mID 2.
 loc.allocate(3, 4); // The leftmost block&#39;s first index is 3. The memory array becomes [1,_,3,<strong>4</strong>,<strong>4</strong>,<strong>4</strong>,_,_,_,_]. We return 3.
 loc.allocate(1, 1); // The leftmost block&#39;s first index is 1. The memory array becomes [1,<strong>1</strong>,3,4,4,4,_,_,_,_]. We return 1.
 loc.allocate(1, 1); // The leftmost block&#39;s first index is 6. The memory array becomes [1,1,3,4,4,4,<strong>1</strong>,_,_,_]. We return 6.
-loc.free(1); // Free all memory units with mID 1. The memory array becomes [_,_,3,4,4,4,_,_,_,_]. We return 3 since there are 3 units with mID 1.
+loc.freeMemory(1); // Free all memory units with mID 1. The memory array becomes [_,_,3,4,4,4,_,_,_,_]. We return 3 since there are 3 units with mID 1.
 loc.allocate(10, 2); // We can not find any free block with 10 consecutive free memory units, so we return -1.
-loc.free(7); // Free all memory units with mID 7. The memory array remains the same since there is no memory unit with mID 7. We return 0.
+loc.freeMemory(7); // Free all memory units with mID 7. The memory array remains the same since there is no memory unit with mID 7. We return 0.
 </pre>
 
 <p>&nbsp;</p>
@@ -57,18 +74,33 @@ loc.free(7); // Free all memory units with mID 7. The memory array remains the s
 
 <ul>
 	<li><code>1 &lt;= n, size, mID &lt;= 1000</code></li>
-	<li>At most <code>1000</code> calls will be made to <code>allocate</code> and <code>free</code>.</li>
+	<li>At most <code>1000</code> calls will be made to <code>allocate</code> and <code>freeMemory</code>.</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1: Brute Force Simulation
+
+The data range of the problem is not large, so we can directly use an array to simulate the memory space.
+
+During initialization, set each element in the array to $0$, indicating it's free.
+
+When the `allocate` method is called, traverse the array, find `size` consecutive free memory units, set them to `mID`, and return the first index.
+
+When the `free` method is called, traverse the array, set all memory units equal to `mID` to $0$, indicating they are free.
+
+The time complexity is $O(n \times q)$, and the space complexity is $O(n)$, where $n$ and $q$ are the size of the memory space and the number of method calls, respectively.
+
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Allocator:
-
     def __init__(self, n: int):
         self.m = [0] * n
 
@@ -80,10 +112,9 @@ class Allocator:
             else:
                 cnt += 1
                 if cnt == size:
-                    self.m[i - size + 1: i + 1] = [mID] * size
+                    self.m[i - size + 1 : i + 1] = [mID] * size
                     return i - size + 1
         return -1
-
 
     def free(self, mID: int) -> int:
         ans = 0
@@ -93,39 +124,6 @@ class Allocator:
                 ans += 1
         return ans
 
-# Your Allocator object will be instantiated and called as such:
-# obj = Allocator(n)
-# param_1 = obj.allocate(size,mID)
-# param_2 = obj.free(mID)
-```
-
-```python
-from sortedcontainers import SortedList
-
-
-class Allocator:
-
-    def __init__(self, n: int):
-        self.sl = SortedList([(-1, -1), (n, n)])
-        self.d = defaultdict(list)
-
-    def allocate(self, size: int, mID: int) -> int:
-        for (_, s), (e, _) in pairwise(self.sl):
-            s, e = s + 1, e - 1
-            if e - s + 1 >= size:
-                self.sl.add((s, s + size - 1))
-                self.d[mID].append((s, s + size - 1))
-                return s
-        return -1
-
-    def free(self, mID: int) -> int:
-        ans = 0
-        for block in self.d[mID]:
-            self.sl.remove(block)
-            ans += block[1] - block[0] + 1
-        del self.d[mID]
-        return ans
-
 
 # Your Allocator object will be instantiated and called as such:
 # obj = Allocator(n)
@@ -133,7 +131,7 @@ class Allocator:
 # param_2 = obj.free(mID)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Allocator {
@@ -176,53 +174,7 @@ class Allocator {
  */
 ```
 
-```java
-class Allocator {
-    private TreeMap<Integer, Integer> tm = new TreeMap<>();
-    private Map<Integer, List<Integer>> d = new HashMap<>();
-
-    public Allocator(int n) {
-        tm.put(-1, -1);
-        tm.put(n, n);
-    }
-
-    public int allocate(int size, int mID) {
-        int s = -1;
-        for (var entry : tm.entrySet()) {
-            int v = entry.getKey();
-            if (s != -1) {
-                int e = v - 1;
-                if (e - s + 1 >= size) {
-                    tm.put(s, s + size - 1);
-                    d.computeIfAbsent(mID, k -> new ArrayList<>()).add(s);
-                    return s;
-                }
-            }
-            s = entry.getValue() + 1;
-        }
-        return -1;
-    }
-
-    public int free(int mID) {
-        int ans = 0;
-        for (int s : d.getOrDefault(mID, Collections.emptyList())) {
-            int e = tm.remove(s);
-            ans += e - s + 1;
-        }
-        d.remove(mID);
-        return ans;
-    }
-}
-
-/**
- * Your Allocator object will be instantiated and called as such:
- * Allocator obj = new Allocator(n);
- * int param_1 = obj.allocate(size,mID);
- * int param_2 = obj.free(mID);
- */
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Allocator {
@@ -273,6 +225,153 @@ private:
  */
 ```
 
+#### Go
+
+```go
+type Allocator struct {
+	m []int
+}
+
+func Constructor(n int) Allocator {
+	return Allocator{make([]int, n)}
+}
+
+func (this *Allocator) Allocate(size int, mID int) int {
+	cnt := 0
+	for i, v := range this.m {
+		if v > 0 {
+			cnt = 0
+		} else {
+			cnt++
+			if cnt == size {
+				for j := i - size + 1; j <= i; j++ {
+					this.m[j] = mID
+				}
+				return i - size + 1
+			}
+		}
+	}
+	return -1
+}
+
+func (this *Allocator) Free(mID int) (ans int) {
+	for i, v := range this.m {
+		if v == mID {
+			this.m[i] = 0
+			ans++
+		}
+	}
+	return
+}
+
+/**
+ * Your Allocator object will be instantiated and called as such:
+ * obj := Constructor(n);
+ * param_1 := obj.Allocate(size,mID);
+ * param_2 := obj.Free(mID);
+ */
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Hash Table + Ordered Set
+
+We can use an ordered set to maintain the start and end indices of all allocated memory units, where the start index is the key and the end index is the value. Additionally, we use a hash table to maintain the `mID` and its corresponding start index of the memory unit.
+
+When the `allocate` method is called, we traverse the ordered set, find the first free interval with a length greater than or equal to `size`, allocate it to `mID`, and update the ordered set. Then we add the `mID` and its corresponding start index of the memory unit to the hash table.
+
+When the `free` method is called, we find the start index of the memory unit corresponding to `mID` from the hash table, then delete it from the ordered set, and then delete `mID` from the hash table.
+
+The time complexity is $O(q \log n)$, and the space complexity is $O(n)$, where $n$ and $q$ are the size of the memory space and the number of method calls, respectively.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Allocator:
+    def __init__(self, n: int):
+        self.sl = SortedList([(-1, -1), (n, n)])
+        self.d = defaultdict(list)
+
+    def allocate(self, size: int, mID: int) -> int:
+        for (_, s), (e, _) in pairwise(self.sl):
+            s, e = s + 1, e - 1
+            if e - s + 1 >= size:
+                self.sl.add((s, s + size - 1))
+                self.d[mID].append((s, s + size - 1))
+                return s
+        return -1
+
+    def free(self, mID: int) -> int:
+        ans = 0
+        for block in self.d[mID]:
+            self.sl.remove(block)
+            ans += block[1] - block[0] + 1
+        del self.d[mID]
+        return ans
+
+
+# Your Allocator object will be instantiated and called as such:
+# obj = Allocator(n)
+# param_1 = obj.allocate(size,mID)
+# param_2 = obj.free(mID)
+```
+
+#### Java
+
+```java
+class Allocator {
+    private TreeMap<Integer, Integer> tm = new TreeMap<>();
+    private Map<Integer, List<Integer>> d = new HashMap<>();
+
+    public Allocator(int n) {
+        tm.put(-1, -1);
+        tm.put(n, n);
+    }
+
+    public int allocate(int size, int mID) {
+        int s = -1;
+        for (var entry : tm.entrySet()) {
+            int v = entry.getKey();
+            if (s != -1) {
+                int e = v - 1;
+                if (e - s + 1 >= size) {
+                    tm.put(s, s + size - 1);
+                    d.computeIfAbsent(mID, k -> new ArrayList<>()).add(s);
+                    return s;
+                }
+            }
+            s = entry.getValue() + 1;
+        }
+        return -1;
+    }
+
+    public int free(int mID) {
+        int ans = 0;
+        for (int s : d.getOrDefault(mID, Collections.emptyList())) {
+            int e = tm.remove(s);
+            ans += e - s + 1;
+        }
+        d.remove(mID);
+        return ans;
+    }
+}
+
+/**
+ * Your Allocator object will be instantiated and called as such:
+ * Allocator obj = new Allocator(n);
+ * int param_1 = obj.allocate(size,mID);
+ * int param_2 = obj.free(mID);
+ */
+```
+
+#### C++
+
 ```cpp
 class Allocator {
 public:
@@ -321,52 +420,7 @@ private:
  */
 ```
 
-### **Go**
-
-```go
-type Allocator struct {
-	m []int
-}
-
-func Constructor(n int) Allocator {
-	return Allocator{make([]int, n)}
-}
-
-func (this *Allocator) Allocate(size int, mID int) int {
-	cnt := 0
-	for i, v := range this.m {
-		if v > 0 {
-			cnt = 0
-		} else {
-			cnt++
-			if cnt == size {
-				for j := i - size + 1; j <= i; j++ {
-					this.m[j] = mID
-				}
-				return i - size + 1
-			}
-		}
-	}
-	return -1
-}
-
-func (this *Allocator) Free(mID int) (ans int) {
-	for i, v := range this.m {
-		if v == mID {
-			this.m[i] = 0
-			ans++
-		}
-	}
-	return
-}
-
-/**
- * Your Allocator object will be instantiated and called as such:
- * obj := Constructor(n);
- * param_1 := obj.Allocate(size,mID);
- * param_2 := obj.Free(mID);
- */
-```
+#### Go
 
 ```go
 type Allocator struct {
@@ -419,10 +473,8 @@ func (this *Allocator) Free(mID int) int {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1290.Convert%20Binary%20Number%20in%20a%20Linked%20List%20to%20Integer/README_EN.md
+rating: 1151
+source: Weekly Contest 167 Q1
+tags:
+    - Linked List
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1290. Convert Binary Number in a Linked List to Integer](https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer)
 
 [中文文档](/solution/1200-1299/1290.Convert%20Binary%20Number%20in%20a%20Linked%20List%20to%20Integer/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given <code>head</code> which is a reference node to a singly-linked list. The value of each node in the linked list is either <code>0</code> or <code>1</code>. The linked list holds the binary representation of a number.</p>
 
@@ -35,11 +50,17 @@
 	<li>Each node&#39;s value is either <code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -56,7 +77,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -80,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -105,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -123,30 +144,7 @@ func getDecimalValue(head *ListNode) (ans int) {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
- * }
- */
-/**
- * @param {ListNode} head
- * @return {number}
- */
-var getDecimalValue = function (head) {
-    let ans = 0;
-    for (; head; head = head.next) {
-        ans = (ans << 1) | head.val;
-    }
-    return ans;
-};
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -170,7 +168,7 @@ function getDecimalValue(head: ListNode | null): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -202,32 +200,32 @@ impl Solution {
 }
 ```
 
-### **C**
+#### JavaScript
 
-```c
+```js
 /**
  * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     struct ListNode *next;
- * };
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
  */
-
-
-int getDecimalValue(struct ListNode *head) {
-    int ans = 0;
-    struct ListNode *cur = head;
-    while (cur) {
-        ans = (ans << 1) | cur->val;
-        cur = cur->next;
+/**
+ * @param {ListNode} head
+ * @return {number}
+ */
+var getDecimalValue = function (head) {
+    let ans = 0;
+    for (; head; head = head.next) {
+        ans = (ans << 1) | head.val;
     }
     return ans;
-}
+};
 ```
 
-### **PHP**
+#### PHP
 
-```PHP
+```php
 /**
  * Definition for a singly-linked list.
  * class ListNode {
@@ -240,13 +238,12 @@ int getDecimalValue(struct ListNode *head) {
  * }
  */
 class Solution {
-
     /**
      * @param ListNode $head
      * @return Integer
      */
     function getDecimalValue($head) {
-        $rs = array();
+        $rs = [];
         while ($head != null) {
             array_push($rs, $head->val);
             $head = $head->next;
@@ -257,10 +254,30 @@ class Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
+```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
 
+int getDecimalValue(struct ListNode* head) {
+    int ans = 0;
+    struct ListNode* cur = head;
+    while (cur) {
+        ans = (ans << 1) | cur->val;
+        cur = cur->next;
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
-# [1256. 加密数字](https://leetcode.cn/problems/encode-number)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1256.Encode%20Number/README.md
+rating: 1561
+source: 第 13 场双周赛 Q1
+tags:
+    - 位运算
+    - 数学
+    - 字符串
+---
+
+<!-- problem:start -->
+
+# [1256. 加密数字 🔒](https://leetcode.cn/problems/encode-number)
 
 [English Version](/solution/1200-1299/1256.Encode%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个非负整数 <code>num</code> ，返回它的「加密字符串」。</p>
 
@@ -34,32 +48,77 @@
 	<li><code>0 &lt;= num &lt;= 10^9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：位运算
+
+我们将 $num$ 加一，然后将其转换为二进制字符串，去掉最高位的 $1$ 即可。
+
+时间复杂度 $O(\log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为 $num$ 的大小。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-
+class Solution:
+    def encode(self, num: int) -> str:
+        return bin(num + 1)[3:]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
-
+class Solution {
+    public String encode(int num) {
+        return Integer.toBinaryString(num + 1).substring(1);
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    string encode(int num) {
+        bitset<32> bs(++num);
+        string ans = bs.to_string();
+        int i = 0;
+        while (ans[i] == '0') {
+            ++i;
+        }
+        return ans.substr(i + 1);
+    }
+};
 ```
 
+#### Go
+
+```go
+func encode(num int) string {
+	num++
+	s := strconv.FormatInt(int64(num), 2)
+	return s[1:]
+}
+```
+
+#### TypeScript
+
+```ts
+function encode(num: number): string {
+    ++num;
+    let s = num.toString(2);
+    return s.slice(1);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2017.%20%E9%80%9F%E7%AE%97%E6%9C%BA%E5%99%A8%E4%BA%BA/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 17. 速算机器人](https://leetcode.cn/problems/nGK0Fy)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 小扣在秋日市集发现了一款速算机器人。店家对机器人说出两个数字（记作 `x` 和 `y`），请小扣说出计算指令：
 
@@ -35,15 +42,17 @@
 -   `0 <= s.length <= 10`
 -   `s` 由 `'A'` 和 `'B'` 组成
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -57,9 +66,7 @@ class Solution:
         return x + y
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -77,7 +84,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -95,7 +102,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func calculate(s string) int {
@@ -111,10 +118,27 @@ func calculate(s string) int {
 }
 ```
 
-### **...**
+#### Swift
 
-```
-
+```swift
+class Solution {
+    func calculate(_ s: String) -> Int {
+        var x = 1
+        var y = 0
+        for c in s {
+            if c == "A" {
+                x = x * 2 + y
+            } else if c == "B" {
+                y = y * 2 + x
+            }
+        }
+        return x + y
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

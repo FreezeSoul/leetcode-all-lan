@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1726.Tuple%20with%20Same%20Product/README.md
+rating: 1530
+source: 第 224 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1726. 同积元组](https://leetcode.cn/problems/tuple-with-same-product)
 
 [English Version](/solution/1700-1799/1726.Tuple%20with%20Same%20Product/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由 <strong>不同</strong> 正整数组成的数组 <code>nums</code> ，请你返回满足&nbsp;<code>a * b = c * d</code> 的元组<em> </em><code>(a, b, c, d)</code><em> </em>的数量。其中 <code>a</code>、<code>b</code>、<code>c</code> 和 <code>d</code> 都是 <code>nums</code> 中的元素，且 <code>a != b != c != d</code> 。</p>
 
@@ -28,7 +42,7 @@
 <strong>解释：</strong>存在 16 个满足题意的元组：
 (1,10,2,5) , (1,10,5,2) , (10,1,2,5) , (10,1,5,2)
 (2,5,1,10) , (2,5,10,1) , (5,2,1,10) , (5,2,10,1)
-(2,10,4,5) , (2,10,5,4) , (10,2,4,5) , (10,2,4,5)
+(2,10,4,5) , (2,10,5,4) , (10,2,4,5) , (10,2,5,4)
 (4,5,2,10) , (4,5,10,2) , (5,4,2,10) , (5,4,10,2)
 </pre>
 
@@ -42,23 +56,23 @@
 	<li><code>nums</code> 中的所有元素 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：组合数+哈希表**
+### 方法一：组合数 + 哈希表
 
-假设存在 `n` 组数，对于其中任意两组数 `a、b` 和 `c、d`，均满足 $a * b = c * d$ 的条件，则这样的组合一共有 $\mathrm{C}_n^2 = \frac{n*(n-1)}{2}$ 个。
+假设存在 $n$ 组数，对于其中任意两组数 $a, b$ 和 $c, d$，均满足 $a \times b = c \times d$ 的条件，则这样的组合一共有 $\mathrm{C}_n^2 = \frac{n \times (n-1)}{2}$ 个。
 
-根据题意每一组满足上述条件的组合可以构成 `8` 个满足题意的元组，故将各个相同乘积的组合数乘以 `8` 相加即可得到结果。
+根据题意每一组满足上述条件的组合可以构成 $8$ 个满足题意的元组，故将各个相同乘积的组合数乘以 $8$ 相加（等价于：左移 $3$ 位）即可得到结果。
 
-时间复杂度 $O(n^2)$，空间复杂度 $O(n^2)$。
+时间复杂度 $O(n^2)$，空间复杂度 $O(n^2)$。其中 $n$ 为数组长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +85,7 @@ class Solution:
         return sum(v * (v - 1) // 2 for v in cnt.values()) << 3
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -82,7 +94,7 @@ class Solution {
         for (int i = 1; i < nums.length; ++i) {
             for (int j = 0; j < i; ++j) {
                 int x = nums[i] * nums[j];
-                cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+                cnt.merge(x, 1, Integer::sum);
             }
         }
         int ans = 0;
@@ -94,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +128,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func tupleSameProduct(nums []int) int {
@@ -135,10 +147,53 @@ func tupleSameProduct(nums []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function tupleSameProduct(nums: number[]): number {
+    const cnt: Map<number, number> = new Map();
+    for (let i = 1; i < nums.length; ++i) {
+        for (let j = 0; j < i; ++j) {
+            const x = nums[i] * nums[j];
+            cnt.set(x, (cnt.get(x) ?? 0) + 1);
+        }
+    }
+    let ans = 0;
+    for (const [_, v] of cnt) {
+        ans += (v * (v - 1)) / 2;
+    }
+    return ans << 3;
+}
 ```
 
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn tuple_same_product(nums: Vec<i32>) -> i32 {
+        let mut cnt: HashMap<i32, i32> = HashMap::new();
+        let mut ans = 0;
+
+        for i in 1..nums.len() {
+            for j in 0..i {
+                let x = nums[i] * nums[j];
+                *cnt.entry(x).or_insert(0) += 1;
+            }
+        }
+
+        for v in cnt.values() {
+            ans += (v * (v - 1)) / 2;
+        }
+
+        ans << 3
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0804.Unique%20Morse%20Code%20Words/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [804. 唯一摩尔斯密码词](https://leetcode.cn/problems/unique-morse-code-words)
 
 [English Version](/solution/0800-0899/0804.Unique%20Morse%20Code%20Words/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>国际摩尔斯密码定义一种标准编码方式，将每个字母对应于一个由一系列点和短线组成的字符串，&nbsp;比如:</p>
 
@@ -61,11 +73,13 @@
 	<li><code>words[i]</code> 由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 将 words 所有单词翻译成对应的摩尔斯密码，加入到哈希表中，最后返回哈希表的 size。
 
@@ -73,9 +87,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -112,9 +124,7 @@ class Solution:
         return len(s)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -135,7 +145,44 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    int uniqueMorseRepresentations(vector<string>& words) {
+        vector<string> codes = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.",
+            "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
+        unordered_set<string> s;
+        for (auto& word : words) {
+            string t;
+            for (char& c : word) t += codes[c - 'a'];
+            s.insert(t);
+        }
+        return s.size();
+    }
+};
+```
+
+#### Go
+
+```go
+func uniqueMorseRepresentations(words []string) int {
+	codes := []string{".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.",
+		"---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."}
+	s := make(map[string]bool)
+	for _, word := range words {
+		t := &strings.Builder{}
+		for _, c := range word {
+			t.WriteString(codes[c-'a'])
+		}
+		s[t.String()] = true
+	}
+	return len(s)
+}
+```
+
+#### TypeScript
 
 ```ts
 const codes = [
@@ -179,7 +226,7 @@ function uniqueMorseRepresentations(words: string[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -204,47 +251,8 @@ impl Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int uniqueMorseRepresentations(vector<string>& words) {
-        vector<string> codes = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.",
-            "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
-        unordered_set<string> s;
-        for (auto& word : words) {
-            string t;
-            for (char& c : word) t += codes[c - 'a'];
-            s.insert(t);
-        }
-        return s.size();
-    }
-};
-```
-
-### **Go**
-
-```go
-func uniqueMorseRepresentations(words []string) int {
-	codes := []string{".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.",
-		"---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."}
-	s := make(map[string]bool)
-	for _, word := range words {
-		t := &strings.Builder{}
-		for _, c := range word {
-			t.WriteString(codes[c-'a'])
-		}
-		s[t.String()] = true
-	}
-	return len(s)
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1636.Sort%20Array%20by%20Increasing%20Frequency/README_EN.md
+rating: 1430
+source: Biweekly Contest 38 Q1
+tags:
+    - Array
+    - Hash Table
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1636. Sort Array by Increasing Frequency](https://leetcode.com/problems/sort-array-by-increasing-frequency)
 
 [中文文档](/solution/1600-1699/1636.Sort%20Array%20by%20Increasing%20Frequency/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of integers <code>nums</code>, sort the array in <strong>increasing</strong> order based on the frequency of the values. If multiple values have the same frequency, sort them in <strong>decreasing</strong> order.</p>
 
@@ -39,11 +55,17 @@
 	<li><code>-100 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -52,7 +74,7 @@ class Solution:
         return sorted(nums, key=lambda x: (cnt[x], -x))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -75,7 +97,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -94,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func frequencySort(nums []int) []int {
@@ -110,7 +132,7 @@ func frequencySort(nums []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function frequencySort(nums: number[]): number[] {
@@ -122,7 +144,7 @@ function frequencySort(nums: number[]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -144,7 +166,7 @@ impl Solution {
 }
 ```
 
-### **Javascript**
+#### JavaScript
 
 ```js
 /**
@@ -161,10 +183,8 @@ var frequencySort = function (nums) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

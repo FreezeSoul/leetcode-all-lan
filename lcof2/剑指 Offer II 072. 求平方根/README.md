@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20072.%20%E6%B1%82%E5%B9%B3%E6%96%B9%E6%A0%B9/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 072. 求平方根](https://leetcode.cn/problems/jJ0w9p)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>实现&nbsp;<code>int sqrt(int x)</code>&nbsp;函数。</p>
 
@@ -26,17 +33,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 69&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/sqrtx/">https://leetcode.cn/problems/sqrtx/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-二分查找。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -52,9 +59,7 @@ class Solution:
         return left
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -74,7 +79,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -88,12 +93,12 @@ public:
             else
                 right = mid - 1;
         }
-        return (int)left;
+        return (int) left;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mySqrt(x int) int {
@@ -110,7 +115,7 @@ func mySqrt(x int) int {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -132,7 +137,7 @@ var mySqrt = function (x) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -155,10 +160,31 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
-
+```swift
+class Solution {
+    func mySqrt(_ x: Int) -> Int {
+        if x == 0 {
+            return 0
+        }
+        var left = 0
+        var right = x
+        while left < right {
+            let mid = (left + right + 1) / 2
+            if mid <= x / mid {
+                left = mid
+            } else {
+                right = mid - 1
+            }
+        }
+        return left
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

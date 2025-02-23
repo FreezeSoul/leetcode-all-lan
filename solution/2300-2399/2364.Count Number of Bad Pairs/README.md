@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2364.Count%20Number%20of%20Bad%20Pairs/README.md
+rating: 1622
+source: 第 84 场双周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 数学
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [2364. 统计坏数对的数目](https://leetcode.cn/problems/count-number-of-bad-pairs)
 
 [English Version](/solution/2300-2399/2364.Count%20Number%20of%20Bad%20Pairs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从<strong>&nbsp;0</strong>&nbsp;开始的整数数组&nbsp;<code>nums</code>&nbsp;。如果 <code>i &lt; j</code>&nbsp;且&nbsp;<code>j - i != nums[j] - nums[i]</code>&nbsp;，那么我们称&nbsp;<code>(i, j)</code>&nbsp;是一个 <strong>坏</strong><strong>数对</strong>&nbsp;。</p>
 
@@ -40,11 +55,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：式子转换 + 哈希表**
+### 方法一：式子转换 + 哈希表
 
 根据题目描述，我们可以得知，对于任意的 $i \lt j$，如果 $j - i \neq nums[j] - nums[i]$，则 $(i, j)$ 是一个坏数对。
 
@@ -58,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -73,9 +88,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,7 +123,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countBadPairs(nums []int) (ans int64) {
@@ -124,7 +137,7 @@ func countBadPairs(nums []int) (ans int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countBadPairs(nums: number[]): number {
@@ -139,10 +152,8 @@ function countBadPairs(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

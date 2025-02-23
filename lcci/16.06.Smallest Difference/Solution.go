@@ -1,28 +1,14 @@
 func smallestDifference(a []int, b []int) int {
-	sort.Ints(a)
 	sort.Ints(b)
-	i, j, res := 0, 0, 2147483647
-	for i < len(a) && j < len(b) {
-		res = min(res, abs(a[i]-b[j]))
-		if a[i] > b[j] {
-			j++
-		} else {
-			i++
+	var ans int = 1e18
+	for _, x := range a {
+		i := sort.SearchInts(b, x)
+		if i < len(b) {
+			ans = min(ans, b[i]-x)
+		}
+		if i > 0 {
+			ans = min(ans, x-b[i-1])
 		}
 	}
-	return res
-}
-
-func abs(a int) int {
-	if a < 0 {
-		return -a
-	}
-	return a
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+	return ans
 }

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1773.Count%20Items%20Matching%20a%20Rule/README_EN.md
+rating: 1174
+source: Weekly Contest 230 Q1
+tags:
+    - Array
+    - String
+---
+
+<!-- problem:start -->
+
 # [1773. Count Items Matching a Rule](https://leetcode.com/problems/count-items-matching-a-rule)
 
 [中文文档](/solution/1700-1799/1773.Count%20Items%20Matching%20a%20Rule/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>items</code>, where each <code>items[i] = [type<sub>i</sub>, color<sub>i</sub>, name<sub>i</sub>]</code> describes the type, color, and name of the <code>i<sup>th</sup></code> item. You are also given a rule represented by two strings, <code>ruleKey</code> and <code>ruleValue</code>.</p>
 
@@ -42,11 +57,17 @@
 	<li>All strings consist only of lowercase letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +76,7 @@ class Solution:
         return sum(v[i] == ruleValue for v in items)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -84,7 +105,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countMatches(items [][]string, ruleKey string, ruleValue string) (ans int) {
@@ -98,35 +119,16 @@ func countMatches(items [][]string, ruleKey string, ruleValue string) (ans int) 
 }
 ```
 
-### **C**
-
-```c
-int countMatches(char ***items, int itemsSize, int *itemsColSize, char *ruleKey, char *ruleValue) {
-    int k = strcmp(ruleKey, "type") == 0 ? 0 : strcmp(ruleKey, "color") == 0 ? 1 : 2;
-    int res = 0;
-    for (int i = 0; i < itemsSize; i++) {
-        if (strcmp(items[i][k], ruleValue) == 0) {
-            res++;
-        }
-    }
-    return res;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function countMatches(
-    items: string[][],
-    ruleKey: string,
-    ruleValue: string,
-): number {
+function countMatches(items: string[][], ruleKey: string, ruleValue: string): number {
     const key = ruleKey === 'type' ? 0 : ruleKey === 'color' ? 1 : 2;
     return items.reduce((r, v) => r + (v[key] === ruleValue ? 1 : 0), 0);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -143,10 +145,24 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+int countMatches(char*** items, int itemsSize, int* itemsColSize, char* ruleKey, char* ruleValue) {
+    int k = strcmp(ruleKey, "type") == 0 ? 0 : strcmp(ruleKey, "color") == 0 ? 1
+                                                                             : 2;
+    int res = 0;
+    for (int i = 0; i < itemsSize; i++) {
+        if (strcmp(items[i][k], ruleValue) == 0) {
+            res++;
+        }
+    }
+    return res;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

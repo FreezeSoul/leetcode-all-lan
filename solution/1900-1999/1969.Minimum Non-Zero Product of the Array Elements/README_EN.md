@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1969.Minimum%20Non-Zero%20Product%20of%20the%20Array%20Elements/README_EN.md
+rating: 1966
+source: Weekly Contest 254 Q3
+tags:
+    - Greedy
+    - Recursion
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1969. Minimum Non-Zero Product of the Array Elements](https://leetcode.com/problems/minimum-non-zero-product-of-the-array-elements)
 
 [中文文档](/solution/1900-1999/1969.Minimum%20Non-Zero%20Product%20of%20the%20Array%20Elements/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a positive integer <code>p</code>. Consider an array <code>nums</code> (<strong>1-indexed</strong>) that consists of the integers in the <strong>inclusive</strong> range <code>[1, 2<sup>p</sup> - 1]</code> in their binary representations. You are allowed to do the following operation <strong>any</strong> number of times:</p>
 
@@ -57,26 +73,127 @@ The array product is 1 * 6 * 1 * 6 * 1 * 6 * 7 = 1512, which is the minimum poss
 	<li><code>1 &lt;= p &lt;= 60</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Fast Power
+
+We notice that each operation does not change the sum of the elements. When the sum of the elements remains unchanged, to minimize the product, we should maximize the difference between the elements as much as possible.
+
+Since the largest element is $2^p - 1$, no matter which element it exchanges with, it will not increase the difference. Therefore, we do not need to consider the case of exchanging with the largest element.
+
+For the other elements in $[1,..2^p-2]$, we pair the first and last elements one by one, that is, pair $x$ with $2^p-1-x$. After several operations, each pair of elements becomes $(1, 2^p-2)$. The final product is $(2^p-1) \times (2^p-2)^{2^{p-1}-1}$.
+
+The time complexity is $O(p)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-
+class Solution:
+    def minNonZeroProduct(self, p: int) -> int:
+        mod = 10**9 + 7
+        return (2**p - 1) * pow(2**p - 2, 2 ** (p - 1) - 1, mod) % mod
 ```
 
-### **Java**
+#### Java
 
 ```java
+class Solution {
+    public int minNonZeroProduct(int p) {
+        final int mod = (int) 1e9 + 7;
+        long a = ((1L << p) - 1) % mod;
+        long b = qpow(((1L << p) - 2) % mod, (1L << (p - 1)) - 1, mod);
+        return (int) (a * b % mod);
+    }
 
+    private long qpow(long a, long n, int mod) {
+        long ans = 1;
+        for (; n > 0; n >>= 1) {
+            if ((n & 1) == 1) {
+                ans = ans * a % mod;
+            }
+            a = a * a % mod;
+        }
+        return ans;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int minNonZeroProduct(int p) {
+        using ll = long long;
+        const int mod = 1e9 + 7;
+        auto qpow = [](ll a, ll n) {
+            ll ans = 1;
+            for (; n; n >>= 1) {
+                if (n & 1) {
+                    ans = ans * a % mod;
+                }
+                a = a * a % mod;
+            }
+            return ans;
+        };
+        ll a = ((1LL << p) - 1) % mod;
+        ll b = qpow(((1LL << p) - 2) % mod, (1L << (p - 1)) - 1);
+        return a * b % mod;
+    }
+};
 ```
 
+#### Go
+
+```go
+func minNonZeroProduct(p int) int {
+	const mod int = 1e9 + 7
+	qpow := func(a, n int) int {
+		ans := 1
+		for ; n > 0; n >>= 1 {
+			if n&1 == 1 {
+				ans = ans * a % mod
+			}
+			a = a * a % mod
+		}
+		return ans
+	}
+	a := ((1 << p) - 1) % mod
+	b := qpow(((1<<p)-2)%mod, (1<<(p-1))-1)
+	return a * b % mod
+}
+```
+
+#### TypeScript
+
+```ts
+function minNonZeroProduct(p: number): number {
+    const mod = BigInt(1e9 + 7);
+
+    const qpow = (a: bigint, n: bigint): bigint => {
+        let ans = BigInt(1);
+        for (; n; n >>= BigInt(1)) {
+            if (n & BigInt(1)) {
+                ans = (ans * a) % mod;
+            }
+            a = (a * a) % mod;
+        }
+        return ans;
+    };
+    const a = (2n ** BigInt(p) - 1n) % mod;
+    const b = qpow((2n ** BigInt(p) - 2n) % mod, 2n ** (BigInt(p) - 1n) - 1n);
+    return Number((a * b) % mod);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

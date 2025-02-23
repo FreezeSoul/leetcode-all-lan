@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0107.Binary%20Tree%20Level%20Order%20Traversal%20II/README.md
+tags:
+    - 树
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [107. 二叉树的层序遍历 II](https://leetcode.cn/problems/binary-tree-level-order-traversal-ii)
 
 [English Version](/solution/0100-0199/0107.Binary%20Tree%20Level%20Order%20Traversal%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你二叉树的根节点 <code>root</code> ，返回其节点值 <strong>自底向上的层序遍历</strong> 。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）</p>
 
@@ -40,17 +52,26 @@
 	<li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-同 [102](/solution/0100-0199/0102.Binary%20Tree%20Level%20Order%20Traversal/README.md)，最后反转一下结果即可。
+### 方法一：BFS
+
+我们可以使用 BFS 的方法来解决这道题。首先将根节点入队，然后不断地进行以下操作，直到队列为空：
+
+-   遍历当前队列中的所有节点，将它们的值存储到一个临时数组 $t$ 中，然后将它们的孩子节点入队。
+-   将临时数组 $t$ 存储到答案数组中。
+
+最后将答案数组反转后返回即可。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是二叉树的节点个数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -78,9 +99,7 @@ class Solution:
         return ans[::-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -125,7 +144,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -143,18 +162,24 @@ class Solution {
 public:
     vector<vector<int>> levelOrderBottom(TreeNode* root) {
         vector<vector<int>> ans;
-        if (!root) return ans;
+        if (!root) {
+            return ans;
+        }
         queue<TreeNode*> q{{root}};
         while (!q.empty()) {
             vector<int> t;
-            for (int i = q.size(); i; --i) {
+            for (int n = q.size(); n; --n) {
                 auto node = q.front();
                 q.pop();
-                t.emplace_back(node->val);
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
+                t.push_back(node->val);
+                if (node->left) {
+                    q.push(node->left);
+                }
+                if (node->right) {
+                    q.push(node->right);
+                }
             }
-            ans.emplace_back(t);
+            ans.push_back(t);
         }
         reverse(ans.begin(), ans.end());
         return ans;
@@ -162,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -173,15 +198,14 @@ public:
  *     Right *TreeNode
  * }
  */
-func levelOrderBottom(root *TreeNode) [][]int {
-	ans := [][]int{}
+func levelOrderBottom(root *TreeNode) (ans [][]int) {
 	if root == nil {
-		return ans
+		return
 	}
 	q := []*TreeNode{root}
 	for len(q) > 0 {
-		var t []int
-		for i := len(q); i > 0; i-- {
+		t := []int{}
+		for n := len(q); n > 0; n-- {
 			node := q[0]
 			q = q[1:]
 			t = append(t, node.Val)
@@ -192,13 +216,105 @@ func levelOrderBottom(root *TreeNode) [][]int {
 				q = append(q, node.Right)
 			}
 		}
-		ans = append([][]int{t}, ans...)
+		ans = append(ans, t)
 	}
-	return ans
+	for i, j := 0, len(ans)-1; i < j; i, j = i+1, j-1 {
+		ans[i], ans[j] = ans[j], ans[i]
+	}
+	return
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function levelOrderBottom(root: TreeNode | null): number[][] {
+    const ans: number[][] = [];
+    if (!root) {
+        return ans;
+    }
+    const q: TreeNode[] = [root];
+    while (q.length) {
+        const t: number[] = [];
+        const qq: TreeNode[] = [];
+        for (const { val, left, right } of q) {
+            t.push(val);
+            left && qq.push(left);
+            right && qq.push(right);
+        }
+        ans.push(t);
+        q.splice(0, q.length, ...qq);
+    }
+    return ans.reverse();
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::{cell::RefCell, collections::VecDeque, rc::Rc};
+impl Solution {
+    pub fn level_order_bottom(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+        let mut ans = Vec::new();
+        if let Some(root_node) = root {
+            let mut q = VecDeque::new();
+            q.push_back(root_node);
+            while !q.is_empty() {
+                let mut t = Vec::new();
+                for _ in 0..q.len() {
+                    if let Some(node) = q.pop_front() {
+                        let node_ref = node.borrow();
+                        t.push(node_ref.val);
+                        if let Some(ref left) = node_ref.left {
+                            q.push_back(Rc::clone(left));
+                        }
+                        if let Some(ref right) = node_ref.right {
+                            q.push_back(Rc::clone(right));
+                        }
+                    }
+                }
+                ans.push(t);
+            }
+        }
+        ans.reverse();
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -214,27 +330,28 @@ func levelOrderBottom(root *TreeNode) [][]int {
  * @return {number[][]}
  */
 var levelOrderBottom = function (root) {
-    let ans = [];
-    if (!root) return ans;
-    let q = [root];
-    while (q.length) {
-        let t = [];
-        for (let i = q.length; i > 0; --i) {
-            const node = q.shift();
-            t.push(node.val);
-            if (node.left) q.push(node.left);
-            if (node.right) q.push(node.right);
-        }
-        ans.unshift(t);
+    const ans = [];
+    if (!root) {
+        return ans;
     }
-    return ans;
+    const q = [root];
+    while (q.length) {
+        const t = [];
+        const qq = [];
+        for (const { val, left, right } of q) {
+            t.push(val);
+            left && qq.push(left);
+            right && qq.push(right);
+        }
+        ans.push(t);
+        q.splice(0, q.length, ...qq);
+    }
+    return ans.reverse();
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

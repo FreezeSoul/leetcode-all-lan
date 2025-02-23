@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1560.Most%20Visited%20Sector%20in%20%20a%20Circular%20Track/README_EN.md
+rating: 1443
+source: Weekly Contest 203 Q1
+tags:
+    - Array
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1560. Most Visited Sector in a Circular Track](https://leetcode.com/problems/most-visited-sector-in-a-circular-track)
 
 [中文文档](/solution/1500-1599/1560.Most%20Visited%20Sector%20in%20%20a%20Circular%20Track/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code> and an integer array <code>rounds</code>. We have a circular track which consists of <code>n</code> sectors labeled from <code>1</code> to <code>n</code>. A marathon will be held on this track, the marathon consists of <code>m</code> rounds. The <code>i<sup>th</sup></code> round starts at sector <code>rounds[i - 1]</code> and ends at sector <code>rounds[i]</code>. For example, round 1 starts at sector <code>rounds[0]</code> and ends at sector <code>rounds[1]</code></p>
 
@@ -45,11 +60,25 @@ We can see that both sectors 1 and 2 are visited twice and they are the most vis
 	<li><code>rounds[i] != rounds[i + 1]</code> for <code>0 &lt;= i &lt; m</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Considering the Relationship Between Start and End Positions
+
+Since the end position of each stage is the start position of the next stage, and each stage is in a counterclockwise direction, we can determine the number of times each sector is passed based on the relationship between the start and end positions.
+
+If $\textit{rounds}[0] \leq \textit{rounds}[m]$, then the sectors from $\textit{rounds}[0]$ to $\textit{rounds}[m]$ are passed the most times, and we can directly return all sectors within this interval.
+
+Otherwise, the sectors from $1$ to $\textit{rounds}[m]$ and the sectors from $\textit{rounds}[0]$ to $n$ form the union of the most passed sectors, and we can return the union of these two intervals.
+
+The time complexity is $O(n)$, where $n$ is the number of sectors. Ignoring the space consumption of the answer array, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +88,7 @@ class Solution:
         return list(range(1, rounds[-1] + 1)) + list(range(rounds[0], n + 1))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +112,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -92,17 +121,23 @@ public:
         int m = rounds.size() - 1;
         vector<int> ans;
         if (rounds[0] <= rounds[m]) {
-            for (int i = rounds[0]; i <= rounds[m]; ++i) ans.push_back(i);
+            for (int i = rounds[0]; i <= rounds[m]; ++i) {
+                ans.push_back(i);
+            }
         } else {
-            for (int i = 1; i <= rounds[m]; ++i) ans.push_back(i);
-            for (int i = rounds[0]; i <= n; ++i) ans.push_back(i);
+            for (int i = 1; i <= rounds[m]; ++i) {
+                ans.push_back(i);
+            }
+            for (int i = rounds[0]; i <= n; ++i) {
+                ans.push_back(i);
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mostVisited(n int, rounds []int) []int {
@@ -124,10 +159,30 @@ func mostVisited(n int, rounds []int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function mostVisited(n: number, rounds: number[]): number[] {
+    const ans: number[] = [];
+    const m = rounds.length - 1;
+    if (rounds[0] <= rounds[m]) {
+        for (let i = rounds[0]; i <= rounds[m]; ++i) {
+            ans.push(i);
+        }
+    } else {
+        for (let i = 1; i <= rounds[m]; ++i) {
+            ans.push(i);
+        }
+        for (let i = rounds[0]; i <= n; ++i) {
+            ans.push(i);
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0808.Soup%20Servings/README.md
+tags:
+    - 数学
+    - 动态规划
+    - 概率与统计
+---
+
+<!-- problem:start -->
+
 # [808. 分汤](https://leetcode.cn/problems/soup-servings)
 
 [English Version](/solution/0800-0899/0808.Soup%20Servings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有&nbsp;<strong>A&nbsp;和&nbsp;B 两种类型&nbsp;</strong>的汤。一开始每种类型的汤有&nbsp;<code>n</code>&nbsp;毫升。有四种分配操作：</p>
 
@@ -49,11 +61,13 @@
 	<li><code>0 &lt;= n &lt;= 10<sup>9</sup></code>​​​​​​​</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
 在这道题中，由于每次操作都是 $25$ 的倍数，因此，我们可以将每 $25ml$ 的汤视为一份。这样就能将数据规模缩小到 $\left \lceil \frac{n}{25} \right \rceil$。
 
@@ -82,9 +96,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +119,7 @@ class Solution:
         return 1 if n > 4800 else dfs((n + 24) // 25, (n + 24) // 25)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -140,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -161,7 +171,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func soupServings(n int) float64 {
@@ -191,7 +201,7 @@ func soupServings(n int) float64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function soupServings(n: number): number {
@@ -210,21 +220,15 @@ function soupServings(n: number): number {
             return f[i][j];
         }
         f[i][j] =
-            0.25 *
-            (dfs(i - 4, j) +
-                dfs(i - 3, j - 1) +
-                dfs(i - 2, j - 2) +
-                dfs(i - 1, j - 3));
+            0.25 * (dfs(i - 4, j) + dfs(i - 3, j - 1) + dfs(i - 2, j - 2) + dfs(i - 1, j - 3));
         return f[i][j];
     };
     return n >= 4800 ? 1 : dfs(Math.ceil(n / 25), Math.ceil(n / 25));
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

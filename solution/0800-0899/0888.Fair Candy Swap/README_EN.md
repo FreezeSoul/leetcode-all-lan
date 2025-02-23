@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0888.Fair%20Candy%20Swap/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [888. Fair Candy Swap](https://leetcode.com/problems/fair-candy-swap)
 
 [中文文档](/solution/0800-0899/0888.Fair%20Candy%20Swap/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Alice and Bob have a different total number of candies. You are given two integer arrays <code>aliceSizes</code> and <code>bobSizes</code> where <code>aliceSizes[i]</code> is the number of candies of the <code>i<sup>th</sup></code> box of candy that Alice has and <code>bobSizes[j]</code> is the number of candies of the <code>j<sup>th</sup></code> box of candy that Bob has.</p>
 
@@ -42,11 +57,17 @@
 	<li>There will be at least one valid answer for the given input.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +80,7 @@ class Solution:
                 return [a, target]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +106,30 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> fairCandySwap(vector<int>& aliceSizes, vector<int>& bobSizes) {
+        int s1 = accumulate(aliceSizes.begin(), aliceSizes.end(), 0);
+        int s2 = accumulate(bobSizes.begin(), bobSizes.end(), 0);
+        int diff = (s1 - s2) >> 1;
+        unordered_set<int> s(bobSizes.begin(), bobSizes.end());
+        vector<int> ans;
+        for (int& a : aliceSizes) {
+            int target = a - diff;
+            if (s.count(target)) {
+                ans = vector<int>{a, target};
+                break;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### TypeScript
 
 ```ts
 function fairCandySwap(aliceSizes: number[], bobSizes: number[]): number[] {
@@ -101,33 +145,8 @@ function fairCandySwap(aliceSizes: number[], bobSizes: number[]): number[] {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<int> fairCandySwap(vector<int>& aliceSizes, vector<int>& bobSizes) {
-        int s1 = accumulate(aliceSizes.begin(), aliceSizes.end(), 0);
-        int s2 = accumulate(bobSizes.begin(), bobSizes.end(), 0);
-        int diff = (s1 - s2) >> 1;
-        unordered_set<int> s(bobSizes.begin(), bobSizes.end());
-        vector<int> ans;
-        for (int& a : aliceSizes) {
-            int target = a - diff;
-            if (s.count(target)) {
-                ans = vector<int> {a, target};
-                break;
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

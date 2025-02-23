@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1824.Minimum%20Sideway%20Jumps/README_EN.md
+rating: 1778
+source: Weekly Contest 236 Q3
+tags:
+    - Greedy
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1824. Minimum Sideway Jumps](https://leetcode.com/problems/minimum-sideway-jumps)
 
 [中文文档](/solution/1800-1899/1824.Minimum%20Sideway%20Jumps/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a <strong>3 lane road</strong> of length <code>n</code> that consists of <code>n + 1</code> <strong>points</strong> labeled from <code>0</code> to <code>n</code>. A frog <strong>starts</strong> at point <code>0</code> in the <strong>second </strong>lane<strong> </strong>and wants to jump to point <code>n</code>. However, there could be obstacles along the way.</p>
 
@@ -58,11 +74,27 @@ Note that the frog can jump over obstacles only when making side jumps (as shown
 	<li><code>obstacles[0] == obstacles[n] == 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i][j]$ as the minimum number of sidesteps for the frog to reach the $i$-th point and be on the $j$-th lane (index starts from $0$).
+
+Note that the frog starts on the second lane (the problem index starts from $1$), so the value of $f[0][1]$ is $0$, and the values of $f[0][0]$ and $f[0][2]$ are both $1$. The answer is $min(f[n][0], f[n][1], f[n][2])$.
+
+For each position $i$ from $1$ to $n$, we can enumerate the current lane $j$ of the frog. If $obstacles[i] = j + 1$, it means that there is an obstacle on the $j$-th lane, and the value of $f[i][j]$ is infinity. Otherwise, the frog can choose not to jump, in which case the value of $f[i][j]$ is $f[i - 1][j]$, or the frog can sidestep from other lanes, in which case $f[i][j] = min(f[i][j], min(f[i][0], f[i][1], f[i][2]) + 1)$.
+
+In the code implementation, we can optimize the first dimension of space and only use an array $f$ of length $3$ for maintenance.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $obstacles$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -80,7 +112,7 @@ class Solution:
         return min(f)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +165,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSideJumps(obstacles []int) int {
@@ -155,16 +187,9 @@ func minSideJumps(obstacles []int) int {
 	}
 	return min(f[0], min(f[1], f[2]))
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minSideJumps(obstacles: number[]): number {
@@ -188,10 +213,8 @@ function minSideJumps(obstacles: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

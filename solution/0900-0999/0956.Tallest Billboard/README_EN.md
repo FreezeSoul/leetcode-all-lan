@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0956.Tallest%20Billboard/README_EN.md
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [956. Tallest Billboard](https://leetcode.com/problems/tallest-billboard)
 
 [中文文档](/solution/0900-0999/0956.Tallest%20Billboard/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are installing a billboard and want it to have the largest height. The billboard will have two steel supports, one on each side. Each steel support must be an equal height.</p>
 
@@ -44,11 +57,17 @@
 	<li><code>sum(rods[i]) &lt;= 5000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,28 +83,7 @@ class Solution:
         return dfs(0, 0)
 ```
 
-```python
-class Solution:
-    def tallestBillboard(self, rods: List[int]) -> int:
-        n = len(rods)
-        s = sum(rods)
-        f = [[-inf] * (s + 1) for _ in range(n + 1)]
-        f[0][0] = 0
-        t = 0
-        for i, x in enumerate(rods, 1):
-            t += x
-            for j in range(t + 1):
-                f[i][j] = f[i - 1][j]
-                if j >= x:
-                    f[i][j] = max(f[i][j], f[i - 1][j - x])
-                if j + x <= t:
-                    f[i][j] = max(f[i][j], f[i - 1][j + x] + x)
-                if j < x:
-                    f[i][j] = max(f[i][j], f[i - 1][x - j] + x - j)
-        return f[n][0]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -117,6 +115,132 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int tallestBillboard(vector<int>& rods) {
+        int s = accumulate(rods.begin(), rods.end(), 0);
+        int n = rods.size();
+        int f[n][s + 1];
+        memset(f, -1, sizeof(f));
+        function<int(int, int)> dfs = [&](int i, int j) -> int {
+            if (i >= n) {
+                return j == 0 ? 0 : -(1 << 30);
+            }
+            if (f[i][j] != -1) {
+                return f[i][j];
+            }
+            int ans = max(dfs(i + 1, j), dfs(i + 1, j + rods[i]));
+            ans = max(ans, dfs(i + 1, abs(j - rods[i])) + min(j, rods[i]));
+            return f[i][j] = ans;
+        };
+        return dfs(0, 0);
+    }
+};
+```
+
+#### Go
+
+```go
+func tallestBillboard(rods []int) int {
+	s := 0
+	for _, x := range rods {
+		s += x
+	}
+	n := len(rods)
+	f := make([][]int, n)
+	for i := range f {
+		f[i] = make([]int, s+1)
+		for j := range f[i] {
+			f[i][j] = -1
+		}
+	}
+	var dfs func(i, j int) int
+	dfs = func(i, j int) int {
+		if i >= n {
+			if j == 0 {
+				return 0
+			}
+			return -(1 << 30)
+		}
+		if f[i][j] != -1 {
+			return f[i][j]
+		}
+		ans := max(dfs(i+1, j), dfs(i+1, j+rods[i]))
+		ans = max(ans, dfs(i+1, abs(j-rods[i]))+min(j, rods[i]))
+		f[i][j] = ans
+		return ans
+	}
+	return dfs(0, 0)
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+```
+
+#### TypeScript
+
+```ts
+function tallestBillboard(rods: number[]): number {
+    const s = rods.reduce((a, b) => a + b, 0);
+    const n = rods.length;
+    const f = new Array(n).fill(0).map(() => new Array(s + 1).fill(-1));
+    const dfs = (i: number, j: number): number => {
+        if (i >= n) {
+            return j === 0 ? 0 : -(1 << 30);
+        }
+        if (f[i][j] !== -1) {
+            return f[i][j];
+        }
+        let ans = Math.max(dfs(i + 1, j), dfs(i + 1, j + rods[i]));
+        ans = Math.max(ans, dfs(i + 1, Math.abs(j - rods[i])) + Math.min(j, rods[i]));
+        return (f[i][j] = ans);
+    };
+    return dfs(0, 0);
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def tallestBillboard(self, rods: List[int]) -> int:
+        n = len(rods)
+        s = sum(rods)
+        f = [[-inf] * (s + 1) for _ in range(n + 1)]
+        f[0][0] = 0
+        t = 0
+        for i, x in enumerate(rods, 1):
+            t += x
+            for j in range(t + 1):
+                f[i][j] = f[i - 1][j]
+                if j >= x:
+                    f[i][j] = max(f[i][j], f[i - 1][j - x])
+                if j + x <= t:
+                    f[i][j] = max(f[i][j], f[i - 1][j + x] + x)
+                if j < x:
+                    f[i][j] = max(f[i][j], f[i - 1][x - j] + x - j)
+        return f[n][0]
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -152,31 +276,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int tallestBillboard(vector<int>& rods) {
-        int s = accumulate(rods.begin(), rods.end(), 0);
-        int n = rods.size();
-        int f[n][s + 1];
-        memset(f, -1, sizeof(f));
-        function<int(int, int)> dfs = [&](int i, int j) -> int {
-            if (i >= n) {
-                return j == 0 ? 0 : -(1 << 30);
-            }
-            if (f[i][j] != -1) {
-                return f[i][j];
-            }
-            int ans = max(dfs(i + 1, j), dfs(i + 1, j + rods[i]));
-            ans = max(ans, dfs(i + 1, abs(j - rods[i])) + min(j, rods[i]));
-            return f[i][j] = ans;
-        };
-        return dfs(0, 0);
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -208,62 +308,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func tallestBillboard(rods []int) int {
-	s := 0
-	for _, x := range rods {
-		s += x
-	}
-	n := len(rods)
-	f := make([][]int, n)
-	for i := range f {
-		f[i] = make([]int, s+1)
-		for j := range f[i] {
-			f[i][j] = -1
-		}
-	}
-	var dfs func(i, j int) int
-	dfs = func(i, j int) int {
-		if i >= n {
-			if j == 0 {
-				return 0
-			}
-			return -(1 << 30)
-		}
-		if f[i][j] != -1 {
-			return f[i][j]
-		}
-		ans := max(dfs(i+1, j), dfs(i+1, j+rods[i]))
-		ans = max(ans, dfs(i+1, abs(j-rods[i]))+min(j, rods[i]))
-		f[i][j] = ans
-		return ans
-	}
-	return dfs(0, 0)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}
-```
+#### Go
 
 ```go
 func tallestBillboard(rods []int) int {
@@ -298,44 +343,10 @@ func tallestBillboard(rods []int) int {
 	}
 	return f[n][0]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function tallestBillboard(rods: number[]): number {
-    const s = rods.reduce((a, b) => a + b, 0);
-    const n = rods.length;
-    const f = new Array(n).fill(0).map(() => new Array(s + 1).fill(-1));
-    const dfs = (i: number, j: number): number => {
-        if (i >= n) {
-            return j === 0 ? 0 : -(1 << 30);
-        }
-        if (f[i][j] !== -1) {
-            return f[i][j];
-        }
-        let ans = Math.max(dfs(i + 1, j), dfs(i + 1, j + rods[i]));
-        ans = Math.max(
-            ans,
-            dfs(i + 1, Math.abs(j - rods[i])) + Math.min(j, rods[i]),
-        );
-        return (f[i][j] = ans);
-    };
-    return dfs(0, 0);
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

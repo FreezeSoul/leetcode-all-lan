@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2332.The%20Latest%20Time%20to%20Catch%20a%20Bus/README_EN.md
+rating: 1840
+source: Biweekly Contest 82 Q2
+tags:
+    - Array
+    - Two Pointers
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2332. The Latest Time to Catch a Bus](https://leetcode.com/problems/the-latest-time-to-catch-a-bus)
 
 [中文文档](/solution/2300-2399/2332.The%20Latest%20Time%20to%20Catch%20a%20Bus/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong> integer array <code>buses</code> of length <code>n</code>, where <code>buses[i]</code> represents the departure time of the <code>i<sup>th</sup></code> bus. You are also given a <strong>0-indexed</strong> integer array <code>passengers</code> of length <code>m</code>, where <code>passengers[j]</code> represents the arrival time of the <code>j<sup>th</sup></code> passenger. All bus departure times are unique. All passenger arrival times are unique.</p>
 
@@ -55,11 +72,26 @@ Notice if you had arrived any later, then the 6<sup>th</sup> passenger would hav
 	<li>Each element in <code>passengers</code> is <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+First, we sort, and then use double pointers to simulate the process of passengers getting on the bus: traverse the bus $bus$, passengers follow the principle of "first come, first served".
+
+After the simulation ends, judge whether the last bus still has seats:
+
+-   If there are seats, we can arrive at the bus station when the bus departs at $bus[|bus|-1]$; if there are people at this time, we can find the time when no one arrives by going forward.
+-   If there are no seats, we can find the last passenger who got on the bus, and find the time when no one arrives by going forward from him.
+
+The time complexity is $O(n \times \log n + m \times \log m)$, and the space complexity is $O(\log n + \log m)$. Where $n$ and $m$ are the numbers of buses and passengers respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -80,7 +112,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -106,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func latestTimeCatchTheBus(buses []int, passengers []int, capacity int) int {
@@ -154,16 +186,62 @@ func latestTimeCatchTheBus(buses []int, passengers []int, capacity int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function latestTimeCatchTheBus(buses: number[], passengers: number[], capacity: number): number {
+    buses.sort((a, b) => a - b);
+    passengers.sort((a, b) => a - b);
+    let [j, c] = [0, 0];
+    for (const t of buses) {
+        c = capacity;
+        while (c && j < passengers.length && passengers[j] <= t) {
+            --c;
+            ++j;
+        }
+    }
+    --j;
+    let ans = c > 0 ? buses.at(-1)! : passengers[j];
+    while (j >= 0 && passengers[j] === ans) {
+        --ans;
+        --j;
+    }
+    return ans;
+}
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[]} buses
+ * @param {number[]} passengers
+ * @param {number} capacity
+ * @return {number}
+ */
+var latestTimeCatchTheBus = function (buses, passengers, capacity) {
+    buses.sort((a, b) => a - b);
+    passengers.sort((a, b) => a - b);
+    let [j, c] = [0, 0];
+    for (const t of buses) {
+        c = capacity;
+        while (c && j < passengers.length && passengers[j] <= t) {
+            --c;
+            ++j;
+        }
+    }
+    --j;
+    let ans = c > 0 ? buses.at(-1) : passengers[j];
+    while (j >= 0 && passengers[j] === ans) {
+        --ans;
+        --j;
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,22 +1,16 @@
 int firstMissingPositive(int* nums, int numsSize) {
-
-    int Max = nums[0], i, *Count;
-
-    for (i = 1; i < numsSize; i++) {
-        Max = (Max < nums[i]) ? nums[i] : Max;
-    }
-
-    Count = (int*) calloc(Max + 1, sizeof(int));
-    for (i = 0; i < numsSize; i++) {
-        if (nums[i] > 0) {
-            Count[nums[i]]++;
+    for (int i = 0; i < numsSize; ++i) {
+        while (nums[i] > 0 && nums[i] <= numsSize && nums[i] != nums[nums[i] - 1]) {
+            int j = nums[i] - 1;
+            int t = nums[i];
+            nums[i] = nums[j];
+            nums[j] = t;
         }
     }
-
-    i = 1;
-    while (Count[i] != 0) {
-        i++;
+    for (int i = 0; i < numsSize; ++i) {
+        if (nums[i] != i + 1) {
+            return i + 1;
+        }
     }
-
-    return i;
+    return numsSize + 1;
 }

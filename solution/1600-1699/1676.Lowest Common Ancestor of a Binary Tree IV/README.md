@@ -1,10 +1,23 @@
-# [1676. 二叉树的最近公共祖先 IV](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree-iv)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1676.Lowest%20Common%20Ancestor%20of%20a%20Binary%20Tree%20IV/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 哈希表
+    - 二叉树
+---
+
+<!-- problem:start -->
+
+# [1676. 二叉树的最近公共祖先 IV 🔒](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree-iv)
 
 [English Version](/solution/1600-1699/1676.Lowest%20Common%20Ancestor%20of%20a%20Binary%20Tree%20IV/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一棵二叉树的根节点 <code>root</code> 和 <code>TreeNode</code> 类对象的数组（列表） <code>nodes</code>，返回<em> </em><code>nodes</code> 中所有节点的最近公共祖先（LCA）。数组（列表）中所有节点都存在于该二叉树中，且二叉树中所有节点的值都是互不相同的。</p>
 
@@ -53,17 +66,17 @@
 	<li>所有的 <code>nodes[i]</code> 都是互不相同的。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + DFS**
+### 方法一：哈希表 + DFS
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -90,9 +103,7 @@ class Solution:
         return dfs(root)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -131,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -149,13 +160,21 @@ class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, vector<TreeNode*>& nodes) {
         unordered_set<int> s;
-        for (auto node : nodes) s.insert(node->val);
-        function<TreeNode*(TreeNode*)> dfs = [&](TreeNode* root) -> TreeNode* {
-            if (!root || s.count(root->val)) return root;
+        for (auto node : nodes) {
+            s.insert(node->val);
+        }
+        auto dfs = [&](this auto&& dfs, TreeNode* root) -> TreeNode* {
+            if (!root || s.contains(root->val)) {
+                return root;
+            }
             auto left = dfs(root->left);
             auto right = dfs(root->right);
-            if (!left) return right;
-            if (!right) return left;
+            if (!left) {
+                return right;
+            }
+            if (!right) {
+                return left;
+            }
             return root;
         };
         return dfs(root);
@@ -163,7 +182,7 @@ public:
 };
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -197,10 +216,8 @@ var lowestCommonAncestor = function (root, nodes) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1396.Design%20Underground%20System/README_EN.md
+rating: 1464
+source: Weekly Contest 182 Q3
+tags:
+    - Design
+    - Hash Table
+    - String
+---
+
+<!-- problem:start -->
+
 # [1396. Design Underground System](https://leetcode.com/problems/design-underground-system)
 
 [中文文档](/solution/1300-1399/1396.Design%20Underground%20System/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>An underground railway system is keeping track of customer travel times between different stations. They are using this data to calculate the average time it takes to travel from one station to another.</p>
 
@@ -10,6 +26,7 @@
 
 <ul>
 	<li><code>void checkIn(int id, string stationName, int t)</code>
+
     <ul>
     	<li>A customer with a card ID equal to <code>id</code>, checks in at the station <code>stationName</code> at time <code>t</code>.</li>
     	<li>A customer can only be checked into one place at a time.</li>
@@ -28,6 +45,7 @@
     	<li>There will be at least one customer that has traveled from <code>startStation</code> to <code>endStation</code> before <code>getAverageTime</code> is called.</li>
     </ul>
     </li>
+
 </ul>
 
 <p>You may assume all calls to the <code>checkIn</code> and <code>checkOut</code> methods are consistent. If a customer checks in at time <code>t<sub>1</sub></code> then checks out at time <code>t<sub>2</sub></code>, then <code>t<sub>1</sub> &lt; t<sub>2</sub></code>. All events happen in chronological order.</p>
@@ -93,15 +111,33 @@ undergroundSystem.getAverageTime(&quot;Leyton&quot;, &quot;Paradise&quot;); // r
 	<li>Answers within <code>10<sup>-5</sup></code> of the actual value will be accepted.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table
+
+We use two hash tables to store data:
+
+-   `ts`: Stores the passenger's id, check-in time, and check-in station. The key is the passenger's id, and the value is a tuple `(t, stationName)`.
+-   `d`: Stores the passenger's check-in station, check-out station, travel time, and number of trips. The key is a tuple `(startStation, endStation)`, and the value is a tuple `(totalTime, count)`.
+
+When a passenger checks in, we store the passenger's id, check-in time, and check-in station in `ts`, i.e., `ts[id] = (t, stationName)`.
+
+When a passenger checks out, we retrieve the passenger's check-in time and station `(t0, station)` from `ts`, then calculate the passenger's travel time $t - t_0$, and store the passenger's travel time and number of trips in `d`.
+
+When we want to calculate a passenger's average travel time, we retrieve the passenger's total travel time and number of trips `(totalTime, count)` from `d`, then calculate the average travel time as $totalTime / count$.
+
+The time complexity is $O(1)$, and the space complexity is $O(n)$. Where $n$ is the number of passengers.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class UndergroundSystem:
-
     def __init__(self):
         self.ts = {}
         self.d = {}
@@ -126,7 +162,7 @@ class UndergroundSystem:
 # param_3 = obj.getAverageTime(startStation,endStation)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class UndergroundSystem {
@@ -166,7 +202,7 @@ class UndergroundSystem {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class UndergroundSystem {
@@ -204,7 +240,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type UndergroundSystem struct {
@@ -258,10 +294,8 @@ type pair struct {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,16 +1,32 @@
-# [277. Find the Celebrity](https://leetcode.com/problems/find-the-celebrity)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0277.Find%20the%20Celebrity/README_EN.md
+tags:
+    - Graph
+    - Two Pointers
+    - Interactive
+---
+
+<!-- problem:start -->
+
+# [277. Find the Celebrity 🔒](https://leetcode.com/problems/find-the-celebrity)
 
 [中文文档](/solution/0200-0299/0277.Find%20the%20Celebrity/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>Suppose you are at a party with <code>n</code> people labeled from <code>0</code> to <code>n - 1</code> and among them, there may exist one celebrity. The definition of a celebrity is that all the other <code>n - 1</code> people know the celebrity, but the celebrity does not know any of them.</p>
 
 <p>Now you want to find out who the celebrity is or verify that there is not one. You are only allowed to ask questions like: &quot;Hi, A. Do you know B?&quot; to get information about whether A knows B. You need to find out the celebrity (or verify there is not one) by asking as few questions as possible (in the asymptotic sense).</p>
 
-<p>You are given a helper function <code>bool knows(a, b)</code> that tells you whether <code>a</code> knows <code>b</code>. Implement a function <code>int findCelebrity(n)</code>. There will be exactly one celebrity if they are at the party.</p>
+<p>You are given an integer <code>n</code> and a helper function <code>bool knows(a, b)</code> that tells you whether <code>a</code> knows <code>b</code>. Implement a function <code>int findCelebrity(n)</code>. There will be exactly one celebrity if they are at the party.</p>
 
 <p>Return <em>the celebrity&#39;s label if there is a celebrity at the party</em>. If there is no celebrity, return <code>-1</code>.</p>
+
+<p><strong>Note</strong> that the <code>n x n</code> 2D array <code>graph</code> given as input is <strong>not</strong> directly available to you, and instead <strong>only</strong> accessible through the helper function <code>knows</code>. <code>graph[i][j] == 1</code> represents person <code>i</code> knows person <code>j</code>, wherease <code>graph[i][j] == 0</code> represents person <code>j</code> does not know person <code>i</code>.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -42,16 +58,23 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> If the maximum number of allowed calls to the API <code>knows</code> is <code>3 * n</code>, could you find a solution without exceeding the maximum number of calls?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # The knows API is already defined for you.
 # return a bool, whether a knows b
 # def knows(a: int, b: int) -> bool:
+
 
 class Solution:
     def findCelebrity(self, n: int) -> int:
@@ -66,7 +89,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /* The knows API is defined in the parent class Relation.
@@ -92,7 +115,7 @@ public class Solution extends Relation {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /* The knows API is defined for you.
@@ -119,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -146,10 +169,8 @@ func solution(knows func(a int, b int) bool) func(n int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1845.Seat%20Reservation%20Manager/README.md
+rating: 1428
+source: 第 51 场双周赛 Q2
+tags:
+    - 设计
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1845. 座位预约管理系统](https://leetcode.cn/problems/seat-reservation-manager)
 
 [English Version](/solution/1800-1899/1845.Seat%20Reservation%20Manager/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>请你设计一个管理 <code>n</code> 个座位预约的系统，座位编号从 <code>1</code> 到 <code>n</code> 。</p>
 
@@ -50,34 +63,30 @@ seatManager.unreserve(5); // 将座位 5 变为可以预约，现在可预约的
 	<li>对 <code>reserve</code> 和 <code>unreserve</code> 的调用 <strong>总共</strong> 不超过 <code>10<sup>5</sup></code> 次。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（小根堆）**
+### 方法一：优先队列（小根堆）
 
-我们可以使用优先队列（小根堆）来维护可预约座位的最小编号。
+我们定义一个优先队列（小根堆）$\textit{q}$，用于存储所有可预约的座位编号。初始时，我们将 $1$ 到 $n$ 的所有座位编号加入到 $\textit{q}$ 中。
 
-初始化时，将所有座位的编号放入优先队列中。
+调用 `reserve` 方法时，我们从 $\textit{q}$ 中弹出堆顶元素，即可预约的座位编号的最小值。
 
-当调用 `reserve` 方法时，从优先队列中取出最小编号的座位，即为可预约座位的最小编号。
+调用 `unreserve` 方法时，我们将座位编号加入到 $\textit{q}$ 中。
 
-当调用 `unreserve` 方法时，将座位编号放入优先队列中。
-
-时间复杂度 $O(n \times \log n)$，空间复杂度 $O(n)$。其中 $n$ 为座位的数量。
+时间复杂度方面，初始化的时间复杂度为 $O(n)$ 或 $O(n \times \log n)$，`reserve` 和 `unreserve` 方法的时间复杂度均为 $O(\log n)$。空间复杂度为 $O(n)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class SeatManager:
-
     def __init__(self, n: int):
         self.q = list(range(1, n + 1))
-        heapify(self.q)
 
     def reserve(self) -> int:
         return heappop(self.q)
@@ -92,9 +101,7 @@ class SeatManager:
 # obj.unreserve(seatNumber)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class SeatManager {
@@ -123,7 +130,7 @@ class SeatManager {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class SeatManager {
@@ -156,7 +163,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type SeatManager struct {
@@ -181,9 +188,9 @@ func (this *SeatManager) Unreserve(seatNumber int) {
 
 type hp struct{ sort.IntSlice }
 
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] < h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] < h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -198,10 +205,66 @@ func (h *hp) Pop() interface{} {
  */
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+class SeatManager {
+    private q: typeof MinPriorityQueue;
+    constructor(n: number) {
+        this.q = new MinPriorityQueue();
+        for (let i = 1; i <= n; i++) {
+            this.q.enqueue(i);
+        }
+    }
+
+    reserve(): number {
+        return this.q.dequeue().element;
+    }
+
+    unreserve(seatNumber: number): void {
+        this.q.enqueue(seatNumber);
+    }
+}
+
+/**
+ * Your SeatManager object will be instantiated and called as such:
+ * var obj = new SeatManager(n)
+ * var param_1 = obj.reserve()
+ * obj.unreserve(seatNumber)
+ */
 ```
 
+#### C#
+
+```cs
+public class SeatManager {
+    private PriorityQueue<int, int> q = new PriorityQueue<int, int>();
+
+    public SeatManager(int n) {
+        for (int i = 1; i <= n; ++i) {
+            q.Enqueue(i, i);
+        }
+    }
+
+    public int Reserve() {
+        return q.Dequeue();
+    }
+
+    public void Unreserve(int seatNumber) {
+        q.Enqueue(seatNumber, seatNumber);
+    }
+}
+
+/**
+ * Your SeatManager object will be instantiated and called as such:
+ * SeatManager obj = new SeatManager(n);
+ * int param_1 = obj.Reserve();
+ * obj.Unreserve(seatNumber);
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

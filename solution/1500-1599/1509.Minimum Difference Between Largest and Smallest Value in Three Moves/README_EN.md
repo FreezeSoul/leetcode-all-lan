@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1509.Minimum%20Difference%20Between%20Largest%20and%20Smallest%20Value%20in%20Three%20Moves/README_EN.md
+rating: 1653
+source: Biweekly Contest 30 Q3
+tags:
+    - Greedy
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1509. Minimum Difference Between Largest and Smallest Value in Three Moves](https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves)
 
 [中文文档](/solution/1500-1599/1509.Minimum%20Difference%20Between%20Largest%20and%20Smallest%20Value%20in%20Three%20Moves/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>.</p>
 
@@ -41,9 +57,9 @@ It can be shown that there is no way to make the difference 0 in 3 moves.</pre>
 <strong>Input:</strong> nums = [3,100,20]
 <strong>Output:</strong> 0
 <strong>Explanation:</strong> We can make at most 3 moves.
-In the first move, change 100 to 7. nums becomes [4,7,20].
-In the second move, change 20 to 7. nums becomes [4,7,7].
-In the third move, change 4 to 3. nums becomes [7,7,7].
+In the first move, change 100 to 7. nums becomes [3,7,20].
+In the second move, change 20 to 7. nums becomes [3,7,7].
+In the third move, change 3 to 7. nums becomes [7,7,7].
 After performing 3 moves, the difference between the minimum and maximum is 7 - 7 = 0.
 </pre>
 
@@ -55,11 +71,17 @@ After performing 3 moves, the difference between the minimum and maximum is 7 - 
 	<li><code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -75,7 +97,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minDifference(nums []int) int {
@@ -132,19 +154,46 @@ func minDifference(nums []int) int {
 	}
 	return ans
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minDifference(nums: number[]): number {
+    if (nums.length < 5) {
+        return 0;
+    }
+    nums.sort((a, b) => a - b);
+    let ans = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < 4; i++) {
+        ans = Math.min(ans, nums.at(i - 4)! - nums[i]);
+    }
+    return ans;
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minDifference = function (nums) {
+    if (nums.length < 5) {
+        return 0;
+    }
+    nums.sort((a, b) => a - b);
+    let ans = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < 4; i++) {
+        ans = Math.min(ans, nums.at(i - 4) - nums[i]);
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
-# [2329. Product Sales Analysis V](https://leetcode.com/problems/product-sales-analysis-v)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2329.Product%20Sales%20Analysis%20V/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2329. Product Sales Analysis V 🔒](https://leetcode.com/problems/product-sales-analysis-v)
 
 [中文文档](/solution/2300-2399/2329.Product%20Sales%20Analysis%20V/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Sales</code></p>
 
@@ -15,8 +27,8 @@
 | user_id     | int   |
 | quantity    | int   |
 +-------------+-------+
-sale_id is the primary key of this table.
-product_id is a foreign key to <code>Product</code> table.
+sale_id contains unique values.
+product_id is a foreign key (column with unique values) to <code>Product</code> table.
 Each row of this table shows the ID of the product and the quantity purchased by a user.
 </pre>
 
@@ -31,17 +43,17 @@ Each row of this table shows the ID of the product and the quantity purchased by
 | product_id  | int  |
 | price       | int  |
 +-------------+------+
-product_id is the primary key of this table.
+product_id contains unique values.
 Each row of this table indicates the price of each product.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query that reports the spending of each user.</p>
+<p>Write a solution to report&nbsp;the spending of each user.</p>
 
 <p>Return the resulting table ordered by <code>spending</code> in <strong>descending order</strong>. In case of a tie, order them by <code>user_id</code> in ascending order.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -81,14 +93,30 @@ User 103 spent 3 * 25 = 75.
 Users 102 and 103 spent the same amount and we break the tie by their ID while user 101 is on the top.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT user_id, SUM(quantity * price) AS spending
+FROM
+    Sales
+    JOIN Product USING (product_id)
+GROUP BY 1
+ORDER BY 2 DESC, 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

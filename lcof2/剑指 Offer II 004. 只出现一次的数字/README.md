@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20004.%20%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 004. 只出现一次的数字](https://leetcode.cn/problems/WGki4K)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>nums</code> ，除某个元素仅出现 <strong>一次</strong> 外，其余每个元素都恰出现 <strong>三次 。</strong>请你找出并返回那个只出现了一次的元素。</p>
 
@@ -40,24 +47,28 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 137&nbsp;题相同：<a href="https://leetcode.cn/problems/single-number-ii/">https://leetcode.cn/problems/single-number-ii/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-统计所有数字每个位中 1 出现的次数，对于某个位，1 出现的次数一定是 3 的倍数 +1 或 0。对这个数 %3 得到的结果就是那个出现一次的数字在该位上的值。
+### 方法一：位运算
+
+我们可以统计所有数字中每个位上出现的 $1$ 的个数，然后对 $3$ 取模。如果某一位上的出现的 $1$ 的个数无法被 $3$ 整除，说明只出现一次的数字在该位上是 $1$，否则是 $0$。
+
+时间复杂度 $O(n \times \log M)$，其中 $n$ 是数组 $nums$ 的长度，而 $M$ 是数组中元素的最大值。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
         ans = 0
         for i in range(32):
-            cnt = sum(num >> i & 1 for num in nums)
+            cnt = sum(x >> i & 1 for x in nums)
             if cnt % 3:
                 if i == 31:
                     ans -= 1 << i
@@ -66,18 +77,16 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int singleNumber(int[] nums) {
         int ans = 0;
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < 32; ++i) {
             int cnt = 0;
-            for (int num : nums) {
-                cnt += num >> i & 1;
+            for (int x : nums) {
+                cnt += x >> i & 1;
             }
             cnt %= 3;
             ans |= cnt << i;
@@ -87,26 +96,7 @@ class Solution {
 }
 ```
 
-### **Go**
-
-需要注意 Golang 中的 `int` 在 64 位平台上相当于 `int64`
-
-```go
-func singleNumber(nums []int) int {
-	ans := int32(0)
-	for i := 0; i < 32; i++ {
-		cnt := int32(0)
-		for _, num := range nums {
-			cnt += int32(num) >> i & 1
-		}
-		cnt %= 3
-		ans |= cnt << i
-	}
-	return int(ans)
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -115,8 +105,8 @@ public:
         int ans = 0;
         for (int i = 0; i < 32; ++i) {
             int cnt = 0;
-            for (int num : nums) {
-                cnt += ((num >> i) & 1);
+            for (int x : nums) {
+                cnt += (x >> i) & 1;
             }
             cnt %= 3;
             ans |= cnt << i;
@@ -126,10 +116,61 @@ public:
 };
 ```
 
-### **...**
+#### Go
 
+```go
+func singleNumber(nums []int) int {
+	var ans int32
+	for i := 0; i < 32; i++ {
+		cnt := 0
+		for _, x := range nums {
+			cnt += x >> i & 1
+		}
+		cnt %= 3
+		ans |= int32(cnt) << i
+	}
+	return int(ans)
+}
 ```
 
+#### TypeScript
+
+```ts
+function singleNumber(nums: number[]): number {
+    let ans = 0;
+    for (let i = 0; i < 32; ++i) {
+        let cnt = 0;
+        for (const x of nums) {
+            cnt += (x >> i) & 1;
+        }
+        cnt %= 3;
+        ans |= cnt << i;
+    }
+    return ans;
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    func singleNumber(_ nums: [Int]) -> Int {
+        var ans: Int32 = 0
+        for i in 0..<32 {
+            var cnt = 0
+            for num in nums {
+                cnt += (num >> i) & 1
+            }
+            cnt %= 3
+            ans |= Int32(cnt) << i
+        }
+        return Int(ans)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

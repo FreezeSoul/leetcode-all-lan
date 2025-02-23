@@ -1,12 +1,29 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1160.Find%20Words%20That%20Can%20Be%20Formed%20by%20Characters/README_EN.md
+rating: 1205
+source: Weekly Contest 150 Q1
+tags:
+    - Array
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [1160. Find Words That Can Be Formed by Characters](https://leetcode.com/problems/find-words-that-can-be-formed-by-characters)
 
 [中文文档](/solution/1100-1199/1160.Find%20Words%20That%20Can%20Be%20Formed%20by%20Characters/README.md)
 
 ## Description
 
+<!-- description:start -->
+
 <p>You are given an array of strings <code>words</code> and a string <code>chars</code>.</p>
 
-<p>A string is <strong>good</strong> if it can be formed by characters from chars (each character can only be used once).</p>
+<p>A string is <strong>good</strong> if it can be formed by characters from <code>chars</code> (each character can only be used once).</p>
 
 <p>Return <em>the sum of lengths of all good strings in words</em>.</p>
 
@@ -36,11 +53,25 @@
 	<li><code>words[i]</code> and <code>chars</code> consist of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We can use an array $cnt$ of length $26$ to count the occurrence of each letter in the string $chars$.
+
+Then we traverse the string array $words$. For each string $w$, we use an array $wc$ of length $26$ to count the occurrence of each letter in the string $w$. If for each letter $c$, $wc[c] \leq cnt[c]$, then we can spell the string $w$ with the letters in $chars$, otherwise we cannot spell the string $w$. If we can spell the string $w$, then we add the length of the string $w$ to the answer.
+
+After the traversal, we can get the answer.
+
+The time complexity is $O(L)$, and the space complexity is $O(C)$. Here, $L$ is the sum of the lengths of all strings in the problem, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -54,7 +85,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +144,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countCharacters(words []string, chars string) (ans int) {
@@ -140,7 +171,7 @@ func countCharacters(words []string, chars string) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countCharacters(words: string[], chars: string): number {
@@ -167,7 +198,7 @@ function countCharacters(words: string[], chars: string): number {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -197,10 +228,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

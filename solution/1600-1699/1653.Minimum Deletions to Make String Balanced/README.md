@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1653.Minimum%20Deletions%20to%20Make%20String%20Balanced/README.md
+rating: 1793
+source: 第 39 场双周赛 Q2
+tags:
+    - 栈
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1653. 使字符串平衡的最少删除次数](https://leetcode.cn/problems/minimum-deletions-to-make-string-balanced)
 
 [English Version](/solution/1600-1699/1653.Minimum%20Deletions%20to%20Make%20String%20Balanced/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串&nbsp;<code>s</code>&nbsp;，它仅包含字符&nbsp;<code>'a'</code> 和&nbsp;<code>'b'</code>​​​​ 。</p>
 
@@ -41,11 +55,13 @@
 	<li><code>s[i]</code>&nbsp;要么是&nbsp;<code>'a'</code> 要么是&nbsp;<code>'b'</code>​<strong>&nbsp;</strong>。​</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i]$ 表示前 $i$ 个字符中，删除最少的字符数，使得字符串平衡。初始时 $f[0]=0$。答案为 $f[n]$。
 
@@ -67,21 +83,11 @@ $$
 
 我们注意到，状态转移方程中只与前一个状态以及变量 $b$ 有关，因此我们可以仅用一个答案变量 $ans$ 维护当前的 $f[i]$，并不需要开辟数组 $f$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
-
-**方法二：枚举 + 前缀和**
-
-我们可以枚举字符串 $s$ 中的每一个位置 $i$，将字符串 $s$ 分成两部分，分别为 $s[0,..,i-1]$ 和 $s[i+1,..n-1]$，要使得字符串平衡，我们在当前位置 $i$ 需要删除的字符数为 $s[0,..,i-1]$ 中字符 $b$ 的个数加上 $s[i+1,..n-1]$ 中字符 $a$ 的个数。
-
-因此，我们维护两个变量 $lb$ 和 $ra$ 分别表示 $s[0,..,i-1]$ 中字符 $b$ 的个数以及 $s[i+1,..n-1]$ 中字符 $a$ 的个数，那么我们需要删除的字符数为 $lb+ra$。枚举过程中，更新变量 $lb$ 和 $ra$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
+时间复杂度 $O(n)$，其中 $n$ 为字符串 $s$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,33 +104,7 @@ class Solution:
         return f[n]
 ```
 
-```python
-class Solution:
-    def minimumDeletions(self, s: str) -> int:
-        ans = b = 0
-        for c in s:
-            if c == 'b':
-                b += 1
-            else:
-                ans = min(ans + 1, b)
-        return ans
-```
-
-```python
-class Solution:
-    def minimumDeletions(self, s: str) -> int:
-        lb, ra = 0, s.count('a')
-        ans = len(s)
-        for c in s:
-            ra -= c == 'a'
-            ans = min(ans, lb + ra)
-            lb += c == 'b'
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -145,45 +125,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int minimumDeletions(String s) {
-        int n = s.length();
-        int ans = 0, b = 0;
-        for (int i = 0; i < n; ++i) {
-            if (s.charAt(i) == 'b') {
-                ++b;
-            } else {
-                ans = Math.min(ans + 1, b);
-            }
-        }
-        return ans;
-    }
-}
-```
-
-```java
-class Solution {
-    public int minimumDeletions(String s) {
-        int lb = 0, ra = 0;
-        int n = s.length();
-        for (int i = 0; i < n; ++i) {
-            if (s.charAt(i) == 'a') {
-                ++ra;
-            }
-        }
-        int ans = n;
-        for (int i = 0; i < n; ++i) {
-            ra -= (s.charAt(i) == 'a' ? 1 : 0);
-            ans = Math.min(ans, lb + ra);
-            lb += (s.charAt(i) == 'b' ? 1 : 0);
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -206,40 +148,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int minimumDeletions(string s) {
-        int ans = 0, b = 0;
-        for (char& c : s) {
-            if (c == 'b') {
-                ++b;
-            } else {
-                ans = min(ans + 1, b);
-            }
-        }
-        return ans;
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    int minimumDeletions(string s) {
-        int lb = 0, ra = count(s.begin(), s.end(), 'a');
-        int ans = ra;
-        for (char& c : s) {
-            ra -= c == 'a';
-            ans = min(ans, lb + ra);
-            lb += c == 'b';
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func minimumDeletions(s string) int {
@@ -257,14 +166,119 @@ func minimumDeletions(s string) int {
 	}
 	return f[n]
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minimumDeletions(s: string): number {
+    const n = s.length;
+    const f = new Array(n + 1).fill(0);
+    let b = 0;
+    for (let i = 1; i <= n; ++i) {
+        if (s[i - 1] === 'b') {
+            f[i] = f[i - 1];
+            ++b;
+        } else {
+            f[i] = Math.min(f[i - 1] + 1, b);
+        }
+    }
+    return f[n];
 }
 ```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minimumDeletions = function (s) {
+    const n = s.length;
+    const f = new Array(n + 1).fill(0);
+    let b = 0;
+    for (let i = 1; i <= n; ++i) {
+        if (s[i - 1] === 'b') {
+            f[i] = f[i - 1];
+            ++b;
+        } else {
+            f[i] = Math.min(f[i - 1] + 1, b);
+        }
+    }
+    return f[n];
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：枚举 + 前缀和
+
+我们可以枚举字符串 $s$ 中的每一个位置 $i$，将字符串 $s$ 分成两部分，分别为 $s[0,..,i-1]$ 和 $s[i+1,..n-1]$，要使得字符串平衡，我们在当前位置 $i$ 需要删除的字符数为 $s[0,..,i-1]$ 中字符 $b$ 的个数加上 $s[i+1,..n-1]$ 中字符 $a$ 的个数。
+
+因此，我们维护两个变量 $lb$ 和 $ra$ 分别表示 $s[0,..,i-1]$ 中字符 $b$ 的个数以及 $s[i+1,..n-1]$ 中字符 $a$ 的个数，那么我们需要删除的字符数为 $lb+ra$。枚举过程中，更新变量 $lb$ 和 $ra$。
+
+时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串 $s$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minimumDeletions(self, s: str) -> int:
+        ans = b = 0
+        for c in s:
+            if c == 'b':
+                b += 1
+            else:
+                ans = min(ans + 1, b)
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int minimumDeletions(String s) {
+        int n = s.length();
+        int ans = 0, b = 0;
+        for (int i = 0; i < n; ++i) {
+            if (s.charAt(i) == 'b') {
+                ++b;
+            } else {
+                ans = Math.min(ans + 1, b);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minimumDeletions(string s) {
+        int ans = 0, b = 0;
+        for (char& c : s) {
+            if (c == 'b') {
+                ++b;
+            } else {
+                ans = min(ans + 1, b);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
 
 ```go
 func minimumDeletions(s string) int {
@@ -278,14 +292,112 @@ func minimumDeletions(s string) int {
 	}
 	return ans
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minimumDeletions(s: string): number {
+    let [ans, b] = [0, 0];
+
+    for (const ch of s) {
+        if (ch === 'b') {
+            ++b;
+        } else {
+            ans = Math.min(ans + 1, b);
+        }
+    }
+    return ans;
 }
 ```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minimumDeletions = function (s) {
+    let [ans, b] = [0, 0];
+
+    for (const ch of s) {
+        if (ch === 'b') {
+            ++b;
+        } else {
+            ans = Math.min(ans + 1, b);
+        }
+    }
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def minimumDeletions(self, s: str) -> int:
+        lb, ra = 0, s.count('a')
+        ans = len(s)
+        for c in s:
+            ra -= c == 'a'
+            ans = min(ans, lb + ra)
+            lb += c == 'b'
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int minimumDeletions(String s) {
+        int lb = 0, ra = 0;
+        int n = s.length();
+        for (int i = 0; i < n; ++i) {
+            if (s.charAt(i) == 'a') {
+                ++ra;
+            }
+        }
+        int ans = n;
+        for (int i = 0; i < n; ++i) {
+            ra -= (s.charAt(i) == 'a' ? 1 : 0);
+            ans = Math.min(ans, lb + ra);
+            lb += (s.charAt(i) == 'b' ? 1 : 0);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int minimumDeletions(string s) {
+        int lb = 0, ra = count(s.begin(), s.end(), 'a');
+        int ans = ra;
+        for (char& c : s) {
+            ra -= c == 'a';
+            ans = min(ans, lb + ra);
+            lb += c == 'b';
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
 
 ```go
 func minimumDeletions(s string) int {
@@ -306,65 +418,96 @@ func minimumDeletions(s string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minimumDeletions(s: string): number {
-    const n = s.length;
-    const f = new Array(n + 1).fill(0);
-    let b = 0;
-    for (let i = 1; i <= n; ++i) {
-        if (s.charAt(i - 1) === 'b') {
-            f[i] = f[i - 1];
-            ++b;
-        } else {
-            f[i] = Math.min(f[i - 1] + 1, b);
-        }
-    }
-    return f[n];
-}
-```
+    let ra = [...s].reduce((acc, x) => (x === 'a' ? acc + 1 : acc), 0);
+    let lb = 0;
 
-```ts
-function minimumDeletions(s: string): number {
-    const n = s.length;
-    let ans = 0,
-        b = 0;
-    for (let i = 0; i < n; ++i) {
-        if (s.charAt(i) === 'b') {
-            ++b;
-        } else {
-            ans = Math.min(ans + 1, b);
-        }
-    }
-    return ans;
-}
-```
-
-```ts
-function minimumDeletions(s: string): number {
-    let lb = 0,
-        ra = 0;
-    const n = s.length;
-    for (let i = 0; i < n; ++i) {
-        if (s.charAt(i) === 'a') {
-            ++ra;
-        }
-    }
-    let ans = n;
-    for (let i = 0; i < n; ++i) {
-        ra -= s.charAt(i) === 'a' ? 1 : 0;
+    let ans = s.length;
+    for (const ch of s) {
+        if (ch === 'a') ra--;
         ans = Math.min(ans, lb + ra);
-        lb += s.charAt(i) === 'b' ? 1 : 0;
+        if (ch === 'b') lb++;
     }
     return ans;
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minimumDeletions = function (s) {
+    let ra = [...s].reduce((acc, x) => (x === 'a' ? acc + 1 : acc), 0);
+    let lb = 0;
 
+    let ans = s.length;
+    for (const ch of s) {
+        if (ch === 'a') ra--;
+        ans = Math.min(ans, lb + ra);
+        if (ch === 'b') lb++;
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 4: Stack
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function minimumDeletions(s: string): number {
+    const stk: string[] = [];
+    let res = 0;
+
+    for (const ch of s) {
+        if (stk.at(-1) === 'b' && ch === 'a') {
+            stk.pop();
+            res++;
+        } else stk.push(ch);
+    }
+
+    return res;
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minimumDeletions = function (s) {
+    const stk = [];
+    let res = 0;
+
+    for (const ch of s) {
+        if (stk.at(-1) === 'b' && ch === 'a') {
+            stk.pop();
+            res++;
+        } else stk.push(ch);
+    }
+
+    return res;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

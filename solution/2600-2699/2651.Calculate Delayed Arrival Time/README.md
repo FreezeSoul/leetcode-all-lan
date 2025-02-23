@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2651.Calculate%20Delayed%20Arrival%20Time/README.md
+rating: 1168
+source: 第 342 场周赛 Q1
+tags:
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2651. 计算列车到站时间](https://leetcode.cn/problems/calculate-delayed-arrival-time)
 
 [English Version](/solution/2600-2699/2651.Calculate%20Delayed%20Arrival%20Time/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数 <code>arrivalTime</code> 表示列车正点到站的时间（单位：小时），另给你一个正整数 <code>delayedTime</code> 表示列车延误的小时数。</p>
 
@@ -36,11 +48,13 @@
 	<li><code>1 &lt;= delayedTime &lt;= 24</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 我们直接计算列车实际到站的时间，即为 $arrivalTime + delayedTime$，但是由于时间采用 24 小时制，所以我们需要对结果取模，即 $(arrivalTime + delayedTime) \bmod 24$。
 
@@ -48,9 +62,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -58,9 +70,7 @@ class Solution:
         return (arrivalTime + delayedTime) % 24
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -70,7 +80,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -81,7 +91,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findDelayedArrivalTime(arrivalTime int, delayedTime int) int {
@@ -89,21 +99,26 @@ func findDelayedArrivalTime(arrivalTime int, delayedTime int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function findDelayedArrivalTime(
-    arrivalTime: number,
-    delayedTime: number,
-): number {
+function findDelayedArrivalTime(arrivalTime: number, delayedTime: number): number {
     return (arrivalTime + delayedTime) % 24;
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn find_delayed_arrival_time(arrival_time: i32, delayed_time: i32) -> i32 {
+        (arrival_time + delayed_time) % 24
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

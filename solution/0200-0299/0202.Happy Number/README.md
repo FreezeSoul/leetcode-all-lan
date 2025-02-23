@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0202.Happy%20Number/README.md
+tags:
+    - 哈希表
+    - 数学
+    - 双指针
+---
+
+<!-- problem:start -->
+
 # [202. 快乐数](https://leetcode.cn/problems/happy-number)
 
 [English Version](/solution/0200-0299/0202.Happy%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>编写一个算法来判断一个数 <code>n</code> 是不是快乐数。</p>
 
@@ -47,29 +59,21 @@
 	<li><code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 模拟**
+### 方法一：哈希表 + 模拟
 
 将每次转换后的数字存入哈希表，如果出现重复数字，说明进入了循环，不是快乐数。否则，如果转换后的数字为 $1$，说明是快乐数。
 
 时间复杂度 $O(\log n)$，空间复杂度 $O(\log n)$。
 
-**方法二：快慢指针**
-
-与判断链表是否存在环原理一致。如果 $n$ 是快乐数，那么快指针最终会与慢指针相遇，且相遇时的数字为 $1$；否则，快指针最终会与慢指针相遇，且相遇时的数字不为 $1$。
-
-因此，最后判断快慢指针相遇时的数字是否为 $1$ 即可。
-
-时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -85,25 +89,7 @@ class Solution:
         return n == 1
 ```
 
-```python
-class Solution:
-    def isHappy(self, n: int) -> bool:
-        def next(x):
-            y = 0
-            while x:
-                x, v = divmod(x, 10)
-                y += v * v
-            return y
-
-        slow, fast = n, next(n)
-        while slow != fast:
-            slow, fast = next(slow), next(next(fast))
-        return slow == 1
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -123,28 +109,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean isHappy(int n) {
-        int slow = n, fast = next(n);
-        while (slow != fast) {
-            slow = next(slow);
-            fast = next(next(fast));
-        }
-        return slow == 1;
-    }
-
-    private int next(int x) {
-        int y = 0;
-        for (; x > 0; x /= 10) {
-            y += (x % 10) * (x % 10);
-        }
-        return y;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -164,28 +129,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    bool isHappy(int n) {
-        auto next = [](int x) {
-            int y = 0;
-            for (; x; x /= 10) {
-                y += pow(x % 10, 2);
-            }
-            return y;
-        };
-        int slow = n, fast = next(n);
-        while (slow != fast) {
-            slow = next(slow);
-            fast = next(next(fast));
-        }
-        return slow == 1;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func isHappy(n int) bool {
@@ -202,24 +146,7 @@ func isHappy(n int) bool {
 }
 ```
 
-```go
-func isHappy(n int) bool {
-	next := func(x int) (y int) {
-		for ; x > 0; x /= 10 {
-			y += (x % 10) * (x % 10)
-		}
-		return
-	}
-	slow, fast := n, next(n)
-	for slow != fast {
-		slow = next(slow)
-		fast = next(next(fast))
-	}
-	return slow == 1
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isHappy(n: number): boolean {
@@ -244,28 +171,7 @@ function isHappy(n: number): boolean {
 }
 ```
 
-```ts
-function isHappy(n: number): boolean {
-    const getNext = (n: number) => {
-        let res = 0;
-        while (n !== 0) {
-            res += (n % 10) ** 2;
-            n = Math.floor(n / 10);
-        }
-        return res;
-    };
-
-    let slow = n;
-    let fast = getNext(n);
-    while (slow !== fast) {
-        slow = getNext(slow);
-        fast = getNext(getNext(fast));
-    }
-    return fast === 1;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -294,29 +200,7 @@ impl Solution {
 }
 ```
 
-```rust
-impl Solution {
-    pub fn is_happy(n: i32) -> bool {
-        let get_next = |mut n: i32| {
-            let mut res = 0;
-            while n != 0 {
-                res += (n % 10).pow(2);
-                n /= 10;
-            }
-            res
-        };
-        let mut slow = n;
-        let mut fast = get_next(n);
-        while slow != fast {
-            slow = get_next(slow);
-            fast = get_next(get_next(fast));
-        }
-        slow == 1
-    }
-}
-```
-
-### **C**
+#### C
 
 ```c
 int getNext(int n) {
@@ -339,10 +223,154 @@ bool isHappy(int n) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：快慢指针
+
+与判断链表是否存在环原理一致。如果 $n$ 是快乐数，那么快指针最终会与慢指针相遇，且相遇时的数字为 $1$；否则，快指针最终会与慢指针相遇，且相遇时的数字不为 $1$。
+
+因此，最后判断快慢指针相遇时的数字是否为 $1$ 即可。
+
+时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        def next(x):
+            y = 0
+            while x:
+                x, v = divmod(x, 10)
+                y += v * v
+            return y
+
+        slow, fast = n, next(n)
+        while slow != fast:
+            slow, fast = next(slow), next(next(fast))
+        return slow == 1
 ```
 
+#### Java
+
+```java
+class Solution {
+    public boolean isHappy(int n) {
+        int slow = n, fast = next(n);
+        while (slow != fast) {
+            slow = next(slow);
+            fast = next(next(fast));
+        }
+        return slow == 1;
+    }
+
+    private int next(int x) {
+        int y = 0;
+        for (; x > 0; x /= 10) {
+            y += (x % 10) * (x % 10);
+        }
+        return y;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isHappy(int n) {
+        auto next = [](int x) {
+            int y = 0;
+            for (; x; x /= 10) {
+                y += pow(x % 10, 2);
+            }
+            return y;
+        };
+        int slow = n, fast = next(n);
+        while (slow != fast) {
+            slow = next(slow);
+            fast = next(next(fast));
+        }
+        return slow == 1;
+    }
+};
+```
+
+#### Go
+
+```go
+func isHappy(n int) bool {
+	next := func(x int) (y int) {
+		for ; x > 0; x /= 10 {
+			y += (x % 10) * (x % 10)
+		}
+		return
+	}
+	slow, fast := n, next(n)
+	for slow != fast {
+		slow = next(slow)
+		fast = next(next(fast))
+	}
+	return slow == 1
+}
+```
+
+#### TypeScript
+
+```ts
+function isHappy(n: number): boolean {
+    const getNext = (n: number) => {
+        let res = 0;
+        while (n !== 0) {
+            res += (n % 10) ** 2;
+            n = Math.floor(n / 10);
+        }
+        return res;
+    };
+
+    let slow = n;
+    let fast = getNext(n);
+    while (slow !== fast) {
+        slow = getNext(slow);
+        fast = getNext(getNext(fast));
+    }
+    return fast === 1;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn is_happy(n: i32) -> bool {
+        let get_next = |mut n: i32| {
+            let mut res = 0;
+            while n != 0 {
+                res += (n % 10).pow(2);
+                n /= 10;
+            }
+            res
+        };
+        let mut slow = n;
+        let mut fast = get_next(n);
+        while slow != fast {
+            slow = get_next(slow);
+            fast = get_next(get_next(fast));
+        }
+        slow == 1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,13 +1,20 @@
 function maxProfit(prices: number[]): number {
     const n = prices.length;
-    let dp = Array.from({ length: n }, v => new Array(3).fill(0));
-    dp[0] = [0, -prices[0], Number.MIN_SAFE_INTEGER];
-    for (let i = 1; i < n; i++) {
-        dp[i] = [
-            Math.max(dp[i - 1][0], dp[i - 1][2]),
-            Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]),
-            dp[i - 1][1] + prices[i],
-        ];
-    }
-    return Math.max(dp[n - 1][0], dp[n - 1][2]);
+    const f: number[][] = Array.from({ length: n }, () => Array.from({ length: 2 }, () => -1));
+    const dfs = (i: number, j: number): number => {
+        if (i >= n) {
+            return 0;
+        }
+        if (f[i][j] !== -1) {
+            return f[i][j];
+        }
+        let ans = dfs(i + 1, j);
+        if (j) {
+            ans = Math.max(ans, prices[i] + dfs(i + 2, 0));
+        } else {
+            ans = Math.max(ans, -prices[i] + dfs(i + 1, 1));
+        }
+        return (f[i][j] = ans);
+    };
+    return dfs(0, 0);
 }

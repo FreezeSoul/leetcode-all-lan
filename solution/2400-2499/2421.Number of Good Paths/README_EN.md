@@ -1,8 +1,27 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2421.Number%20of%20Good%20Paths/README_EN.md
+rating: 2444
+source: Weekly Contest 312 Q4
+tags:
+    - Tree
+    - Union Find
+    - Graph
+    - Array
+    - Hash Table
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2421. Number of Good Paths](https://leetcode.com/problems/number-of-good-paths)
 
 [中文文档](/solution/2400-2499/2421.Number%20of%20Good%20Paths/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a tree (i.e. a connected, undirected graph with no cycles) consisting of <code>n</code> nodes numbered from <code>0</code> to <code>n - 1</code> and exactly <code>n - 1</code> edges.</p>
 
@@ -62,11 +81,23 @@ There are 2 additional good paths: 0 -&gt; 1 and 2 -&gt; 3.
 	<li><code>edges</code> represents a valid tree.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Union Find
+
+To ensure that the starting point (or endpoint) of the path is greater than or equal to all points on the path, we can consider sorting all points from small to large first, then traverse and add them to the connected component, specifically as follows:
+
+When traversing to point $a$, for the adjacent point $b$ that is less than or equal to $vals[a]$, if they are not in the same connected component, they can be merged. And we can use all points in the connected component where point $a$ is located with a value of $vals[a]$ as the starting point, and all points in the connected component where point $b$ is located with a value of $vals[a]$ as the endpoint. The product of the number of the two types of points is the contribution to the answer when adding point $a$.
+
+The time complexity is $O(n \times \log n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -100,7 +131,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -152,7 +183,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -200,7 +231,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOfGoodPaths(vals []int, edges [][]int) int {
@@ -252,16 +283,8 @@ func numberOfGoodPaths(vals []int, edges [][]int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

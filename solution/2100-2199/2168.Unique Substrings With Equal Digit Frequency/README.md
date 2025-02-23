@@ -1,10 +1,24 @@
-# [2168. 每个数字的频率都相同的独特子字符串的数量](https://leetcode.cn/problems/unique-substrings-with-equal-digit-frequency)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2168.Unique%20Substrings%20With%20Equal%20Digit%20Frequency/README.md
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+    - 哈希函数
+    - 滚动哈希
+---
+
+<!-- problem:start -->
+
+# [2168. 每个数字的频率都相同的独特子字符串的数量 🔒](https://leetcode.cn/problems/unique-substrings-with-equal-digit-frequency)
 
 [English Version](/solution/2100-2199/2168.Unique%20Substrings%20With%20Equal%20Digit%20Frequency/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 给你一个由数字组成的字符串&nbsp;<code>s</code>，返回<em>&nbsp;</em><code>s</code><em>&nbsp;</em>中<strong>独特子字符串数量</strong>，其中的每一个数字出现的频率都相同<i>。</i>
 
@@ -36,15 +50,17 @@
 	<li><code>s</code>&nbsp;只包含阿拉伯数字.</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -69,9 +85,7 @@ class Solution:
         return len(vis)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +125,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 func equalDigitFrequency(s string) int {
@@ -151,16 +165,8 @@ func equalDigitFrequency(s string) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

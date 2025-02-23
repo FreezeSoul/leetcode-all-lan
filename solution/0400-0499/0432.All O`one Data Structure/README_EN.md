@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0432.All%20O%60one%20Data%20Structure/README_EN.md
+tags:
+    - Design
+    - Hash Table
+    - Linked List
+    - Doubly-Linked List
+---
+
+<!-- problem:start -->
+
 # [432. All O`one Data Structure](https://leetcode.com/problems/all-oone-data-structure)
 
 [中文文档](/solution/0400-0499/0432.All%20O%60one%20Data%20Structure/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a data structure to store the strings&#39; count with the ability to return the strings with minimum and maximum counts.</p>
 
@@ -49,11 +64,17 @@ allOne.getMinKey(); // return &quot;leet&quot;
 	<li>At most <code>5 * 10<sup>4</sup></code>&nbsp;calls will be made to <code>inc</code>, <code>dec</code>, <code>getMaxKey</code>, and <code>getMinKey</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Node:
@@ -133,7 +154,7 @@ class AllOne:
 # param_4 = obj.getMinKey()
 ```
 
-### **Java**
+#### Java
 
 ```java
 class AllOne {
@@ -237,10 +258,8 @@ class Node {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

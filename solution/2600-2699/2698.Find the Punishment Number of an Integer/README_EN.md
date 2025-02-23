@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2698.Find%20the%20Punishment%20Number%20of%20an%20Integer/README_EN.md
+rating: 1678
+source: Weekly Contest 346 Q3
+tags:
+    - Math
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [2698. Find the Punishment Number of an Integer](https://leetcode.com/problems/find-the-punishment-number-of-an-integer)
 
 [中文文档](/solution/2600-2699/2698.Find%20the%20Punishment%20Number%20of%20an%20Integer/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a positive integer <code>n</code>, return <em>the <strong>punishment number</strong></em> of <code>n</code>.</p>
 
@@ -19,10 +34,10 @@
 <pre>
 <strong>Input:</strong> n = 10
 <strong>Output:</strong> 182
-<strong>Explanation:</strong> There are exactly 3 integers i that satisfy the conditions in the statement:
+<strong>Explanation:</strong> There are exactly 3 integers i in the range [1, 10] that satisfy the conditions in the statement:
 - 1 since 1 * 1 = 1
-- 9 since 9 * 9 = 81 and 81 can be partitioned into 8 + 1.
-- 10 since 10 * 10 = 100 and 100 can be partitioned into 10 + 0.
+- 9 since 9 * 9 = 81 and 81 can be partitioned into 8 and 1 with a sum equal to 8 + 1 == 9.
+- 10 since 10 * 10 = 100 and 100 can be partitioned into 10 and 0 with a sum equal to 10 + 0 == 10.
 Hence, the punishment number of 10 is 1 + 81 + 100 = 182
 </pre>
 
@@ -31,7 +46,7 @@ Hence, the punishment number of 10 is 1 + 81 + 100 = 182
 <pre>
 <strong>Input:</strong> n = 37
 <strong>Output:</strong> 1478
-<strong>Explanation:</strong> There are exactly 4 integers i that satisfy the conditions in the statement:
+<strong>Explanation:</strong> There are exactly 4 integers i in the range [1, 37] that satisfy the conditions in the statement:
 - 1 since 1 * 1 = 1. 
 - 9 since 9 * 9 = 81 and 81 can be partitioned into 8 + 1. 
 - 10 since 10 * 10 = 100 and 100 can be partitioned into 10 + 0. 
@@ -46,11 +61,23 @@ Hence, the punishment number of 37 is 1 + 81 + 100 + 1296 = 1478
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Enumeration + DFS
+
+We enumerate $i$, where $1 \leq i \leq n$. For each $i$, we split the decimal representation string of $x = i^2$, and then check whether it meets the requirements of the problem. If it does, we add $x$ to the answer.
+
+After the enumeration ends, we return the answer.
+
+The time complexity is $O(n^{1 + 2 \log_{10}^2})$, and the space complexity is $O(\log n)$, where $n$ is the given positive integer.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -76,7 +103,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +138,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -148,7 +175,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func punishmentNumber(n int) (ans int) {
@@ -181,7 +208,7 @@ func punishmentNumber(n int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function punishmentNumber(n: number): number {
@@ -214,10 +241,8 @@ function punishmentNumber(n: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

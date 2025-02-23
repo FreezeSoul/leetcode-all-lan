@@ -1,8 +1,24 @@
-# [2638. Count the Number of K-Free Subsets](https://leetcode.com/problems/count-the-number-of-k-free-subsets)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2638.Count%20the%20Number%20of%20K-Free%20Subsets/README_EN.md
+tags:
+    - Array
+    - Math
+    - Dynamic Programming
+    - Combinatorics
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [2638. Count the Number of K-Free Subsets 🔒](https://leetcode.com/problems/count-the-number-of-k-free-subsets)
 
 [中文文档](/solution/2600-2699/2638.Count%20the%20Number%20of%20K-Free%20Subsets/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>,&nbsp;which contains <strong>distinct</strong> elements and an integer <code>k</code>.</p>
 
@@ -46,9 +62,13 @@
 	<li><code>1 &lt;= k &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Grouping + Dynamic Programming**
+<!-- solution:start -->
+
+### Solution 1: Grouping + Dynamic Programming
 
 First, sort the array $nums$ in ascending order, and then group the elements in the array according to the remainder modulo $k$, that is, the elements $nums[i] \bmod k$ with the same remainder are in the same group. Then for any two elements in different groups, their absolute difference is not equal to $k$. Therefore, we can obtain the number of subsets in each group, and then multiply the number of subsets in each group to obtain the answer.
 
@@ -60,7 +80,7 @@ The time complexity is $O(n \times \log n)$ and the space complexity is $O(n)$, 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -84,7 +104,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -114,7 +134,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +165,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countTheNumOfKFreeSubsets(nums []int, k int) int64 {
@@ -173,7 +193,7 @@ func countTheNumOfKFreeSubsets(nums []int, k int) int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countTheNumOfKFreeSubsets(nums: number[], k: number): number {
@@ -204,10 +224,8 @@ function countTheNumOfKFreeSubsets(nums: number[], k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

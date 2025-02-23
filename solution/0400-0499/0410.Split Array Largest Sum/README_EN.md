@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0410.Split%20Array%20Largest%20Sum/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Binary Search
+    - Dynamic Programming
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum)
 
 [中文文档](/solution/0400-0499/0410.Split%20Array%20Largest%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code> and an integer <code>k</code>, split <code>nums</code> into <code>k</code> non-empty subarrays such that the largest sum of any subarray is <strong>minimized</strong>.</p>
 
@@ -38,13 +54,25 @@ The best way is to split it into [1,2,3] and [4,5], where the largest sum among 
 	<li><code>1 &lt;= k &lt;= min(50, nums.length)</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Binary search.
+<!-- solution:start -->
+
+### Solution 1: Binary Search
+
+We notice that the larger the maximum sum of the subarrays, the fewer the number of subarrays. When there is a maximum sum of the subarrays that meets the condition, then a larger maximum sum of the subarrays will definitely meet the condition. This means that we can perform a binary search for the maximum sum of the subarrays to find the smallest value that meets the condition.
+
+We define the left boundary of the binary search as $left = \max(nums)$, and the right boundary as $right = sum(nums)$. Then for each step of the binary search, we take the middle value $mid = \lfloor \frac{left + right}{2} \rfloor$, and then determine whether there is a way to split the array so that the maximum sum of the subarrays does not exceed $mid$. If there is, it means that $mid$ might be the smallest value that meets the condition, so we adjust the right boundary to $mid$. Otherwise, we adjust the left boundary to $mid + 1$.
+
+How do we determine whether there is a way to split the array so that the maximum sum of the subarrays does not exceed $mid$? We can use a greedy method, traverse the array from left to right, and add the elements of the array to the subarray one by one. If the current sum of the subarray is greater than $mid$, then we add the current element to the next subarray. If we can split the array into no more than $k$ subarrays, and the maximum sum of each subarray does not exceed $mid$, then $mid$ is the smallest value that meets the condition. Otherwise, $mid$ does not meet the condition.
+
+The time complexity is $O(n \times \log m)$, and the space complexity is $O(1)$. Here, $n$ and $m$ are the length of the array and the sum of all elements in the array, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +90,7 @@ class Solution:
         return left + bisect_left(range(left, right + 1), True, key=check)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +125,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -132,7 +160,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func splitArray(nums []int, k int) int {
@@ -154,53 +182,77 @@ func splitArray(nums []int, k int) int {
 		return cnt <= k
 	})
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### JavaScript
 
-```ts
-function splitArray(nums: number[], k: number): number {
-    let left = 0;
-    let right = 0;
-    for (const x of nums) {
-        left = Math.max(left, x);
-        right += x;
-    }
-    const check = (mx: number) => {
-        let s = 1 << 30;
-        let cnt = 0;
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var splitArray = function (nums, k) {
+    let l = Math.max(...nums);
+    let r = nums.reduce((a, b) => a + b);
+
+    const check = mx => {
+        let [s, cnt] = [0, 0];
         for (const x of nums) {
             s += x;
             if (s > mx) {
                 s = x;
-                ++cnt;
+                if (++cnt === k) return false;
             }
         }
-        return cnt <= k;
+        return true;
     };
-    while (left < right) {
-        const mid = (left + right) >> 1;
+
+    while (l < r) {
+        const mid = (l + r) >> 1;
         if (check(mid)) {
-            right = mid;
+            r = mid;
         } else {
-            left = mid + 1;
+            l = mid + 1;
         }
     }
-    return left;
+    return l;
+};
+```
+
+#### TypeScript
+
+```ts
+function splitArray(nums: number[], k: number): number {
+    let l = Math.max(...nums);
+    let r = nums.reduce((a, b) => a + b);
+
+    const check = (mx: number) => {
+        let [s, cnt] = [0, 0];
+        for (const x of nums) {
+            s += x;
+            if (s > mx) {
+                s = x;
+                if (++cnt === k) return false;
+            }
+        }
+        return true;
+    };
+
+    while (l < r) {
+        const mid = (l + r) >> 1;
+        if (check(mid)) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    return l;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20052.%20%E5%B1%95%E5%B9%B3%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 052. 展平二叉搜索树](https://leetcode.cn/problems/NYBBNL)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵二叉搜索树，请&nbsp;<strong>按中序遍历</strong> 将其重新排列为一棵递增顺序搜索树，使树中最左边的节点成为树的根节点，并且每个节点没有左子节点，只有一个右子节点。</p>
 
@@ -39,17 +46,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 897&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/increasing-order-search-tree/">https://leetcode.cn/problems/increasing-order-search-tree/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-由于二叉搜索树的性质，可以利用中序遍历得到递增序列
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -78,9 +85,7 @@ class Solution:
         return head
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -123,42 +128,7 @@ class Solution {
 }
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func increasingBST(root *TreeNode) *TreeNode {
-	var head, tail *TreeNode
-	stack := make([]*TreeNode, 0)
-	cur := root
-	for len(stack) > 0 || cur != nil {
-		for cur != nil {
-			stack = append(stack, cur)
-			cur = cur.Left
-		}
-		cur = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		if head == nil {
-			head = cur
-		} else {
-			tail.Right = cur
-		}
-		tail = cur
-		cur.Left = nil
-		cur = cur.Right
-	}
-	return head
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -199,7 +169,42 @@ public:
 };
 ```
 
-### **TypeScript**
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func increasingBST(root *TreeNode) *TreeNode {
+	var head, tail *TreeNode
+	stack := make([]*TreeNode, 0)
+	cur := root
+	for len(stack) > 0 || cur != nil {
+		for cur != nil {
+			stack = append(stack, cur)
+			cur = cur.Left
+		}
+		cur = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if head == nil {
+			head = cur
+		} else {
+			tail.Right = cur
+		}
+		tail = cur
+		cur.Left = nil
+		cur = cur.Right
+	}
+	return head
+}
+```
+
+#### TypeScript
 
 ```ts
 /**
@@ -233,7 +238,7 @@ function increasingBST(root: TreeNode | null): TreeNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -254,8 +259,8 @@ function increasingBST(root: TreeNode | null): TreeNode | null {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, vals: &mut Vec<i32>) {
         if root.is_none() {
@@ -285,7 +290,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
@@ -297,7 +302,7 @@ impl Solution {
  * };
  */
 
-struct TreeNode *dfs(struct TreeNode *root, struct TreeNode *cur) {
+struct TreeNode* dfs(struct TreeNode* root, struct TreeNode* cur) {
     if (!root) {
         return cur;
     }
@@ -310,17 +315,212 @@ struct TreeNode *dfs(struct TreeNode *root, struct TreeNode *cur) {
     return dfs(root->right, cur);
 }
 
-struct TreeNode *increasingBST(struct TreeNode *root) {
-    struct TreeNode *dummy = malloc(sizeof(struct TreeNode));
+struct TreeNode* increasingBST(struct TreeNode* root) {
+    struct TreeNode* dummy = malloc(sizeof(struct TreeNode));
     dfs(root, dummy);
     return dummy->right;
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/* class TreeNode {
+*     var val: Int
+*     var left: TreeNode?
+*     var right: TreeNode?
+*     init() {
+*         self.val = 0
+*         self.left = nil
+*         self.right = nil
+*     }
+*     init(_ val: Int) {
+*         self.val = val
+*         self.left = nil
+*         self.right = nil
+*     }
+*     init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+*         self.val = val
+*         self.left = left
+*         self.right = right
+*     }
+* }
+*/
 
+class Solution {
+    func increasingBST(_ root: TreeNode?) -> TreeNode? {
+        var head: TreeNode? = nil
+        var tail: TreeNode? = nil
+        var stack = [TreeNode]()
+        var cur = root
+
+        while !stack.isEmpty || cur != nil {
+            while cur != nil {
+                stack.append(cur!)
+                cur = cur?.left
+            }
+            cur = stack.removeLast()
+            if head == nil {
+                head = cur
+            } else {
+                tail?.right = cur
+            }
+            tail = cur
+            cur?.left = nil
+            cur = cur?.right
+        }
+        return head
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def increasingBST(self, root: TreeNode) -> TreeNode:
+        def dfs(root: TreeNode):
+            if root is None:
+                return
+
+            dfs(root.left)
+
+            nonlocal cur
+            cur.right = root
+            root.left = None
+            cur = cur.right
+
+            dfs(root.right)
+
+        cur = dummy = TreeNode()
+        dfs(root)
+        return dummy.right
+```
+
+#### Java
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private TreeNode cur;
+
+    public TreeNode increasingBST(TreeNode root) {
+        TreeNode dummy = new TreeNode();
+        cur = dummy;
+        dfs(root);
+        return dummy.right;
+    }
+
+    private void dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        dfs(root.left);
+        cur.right = root;
+        root.left = null;
+        cur = cur.right;
+        dfs(root.right);
+    }
+}
+```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* increasingBST(TreeNode* root) {
+        TreeNode* dummy = new TreeNode();
+        TreeNode* cur = dummy;
+        function<void(TreeNode*)> dfs = [&](TreeNode* root) {
+            if (!root) {
+                return;
+            }
+            dfs(root->left);
+            cur->right = root;
+            root->left = nullptr;
+            cur = cur->right;
+            dfs(root->right);
+        };
+        dfs(root);
+        return dummy->right;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func increasingBST(root *TreeNode) *TreeNode {
+	dummy := &TreeNode{}
+	cur := dummy
+	var dfs func(*TreeNode)
+	dfs = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		dfs(root.Left)
+		root.Left = nil
+		cur.Right = root
+		cur = root
+		dfs(root.Right)
+	}
+	dfs(root)
+	return dummy.Right
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

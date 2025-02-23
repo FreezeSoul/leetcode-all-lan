@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0207.Course%20Schedule/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Topological Sort
+---
+
+<!-- problem:start -->
+
 # [207. Course Schedule](https://leetcode.com/problems/course-schedule)
 
 [中文文档](/solution/0200-0299/0207.Course%20Schedule/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are a total of <code>numCourses</code> courses you have to take, labeled from <code>0</code> to <code>numCourses - 1</code>. You are given an array <code>prerequisites</code> where <code>prerequisites[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that you <strong>must</strong> take course <code>b<sub>i</sub></code> first if you want to take course <code>a<sub>i</sub></code>.</p>
 
@@ -42,33 +57,45 @@ To take course 1 you should have finished course 0, and to take course 0 you sho
 	<li>All the pairs prerequisites[i] are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Topological Sorting
+
+For this problem, we can consider the courses as nodes in a graph, and prerequisites as edges in the graph. Thus, we can transform this problem into determining whether there is a cycle in the directed graph.
+
+Specifically, we can use the idea of topological sorting. For each node with an in-degree of $0$, we reduce the in-degree of its out-degree nodes by $1$, until all nodes have been traversed.
+
+If all nodes have been traversed, it means there is no cycle in the graph, and we can complete all courses; otherwise, we cannot complete all courses.
+
+The time complexity is $O(n + m)$, and the space complexity is $O(n + m)$. Here, $n$ and $m$ are the number of courses and prerequisites respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        g = defaultdict(list)
+        g = [[] for _ in range(numCourses)]
         indeg = [0] * numCourses
         for a, b in prerequisites:
             g[b].append(a)
             indeg[a] += 1
-        cnt = 0
-        q = deque(i for i, x in enumerate(indeg) if x == 0)
-        while q:
-            i = q.popleft()
-            cnt += 1
+        q = [i for i, x in enumerate(indeg) if x == 0]
+        for i in q:
+            numCourses -= 1
             for j in g[i]:
                 indeg[j] -= 1
                 if indeg[j] == 0:
                     q.append(j)
-        return cnt == numCourses
+        return numCourses == 0
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,22 +114,21 @@ class Solution {
                 q.offer(i);
             }
         }
-        int cnt = 0;
         while (!q.isEmpty()) {
             int i = q.poll();
-            ++cnt;
+            --numCourses;
             for (int j : g[i]) {
                 if (--indeg[j] == 0) {
                     q.offer(j);
                 }
             }
         }
-        return cnt == numCourses;
+        return numCourses == 0;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,23 +147,22 @@ public:
                 q.push(i);
             }
         }
-        int cnt = 0;
         while (!q.empty()) {
             int i = q.front();
             q.pop();
-            ++cnt;
+            --numCourses;
             for (int j : g[i]) {
                 if (--indeg[j] == 0) {
                     q.push(j);
                 }
             }
         }
-        return cnt == numCourses;
+        return numCourses == 0;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canFinish(numCourses int, prerequisites [][]int) bool {
@@ -154,11 +179,10 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 			q = append(q, i)
 		}
 	}
-	cnt := 0
 	for len(q) > 0 {
 		i := q[0]
 		q = q[1:]
-		cnt++
+		numCourses--
 		for _, j := range g[i] {
 			indeg[j]--
 			if indeg[j] == 0 {
@@ -166,41 +190,79 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 			}
 		}
 	}
-	return cnt == numCourses
+	return numCourses == 0
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canFinish(numCourses: number, prerequisites: number[][]): boolean {
-    const g: number[][] = new Array(numCourses).fill(0).map(() => []);
-    const indeg: number[] = new Array(numCourses).fill(0);
+    const g: number[][] = Array.from({ length: numCourses }, () => []);
+    const indeg: number[] = Array(numCourses).fill(0);
     for (const [a, b] of prerequisites) {
         g[b].push(a);
         indeg[a]++;
     }
     const q: number[] = [];
     for (let i = 0; i < numCourses; ++i) {
-        if (indeg[i] == 0) {
+        if (indeg[i] === 0) {
             q.push(i);
         }
     }
-    let cnt = 0;
-    while (q.length) {
-        const i = q.shift()!;
-        cnt++;
+    for (const i of q) {
+        --numCourses;
         for (const j of g[i]) {
-            if (--indeg[j] == 0) {
+            if (--indeg[j] === 0) {
                 q.push(j);
             }
         }
     }
-    return cnt == numCourses;
+    return numCourses === 0;
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+use std::collections::VecDeque;
+
+impl Solution {
+    pub fn can_finish(mut num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
+        let mut g: Vec<Vec<i32>> = vec![vec![]; num_courses as usize];
+        let mut indeg: Vec<i32> = vec![0; num_courses as usize];
+
+        for p in prerequisites {
+            let a = p[0] as usize;
+            let b = p[1] as usize;
+            g[b].push(a as i32);
+            indeg[a] += 1;
+        }
+
+        let mut q: VecDeque<usize> = VecDeque::new();
+        for i in 0..num_courses {
+            if indeg[i as usize] == 0 {
+                q.push_back(i as usize);
+            }
+        }
+
+        while let Some(i) = q.pop_front() {
+            num_courses -= 1;
+            for &j in &g[i] {
+                let j = j as usize;
+                indeg[j] -= 1;
+                if indeg[j] == 0 {
+                    q.push_back(j);
+                }
+            }
+        }
+
+        num_courses == 0
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -221,25 +283,22 @@ public class Solution {
                 q.Enqueue(i);
             }
         }
-        var cnt = 0;
         while (q.Count > 0) {
             int i = q.Dequeue();
-            ++cnt;
+            --numCourses;
             foreach (int j in g[i]) {
                 if (--indeg[j] == 0) {
                     q.Enqueue(j);
                 }
             }
         }
-        return cnt == numCourses;
+        return numCourses == 0;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,20 @@
-# [1635. Hopper 公司查询 I](https://leetcode.cn/problems/hopper-company-queries-i)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1635.Hopper%20Company%20Queries%20I/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1635. Hopper 公司查询 I 🔒](https://leetcode.cn/problems/hopper-company-queries-i)
 
 [English Version](/solution/1600-1699/1635.Hopper%20Company%20Queries%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Drivers</code></p>
 
@@ -15,7 +25,7 @@
 | driver_id   | int     |
 | join_date   | date    |
 +-------------+---------+
-driver_id是该表的主键。
+driver_id 是该表的主键(具有唯一值的列)。
 该表的每一行均包含驾驶员的ID以及他们加入Hopper公司的日期。
 </pre>
 
@@ -31,7 +41,7 @@ driver_id是该表的主键。
 | user_id      | int     |
 | requested_at | date    |
 +--------------+---------+
-ride_id是该表的主键。
+ride_id 是该表的主键(具有唯一值的列)。
 该表的每一行均包含行程ID(ride_id)，用户ID(user_id)以及该行程的日期(requested_at)。
 该表中可能有一些不被接受的乘车请求。
 </pre>
@@ -49,14 +59,14 @@ ride_id是该表的主键。
 | ride_distance | int     |
 | ride_duration | int     |
 +---------------+---------+
-ride_id是该表的主键。
+ride_id 是该表的主键(具有唯一值的列)。
 该表的每一行都包含已接受的行程信息。
 表中的行程信息都在“<code>Rides</code>”表中存在。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>编写SQL查询以报告2020年每个月的以下统计信息：</p>
+<p>编写解决方案以报告 <strong>2020</strong> 年每个月的以下统计信息：</p>
 
 <ul>
 	<li>截至某月底，当前在Hopper公司工作的驾驶员数量（<code>active_drivers</code>）。</li>
@@ -65,7 +75,7 @@ ride_id是该表的主键。
 
 <p>返回按<code>month</code> 升序排列的结果表，其中<code>month</code> 是月份的数字（一月是<code>1</code>，二月是<code>2</code>，依此类推）。</p>
 
-<p>查询结果格式如下例所示。</p>
+<p>返回结果格式如下例所示。</p>
 
 <p>&nbsp;</p>
 
@@ -152,16 +162,53 @@ ride_id是该表的主键。
 截至11月底-&gt;六个活跃的驾驶员（10,8,5,7,4,1），两个被接受的行程（20,5）。
 截至12月底-&gt;六个活跃的驾驶员（10,8,5,7,4,1），一个被接受的行程（2）。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    recursive Months AS (
+        SELECT
+            1 AS month
+        UNION ALL
+        SELECT
+            month + 1
+        FROM Months
+        WHERE month < 12
+    ),
+    Ride AS (
+        SELECT MONTH(requested_at) AS month, COUNT(1) AS cnt
+        FROM
+            Rides AS r
+            JOIN AcceptedRides AS a
+                ON r.ride_id = a.ride_id AND YEAR(requested_at) = 2020
+        GROUP BY month
+    )
+SELECT
+    m.month,
+    COUNT(driver_id) AS active_drivers,
+    IFNULL(r.cnt, 0) AS accepted_rides
+FROM
+    Months AS m
+    LEFT JOIN Drivers AS d
+        ON (m.month >= MONTH(d.join_date) AND YEAR(d.join_date) = 2020)
+        OR YEAR(d.join_date) < 2020
+    LEFT JOIN Ride AS r ON m.month = r.month
+GROUP BY month;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

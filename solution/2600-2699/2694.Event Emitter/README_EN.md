@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2694.Event%20Emitter/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2694. Event Emitter](https://leetcode.com/problems/event-emitter)
 
 [中文文档](/solution/2600-2699/2694.Event%20Emitter/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design an <code>EventEmitter</code> class. This interface&nbsp;is similar (but with some differences) to the one found in Node.js or the Event Target interface of the DOM. The <code>EventEmitter</code> should allow for subscribing to events and emitting them.</p>
 
@@ -19,7 +31,9 @@
 <p><strong class="example">Example 1:</strong></p>
 
 <pre>
-<strong>Input:</strong> actions = [&quot;EventEmitter&quot;, &quot;emit&quot;, &quot;subscribe&quot;, &quot;subscribe&quot;, &quot;emit&quot;], values = [[], [&quot;firstEvent&quot;, &quot;function cb1() { return 5; }&quot;],  [&quot;firstEvent&quot;, &quot;function cb1() { return 5; }&quot;], [&quot;firstEvent&quot;]]
+<strong>Input:</strong> 
+actions = [&quot;EventEmitter&quot;, &quot;emit&quot;, &quot;subscribe&quot;, &quot;subscribe&quot;, &quot;emit&quot;], 
+values = [[], [&quot;firstEvent&quot;], [&quot;firstEvent&quot;, &quot;function cb1() { return 5; }&quot;],&nbsp; [&quot;firstEvent&quot;, &quot;function cb1() { return 6; }&quot;], [&quot;firstEvent&quot;]]
 <strong>Output:</strong> [[],[&quot;emitted&quot;,[]],[&quot;subscribed&quot;],[&quot;subscribed&quot;],[&quot;emitted&quot;,[5,6]]]
 <strong>Explanation:</strong> 
 const emitter = new EventEmitter();
@@ -32,9 +46,11 @@ emitter.emit(&quot;firstEvent&quot;); // [5, 6], returns the output of cb1 and c
 <p><strong class="example">Example 2:</strong></p>
 
 <pre>
-<strong>Input:</strong> actions = [&quot;EventEmitter&quot;, &quot;subscribe&quot;, &quot;emit&quot;, &quot;emit&quot;], values = [[], [&quot;firstEvent&quot;, &quot;function cb1(...args) { return args.join(&#39;,&#39;); }&quot;], [&quot;firstEvent&quot;, [1,2,3]], [&quot;firstEvent&quot;, [3,4,6]]]
+<strong>Input:</strong> 
+actions = [&quot;EventEmitter&quot;, &quot;subscribe&quot;, &quot;emit&quot;, &quot;emit&quot;], 
+values = [[], [&quot;firstEvent&quot;, &quot;function cb1(...args) { return args.join(&#39;,&#39;); }&quot;], [&quot;firstEvent&quot;, [1,2,3]], [&quot;firstEvent&quot;, [3,4,6]]]
 <strong>Output:</strong> [[],[&quot;subscribed&quot;],[&quot;emitted&quot;,[&quot;1,2,3&quot;]],[&quot;emitted&quot;,[&quot;3,4,6&quot;]]]
-<strong>Explanation: </strong>Note that the emit method should be able to accept an OPTIONAL array of arguents.
+<strong>Explanation: </strong>Note that the emit method should be able to accept an OPTIONAL array of arguments.
 
 const emitter = new EventEmitter();
 emitter.subscribe(&quot;firstEvent, function cb1(...args) { return args.join(&#39;,&#39;); });
@@ -45,7 +61,9 @@ emitter.emit(&quot;firstEvent&quot;, [3, 4, 6]); // [&quot;3,4,6&quot;]
 <p><strong class="example">Example 3:</strong></p>
 
 <pre>
-<strong>Input:</strong> actions = [&quot;EventEmitter&quot;, &quot;subscribe&quot;, &quot;emit&quot;, &quot;unsubscribe&quot;, &quot;emit&quot;], values = [[], [&quot;firstEvent&quot;, &quot;(...args) =&gt; args.join(&#39;,&#39;)&quot;], [&quot;firstEvent&quot;, [1,2,3]], [0], [&quot;firstEvent&quot;, [4,5,6]]]
+<strong>Input:</strong> 
+actions = [&quot;EventEmitter&quot;, &quot;subscribe&quot;, &quot;emit&quot;, &quot;unsubscribe&quot;, &quot;emit&quot;], 
+values = [[], [&quot;firstEvent&quot;, &quot;(...args) =&gt; args.join(&#39;,&#39;)&quot;], [&quot;firstEvent&quot;, [1,2,3]], [0], [&quot;firstEvent&quot;, [4,5,6]]]
 <strong>Output:</strong> [[],[&quot;subscribed&quot;],[&quot;emitted&quot;,[&quot;1,2,3&quot;]],[&quot;unsubscribed&quot;,0],[&quot;emitted&quot;,[]]]
 <strong>Explanation:</strong>
 const emitter = new EventEmitter();
@@ -54,6 +72,20 @@ emitter.emit(&quot;firstEvent&quot;, [1, 2, 3]); // [&quot;1,2,3&quot;]
 sub.unsubscribe(); // undefined
 emitter.emit(&quot;firstEvent&quot;, [4, 5, 6]); // [], there are no subscriptions
 </pre>
+
+<p><strong class="example">Example 4:</strong></p>
+
+<pre>
+<strong>Input:</strong> 
+actions = [&quot;EventEmitter&quot;, &quot;subscribe&quot;, &quot;subscribe&quot;, &quot;unsubscribe&quot;, &quot;emit&quot;], 
+values = [[], [&quot;firstEvent&quot;, &quot;x =&gt; x + 1&quot;], [&quot;firstEvent&quot;, &quot;x =&gt; x + 2&quot;], [0], [&quot;firstEvent&quot;, [5]]]
+<strong>Output:</strong> [[],[&quot;subscribed&quot;],[&quot;subscribed&quot;],[&quot;unsubscribed&quot;,0],[&quot;emitted&quot;,[7]]]
+<strong>Explanation:</strong>
+const emitter = new EventEmitter();
+const sub1 = emitter.subscribe(&quot;firstEvent&quot;, x =&gt; x + 1);
+const sub2 = emitter.subscribe(&quot;firstEvent&quot;, x =&gt; x + 2);
+sub1.unsubscribe(); // undefined
+emitter.emit(&quot;firstEvent&quot;, [5]); // [7]</pre>
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
@@ -69,11 +101,17 @@ emitter.emit(&quot;firstEvent&quot;, [4, 5, 6]); // [], there are no subscriptio
 	<li>The <code>unsubscribe</code>&nbsp;action takes one argument, which is the 0-indexed order of the subscription made before.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 type Callback = (...args: any[]) => any;
@@ -85,10 +123,7 @@ class EventEmitter {
     private d: Map<string, Set<Callback>> = new Map();
 
     subscribe(eventName: string, callback: Callback): Subscription {
-        this.d.set(
-            eventName,
-            (this.d.get(eventName) || new Set()).add(callback),
-        );
+        this.d.set(eventName, (this.d.get(eventName) || new Set()).add(callback));
         return {
             unsubscribe: () => {
                 this.d.get(eventName)?.delete(callback);
@@ -119,3 +154,7 @@ class EventEmitter {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

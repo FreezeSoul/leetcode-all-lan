@@ -1,8 +1,25 @@
-# [2613. Beautiful Pairs](https://leetcode.com/problems/beautiful-pairs)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2613.Beautiful%20Pairs/README_EN.md
+tags:
+    - Geometry
+    - Array
+    - Math
+    - Divide and Conquer
+    - Ordered Set
+    - Sorting
+---
+
+<!-- problem:start -->
+
+# [2613. Beautiful Pairs 🔒](https://leetcode.com/problems/beautiful-pairs)
 
 [中文文档](/solution/2600-2699/2613.Beautiful%20Pairs/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two <strong>0-indexed</strong> integer arrays <code>nums1</code> and <code>nums2</code> of the same length. A pair of indices <code>(i,j)</code> is called <strong>beautiful</strong> if<code>|nums1[i] - nums1[j]| + |nums2[i] - nums2[j]|</code> is the smallest amongst all possible indices pairs where <code>i &lt; j</code>.</p>
 
@@ -42,9 +59,13 @@
 	<li><code>0 &lt;= nums2<sub>i</sub>&nbsp;&lt;= nums2.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Sorting + Divide and Conquer**
+<!-- solution:start -->
+
+### Solution 1: Sorting + Divide and Conquer
 
 This problem is equivalent to finding two points in the plane, such that the Manhattan distance between them is the smallest. If there are multiple points satisfying the condition, return the one with the smallest index.
 
@@ -64,7 +85,7 @@ Space complexity: $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -81,7 +102,7 @@ class Solution:
             d2, pi2, pj2 = dfs(m + 1, r)
             if d1 > d2 or (d1 == d2 and (pi1 > pi2 or (pi1 == pi2 and pj1 > pj2))):
                 d1, pi1, pj1 = d2, pi2, pj2
-            t = [p for p in points[l: r + 1] if abs(p[0] - x) <= d1]
+            t = [p for p in points[l : r + 1] if abs(p[0] - x) <= d1]
             t.sort(key=lambda x: x[1])
             for i in range(len(t)):
                 for j in range(i + 1, len(t)):
@@ -106,7 +127,7 @@ class Solution:
         return [pi, pj]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -176,7 +197,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -247,7 +268,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func beautifulPair(nums1 []int, nums2 []int) []int {
@@ -309,20 +330,6 @@ func dist(x1, y1, x2, y2 int) int {
 	return abs(x1-x2) + abs(y1-y2)
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -331,7 +338,7 @@ func abs(x int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function beautifulPair(nums1: number[], nums2: number[]): number[] {
@@ -364,8 +371,7 @@ function beautifulPair(nums1: number[], nums2: number[]): number[] {
         let t2 = dfs(m + 1, r);
         if (
             t1[0] > t2[0] ||
-            (t1[0] == t2[0] &&
-                (t1[1] > t2[1] || (t1[1] == t2[1] && t1[2] > t2[2])))
+            (t1[0] == t2[0] && (t1[1] > t2[1] || (t1[1] == t2[1] && t1[2] > t2[2])))
         ) {
             t1 = t2;
         }
@@ -384,10 +390,7 @@ function beautifulPair(nums1: number[], nums2: number[]): number[] {
                 const pi = Math.min(t[i][2], t[j][2]);
                 const pj = Math.max(t[i][2], t[j][2]);
                 const d = dist(t[i][0], t[i][1], t[j][0], t[j][1]);
-                if (
-                    d < t1[0] ||
-                    (d == t1[0] && (pi < t1[1] || (pi == t1[1] && pj < t1[2])))
-                ) {
+                if (d < t1[0] || (d == t1[0] && (pi < t1[1] || (pi == t1[1] && pj < t1[2])))) {
                     t1 = [d, pi, pj];
                 }
             }
@@ -406,10 +409,8 @@ function f(x: number, y: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

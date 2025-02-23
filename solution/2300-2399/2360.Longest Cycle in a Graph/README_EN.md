@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2360.Longest%20Cycle%20in%20a%20Graph/README_EN.md
+rating: 1897
+source: Weekly Contest 304 Q4
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Topological Sort
+---
+
+<!-- problem:start -->
+
 # [2360. Longest Cycle in a Graph](https://leetcode.com/problems/longest-cycle-in-a-graph)
 
 [中文文档](/solution/2300-2399/2360.Longest%20Cycle%20in%20a%20Graph/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>directed</strong> graph of <code>n</code> nodes numbered from <code>0</code> to <code>n - 1</code>, where each node has <strong>at most one</strong> outgoing edge.</p>
 
@@ -40,11 +57,25 @@ The length of this cycle is 3, so 3 is returned.
 	<li><code>edges[i] != i</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Traverse Starting Points
+
+We can traverse each node in the range $[0,..,n-1]$. If a node has not been visited, we start from this node and search for adjacent nodes until we encounter a cycle or a node that has already been visited. If we encounter a cycle, we update the answer.
+
+The time complexity is $O(n)$ and the space complexity is $O(n)$, where $n$ is the number of nodes.
+
+Similar problems:
+
+-   [2127. Maximum Employees to Be Invited to a Meeting](https://github.com/doocs/leetcode/blob/main/solution/2100-2199/2127.Maximum%20Employees%20to%20Be%20Invited%20to%20a%20Meeting/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -69,7 +100,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -136,7 +167,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestCycle(edges []int) int {
@@ -164,16 +195,9 @@ func longestCycle(edges []int) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestCycle(edges: number[]): number {
@@ -204,10 +228,8 @@ function longestCycle(edges: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

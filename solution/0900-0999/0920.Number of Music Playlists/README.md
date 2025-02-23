@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0920.Number%20of%20Music%20Playlists/README.md
+tags:
+    - 数学
+    - 动态规划
+    - 组合数学
+---
+
+<!-- problem:start -->
+
 # [920. 播放列表的数量](https://leetcode.cn/problems/number-of-music-playlists)
 
 [English Version](/solution/0900-0999/0920.Number%20of%20Music%20Playlists/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你的音乐播放器里有 <code>n</code> 首不同的歌，在旅途中，你计划听 <code>goal</code> 首歌（不一定不同，即，允许歌曲重复）。你将会按如下规则创建播放列表：</p>
 
@@ -48,11 +60,13 @@
 	<li><code>0 &lt;= k &lt; n &lt;= goal &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i][j]$ 表示听 $i$ 首歌，且这 $i$ 首歌中有 $j$ 首不同歌曲的播放列表的数量。初始时 $f[0][0]=1$。答案为 $f[goal][n]$。
 
@@ -71,13 +85,9 @@ $$
 
 时间复杂度 $O(goal \times n)$，空间复杂度 $O(goal \times n)$。其中 $goal$ 和 $n$ 为题目中给定的参数。
 
-注意到 $f[i][j]$ 只与 $f[i - 1][j - 1]$ 和 $f[i - 1][j]$ 有关，因此我们可以使用滚动数组优化空间复杂度，时间复杂度不变。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -94,26 +104,7 @@ class Solution:
         return f[goal][n]
 ```
 
-```python
-class Solution:
-    def numMusicPlaylists(self, n: int, goal: int, k: int) -> int:
-        mod = 10**9 + 7
-        f = [0] * (goal + 1)
-        f[0] = 1
-        for i in range(1, goal + 1):
-            g = [0] * (goal + 1)
-            for j in range(1, n + 1):
-                g[j] = f[j - 1] * (n - j + 1)
-                if j > k:
-                    g[j] += f[j] * (j - k)
-                g[j] %= mod
-            f = g
-        return f[n]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -134,6 +125,140 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numMusicPlaylists(int n, int goal, int k) {
+        const int mod = 1e9 + 7;
+        long long f[goal + 1][n + 1];
+        memset(f, 0, sizeof(f));
+        f[0][0] = 1;
+        for (int i = 1; i <= goal; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                f[i][j] = f[i - 1][j - 1] * (n - j + 1);
+                if (j > k) {
+                    f[i][j] += f[i - 1][j] * (j - k);
+                }
+                f[i][j] %= mod;
+            }
+        }
+        return f[goal][n];
+    }
+};
+```
+
+#### Go
+
+```go
+func numMusicPlaylists(n int, goal int, k int) int {
+	const mod = 1e9 + 7
+	f := make([][]int, goal+1)
+	for i := range f {
+		f[i] = make([]int, n+1)
+	}
+	f[0][0] = 1
+	for i := 1; i <= goal; i++ {
+		for j := 1; j <= n; j++ {
+			f[i][j] = f[i-1][j-1] * (n - j + 1)
+			if j > k {
+				f[i][j] += f[i-1][j] * (j - k)
+			}
+			f[i][j] %= mod
+		}
+	}
+	return f[goal][n]
+}
+```
+
+#### TypeScript
+
+```ts
+function numMusicPlaylists(n: number, goal: number, k: number): number {
+    const mod = 1e9 + 7;
+    const f = new Array(goal + 1).fill(0).map(() => new Array(n + 1).fill(0));
+    f[0][0] = 1;
+    for (let i = 1; i <= goal; ++i) {
+        for (let j = 1; j <= n; ++j) {
+            f[i][j] = f[i - 1][j - 1] * (n - j + 1);
+            if (j > k) {
+                f[i][j] += f[i - 1][j] * (j - k);
+            }
+            f[i][j] %= mod;
+        }
+    }
+    return f[goal][n];
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    #[allow(dead_code)]
+    pub fn num_music_playlists(n: i32, goal: i32, k: i32) -> i32 {
+        let mut dp: Vec<Vec<i64>> = vec![vec![0; n as usize + 1]; goal as usize + 1];
+
+        // Initialize the dp vector
+        dp[0][0] = 1;
+
+        // Begin the dp process
+        for i in 1..=goal as usize {
+            for j in 1..=n as usize {
+                // Choose the song that has not been chosen before
+                // We have n - (j - 1) songs to choose
+                dp[i][j] += dp[i - 1][j - 1] * ((n - ((j as i32) - 1)) as i64);
+
+                // Choose the song that has been chosen before
+                // We have j - k songs to choose if j > k
+                if (j as i32) > k {
+                    dp[i][j] += dp[i - 1][j] * (((j as i32) - k) as i64);
+                }
+
+                // Update dp[i][j]
+                dp[i][j] %= ((1e9 as i32) + 7) as i64;
+            }
+        }
+
+        dp[goal as usize][n as usize] as i32
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划（空间优化）
+
+我们注意到 $f[i][j]$ 只与 $f[i - 1][j - 1]$ 和 $f[i - 1][j]$ 有关，因此我们可以使用滚动数组优化空间复杂度，将空间复杂度优化至 $O(n)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numMusicPlaylists(self, n: int, goal: int, k: int) -> int:
+        mod = 10**9 + 7
+        f = [0] * (goal + 1)
+        f[0] = 1
+        for i in range(1, goal + 1):
+            g = [0] * (goal + 1)
+            for j in range(1, n + 1):
+                g[j] = f[j - 1] * (n - j + 1)
+                if j > k:
+                    g[j] += f[j] * (j - k)
+                g[j] %= mod
+            f = g
+        return f[n]
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -157,29 +282,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int numMusicPlaylists(int n, int goal, int k) {
-        const int mod = 1e9 + 7;
-        long long f[goal + 1][n + 1];
-        memset(f, 0, sizeof(f));
-        f[0][0] = 1;
-        for (int i = 1; i <= goal; ++i) {
-            for (int j = 1; j <= n; ++j) {
-                f[i][j] = f[i - 1][j - 1] * (n - j + 1);
-                if (j > k) {
-                    f[i][j] += f[i - 1][j] * (j - k);
-                }
-                f[i][j] %= mod;
-            }
-        }
-        return f[goal][n];
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -204,28 +307,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func numMusicPlaylists(n int, goal int, k int) int {
-	const mod = 1e9 + 7
-	f := make([][]int, goal+1)
-	for i := range f {
-		f[i] = make([]int, n+1)
-	}
-	f[0][0] = 1
-	for i := 1; i <= goal; i++ {
-		for j := 1; j <= n; j++ {
-			f[i][j] = f[i-1][j-1] * (n - j + 1)
-			if j > k {
-				f[i][j] += f[i-1][j] * (j - k)
-			}
-			f[i][j] %= mod
-		}
-	}
-	return f[goal][n]
-}
-```
+#### Go
 
 ```go
 func numMusicPlaylists(n int, goal int, k int) int {
@@ -247,25 +329,7 @@ func numMusicPlaylists(n int, goal int, k int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function numMusicPlaylists(n: number, goal: number, k: number): number {
-    const mod = 1e9 + 7;
-    const f = new Array(goal + 1).fill(0).map(() => new Array(n + 1).fill(0));
-    f[0][0] = 1;
-    for (let i = 1; i <= goal; ++i) {
-        for (let j = 1; j <= n; ++j) {
-            f[i][j] = f[i - 1][j - 1] * (n - j + 1);
-            if (j > k) {
-                f[i][j] += f[i - 1][j] * (j - k);
-            }
-            f[i][j] %= mod;
-        }
-    }
-    return f[goal][n];
-}
-```
+#### TypeScript
 
 ```ts
 function numMusicPlaylists(n: number, goal: number, k: number): number {
@@ -287,10 +351,8 @@ function numMusicPlaylists(n: number, goal: number, k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

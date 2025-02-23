@@ -2,13 +2,13 @@ class Solution {
     public int findUnsortedSubarray(int[] nums) {
         int[] arr = nums.clone();
         Arrays.sort(arr);
-        int left = 0, right = nums.length - 1;
-        while (left <= right && nums[left] == arr[left]) {
-            ++left;
+        int l = 0, r = arr.length - 1;
+        while (l <= r && nums[l] == arr[l]) {
+            l++;
         }
-        while (left <= right && nums[right] == arr[right]) {
-            --right;
+        while (l <= r && nums[r] == arr[r]) {
+            r--;
         }
-        return right - left + 1;
+        return r - l + 1;
     }
 }

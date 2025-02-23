@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0289.Game%20of%20Life/README.md
+tags:
+    - 数组
+    - 矩阵
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [289. 生命游戏](https://leetcode.cn/problems/game-of-life)
 
 [English Version](/solution/0200-0299/0289.Game%20of%20Life/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>根据&nbsp;<a href="https://baike.baidu.com/item/%E7%94%9F%E5%91%BD%E6%B8%B8%E6%88%8F/2926434?fr=aladdin" target="_blank">百度百科</a>&nbsp;，&nbsp;<strong>生命游戏</strong>&nbsp;，简称为 <strong>生命</strong> ，是英国数学家约翰·何顿·康威在 1970 年发明的细胞自动机。</p>
 
@@ -17,7 +29,11 @@
 	<li>如果死细胞周围正好有三个活细胞，则该位置死细胞复活；</li>
 </ol>
 
-<p>下一个状态是通过将上述规则同时应用于当前状态下的每个细胞所形成的，其中细胞的出生和死亡是同时发生的。给你 <code>m x n</code> 网格面板 <code>board</code> 的当前状态，返回下一个状态。</p>
+<p>下一个状态是通过将上述规则同时应用于当前状态下的每个细胞所形成的，其中细胞的出生和死亡是 <strong>同时</strong> 发生的。给你 <code>m x n</code> 网格面板 <code>board</code> 的当前状态，返回下一个状态。</p>
+
+<p>给定当前&nbsp;<code>board</code>&nbsp;的状态，<strong>更新</strong>&nbsp;<code>board</code>&nbsp;到下一个状态。</p>
+
+<p><strong>注意</strong> 你不需要返回任何东西。</p>
 
 <p>&nbsp;</p>
 
@@ -55,11 +71,13 @@
 	<li>本题中，我们使用二维数组来表示面板。原则上，面板是无限的，但当活细胞侵占了面板边界时会造成问题。你将如何解决这些问题？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：原地标记**
+### 方法一：原地标记
 
 我们不妨定义两个新的状态，其中状态 $2$ 表示活细胞在下一个状态转为死细胞，状态 $-1$ 表示死细胞在下一个状态转为活细胞。那么，对于当前遍历到的格子，如果格子大于 $0$，就表示当前格子是活细胞，否则就是死细胞。
 
@@ -71,9 +89,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,9 +114,7 @@ class Solution:
                     board[i][j] = 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -137,7 +151,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -175,7 +189,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func gameOfLife(board [][]int) {
@@ -211,7 +225,7 @@ func gameOfLife(board [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -251,7 +265,67 @@ function gameOfLife(board: number[][]): void {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+const DIR: [(i32, i32); 8] = [
+    (-1, 0),
+    (1, 0),
+    (0, -1),
+    (0, 1),
+    (-1, -1),
+    (-1, 1),
+    (1, -1),
+    (1, 1),
+];
+
+impl Solution {
+    #[allow(dead_code)]
+    pub fn game_of_life(board: &mut Vec<Vec<i32>>) {
+        let n = board.len();
+        let m = board[0].len();
+        let mut weight_vec: Vec<Vec<i32>> = vec![vec![0; m]; n];
+
+        // Initialize the weight vector
+        for i in 0..n {
+            for j in 0..m {
+                if board[i][j] == 0 {
+                    continue;
+                }
+                for (dx, dy) in DIR {
+                    let x = (i as i32) + dx;
+                    let y = (j as i32) + dy;
+                    if Self::check_bounds(x, y, n as i32, m as i32) {
+                        weight_vec[x as usize][y as usize] += 1;
+                    }
+                }
+            }
+        }
+
+        // Update the board
+        for i in 0..n {
+            for j in 0..m {
+                if weight_vec[i][j] < 2 {
+                    board[i][j] = 0;
+                } else if weight_vec[i][j] <= 3 {
+                    if board[i][j] == 0 && weight_vec[i][j] == 3 {
+                        board[i][j] = 1;
+                    }
+                } else {
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    #[allow(dead_code)]
+    fn check_bounds(i: i32, j: i32, n: i32, m: i32) -> bool {
+        i >= 0 && i < n && j >= 0 && j < m
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -290,10 +364,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

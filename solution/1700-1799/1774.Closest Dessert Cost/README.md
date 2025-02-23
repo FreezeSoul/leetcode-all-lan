@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1774.Closest%20Dessert%20Cost/README.md
+rating: 1701
+source: 第 230 场周赛 Q2
+tags:
+    - 数组
+    - 动态规划
+    - 回溯
+---
+
+<!-- problem:start -->
+
 # [1774. 最接近目标价格的甜点成本](https://leetcode.cn/problems/closest-dessert-cost)
 
 [English Version](/solution/1700-1799/1774.Closest%20Dessert%20Cost/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你打算做甜点，现在需要购买配料。目前共有 <code>n</code> 种冰激凌基料和 <code>m</code> 种配料可供选购。而制作甜点需要遵循以下几条规则：</p>
 
@@ -80,27 +94,31 @@
 	<li><code>1 <= target <= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举子集和 + 排序 + 二分查找**
+### 方法一：枚举子集和 + 排序 + 二分查找
 
 每种类型的配料最多可以选两份，因此，我们可以复制一份配料，然后利用 `DFS` 枚举子集之和。在实现上，我们可以只枚举一半的配料的所有子集和，然后在另一半配料子集和中，利用二分查找找到最接近的配料。
 
-时间复杂度 $O(n\times 2^m \times \log {2^m})$。
+时间复杂度 $O(n \times 2^m \times \log {2^m})$。
 
-相似题目：[1755. 最接近目标值的子序列和](/solution/1700-1799/1755.Closest%20Subsequence%20Sum/README.md)
+相似题目：
+
+-   [1755. 最接近目标值的子序列和](https://github.com/doocs/leetcode/blob/main/solution/1700-1799/1755.Closest%20Subsequence%20Sum/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def closestCost(self, baseCosts: List[int], toppingCosts: List[int], target: int) -> int:
+    def closestCost(
+        self, baseCosts: List[int], toppingCosts: List[int], target: int
+    ) -> int:
         def dfs(i, t):
             if i >= len(toppingCosts):
                 arr.append(t)
@@ -128,9 +146,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -188,7 +204,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -229,7 +245,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func closestCost(baseCosts []int, toppingCosts []int, target int) int {
@@ -247,12 +263,12 @@ func closestCost(baseCosts []int, toppingCosts []int, target int) int {
 	sort.Ints(arr)
 	const inf = 1 << 30
 	ans, d := inf, inf
-    // 选择一种冰激淋基料
+	// 选择一种冰激淋基料
 	for _, x := range baseCosts {
-        // 枚举子集和
+		// 枚举子集和
 		for _, y := range arr {
-            // 二分查找
-			i := sort.Search(len(arr), func(i int) bool { return arr[i] >= target-x-y })
+			// 二分查找
+			i := sort.SearchInts(arr, target-x-y)
 			for j := i - 1; j < i+1; j++ {
 				if j >= 0 && j < len(arr) {
 					t := abs(x + y + arr[j] - target)
@@ -275,10 +291,34 @@ func abs(x int) int {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+const closestCost = function (baseCosts, toppingCosts, target) {
+    let closestDessertCost = -Infinity;
+    function dfs(dessertCost, j) {
+        const tarCurrDiff = Math.abs(target - dessertCost);
+        const tarCloseDiff = Math.abs(target - closestDessertCost);
+        if (tarCurrDiff < tarCloseDiff) {
+            closestDessertCost = dessertCost;
+        } else if (tarCurrDiff === tarCloseDiff && dessertCost < closestDessertCost) {
+            closestDessertCost = dessertCost;
+        }
+        if (dessertCost > target) return;
+        if (j === toppingCosts.length) return;
+        for (let count = 0; count <= 2; count++) {
+            dfs(dessertCost + count * toppingCosts[j], j + 1);
+        }
+    }
+    for (let i = 0; i < baseCosts.length; i++) {
+        dfs(baseCosts[i], 0);
+    }
+    return closestDessertCost;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

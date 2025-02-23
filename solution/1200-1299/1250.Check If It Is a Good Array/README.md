@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1250.Check%20If%20It%20Is%20a%20Good%20Array/README.md
+rating: 1983
+source: 第 161 场周赛 Q4
+tags:
+    - 数组
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [1250. 检查「好数组」](https://leetcode.cn/problems/check-if-it-is-a-good-array)
 
 [English Version](/solution/1200-1299/1250.Check%20If%20It%20Is%20a%20Good%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>nums</code>，你需要从中任选一些子集，然后将子集中每一个数乘以一个 <strong>任意整数</strong>，并求出他们的和。</p>
 
@@ -43,11 +57,13 @@
 	<li><code>1 &lt;= nums[i] &lt;= 10^9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学（裴蜀定理）**
+### 方法一：数学（裴蜀定理）
 
 我们先可以考虑选取两个数的情况，若选取的数是 $a$ 和 $b$，那么根据题目的要求，我们需要满足 $a \times x + b \times y = 1$，其中 $x$ 和 $y$ 是任意整数。
 
@@ -61,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +85,7 @@ class Solution:
         return reduce(gcd, nums) == 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -106,7 +118,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isGoodArray(nums []int) bool {
@@ -125,10 +137,20 @@ func gcd(a, b int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function isGoodArray(nums: number[]): boolean {
+    return nums.reduce(gcd) === 1;
+}
 
+function gcd(a: number, b: number): number {
+    return b === 0 ? a : gcd(b, a % b);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

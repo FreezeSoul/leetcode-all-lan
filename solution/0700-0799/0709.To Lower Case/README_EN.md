@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0709.To%20Lower%20Case/README_EN.md
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [709. To Lower Case](https://leetcode.com/problems/to-lower-case)
 
 [中文文档](/solution/0700-0799/0709.To%20Lower%20Case/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code>, return <em>the string after replacing every uppercase letter with the same lowercase letter</em>.</p>
 
@@ -36,11 +48,17 @@
 	<li><code>s</code> consists of printable ASCII characters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -48,7 +66,7 @@ class Solution:
         return "".join([chr(ord(c) | 32) if c.isupper() else c for c in s])
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -64,7 +82,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -80,7 +98,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func toLowerCase(s string) string {
@@ -94,7 +112,7 @@ func toLowerCase(s string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function toLowerCase(s: string): string {
@@ -102,13 +120,7 @@ function toLowerCase(s: string): string {
 }
 ```
 
-```ts
-function toLowerCase(s: string): string {
-    return [...s].map(c => String.fromCharCode(c.charCodeAt(0) | 32)).join('');
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -117,6 +129,40 @@ impl Solution {
     }
 }
 ```
+
+#### C
+
+```c
+char* toLowerCase(char* s) {
+    int n = strlen(s);
+    for (int i = 0; i < n; i++) {
+        if (s[i] >= 'A' && s[i] <= 'Z') {
+            s[i] |= 32;
+        }
+    }
+    return s;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function toLowerCase(s: string): string {
+    return [...s].map(c => String.fromCharCode(c.charCodeAt(0) | 32)).join('');
+}
+```
+
+#### Rust
 
 ```rust
 impl Solution {
@@ -129,24 +175,8 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-char *toLowerCase(char *s) {
-    int n = strlen(s);
-    for (int i = 0; i < n; i++) {
-        if (s[i] >= 'A' && s[i] <= 'Z') {
-            s[i] |= 32;
-        }
-    }
-    return s;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

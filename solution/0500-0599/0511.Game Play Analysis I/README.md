@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0511.Game%20Play%20Analysis%20I/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [511. 游戏玩法分析 I](https://leetcode.cn/problems/game-play-analysis-i)
 
 [English Version](/solution/0500-0599/0511.Game%20Play%20Analysis%20I/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>活动表&nbsp;<code>Activity</code>：</p>
 
@@ -17,14 +27,14 @@
 | event_date   | date    |
 | games_played | int     |
 +--------------+---------+
-表的主键是 (player_id, event_date)。
+在 SQL 中，表的主键是 (player_id, event_date)。
 这张表展示了一些游戏玩家在游戏平台上的行为活动。
 每行数据记录了一名玩家在退出平台之前，当天使用同一台设备登录平台后打开的游戏的数目（可能是 0 个）。
 </pre>
 
 <p>&nbsp;</p>
 
-<p>写一条 SQL&nbsp;查询语句获取每位玩家 <strong>第一次登陆平台的日期</strong>。</p>
+<p>查询每位玩家 <strong>第一次登录平台的日期</strong>。</p>
 
 <p>查询结果的格式如下所示：</p>
 
@@ -50,22 +60,43 @@ Result 表：
 +-----------+-------------+
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分组求最小值
+
+我们可以用 `GROUP BY` 对 `player_id` 进行分组，然后取每一组中最小的 `event_date` 作为玩家第一次登录平台的日期。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### Python3
+
+```python
+import pandas as pd
+
+
+def game_analysis(activity: pd.DataFrame) -> pd.DataFrame:
+    return (
+        activity.groupby("player_id")
+        .agg(first_login=("event_date", "min"))
+        .reset_index()
+    )
+```
+
+#### MySQL
 
 ```sql
-SELECT
-    player_id,
-    MIN(event_date) first_login
-FROM
-    Activity
-GROUP BY
-    player_id;
+# Write your MySQL query statement below
+SELECT player_id, MIN(event_date) AS first_login
+FROM Activity
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

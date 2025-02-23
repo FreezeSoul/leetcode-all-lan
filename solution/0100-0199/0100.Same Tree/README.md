@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0100.Same%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [100. 相同的树](https://leetcode.cn/problems/same-tree)
 
 [English Version](/solution/0100-0199/0100.Same%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两棵二叉树的根节点 <code>p</code> 和 <code>q</code> ，编写一个函数来检验这两棵树是否相同。</p>
 
@@ -42,11 +55,13 @@
 	<li><code>-10<sup>4</sup> <= Node.val <= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们可以使用 DFS 递归的方法来解决这个问题。
 
@@ -54,21 +69,9 @@
 
 时间复杂度 $O(\min(m, n))$，空间复杂度 $O(\min(m, n))$。其中 $m$ 和 $n$ 分别是两个二叉树的节点个数。空间复杂度主要取决于递归调用的层数，递归调用的层数不会超过较小的二叉树的节点个数。
 
-**方法二：BFS**
-
-我们也可以使用 BFS 迭代的方法来解决这个问题。
-
-首先将两个二叉树的根节点分别加入两个队列。每次从两个队列各取出一个节点，进行如下比较操作。如果两个节点的值不相同，则两个二叉树的结构一定不同，如果两个节点的值相同，则判断两个节点的子节点是否为空，如果只有一个节点的左子节点为空，则两个二叉树的结构一定不同，如果只有一个节点的右子节点为空，则两个二叉树的结构一定不同，如果左右子节点的结构相同，则将两个节点的左子节点和右子节点分别加入两个队列，对于下一次迭代，将从两个队列各取出一个节点进行比较。当两个队列同时为空时，说明我们已经比较完了所有节点，两个二叉树的结构完全相同。
-
-时间复杂度 $O(\min(m, n))$，空间复杂度 $O(\min(m, n))$。其中 $m$ 和 $n$ 分别是两个二叉树的节点个数。空间复杂度主要取决于队列中的元素个数，队列中的元素个数不会超过较小的二叉树的节点个数。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-DFS：
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -86,7 +89,231 @@ class Solution:
         return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
 ```
 
-BFS：
+#### Java
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == q) return true;
+        if (p == null || q == null || p.val != q.val) return false;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+}
+```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p == q) return true;
+        if (!p || !q || p->val != q->val) return false;
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+	if p == q {
+		return true
+	}
+	if p == nil || q == nil || p.Val != q.Val {
+		return false
+	}
+	return isSameTree(p.Left, q.Left) && isSameTree(p.Right, q.Right)
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (p == null && q == null) {
+        return true;
+    }
+    if (p == null || q == null || p.val !== q.val) {
+        return false;
+    }
+    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::rc::Rc;
+impl Solution {
+    fn dfs(p: &Option<Rc<RefCell<TreeNode>>>, q: &Option<Rc<RefCell<TreeNode>>>) -> bool {
+        if p.is_none() && q.is_none() {
+            return true;
+        }
+        if p.is_none() || q.is_none() {
+            return false;
+        }
+        let r1 = p.as_ref().unwrap().borrow();
+        let r2 = q.as_ref().unwrap().borrow();
+        r1.val == r2.val && Self::dfs(&r1.left, &r2.left) && Self::dfs(&r1.right, &r2.right)
+    }
+
+    pub fn is_same_tree(
+        p: Option<Rc<RefCell<TreeNode>>>,
+        q: Option<Rc<RefCell<TreeNode>>>,
+    ) -> bool {
+        Self::dfs(&p, &q)
+    }
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function (p, q) {
+    if (!p && !q) return true;
+    if (p && q) {
+        return p.val === q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+    return false;
+};
+```
+
+#### PHP
+
+```php
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     public $val = null;
+ *     public $left = null;
+ *     public $right = null;
+ *     function __construct($val = 0, $left = null, $right = null) {
+ *         $this->val = $val;
+ *         $this->left = $left;
+ *         $this->right = $right;
+ *     }
+ * }
+ */
+class Solution {
+    /**
+     * @param TreeNode $p
+     * @param TreeNode $q
+     * @return Boolean
+     */
+    function isSameTree($p, $q) {
+        if ($p == null && $q == null) {
+            return true;
+        }
+        if ($p == null || $q == null) {
+            return false;
+        }
+        if ($p->val != $q->val) {
+            return false;
+        }
+        return $this->isSameTree($p->left, $q->left) && $this->isSameTree($p->right, $q->right);
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：BFS
+
+我们也可以使用 BFS 迭代的方法来解决这个问题。
+
+首先将两个二叉树的根节点分别加入两个队列。每次从两个队列各取出一个节点，进行如下比较操作。如果两个节点的值不相同，则两个二叉树的结构一定不同，如果两个节点的值相同，则判断两个节点的子节点是否为空，如果只有一个节点的左子节点为空，则两个二叉树的结构一定不同，如果只有一个节点的右子节点为空，则两个二叉树的结构一定不同，如果左右子节点的结构相同，则将两个节点的左子节点和右子节点分别加入两个队列，对于下一次迭代，将从两个队列各取出一个节点进行比较。当两个队列同时为空时，说明我们已经比较完了所有节点，两个二叉树的结构完全相同。
+
+时间复杂度 $O(\min(m, n))$，空间复杂度 $O(\min(m, n))$。其中 $m$ 和 $n$ 分别是两个二叉树的节点个数。空间复杂度主要取决于队列中的元素个数，队列中的元素个数不会超过较小的二叉树的节点个数。
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -121,34 +348,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public boolean isSameTree(TreeNode p, TreeNode q) {
-        if (p == q) return true;
-        if (p == null || q == null || p.val != q.val) return false;
-        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
-    }
-}
-```
+#### Java
 
 ```java
 /**
@@ -206,29 +406,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    bool isSameTree(TreeNode* p, TreeNode* q) {
-        if (p == q) return true;
-        if (!p || !q || p->val != q->val) return false;
-        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
-    }
-};
-```
+#### C++
 
 ```cpp
 /**
@@ -249,8 +427,7 @@ public:
         if (!p || !q) return false;
         queue<TreeNode*> q1{{p}};
         queue<TreeNode*> q2{{q}};
-        while (!q1.empty() && !q2.empty())
-        {
+        while (!q1.empty() && !q2.empty()) {
             p = q1.front();
             q = q2.front();
             if (p->val != q->val) return false;
@@ -260,13 +437,11 @@ public:
             TreeNode *lb = q->left, *rb = q->right;
             if ((la && !lb) || (lb && !la)) return false;
             if ((ra && !rb) || (rb && !ra)) return false;
-            if (la)
-            {
+            if (la) {
                 q1.push(la);
                 q2.push(lb);
             }
-            if (ra)
-            {
+            if (ra) {
                 q1.push(ra);
                 q2.push(rb);
             }
@@ -276,27 +451,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func isSameTree(p *TreeNode, q *TreeNode) bool {
-    if p == q {
-        return true
-    }
-    if p == nil || q == nil || p.Val != q.Val {
-        return false
-    }
-    return isSameTree(p.Left, q.Left) && isSameTree(p.Right, q.Right)
-}
-```
+#### Go
 
 ```go
 /**
@@ -343,62 +498,7 @@ func isSameTree(p *TreeNode, q *TreeNode) bool {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {TreeNode} p
- * @param {TreeNode} q
- * @return {boolean}
- */
-var isSameTree = function (p, q) {
-    if (!p && !q) return true;
-    if (p && q) {
-        return (
-            p.val === q.val &&
-            isSameTree(p.left, q.left) &&
-            isSameTree(p.right, q.right)
-        );
-    }
-    return false;
-};
-```
-
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
-    if (p == null && q == null) {
-        return true;
-    }
-    if (p == null || q == null || p.val !== q.val) {
-        return false;
-    }
-    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
-}
-```
+#### TypeScript
 
 ```ts
 /**
@@ -454,7 +554,7 @@ function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -475,52 +575,9 @@ function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
 //     }
 //   }
 // }
-use std::rc::Rc;
-use std::cell::RefCell;
-impl Solution {
-    fn dfs(p: &Option<Rc<RefCell<TreeNode>>>, q: &Option<Rc<RefCell<TreeNode>>>) -> bool {
-        if p.is_none() && q.is_none() {
-            return true;
-        }
-        if p.is_none() || q.is_none() {
-            return false;
-        }
-        let r1 = p.as_ref().unwrap().borrow();
-        let r2 = q.as_ref().unwrap().borrow();
-        r1.val == r2.val && Self::dfs(&r1.left, &r2.left) && Self::dfs(&r1.right, &r2.right)
-    }
-
-    pub fn is_same_tree(
-        p: Option<Rc<RefCell<TreeNode>>>,
-        q: Option<Rc<RefCell<TreeNode>>>,
-    ) -> bool {
-        Self::dfs(&p, &q)
-    }
-}
-```
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
-use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::VecDeque;
+use std::rc::Rc;
 impl Solution {
     pub fn is_same_tree(
         mut p: Option<Rc<RefCell<TreeNode>>>,
@@ -549,7 +606,9 @@ impl Solution {
                         queue.push_back(node1.left.take());
                         queue.push_back(node2.left.take());
                     }
-                    (_, _) => return false,
+                    (_, _) => {
+                        return false;
+                    }
                 }
                 match (node1.right.is_some(), node2.right.is_some()) {
                     (false, false) => {}
@@ -557,7 +616,9 @@ impl Solution {
                         queue.push_back(node1.right.take());
                         queue.push_back(node2.right.take());
                     }
-                    (_, _) => return false,
+                    (_, _) => {
+                        return false;
+                    }
                 }
             }
         }
@@ -566,47 +627,8 @@ impl Solution {
 }
 ```
 
-### **PHP**
-
-```php
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     public $val = null;
- *     public $left = null;
- *     public $right = null;
- *     function __construct($val = 0, $left = null, $right = null) {
- *         $this->val = $val;
- *         $this->left = $left;
- *         $this->right = $right;
- *     }
- * }
- */
-class Solution {
-    /**
-     * @param TreeNode $p
-     * @param TreeNode $q
-     * @return Boolean
-     */
-    function isSameTree($p, $q) {
-        if ($p == Null && $q == Null) {
-            return true;
-        }
-        if ($p == Null || $q == Null) {
-            return false;
-        }
-        if ($p->val != $q->val) {
-            return false;
-        }
-        return $this->isSameTree($p->left, $q->left) && $this->isSameTree($p->right, $q->right);
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

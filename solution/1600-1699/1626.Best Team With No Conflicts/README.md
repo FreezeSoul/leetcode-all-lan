@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1626.Best%20Team%20With%20No%20Conflicts/README.md
+rating: 2027
+source: 第 211 场周赛 Q3
+tags:
+    - 数组
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1626. 无矛盾的最佳球队](https://leetcode.cn/problems/best-team-with-no-conflicts)
 
 [English Version](/solution/1600-1699/1626.Best%20Team%20With%20No%20Conflicts/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>假设你是球队的经理。对于即将到来的锦标赛，你想组合一支总体得分最高的球队。球队的得分是球队中所有球员的分数 <strong>总和</strong> 。</p>
 
@@ -45,11 +59,13 @@
 	<li><code>1 &lt;= ages[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 动态规划**
+### 方法一：排序 + 动态规划
 
 我们可以将球员按照分数从小到大排序，如果分数相同，则按照年龄从小到大排序。
 
@@ -63,21 +79,9 @@
 
 时间复杂度 $O(n^2)$，空间复杂度 $O(n)$。其中 $n$ 为球员的数量。
 
-**方法二：排序 + 树状数组**
-
-与方法一类似，我们可以将球员按照分数从小到大排序，如果分数相同，则按照年龄从小到大排序。
-
-接下来，我们使用树状数组维护不超过当前球员年龄的球员的最大得分。每一次，我们只需要在 $O(\log m)$ 的时间内找出不超过当前球员年龄的球员的最大得分，然后将当前球员的分数加到该得分上，即可更新当前球员年龄的最大得分。
-
-最后，我们返回得分的最大值即可。
-
-时间复杂度 $O(n \times (\log n + \log m))$，空间复杂度 $O(n + m)$。其中 $n$ 和 $m$ 分别为球员的数量和球员的年龄的最大值。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,6 +96,150 @@ class Solution:
             f[i] += score
         return max(f)
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int bestTeamScore(int[] scores, int[] ages) {
+        int n = ages.length;
+        int[][] arr = new int[n][2];
+        for (int i = 0; i < n; ++i) {
+            arr[i] = new int[] {scores[i], ages[i]};
+        }
+        Arrays.sort(arr, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+        int[] f = new int[n];
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (arr[i][1] >= arr[j][1]) {
+                    f[i] = Math.max(f[i], f[j]);
+                }
+            }
+            f[i] += arr[i][0];
+            ans = Math.max(ans, f[i]);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        int n = ages.size();
+        vector<pair<int, int>> arr(n);
+        for (int i = 0; i < n; ++i) {
+            arr[i] = {scores[i], ages[i]};
+        }
+        sort(arr.begin(), arr.end());
+        vector<int> f(n);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (arr[i].second >= arr[j].second) {
+                    f[i] = max(f[i], f[j]);
+                }
+            }
+            f[i] += arr[i].first;
+        }
+        return *max_element(f.begin(), f.end());
+    }
+};
+```
+
+#### Go
+
+```go
+func bestTeamScore(scores []int, ages []int) int {
+	n := len(ages)
+	arr := make([][2]int, n)
+	for i := range ages {
+		arr[i] = [2]int{scores[i], ages[i]}
+	}
+	sort.Slice(arr, func(i, j int) bool {
+		a, b := arr[i], arr[j]
+		return a[0] < b[0] || a[0] == b[0] && a[1] < b[1]
+	})
+	f := make([]int, n)
+	for i := range arr {
+		for j := 0; j < i; j++ {
+			if arr[i][1] >= arr[j][1] {
+				f[i] = max(f[i], f[j])
+			}
+		}
+		f[i] += arr[i][0]
+	}
+	return slices.Max(f)
+}
+```
+
+#### TypeScript
+
+```ts
+function bestTeamScore(scores: number[], ages: number[]): number {
+    const arr = ages.map((age, i) => [age, scores[i]]);
+    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
+    const n = arr.length;
+    const f = new Array(n).fill(0);
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < i; ++j) {
+            if (arr[i][1] >= arr[j][1]) {
+                f[i] = Math.max(f[i], f[j]);
+            }
+        }
+        f[i] += arr[i][1];
+    }
+    return Math.max(...f);
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} scores
+ * @param {number[]} ages
+ * @return {number}
+ */
+var bestTeamScore = function (scores, ages) {
+    const arr = ages.map((age, i) => [age, scores[i]]);
+    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
+    const n = arr.length;
+    const f = new Array(n).fill(0);
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < i; ++j) {
+            if (arr[i][1] >= arr[j][1]) {
+                f[i] = Math.max(f[i], f[j]);
+            }
+        }
+        f[i] += arr[i][1];
+    }
+    return Math.max(...f);
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：排序 + 树状数组
+
+与方法一类似，我们可以将球员按照分数从小到大排序，如果分数相同，则按照年龄从小到大排序。
+
+接下来，我们使用树状数组维护不超过当前球员年龄的球员的最大得分。每一次，我们只需要在 $O(\log m)$ 的时间内找出不超过当前球员年龄的球员的最大得分，然后将当前球员的分数加到该得分上，即可更新当前球员年龄的最大得分。
+
+最后，我们返回得分的最大值即可。
+
+时间复杂度 $O(n \times (\log n + \log m))$，空间复杂度 $O(n + m)$。其中 $n$ 和 $m$ 分别为球员的数量和球员的年龄的最大值。
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class BinaryIndexedTree:
@@ -121,34 +269,7 @@ class Solution:
         return tree.query(m)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int bestTeamScore(int[] scores, int[] ages) {
-        int n = ages.length;
-        int[][] arr = new int[n][2];
-        for (int i = 0; i < n; ++i) {
-            arr[i] = new int[] {scores[i], ages[i]};
-        }
-        Arrays.sort(arr, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
-        int[] f = new int[n];
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                if (arr[i][1] >= arr[j][1]) {
-                    f[i] = Math.max(f[i], f[j]);
-                }
-            }
-            f[i] += arr[i][0];
-            ans = Math.max(ans, f[i]);
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -198,36 +319,14 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
-        int n = ages.size();
-        vector<pair<int, int>> arr(n);
-        for (int i = 0; i < n; ++i) {
-            arr[i] = {scores[i], ages[i]};
-        }
-        sort(arr.begin(), arr.end());
-        vector<int> f(n);
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                if (arr[i].second >= arr[j].second) {
-                    f[i] = max(f[i], f[j]);
-                }
-            }
-            f[i] += arr[i].first;
-        }
-        return *max_element(f.begin(), f.end());
-    }
-};
-```
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
 public:
-    BinaryIndexedTree(int _n) : n(_n), c(_n + 1) {}
+    BinaryIndexedTree(int _n)
+        : n(_n)
+        , c(_n + 1) {}
 
     void update(int x, int val) {
         while (x <= n) {
@@ -269,39 +368,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func bestTeamScore(scores []int, ages []int) (ans int) {
-	n := len(ages)
-	arr := make([][2]int, n)
-	for i := range ages {
-		arr[i] = [2]int{scores[i], ages[i]}
-	}
-	sort.Slice(arr, func(i, j int) bool {
-		a, b := arr[i], arr[j]
-		return a[0] < b[0] || a[0] == b[0] && a[1] < b[1]
-	})
-	f := make([]int, n)
-	for i := range arr {
-		for j := 0; j < i; j++ {
-			if arr[i][1] >= arr[j][1] {
-				f[i] = max(f[i], f[j])
-			}
-		}
-		f[i] += arr[i][0]
-		ans = max(ans, f[i])
-	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 type BinaryIndexedTree struct {
@@ -348,64 +415,10 @@ func bestTeamScore(scores []int, ages []int) int {
 	}
 	return tree.query(m)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-function bestTeamScore(scores: number[], ages: number[]): number {
-    const arr = ages.map((age, i) => [age, scores[i]]);
-    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
-    const n = arr.length;
-    const f = new Array(n).fill(0);
-    for (let i = 0; i < n; ++i) {
-        for (let j = 0; j < i; ++j) {
-            if (arr[i][1] >= arr[j][1]) {
-                f[i] = Math.max(f[i], f[j]);
-            }
-        }
-        f[i] += arr[i][1];
-    }
-    return Math.max(...f);
-}
-```
-
-### **JavaScript**
-
-```js
-/**
- * @param {number[]} scores
- * @param {number[]} ages
- * @return {number}
- */
-var bestTeamScore = function (scores, ages) {
-    const arr = ages.map((age, i) => [age, scores[i]]);
-    arr.sort((a, b) => (a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]));
-    const n = arr.length;
-    const f = new Array(n).fill(0);
-    for (let i = 0; i < n; ++i) {
-        for (let j = 0; j < i; ++j) {
-            if (arr[i][1] >= arr[j][1]) {
-                f[i] = Math.max(f[i], f[j]);
-            }
-        }
-        f[i] += arr[i][1];
-    }
-    return Math.max(...f);
-};
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

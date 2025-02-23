@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1291.Sequential%20Digits/README.md
+rating: 1373
+source: 第 167 场周赛 Q2
+tags:
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [1291. 顺次数](https://leetcode.cn/problems/sequential-digits)
 
 [English Version](/solution/1200-1299/1291.Sequential%20Digits/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们定义「顺次数」为：每一位上的数字都比前一位上的数字大 <code>1</code> 的整数。</p>
 
@@ -32,11 +44,13 @@
 	<li><code>10 &lt;= low &lt;= high &lt;= 10^9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 我们可以枚举数字的第一位 $i$，然后枚举数字的最后一位 $j$，那么这个数字就是 $i,i+1,\cdots,j$ 这 $j-i+1$ 个数字组成的。我们可以通过不断地将数字乘以 $10$ 并加上下一个数字 $j+1$ 来得到下一个数字，如果数字在 $[low, high]$ 的范围内，我们就将它加入答案中。
 
@@ -46,9 +60,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -63,9 +75,7 @@ class Solution:
         return sorted(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +96,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +118,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sequentialDigits(low int, high int) (ans []int) {
@@ -126,7 +136,7 @@ func sequentialDigits(low int, high int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sequentialDigits(low: number, high: number): number[] {
@@ -145,10 +155,8 @@ function sequentialDigits(low: number, high: number): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

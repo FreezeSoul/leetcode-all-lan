@@ -1,10 +1,24 @@
-# [1429. 第一个唯一数字](https://leetcode.cn/problems/first-unique-number)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1429.First%20Unique%20Number/README.md
+tags:
+    - 设计
+    - 队列
+    - 数组
+    - 哈希表
+    - 数据流
+---
+
+<!-- problem:start -->
+
+# [1429. 第一个唯一数字 🔒](https://leetcode.cn/problems/first-unique-number)
 
 [English Version](/solution/1400-1499/1429.First%20Unique%20Number/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一系列整数，插入一个队列中，找出队列中第一个唯一整数。</p>
 
@@ -82,11 +96,13 @@ firstUnique.showFirstUnique(); // 返回 -1
 	<li>最多调用 <code>5000</code> 次 <code>showFirstUnique</code> 和 <code>add</code> 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 双端队列**
+### 方法一：哈希表 + 双端队列
 
 我们可以使用哈希表 $cnt$ 统计每个数字出现的次数，使用双端队列 $q$ 按顺序维护出现的数字。
 
@@ -98,13 +114,10 @@ firstUnique.showFirstUnique(); // 返回 -1
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class FirstUnique:
-
     def __init__(self, nums: List[int]):
         self.cnt = Counter(nums)
         self.unique = OrderedDict({v: 1 for v in nums if self.cnt[v] == 1})
@@ -119,28 +132,6 @@ class FirstUnique:
         elif value in self.unique:
             self.unique.pop(value)
 
-# Your FirstUnique object will be instantiated and called as such:
-# obj = FirstUnique(nums)
-# param_1 = obj.showFirstUnique()
-# obj.add(value)
-```
-
-```python
-class FirstUnique:
-
-    def __init__(self, nums: List[int]):
-        self.cnt = Counter(nums)
-        self.q = deque(nums)
-
-    def showFirstUnique(self) -> int:
-        while self.q and self.cnt[self.q[0]] != 1:
-            self.q.popleft()
-        return -1 if not self.q else self.q[0]
-
-    def add(self, value: int) -> None:
-        self.cnt[value] += 1
-        self.q.append(value)
-
 
 # Your FirstUnique object will be instantiated and called as such:
 # obj = FirstUnique(nums)
@@ -148,9 +139,7 @@ class FirstUnique:
 # obj.add(value)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class FirstUnique {
@@ -190,40 +179,7 @@ class FirstUnique {
  */
 ```
 
-```java
-class FirstUnique {
-    private Map<Integer, Integer> cnt = new HashMap<>();
-    private Deque<Integer> q = new ArrayDeque<>();
-
-    public FirstUnique(int[] nums) {
-        for (int v : nums) {
-            cnt.put(v, cnt.getOrDefault(v, 0) + 1);
-            q.offer(v);
-        }
-    }
-
-    public int showFirstUnique() {
-        while (!q.isEmpty() && cnt.get(q.peekFirst()) != 1) {
-            q.poll();
-        }
-        return q.isEmpty() ? -1 : q.peekFirst();
-    }
-
-    public void add(int value) {
-        cnt.put(value, cnt.getOrDefault(value, 0) + 1);
-        q.offer(value);
-    }
-}
-
-/**
- * Your FirstUnique object will be instantiated and called as such:
- * FirstUnique obj = new FirstUnique(nums);
- * int param_1 = obj.showFirstUnique();
- * obj.add(value);
- */
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class FirstUnique {
@@ -258,7 +214,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type FirstUnique struct {
@@ -297,10 +253,77 @@ func (this *FirstUnique) Add(value int) {
  */
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class FirstUnique:
+    def __init__(self, nums: List[int]):
+        self.cnt = Counter(nums)
+        self.q = deque(nums)
+
+    def showFirstUnique(self) -> int:
+        while self.q and self.cnt[self.q[0]] != 1:
+            self.q.popleft()
+        return -1 if not self.q else self.q[0]
+
+    def add(self, value: int) -> None:
+        self.cnt[value] += 1
+        self.q.append(value)
+
+
+# Your FirstUnique object will be instantiated and called as such:
+# obj = FirstUnique(nums)
+# param_1 = obj.showFirstUnique()
+# obj.add(value)
 ```
 
+#### Java
+
+```java
+class FirstUnique {
+    private Map<Integer, Integer> cnt = new HashMap<>();
+    private Deque<Integer> q = new ArrayDeque<>();
+
+    public FirstUnique(int[] nums) {
+        for (int v : nums) {
+            cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+            q.offer(v);
+        }
+    }
+
+    public int showFirstUnique() {
+        while (!q.isEmpty() && cnt.get(q.peekFirst()) != 1) {
+            q.poll();
+        }
+        return q.isEmpty() ? -1 : q.peekFirst();
+    }
+
+    public void add(int value) {
+        cnt.put(value, cnt.getOrDefault(value, 0) + 1);
+        q.offer(value);
+    }
+}
+
+/**
+ * Your FirstUnique object will be instantiated and called as such:
+ * FirstUnique obj = new FirstUnique(nums);
+ * int param_1 = obj.showFirstUnique();
+ * obj.add(value);
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

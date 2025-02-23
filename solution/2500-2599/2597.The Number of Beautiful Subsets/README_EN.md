@@ -1,8 +1,28 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2597.The%20Number%20of%20Beautiful%20Subsets/README_EN.md
+rating: 2023
+source: Weekly Contest 337 Q3
+tags:
+    - Array
+    - Hash Table
+    - Math
+    - Dynamic Programming
+    - Backtracking
+    - Combinatorics
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2597. The Number of Beautiful Subsets](https://leetcode.com/problems/the-number-of-beautiful-subsets)
 
 [中文文档](/solution/2500-2599/2597.The%20Number%20of%20Beautiful%20Subsets/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>nums</code> of positive integers and a <strong>positive</strong> integer <code>k</code>.</p>
 
@@ -35,13 +55,17 @@ It can be proved that there is only 1 beautiful subset in the array [1].
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>1 &lt;= nums.length &lt;= 20</code></li>
+	<li><code>1 &lt;= nums.length &lt;= 18</code></li>
 	<li><code>1 &lt;= nums[i], k &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Counting + Backtracking**
+<!-- solution:start -->
+
+### Solution 1: Counting + Backtracking
 
 We use a hash table or an array $cnt$ to record the currently selected numbers and their counts, and use $ans$ to record the number of beautiful subsets, initially $ans = -1$, indicating that the empty set is excluded.
 
@@ -56,7 +80,7 @@ Time complexity $O(2^n)$, space complexity $O(n)$, where $n$ is the length of th
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -78,7 +102,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -141,7 +165,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func beautifulSubsets(nums []int, k int) int {
@@ -168,7 +192,7 @@ func beautifulSubsets(nums []int, k int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function beautifulSubsets(nums: number[], k: number): number {
@@ -194,10 +218,8 @@ function beautifulSubsets(nums: number[], k: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2726.Calculator%20with%20Method%20Chaining/README_EN.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2726. Calculator with Method Chaining](https://leetcode.com/problems/calculator-with-method-chaining)
 
 [中文文档](/solution/2700-2799/2726.Calculator%20with%20Method%20Chaining/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a <code>Calculator</code> class. The class should provide the&nbsp;mathematical operations of&nbsp;addition, subtraction, multiplication, division, and exponentiation. It should also allow consecutive operations to be performed using method chaining.&nbsp;The <code>Calculator</code> class constructor should accept a number&nbsp;which serves as the&nbsp;initial value of <code>result</code>.</p>
 
@@ -23,7 +35,9 @@
 <p><strong class="example">Example 1:</strong></p>
 
 <pre>
-<strong>Input:</strong> actions = [&quot;Calculator&quot;, &quot;add&quot;, &quot;subtract&quot;, &quot;getResult&quot;], values = [10, 5, 7]
+<strong>Input:</strong> 
+actions = [&quot;Calculator&quot;, &quot;add&quot;, &quot;subtract&quot;, &quot;getResult&quot;], 
+values = [10, 5, 7]
 <strong>Output:</strong> 8
 <strong>Explanation:</strong> 
 new Calculator(10).add(5).subtract(7).getResult() // 10 + 5 - 7 = 8
@@ -32,7 +46,9 @@ new Calculator(10).add(5).subtract(7).getResult() // 10 + 5 - 7 = 8
 <p><strong class="example">Example 2:</strong></p>
 
 <pre>
-<strong>Input:</strong> actions = [&quot;Calculator&quot;, &quot;multiply&quot;, &quot;power&quot;, &quot;getResult&quot;], values = [2, 5, 2]
+<strong>Input:</strong> 
+actions = [&quot;Calculator&quot;, &quot;multiply&quot;, &quot;power&quot;, &quot;getResult&quot;], 
+values = [2, 5, 2]
 <strong>Output:</strong> 100
 <strong>Explanation:</strong> 
 new Calculator(2).multiply(5).power(2).getResult() // (2 * 5) ^ 2 = 100
@@ -41,7 +57,9 @@ new Calculator(2).multiply(5).power(2).getResult() // (2 * 5) ^ 2 = 100
 <p><strong class="example">Example 3:</strong></p>
 
 <pre>
-<strong>Input:</strong> actions = [&quot;Calculator&quot;, &quot;divide&quot;, &quot;getResult&quot;], values = [20, 0]
+<strong>Input:</strong> 
+actions = [&quot;Calculator&quot;, &quot;divide&quot;, &quot;getResult&quot;], 
+values = [20, 0]
 <strong>Output:</strong> &quot;Division by zero is not allowed&quot;
 <strong>Explanation:</strong> 
 new Calculator(20).divide(0).getResult() // 20 / 0 
@@ -53,18 +71,26 @@ The error should be thrown because we cannot divide by zero.
 <p><strong>Constraints:</strong></p>
 
 <ul>
+	<li><code>actions</code> is a valid JSON array of strings</li>
+	<li><code>values</code>&nbsp;is a valid JSON array of numbers</li>
 	<li><code>2 &lt;= actions.length &lt;= 2 * 10<sup>4</sup></code></li>
-	<li><code>1 &lt;= values.length &lt;= 2 * 10<sup>4</sup></code><code>&nbsp;- 1</code></li>
-	<li><code>actions[i] is one of &quot;Calculator&quot;, &quot;add&quot;, &quot;subtract&quot;, &quot;multiply&quot;, &quot;divide&quot;, &quot;power&quot;, and&nbsp;&quot;getResult&quot;</code></li>
-	<li><code><font face="monospace">Last action is always &quot;getResult&quot;</font></code></li>
-	<li><code><font face="monospace">values is a JSON array of numbers</font></code></li>
+	<li><code>1 &lt;= values.length &lt;= 2 * 10<sup>4</sup>&nbsp;- 1</code></li>
+	<li><code>actions[i]</code> is one of &quot;Calculator&quot;, &quot;add&quot;, &quot;subtract&quot;, &quot;multiply&quot;, &quot;divide&quot;, &quot;power&quot;, and&nbsp;&quot;getResult&quot;</li>
+	<li>First action is always &quot;Calculator&quot;</li>
+	<li>Last action is always &quot;getResult&quot;</li>
 </ul>
+
+<!-- description:end -->
 
 ## Solutions
 
+<!-- solution:start -->
+
+### Solution 1
+
 <!-- tabs:start -->
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class Calculator {
@@ -109,3 +135,7 @@ class Calculator {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
-# [1821. Find Customers With Positive Revenue this Year](https://leetcode.com/problems/find-customers-with-positive-revenue-this-year)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1821.Find%20Customers%20With%20Positive%20Revenue%20this%20Year/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1821. Find Customers With Positive Revenue this Year 🔒](https://leetcode.com/problems/find-customers-with-positive-revenue-this-year)
 
 [中文文档](/solution/1800-1899/1821.Find%20Customers%20With%20Positive%20Revenue%20this%20Year/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Customers</code></p>
 
@@ -14,18 +26,18 @@
 | year         | int  |
 | revenue      | int  |
 +--------------+------+
-(customer_id, year) is the primary key for this table.
+(customer_id, year) is the primary key (combination of columns with unique values) for this table.
 This table contains the customer ID and the revenue of customers in different years.
 Note that this revenue can be negative.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the customers with <strong>postive revenue</strong> in the year 2021.</p>
+<p>Write a solution to report the customers with <strong>postive revenue</strong> in the year 2021.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -59,21 +71,30 @@ Customer 4 has revenue equal to 20 in the year 2021.
 Thus only customers 1 and 4 have positive revenue in the year 2021.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: WHERE Clause
+
+We can directly use the `WHERE` clause to filter out the customers whose `year` is `2021` and `revenue` is greater than $0$.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
 SELECT
     customer_id
-FROM
-    Customers
-WHERE
-    year = '2021'
-AND revenue > 0;
+FROM Customers
+WHERE year = '2021' AND revenue > 0;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1585.Check%20If%20String%20Is%20Transformable%20With%20Substring%20Sort%20Operations/README_EN.md
+rating: 2333
+source: Weekly Contest 206 Q4
+tags:
+    - Greedy
+    - String
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1585. Check If String Is Transformable With Substring Sort Operations](https://leetcode.com/problems/check-if-string-is-transformable-with-substring-sort-operations)
 
 [中文文档](/solution/1500-1599/1585.Check%20If%20String%20Is%20Transformable%20With%20Substring%20Sort%20Operations/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two strings <code>s</code> and <code>t</code>, transform string <code>s</code> into string <code>t</code> using the following operation any number of times:</p>
 
@@ -57,11 +73,27 @@
 	<li><code>s</code> and <code>t</code> consist of only digits.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Bubble Sort
+
+The problem is essentially equivalent to determining whether any substring of length 2 in string $s$ can be swapped using bubble sort to obtain $t$.
+
+Therefore, we use an array $pos$ of length 10 to record the indices of each digit in string $s$, where $pos[i]$ represents the list of indices where digit $i$ appears, sorted in ascending order.
+
+Next, we iterate through string $t$. For each character $t[i]$ in $t$, we convert it to the digit $x$. We check if $pos[x]$ is empty. If it is, it means that the digit in $t$ does not exist in $s$, so we return `false`. Otherwise, to swap the character at the first index of $pos[x]$ to index $i$, all indices of digits less than $x$ must be greater than or equal to the first index of $pos[x]. If this condition is not met, we return `false`. Otherwise, we pop the first index from $pos[x]$ and continue iterating through string $t$.
+
+After the iteration, we return `true`.
+
+The time complexity is $O(n \times C)$, and the space complexity is $O(n)$. Here, $n$ is the length of string $s$, and $C$ is the size of the digit set, which is 10 in this problem.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,7 +109,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +136,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -131,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isTransformable(s string, t string) bool {
@@ -155,10 +187,8 @@ func isTransformable(s string, t string) bool {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

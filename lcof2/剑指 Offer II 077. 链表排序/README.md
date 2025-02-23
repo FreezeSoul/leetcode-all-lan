@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20077.%20%E9%93%BE%E8%A1%A8%E6%8E%92%E5%BA%8F/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 077. 链表排序](https://leetcode.cn/problems/7WHec2)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定链表的头结点&nbsp;<code>head</code>&nbsp;，请将其按 <strong>升序</strong> 排列并返回 <strong>排序后的链表</strong> 。</p>
 
@@ -53,17 +60,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 148&nbsp;题相同：<a href="https://leetcode.cn/problems/sort-list/">https://leetcode.cn/problems/sort-list/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-先用快慢指针找到链表中点，然后分成左右两个链表，递归排序左右链表。最后合并两个排序的链表即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -95,9 +102,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -142,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -187,7 +192,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -229,7 +234,53 @@ func sortList(head *ListNode) *ListNode {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+function sortList(head: ListNode | null): ListNode | null {
+    if (head == null || head.next == null) return head;
+    // 快慢指针定位中点
+    let slow: ListNode = head,
+        fast: ListNode = head.next;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    // 归并排序
+    let mid: ListNode = slow.next;
+    slow.next = null;
+    let l1: ListNode = sortList(head);
+    let l2: ListNode = sortList(mid);
+    let dummy: ListNode = new ListNode();
+    let cur: ListNode = dummy;
+    while (l1 != null && l2 != null) {
+        if (l1.val <= l2.val) {
+            cur.next = l1;
+            l1 = l1.next;
+        } else {
+            cur.next = l2;
+            l2 = l2.next;
+        }
+        cur = cur.next;
+    }
+    cur.next = l1 == null ? l2 : l1;
+    return dummy.next;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -274,7 +325,7 @@ var sortList = function (head) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 /**
@@ -326,56 +377,66 @@ public class Solution {
 }
 ```
 
-### **TypeScript**
+#### Swift
 
-```ts
-/**
- * Definition for singly-linked list.
- * class ListNode {
- *     val: number
- *     next: ListNode | null
- *     constructor(val?: number, next?: ListNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
- */
+```swift
 
-function sortList(head: ListNode | null): ListNode | null {
-    if (head == null || head.next == null) return head;
-    // 快慢指针定位中点
-    let slow: ListNode = head,
-        fast: ListNode = head.next;
-    while (fast != null && fast.next != null) {
-        slow = slow.next;
-        fast = fast.next.next;
-    }
-    // 归并排序
-    let mid: ListNode = slow.next;
-    slow.next = null;
-    let l1: ListNode = sortList(head);
-    let l2: ListNode = sortList(mid);
-    let dummy: ListNode = new ListNode();
-    let cur: ListNode = dummy;
-    while (l1 != null && l2 != null) {
-        if (l1.val <= l2.val) {
-            cur.next = l1;
-            l1 = l1.next;
-        } else {
-            cur.next = l2;
-            l2 = l2.next;
+/** class ListNode {
+*    var val: Int
+*    var next: ListNode?
+*    init() { self.val = 0; self.next = nil }
+*    init(_ val: Int) { self.val = val; self.next = nil }
+*    init(_ val: Int, _ next: ListNode?) { self.val = val; self.next = next }
+* }
+*/
+
+class Solution {
+    func sortList(_ head: ListNode?) -> ListNode? {
+        guard let head = head, head.next != nil else {
+            return head
         }
-        cur = cur.next;
+
+        var slow: ListNode? = head
+        var fast: ListNode? = head.next
+
+        while fast != nil && fast?.next != nil {
+            slow = slow?.next
+            fast = fast?.next?.next
+        }
+
+        let mid = slow?.next
+        slow?.next = nil
+
+        let left = sortList(head)
+        let right = sortList(mid)
+
+        return merge(left, right)
     }
-    cur.next = l1 == null ? l2 : l1;
-    return dummy.next;
+
+    private func merge(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+        let dummy = ListNode()
+        var cur = dummy
+        var l1 = l1, l2 = l2
+
+        while let node1 = l1, let node2 = l2 {
+            if node1.val <= node2.val {
+                cur.next = node1
+                l1 = node1.next
+            } else {
+                cur.next = node2
+                l2 = node2.next
+            }
+            cur = cur.next!
+        }
+
+        cur.next = l1 ?? l2
+        return dummy.next
+    }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

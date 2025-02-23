@@ -1,14 +1,12 @@
 function finalPrices(prices: number[]): number[] {
-    const n = prices.length;
-    const res = new Array(n);
-    const stack = [];
-    for (let i = n - 1; i >= 0; i--) {
-        const price = prices[i];
-        while (stack.length !== 0 && stack[stack.length - 1] > price) {
-            stack.pop();
+    const stk: number[] = [];
+    for (let i = prices.length - 1; ~i; --i) {
+        const x = prices[i];
+        while (stk.length && stk.at(-1)! > x) {
+            stk.pop();
         }
-        res[i] = price - (stack[stack.length - 1] ?? 0);
-        stack.push(price);
+        prices[i] -= stk.at(-1) || 0;
+        stk.push(x);
     }
-    return res;
+    return prices;
 }

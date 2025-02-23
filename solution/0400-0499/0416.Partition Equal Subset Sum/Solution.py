@@ -1,12 +1,12 @@
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
-        s = sum(nums)
-        if s % 2 != 0:
+        m, mod = divmod(sum(nums), 2)
+        if mod:
             return False
-        n = s >> 1
-        dp = [False] * (n + 1)
-        dp[0] = True
-        for v in nums:
-            for j in range(n, v - 1, -1):
-                dp[j] = dp[j] or dp[j - v]
-        return dp[-1]
+        n = len(nums)
+        f = [[False] * (m + 1) for _ in range(n + 1)]
+        f[0][0] = True
+        for i, x in enumerate(nums, 1):
+            for j in range(m + 1):
+                f[i][j] = f[i - 1][j] or (j >= x and f[i - 1][j - x])
+        return f[n][m]

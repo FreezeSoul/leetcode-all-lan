@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/README_EN.md
+tags:
+    - Array
+    - Dynamic Programming
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [931. Minimum Falling Path Sum](https://leetcode.com/problems/minimum-falling-path-sum)
 
 [中文文档](/solution/0900-0999/0931.Minimum%20Falling%20Path%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an <code>n x n</code> array of integers <code>matrix</code>, return <em>the <strong>minimum sum</strong> of any <strong>falling path</strong> through</em> <code>matrix</code>.</p>
 
@@ -34,111 +48,137 @@
 	<li><code>-100 &lt;= matrix[i][j] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Dynamic programming.
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minFallingPathSum(self, matrix: List[List[int]]) -> int:
         n = len(matrix)
-        for i in range(1, n):
-            for j in range(n):
-                mi = matrix[i - 1][j]
-                if j > 0:
-                    mi = min(mi, matrix[i - 1][j - 1])
-                if j < n - 1:
-                    mi = min(mi, matrix[i - 1][j + 1])
-                matrix[i][j] += mi
-        return min(matrix[n - 1])
+        f = [0] * n
+        for row in matrix:
+            g = [0] * n
+            for j, x in enumerate(row):
+                l, r = max(0, j - 1), min(n, j + 2)
+                g[j] = min(f[l:r]) + x
+            f = g
+        return min(f)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int minFallingPathSum(int[][] matrix) {
         int n = matrix.length;
-        for (int i = 1; i < n; ++i) {
+        var f = new int[n];
+        for (var row : matrix) {
+            var g = f.clone();
             for (int j = 0; j < n; ++j) {
-                int mi = matrix[i - 1][j];
                 if (j > 0) {
-                    mi = Math.min(mi, matrix[i - 1][j - 1]);
+                    g[j] = Math.min(g[j], f[j - 1]);
                 }
-                if (j < n - 1) {
-                    mi = Math.min(mi, matrix[i - 1][j + 1]);
+                if (j + 1 < n) {
+                    g[j] = Math.min(g[j], f[j + 1]);
                 }
-                matrix[i][j] += mi;
+                g[j] += row[j];
             }
+            f = g;
         }
-        int res = Integer.MAX_VALUE;
-        for (int j = 0; j < n; ++j) {
-            res = Math.min(res, matrix[n - 1][j]);
+        // return Arrays.stream(f).min().getAsInt();
+        int ans = 1 << 30;
+        for (int x : f) {
+            ans = Math.min(ans, x);
         }
-        return res;
+        return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int n = matrix.size();
-        for (int i = 1; i < n; ++i) {
+        vector<int> f(n);
+        for (auto& row : matrix) {
+            auto g = f;
             for (int j = 0; j < n; ++j) {
-                int mi = matrix[i - 1][j];
-                if (j > 0) mi = min(mi, matrix[i - 1][j - 1]);
-                if (j < n - 1) mi = min(mi, matrix[i - 1][j + 1]);
-                matrix[i][j] += mi;
+                if (j) {
+                    g[j] = min(g[j], f[j - 1]);
+                }
+                if (j + 1 < n) {
+                    g[j] = min(g[j], f[j + 1]);
+                }
+                g[j] += row[j];
             }
+            f = move(g);
         }
-        int res = INT_MAX;
-        for (int j = 0; j < n; ++j) {
-            res = min(res, matrix[n - 1][j]);
-        }
-        return res;
+        return *min_element(f.begin(), f.end());
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minFallingPathSum(matrix [][]int) int {
-    n := len(matrix)
-    for i := 1; i < n; i++ {
-        for j := 0; j < n; j++ {
-            mi := matrix[i - 1][j]
-            if j > 0 && mi > matrix[i - 1][j - 1] {
-                mi = matrix[i - 1][j - 1]
-            }
-            if j < n - 1 && mi > matrix[i - 1][j + 1] {
-                mi = matrix[i - 1][j + 1]
-            }
-            matrix[i][j] += mi
-        }
-    }
-    res := 10000
-    for j := 0; j < n; j++ {
-        if res > matrix[n - 1][j] {
-            res = matrix[n - 1][j]
-        }
-    }
-    return res
+	n := len(matrix)
+	f := make([]int, n)
+	for _, row := range matrix {
+		g := make([]int, n)
+		copy(g, f)
+		for j, x := range row {
+			if j > 0 {
+				g[j] = min(g[j], f[j-1])
+			}
+			if j+1 < n {
+				g[j] = min(g[j], f[j+1])
+			}
+			g[j] += x
+		}
+		f = g
+	}
+	return slices.Min(f)
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minFallingPathSum(matrix: number[][]): number {
+    const n = matrix.length;
+    const f: number[] = new Array(n).fill(0);
+    for (const row of matrix) {
+        const g = f.slice();
+        for (let j = 0; j < n; ++j) {
+            if (j > 0) {
+                g[j] = Math.min(g[j], f[j - 1]);
+            }
+            if (j + 1 < n) {
+                g[j] = Math.min(g[j], f[j + 1]);
+            }
+            g[j] += row[j];
+        }
+        f.splice(0, n, ...g);
+    }
+    return Math.min(...f);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

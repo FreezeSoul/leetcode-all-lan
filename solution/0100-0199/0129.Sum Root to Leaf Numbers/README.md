@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0129.Sum%20Root%20to%20Leaf%20Numbers/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers)
 
 [English Version](/solution/0100-0199/0129.Sum%20Root%20to%20Leaf%20Numbers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 给你一个二叉树的根节点 <code>root</code> ，树中每个节点都存放有一个 <code>0</code> 到 <code>9</code> 之间的数字。
 
@@ -56,11 +68,13 @@
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们可以设计一个函数 $dfs(root, s)$，表示从当前节点 $root$ 出发，且当前路径数字为 $s$，返回从当前节点到叶子节点的所有路径数字之和。那么答案就是 $dfs(root, 0)$。
 
@@ -75,9 +89,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -99,9 +111,7 @@ class Solution:
         return dfs(root, 0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -137,7 +147,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -165,7 +175,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -192,35 +202,7 @@ func sumNumbers(root *TreeNode) int {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     struct TreeNode *left;
- *     struct TreeNode *right;
- * };
- */
-
-int dfs(struct TreeNode *root, int num) {
-    if (!root) {
-        return 0;
-    }
-    num = num * 10 + root->val;
-    if (!root->left && !root->right) {
-        return num;
-    }
-    return dfs(root->left, num) + dfs(root->right, num);
-}
-
-int sumNumbers(struct TreeNode *root) {
-    return dfs(root, 0);
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -248,7 +230,7 @@ function sumNumbers(root: TreeNode | null): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -269,8 +251,8 @@ function sumNumbers(root: TreeNode | null): number {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn dfs(node: &Option<Rc<RefCell<TreeNode>>>, mut num: i32) -> i32 {
         if node.is_none() {
@@ -290,7 +272,7 @@ impl Solution {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -316,10 +298,36 @@ var sumNumbers = function (root) {
 };
 ```
 
-### **...**
+#### C
 
-```
+```c
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
 
+int dfs(struct TreeNode* root, int num) {
+    if (!root) {
+        return 0;
+    }
+    num = num * 10 + root->val;
+    if (!root->left && !root->right) {
+        return num;
+    }
+    return dfs(root->left, num) + dfs(root->right, num);
+}
+
+int sumNumbers(struct TreeNode* root) {
+    return dfs(root, 0);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

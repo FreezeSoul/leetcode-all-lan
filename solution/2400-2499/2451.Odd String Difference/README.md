@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2451.Odd%20String%20Difference/README.md
+rating: 1406
+source: 第 90 场双周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [2451. 差值数组不同的字符串](https://leetcode.cn/problems/odd-string-difference)
 
 [English Version](/solution/2400-2499/2451.Odd%20String%20Difference/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>words</code>&nbsp;，每一个字符串长度都相同，令所有字符串的长度都为 <code>n</code>&nbsp;。</p>
 
@@ -51,11 +65,13 @@
 	<li><code>words[i]</code>&nbsp;只含有小写英文字母。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表模拟**
+### 方法一：哈希表模拟
 
 我们用哈希表 $d$ 维护字符串的差值数组和字符串的映射关系，其中差值数组为字符串的相邻字符的差值构成的数组。由于题目保证了除了一个字符串以外，其他字符串的差值数组都相同，因此我们只需要找到差值数组不同的字符串即可。
 
@@ -63,9 +79,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,9 +91,7 @@ class Solution:
         return next(ss[0] for ss in d.values() if len(ss) == 1)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -130,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func oddString(words []string) string {
@@ -153,7 +165,7 @@ func oddString(words []string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function oddString(words: string[]): string {
@@ -178,7 +190,7 @@ function oddString(words: string[]): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
@@ -205,10 +217,50 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn odd_string(words: Vec<String>) -> String {
+        let mut h = HashMap::new();
+
+        for w in words {
+            let bytes: Vec<i32> = w
+                .bytes()
+                .zip(w.bytes().skip(1))
+                .map(|(current, next)| (next - current) as i32)
+                .collect();
+
+            let s: String = bytes.iter().map(|&b| char::from(b as u8)).collect();
+
+            h.entry(s).or_insert(vec![]).push(w);
+        }
+
+        for strs in h.values() {
+            if strs.len() == 1 {
+                return strs[0].clone();
+            }
+        }
+
+        String::from("")
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

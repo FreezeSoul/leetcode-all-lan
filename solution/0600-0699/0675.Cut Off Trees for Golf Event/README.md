@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0675.Cut%20Off%20Trees%20for%20Golf%20Event/README.md
+tags:
+    - 广度优先搜索
+    - 数组
+    - 矩阵
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [675. 为高尔夫比赛砍树](https://leetcode.cn/problems/cut-off-trees-for-golf-event)
 
 [English Version](/solution/0600-0699/0675.Cut%20Off%20Trees%20for%20Golf%20Event/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你被请来给一个要举办高尔夫比赛的树林砍树。树林由一个 <code>m x n</code> 的矩阵表示， 在这个矩阵中：</p>
 
@@ -59,11 +72,13 @@
 	<li><code>0 <= forest[i][j] <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：BFS + 优先队列（A\* 算法）**
+### 方法一：BFS + 优先队列（A\* 算法）
 
 题目的一个关键信息是“所有树的高度都不同”，要按照从小到大的顺序依次砍树，因此，我们先遍历树林，找出所有树及对应的坐标点。然后将树按照高度升序排列。
 
@@ -79,9 +94,7 @@ A\* 算法主要思想如下：
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -121,9 +134,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -194,7 +205,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -254,7 +265,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 var dirs = [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
@@ -319,7 +330,7 @@ func cutOffTree(forest [][]int) int {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -346,7 +357,7 @@ impl Solution {
                     }
                     for k in 0..4 {
                         let x = state / col + DIRS[k][0];
-                        let y = state % col + DIRS[k][1];
+                        let y = (state % col) + DIRS[k][1];
                         let nxt = x * col + y;
                         if x >= 0
                             && x < row
@@ -391,10 +402,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

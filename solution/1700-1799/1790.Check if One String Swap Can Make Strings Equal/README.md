@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1790.Check%20if%20One%20String%20Swap%20Can%20Make%20Strings%20Equal/README.md
+rating: 1300
+source: 第 232 场周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1790. 仅执行一次字符串交换能否使两个字符串相等](https://leetcode.cn/problems/check-if-one-string-swap-can-make-strings-equal)
 
 [English Version](/solution/1700-1799/1790.Check%20if%20One%20String%20Swap%20Can%20Make%20Strings%20Equal/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你长度相等的两个字符串 <code>s1</code> 和 <code>s2</code> 。一次<strong> 字符串交换 </strong>操作的步骤如下：选出某个字符串中的两个下标（不必不同），并交换这两个下标所对应的字符。</p>
 
@@ -49,25 +63,25 @@
 	<li><code>s1</code> 和 <code>s2</code> 仅由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：简单计数**
+### 方法一：计数
 
 我们用变量 $cnt$ 记录两个字符串中相同位置字符不同的个数，两个字符串若满足题目要求，那么 $cnt$ 一定为 $0$ 或 $2$。另外用两个字符变量 $c1$ 和 $c2$ 记录两个字符串中相同位置字符不同的字符。
 
 同时遍历两个字符串，对于相同位置的两个字符 $a$ 和 $b$，如果 $a \ne b$，那么 $cnt$ 自增 $1$。如果此时 $cnt$ 大于 $2$，或者 $cnt$ 为 $2$ 且 $a \ne c2$ 或 $b \ne c1$，那么直接返回 `false`。注意记录一下 $c1$ 和 $c2$。
 
-遍历结束，若 $cnt\neq 1$，返回 `true`。
+遍历结束，若 $cnt \neq 1$，返回 `true`。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为字符串长度。
+时间复杂度 $O(n)$，其中 $n$ 为字符串长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +97,7 @@ class Solution:
         return cnt != 1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -107,7 +119,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +141,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func areAlmostEqual(s1 string, s2 string) bool {
@@ -149,36 +161,7 @@ func areAlmostEqual(s1 string, s2 string) bool {
 }
 ```
 
-### **C**
-
-```c
-bool areAlmostEqual(char *s1, char *s2) {
-    int n = strlen(s1);
-    int i1 = -1;
-    int i2 = -1;
-    for (int i = 0; i < n; i++) {
-        if (s1[i] != s2[i]) {
-            if (i1 == -1) {
-                i1 = i;
-            } else if (i2 == -1) {
-                i2 = i;
-            } else {
-                return 0;
-            }
-        }
-    }
-    if (i1 == -1 && i2 == -1) {
-        return 1;
-    }
-    if (i1 == -1 || i2 == -1) {
-        return 0;
-    }
-    return s1[i1] == s2[i2] && s1[i2] == s2[i1];
-}
-
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function areAlmostEqual(s1: string, s2: string): boolean {
@@ -199,7 +182,7 @@ function areAlmostEqual(s1: string, s2: string): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -222,10 +205,36 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+bool areAlmostEqual(char* s1, char* s2) {
+    int n = strlen(s1);
+    int i1 = -1;
+    int i2 = -1;
+    for (int i = 0; i < n; i++) {
+        if (s1[i] != s2[i]) {
+            if (i1 == -1) {
+                i1 = i;
+            } else if (i2 == -1) {
+                i2 = i;
+            } else {
+                return 0;
+            }
+        }
+    }
+    if (i1 == -1 && i2 == -1) {
+        return 1;
+    }
+    if (i1 == -1 || i2 == -1) {
+        return 0;
+    }
+    return s1[i1] == s2[i2] && s1[i2] == s2[i1];
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

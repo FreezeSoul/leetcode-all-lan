@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2210.Count%20Hills%20and%20Valleys%20in%20an%20Array/README.md
+rating: 1354
+source: 第 285 场周赛 Q1
+tags:
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [2210. 统计数组中峰和谷的数量](https://leetcode.cn/problems/count-hills-and-valleys-in-an-array)
 
 [English Version](/solution/2200-2299/2210.Count%20Hills%20and%20Valleys%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的整数数组 <code>nums</code> 。如果两侧距 <code>i</code> 最近的不相等邻居的值均小于 <code>nums[i]</code> ，则下标 <code>i</code> 是 <code>nums</code> 中，某个峰的一部分。类似地，如果两侧距 <code>i</code> 最近的不相等邻居的值均大于 <code>nums[i]</code> ，则下标 <code>i</code> 是 <code>nums</code> 中某个谷的一部分。对于相邻下标&nbsp;<code>i</code> 和 <code>j</code> ，如果&nbsp;<code>nums[i] == nums[j]</code> ， 则认为这两下标属于 <strong>同一个</strong> 峰或谷。</p>
 
@@ -52,50 +64,27 @@
 	<li><code>1 &lt;= nums[i] &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-先处理数组 `nums`，对于相邻且重复出现的元素，只保留其中一个，如 `[6, 6, 5, 5, 4, 1]`，转换为 `[6, 5, 4, 1]`，再依照题意，进行统计。
+### 方法一：遍历
 
-优化：
+我们初始化一个指针 $j$ 指向下标 $0$ 的位置，然后在 $[1, n-1]$ 的范围内遍历数组。对于每一个位置 $i$：
 
-上述处理的数组方式，不论是删除元素还是新开数组，都会造成复杂度的提升。而实际上，只需要忽略相邻重复元素即可，无需改动原数组。
+-   如果 $nums[i] = nums[i+1]$，则跳过。
+-   否则，如果 $nums[i]$ 大于 $nums[j]$ 且 $nums[i]$ 大于 $nums[i+1]$，则 $i$ 是一个峰；如果 $nums[i]$ 小于 $nums[j]$ 且 $nums[i]$ 小于 $nums[i+1]$，则 $i$ 是一个谷。
+-   然后，我们将 $j$ 更新为 $i$，继续遍历。
 
-```txt
-COUNT_HILL_VALLEY(A)
-    n = A.length
-    r = 0
-    p = A[0]
-    for i = 1 in n - 1
-        c = A[i]
-        q = A[i + 1]
-        if c == q
-            continue
-        if c > prev && c > q || c < prev && c < q
-            r += 1
-        p = c
-    return r
-```
+遍历结束后，我们就可以得到峰和谷的数量。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def countHillValley(self, nums: List[int]) -> int:
-        arr = [nums[0]]
-        for v in nums[1:]:
-            if v != arr[-1]:
-                arr.append(v)
-        return sum(
-            (arr[i] < arr[i - 1]) == (arr[i] < arr[i + 1])
-            for i in range(1, len(arr) - 1)
-        )
-```
+#### Python3
 
 ```python
 class Solution:
@@ -112,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -137,7 +124,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,9 +132,15 @@ public:
     int countHillValley(vector<int>& nums) {
         int ans = 0;
         for (int i = 1, j = 0; i < nums.size() - 1; ++i) {
-            if (nums[i] == nums[i + 1]) continue;
-            if (nums[i] > nums[j] && nums[i] > nums[i + 1]) ++ans;
-            if (nums[i] < nums[j] && nums[i] < nums[i + 1]) ++ans;
+            if (nums[i] == nums[i + 1]) {
+                continue;
+            }
+            if (nums[i] > nums[j] && nums[i] > nums[i + 1]) {
+                ++ans;
+            }
+            if (nums[i] < nums[j] && nums[i] < nums[i + 1]) {
+                ++ans;
+            }
             j = i;
         }
         return ans;
@@ -155,7 +148,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countHillValley(nums []int) int {
@@ -176,56 +169,55 @@ func countHillValley(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countHillValley(nums: number[]): number {
-    const n = nums.length;
-    let res = 0;
-    let prev = nums[0];
-    for (let i = 1; i < n - 1; i++) {
-        const num = nums[i];
-        const next = nums[i + 1];
-        if (num == next) {
+    let ans = 0;
+    for (let i = 1, j = 0; i < nums.length - 1; ++i) {
+        if (nums[i] === nums[i + 1]) {
             continue;
         }
-        if ((num > prev && num > next) || (num < prev && num < next)) {
-            res += 1;
+        if (nums[i] > nums[j] && nums[i] > nums[i + 1]) {
+            ans++;
         }
-        prev = num;
+        if (nums[i] < nums[j] && nums[i] < nums[i + 1]) {
+            ans++;
+        }
+        j = i;
     }
-    return res;
+    return ans;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn count_hill_valley(nums: Vec<i32>) -> i32 {
-        let n = nums.len();
-        let mut res = 0;
-        let mut prev = nums[0];
-        for i in 1..n - 1 {
-            let num = nums[i];
-            let next = nums[i + 1];
-            if num == next {
+        let mut ans = 0;
+        let mut j = 0;
+
+        for i in 1..nums.len() - 1 {
+            if nums[i] == nums[i + 1] {
                 continue;
             }
-            if num > prev && num > next || num < prev && num < next {
-                res += 1;
+            if nums[i] > nums[j] && nums[i] > nums[i + 1] {
+                ans += 1;
             }
-            prev = num;
+            if nums[i] < nums[j] && nums[i] < nums[i + 1] {
+                ans += 1;
+            }
+            j = i;
         }
-        res
+
+        ans
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

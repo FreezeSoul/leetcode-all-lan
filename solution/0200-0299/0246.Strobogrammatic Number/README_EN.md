@@ -1,8 +1,22 @@
-# [246. Strobogrammatic Number](https://leetcode.com/problems/strobogrammatic-number)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0246.Strobogrammatic%20Number/README_EN.md
+tags:
+    - Hash Table
+    - Two Pointers
+    - String
+---
+
+<!-- problem:start -->
+
+# [246. Strobogrammatic Number 🔒](https://leetcode.com/problems/strobogrammatic-number)
 
 [中文文档](/solution/0200-0299/0246.Strobogrammatic%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>num</code> which represents an integer, return <code>true</code> <em>if</em> <code>num</code> <em>is a <strong>strobogrammatic number</strong></em>.</p>
 
@@ -39,11 +53,23 @@
 	<li><code>num</code> does not contain any leading zeros except for zero itself.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Pointers Simulation
+
+We define an array $d$, where $d[i]$ represents the number after rotating the digit $i$ by 180°. If $d[i]$ is $-1$, it means that the digit $i$ cannot be rotated 180° to get a valid digit.
+
+We define two pointers $i$ and $j$, pointing to the left and right ends of the string, respectively. Then we continuously move the pointers towards the center, checking whether $d[num[i]]$ and $num[j]$ are equal. If they are not equal, it means that the string is not a strobogrammatic number, and we can directly return $false$. If $i > j$, it means that we have traversed the entire string, and we return $true$.
+
+The time complexity is $O(n)$, where $n$ is the length of the string. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -58,7 +84,7 @@ class Solution:
         return True
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -75,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -93,7 +119,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isStrobogrammatic(num string) bool {
@@ -108,10 +134,8 @@ func isStrobogrammatic(num string) bool {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

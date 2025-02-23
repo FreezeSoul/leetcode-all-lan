@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2311.Longest%20Binary%20Subsequence%20Less%20Than%20or%20Equal%20to%20K/README_EN.md
+rating: 1839
+source: Weekly Contest 298 Q3
+tags:
+    - Greedy
+    - Memoization
+    - String
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [2311. Longest Binary Subsequence Less Than or Equal to K](https://leetcode.com/problems/longest-binary-subsequence-less-than-or-equal-to-k)
 
 [中文文档](/solution/2300-2399/2311.Longest%20Binary%20Subsequence%20Less%20Than%20or%20Equal%20to%20K/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a binary string <code>s</code> and a positive integer <code>k</code>.</p>
 
@@ -45,11 +62,17 @@ The length of this subsequence is 6, so 6 is returned.
 	<li><code>1 &lt;= k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -64,7 +87,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +106,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestSubsequence(s string, k int) (ans int) {
@@ -119,7 +142,7 @@ func longestSubsequence(s string, k int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestSubsequence(s: string, k: number): number {
@@ -136,26 +159,7 @@ function longestSubsequence(s: string, k: number): number {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int LongestSubsequence(string s, int k) {
-        int ans = 0, v = 0;
-        for (int i = s.Length - 1; i >= 0; --i) {
-            if (s[i] == '0') {
-                ++ans;
-            } else if (ans < 30 && (v | 1 << ans) <= k) {
-                v |= 1 << ans;
-                ++ans;
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -177,10 +181,27 @@ var longestSubsequence = function (s, k) {
 };
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public int LongestSubsequence(string s, int k) {
+        int ans = 0, v = 0;
+        for (int i = s.Length - 1; i >= 0; --i) {
+            if (s[i] == '0') {
+                ++ans;
+            } else if (ans < 30 && (v | 1 << ans) <= k) {
+                v |= 1 << ans;
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

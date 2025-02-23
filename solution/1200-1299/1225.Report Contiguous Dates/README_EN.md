@@ -1,8 +1,20 @@
-# [1225. Report Contiguous Dates](https://leetcode.com/problems/report-contiguous-dates)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1225.Report%20Contiguous%20Dates/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1225. Report Contiguous Dates 🔒](https://leetcode.com/problems/report-contiguous-dates)
 
 [中文文档](/solution/1200-1299/1225.Report%20Contiguous%20Dates/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Failed</code></p>
 
@@ -12,7 +24,7 @@
 +--------------+---------+
 | fail_date    | date    |
 +--------------+---------+
-fail_date is the primary key for this table.
+fail_date is the primary key (column with unique values) for this table.
 This table contains the days of failed tasks.
 </pre>
 
@@ -26,7 +38,7 @@ This table contains the days of failed tasks.
 +--------------+---------+
 | success_date | date    |
 +--------------+---------+
-success_date is the primary key for this table.
+success_date is the primary key (column with unique values) for this table.
 This table contains the days of succeeded tasks.
 </pre>
 
@@ -34,13 +46,13 @@ This table contains the days of succeeded tasks.
 
 <p>A system is running one task <strong>every day</strong>. Every task is independent of the previous tasks. The tasks can fail or succeed.</p>
 
-<p>Write an SQL query to generate a report of <code>period_state</code> for each continuous interval of days in the period from <code>2019-01-01</code> to <code>2019-12-31</code>.</p>
+<p>Write a solution&nbsp;to report the&nbsp;<code>period_state</code> for each continuous interval of days in the period from <code>2019-01-01</code> to <code>2019-12-31</code>.</p>
 
 <p><code>period_state</code> is <em>&#39;</em><code>failed&#39;</code><em> </em>if tasks in this interval failed or <code>&#39;succeeded&#39;</code> if tasks in this interval succeeded. Interval of days are retrieved as <code>start_date</code> and <code>end_date.</code></p>
 
 <p>Return the result table ordered by <code>start_date</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -82,57 +94,55 @@ From 2019-01-04 to 2019-01-05 all tasks failed and the system state was &quot;fa
 From 2019-01-06 to 2019-01-06 all tasks succeeded and the system state was &quot;succeeded&quot;.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Union + Window Function + Group By
+
+We can merge the two tables into one table with a field `st` representing the status, where `failed` indicates failure and `succeeded` indicates success. Then, we can use a window function to group the records with the same status into one group, and calculate the difference between each date and its rank within the group as `pt`, which serves as the identifier for the same continuous status. Finally, we can group by `st` and `pt`, and calculate the minimum and maximum dates for each group, and sort by the minimum date.
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-select
-    state as period_state,
-    min(dt) as start_date,
-    max(dt) as end_date
-from
+WITH
+    T AS (
+        SELECT fail_date AS dt, 'failed' AS st
+        FROM Failed
+        WHERE YEAR(fail_date) = 2019
+        UNION ALL
+        SELECT success_date AS dt, 'succeeded' AS st
+        FROM Succeeded
+        WHERE YEAR(success_date) = 2019
+    )
+SELECT
+    st AS period_state,
+    MIN(dt) AS start_date,
+    MAX(dt) AS end_date
+FROM
     (
-        select
+        SELECT
             *,
-            subdate(
+            SUBDATE(
                 dt,
-                rank() over(
-                    partition by state
-                    order by
-                        dt
+                RANK() OVER (
+                    PARTITION BY st
+                    ORDER BY dt
                 )
-            ) as dif
-        from
-            (
-                select
-                    'failed' as state,
-                    fail_date as dt
-                from
-                    failed
-                where
-                    fail_date between '2019-01-01'
-                    and '2019-12-31'
-                union
-                all
-                select
-                    'succeeded' as state,
-                    success_date as dt
-                from
-                    succeeded
-                where
-                    success_date between '2019-01-01'
-                    and '2019-12-31'
-            ) t1
-    ) t2
-group by
-    state,
-    dif
-order by
-    dt
+            ) AS pt
+        FROM T
+    ) AS t
+GROUP BY 1, pt
+ORDER BY 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

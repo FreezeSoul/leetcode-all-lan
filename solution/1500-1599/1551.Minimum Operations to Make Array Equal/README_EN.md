@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1551.Minimum%20Operations%20to%20Make%20Array%20Equal/README_EN.md
+rating: 1293
+source: Weekly Contest 202 Q2
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1551. Minimum Operations to Make Array Equal](https://leetcode.com/problems/minimum-operations-to-make-array-equal)
 
 [中文文档](/solution/1500-1599/1551.Minimum%20Operations%20to%20Make%20Array%20Equal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have an array <code>arr</code> of length <code>n</code> where <code>arr[i] = (2 * i) + 1</code> for all valid values of <code>i</code> (i.e.,&nbsp;<code>0 &lt;= i &lt; n</code>).</p>
 
@@ -35,64 +49,96 @@ In the second operation choose x = 2 and y = 0 again, thus arr = [3, 3, 3].
 	<li><code>1 &lt;= n &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Mathematics
+
+According to the problem description, the array $arr$ is an arithmetic sequence with the first term as $1$ and the common difference as $2$. Therefore, the sum of the first $n$ terms of the array is:
+
+$$
+\begin{aligned}
+S_n &= \frac{n}{2} \times (a_1 + a_n) \\
+&= \frac{n}{2} \times (1 + (2n - 1)) \\
+&= n^2
+\end{aligned}
+$$
+
+Since in one operation, one number is decreased by one and another number is increased by one, the sum of all elements in the array remains unchanged. Therefore, when all elements in the array are equal, the value of each element is $S_n / n = n$. Hence, the minimum number of operations required to make all elements in the array equal is:
+
+$$
+\sum_{i=0}^{\frac{n}{2}} (n - (2i + 1))
+$$
+
+The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minOperations(self, n: int) -> int:
-        ans = 0
-        for i in range(n >> 1):
-            ans += n - (2 * i + 1)
-        return ans
+        return sum(n - (i << 1 | 1) for i in range(n >> 1))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int minOperations(int n) {
         int ans = 0;
-        for (int i = 0; i < (n >> 1); i++) {
-            ans += (n - (2 * i + 1));
+        for (int i = 0; i < n >> 1; ++i) {
+            ans += n - (i << 1 | 1);
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minOperations(int n) {
         int ans = 0;
-        for (int i = 0; i < (n >> 1); ++i) ans += (n - (2 * i + 1));
+        for (int i = 0; i < n >> 1; ++i) {
+            ans += n - (i << 1 | 1);
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func minOperations(n int) int {
-	ans := 0
-	for i := 0; i < (n >> 1); i++ {
-		ans += (n - (2*i + 1))
+func minOperations(n int) (ans int) {
+	for i := 0; i < n>>1; i++ {
+		ans += n - (i<<1 | 1)
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function minOperations(n: number): number {
+    let ans = 0;
+    for (let i = 0; i < n >> 1; ++i) {
+        ans += n - ((i << 1) | 1);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

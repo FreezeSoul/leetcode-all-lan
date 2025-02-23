@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1013.Partition%20Array%20Into%20Three%20Parts%20With%20Equal%20Sum/README.md
+rating: 1378
+source: 第 129 场周赛 Q1
+tags:
+    - 贪心
+    - 数组
+---
+
+<!-- problem:start -->
+
 # [1013. 将数组分成和相等的三个部分](https://leetcode.cn/problems/partition-array-into-three-parts-with-equal-sum)
 
 [English Version](/solution/1000-1099/1013.Partition%20Array%20Into%20Three%20Parts%20With%20Equal%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>arr</code>，只有可以将其划分为三个和相等的 <strong>非空</strong> 部分时才返回 <code>true</code>，否则返回 <code>false</code>。</p>
 
@@ -44,145 +57,164 @@
 	<li><code>-10<sup>4</sup> <= arr[i] <= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：双指针**
+### 方法一：遍历求和
 
-先遍历数组 `arr`，得到数组所有元素的和，记为 `s`。如果 `s` 不能被 3 整除，那么数组 `arr` 不能被分成和相等的三个部分，直接返回 `false`。
+我们先求出整个数组的和，然后判断和是否能被 3 整除，如果不能，直接返回 $\textit{false}$。
 
-接下来，利用双指针 `i`, `j` 找三等分和的边界，若成功找到，返回 `true`，否则返回 `false`。
+否则，我们记 $\textit{s}$ 表示每部分的和，用一个变量 $\textit{cnt}$ 记录当前已经找到的部分数，另一个变量 $\textit{t}$ 记录当前部分的和。初始时 $\textit{cnt} = 0$, $t = 0$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$，其中 $n$ 为数组 `arr` 的长度。
+然后我们遍历数组，对于每个元素 $x$，我们将 $t$ 加上 $x$，如果 $t$ 等于 $s$，说明找到了一部分，将 $\textit{cnt}$ 加一，然后将 $t$ 置为 0。
+
+最后判断 $\textit{cnt}$ 是否大于等于 3 即可。
+
+时间复杂度 $O(n)$，其中 $n$ 是数组 $\textit{arr}$ 的长度。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def canThreePartsEqualSum(self, arr: List[int]) -> bool:
-        s = sum(arr)
-        if s % 3 != 0:
+        s, mod = divmod(sum(arr), 3)
+        if mod:
             return False
-        i, j = 0, len(arr) - 1
-        a = b = 0
-        while i < len(arr):
-            a += arr[i]
-            if a == s // 3:
-                break
-            i += 1
-        while ~j:
-            b += arr[j]
-            if b == s // 3:
-                break
-            j -= 1
-        return i < j - 1
+        cnt = t = 0
+        for x in arr:
+            t += x
+            if t == s:
+                cnt += 1
+                t = 0
+        return cnt >= 3
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public boolean canThreePartsEqualSum(int[] arr) {
-        int s = 0;
-        for (int v : arr) {
-            s += v;
-        }
+        int s = Arrays.stream(arr).sum();
         if (s % 3 != 0) {
             return false;
         }
-        int i = 0, j = arr.length - 1;
-        int a = 0, b = 0;
-        while (i < arr.length) {
-            a += arr[i];
-            if (a == s / 3) {
-                break;
+        s /= 3;
+        int cnt = 0, t = 0;
+        for (int x : arr) {
+            t += x;
+            if (t == s) {
+                cnt++;
+                t = 0;
             }
-            ++i;
         }
-        while (j >= 0) {
-            b += arr[j];
-            if (b == s / 3) {
-                break;
-            }
-            --j;
-        }
-        return i < j - 1;
+        return cnt >= 3;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool canThreePartsEqualSum(vector<int>& arr) {
-        int s = 0;
-        for (int v : arr) s += v;
-        if (s % 3) return false;
-        int i = 0, j = arr.size() - 1;
-        int a = 0, b = 0;
-        while (i < arr.size()) {
-            a += arr[i];
-            if (a == s / 3) {
-                break;
-            }
-            ++i;
+        int s = accumulate(arr.begin(), arr.end(), 0);
+        if (s % 3) {
+            return false;
         }
-        while (~j) {
-            b += arr[j];
-            if (b == s / 3) {
-                break;
+        s /= 3;
+        int cnt = 0, t = 0;
+        for (int x : arr) {
+            t += x;
+            if (t == s) {
+                t = 0;
+                cnt++;
             }
-            --j;
         }
-        return i < j - 1;
+        return cnt >= 3;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canThreePartsEqualSum(arr []int) bool {
 	s := 0
-	for _, v := range arr {
-		s += v
+	for _, x := range arr {
+		s += x
 	}
 	if s%3 != 0 {
 		return false
 	}
-	i, j := 0, len(arr)-1
-	a, b := 0, 0
-	for i < len(arr) {
-		a += arr[i]
-		if a == s/3 {
-			break
+	s /= 3
+	cnt, t := 0, 0
+	for _, x := range arr {
+		t += x
+		if t == s {
+			cnt++
+			t = 0
 		}
-		i++
 	}
-	for j >= 0 {
-		b += arr[j]
-		if b == s/3 {
-			break
-		}
-		j--
-	}
-	return i < j-1
+	return cnt >= 3
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function canThreePartsEqualSum(arr: number[]): boolean {
+    let s = arr.reduce((a, b) => a + b);
+    if (s % 3) {
+        return false;
+    }
+    s = (s / 3) | 0;
+    let [cnt, t] = [0, 0];
+    for (const x of arr) {
+        t += x;
+        if (t == s) {
+            cnt++;
+            t = 0;
+        }
+    }
+    return cnt >= 3;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn can_three_parts_equal_sum(arr: Vec<i32>) -> bool {
+        let sum: i32 = arr.iter().sum();
+        let s = sum / 3;
+        let mod_val = sum % 3;
+        if mod_val != 0 {
+            return false;
+        }
+
+        let mut cnt = 0;
+        let mut t = 0;
+        for &x in &arr {
+            t += x;
+            if t == s {
+                cnt += 1;
+                t = 0;
+            }
+        }
+
+        cnt >= 3
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

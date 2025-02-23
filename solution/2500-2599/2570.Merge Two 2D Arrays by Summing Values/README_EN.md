@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2570.Merge%20Two%202D%20Arrays%20by%20Summing%20Values/README_EN.md
+rating: 1281
+source: Weekly Contest 333 Q1
+tags:
+    - Array
+    - Hash Table
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [2570. Merge Two 2D Arrays by Summing Values](https://leetcode.com/problems/merge-two-2d-arrays-by-summing-values)
 
 [中文文档](/solution/2500-2599/2570.Merge%20Two%202D%20Arrays%20by%20Summing%20Values/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two <strong>2D</strong> integer arrays <code>nums1</code> and <code>nums2.</code></p>
 
@@ -17,7 +33,7 @@
 
 <ul>
 	<li>Only ids that appear in at least one of the two arrays should be included in the resulting array.</li>
-	<li>Each id should be included <strong>only once</strong> and its value should be the sum of the values of this id in the two arrays. If the id does not exist in one of the two arrays then its value in that array is considered to be <code>0</code>.</li>
+	<li>Each id should be included <strong>only once</strong> and its value should be the sum of the values of this id in the two arrays. If the id does not exist in one of the two arrays, then assume its value in that array to be <code>0</code>.</li>
 </ul>
 
 <p>Return <em>the resulting array</em>. The returned array must be sorted in ascending order by id.</p>
@@ -54,11 +70,23 @@
 	<li>Both arrays are in&nbsp;strictly ascending order by id.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting + Enumeration
+
+We can use a hash table or an array `cnt` to count the frequency of each number in the two arrays.
+
+Then we enumerate each number in `cnt` from small to large. If the frequency of a number is greater than $0$, we add it to the answer array.
+
+The time complexity is $O(n + m)$, and the space complexity is $O(M)$. Where $n$ and $m$ are the lengths of the two arrays respectively; and $M$ is the maximum value in the two arrays, in this problem, $M = 1000$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +99,7 @@ class Solution:
         return sorted(cnt.items())
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +152,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mergeArrays(nums1 [][]int, nums2 [][]int) (ans [][]int) {
@@ -144,7 +172,7 @@ func mergeArrays(nums1 [][]int, nums2 [][]int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function mergeArrays(nums1: number[][], nums2: number[][]): number[][] {
@@ -166,10 +194,35 @@ function mergeArrays(nums1: number[][], nums2: number[][]): number[][] {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn merge_arrays(nums1: Vec<Vec<i32>>, nums2: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        let mut cnt = vec![0; 1001];
 
+        for x in &nums1 {
+            cnt[x[0] as usize] += x[1];
+        }
+
+        for x in &nums2 {
+            cnt[x[0] as usize] += x[1];
+        }
+
+        let mut ans = vec![];
+        for i in 0..cnt.len() {
+            if cnt[i] > 0 {
+                ans.push(vec![i as i32, cnt[i] as i32]);
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

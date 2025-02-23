@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1622.Fancy%20Sequence/README_EN.md
+rating: 2476
+source: Biweekly Contest 37 Q4
+tags:
+    - Design
+    - Segment Tree
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1622. Fancy Sequence](https://leetcode.com/problems/fancy-sequence)
 
 [中文文档](/solution/1600-1699/1622.Fancy%20Sequence/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Write an API that generates fancy sequences using the <code>append</code>, <code>addAll</code>, and <code>multAll</code> operations.</p>
 
@@ -50,13 +66,17 @@ fancy.getIndex(2); // return 20
 	<li>At most <code>10<sup>5</sup></code> calls total will be made to <code>append</code>, <code>addAll</code>, <code>multAll</code>, and <code>getIndex</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-Segment Tree.
-
-### **Python3**
+#### Python3
 
 ```python
 MOD = int(1e9 + 7)
@@ -173,7 +193,7 @@ class Fancy:
 # param_4 = obj.getIndex(idx)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Node {
@@ -329,7 +349,7 @@ class Fancy {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 const int MOD = 1e9 + 7;
@@ -474,10 +494,8 @@ public:
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

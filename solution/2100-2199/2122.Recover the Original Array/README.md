@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2122.Recover%20the%20Original%20Array/README.md
+rating: 2158
+source: 第 273 场周赛 Q4
+tags:
+    - 数组
+    - 哈希表
+    - 双指针
+    - 枚举
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2122. 还原原数组](https://leetcode.cn/problems/recover-the-original-array)
 
 [English Version](/solution/2100-2199/2122.Recover%20the%20Original%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>Alice 有一个下标从 <strong>0</strong> 开始的数组 <code>arr</code> ，由 <code>n</code> 个正整数组成。她会选择一个任意的 <strong>正整数 </strong><code>k</code> 并按下述方式创建两个下标从 <strong>0</strong> 开始的新整数数组 <code>lower</code> 和 <code>higher</code> ：</p>
 
@@ -60,19 +76,17 @@
 	<li>生成的测试用例保证存在 <strong>至少一个</strong> 有效数组 <code>arr</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-对 nums 排序后，`nums[0]` 必然是 `lower[0]`，接下来从在 `[1, i)` 区间内枚举 `higher[0]`，然后使用双指针遍历 nums，得到剩余的 lower 和 higher 元素。
-
-双指针遍历时，可以用 vis 数组标记 higher 中出现过的数字。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -102,9 +116,7 @@ class Solution:
         return []
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -146,7 +158,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -174,7 +186,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func recoverArray(nums []int) []int {
@@ -208,18 +220,8 @@ func recoverArray(nums []int) []int {
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

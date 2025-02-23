@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1021.Remove%20Outermost%20Parentheses/README.md
+rating: 1311
+source: 第 131 场周赛 Q1
+tags:
+    - 栈
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1021. 删除最外层的括号](https://leetcode.cn/problems/remove-outermost-parentheses)
 
 [English Version](/solution/1000-1099/1021.Remove%20Outermost%20Parentheses/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有效括号字符串为空 <code>""</code>、<code>"(" + A + ")"</code> 或 <code>A + B</code> ，其中 <code>A</code> 和 <code>B</code> 都是有效的括号字符串，<code>+</code> 代表字符串的连接。</p>
 
@@ -59,11 +72,13 @@
 	<li><code>s</code> 是一个有效括号字符串</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 遍历字符串，遇到左括号 `'('` 计数器加一，此时计数器不为 $1$ 时，说明当前括号不是最外层括号，将其加入结果字符串。遇到右括号 `')'` 计数器减一，此时计数器不为 $0$ 时，说明当前括号不是最外层括号，将其加入结果字符串。
 
@@ -71,9 +86,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,24 +105,7 @@ class Solution:
         return ''.join(ans)
 ```
 
-```python
-class Solution:
-    def removeOuterParentheses(self, s: str) -> str:
-        ans = []
-        cnt = 0
-        for c in s:
-            if c == '(':
-                cnt += 1
-            if cnt > 1:
-                ans.append(c)
-            if c == ')':
-                cnt -= 1
-        return ''.join(ans)
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -133,29 +129,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public String removeOuterParentheses(String s) {
-        StringBuilder ans = new StringBuilder();
-        int cnt = 0;
-        for (int i = 0; i < s.length(); ++i) {
-            char c = s.charAt(i);
-            if (c == '(') {
-                ++cnt;
-            }
-            if (cnt > 1) {
-                ans.append(c);
-            }
-            if (c == ')') {
-                --cnt;
-            }
-        }
-        return ans.toString();
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -179,29 +153,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    string removeOuterParentheses(string s) {
-        string ans;
-        int cnt = 0;
-        for (char& c : s) {
-            if (c == '(') {
-                ++cnt;
-            }
-            if (cnt > 1) {
-                ans.push_back(c);
-            }
-            if (c == ')') {
-                --cnt;
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func removeOuterParentheses(s string) string {
@@ -224,26 +176,7 @@ func removeOuterParentheses(s string) string {
 }
 ```
 
-```go
-func removeOuterParentheses(s string) string {
-	ans := []rune{}
-	cnt := 0
-	for _, c := range s {
-		if c == '(' {
-			cnt++
-		}
-		if cnt > 1 {
-			ans = append(ans, c)
-		}
-		if c == ')' {
-			cnt--
-		}
-	}
-	return string(ans)
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function removeOuterParentheses(s: string): string {
@@ -264,7 +197,7 @@ function removeOuterParentheses(s: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -287,10 +220,104 @@ impl Solution {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def removeOuterParentheses(self, s: str) -> str:
+        ans = []
+        cnt = 0
+        for c in s:
+            if c == '(':
+                cnt += 1
+            if cnt > 1:
+                ans.append(c)
+            if c == ')':
+                cnt -= 1
+        return ''.join(ans)
 ```
 
+#### Java
+
+```java
+class Solution {
+    public String removeOuterParentheses(String s) {
+        StringBuilder ans = new StringBuilder();
+        int cnt = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                ++cnt;
+            }
+            if (cnt > 1) {
+                ans.append(c);
+            }
+            if (c == ')') {
+                --cnt;
+            }
+        }
+        return ans.toString();
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    string removeOuterParentheses(string s) {
+        string ans;
+        int cnt = 0;
+        for (char& c : s) {
+            if (c == '(') {
+                ++cnt;
+            }
+            if (cnt > 1) {
+                ans.push_back(c);
+            }
+            if (c == ')') {
+                --cnt;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func removeOuterParentheses(s string) string {
+	ans := []rune{}
+	cnt := 0
+	for _, c := range s {
+		if c == '(' {
+			cnt++
+		}
+		if cnt > 1 {
+			ans = append(ans, c)
+		}
+		if c == ')' {
+			cnt--
+		}
+	}
+	return string(ans)
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

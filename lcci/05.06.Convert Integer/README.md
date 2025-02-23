@@ -1,10 +1,19 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/05.06.Convert%20Integer/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 05.06. 整数转换](https://leetcode.cn/problems/convert-integer-lcci)
 
 [English Version](/lcci/05.06.Convert%20Integer/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
+
 <p>整数转换。编写一个函数，确定需要改变几个位才能将整数A转成整数B。</p>
 
 <p> <strong>示例1:</strong></p>
@@ -27,21 +36,21 @@
 <li>A，B范围在[-2147483648, 2147483647]之间</li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：位运算**
+### 方法一：位运算
 
-我们将 A 和 B 进行异或运算，得到的结果中 $1$ 的个数即为需要改变的位数。
+我们将 A 和 B 进行异或运算，得到的结果的二进制表示中 $1$ 的个数即为需要改变的位数。
 
 时间复杂度 $O(\log n)$，其中 $n$ 为 A 和 B 的最大值。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -51,9 +60,7 @@ class Solution:
         return (A ^ B).bit_count()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -63,7 +70,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -75,7 +82,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func convertInteger(A int, B int) int {
@@ -83,7 +90,7 @@ func convertInteger(A int, B int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function convertInteger(A: number, B: number): number {
@@ -99,7 +106,7 @@ function convertInteger(A: number, B: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -109,11 +116,18 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
-
-
+```swift
+class Solution {
+    func convertInteger(_ A: Int, _ B: Int) -> Int {
+        return (Int32(A) ^ Int32(B)).nonzeroBitCount
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

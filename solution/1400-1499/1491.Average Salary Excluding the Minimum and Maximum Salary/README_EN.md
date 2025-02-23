@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1491.Average%20Salary%20Excluding%20the%20Minimum%20and%20Maximum%20Salary/README_EN.md
+rating: 1201
+source: Biweekly Contest 29 Q1
+tags:
+    - Array
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1491. Average Salary Excluding the Minimum and Maximum Salary](https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary)
 
 [中文文档](/solution/1400-1499/1491.Average%20Salary%20Excluding%20the%20Minimum%20and%20Maximum%20Salary/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array of <strong>unique</strong> integers <code>salary</code> where <code>salary[i]</code> is the salary of the <code>i<sup>th</sup></code> employee.</p>
 
@@ -36,11 +51,23 @@ Average salary excluding minimum and maximum salary is (2000) / 1 = 2000
 	<li>All the integers of <code>salary</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+Simulate according to the problem's requirements.
+
+Traverse the array, find the maximum and minimum values, and accumulate the sum. Then calculate the average value after removing the maximum and minimum values.
+
+The time complexity is $O(n)$, where $n$ is the length of the array `salary`. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -49,7 +76,7 @@ class Solution:
         return s / (len(salary) - 2)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -67,7 +94,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -86,7 +113,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func average(salary []int) float64 {
@@ -100,23 +127,9 @@ func average(salary []int) float64 {
 	s -= (mi + mx)
 	return float64(s) / float64(len(salary)-2)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function average(salary: number[]): number {
@@ -132,7 +145,7 @@ function average(salary: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -151,26 +164,7 @@ impl Solution {
 }
 ```
 
-### **C**
-
-```c
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-#define min(a,b) (((a) < (b)) ? (a) : (b))
-
-double average(int* salary, int salarySize) {
-    int ma = INT_MIN;
-    int mi = INT_MAX;
-    int sum = 0;
-    for (int i = 0 ; i < salarySize; i++) {
-        sum += salary[i];
-        ma = max(ma, salary[i]);
-        mi = min(mi, salary[i]);
-    }
-    return (sum - mi - ma) * 1.0 / (salarySize - 2);
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -191,10 +185,27 @@ class Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
+```c
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 
+double average(int* salary, int salarySize) {
+    int ma = INT_MIN;
+    int mi = INT_MAX;
+    int sum = 0;
+    for (int i = 0; i < salarySize; i++) {
+        sum += salary[i];
+        ma = max(ma, salary[i]);
+        mi = min(mi, salary[i]);
+    }
+    return (sum - mi - ma) * 1.0 / (salarySize - 2);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

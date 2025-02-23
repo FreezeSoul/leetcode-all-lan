@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0441.Arranging%20Coins/README_EN.md
+tags:
+    - Math
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [441. Arranging Coins](https://leetcode.com/problems/arranging-coins)
 
 [中文文档](/solution/0400-0499/0441.Arranging%20Coins/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have <code>n</code> coins and you want to build a staircase with these coins. The staircase consists of <code>k</code> rows where the <code>i<sup>th</sup></code> row has exactly <code>i</code> coins. The last row of the staircase <strong>may be</strong> incomplete.</p>
 
@@ -32,11 +45,17 @@
 	<li><code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -44,20 +63,7 @@ class Solution:
         return int(math.sqrt(2) * math.sqrt(n + 0.125) - 0.5)
 ```
 
-```python
-class Solution:
-    def arrangeCoins(self, n: int) -> int:
-        left, right = 1, n
-        while left < right:
-            mid = (left + right + 1) >> 1
-            if (1 + mid) * mid // 2 <= n:
-                left = mid
-            else:
-                right = mid - 1
-        return left
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -67,24 +73,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int arrangeCoins(int n) {
-        long left = 1, right = n;
-        while (left < right) {
-            long mid = (left + right + 1) >>> 1;
-            if ((1 + mid) * mid / 2 <= n) {
-                left = mid;
-            } else {
-                right = mid - 1;
-            }
-        }
-        return (int) left;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 using LL = long;
@@ -106,7 +95,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func arrangeCoins(n int) int {
@@ -123,10 +112,52 @@ func arrangeCoins(n int) int {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def arrangeCoins(self, n: int) -> int:
+        left, right = 1, n
+        while left < right:
+            mid = (left + right + 1) >> 1
+            if (1 + mid) * mid // 2 <= n:
+                left = mid
+            else:
+                right = mid - 1
+        return left
 ```
 
+#### Java
+
+```java
+class Solution {
+    public int arrangeCoins(int n) {
+        long left = 1, right = n;
+        while (left < right) {
+            long mid = (left + right + 1) >>> 1;
+            if ((1 + mid) * mid / 2 <= n) {
+                left = mid;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return (int) left;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

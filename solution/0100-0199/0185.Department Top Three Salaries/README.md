@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0185.Department%20Top%20Three%20Salaries/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [185. 部门工资前三高的所有员工](https://leetcode.cn/problems/department-top-three-salaries)
 
 [English Version](/solution/0100-0199/0185.Department%20Top%20Three%20Salaries/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表:&nbsp;<code>Employee</code></p>
 
@@ -17,8 +27,8 @@
 | salary       | int     |
 | departmentId | int     |
 +--------------+---------+
-Id是该表的主键列。
-departmentId是Department表中ID的外键。
+id 是该表的主键列(具有唯一值的列)。
+departmentId 是 Department 表中 ID 的外键（reference 列）。
 该表的每一行都表示员工的ID、姓名和工资。它还包含了他们部门的ID。
 </pre>
 
@@ -33,7 +43,7 @@ departmentId是Department表中ID的外键。
 | id          | int     |
 | name        | varchar |
 +-------------+---------+
-Id是该表的主键列。
+id 是该表的主键列(具有唯一值的列)。
 该表的每一行表示部门ID和部门名。
 </pre>
 
@@ -41,11 +51,11 @@ Id是该表的主键列。
 
 <p>公司的主管们感兴趣的是公司每个部门中谁赚的钱最多。一个部门的 <strong>高收入者</strong> 是指一个员工的工资在该部门的 <strong>不同</strong> 工资中 <strong>排名前三</strong> 。</p>
 
-<p>编写一个SQL查询，找出每个部门中 <strong>收入高的员工</strong> 。</p>
+<p>编写解决方案，找出每个部门中 <strong>收入高的员工</strong> 。</p>
 
 <p>以 <strong>任意顺序</strong> 返回结果表。</p>
 
-<p>查询结果格式如下所示。</p>
+<p>返回结果格式如下所示。</p>
 
 <p>&nbsp;</p>
 
@@ -94,58 +104,102 @@ Department  表:
 - 山姆的薪水第二高
 - 没有第三高的工资，因为只有两名员工</pre>
 
+<p>&nbsp;</p>
+
+<p><strong>提示：</strong></p>
+
+<ul>
+	<li>没有姓名、薪资和部门 <strong>完全</strong> 相同的员工。</li>
+</ul>
+
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
+#### Python3
+
+```python
+import pandas as pd
+
+
+def top_three_salaries(
+    employee: pd.DataFrame, department: pd.DataFrame
+) -> pd.DataFrame:
+    salary_cutoff = (
+        employee.drop_duplicates(["salary", "departmentId"])
+        .groupby("departmentId")["salary"]
+        .nlargest(3)
+        .groupby("departmentId")
+        .min()
+    )
+    employee["Department"] = department.set_index("id")["name"][
+        employee["departmentId"]
+    ].values
+    employee["cutoff"] = salary_cutoff[employee["departmentId"]].values
+    return employee[employee["salary"] >= employee["cutoff"]].rename(
+        columns={"name": "Employee", "salary": "Salary"}
+    )[["Department", "Employee", "Salary"]]
+```
+
+#### MySQL
 
 ```sql
 SELECT
-	Department.NAME AS Department,
-	Employee.NAME AS Employee,
-	Salary
+    Department.NAME AS Department,
+    Employee.NAME AS Employee,
+    Salary
 FROM
-	Employee,
-	Department
+    Employee,
+    Department
 WHERE
-	Employee.DepartmentId = Department.Id
-	AND  (SELECT
+    Employee.DepartmentId = Department.Id
+    AND (
+        SELECT
             COUNT(DISTINCT e2.Salary)
-        FROM
-            Employee e2
-        WHERE
-            e2.Salary > Employee.Salary
-                AND Employee.DepartmentId = e2.DepartmentId
-    ) < 3
-```
-
-```sql
-# Write your MySQL query statement below
-with t as (
-    select
-        departmentId,
-        name,
-        salary,
-        dense_rank() over(
-            partition by departmentId
-            order by
-                salary desc
-        ) as rk
-    from
-        Employee
-)
-select
-    d.name Department,
-    t.name Employee,
-    salary Salary
-from
-    t
-    join Department d on t.departmentId = d.id
-where
-    rk < 4
+        FROM Employee AS e2
+        WHERE e2.Salary > Employee.Salary AND Employee.DepartmentId = e2.DepartmentId
+    ) < 3;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+WITH
+    T AS (
+        SELECT
+            *,
+            DENSE_RANK() OVER (
+                PARTITION BY departmentId
+                ORDER BY salary DESC
+            ) AS rk
+        FROM Employee
+    )
+SELECT d.name AS Department, t.name AS Employee, salary AS Salary
+FROM
+    T AS t
+    JOIN Department AS d ON t.departmentId = d.id
+WHERE rk <= 3;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1005.Maximize%20Sum%20Of%20Array%20After%20K%20Negations/README.md
+rating: 1274
+source: 第 127 场周赛 Q1
+tags:
+    - 贪心
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1005. K 次取反后最大化的数组和](https://leetcode.cn/problems/maximize-sum-of-array-after-k-negations)
 
 [English Version](/solution/1000-1099/1005.Maximize%20Sum%20Of%20Array%20After%20K%20Negations/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> ，按以下方法修改该数组：</p>
 
@@ -52,27 +66,27 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 计数**
+### 方法一：贪心 + 计数
 
 我们观察发现，要使得数组的和尽可能大，就应该尽可能地将数组中的最小负数变成正数。
 
-而题目中元素的范围为 $[-100,100]$，因此，我们可以先用哈希表 $cnt$ 统计数组 $nums$ 中每个元素出现的次数。接着从 $-100$ 开始遍历 $x$，如果哈希表中存在 $x$，那么我们取 $m = \min(cnt[x], k)$ 作为元素 $x$ 取反的个数，然后我们将 $cnt[x]$ 减去 $m$，将 $cnt[-x]$ 加上 $m$，并将 $k$ 减去 $m$。如果 $k$ 为 $0$，说明操作已经结束，直接退出循环即可。
+而题目中元素的范围为 $[-100,100]$，因此，我们可以先用哈希表 $\textit{cnt}$ 统计数组 $\textit{nums}$ 中每个元素出现的次数。接着从 $-100$ 开始遍历 $x$，如果哈希表中存在 $x$，那么我们取 $m = \min(cnt[x], k)$ 作为元素 $x$ 取反的个数，然后我们将 $\textit{cnt}[x]$ 减去 $m$，将 $\textit{cnt}[-x]$ 加上 $m$，并将 $k$ 减去 $m$。如果 $k$ 为 $0$，说明操作已经结束，直接退出循环即可。
 
-如果 $k$ 仍然为奇数，且 $cnt[0]=0$，那么我们还需要取 $cnt$ 中最小的一个正数 $x$，将 $cnt[x]$ 减去 $1$，将 $cnt[-x]$ 加上 $1$。
+如果 $k$ 仍然为奇数，且 $\textit{cnt}[0]=0$，那么我们还需要取 $\textit{cnt}$ 中最小的一个正数 $x$，将 $\textit{cnt}[x]$ 减去 $1$，将 $\textit{cnt}[-x]$ 加上 $1$。
 
-最后，我们遍历哈希表 $cnt$，将 $x$ 与 $cnt[x]$ 相乘的结果累加，即为答案。
+最后，我们遍历哈希表 $\textit{cnt}$，将 $x$ 与 $\textit{cnt}[x]$ 相乘的结果累加，即为答案。
 
-时间复杂度 $O(n + M)$，空间复杂度 $O(M)$。其中 $n$ 和 $M$ 分别为数组 $nums$ 的长度和 $nums$ 的数据范围大小。
+时间复杂度 $O(n + M)$，空间复杂度 $O(M)$。其中 $n$ 和 $M$ 分别为数组 $\textit{nums}$ 的长度和 $\textit{nums}$ 的数据范围大小。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -95,9 +109,7 @@ class Solution:
         return sum(x * v for x, v in cnt.items())
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -132,7 +144,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,7 +180,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func largestSumAfterKNegations(nums []int, k int) (ans int) {
@@ -198,16 +210,9 @@ func largestSumAfterKNegations(nums []int, k int) (ans int) {
 	}
 	return
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function largestSumAfterKNegations(nums: number[], k: number): number {
@@ -232,18 +237,12 @@ function largestSumAfterKNegations(nums: number[], k: number): number {
             }
         }
     }
-    let ans = 0;
-    for (const [key, value] of cnt.entries()) {
-        ans += key * value;
-    }
-    return ans;
+    return Array.from(cnt.entries()).reduce((acc, [k, v]) => acc + k * v, 0);
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

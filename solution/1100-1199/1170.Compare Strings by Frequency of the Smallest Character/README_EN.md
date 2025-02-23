@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1170.Compare%20Strings%20by%20Frequency%20of%20the%20Smallest%20Character/README_EN.md
+rating: 1431
+source: Weekly Contest 151 Q2
+tags:
+    - Array
+    - Hash Table
+    - String
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [1170. Compare Strings by Frequency of the Smallest Character](https://leetcode.com/problems/compare-strings-by-frequency-of-the-smallest-character)
 
 [中文文档](/solution/1100-1199/1170.Compare%20Strings%20by%20Frequency%20of%20the%20Smallest%20Character/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Let the function <code>f(s)</code> be the <strong>frequency of the lexicographically smallest character</strong> in a non-empty string <code>s</code>. For example, if <code>s = &quot;dcce&quot;</code> then <code>f(s) = 2</code> because the lexicographically smallest character is <code>&#39;c&#39;</code>, which has a frequency of 2.</p>
 
@@ -37,27 +55,39 @@
 	<li><code>queries[i][j]</code>, <code>words[i][j]</code> consist of lowercase English letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Binary Search
+
+First, according to the problem description, we implement a function $f(s)$, which returns the frequency of the smallest letter in the string $s$ in lexicographical order.
+
+Next, we calculate $f(w)$ for each string $w$ in $words$, sort them, and store them in an array $nums$.
+
+Then, we traverse each string $q$ in $queries$, and binary search in $nums$ for the first position $i$ that is greater than $f(q)$. Then, the elements at index $i$ and after in $nums$ all satisfy $f(q) < f(W)$, so the answer to the current query is $n - i$.
+
+The time complexity is $O((n + q) \times M)$, and the space complexity is $O(n)$. Here, $n$ and $q$ are the lengths of the arrays $words$ and $queries$ respectively, and $M$ is the maximum length of the strings.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def numSmallerByFrequency(self, queries: List[str], words: List[str]) -> List[int]:
         def f(s: str) -> int:
             cnt = Counter(s)
-            for c in ascii_lowercase:
-                if x := cnt[c]:
-                    return x
+            return next(cnt[c] for c in ascii_lowercase if cnt[c])
 
         n = len(words)
         nums = sorted(f(w) for w in words)
         return [n - bisect_right(nums, f(q)) for q in queries]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -101,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -135,7 +165,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numSmallerByFrequency(queries []string, words []string) (ans []int) {
@@ -165,7 +195,7 @@ func numSmallerByFrequency(queries []string, words []string) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numSmallerByFrequency(queries: string[], words: string[]): number[] {
@@ -196,10 +226,8 @@ function numSmallerByFrequency(queries: string[], words: string[]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

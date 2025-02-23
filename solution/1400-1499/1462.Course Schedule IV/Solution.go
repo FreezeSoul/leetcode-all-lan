@@ -1,37 +1,20 @@
-func checkIfPrerequisite(numCourses int, prerequisites [][]int, queries [][]int) []bool {
-	g := make([][]int, numCourses)
-	for i := range g {
-		g[i] = make([]int, numCourses)
-		for j := range g[i] {
-			g[i][j] = -1
-		}
+func checkIfPrerequisite(n int, prerequisites [][]int, queries [][]int) (ans []bool) {
+	f := make([][]bool, n)
+	for i := range f {
+		f[i] = make([]bool, n)
 	}
-	for _, e := range prerequisites {
-		a, b := e[0], e[1]
-		g[a][b] = 1
+	for _, p := range prerequisites {
+		f[p[0]][p[1]] = true
 	}
-	var ans []bool
-	var dfs func(a, b int) bool
-	dfs = func(a, b int) bool {
-		if g[a][b] != -1 {
-			return g[a][b] == 1
-		}
-		if a == b {
-			g[a][b] = 1
-			return true
-		}
-		for i, c := range g[a] {
-			if c == 1 && dfs(i, b) {
-				g[a][b] = 1
-				return true
+	for k := 0; k < n; k++ {
+		for i := 0; i < n; i++ {
+			for j := 0; j < n; j++ {
+				f[i][j] = f[i][j] || (f[i][k] && f[k][j])
 			}
 		}
-		g[a][b] = 0
-		return false
 	}
-	for _, e := range queries {
-		a, b := e[0], e[1]
-		ans = append(ans, dfs(a, b))
+	for _, q := range queries {
+		ans = append(ans, f[q[0]][q[1]])
 	}
-	return ans
+	return
 }

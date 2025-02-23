@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2171.Removing%20Minimum%20Number%20of%20Magic%20Beans/README_EN.md
+rating: 1748
+source: Weekly Contest 280 Q3
+tags:
+    - Greedy
+    - Array
+    - Enumeration
+    - Prefix Sum
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2171. Removing Minimum Number of Magic Beans](https://leetcode.com/problems/removing-minimum-number-of-magic-beans)
 
 [中文文档](/solution/2100-2199/2171.Removing%20Minimum%20Number%20of%20Magic%20Beans/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array of <strong>positive</strong> integers <code>beans</code>, where each integer represents the number of magic beans found in a particular magic bag.</p>
 
@@ -14,15 +32,15 @@
 <p><strong class="example">Example 1:</strong></p>
 
 <pre>
-<strong>Input:</strong> beans = [4,<u><strong>1</strong></u>,6,5]
+<strong>Input:</strong> beans = [4,1,6,5]
 <strong>Output:</strong> 4
 <strong>Explanation:</strong> 
 - We remove 1 bean from the bag with only 1 bean.
-  This results in the remaining bags: [4,<b><u>0</u></b>,6,5]
+  This results in the remaining bags: [4,<strong><u>0</u></strong>,6,5]
 - Then we remove 2 beans from the bag with 6 beans.
   This results in the remaining bags: [4,0,<strong><u>4</u></strong>,5]
 - Then we remove 1 bean from the bag with 5 beans.
-  This results in the remaining bags: [4,0,4,<b><u>4</u></b>]
+  This results in the remaining bags: [4,0,4,<strong><u>4</u></strong>]
 We removed a total of 1 + 2 + 1 = 4 beans to make the remaining non-empty bags have an equal number of beans.
 There are no other solutions that remove 4 beans or fewer.
 </pre>
@@ -30,7 +48,7 @@ There are no other solutions that remove 4 beans or fewer.
 <p><strong class="example">Example 2:</strong></p>
 
 <pre>
-<strong>Input:</strong> beans = [<strong><u>2</u></strong>,10,<u><strong>3</strong></u>,<strong><u>2</u></strong>]
+<strong>Input:</strong> beans = [2,10,3,2]
 <strong>Output:</strong> 7
 <strong>Explanation:</strong>
 - We remove 2 beans from one of the bags with 2 beans.
@@ -51,32 +69,39 @@ There are no other solutions that removes 7 beans or fewer.
 	<li><code>1 &lt;= beans[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Enumeration
+
+We can sort all the beans in the bags in ascending order, and then enumerate the number of beans $beans[i]$ in each bag as the final number of beans in the bag. The total remaining number of beans is $beans[i] \times (n - i)$, so the number of beans that need to be taken out is $s - beans[i] \times (n - i)$, where $s$ is the total number of beans in all bags. We need to find the minimum number of beans that need to be taken out among all schemes.
+
+The time complexity is $O(n \times \log n)$, and the space complexity is $O(\log n)$. Here, $n$ is the number of bags.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minimumRemoval(self, beans: List[int]) -> int:
         beans.sort()
-        ans = s = sum(beans)
-        n = len(beans)
-        for i, v in enumerate(beans):
-            ans = min(ans, s - v * (n - i))
-        return ans
+        s, n = sum(beans), len(beans)
+        return min(s - x * (n - i) for i, x in enumerate(beans))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public long minimumRemoval(int[] beans) {
         Arrays.sort(beans);
         long s = 0;
-        for (int v : beans) {
-            s += v;
+        for (int x : beans) {
+            s += x;
         }
         long ans = s;
         int n = beans.length;
@@ -88,23 +113,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function minimumRemoval(beans: number[]): number {
-    const n = beans.length;
-    let sum = beans.reduce((a, c) => a + c, 0);
-    beans.sort((a, b) => a - b);
-    let ans = sum;
-    for (let i = 0; i < n; i++) {
-        let num = beans[i];
-        ans = Math.min(sum - num * (n - i), ans);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,41 +123,49 @@ public:
         long long s = accumulate(beans.begin(), beans.end(), 0ll);
         long long ans = s;
         int n = beans.size();
-        for (int i = 0; i < n; ++i) ans = min(ans, s - 1ll * beans[i] * (n - i));
+        for (int i = 0; i < n; ++i) {
+            ans = min(ans, s - 1ll * beans[i] * (n - i));
+        }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumRemoval(beans []int) int64 {
 	sort.Ints(beans)
 	s := 0
-	for _, v := range beans {
-		s += v
+	for _, x := range beans {
+		s += x
 	}
 	ans := s
 	n := len(beans)
-	for i, v := range beans {
-		ans = min(ans, s-v*(n-i))
+	for i, x := range beans {
+		ans = min(ans, s-x*(n-i))
 	}
 	return int64(ans)
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function minimumRemoval(beans: number[]): number {
+    beans.sort((a, b) => a - b);
+    const s = beans.reduce((a, b) => a + b, 0);
+    const n = beans.length;
+    let ans = s;
+    for (let i = 0; i < n; ++i) {
+        ans = Math.min(ans, s - beans[i] * (n - i));
+    }
+    return ans;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

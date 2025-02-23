@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2180.Count%20Integers%20With%20Even%20Digit%20Sum/README.md
+rating: 1257
+source: 第 281 场周赛 Q1
+tags:
+    - 数学
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2180. 统计各位数字之和为偶数的整数个数](https://leetcode.cn/problems/count-integers-with-even-digit-sum)
 
 [English Version](/solution/2100-2199/2180.Count%20Integers%20With%20Even%20Digit%20Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数 <code>num</code> ，请你统计并返回 <strong>小于或等于</strong> <code>num</code> 且各位数字之和为 <strong>偶数</strong> 的正整数的数目。</p>
 
@@ -39,35 +52,21 @@
 	<li><code>1 &lt;= num &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举**
+### 方法一：枚举
 
 一种最简单直接的方法是枚举 $[1,..num]$ 的所有整数 $x$，判断 $x$ 各位数字之和是否为偶数，是则答案加一。
 
 时间复杂度 $O(n \times \log n)$，空间复杂度 $O(1)$。其中 $n$ 为 $num$ 的值。
 
-**方法二：数学**
-
-我们观察发现，在 $[0,..x]$ 的所有数中，每 $10$ 个数中，就有 $5$ 个数的各位数字之和为偶数。例如，在 $[0,..9]$ 中，每 $10$ 个数中，就有 $5$ 个数的各位数字之和为偶数，分别是 $0,2,4,6,8$。
-
-因此，我们可以先算出 $num$ 中有多少个 $10$ 的倍数，然后乘以 $5$ 再减去 $1$（排除 $0$ 这个偶数），可以得到初始答案 $ans=\left\lfloor \frac{num}{10} \right\rfloor \times 5 - 1$。
-
-接下来，我们还需要考虑剩下的 $num \% 10 + 1$ 个数字中，有多少个数的各位数字之和为偶数。这些数字是否是偶数，跟数字的前面数字之和有关，因此，我们可以算出 $num$ 的前面数字之和 $s$，那么剩余的数字中，还有 $\left\lfloor \frac{num \% 10 + 2 - (s \& 1)}{2} \right\rfloor$ 个数的各位数字之和为偶数。累加到答案 $ans$ 中即可。
-
-我们不妨举个例子，假设 $num$ 为 $123$，那么前面 $[0,..119]$ 中一共有 $12$ 个 $10$ 的倍数，每个 $10$ 的倍数中有 $5$ 个数的各位数字之和为偶数，因此，初始答案为 $ans=12 \times 5 - 1=59$。
-
-剩下的数字分别是 $120,121,122,123$，每个数字的前两位数字之和为 $s = 1+2=3$，是奇数，因此，剩下的数字中，只有 $2$ 个数的各位数字之和为偶数，累加到答案 $ans$ 中，最终答案为 $ans+2=61$。
-
-时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。其中 $n$ 为 $num$ 的值。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -82,21 +81,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def countEven(self, num: int) -> int:
-        ans = num // 10 * 5 - 1
-        x, s = num // 10, 0
-        while x:
-            s += x % 10
-            x //= 10
-        ans += (num % 10 + 2 - (s & 1)) >> 1
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -116,21 +101,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int countEven(int num) {
-        int ans = num / 10 * 5 - 1;
-        int s = 0;
-        for (int x = num / 10; x > 0; x /= 10) {
-            s += x % 10;
-        }
-        ans += (num % 10 + 2 - (s & 1)) >> 1;
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -149,22 +120,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int countEven(int num) {
-        int ans = num / 10 * 5 - 1;
-        int s = 0;
-        for (int x = num / 10; x > 0; x /= 10) {
-            s += x % 10;
-        }
-        ans += (num % 10 + 2 - (s & 1)) >> 1;
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func countEven(num int) (ans int) {
@@ -181,19 +137,7 @@ func countEven(num int) (ans int) {
 }
 ```
 
-```go
-func countEven(num int) (ans int) {
-	ans = num/10*5 - 1
-	s := 0
-	for x := num / 10; x > 0; x /= 10 {
-		s += x % 10
-	}
-	ans += (num%10 + 2 - (s & 1)) >> 1
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countEven(num: number): number {
@@ -211,6 +155,91 @@ function countEven(num: number): number {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：数学
+
+我们观察发现，在 $[0,..x]$ 的所有数中，每 $10$ 个数中，就有 $5$ 个数的各位数字之和为偶数。例如，在 $[0,..9]$ 中，每 $10$ 个数中，就有 $5$ 个数的各位数字之和为偶数，分别是 $0,2,4,6,8$。
+
+因此，我们可以先算出 $num$ 中有多少个 $10$ 的倍数，然后乘以 $5$ 再减去 $1$（排除 $0$ 这个偶数），可以得到初始答案 $ans=\left\lfloor \frac{num}{10} \right\rfloor \times 5 - 1$。
+
+接下来，我们还需要考虑剩下的 $num \% 10 + 1$ 个数字中，有多少个数的各位数字之和为偶数。这些数字是否是偶数，跟数字的前面数字之和有关，因此，我们可以算出 $num$ 的前面数字之和 $s$，那么剩余的数字中，还有 $\left\lfloor \frac{num \% 10 + 2 - (s \& 1)}{2} \right\rfloor$ 个数的各位数字之和为偶数。累加到答案 $ans$ 中即可。
+
+我们不妨举个例子，假设 $num$ 为 $123$，那么前面 $[0,..119]$ 中一共有 $12$ 个 $10$ 的倍数，每个 $10$ 的倍数中有 $5$ 个数的各位数字之和为偶数，因此，初始答案为 $ans=12 \times 5 - 1=59$。
+
+剩下的数字分别是 $120,121,122,123$，每个数字的前两位数字之和为 $s = 1+2=3$，是奇数，因此，剩下的数字中，只有 $2$ 个数的各位数字之和为偶数，累加到答案 $ans$ 中，最终答案为 $ans+2=61$。
+
+时间复杂度 $O(\log n)$，空间复杂度 $O(1)$。其中 $n$ 为 $num$ 的值。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def countEven(self, num: int) -> int:
+        ans = num // 10 * 5 - 1
+        x, s = num // 10, 0
+        while x:
+            s += x % 10
+            x //= 10
+        ans += (num % 10 + 2 - (s & 1)) >> 1
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int countEven(int num) {
+        int ans = num / 10 * 5 - 1;
+        int s = 0;
+        for (int x = num / 10; x > 0; x /= 10) {
+            s += x % 10;
+        }
+        ans += (num % 10 + 2 - (s & 1)) >> 1;
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countEven(int num) {
+        int ans = num / 10 * 5 - 1;
+        int s = 0;
+        for (int x = num / 10; x > 0; x /= 10) {
+            s += x % 10;
+        }
+        ans += (num % 10 + 2 - (s & 1)) >> 1;
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func countEven(num int) (ans int) {
+	ans = num/10*5 - 1
+	s := 0
+	for x := num / 10; x > 0; x /= 10 {
+		s += x % 10
+	}
+	ans += (num%10 + 2 - (s & 1)) >> 1
+	return
+}
+```
+
+#### TypeScript
+
 ```ts
 function countEven(num: number): number {
     let ans = Math.floor(num / 10) * 5 - 1;
@@ -223,10 +252,8 @@ function countEven(num: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

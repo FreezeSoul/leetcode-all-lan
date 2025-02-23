@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2127.Maximum%20Employees%20to%20Be%20Invited%20to%20a%20Meeting/README_EN.md
+rating: 2449
+source: Weekly Contest 274 Q4
+tags:
+    - Depth-First Search
+    - Graph
+    - Topological Sort
+---
+
+<!-- problem:start -->
+
 # [2127. Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting)
 
 [中文文档](/solution/2100-2199/2127.Maximum%20Employees%20to%20Be%20Invited%20to%20a%20Meeting/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A company is organizing a meeting and has a list of <code>n</code> employees, waiting to be invited. They have arranged for a large <strong>circular</strong> table, capable of seating <strong>any number</strong> of employees.</p>
 
@@ -59,16 +75,36 @@ The maximum number of employees that can be invited to the meeting is 4.
 	<li><code>favorite[i] != i</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Maximum Cycle in Graph + Longest Chain
+
+We observe that the employee's preference relationship in the problem can be regarded as a directed graph, which can be divided into multiple "base cycle inward trees". Each structure contains a cycle, and each node on the cycle is connected to a tree.
+
+What is a "base cycle inward tree"? First, a base cycle tree is a directed graph with $n$ nodes and $n$ edges, and an inward tree means that in this directed graph, each node has exactly one outgoing edge. In this problem, each employee has exactly one favorite employee, so the constructed directed graph can be composed of multiple "base cycle inward trees".
+
+<img alt="" src="https://fastly.jsdelivr.net/gh/doocs/leetcode@main/solution/2100-2199/2127.Maximum%20Employees%20to%20Be%20Invited%20to%20a%20Meeting/images/05Dxh9.png"></p>
+
+For this problem, we can find the length of the maximum cycle in the graph. Here we only need to find the length of the largest cycle, because if there are multiple cycles, they are not connected to each other, which does not meet the problem requirements.
+
+In addition, for the size of the cycle equal to $2$, that is, there are two employees who like each other, then we can arrange these two employees together. If these two employees are each liked by other employees, then we only need to arrange the employees who like them next to them. If there are multiple such situations, we can arrange them all.
+
+Therefore, the problem is actually equivalent to finding the length of the maximum cycle in the graph, and all cycles of length $2$ plus their longest chain. The maximum of these two can be found. To find the longest chain to the cycle of length $2$, we can use topological sorting.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array `favorite`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maximumInvitations(self, favorite: List[int]) -> int:
-        def max_cycle(fa):
+        def max_cycle(fa: List[int]) -> int:
             n = len(fa)
             vis = [False] * n
             ans = 0
@@ -87,13 +123,13 @@ class Solution:
                         break
             return ans
 
-        def topological_sort(fa):
+        def topological_sort(fa: List[int]) -> int:
             n = len(fa)
             indeg = [0] * n
             dist = [1] * n
             for v in fa:
                 indeg[v] += 1
-            q = deque([i for i, v in enumerate(indeg) if v == 0])
+            q = deque(i for i, v in enumerate(indeg) if v == 0)
             while q:
                 i = q.popleft()
                 dist[fa[i]] = max(dist[fa[i]], dist[i] + 1)
@@ -105,7 +141,7 @@ class Solution:
         return max(max_cycle(favorite), topological_sort(favorite))
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -169,7 +205,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -193,7 +229,7 @@ public:
             }
             for (int k = 0; k < cycle.size(); ++k) {
                 if (cycle[k] == j) {
-                    ans = max(ans, (int)cycle.size() - k);
+                    ans = max(ans, (int) cycle.size() - k);
                     break;
                 }
             }
@@ -223,7 +259,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumInvitations(favorite []int) int {
@@ -289,25 +325,70 @@ func topologicalSort(fa []int) int {
 	}
 	return ans
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function maximumInvitations(favorite: number[]): number {
+    return Math.max(maxCycle(favorite), topologicalSort(favorite));
+}
+
+function maxCycle(fa: number[]): number {
+    const n = fa.length;
+    const vis: boolean[] = Array(n).fill(false);
+    let ans = 0;
+    for (let i = 0; i < n; ++i) {
+        if (vis[i]) {
+            continue;
+        }
+        const cycle: number[] = [];
+        let j = i;
+        for (; !vis[j]; j = fa[j]) {
+            cycle.push(j);
+            vis[j] = true;
+        }
+        for (let k = 0; k < cycle.length; ++k) {
+            if (cycle[k] === j) {
+                ans = Math.max(ans, cycle.length - k);
+            }
+        }
+    }
+    return ans;
+}
+
+function topologicalSort(fa: number[]): number {
+    const n = fa.length;
+    const indeg: number[] = Array(n).fill(0);
+    const dist: number[] = Array(n).fill(1);
+    for (const v of fa) {
+        ++indeg[v];
+    }
+    const q: number[] = [];
+    for (let i = 0; i < n; ++i) {
+        if (indeg[i] === 0) {
+            q.push(i);
+        }
+    }
+    let ans = 0;
+    while (q.length) {
+        const i = q.pop()!;
+        dist[fa[i]] = Math.max(dist[fa[i]], dist[i] + 1);
+        if (--indeg[fa[i]] === 0) {
+            q.push(fa[i]);
+        }
+    }
+    for (let i = 0; i < n; ++i) {
+        if (i === fa[fa[i]]) {
+            ans += dist[i];
+        }
+    }
+    return ans;
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

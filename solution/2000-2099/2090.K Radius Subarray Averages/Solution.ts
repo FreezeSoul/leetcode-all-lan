@@ -1,6 +1,6 @@
 function getAverages(nums: number[], k: number): number[] {
     const n = nums.length;
-    const ans: number[] = new Array(n).fill(-1);
+    const ans: number[] = Array(n).fill(-1);
     let s = 0;
     for (let i = 0; i < n; ++i) {
         s += nums[i];

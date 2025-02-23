@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2306.Naming%20a%20Company/README.md
+rating: 2305
+source: 第 297 场周赛 Q4
+tags:
+    - 位运算
+    - 数组
+    - 哈希表
+    - 字符串
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [2306. 公司命名](https://leetcode.cn/problems/naming-a-company)
 
 [English Version](/solution/2300-2399/2306.Naming%20a%20Company/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>ideas</code> 表示在公司命名过程中使用的名字列表。公司命名流程如下：</p>
 
@@ -56,19 +72,27 @@
 	<li><code>ideas</code> 中的所有字符串 <strong>互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：枚举计数**
+### 方法一：枚举计数
 
-$f[i][j]$ 表示有多少个首字母为 $i$ 的字符串，将首字符换成 $j$ 后，未在 $ideas$ 中出现过的字符串个数。
+我们定义 $f[i][j]$ 表示 $\textit{ideas}$ 中以第 $i$ 个字母开头，替换为第 $j$ 个字母后，不在 $\textit{ideas}$ 中的字符串的个数。初始时 $f[i][j] = 0$。另外，用一个哈希表 $s$ 记录 $\textit{ideas}$ 中的字符串，方便我们快速判断某个字符串是否在 $\textit{ideas}$ 中。
+
+接下来，我们遍历 $\textit{ideas}$ 中字符串，对于当前遍历到的字符串 $v$，我们枚举替换后的第一个字母 $j$，如果 $v$ 替换后的字符串不在 $\textit{ideas}$ 中，那么我们就更新 $f[i][j] = f[i][j] + 1$。
+
+最后，我们再次遍历 $\textit{ideas}$ 中字符串，对于当前遍历到的字符串 $v$，我们枚举替换后的第一个字母 $j$，如果 $v$ 替换后的字符串不在 $\textit{ideas}$ 中，那么我们就更新答案 $\textit{ans} = \textit{ans} + f[j][i]$。
+
+最终答案即为 $\textit{ans}$。
+
+时间复杂度 $O(n \times m \times |\Sigma|)$，空间复杂度 $O(|\Sigma|^2)$。其中 $n$ 和 $m$ 分别是 $\textit{ideas}$ 中字符串的个数和字符串的最大长度，而 $|\Sigma|$ 是字符串中出现的字符集，本题中 $|\Sigma| \leq 26$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,9 +117,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -131,14 +153,14 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long distinctNames(vector<string>& ideas) {
         unordered_set<string> s(ideas.begin(), ideas.end());
-        vector<vector<int>> f(26, vector<int>(26));
+        int f[26][26]{};
         for (auto v : ideas) {
             int i = v[0] - 'a';
             for (int j = 0; j < 26; ++j) {
@@ -149,7 +171,7 @@ public:
             }
         }
         long long ans = 0;
-        for (auto v : ideas) {
+        for (auto& v : ideas) {
             int i = v[0] - 'a';
             for (int j = 0; j < 26; ++j) {
                 v[0] = j + 'a';
@@ -163,18 +185,15 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func distinctNames(ideas []string) int64 {
+func distinctNames(ideas []string) (ans int64) {
 	s := map[string]bool{}
 	for _, v := range ideas {
 		s[v] = true
 	}
-	f := make([][]int, 26)
-	for i := range f {
-		f[i] = make([]int, 26)
-	}
+	f := [26][26]int{}
 	for _, v := range ideas {
 		i := int(v[0] - 'a')
 		t := []byte(v)
@@ -185,7 +204,7 @@ func distinctNames(ideas []string) int64 {
 			}
 		}
 	}
-	var ans int64
+
 	for _, v := range ideas {
 		i := int(v[0] - 'a')
 		t := []byte(v)
@@ -196,20 +215,12 @@ func distinctNames(ideas []string) int64 {
 			}
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

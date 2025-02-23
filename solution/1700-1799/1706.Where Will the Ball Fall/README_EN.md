@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1706.Where%20Will%20the%20Ball%20Fall/README_EN.md
+rating: 1764
+source: Weekly Contest 221 Q3
+tags:
+    - Array
+    - Matrix
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1706. Where Will the Ball Fall](https://leetcode.com/problems/where-will-the-ball-fall)
 
 [中文文档](/solution/1700-1799/1706.Where%20Will%20the%20Ball%20Fall/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You have a 2-D <code>grid</code> of size <code>m x n</code> representing a box, and you have <code>n</code> balls. The box is open on the top and bottom sides.</p>
 
@@ -58,19 +74,33 @@ Ball b4 is dropped at column 4 and will get stuck on the box between column 2 an
 	<li><code>grid[i][j]</code> is <code>1</code> or <code>-1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Case Analysis + DFS
+
+We can use DFS to simulate the movement of the ball. Design a function $\textit{dfs}(i, j)$, which represents the column where the ball will fall when it starts from row $i$ and column $j$. The ball will get stuck in the following cases:
+
+1. The ball is in the leftmost column, and the cell's diagonal directs the ball to the left.
+2. The ball is in the rightmost column, and the cell's diagonal directs the ball to the right.
+3. The cell's diagonal directs the ball to the right, and the adjacent cell to the right directs the ball to the left.
+4. The cell's diagonal directs the ball to the left, and the adjacent cell to the left directs the ball to the right.
+
+If any of the above conditions are met, we can determine that the ball will get stuck and return $-1$. Otherwise, we can continue to recursively find the next position of the ball. Finally, if the ball reaches the last row, we can return the current column index.
+
+The time complexity is $O(m \times n)$, and the space complexity is $O(m)$. Here, $m$ and $n$ are the number of rows and columns of the grid, respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def findBall(self, grid: List[List[int]]) -> List[int]:
-        m, n = len(grid), len(grid[0])
-
-        def dfs(i, j):
-            nonlocal m, n
+        def dfs(i: int, j: int) -> int:
             if i == m:
                 return j
             if j == 0 and grid[i][j] == -1:
@@ -83,10 +113,11 @@ class Solution:
                 return -1
             return dfs(i + 1, j + 1) if grid[i][j] == 1 else dfs(i + 1, j - 1)
 
+        m, n = len(grid), len(grid[0])
         return [dfs(0, j) for j in range(n)]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -126,40 +157,45 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
-    int m, n;
-    vector<vector<int>> grid;
-
     vector<int> findBall(vector<vector<int>>& grid) {
-        this->grid = grid;
-        m = grid.size();
-        n = grid[0].size();
+        int m = grid.size(), n = grid[0].size();
         vector<int> ans(n);
-        for (int j = 0; j < n; ++j) ans[j] = dfs(0, j);
+        function<int(int, int)> dfs = [&](int i, int j) {
+            if (i == m) {
+                return j;
+            }
+            if (j == 0 && grid[i][j] == -1) {
+                return -1;
+            }
+            if (j == n - 1 && grid[i][j] == 1) {
+                return -1;
+            }
+            if (grid[i][j] == 1 && grid[i][j + 1] == -1) {
+                return -1;
+            }
+            if (grid[i][j] == -1 && grid[i][j - 1] == 1) {
+                return -1;
+            }
+            return grid[i][j] == 1 ? dfs(i + 1, j + 1) : dfs(i + 1, j - 1);
+        };
+        for (int j = 0; j < n; ++j) {
+            ans[j] = dfs(0, j);
+        }
         return ans;
-    }
-
-    int dfs(int i, int j) {
-        if (i == m) return j;
-        if (j == 0 && grid[i][j] == -1) return -1;
-        if (j == n - 1 && grid[i][j] == 1) return -1;
-        if (grid[i][j] == 1 && grid[i][j + 1] == -1) return -1;
-        if (grid[i][j] == -1 && grid[i][j - 1] == 1) return -1;
-        return grid[i][j] == 1 ? dfs(i + 1, j + 1) : dfs(i + 1, j - 1);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func findBall(grid [][]int) []int {
+func findBall(grid [][]int) (ans []int) {
 	m, n := len(grid), len(grid[0])
-
 	var dfs func(i, j int) int
 	dfs = func(i, j int) int {
 		if i == m {
@@ -182,22 +218,19 @@ func findBall(grid [][]int) []int {
 		}
 		return dfs(i+1, j-1)
 	}
-
-	var ans []int
 	for j := 0; j < n; j++ {
 		ans = append(ans, dfs(0, j))
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findBall(grid: number[][]): number[] {
     const m = grid.length;
     const n = grid[0].length;
-    const res = new Array(n).fill(0);
     const dfs = (i: number, j: number) => {
         if (i === m) {
             return j;
@@ -214,14 +247,11 @@ function findBall(grid: number[][]): number[] {
             return dfs(i + 1, j - 1);
         }
     };
-    for (let i = 0; i < n; i++) {
-        res[i] = dfs(0, i);
-    }
-    return res;
+    return Array.from({ length: n }, (_, j) => dfs(0, j));
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -245,19 +275,47 @@ impl Solution {
     pub fn find_ball(grid: Vec<Vec<i32>>) -> Vec<i32> {
         let m = grid.len();
         let n = grid[0].len();
-        let mut res = vec![0; n];
+        let mut ans = vec![0; n];
         for i in 0..n {
-            res[i] = Self::dfs(&grid, 0, i);
+            ans[i] = Self::dfs(&grid, 0, i);
         }
-        res
+        ans
     }
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+/**
+ * @param {number[][]} grid
+ * @return {number[]}
+ */
+var findBall = function (grid) {
+    const m = grid.length;
+    const n = grid[0].length;
+    const dfs = (i, j) => {
+        if (i === m) {
+            return j;
+        }
+        if (grid[i][j] === 1) {
+            if (j === n - 1 || grid[i][j + 1] === -1) {
+                return -1;
+            }
+            return dfs(i + 1, j + 1);
+        } else {
+            if (j === 0 || grid[i][j - 1] === 1) {
+                return -1;
+            }
+            return dfs(i + 1, j - 1);
+        }
+    };
+    return Array.from({ length: n }, (_, j) => dfs(0, j));
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1619.Mean%20of%20Array%20After%20Removing%20Some%20Elements/README.md
+rating: 1374
+source: 第 37 场双周赛 Q1
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1619. 删除某些元素后的数组均值](https://leetcode.cn/problems/mean-of-array-after-removing-some-elements)
 
 [English Version](/solution/1600-1699/1619.Mean%20of%20Array%20After%20Removing%20Some%20Elements/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>arr</code> ，请你删除最小 <code>5%</code> 的数字和最大 <code>5%</code> 的数字后，剩余数字的平均值。</p>
 
@@ -58,11 +71,13 @@
 	<li><code>0 <= arr[i] <= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 直接模拟。
 
@@ -72,9 +87,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -86,9 +99,7 @@ class Solution:
         return round(sum(t) / len(t), 5)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -104,7 +115,37 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    double trimMean(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+        int n = arr.size();
+        double s = 0;
+        for (int start = (int) (n * 0.05), i = start; i < n - start; ++i)
+            s += arr[i];
+        return s / (n * 0.9);
+    }
+};
+```
+
+#### Go
+
+```go
+func trimMean(arr []int) float64 {
+	sort.Ints(arr)
+	n := len(arr)
+	sum := 0.0
+	for i := n / 20; i < n-n/20; i++ {
+		sum += float64(arr[i])
+	}
+	return sum / (float64(n) * 0.9)
+}
+```
+
+#### TypeScript
 
 ```ts
 function trimMean(arr: number[]): number {
@@ -119,57 +160,25 @@ function trimMean(arr: number[]): number {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    double trimMean(vector<int>& arr) {
-        sort(arr.begin(), arr.end());
-        int n = arr.size();
-        double s = 0;
-        for (int start = (int)(n * 0.05), i = start; i < n - start; ++i)
-            s += arr[i];
-        return s / (n * 0.9);
-    }
-};
-```
-
-### **Go**
-
-```go
-func trimMean(arr []int) float64 {
-	sort.Ints(arr)
-	n := len(arr)
-	sum := 0.0
-	for i := n / 20; i < n-n/20; i++ {
-		sum += float64(arr[i])
-	}
-	return sum / (float64(n) * 0.9)
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn trim_mean(mut arr: Vec<i32>) -> f64 {
         arr.sort();
         let n = arr.len();
-        let count = (n as f64 * 0.05).floor() as usize;
+        let count = ((n as f64) * 0.05).floor() as usize;
         let mut sum = 0;
         for i in count..n - count {
             sum += arr[i];
         }
-        sum as f64 / (n as f64 * 0.9)
+        (sum as f64) / ((n as f64) * 0.9)
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

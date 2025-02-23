@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20055.%20%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E8%BF%AD%E4%BB%A3%E5%99%A8/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 055. 二叉搜索树迭代器](https://leetcode.cn/problems/kTOapQ)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>实现一个二叉搜索树迭代器类<code>BSTIterator</code> ，表示一个按中序遍历二叉搜索树（BST）的迭代器：</p>
 
@@ -68,27 +75,21 @@ bSTIterator.hasNext(); // 返回 False
 
 <p><meta charset="UTF-8" />注意：本题与主站 173&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/binary-search-tree-iterator/">https://leetcode.cn/problems/binary-search-tree-iterator/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：递归**
+### 方法一：递归
 
 初始化数据时，递归中序遍历，将二叉搜索树每个结点的值保存在列表 `vals` 中。用 `cur` 指针记录外部即将遍历的位置，初始化为 0。
 
 调用 `next()` 时，返回 `vals[cur]`，同时 `cur` 指针自增。调用 `hasNext()` 时，判断 `cur` 指针是否已经达到 `len(vals)` 个数，若是，说明已经遍历结束，返回 false，否则返回 true。
 
-**方法二：栈迭代**
-
-初始化时，从根节点一路遍历所有左子节点，压入栈 `stack` 中。
-
-调用 `next()`时，弹出栈顶元素 `cur`，获取 `cur` 的右子节点 `node`，若 `node` 不为空，一直循环压入左节点。最后返回 `cur.val` 即可。调用 `hasNext()` 时，判断 `stack` 是否为空，空则表示迭代结束。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -124,42 +125,7 @@ class BSTIterator:
 # param_2 = obj.hasNext()
 ```
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class BSTIterator:
-
-    def __init__(self, root: TreeNode):
-        self.stack = []
-        while root:
-            self.stack.append(root)
-            root = root.left
-
-    def next(self) -> int:
-        cur = self.stack.pop()
-        node = cur.right
-        while node:
-            self.stack.append(node)
-            node = node.left
-        return cur.val
-
-    def hasNext(self) -> bool:
-        return len(self.stack) > 0
-
-
-# Your BSTIterator object will be instantiated and called as such:
-# obj = BSTIterator(root)
-# param_1 = obj.next()
-# param_2 = obj.hasNext()
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -210,53 +176,7 @@ class BSTIterator {
  */
 ```
 
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class BSTIterator {
-    private Deque<TreeNode> stack = new LinkedList<>();
-
-    public BSTIterator(TreeNode root) {
-        for (; root != null; root = root.left) {
-            stack.offerLast(root);
-        }
-    }
-
-    public int next() {
-        TreeNode cur = stack.pollLast();
-        for (TreeNode node = cur.right; node != null; node = node.left) {
-            stack.offerLast(node);
-        }
-        return cur.val;
-    }
-
-    public boolean hasNext() {
-        return !stack.isEmpty();
-    }
-}
-
-/**
- * Your BSTIterator object will be instantiated and called as such:
- * BSTIterator obj = new BSTIterator(root);
- * int param_1 = obj.next();
- * boolean param_2 = obj.hasNext();
- */
-```
-
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -304,51 +224,7 @@ public:
  */
 ```
 
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class BSTIterator {
-public:
-    stack<TreeNode*> stack;
-    BSTIterator(TreeNode* root) {
-        for (; root != nullptr; root = root->left) {
-            stack.push(root);
-        }
-    }
-
-    int next() {
-        TreeNode* cur = stack.top();
-        stack.pop();
-        TreeNode* node = cur->right;
-        for (; node != nullptr; node = node->left) {
-            stack.push(node);
-        }
-        return cur->val;
-    }
-
-    bool hasNext() {
-        return !stack.empty();
-    }
-};
-
-/**
- * Your BSTIterator object will be instantiated and called as such:
- * BSTIterator* obj = new BSTIterator(root);
- * int param_1 = obj->next();
- * bool param_2 = obj->hasNext();
- */
-```
-
-### **Go**
+#### Go
 
 ```go
 /**
@@ -394,7 +270,113 @@ func (this *BSTIterator) HasNext() bool {
  */
 ```
 
-## **JavaScript**
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+class BSTIterator {
+    private stack: number[];
+
+    constructor(root: TreeNode | null) {
+        this.stack = [];
+        const dfs = ({ val, left, right }: TreeNode) => {
+            right && dfs(right);
+            this.stack.push(val);
+            left && dfs(left);
+        };
+        dfs(root);
+    }
+
+    next(): number {
+        return this.stack.pop();
+    }
+
+    hasNext(): boolean {
+        return this.stack.length !== 0;
+    }
+}
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * var obj = new BSTIterator(root)
+ * var param_1 = obj.next()
+ * var param_2 = obj.hasNext()
+ */
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::rc::Rc;
+struct BSTIterator {
+    stack: Vec<i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl BSTIterator {
+    fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, stack: &mut Vec<i32>) {
+        let node = root.as_ref().unwrap().borrow();
+        if node.right.is_some() {
+            Self::dfs(&node.right, stack);
+        }
+        stack.push(node.val);
+        if node.left.is_some() {
+            Self::dfs(&node.left, stack);
+        }
+    }
+
+    fn new(root: Option<Rc<RefCell<TreeNode>>>) -> Self {
+        let mut stack = Vec::new();
+        Self::dfs(&root, &mut stack);
+        Self { stack }
+    }
+
+    fn next(&mut self) -> i32 {
+        self.stack.pop().unwrap()
+    }
+
+    fn has_next(&self) -> bool {
+        !self.stack.is_empty()
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -442,126 +424,204 @@ BSTIterator.prototype.hasNext = function () {
  */
 ```
 
-### **TypeScript**
+#### Swift
 
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
+```swift
+/* class TreeNode {
+*     var val: Int
+*     var left: TreeNode?
+*     var right: TreeNode?
+*     init() {
+*         self.val = 0
+*         self.left = nil
+*         self.right = nil
+*     }
+*     init(_ val: Int) {
+*         self.val = val
+*         self.left = nil
+*         self.right = nil
+*     }
+*     init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+*         self.val = val
+*         self.left = left
+*         self.right = right
+*     }
+* }
+*/
 
 class BSTIterator {
-    private stack: number[];
+    private var cur = 0
+    private var vals = [Int]()
 
-    constructor(root: TreeNode | null) {
-        this.stack = [];
-        const dfs = ({ val, left, right }: TreeNode) => {
-            right && dfs(right);
-            this.stack.push(val);
-            left && dfs(left);
-        };
-        dfs(root);
+    init(_ root: TreeNode?) {
+        inorder(root)
     }
 
-    next(): number {
-        return this.stack.pop();
+    func next() -> Int {
+        let value = vals[cur]
+        cur += 1
+        return value
     }
 
-    hasNext(): boolean {
-        return this.stack.length !== 0;
+    func hasNext() -> Bool {
+        return cur < vals.count
+    }
+
+    private func inorder(_ root: TreeNode?) {
+        guard let node = root else {
+            return
+        }
+        inorder(node.left)
+        vals.append(node.val)
+        inorder(node.right)
     }
 }
-
-/**
- * Your BSTIterator object will be instantiated and called as such:
- * var obj = new BSTIterator(root)
- * var param_1 = obj.next()
- * var param_2 = obj.hasNext()
- */
-```
-
-### **Rust**
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
-use std::rc::Rc;
-use std::cell::RefCell;
-struct BSTIterator {
-    stack: Vec<i32>
-}
-
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl BSTIterator {
-    fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, stack: &mut Vec<i32>) {
-        let node = root.as_ref().unwrap().borrow();
-        if node.right.is_some() {
-            Self::dfs(&node.right, stack);
-        }
-        stack.push(node.val);
-        if node.left.is_some() {
-            Self::dfs(&node.left, stack);
-        }
-    }
-
-    fn new(root: Option<Rc<RefCell<TreeNode>>>) -> Self {
-        let mut stack = Vec::new();
-        Self::dfs(&root, &mut stack);
-        Self {
-            stack
-        }
-    }
-
-    fn next(&mut self) -> i32 {
-        self.stack.pop().unwrap()
-    }
-
-    fn has_next(&self) -> bool {
-        !self.stack.is_empty()
-    }
-}
-
-/**
- * Your BSTIterator object will be instantiated and called as such:
- * let obj = BSTIterator::new(root);
- * let ret_1: i32 = obj.next();
- * let ret_2: bool = obj.has_next();
- */
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start-->
+
+### 方法二：栈迭代
+
+初始化时，从根节点一路遍历所有左子节点，压入栈 `stack` 中。
+
+调用 `next()`时，弹出栈顶元素 `cur`，获取 `cur` 的右子节点 `node`，若 `node` 不为空，一直循环压入左节点。最后返回 `cur.val` 即可。调用 `hasNext()` 时，判断 `stack` 是否为空，空则表示迭代结束。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class BSTIterator:
+    def __init__(self, root: TreeNode):
+        self.stack = []
+        while root:
+            self.stack.append(root)
+            root = root.left
+
+    def next(self) -> int:
+        cur = self.stack.pop()
+        node = cur.right
+        while node:
+            self.stack.append(node)
+            node = node.left
+        return cur.val
+
+    def hasNext(self) -> bool:
+        return len(self.stack) > 0
+
+
+# Your BSTIterator object will be instantiated and called as such:
+# obj = BSTIterator(root)
+# param_1 = obj.next()
+# param_2 = obj.hasNext()
+```
+
+#### Java
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class BSTIterator {
+    private Deque<TreeNode> stack = new LinkedList<>();
+
+    public BSTIterator(TreeNode root) {
+        for (; root != null; root = root.left) {
+            stack.offerLast(root);
+        }
+    }
+
+    public int next() {
+        TreeNode cur = stack.pollLast();
+        for (TreeNode node = cur.right; node != null; node = node.left) {
+            stack.offerLast(node);
+        }
+        return cur.val;
+    }
+
+    public boolean hasNext() {
+        return !stack.isEmpty();
+    }
+}
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * int param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */
+```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class BSTIterator {
+public:
+    stack<TreeNode*> stack;
+    BSTIterator(TreeNode* root) {
+        for (; root != nullptr; root = root->left) {
+            stack.push(root);
+        }
+    }
+
+    int next() {
+        TreeNode* cur = stack.top();
+        stack.pop();
+        TreeNode* node = cur->right;
+        for (; node != nullptr; node = node->left) {
+            stack.push(node);
+        }
+        return cur->val;
+    }
+
+    bool hasNext() {
+        return !stack.empty();
+    }
+};
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator* obj = new BSTIterator(root);
+ * int param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0458.Poor%20Pigs/README.md
+tags:
+    - 数学
+    - 动态规划
+    - 组合数学
+---
+
+<!-- problem:start -->
+
 # [458. 可怜的小猪](https://leetcode.cn/problems/poor-pigs)
 
 [English Version](/solution/0400-0499/0458.Poor%20Pigs/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有<code> buckets</code> 桶液体，其中 <strong>正好有一桶</strong>&nbsp;含有毒药，其余装的都是水。它们从外观看起来都一样。为了弄清楚哪只水桶含有毒药，你可以喂一些猪喝，通过观察猪是否会死进行判断。不幸的是，你只有&nbsp;<code>minutesToTest</code> 分钟时间来确定哪桶液体是有毒的。</p>
 
@@ -52,19 +64,17 @@
 	<li><code>1 &lt;=&nbsp;minutesToDie &lt;=&nbsp;minutesToTest &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-每只 🐖 可以喝液体的次数是 `minutesToTest / minutesToDie`，那么 🐖 会有 `(minutesToTest / minutesToDie) + 1` 种状态，即喝完第 1 次死亡，喝完第 2 次死亡，...，喝完第 `minutesToTest / minutesToDie` 死亡，喝完第 `minutesToTest / minutesToDie` 次依然存活。
-
-我们设定 `base = (minutesToTest / minutesToDie) + 1`，n 只 🐖 能验证的范围是 `pow(base, n)`，因此求 `pow(base, n) >= buckets` 的最小 n 即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -77,9 +87,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +102,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +116,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func poorPigs(buckets int, minutesToDie int, minutesToTest int) int {
@@ -121,10 +129,8 @@ func poorPigs(buckets int, minutesToDie int, minutesToTest int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

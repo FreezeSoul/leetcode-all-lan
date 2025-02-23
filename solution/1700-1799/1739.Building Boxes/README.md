@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1739.Building%20Boxes/README.md
+rating: 2198
+source: 第 225 场周赛 Q4
+tags:
+    - 贪心
+    - 数学
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [1739. 放置盒子](https://leetcode.cn/problems/building-boxes)
 
 [English Version](/solution/1700-1799/1739.Building%20Boxes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一个立方体房间，其长度、宽度和高度都等于 <code>n</code> 个单位。请你在房间里放置 <code>n</code> 个盒子，每个盒子都是一个单位边长的立方体。放置规则如下：</p>
 
@@ -57,11 +71,13 @@
 	<li><code>1 <= n <= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学规律**
+### 方法一：数学规律
 
 根据题目描述，层数最高的盒子需要放在墙角，并且盒子的摆放呈阶梯状，这样可以使得接触地面的盒子数量最少。
 
@@ -69,13 +85,11 @@
 
 如果此时盒子还有剩余，那么可以从最低一层继续摆放，假设摆放 $i$ 个，那么累计可摆放的盒子个数为 $1+2+\cdots+i$。
 
-时间复杂度 $O(\sqrt{n})$，空间复杂度 $O(1)$。其中 $n$ 为题目给定的盒子数量。
+时间复杂度 $O(\sqrt{n})$，其中 $n$ 为题目给定的盒子数量。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -94,9 +108,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -119,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -143,7 +155,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumBoxes(n int) int {
@@ -164,10 +176,8 @@ func minimumBoxes(n int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

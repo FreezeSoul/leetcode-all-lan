@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2367.Number%20of%20Arithmetic%20Triplets/README_EN.md
+rating: 1203
+source: Weekly Contest 305 Q1
+tags:
+    - Array
+    - Hash Table
+    - Two Pointers
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [2367. Number of Arithmetic Triplets](https://leetcode.com/problems/number-of-arithmetic-triplets)
 
 [中文文档](/solution/2300-2399/2367.Number%20of%20Arithmetic%20Triplets/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a <strong>0-indexed</strong>, <strong>strictly increasing</strong> integer array <code>nums</code> and a positive integer <code>diff</code>. A triplet <code>(i, j, k)</code> is an <strong>arithmetic triplet</strong> if the following conditions are met:</p>
 
@@ -45,11 +62,21 @@
 	<li><code>nums</code> is <strong>strictly</strong> increasing.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Brute Force
+
+We notice that the length of the array $nums$ is no more than $200$. Therefore, we can directly enumerate $i$, $j$, $k$, and check whether they meet the conditions. If they do, we increment the count of the triplet.
+
+The time complexity is $O(n^3)$, where $n$ is the length of the array $nums$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,14 +84,7 @@ class Solution:
         return sum(b - a == diff and c - b == diff for a, b, c in combinations(nums, 3))
 ```
 
-```python
-class Solution:
-    def arithmeticTriplets(self, nums: List[int], diff: int) -> int:
-        vis = set(nums)
-        return sum(x + diff in vis and x + diff * 2 in vis for x in nums)
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,25 +105,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int arithmeticTriplets(int[] nums, int diff) {
-        boolean[] vis = new boolean[301];
-        for (int x : nums) {
-            vis[x] = true;
-        }
-        int ans = 0;
-        for (int x : nums) {
-            if (vis[x + diff] && vis[x + diff + diff]) {
-                ++ans;
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,24 +127,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int arithmeticTriplets(vector<int>& nums, int diff) {
-        bitset<301> vis;
-        for (int x : nums) {
-            vis[x] = 1;
-        }
-        int ans = 0;
-        for (int x : nums) {
-            ans += vis[x + diff] && vis[x + diff + diff];
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func arithmeticTriplets(nums []int, diff int) (ans int) {
@@ -160,22 +145,7 @@ func arithmeticTriplets(nums []int, diff int) (ans int) {
 }
 ```
 
-```go
-func arithmeticTriplets(nums []int, diff int) (ans int) {
-	vis := [301]bool{}
-	for _, x := range nums {
-		vis[x] = true
-	}
-	for _, x := range nums {
-		if vis[x+diff] && vis[x+diff+diff] {
-			ans++
-		}
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function arithmeticTriplets(nums: number[], diff: number): number {
@@ -194,6 +164,89 @@ function arithmeticTriplets(nums: number[], diff: number): number {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Array or Hash Table
+
+We can first store the elements of $nums$ in a hash table or array $vis$. Then, for each element $x$ in $nums$, we check if $x+diff$ and $x+diff+diff$ are also in $vis$. If they are, we increment the count of the triplet.
+
+After the enumeration, we return the answer.
+
+The time complexity is $O(n)$ and the space complexity is $O(n)$, where $n$ is the length of the array $nums$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def arithmeticTriplets(self, nums: List[int], diff: int) -> int:
+        vis = set(nums)
+        return sum(x + diff in vis and x + diff * 2 in vis for x in nums)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int arithmeticTriplets(int[] nums, int diff) {
+        boolean[] vis = new boolean[301];
+        for (int x : nums) {
+            vis[x] = true;
+        }
+        int ans = 0;
+        for (int x : nums) {
+            if (vis[x + diff] && vis[x + diff + diff]) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int arithmeticTriplets(vector<int>& nums, int diff) {
+        bitset<301> vis;
+        for (int x : nums) {
+            vis[x] = 1;
+        }
+        int ans = 0;
+        for (int x : nums) {
+            ans += vis[x + diff] && vis[x + diff + diff];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func arithmeticTriplets(nums []int, diff int) (ans int) {
+	vis := [301]bool{}
+	for _, x := range nums {
+		vis[x] = true
+	}
+	for _, x := range nums {
+		if vis[x+diff] && vis[x+diff+diff] {
+			ans++
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
 ```ts
 function arithmeticTriplets(nums: number[], diff: number): number {
     const vis: boolean[] = new Array(301).fill(false);
@@ -210,10 +263,8 @@ function arithmeticTriplets(nums: number[], diff: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

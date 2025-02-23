@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1186.Maximum%20Subarray%20Sum%20with%20One%20Deletion/README.md
+rating: 1799
+source: 第 153 场周赛 Q3
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1186. 删除一次得到子数组最大和](https://leetcode.cn/problems/maximum-subarray-sum-with-one-deletion)
 
 [English Version](/solution/1100-1199/1186.Maximum%20Subarray%20Sum%20with%20One%20Deletion/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组，返回它的某个&nbsp;<strong>非空</strong> 子数组（连续元素）在执行一次可选的删除操作后，所能得到的最大元素总和。换句话说，你可以从原数组中选出一个子数组，并可以决定要不要从中删除一个元素（只能删一次哦），（删除后）子数组中至少应当有一个元素，然后该子数组（剩下）的元素总和是所有子数组之中最大的。</p>
 
@@ -46,23 +59,23 @@
 	<li><code>-10<sup>4</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：预处理 + 枚举**
+### 方法一：预处理 + 枚举
 
-我们可以先预处理出数组 $arr$ 以每个元素结尾和开头的最大子数组和，分别存入数组 $left$ 和 $right$ 中。
+我们可以先预处理出数组 $\textit{arr}$ 以每个元素结尾和开头的最大子数组和，分别存入数组 $\textit{left}$ 和 $\textit{right}$ 中。
 
-如果我们不删除任何元素，那么最大子数组和就是 $left[i]$ 或 $right[i]$ 中的最大值；如果我们删除一个元素，我们可以枚举 $[1..n-2]$ 中的每个位置 $i$，计算 $left[i-1] + right[i+1]$ 的值，取最大值即可。
+如果我们不删除任何元素，那么最大子数组和就是 $\textit{left}[i]$ 或 $\textit{right}[i]$ 中的最大值；如果我们删除一个元素，我们可以枚举 $[1..n-2]$ 中的每个位置 $i$，计算 $\textit{left}[i-1] + \textit{right}[i+1]$ 的值，取最大值即可。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $arr$ 的长度。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{arr}$ 的长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -84,9 +97,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -138,44 +149,36 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumSum(arr []int) int {
 	n := len(arr)
 	left := make([]int, n)
 	right := make([]int, n)
-	ans := -(1 << 30)
 	for i, s := 0, 0; i < n; i++ {
 		s = max(s, 0) + arr[i]
 		left[i] = s
-		ans = max(ans, s)
 	}
 	for i, s := n-1, 0; i >= 0; i-- {
 		s = max(s, 0) + arr[i]
 		right[i] = s
 	}
+	ans := slices.Max(left)
 	for i := 1; i < n-1; i++ {
 		ans = max(ans, left[i-1]+right[i+1])
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumSum(arr: number[]): number {
     const n = arr.length;
-    const left: number[] = new Array(n);
-    const right: number[] = new Array(n);
+    const left: number[] = Array(n).fill(0);
+    const right: number[] = Array(n).fill(0);
     for (let i = 0, s = 0; i < n; ++i) {
         s = Math.max(s, 0) + arr[i];
         left[i] = s;
@@ -192,10 +195,35 @@ function maximumSum(arr: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn maximum_sum(arr: Vec<i32>) -> i32 {
+        let n = arr.len();
+        let mut left = vec![0; n];
+        let mut right = vec![0; n];
+        let mut s = 0;
+        for i in 0..n {
+            s = (s.max(0)) + arr[i];
+            left[i] = s;
+        }
+        s = 0;
+        for i in (0..n).rev() {
+            s = (s.max(0)) + arr[i];
+            right[i] = s;
+        }
+        let mut ans = *left.iter().max().unwrap();
+        for i in 1..n - 1 {
+            ans = ans.max(left[i - 1] + right[i + 1]);
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

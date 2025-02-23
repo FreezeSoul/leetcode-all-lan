@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2250.Count%20Number%20of%20Rectangles%20Containing%20Each%20Point/README_EN.md
+rating: 1997
+source: Weekly Contest 290 Q3
+tags:
+    - Binary Indexed Tree
+    - Array
+    - Binary Search
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [2250. Count Number of Rectangles Containing Each Point](https://leetcode.com/problems/count-number-of-rectangles-containing-each-point)
 
 [中文文档](/solution/2200-2299/2250.Count%20Number%20of%20Rectangles%20Containing%20Each%20Point/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a 2D integer array <code>rectangles</code> where <code>rectangles[i] = [l<sub>i</sub>, h<sub>i</sub>]</code> indicates that <code>i<sup>th</sup></code> rectangle has a length of <code>l<sub>i</sub></code> and a height of <code>h<sub>i</sub></code>. You are also given a 2D integer array <code>points</code> where <code>points[j] = [x<sub>j</sub>, y<sub>j</sub>]</code> is a point with coordinates <code>(x<sub>j</sub>, y<sub>j</sub>)</code>.</p>
 
@@ -53,11 +70,17 @@ Therefore, we return [1, 3].
 	<li>All the <code>points</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -79,7 +102,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -118,42 +141,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function countRectangles(rectangles: number[][], points: number[][]): number[] {
-    const n = 101;
-    let ymap = Array.from({ length: n }, v => []);
-    for (let [x, y] of rectangles) {
-        ymap[y].push(x);
-    }
-    for (let nums of ymap) {
-        nums.sort((a, b) => a - b);
-    }
-    let ans = [];
-    for (let [x, y] of points) {
-        let count = 0;
-        for (let h = y; h < n; h++) {
-            const nums = ymap[h];
-            let left = 0,
-                right = nums.length;
-            while (left < right) {
-                let mid = (left + right) >> 1;
-                if (x > nums[mid]) {
-                    left = mid + 1;
-                } else {
-                    right = mid;
-                }
-            }
-            count += nums.length - right;
-        }
-        ans.push(count);
-    }
-    return ans;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -178,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countRectangles(rectangles [][]int, points [][]int) []int {
@@ -213,10 +201,43 @@ func countRectangles(rectangles [][]int, points [][]int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function countRectangles(rectangles: number[][], points: number[][]): number[] {
+    const n = 101;
+    let ymap = Array.from({ length: n }, v => []);
+    for (let [x, y] of rectangles) {
+        ymap[y].push(x);
+    }
+    for (let nums of ymap) {
+        nums.sort((a, b) => a - b);
+    }
+    let ans = [];
+    for (let [x, y] of points) {
+        let count = 0;
+        for (let h = y; h < n; h++) {
+            const nums = ymap[h];
+            let left = 0,
+                right = nums.length;
+            while (left < right) {
+                let mid = (left + right) >> 1;
+                if (x > nums[mid]) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            count += nums.length - right;
+        }
+        ans.push(count);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

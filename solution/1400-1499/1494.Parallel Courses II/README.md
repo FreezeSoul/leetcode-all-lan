@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1494.Parallel%20Courses%20II/README.md
+rating: 2081
+source: 第 29 场双周赛 Q4
+tags:
+    - 位运算
+    - 图
+    - 动态规划
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
 # [1494. 并行课程 II](https://leetcode.cn/problems/parallel-courses-ii)
 
 [English Version](/solution/1400-1499/1494.Parallel%20Courses%20II/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数&nbsp;<code>n</code>&nbsp;表示某所大学里课程的数目，编号为&nbsp;<code>1</code>&nbsp;到&nbsp;<code>n</code>&nbsp;，数组&nbsp;<code>relations</code>&nbsp;中，&nbsp;<code>relations[i] = [x<sub>i</sub>, y<sub>i</sub>]</code>&nbsp; 表示一个先修课的关系，也就是课程&nbsp;<code>x<sub>i</sub></code>&nbsp;必须在课程&nbsp;<code>y<sub>i</sub></code><sub>&nbsp;</sub>之前上。同时你还有一个整数&nbsp;<code>k</code>&nbsp;。</p>
 
@@ -56,13 +71,15 @@
 	<li>题目输入的图是个有向无环图。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：状态压缩 + BFS + 枚举子集**
+### 方法一：状态压缩 + BFS + 子集枚举
 
-我们用数组 $d[i]$ 表示课程 $i$ 的先修课程的集合。由于数据规模 $n\lt 15$，我们可以用一个整数的二进制位来表示集合，其中第 $j$ 位为 $1$ 表示课程 $j$ 是课程 $i$ 的先修课程。
+我们用数组 $d[i]$ 表示课程 $i$ 的先修课程的集合。由于数据规模 $n\lt 15$，我们可以用一个整数的二进制位（状态压缩）来表示集合，其中第 $j$ 位为 $1$ 表示课程 $j$ 是课程 $i$ 的先修课程。
 
 我们用一个状态变量 $cur$ 表示当前已经上过的课程的集合，初始时 $cur=0$。如果 $cur=2^{n+1}-2$，表示所有课程都上过了，返回当前学期即可。
 
@@ -70,13 +87,11 @@
 
 如果 $nxt$ 的二进制表示中 $1$ 的个数小于等于 $k$，说明后续学期可以上的课程数不超过 $k$，我们就可以将 $nxt$ 加入队列中。否则，说明后续学期可以上的课程数超过 $k$，那么我们就应该从后续可以上的课程中选择 $k$ 门课程，这样才能保证后续学期可以上的课程数不超过 $k$。我们可以枚举 $nxt$ 的所有子集，将子集加入队列中。
 
-时间复杂度 $O(2^n\times n)$，空间复杂度 $O(2^n\times)$。
+时间复杂度 $O(3^n)$，空间复杂度 $O(2^n)$。其中 $n$ 是题目给定的课程数。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -108,9 +123,7 @@ class Solution:
                     nxt = (nxt - 1) & x
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -155,11 +168,9 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
-using pii = pair<int, int>;
-
 class Solution {
 public:
     int minNumberOfSemesters(int n, vector<vector<int>>& relations, int k) {
@@ -167,7 +178,7 @@ public:
         for (auto& e : relations) {
             d[e[1]] |= 1 << e[0];
         }
-        queue<pii> q;
+        queue<pair<int, int>> q;
         q.push({0, 0});
         unordered_set<int> vis{{0}};
         while (!q.empty()) {
@@ -204,7 +215,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minNumberOfSemesters(n int, relations [][]int, k int) int {
@@ -249,10 +260,8 @@ func minNumberOfSemesters(n int, relations [][]int, k int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

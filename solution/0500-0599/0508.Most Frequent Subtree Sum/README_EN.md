@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0508.Most%20Frequent%20Subtree%20Sum/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Hash Table
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [508. Most Frequent Subtree Sum](https://leetcode.com/problems/most-frequent-subtree-sum)
 
 [中文文档](/solution/0500-0599/0508.Most%20Frequent%20Subtree%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree, return the most frequent <strong>subtree sum</strong>. If there is a tie, return all the values with the highest frequency in any order.</p>
 
@@ -31,11 +46,23 @@
 	<li><code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + DFS
+
+We can use a hash table $\textit{cnt}$ to record the frequency of each subtree sum. Then, we use depth-first search (DFS) to traverse the entire tree, calculate the sum of elements for each subtree, and update $\textit{cnt}$.
+
+Finally, we traverse $\textit{cnt}$ to find all subtree sums that appear most frequently.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -45,22 +72,22 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def findFrequentTreeSum(self, root: TreeNode) -> List[int]:
-        def dfs(root):
+    def findFrequentTreeSum(self, root: Optional[TreeNode]) -> List[int]:
+        def dfs(root: Optional[TreeNode]) -> int:
             if root is None:
                 return 0
-            left, right = dfs(root.left), dfs(root.right)
-            s = root.val + left + right
-            counter[s] += 1
+            l, r = dfs(root.left), dfs(root.right)
+            s = l + r + root.val
+            cnt[s] += 1
             return s
 
-        counter = Counter()
+        cnt = Counter()
         dfs(root)
-        mx = max(counter.values())
-        return [k for k, v in counter.items() if v == mx]
+        mx = max(cnt.values())
+        return [k for k, v in cnt.items() if v == mx]
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -79,24 +106,18 @@ class Solution:
  * }
  */
 class Solution {
-    private Map<Integer, Integer> counter;
+    private Map<Integer, Integer> cnt = new HashMap<>();
     private int mx;
 
     public int[] findFrequentTreeSum(TreeNode root) {
-        counter = new HashMap<>();
-        mx = Integer.MIN_VALUE;
         dfs(root);
-        List<Integer> res = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : counter.entrySet()) {
-            if (entry.getValue() == mx) {
-                res.add(entry.getKey());
+        List<Integer> ans = new ArrayList<>();
+        for (var e : cnt.entrySet()) {
+            if (e.getValue() == mx) {
+                ans.add(e.getKey());
             }
         }
-        int[] ans = new int[res.size()];
-        for (int i = 0; i < res.size(); ++i) {
-            ans[i] = res.get(i);
-        }
-        return ans;
+        return ans.stream().mapToInt(i -> i).toArray();
     }
 
     private int dfs(TreeNode root) {
@@ -104,14 +125,13 @@ class Solution {
             return 0;
         }
         int s = root.val + dfs(root.left) + dfs(root.right);
-        counter.put(s, counter.getOrDefault(s, 0) + 1);
-        mx = Math.max(mx, counter.get(s));
+        mx = Math.max(mx, cnt.merge(s, 1, Integer::sum));
         return s;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -127,30 +147,30 @@ class Solution {
  */
 class Solution {
 public:
-    unordered_map<int, int> counter;
-    int mx = 0;
-
     vector<int> findFrequentTreeSum(TreeNode* root) {
-        mx = INT_MIN;
+        unordered_map<int, int> cnt;
+        int mx = 0;
+        function<int(TreeNode*)> dfs = [&](TreeNode* root) -> int {
+            if (!root) {
+                return 0;
+            }
+            int s = root->val + dfs(root->left) + dfs(root->right);
+            mx = max(mx, ++cnt[s]);
+            return s;
+        };
         dfs(root);
         vector<int> ans;
-        for (auto& entry : counter)
-            if (entry.second == mx)
-                ans.push_back(entry.first);
+        for (const auto& [k, v] : cnt) {
+            if (v == mx) {
+                ans.push_back(k);
+            }
+        }
         return ans;
-    }
-
-    int dfs(TreeNode* root) {
-        if (!root) return 0;
-        int s = root->val + dfs(root->left) + dfs(root->right);
-        ++counter[s];
-        mx = max(mx, counter[s]);
-        return s;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -161,33 +181,30 @@ public:
  *     Right *TreeNode
  * }
  */
-func findFrequentTreeSum(root *TreeNode) []int {
-	counter := make(map[int]int)
-	mx := 0
-	var dfs func(root *TreeNode) int
+func findFrequentTreeSum(root *TreeNode) (ans []int) {
+	cnt := map[int]int{}
+	var mx int
+	var dfs func(*TreeNode) int
 	dfs = func(root *TreeNode) int {
 		if root == nil {
 			return 0
 		}
 		s := root.Val + dfs(root.Left) + dfs(root.Right)
-		counter[s]++
-		if mx < counter[s] {
-			mx = counter[s]
-		}
+		cnt[s]++
+		mx = max(mx, cnt[s])
 		return s
 	}
 	dfs(root)
-	var ans []int
-	for k, v := range counter {
+	for k, v := range cnt {
 		if v == mx {
 			ans = append(ans, k)
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -205,30 +222,26 @@ func findFrequentTreeSum(root *TreeNode) []int {
  */
 
 function findFrequentTreeSum(root: TreeNode | null): number[] {
-    const map = new Map<number, number>();
-    let max = 0;
-    const dfs = (root: TreeNode | null) => {
-        if (root == null) {
+    const cnt = new Map<number, number>();
+    let mx = 0;
+    const dfs = (root: TreeNode | null): number => {
+        if (!root) {
             return 0;
         }
         const { val, left, right } = root;
-        const sum = val + dfs(left) + dfs(right);
-        map.set(sum, (map.get(sum) ?? 0) + 1);
-        max = Math.max(max, map.get(sum));
-        return sum;
+        const s = val + dfs(left) + dfs(right);
+        cnt.set(s, (cnt.get(s) ?? 0) + 1);
+        mx = Math.max(mx, cnt.get(s)!);
+        return s;
     };
     dfs(root);
-    const res = [];
-    for (const [k, v] of map) {
-        if (v === max) {
-            res.push(k);
-        }
-    }
-    return res;
+    return Array.from(cnt.entries())
+        .filter(([_, c]) => c === mx)
+        .map(([s, _]) => s);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -249,44 +262,38 @@ function findFrequentTreeSum(root: TreeNode | null): number[] {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::HashMap;
-impl Solution {
-    fn dfs(
-        root: &Option<Rc<RefCell<TreeNode>>>,
-        map: &mut HashMap<i32, i32>,
-        max: &mut i32,
-    ) -> i32 {
-        if root.is_none() {
-            return 0;
-        }
-        let node = root.as_ref().unwrap().borrow();
-        let sum = node.val + Self::dfs(&node.left, map, max) + Self::dfs(&node.right, map, max);
-        map.insert(sum, map.get(&sum).unwrap_or(&0) + 1);
-        *max = (*max).max(map[&sum]);
-        sum
-    }
+use std::rc::Rc;
 
+impl Solution {
     pub fn find_frequent_tree_sum(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
-        let mut map = HashMap::new();
-        let mut max = 0;
-        let mut res = Vec::new();
-        Self::dfs(&root, &mut map, &mut max);
-        for (k, v) in map.into_iter() {
-            if v == max {
-                res.push(k);
+        fn dfs(root: Option<Rc<RefCell<TreeNode>>>, cnt: &mut HashMap<i32, i32>) -> i32 {
+            if let Some(node) = root {
+                let l = dfs(node.borrow().left.clone(), cnt);
+                let r = dfs(node.borrow().right.clone(), cnt);
+                let s = l + r + node.borrow().val;
+                *cnt.entry(s).or_insert(0) += 1;
+                s
+            } else {
+                0
             }
         }
-        res
+
+        let mut cnt = HashMap::new();
+        dfs(root, &mut cnt);
+
+        let mx = cnt.values().cloned().max().unwrap_or(0);
+        cnt.into_iter()
+            .filter(|&(_, v)| v == mx)
+            .map(|(k, _)| k)
+            .collect()
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

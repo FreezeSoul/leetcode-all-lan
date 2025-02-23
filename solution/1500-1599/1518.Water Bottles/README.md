@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1518.Water%20Bottles/README.md
+rating: 1245
+source: 第 198 场周赛 Q1
+tags:
+    - 数学
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [1518. 换水问题](https://leetcode.cn/problems/water-bottles)
 
 [English Version](/solution/1500-1599/1518.Water%20Bottles/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>超市正在促销，你可以用 <code>numExchange</code> 个空水瓶从超市兑换一瓶水。最开始，你一共购入了 <code>numBottles</code> 瓶水。</p>
 
@@ -47,11 +60,13 @@
 	<li><code>2 &lt;= numExchange &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们可以直接模拟整个过程。
 
@@ -65,67 +80,89 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def numWaterBottles(self, numBottles: int, numExchange: int) -> int:
         ans = numBottles
         while numBottles >= numExchange:
-            numBottles -= (numExchange - 1)
+            numBottles -= numExchange - 1
             ans += 1
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int numWaterBottles(int numBottles, int numExchange) {
         int ans = numBottles;
-        while (numBottles >= numExchange) {
+        for (; numBottles >= numExchange; ++ans) {
             numBottles -= (numExchange - 1);
-            ++ans;
         }
         return ans;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int numWaterBottles(int numBottles, int numExchange) {
         int ans = numBottles;
-        while (numBottles >= numExchange) {
+        for (; numBottles >= numExchange; ++ans) {
             numBottles -= (numExchange - 1);
-            ++ans;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numWaterBottles(numBottles int, numExchange int) int {
 	ans := numBottles
-	for numBottles >= numExchange {
+	for ; numBottles >= numExchange; ans++ {
 		numBottles -= (numExchange - 1)
-		ans++
 	}
 	return ans
 }
 ```
 
-### **PHP**
+#### TypeScript
+
+```ts
+function numWaterBottles(numBottles: number, numExchange: number): number {
+    let ans = numBottles;
+    for (; numBottles >= numExchange; ++ans) {
+        numBottles -= numExchange - 1;
+    }
+    return ans;
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number} numBottles
+ * @param {number} numExchange
+ * @return {number}
+ */
+var numWaterBottles = function (numBottles, numExchange) {
+    let ans = numBottles;
+    for (; numBottles >= numExchange; ++ans) {
+        numBottles -= numExchange - 1;
+    }
+    return ans;
+};
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -135,38 +172,18 @@ class Solution {
      * @return Integer
      */
     function numWaterBottles($numBottles, $numExchange) {
-        $sum = $numBottles;
+        $ans = $numBottles;
         while ($numBottles >= $numExchange) {
             $numBottles = $numBottles - $numExchange + 1;
-            $sum++;
+            $ans++;
         }
-        return $sum;
+        return $ans;
     }
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number} numBottles
- * @param {number} numExchange
- * @return {number}
- */
-var numWaterBottles = function (numBottles, numExchange) {
-    let sum = numBottles;
-    while (numBottles >= numExchange) {
-        numBottles = numBottles - numExchange + 1;
-        sum++;
-    }
-    return sum;
-};
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

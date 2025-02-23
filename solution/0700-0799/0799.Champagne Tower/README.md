@@ -1,12 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0799.Champagne%20Tower/README.md
+tags:
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [799. 香槟塔](https://leetcode.cn/problems/champagne-tower)
 
 [English Version](/solution/0700-0799/0799.Champagne%20Tower/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>我们把玻璃杯摆成金字塔的形状，其中&nbsp;<strong>第一层</strong>&nbsp;有 <code>1</code> 个玻璃杯， <strong>第二层</strong>&nbsp;有 <code>2</code> 个，依次类推到第 100 层，每个玻璃杯 (250ml) 将盛有香槟。</p>
+<p>我们把玻璃杯摆成金字塔的形状，其中&nbsp;<strong>第一层</strong>&nbsp;有 <code>1</code> 个玻璃杯， <strong>第二层</strong>&nbsp;有 <code>2</code> 个，依次类推到第 100 层，每个玻璃杯将盛有香槟。</p>
 
 <p>从顶层的第一个玻璃杯开始倾倒一些香槟，当顶层的杯子满了，任何溢出的香槟都会立刻等流量的流向左右两侧的玻璃杯。当左右两边的杯子也满了，就会等流量的流向它们左右两边的杯子，依次类推。（当最底层的玻璃杯满了，香槟会流到地板上）</p>
 
@@ -48,11 +58,13 @@
 	<li><code>0 &lt;= query_glass &lt;= query_row&nbsp;&lt; 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 我们直接模拟倒香槟的过程。
 
@@ -68,9 +80,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -87,24 +97,7 @@ class Solution:
         return f[query_row][query_glass]
 ```
 
-```python
-class Solution:
-    def champagneTower(self, poured: int, query_row: int, query_glass: int) -> float:
-        f = [poured]
-        for i in range(1, query_row + 1):
-            g = [0] * (i + 1)
-            for j, v in enumerate(f):
-                if v > 1:
-                    half = (v - 1) / 2
-                    g[j] += half
-                    g[j + 1] += half
-            f = g
-        return min(1, f[query_glass])
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -126,27 +119,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public double champagneTower(int poured, int query_row, int query_glass) {
-        double[] f = {poured};
-        for (int i = 1; i <= query_row; ++i) {
-            double[] g = new double[i + 1];
-            for (int j = 0; j < i; ++j) {
-                if (f[j] > 1) {
-                    double half = (f[j] - 1) / 2.0;
-                    g[j] += half;
-                    g[j + 1] += half;
-                }
-            }
-            f = g;
-        }
-        return Math.min(1, f[query_glass]);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -168,6 +141,119 @@ public:
     }
 };
 ```
+
+#### Go
+
+```go
+func champagneTower(poured int, query_row int, query_glass int) float64 {
+	f := [101][101]float64{}
+	f[0][0] = float64(poured)
+	for i := 0; i <= query_row; i++ {
+		for j := 0; j <= i; j++ {
+			if f[i][j] > 1 {
+				half := (f[i][j] - 1) / 2.0
+				f[i][j] = 1
+				f[i+1][j] += half
+				f[i+1][j+1] += half
+			}
+		}
+	}
+	return f[query_row][query_glass]
+}
+```
+
+#### TypeScript
+
+```ts
+function champagneTower(poured: number, query_row: number, query_glass: number): number {
+    let row = [poured];
+    for (let i = 1; i <= query_row; i++) {
+        const nextRow = new Array(i + 1).fill(0);
+        for (let j = 0; j < i; j++) {
+            if (row[j] > 1) {
+                nextRow[j] += (row[j] - 1) / 2;
+                nextRow[j + 1] += (row[j] - 1) / 2;
+            }
+        }
+        row = nextRow;
+    }
+    return Math.min(1, row[query_glass]);
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn champagne_tower(poured: i32, query_row: i32, query_glass: i32) -> f64 {
+        let query_row = query_row as usize;
+        let query_glass = query_glass as usize;
+        let mut row = vec![poured as f64];
+        for i in 1..=query_row {
+            let mut next_row = vec![0f64; i + 1];
+            for j in 0..i {
+                if row[j] > 1f64 {
+                    next_row[j] += (row[j] - 1f64) / 2f64;
+                    next_row[j + 1] += (row[j] - 1f64) / 2f64;
+                }
+            }
+            row = next_row;
+        }
+        (1f64).min(row[query_glass])
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def champagneTower(self, poured: int, query_row: int, query_glass: int) -> float:
+        f = [poured]
+        for i in range(1, query_row + 1):
+            g = [0] * (i + 1)
+            for j, v in enumerate(f):
+                if v > 1:
+                    half = (v - 1) / 2
+                    g[j] += half
+                    g[j + 1] += half
+            f = g
+        return min(1, f[query_glass])
+```
+
+#### Java
+
+```java
+class Solution {
+    public double champagneTower(int poured, int query_row, int query_glass) {
+        double[] f = {poured};
+        for (int i = 1; i <= query_row; ++i) {
+            double[] g = new double[i + 1];
+            for (int j = 0; j < i; ++j) {
+                if (f[j] > 1) {
+                    double half = (f[j] - 1) / 2.0;
+                    g[j] += half;
+                    g[j + 1] += half;
+                }
+            }
+            f = g;
+        }
+        return Math.min(1, f[query_glass]);
+    }
+}
+```
+
+#### C++
 
 ```cpp
 class Solution {
@@ -191,25 +277,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func champagneTower(poured int, query_row int, query_glass int) float64 {
-	f := [101][101]float64{}
-	f[0][0] = float64(poured)
-	for i := 0; i <= query_row; i++ {
-		for j := 0; j <= i; j++ {
-			if f[i][j] > 1 {
-				half := (f[i][j] - 1) / 2.0
-				f[i][j] = 1
-				f[i+1][j] += half
-				f[i+1][j+1] += half
-			}
-		}
-	}
-	return f[query_row][query_glass]
-}
-```
+#### Go
 
 ```go
 func champagneTower(poured int, query_row int, query_glass int) float64 {
@@ -229,56 +297,8 @@ func champagneTower(poured int, query_row int, query_glass int) float64 {
 }
 ```
 
-### **TypeScipt**
-
-```ts
-function champagneTower(
-    poured: number,
-    query_row: number,
-    query_glass: number,
-): number {
-    let row = [poured];
-    for (let i = 1; i <= query_row; i++) {
-        const nextRow = new Array(i + 1).fill(0);
-        for (let j = 0; j < i; j++) {
-            if (row[j] > 1) {
-                nextRow[j] += (row[j] - 1) / 2;
-                nextRow[j + 1] += (row[j] - 1) / 2;
-            }
-        }
-        row = nextRow;
-    }
-    return Math.min(1, row[query_glass]);
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn champagne_tower(poured: i32, query_row: i32, query_glass: i32) -> f64 {
-        let query_row = query_row as usize;
-        let query_glass = query_glass as usize;
-        let mut row = vec![poured as f64];
-        for i in 1..=query_row {
-            let mut next_row = vec![0f64; i + 1];
-            for j in 0..i {
-                if row[j] > 1f64 {
-                    next_row[j] += (row[j] - 1f64) / 2f64;
-                    next_row[j + 1] += (row[j] - 1f64) / 2f64;
-                }
-            }
-            row = next_row;
-        }
-        1f64.min(row[query_glass])
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

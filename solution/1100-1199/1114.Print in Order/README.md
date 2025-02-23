@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1114.Print%20in%20Order/README.md
+tags:
+    - 多线程
+---
+
+<!-- problem:start -->
+
 # [1114. 按序打印](https://leetcode.cn/problems/print-in-order)
 
 [English Version](/solution/1100-1199/1114.Print%20in%20Order/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个类：</p>
 
@@ -61,11 +71,13 @@ public class Foo {
 	<li><code>nums</code> 是 <code>[1, 2, 3]</code> 的一组排列</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：多线程 + 锁或信号量**
+### 方法一：多线程 + 锁或信号量
 
 我们可以用三个信号量 $a$, $b$, $c$ 来控制三个线程的执行顺序，初始时 $a$ 信号量的计数为 $1$，$b$ 和 $c$ 的计数为 $0$。
 
@@ -79,9 +91,7 @@ public class Foo {
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Foo:
@@ -105,37 +115,7 @@ class Foo:
         printThird()
 ```
 
-```python
-from threading import Semaphore
-
-class Foo:
-    def __init__(self):
-        self.a = Semaphore(1)
-        self.b = Semaphore(0)
-        self.c = Semaphore(0)
-
-    def first(self, printFirst: 'Callable[[], None]') -> None:
-        self.a.acquire()
-        # printFirst() outputs "first". Do not change or remove this line.
-        printFirst()
-        self.b.release()
-
-    def second(self, printSecond: 'Callable[[], None]') -> None:
-        self.b.acquire()
-        # printSecond() outputs "second". Do not change or remove this line.
-        printSecond()
-        self.c.release()
-
-    def third(self, printThird: 'Callable[[], None]') -> None:
-        self.c.acquire()
-        # printThird() outputs "third". Do not change or remove this line.
-        printThird()
-        self.a.release()
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Foo {
@@ -169,7 +149,7 @@ class Foo {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Foo {
@@ -200,6 +180,49 @@ public:
 };
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+from threading import Semaphore
+
+
+class Foo:
+    def __init__(self):
+        self.a = Semaphore(1)
+        self.b = Semaphore(0)
+        self.c = Semaphore(0)
+
+    def first(self, printFirst: 'Callable[[], None]') -> None:
+        self.a.acquire()
+        # printFirst() outputs "first". Do not change or remove this line.
+        printFirst()
+        self.b.release()
+
+    def second(self, printSecond: 'Callable[[], None]') -> None:
+        self.b.acquire()
+        # printSecond() outputs "second". Do not change or remove this line.
+        printSecond()
+        self.c.release()
+
+    def third(self, printThird: 'Callable[[], None]') -> None:
+        self.c.acquire()
+        # printThird() outputs "third". Do not change or remove this line.
+        printThird()
+        self.a.release()
+```
+
+#### C++
+
 ```cpp
 #include <semaphore.h>
 
@@ -215,21 +238,21 @@ public:
     }
 
     void first(function<void()> printFirst) {
-         sem_wait(&a);
+        sem_wait(&a);
         // printFirst() outputs "first". Do not change or remove this line.
         printFirst();
         sem_post(&b);
     }
 
     void second(function<void()> printSecond) {
-         sem_wait(&b);
+        sem_wait(&b);
         // printSecond() outputs "second". Do not change or remove this line.
         printSecond();
         sem_post(&c);
     }
 
     void third(function<void()> printThird) {
-         sem_wait(&c);
+        sem_wait(&c);
         // printThird() outputs "third". Do not change or remove this line.
         printThird();
         sem_post(&a);
@@ -237,10 +260,8 @@ public:
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

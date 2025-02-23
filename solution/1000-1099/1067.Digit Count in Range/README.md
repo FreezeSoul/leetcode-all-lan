@@ -1,10 +1,23 @@
-# [1067. 范围内的数字计数](https://leetcode.cn/problems/digit-count-in-range)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1067.Digit%20Count%20in%20Range/README.md
+rating: 2025
+source: 第 1 场双周赛 Q4
+tags:
+    - 数学
+    - 动态规划
+---
+
+<!-- problem:start -->
+
+# [1067. 范围内的数字计数 🔒](https://leetcode.cn/problems/digit-count-in-range)
 
 [English Version](/solution/1000-1099/1067.Digit%20Count%20in%20Range/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个在 <code>0</code>&nbsp;到&nbsp;<code>9</code> 之间的整数&nbsp;<code>d</code>，和两个正整数&nbsp;<code>low</code>&nbsp;和&nbsp;<code>high</code>&nbsp;分别作为上下界。返回&nbsp;<code>d</code> 在&nbsp;<code>low</code>&nbsp;和&nbsp;<code>high</code>&nbsp;之间的整数中出现的次数，包括边界&nbsp;<code>low</code> 和&nbsp;<code>high</code>。</p>
 
@@ -35,11 +48,13 @@
 	<li><code>1 &lt;= low &lt;= high &lt;= 2&times;10^8</code></li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数位 DP**
+### 方法一：数位 DP
 
 这道题实际上是求在给定区间 $[l,..r]$ 中，数字中出现 $d$ 的个数。个数与数的位数以及每一位上的数字有关。我们可以用数位 DP 的思路来解决这道题。数位 DP 中，数的大小对复杂度的影响很小。
 
@@ -67,13 +82,13 @@ $$
 
 时间复杂度 $O(\log m + \log n)$。其中 $m$, $n$ 分别为题目中的 `low` 和 `high`。
 
-相似题目：[233. 数字 1 的个数](/solution/0200-0299/0233.Number%20of%20Digit%20One/README.md)
+相似题目：
+
+-   [233. 数字 1 的个数](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0233.Number%20of%20Digit%20One/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,8 +106,7 @@ class Solution:
                 if i == 0 and lead:
                     ans += dfs(pos - 1, cnt, lead, limit and i == up)
                 else:
-                    ans += dfs(pos - 1, cnt + (i == d),
-                               False, limit and i == up)
+                    ans += dfs(pos - 1, cnt + (i == d), False, limit and i == up)
             return ans
 
         a = [0] * 11
@@ -104,9 +118,7 @@ class Solution:
         return dfs(l, 0, True, True)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -155,7 +167,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -203,7 +215,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func digitsCount(d int, low int, high int) int {
@@ -259,10 +271,8 @@ func digitsCount(d int, low int, high int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

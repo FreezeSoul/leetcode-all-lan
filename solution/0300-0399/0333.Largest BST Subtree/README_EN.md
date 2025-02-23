@@ -1,8 +1,24 @@
-# [333. Largest BST Subtree](https://leetcode.com/problems/largest-bst-subtree)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0333.Largest%20BST%20Subtree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Search Tree
+    - Dynamic Programming
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
+# [333. Largest BST Subtree 🔒](https://leetcode.com/problems/largest-bst-subtree)
 
 [中文文档](/solution/0300-0399/0333.Largest%20BST%20Subtree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the root of a binary tree, find the largest <span data-keyword="subtree">subtree</span>, which is also a Binary Search Tree (BST), where the largest means subtree has the largest number of nodes.</p>
 
@@ -43,11 +59,17 @@
 <p>&nbsp;</p>
 <p><strong>Follow up:</strong> Can you figure out ways to solve it with <code>O(n)</code> time complexity?</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -74,7 +96,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -117,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -154,7 +176,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -183,26 +205,10 @@ func largestBSTSubtree(root *TreeNode) int {
 	dfs(root)
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

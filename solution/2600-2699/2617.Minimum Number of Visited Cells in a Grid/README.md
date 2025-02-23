@@ -1,10 +1,29 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2617.Minimum%20Number%20of%20Visited%20Cells%20in%20a%20Grid/README.md
+rating: 2581
+source: 第 340 场周赛 Q4
+tags:
+    - 栈
+    - 广度优先搜索
+    - 并查集
+    - 数组
+    - 动态规划
+    - 矩阵
+    - 单调栈
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2617. 网格图中最少访问的格子数](https://leetcode.cn/problems/minimum-number-of-visited-cells-in-a-grid)
 
 [English Version](/solution/2600-2699/2617.Minimum%20Number%20of%20Visited%20Cells%20in%20a%20Grid/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的&nbsp;<code>m x n</code>&nbsp;整数矩阵&nbsp;<code>grid</code>&nbsp;。你一开始的位置在&nbsp;<strong>左上角</strong>&nbsp;格子&nbsp;<code>(0, 0)</code>&nbsp;。</p>
 
@@ -59,11 +78,13 @@
 	<li><code>grid[m - 1][n - 1] == 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列**
+### 方法一：优先队列
 
 我们记网格的行数为 $m$，列数为 $n$，定义 $dist[i][j]$ 表示从坐标 $(0, 0)$ 移动到坐标 $(i, j)$ 的最短距离，初始时 $dist[0][0] = 1$，其它 $dist[i][j]=-1$。
 
@@ -79,9 +100,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -107,9 +126,7 @@ class Solution:
         return dist[-1][-1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -151,7 +168,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -188,7 +205,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumVisitedCells(grid [][]int) int {
@@ -238,14 +255,12 @@ func (a hp) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a hp) Less(i, j int) bool {
 	return a[i].first < a[j].first || (a[i].first == a[j].first && a[i].second < a[j].second)
 }
-func (a *hp) Push(x interface{}) { *a = append(*a, x.(pair)) }
-func (a *hp) Pop() interface{}   { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
-```
-
-### **...**
-
-```
-
+func (a *hp) Push(x any) { *a = append(*a, x.(pair)) }
+func (a *hp) Pop() any   { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

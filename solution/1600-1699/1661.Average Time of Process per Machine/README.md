@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1661.Average%20Time%20of%20Process%20per%20Machine/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
 # [1661. 每台机器的进程平均运行时间](https://leetcode.cn/problems/average-time-of-process-per-machine)
 
 [English Version](/solution/1600-1699/1661.Average%20Time%20of%20Process%20per%20Machine/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Activity</code></p>
 
@@ -17,22 +27,22 @@
 | activity_type  | enum    |
 | timestamp      | float   |
 +----------------+---------+
-该表展示了一家工厂网站的用户活动.
-(machine_id, process_id, activity_type) 是当前表的主键.
-machine_id 是一台机器的ID号.
-process_id 是运行在各机器上的进程ID号.
-activity_type 是枚举类型 ('start', 'end').
-timestamp 是浮点类型,代表当前时间(以秒为单位).
-'start' 代表该进程在这台机器上的开始运行时间戳 , 'end' 代表该进程在这台机器上的终止运行时间戳.
-同一台机器，同一个进程都有一对开始时间戳和结束时间戳，而且开始时间戳永远在结束时间戳前面.</pre>
+该表展示了一家工厂网站的用户活动。
+(machine_id, process_id, activity_type) 是当前表的主键（具有唯一值的列的组合）。
+machine_id 是一台机器的ID号。
+process_id 是运行在各机器上的进程ID号。
+activity_type 是枚举类型 ('start', 'end')。
+timestamp 是浮点类型,代表当前时间(以秒为单位)。
+'start' 代表该进程在这台机器上的开始运行时间戳 , 'end' 代表该进程在这台机器上的终止运行时间戳。
+同一台机器，同一个进程都有一对开始时间戳和结束时间戳，而且开始时间戳永远在结束时间戳前面。</pre>
 
 <p>&nbsp;</p>
 
-<p>现在有一个工厂网站由几台机器运行，每台机器上运行着相同数量的进程. 请写出一条SQL计算每台机器各自完成一个进程任务的平均耗时.</p>
+<p>现在有一个工厂网站由几台机器运行，每台机器上运行着 <strong>相同数量的进程</strong> 。编写解决方案，计算每台机器各自完成一个进程任务的平均耗时。</p>
 
-<p>完成一个进程任务的时间指进程的<code>'end' 时间戳</code> 减去&nbsp;<code>'start' 时间戳</code>. 平均耗时通过计算每台机器上所有进程任务的总耗费时间除以机器上的总进程数量获得.</p>
+<p>完成一个进程任务的时间指进程的<code>'end' 时间戳</code> 减去&nbsp;<code>'start' 时间戳</code>。平均耗时通过计算每台机器上所有进程任务的总耗费时间除以机器上的总进程数量获得。</p>
 
-<p>结果表必须包含<code>machine_id（机器ID）</code> 和对应的&nbsp;<strong>average time（平均耗时）</strong>&nbsp;别名&nbsp;<code>processing_time</code>, 且<strong>四舍五入保留3位小数.</strong></p>
+<p>结果表必须包含<code>machine_id（机器ID）</code> 和对应的&nbsp;<strong>average time（平均耗时）</strong>&nbsp;别名&nbsp;<code>processing_time</code>，且<strong>四舍五入保留3位小数。</strong></p>
 
 <p>以 <strong>任意顺序</strong> 返回表。</p>
 
@@ -75,16 +85,62 @@ Activity table:
 机器 1 的平均耗时: ((1.550 - 0.550) + (1.420 - 0.430)) / 2 = 0.995
 机器 2 的平均耗时: ((4.512 - 4.100) + (5.000 - 2.500)) / 2 = 1.456</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：分组统计
+
+我们可以根据 `machine_id` 分组，然后利用 `AVG` 函数计算每台机器上所有进程任务的平均耗时。由于机器上的每个进程任务都有一对开始时间戳和结束时间戳，完成一个进程任务的时间指进程的 `end` 时间戳 减去 `start` 时间戳，因此我们可以利用 `CASE WHEN` 或者 `IF` 函数来计算每个进程任务的耗时，最后再利用 `AVG` 函数计算每台机器上所有进程任务的平均耗时。
+
+注意，每台机器有 $2$ 个进程任务，因此我们需要将计算出的平均耗时乘以 $2$。
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT
+    machine_id,
+    ROUND(
+        AVG(
+            CASE
+                WHEN activity_type = 'start' THEN -timestamp
+                ELSE timestamp
+            END
+        ) * 2,
+        3
+    ) AS processing_time
+FROM Activity
+GROUP BY 1;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### MySQL
+
+```sql
+# Write your MySQL query statement below
+SELECT
+    machine_id,
+    ROUND(AVG(IF(activity_type = 'start', -1, 1) * timestamp) * 2, 3) AS processing_time
+FROM Activity
+GROUP BY 1;
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

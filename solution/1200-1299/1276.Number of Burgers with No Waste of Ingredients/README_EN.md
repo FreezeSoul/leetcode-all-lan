@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1276.Number%20of%20Burgers%20with%20No%20Waste%20of%20Ingredients/README_EN.md
+rating: 1386
+source: Weekly Contest 165 Q2
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1276. Number of Burgers with No Waste of Ingredients](https://leetcode.com/problems/number-of-burgers-with-no-waste-of-ingredients)
 
 [中文文档](/solution/1200-1299/1276.Number%20of%20Burgers%20with%20No%20Waste%20of%20Ingredients/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two integers <code>tomatoSlices</code> and <code>cheeseSlices</code>. The ingredients of different burgers are as follows:</p>
 
@@ -46,11 +60,39 @@ There will be no remaining ingredients.
 	<li><code>0 &lt;= tomatoSlices, cheeseSlices &lt;= 10<sup>7</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Mathematics
+
+We set the number of Jumbo Burgers as $x$ and the number of Small Burgers as $y$, then we have:
+
+$$
+\begin{aligned}
+4x + 2y &= tomatoSlices \\
+x + y &= cheeseSlices
+\end{aligned}
+$$
+
+Transforming the above two equations, we can get:
+
+$$
+\begin{aligned}
+y = (4 \times cheeseSlices - tomatoSlices) / 2 \\
+x = cheeseSlices - y
+\end{aligned}
+$$
+
+Where $x$ and $y$ must be non-negative integers.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -61,7 +103,7 @@ class Solution:
         return [] if k % 2 or y < 0 or x < 0 else [x, y]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -69,12 +111,12 @@ class Solution {
         int k = 4 * cheeseSlices - tomatoSlices;
         int y = k / 2;
         int x = cheeseSlices - y;
-        return k % 2 != 0 || y < 0 || x < 0 ? Collections.emptyList() : Arrays.asList(x, y);
+        return k % 2 != 0 || y < 0 || x < 0 ? List.of() : List.of(x, y);
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -88,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numOfBurgers(tomatoSlices int, cheeseSlices int) []int {
@@ -102,10 +144,36 @@ func numOfBurgers(tomatoSlices int, cheeseSlices int) []int {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function numOfBurgers(tomatoSlices: number, cheeseSlices: number): number[] {
+    const k = 4 * cheeseSlices - tomatoSlices;
+    const y = k >> 1;
+    const x = cheeseSlices - y;
+    return k % 2 || y < 0 || x < 0 ? [] : [x, y];
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn num_of_burgers(tomato_slices: i32, cheese_slices: i32) -> Vec<i32> {
+        let k = 4 * cheese_slices - tomato_slices;
+        let y = k / 2;
+        let x = cheese_slices - y;
+        if k % 2 != 0 || y < 0 || x < 0 {
+            Vec::new()
+        } else {
+            vec![x, y]
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

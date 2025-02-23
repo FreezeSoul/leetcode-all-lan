@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0383.Ransom%20Note/README.md
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [383. 赎金信](https://leetcode.cn/problems/ransom-note)
 
 [English Version](/solution/0300-0399/0383.Ransom%20Note/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串：<code>ransomNote</code> 和 <code>magazine</code> ，判断 <code>ransomNote</code> 能不能由 <code>magazine</code> 里面的字符构成。</p>
 
@@ -44,11 +56,13 @@
 	<li><code>ransomNote</code> 和 <code>magazine</code> 由小写英文字母组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表或数组**
+### 方法一：哈希表或数组
 
 我们可以用一个哈希表或长度为 $26$ 的数组 $cnt$ 记录字符串 `magazine` 中所有字符出现的次数。然后遍历字符串 `ransomNote`，对于其中的每个字符 $c$，我们将其从 $cnt$ 的次数减 $1$，如果减 $1$ 之后的次数小于 $0$，说明 $c$ 在 `magazine` 中出现的次数不够，因此无法构成 `ransomNote`，返回 $false$ 即可。
 
@@ -58,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -73,9 +85,7 @@ class Solution:
         return True
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -94,7 +104,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -114,7 +124,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func canConstruct(ransomNote string, magazine string) bool {
@@ -132,11 +142,11 @@ func canConstruct(ransomNote string, magazine string) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function canConstruct(ransomNote: string, magazine: string): boolean {
-    const cnt = new Array(26).fill(0);
+    const cnt: number[] = Array(26).fill(0);
     for (const c of magazine) {
         ++cnt[c.charCodeAt(0) - 97];
     }
@@ -149,7 +159,7 @@ function canConstruct(ransomNote: string, magazine: string): boolean {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -168,7 +178,7 @@ public class Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -183,18 +193,19 @@ class Solution {
             $hashtable[$arrM[$i]] += 1;
         }
         for ($j = 0; $j < strlen($ransomNote); $j++) {
-            if (!isset($hashtable[$ransomNote[$j]]) || $hashtable[$ransomNote[$j]] == 0) return false;
-            else $hashtable[$ransomNote[$j]] -= 1;
+            if (!isset($hashtable[$ransomNote[$j]]) || $hashtable[$ransomNote[$j]] == 0) {
+                return false;
+            } else {
+                $hashtable[$ransomNote[$j]] -= 1;
+            }
         }
         return true;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

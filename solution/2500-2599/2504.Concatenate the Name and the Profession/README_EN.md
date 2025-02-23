@@ -1,8 +1,20 @@
-# [2504. Concatenate the Name and the Profession](https://leetcode.com/problems/concatenate-the-name-and-the-profession)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2504.Concatenate%20the%20Name%20and%20the%20Profession/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2504. Concatenate the Name and the Profession 🔒](https://leetcode.com/problems/concatenate-the-name-and-the-profession)
 
 [中文文档](/solution/2500-2599/2504.Concatenate%20the%20Name%20and%20the%20Profession/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Person</code></p>
 
@@ -14,18 +26,18 @@
 | name        | varchar |
 | profession  | ENUM    |
 +-------------+---------+
-person_id is the primary key for this table.
+person_id is the primary key (column with a unique value) for this table.
 Each row in this table contains a person&#39;s ID, name, and profession.
-The profession   column in an enum of the type (&#39;Doctor&#39;, &#39;Singer&#39;, &#39;Actor&#39;, &#39;Player&#39;, &#39;Engineer&#39;, or &#39;Lawyer&#39;)
+The profession column in an enum of the type (&#39;Doctor&#39;, &#39;Singer&#39;, &#39;Actor&#39;, &#39;Player&#39;, &#39;Engineer&#39;, or &#39;Lawyer&#39;)
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report each person&#39;s name followed by the first letter of their profession enclosed in parentheses.</p>
+<p>Write a solution to report each person&#39;s name followed by the first letter of their profession enclosed in parentheses.</p>
 
 <p>Return the result table <strong>ordered</strong> by <code>person_id</code> in <strong>descending order</strong>.</p>
 
-<p>The query result format is shown in the following example.</p>
+<p>The result format is shown in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -57,17 +69,27 @@ Person table:
 <strong>Explanation:</strong> Note that there should not be any white space between the name and the first letter of the profession.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT person_id, CONCAT(name, "(", substring(profession, 1, 1), ")") AS name
+SELECT person_id, CONCAT(name, "(", SUBSTRING(profession, 1, 1), ")") AS name
 FROM Person
 ORDER BY person_id DESC;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

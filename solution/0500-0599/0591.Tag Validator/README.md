@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0591.Tag%20Validator/README.md
+tags:
+    - 栈
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [591. 标签验证器](https://leetcode.cn/problems/tag-validator)
 
 [English Version](/solution/0500-0599/0591.Tag%20Validator/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个表示代码片段的字符串，你需要实现一个验证器来解析这段代码，并返回它是否合法。合法的代码片段需要遵守以下的所有规则：</p>
 
@@ -91,17 +102,17 @@ cdata <strong>不</strong>是 <strong>&quot;&lt;![CDATA[&lt;div&gt;]&gt;]]&gt;]]
 	<li>为简明起见，你可以假设输入的代码（包括提到的<strong>任意字符</strong>）只包含<code>数字</code>, <font color="#c7254e" face="Menlo, Monaco, Consolas, Courier New, monospace"><span style="background-color:#f9f2f4; font-size:12.6px">字母</span></font>, <code>&#39;&lt;&#39;</code>,<code>&#39;&gt;&#39;</code>,<code>&#39;/&#39;</code>,<code>&#39;!&#39;</code>,<code>&#39;[&#39;</code>,<code>&#39;]&#39;</code>和<code>&#39; &#39;</code>。</li>
 </ol>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：栈模拟**
+### 方法一：栈模拟
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -140,9 +151,7 @@ class Solution:
         return not stk
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -199,7 +208,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -242,7 +251,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isValid(code string) bool {
@@ -304,7 +313,7 @@ func check(tag string) bool {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -322,8 +331,12 @@ impl Solution {
             }
             if code[i..].starts_with("<![CDATA[") {
                 match code[i + 9..].find("]]>") {
-                    Some(n) => i += n + 11,
-                    None => return false,
+                    Some(n) => {
+                        i += n + 11;
+                    }
+                    None => {
+                        return false;
+                    }
                 };
             } else if code[i..].starts_with("</") {
                 let j = i + 2;
@@ -335,7 +348,9 @@ impl Solution {
                         }
                         i += n + 2;
                     }
-                    None => return false,
+                    None => {
+                        return false;
+                    }
                 };
             } else if code[i..].starts_with("<") {
                 let j = i + 1;
@@ -347,7 +362,9 @@ impl Solution {
                         }
                         stk.push(t);
                     }
-                    None => return false,
+                    None => {
+                        return false;
+                    }
                 };
             }
             i += 1;
@@ -357,10 +374,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

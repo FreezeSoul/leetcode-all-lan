@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1390.Four%20Divisors/README_EN.md
+rating: 1478
+source: Weekly Contest 181 Q2
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1390. Four Divisors](https://leetcode.com/problems/four-divisors)
 
 [中文文档](/solution/1300-1399/1390.Four%20Divisors/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer array <code>nums</code>, return <em>the sum of divisors of the integers in that array that have exactly four divisors</em>. If there is no such integer in the array, return <code>0</code>.</p>
 
@@ -41,11 +56,21 @@ The answer is the sum of divisors of 21 only.
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Factor Decomposition
+
+We can perform factor decomposition on each number. If the number of factors is $4$, then this number meets the requirements of the problem, and we can add its factors to the answer.
+
+The time complexity is $O(n \times \sqrt{n})$, where $n$ is the length of the array. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,7 +91,7 @@ class Solution:
         return sum(f(x) for x in nums)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -95,7 +120,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -125,7 +150,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sumFourDivisors(nums []int) (ans int) {
@@ -153,7 +178,7 @@ func sumFourDivisors(nums []int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sumFourDivisors(nums: number[]): number {
@@ -180,10 +205,8 @@ function sumFourDivisors(nums: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

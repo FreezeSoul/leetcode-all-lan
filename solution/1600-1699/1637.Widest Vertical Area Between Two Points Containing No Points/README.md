@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1637.Widest%20Vertical%20Area%20Between%20Two%20Points%20Containing%20No%20Points/README.md
+rating: 1486
+source: 第 38 场双周赛 Q2
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [1637. 两点之间不包含任何点的最宽垂直区域](https://leetcode.cn/problems/widest-vertical-area-between-two-points-containing-no-points)
 
 [English Version](/solution/1600-1699/1637.Widest%20Vertical%20Area%20Between%20Two%20Points%20Containing%20No%20Points/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你&nbsp;<code>n</code>&nbsp;个二维平面上的点 <code>points</code> ，其中&nbsp;<code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code>&nbsp;，请你返回两点之间内部不包含任何点的&nbsp;<strong>最宽垂直区域</strong> 的宽度。</p>
 
@@ -40,17 +53,111 @@
 	<li><code>0 &lt;= x<sub>i</sub>, y<sub>i</sub>&nbsp;&lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 我们可以对数组 $points$ 按照 $x$ 升序排列，获取相邻点之间 $x$ 的差值的最大值。
 
 时间复杂度 $O(n \times \log n)$，空间复杂度 $O(\log n)$。其中 $n$ 为数组 $points$ 的长度。
 
-**方法二：桶排序**
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxWidthOfVerticalArea(self, points: List[List[int]]) -> int:
+        points.sort()
+        return max(b[0] - a[0] for a, b in pairwise(points))
+```
+
+#### Java
+
+```java
+class Solution {
+    public int maxWidthOfVerticalArea(int[][] points) {
+        Arrays.sort(points, (a, b) -> a[0] - b[0]);
+        int ans = 0;
+        for (int i = 0; i < points.length - 1; ++i) {
+            ans = Math.max(ans, points[i + 1][0] - points[i][0]);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxWidthOfVerticalArea(vector<vector<int>>& points) {
+        sort(points.begin(), points.end());
+        int ans = 0;
+        for (int i = 0; i < points.size() - 1; ++i) {
+            ans = max(ans, points[i + 1][0] - points[i][0]);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxWidthOfVerticalArea(points [][]int) (ans int) {
+	sort.Slice(points, func(i, j int) bool { return points[i][0] < points[j][0] })
+	for i, p := range points[1:] {
+		ans = max(ans, p[0]-points[i][0])
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function maxWidthOfVerticalArea(points: number[][]): number {
+    points.sort((a, b) => a[0] - b[0]);
+    let ans = 0;
+    for (let i = 1; i < points.length; ++i) {
+        ans = Math.max(ans, points[i][0] - points[i - 1][0]);
+    }
+    return ans;
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number[][]} points
+ * @return {number}
+ */
+var maxWidthOfVerticalArea = function (points) {
+    points.sort((a, b) => a[0] - b[0]);
+    let ans = 0;
+    let px = points[0][0];
+    for (const [x, _] of points) {
+        ans = Math.max(ans, x - px);
+        px = x;
+    }
+    return ans;
+};
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：桶排序
 
 方法一中排序的时间复杂度为 $O(n \times \log n)$，其实我们可以利用桶排序的思想，将时间复杂度降低到 $O(n)$。
 
@@ -74,16 +181,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def maxWidthOfVerticalArea(self, points: List[List[int]]) -> int:
-        points.sort()
-        return max(b[0] - a[0] for a, b in pairwise(points))
-```
+#### Python3
 
 ```python
 class Solution:
@@ -108,22 +206,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int maxWidthOfVerticalArea(int[][] points) {
-        Arrays.sort(points, (a, b) -> a[0] - b[0]);
-        int ans = 0;
-        for (int i = 0; i < points.length - 1; ++i) {
-            ans = Math.max(ans, points[i + 1][0] - points[i][0]);
-        }
-        return ans;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -165,21 +248,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxWidthOfVerticalArea(vector<vector<int>>& points) {
-        sort(points.begin(), points.end());
-        int ans = 0;
-        for (int i = 0; i < points.size() - 1; ++i) {
-            ans = max(ans, points[i + 1][0] - points[i][0]);
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -216,24 +285,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func maxWidthOfVerticalArea(points [][]int) (ans int) {
-	sort.Slice(points, func(i, j int) bool { return points[i][0] < points[j][0] })
-	for i, p := range points[1:] {
-		ans = max(ans, p[0]-points[i][0])
-	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func maxWidthOfVerticalArea(points [][]int) (ans int) {
@@ -269,34 +321,9 @@ func maxWidthOfVerticalArea(points [][]int) (ans int) {
 	}
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
-
-```ts
-function maxWidthOfVerticalArea(points: number[][]): number {
-    points.sort((a, b) => a[0] - b[0]);
-    let ans = 0;
-    for (let i = 1; i < points.length; ++i) {
-        ans = Math.max(ans, points[i][0] - points[i - 1][0]);
-    }
-    return ans;
-}
-```
+#### TypeScript
 
 ```ts
 function maxWidthOfVerticalArea(points: number[][]): number {
@@ -330,24 +357,7 @@ function maxWidthOfVerticalArea(points: number[][]): number {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * @param {number[][]} points
- * @return {number}
- */
-var maxWidthOfVerticalArea = function (points) {
-    points.sort((a, b) => a[0] - b[0]);
-    let ans = 0;
-    let px = points[0][0];
-    for (const [x, _] of points) {
-        ans = Math.max(ans, x - px);
-        px = x;
-    }
-    return ans;
-};
-```
+#### JavaScript
 
 ```js
 /**
@@ -385,10 +395,8 @@ var maxWidthOfVerticalArea = function (points) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

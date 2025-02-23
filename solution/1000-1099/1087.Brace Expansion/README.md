@@ -1,10 +1,24 @@
-# [1087. 花括号展开](https://leetcode.cn/problems/brace-expansion)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1087.Brace%20Expansion/README.md
+rating: 1480
+source: 第 2 场双周赛 Q3
+tags:
+    - 广度优先搜索
+    - 字符串
+    - 回溯
+---
+
+<!-- problem:start -->
+
+# [1087. 花括号展开 🔒](https://leetcode.cn/problems/brace-expansion)
 
 [English Version](/solution/1000-1099/1087.Brace%20Expansion/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个表示单词列表的字符串&nbsp;<code>s</code>&nbsp;。单词中的每个字母都有一个或多个选项。</p>
 
@@ -45,17 +59,17 @@
 	<li>在一对连续的左括号和右括号内的所有字符都是不同的。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-先将字符串 s 进行 convert 转换，比如 `"{a,b}{z,x,y}"` 转换为 `[['a', 'b'], ['z', 'x', 'y']]`，然后利用 DFS 回溯获取每一个单词，放到 ans 中，最后对 ans 进行排序并返回即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +106,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -143,10 +155,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

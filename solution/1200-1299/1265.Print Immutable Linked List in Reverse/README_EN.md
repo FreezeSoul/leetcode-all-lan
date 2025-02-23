@@ -1,8 +1,23 @@
-# [1265. Print Immutable Linked List in Reverse](https://leetcode.com/problems/print-immutable-linked-list-in-reverse)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1265.Print%20Immutable%20Linked%20List%20in%20Reverse/README_EN.md
+tags:
+    - Stack
+    - Recursion
+    - Linked List
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
+# [1265. Print Immutable Linked List in Reverse 🔒](https://leetcode.com/problems/print-immutable-linked-list-in-reverse)
 
 [中文文档](/solution/1200-1299/1265.Print%20Immutable%20Linked%20List%20in%20Reverse/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an immutable linked list, print out all values of each node in reverse with the help of the following&nbsp;interface:</p>
 
@@ -63,11 +78,21 @@
 	<li>Linear time complexity and less than linear space complexity?</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Recursion
+
+We can use recursion to implement reverse printing of a linked list. In the function, we check whether the current node is null. If it is not null, we get the next node, then recursively call the function itself, and finally print the value of the current node.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Where $n$ is the length of the linked list.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # """
@@ -86,7 +111,7 @@ class Solution:
             head.printValue()
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -108,7 +133,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -132,7 +157,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /*   Below is the interface for ImmutableListNode, which is already defined for you.
@@ -158,7 +183,7 @@ func printLinkedListInReverse(head ImmutableListNode) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -179,10 +204,30 @@ function printLinkedListInReverse(head: ImmutableListNode) {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+/**
+ * // This is the ImmutableListNode's API interface.
+ * // You should not implement it, or speculate about its implementation.
+ * class ImmutableListNode {
+ *     public void PrintValue(); // print the value of this node.
+ *     public ImmutableListNode GetNext(); // return the next node.
+ * }
+ */
 
+public class Solution {
+    public void PrintLinkedListInReverse(ImmutableListNode head) {
+        if (head != null) {
+            PrintLinkedListInReverse(head.GetNext());
+            head.PrintValue();
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

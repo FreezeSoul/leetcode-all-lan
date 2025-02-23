@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0198.House%20Robber/README.md
+tags:
+    - 数组
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [198. 打家劫舍](https://leetcode.cn/problems/house-robber)
 
 [English Version](/solution/0100-0199/0198.House%20Robber/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，<strong>如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警</strong>。</p>
 
@@ -38,47 +49,35 @@
 	<li><code>0 <= nums[i] <= 400</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：记忆化搜索**
+### 方法一：记忆化搜索
 
-我们设计函数 $dfs(i)$ 表示从第 $i$ 间房屋开始偷窃，能偷窃到的最高金额。答案为 $dfs(0)$。
+我们设计一个函数 $\textit{dfs}(i)$，表示从第 $i$ 间房屋开始偷窃能够得到的最高金额。那么答案即为 $\textit{dfs}(0)$。
 
-对于第 $i$ 间房屋，有偷窃和不偷窃两种选择。如果偷窃，那么下一间房屋就不能偷窃，偷窃总金额为当前房屋金额加上下下间房屋开始的偷窃最高金额，即 $nums[i] + dfs(i + 2)$。如果不偷窃，那么下一间房屋就可以偷窃，偷窃总金额为下一间房屋开始的偷窃最高金额，即 $dfs(i + 1)$。两种选择取最大值作为函数 $dfs(i)$ 的返回值。
+函数 $\textit{dfs}(i)$ 的执行过程如下：
 
-我们可以使用记忆化搜索，避免重复计算。
+-   如果 $i \ge \textit{len}(\textit{nums})$，表示所有房屋都被考虑过了，直接返回 $0$；
+-   否则，考虑偷窃第 $i$ 间房屋，那么 $\textit{dfs}(i) = \textit{nums}[i] + \textit{dfs}(i+2)$；不偷窃第 $i$ 间房屋，那么 $\textit{dfs}(i) = \textit{dfs}(i+1)$。
+-   返回 $\max(\textit{nums}[i] + \textit{dfs}(i+2), \textit{dfs}(i+1))$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为房屋数量。
+为了避免重复计算，我们使用记忆化搜索的方法，将 $\textit{dfs}(i)$ 的结果保存在一个数组或哈希表中，每次计算前先查询是否已经计算过，如果计算过直接返回结果。
 
-**方法二：动态规划**
-
-我们也可以将记忆化搜索改成动态规划。
-
-定义 $dp[i]$ 表示偷窃前 $i$ 个房屋能得到的最高金额。答案为 $dp[n]$。
-
-状态转移方程为 $dp[i] = max(dp[i - 1], dp[i - 2] + nums[i - 1])$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为房屋数量。
-
-**方法三：动态规划（空间优化）**
-
-注意到方法二中的状态转移方程只和 $dp[i - 1]$ 和 $dp[i - 2]$ 有关，因此我们可以只用两个变量来维护这两个状态，从而将空间复杂度优化到 $O(1)$。
-
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为房屋数量。
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组长度。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def rob(self, nums: List[int]) -> int:
         @cache
-        def dfs(i):
+        def dfs(i: int) -> int:
             if i >= len(nums):
                 return 0
             return max(nums[i] + dfs(i + 2), dfs(i + 1))
@@ -86,39 +85,16 @@ class Solution:
         return dfs(0)
 ```
 
-```python
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        n = len(nums)
-        dp = [0] * (n + 1)
-        dp[1] = nums[0]
-        for i in range(2, n + 1):
-            dp[i] = max(nums[i - 1] + dp[i - 2], dp[i - 1])
-        return dp[n]
-```
-
-```python
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        a, b = 0, nums[0]
-        for num in nums[1:]:
-            a, b = b, max(num + a, b)
-        return b
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-    private int[] f;
+    private Integer[] f;
     private int[] nums;
 
     public int rob(int[] nums) {
         this.nums = nums;
-        f = new int[nums.length];
-        Arrays.fill(f, -1);
+        f = new Integer[nums.length];
         return dfs(0);
     }
 
@@ -126,55 +102,30 @@ class Solution {
         if (i >= nums.length) {
             return 0;
         }
-        if (f[i] != -1) {
-            return f[i];
+        if (f[i] == null) {
+            f[i] = Math.max(nums[i] + dfs(i + 2), dfs(i + 1));
         }
-        f[i] = Math.max(nums[i] + dfs(i + 2), dfs(i + 1));
         return f[i];
     }
 }
 ```
 
-```java
-class Solution {
-    public int rob(int[] nums) {
-        int n = nums.length;
-        int[] dp = new int[n + 1];
-        dp[1] = nums[0];
-        for (int i = 2; i <= n; ++i) {
-            dp[i] = Math.max(nums[i - 1] + dp[i - 2], dp[i - 1]);
-        }
-        return dp[n];
-    }
-}
-```
-
-```java
-class Solution {
-    public int rob(int[] nums) {
-        int a = 0, b = nums[0];
-        for (int i = 1; i < nums.length; ++i) {
-            int c = Math.max(nums[i] + a, b);
-            a = b;
-            b = c;
-        }
-        return b;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int rob(vector<int>& nums) {
         int n = nums.size();
-        vector<int> f(n, -1);
-        function<int(int)> dfs = [&](int i) -> int {
-            if (i >= n) return 0;
-            if (f[i] != -1) return f[i];
-            f[i] = max(nums[i] + dfs(i + 2), dfs(i + 1));
+        int f[n];
+        memset(f, -1, sizeof(f));
+        auto dfs = [&](this auto&& dfs, int i) -> int {
+            if (i >= n) {
+                return 0;
+            }
+            if (f[i] < 0) {
+                f[i] = max(nums[i] + dfs(i + 2), dfs(i + 1));
+            }
             return f[i];
         };
         return dfs(0);
@@ -182,37 +133,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int rob(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> dp(n + 1);
-        dp[1] = nums[0];
-        for (int i = 2; i <= n; ++i) {
-            dp[i] = max(nums[i - 1] + dp[i - 2], dp[i - 1]);
-        }
-        return dp[n];
-    }
-};
-```
-
-```cpp
-class Solution {
-    public : int rob(vector<int>& nums) {
-        int n = nums.size();
-        int a = 0, b = nums[0];
-        for (int i = 1; i < n; ++i) {
-            int c = max(nums[i] + a, b);
-            a = b;
-            b = c;
-        }
-        return b;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func rob(nums []int) int {
@@ -226,119 +147,320 @@ func rob(nums []int) int {
 		if i >= n {
 			return 0
 		}
-		if f[i] != -1 {
-			return f[i]
+		if f[i] < 0 {
+			f[i] = max(nums[i]+dfs(i+2), dfs(i+1))
 		}
-		f[i] = max(nums[i]+dfs(i+2), dfs(i+1))
 		return f[i]
 	}
 	return dfs(0)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-```go
-func rob(nums []int) int {
-	n := len(nums)
-	dp := make([]int, n+1)
-	dp[1] = nums[0]
-	for i := 2; i <= n; i++ {
-		dp[i] = max(nums[i-1]+dp[i-2], dp[i-1])
-	}
-	return dp[n]
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-```go
-func rob(nums []int) int {
-    a, b, n := 0, nums[0], len(nums)
-    for i := 1; i < n; i++ {
-        a, b = b, max(nums[i] + a, b)
-    }
-    return b
-}
-
-func max(a, b int) int {
-    if a > b {
-        return a
-    }
-    return b
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function rob(nums: number[]): number {
     const n = nums.length;
-    const f = new Array(n).fill(-1);
-    function dfs(i) {
+    const f: number[] = Array(n).fill(-1);
+    const dfs = (i: number): number => {
         if (i >= n) {
             return 0;
         }
-        if (f[i] != -1) {
-            return f[i];
+        if (f[i] < 0) {
+            f[i] = Math.max(nums[i] + dfs(i + 2), dfs(i + 1));
         }
-        f[i] = Math.max(nums[i] + dfs(i + 2), dfs(i + 1));
         return f[i];
-    }
+    };
     return dfs(0);
 }
 ```
 
-```ts
-function rob(nums: number[]): number {
-    const n = nums.length;
-    const dp = new Array(n + 1).fill(0);
-    dp[1] = nums[0];
-    for (let i = 2; i <= n; ++i) {
-        dp[i] = Math.max(nums[i - 1] + dp[i - 2], dp[i - 1]);
-    }
-    return dp[n];
-}
-```
-
-```ts
-function rob(nums: number[]): number {
-    const dp = [0, 0];
-    for (const num of nums) {
-        [dp[0], dp[1]] = [dp[1], Math.max(dp[1], dp[0] + num)];
-    }
-    return dp[1];
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn rob(nums: Vec<i32>) -> i32 {
-        let mut dp = [0, 0];
-        for num in nums {
-            dp = [dp[1], dp[1].max(dp[0] + num)]
+        fn dfs(i: usize, nums: &Vec<i32>, f: &mut Vec<i32>) -> i32 {
+            if i >= nums.len() {
+                return 0;
+            }
+            if f[i] < 0 {
+                f[i] = (nums[i] + dfs(i + 2, nums, f)).max(dfs(i + 1, nums, f));
+            }
+            f[i]
         }
-        dp[1]
+
+        let n = nums.len();
+        let mut f = vec![-1; n];
+        dfs(0, &nums, &mut f)
     }
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
-
+```js
+function rob(nums) {
+    const n = nums.length;
+    const f = Array(n).fill(-1);
+    const dfs = i => {
+        if (i >= n) {
+            return 0;
+        }
+        if (f[i] < 0) {
+            f[i] = Math.max(nums[i] + dfs(i + 2), dfs(i + 1));
+        }
+        return f[i];
+    };
+    return dfs(0);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：动态规划
+
+我们定义 $f[i]$ 表示前 $i$ 间房屋能偷窃到的最高总金额，初始时 $f[0]=0$, $f[1]=nums[0]$。
+
+考虑 $i \gt 1$ 的情况，第 $i$ 间房屋有两个选项：
+
+-   不偷窃第 $i$ 间房屋，偷窃总金额为 $f[i-1]$；
+-   偷窃第 $i$ 间房屋，偷窃总金额为 $f[i-2]+nums[i-1]$；
+
+因此，我们可以得到状态转移方程：
+
+$$
+f[i]=
+\begin{cases}
+0, & i=0 \\
+nums[0], & i=1 \\
+\max(f[i-1],f[i-2]+nums[i-1]), & i \gt 1
+\end{cases}
+$$
+
+最终的答案即为 $f[n]$，其中 $n$ 是数组的长度。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 是数组长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        f = [0] * (n + 1)
+        f[1] = nums[0]
+        for i in range(2, n + 1):
+            f[i] = max(f[i - 1], f[i - 2] + nums[i - 1])
+        return f[n]
+```
+
+#### Java
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int n = nums.length;
+        int[] f = new int[n + 1];
+        f[1] = nums[0];
+        for (int i = 2; i <= n; ++i) {
+            f[i] = Math.max(f[i - 1], f[i - 2] + nums[i - 1]);
+        }
+        return f[n];
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        int f[n + 1];
+        memset(f, 0, sizeof(f));
+        f[1] = nums[0];
+        for (int i = 2; i <= n; ++i) {
+            f[i] = max(f[i - 1], f[i - 2] + nums[i - 1]);
+        }
+        return f[n];
+    }
+};
+```
+
+#### Go
+
+```go
+func rob(nums []int) int {
+	n := len(nums)
+	f := make([]int, n+1)
+	f[1] = nums[0]
+	for i := 2; i <= n; i++ {
+		f[i] = max(f[i-1], f[i-2]+nums[i-1])
+	}
+	return f[n]
+}
+```
+
+#### TypeScript
+
+```ts
+function rob(nums: number[]): number {
+    const n = nums.length;
+    const f: number[] = Array(n + 1).fill(0);
+    f[1] = nums[0];
+    for (let i = 2; i <= n; ++i) {
+        f[i] = Math.max(f[i - 1], f[i - 2] + nums[i - 1]);
+    }
+    return f[n];
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn rob(nums: Vec<i32>) -> i32 {
+        let n = nums.len();
+        let mut f = vec![0; n + 1];
+        f[1] = nums[0];
+        for i in 2..=n {
+            f[i] = f[i - 1].max(f[i - 2] + nums[i - 1]);
+        }
+        f[n]
+    }
+}
+```
+
+#### JavaScript
+
+```js
+function rob(nums) {
+    const n = nums.length;
+    const f = Array(n + 1).fill(0);
+    f[1] = nums[0];
+    for (let i = 2; i <= n; ++i) {
+        f[i] = Math.max(f[i - 1], f[i - 2] + nums[i - 1]);
+    }
+    return f[n];
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三：动态规划（空间优化）
+
+我们注意到，当 $i \gt 2$ 时，$f[i]$ 只和 $f[i-1]$ 与 $f[i-2]$ 有关，因此我们可以使用两个变量代替数组，将空间复杂度降到 $O(1)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        f = g = 0
+        for x in nums:
+            f, g = max(f, g), f + x
+        return max(f, g)
+```
+
+#### Java
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int f = 0, g = 0;
+        for (int x : nums) {
+            int ff = Math.max(f, g);
+            g = f + x;
+            f = ff;
+        }
+        return Math.max(f, g);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int f = 0, g = 0;
+        for (int& x : nums) {
+            int ff = max(f, g);
+            g = f + x;
+            f = ff;
+        }
+        return max(f, g);
+    }
+};
+```
+
+#### Go
+
+```go
+func rob(nums []int) int {
+	f, g := 0, 0
+	for _, x := range nums {
+		f, g = max(f, g), f+x
+	}
+	return max(f, g)
+}
+```
+
+#### TypeScript
+
+```ts
+function rob(nums: number[]): number {
+    let [f, g] = [0, 0];
+    for (const x of nums) {
+        [f, g] = [Math.max(f, g), f + x];
+    }
+    return Math.max(f, g);
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn rob(nums: Vec<i32>) -> i32 {
+        let mut f = [0, 0];
+        for x in nums {
+            f = [f[0].max(f[1]), f[0] + x];
+        }
+        f[0].max(f[1])
+    }
+}
+```
+
+#### JavaScript
+
+```js
+function rob(nums) {
+    let [f, g] = [0, 0];
+    for (const x of nums) {
+        [f, g] = [Math.max(f, g), f + x];
+    }
+    return Math.max(f, g);
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0129.Sum%20Root%20to%20Leaf%20Numbers/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [129. Sum Root to Leaf Numbers](https://leetcode.com/problems/sum-root-to-leaf-numbers)
 
 [中文文档](/solution/0100-0199/0129.Sum%20Root%20to%20Leaf%20Numbers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the <code>root</code> of a binary tree containing digits from <code>0</code> to <code>9</code> only.</p>
 
@@ -49,13 +63,28 @@ Therefore, sum = 495 + 491 + 40 = <code>1026</code>.
 	<li>The depth of the tree will not exceed <code>10</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS.
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+We can design a function $dfs(root, s)$, which represents the sum of all path numbers from the current node $root$ to the leaf nodes, given that the current path number is $s$. The answer is $dfs(root, 0)$.
+
+The calculation of the function $dfs(root, s)$ is as follows:
+
+-   If the current node $root$ is null, return $0$.
+-   Otherwise, add the value of the current node to $s$, i.e., $s = s \times 10 + root.val$.
+-   If the current node is a leaf node, return $s$.
+-   Otherwise, return $dfs(root.left, s) + dfs(root.right, s)$.
+
+The time complexity is $O(n)$, and the space complexity is $O(\log n)$. Here, $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -77,7 +106,7 @@ class Solution:
         return dfs(root, 0)
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -113,7 +142,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -141,7 +170,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -168,35 +197,7 @@ func sumNumbers(root *TreeNode) int {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     struct TreeNode *left;
- *     struct TreeNode *right;
- * };
- */
-
-int dfs(struct TreeNode *root, int num) {
-    if (!root) {
-        return 0;
-    }
-    num = num * 10 + root->val;
-    if (!root->left && !root->right) {
-        return num;
-    }
-    return dfs(root->left, num) + dfs(root->right, num);
-}
-
-int sumNumbers(struct TreeNode *root) {
-    return dfs(root, 0);
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -224,7 +225,7 @@ function sumNumbers(root: TreeNode | null): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -245,8 +246,8 @@ function sumNumbers(root: TreeNode | null): number {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     fn dfs(node: &Option<Rc<RefCell<TreeNode>>>, mut num: i32) -> i32 {
         if node.is_none() {
@@ -266,7 +267,7 @@ impl Solution {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -292,10 +293,36 @@ var sumNumbers = function (root) {
 };
 ```
 
-### **...**
+#### C
 
-```
+```c
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
 
+int dfs(struct TreeNode* root, int num) {
+    if (!root) {
+        return 0;
+    }
+    num = num * 10 + root->val;
+    if (!root->left && !root->right) {
+        return num;
+    }
+    return dfs(root->left, num) + dfs(root->right, num);
+}
+
+int sumNumbers(struct TreeNode* root) {
+    return dfs(root, 0);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

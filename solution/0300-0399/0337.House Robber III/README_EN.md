@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0337.House%20Robber%20III/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Dynamic Programming
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [337. House Robber III](https://leetcode.com/problems/house-robber-iii)
 
 [中文文档](/solution/0300-0399/0337.House%20Robber%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>The thief has found himself a new place for his thievery again. There is only one entrance to this area, called <code>root</code>.</p>
 
@@ -35,11 +50,17 @@
 	<li><code>0 &lt;= Node.val &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -49,25 +70,18 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def rob(self, root: TreeNode) -> int:
-        @cache
-        def dfs(root):
+    def rob(self, root: Optional[TreeNode]) -> int:
+        def dfs(root: Optional[TreeNode]) -> (int, int):
             if root is None:
-                return 0
-            if root.left is None and root.right is None:
-                return root.val
-            a = dfs(root.left) + dfs(root.right)
-            b = root.val
-            if root.left:
-                b += dfs(root.left.left) + dfs(root.left.right)
-            if root.right:
-                b += dfs(root.right.left) + dfs(root.right.right)
-            return max(a, b)
+                return 0, 0
+            la, lb = dfs(root.left)
+            ra, rb = dfs(root.right)
+            return root.val + lb + rb, max(la, lb) + max(ra, rb)
 
-        return dfs(root)
+        return max(dfs(root))
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -86,36 +100,23 @@ class Solution:
  * }
  */
 class Solution {
-    private Map<TreeNode, Integer> memo;
-
     public int rob(TreeNode root) {
-        memo = new HashMap<>();
-        return dfs(root);
+        int[] ans = dfs(root);
+        return Math.max(ans[0], ans[1]);
     }
 
-    private int dfs(TreeNode root) {
+    private int[] dfs(TreeNode root) {
         if (root == null) {
-            return 0;
+            return new int[2];
         }
-        if (memo.containsKey(root)) {
-            return memo.get(root);
-        }
-        int a = dfs(root.left) + dfs(root.right);
-        int b = root.val;
-        if (root.left != null) {
-            b += dfs(root.left.left) + dfs(root.left.right);
-        }
-        if (root.right != null) {
-            b += dfs(root.right.left) + dfs(root.right.right);
-        }
-        int res = Math.max(a, b);
-        memo.put(root, res);
-        return res;
+        int[] l = dfs(root.left);
+        int[] r = dfs(root.right);
+        return new int[] {root.val + l[1] + r[1], Math.max(l[0], l[1]) + Math.max(r[0], r[1])};
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -131,27 +132,22 @@ class Solution {
  */
 class Solution {
 public:
-    unordered_map<TreeNode*, int> memo;
-
     int rob(TreeNode* root) {
-        return dfs(root);
-    }
-
-    int dfs(TreeNode* root) {
-        if (!root) return 0;
-        if (memo.count(root)) return memo[root];
-        int a = dfs(root->left) + dfs(root->right);
-        int b = root->val;
-        if (root->left) b += dfs(root->left->left) + dfs(root->left->right);
-        if (root->right) b += dfs(root->right->left) + dfs(root->right->right);
-        int res = max(a, b);
-        memo[root] = res;
-        return res;
+        function<pair<int, int>(TreeNode*)> dfs = [&](TreeNode* root) -> pair<int, int> {
+            if (!root) {
+                return make_pair(0, 0);
+            }
+            auto [la, lb] = dfs(root->left);
+            auto [ra, rb] = dfs(root->right);
+            return make_pair(root->val + lb + rb, max(la, lb) + max(ra, rb));
+        };
+        auto [a, b] = dfs(root);
+        return max(a, b);
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -163,42 +159,52 @@ public:
  * }
  */
 func rob(root *TreeNode) int {
-	memo := make(map[*TreeNode]int)
-	var dfs func(root *TreeNode) int
-	dfs = func(root *TreeNode) int {
+	var dfs func(*TreeNode) (int, int)
+	dfs = func(root *TreeNode) (int, int) {
 		if root == nil {
-			return 0
+			return 0, 0
 		}
-		if _, ok := memo[root]; ok {
-			return memo[root]
-		}
-		a := dfs(root.Left) + dfs(root.Right)
-		b := root.Val
-		if root.Left != nil {
-			b += dfs(root.Left.Left) + dfs(root.Left.Right)
-		}
-		if root.Right != nil {
-			b += dfs(root.Right.Left) + dfs(root.Right.Right)
-		}
-		res := max(a, b)
-		memo[root] = res
-		return res
+		la, lb := dfs(root.Left)
+		ra, rb := dfs(root.Right)
+		return root.Val + lb + rb, max(la, lb) + max(ra, rb)
 	}
-	return dfs(root)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	a, b := dfs(root)
+	return max(a, b)
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
 
+function rob(root: TreeNode | null): number {
+    const dfs = (root: TreeNode | null): [number, number] => {
+        if (!root) {
+            return [0, 0];
+        }
+        const [la, lb] = dfs(root.left);
+        const [ra, rb] = dfs(root.right);
+        return [root.val + lb + rb, Math.max(la, lb) + Math.max(ra, rb)];
+    };
+    return Math.max(...dfs(root));
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

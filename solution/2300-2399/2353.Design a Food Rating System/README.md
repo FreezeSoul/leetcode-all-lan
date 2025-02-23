@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2353.Design%20a%20Food%20Rating%20System/README.md
+rating: 1781
+source: 第 303 场周赛 Q3
+tags:
+    - 设计
+    - 数组
+    - 哈希表
+    - 字符串
+    - 有序集合
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2353. 设计食物评分系统](https://leetcode.cn/problems/design-a-food-rating-system)
 
 [English Version](/solution/2300-2399/2353.Design%20a%20Food%20Rating%20System/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个支持下述操作的食物评分系统：</p>
 
@@ -17,6 +34,7 @@
 
 <ul>
 	<li><code>FoodRatings(String[] foods, String[] cuisines, int[] ratings)</code> 初始化系统。食物由 <code>foods</code>、<code>cuisines</code> 和 <code>ratings</code> 描述，长度均为 <code>n</code> 。
+
     <ul>
     	<li><code>foods[i]</code> 是第 <code>i</code> 种食物的名字。</li>
     	<li><code>cuisines[i]</code> 是第 <code>i</code> 种食物的烹饪方式。</li>
@@ -25,6 +43,7 @@
     </li>
     <li><code>void changeRating(String food, int newRating)</code> 修改名字为 <code>food</code> 的食物的评分。</li>
     <li><code>String highestRated(String cuisine)</code> 返回指定烹饪方式 <code>cuisine</code> 下评分最高的食物的名字。如果存在并列，返回 <strong>字典序较小</strong> 的名字。</li>
+
 </ul>
 
 <p>注意，字符串 <code>x</code> 的字典序比字符串 <code>y</code> 更小的前提是：<code>x</code> 在字典中出现的位置在 <code>y</code> 之前，也就是说，要么 <code>x</code> 是 <code>y</code> 的前缀，或者在满足&nbsp;<code>x[i] != y[i]</code> 的第一个位置 <code>i</code> 处，<code>x[i]</code> 在字母表中出现的位置在 <code>y[i]</code> 之前。</p>
@@ -70,20 +89,19 @@ foodRatings.highestRated("japanese"); // 返回 "ramen"
 	<li>最多调用 <code>changeRating</code> 和 <code>highestRated</code> <strong>总计</strong> <code>2 * 10<sup>4</sup></code> 次</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
-from sortedcontainers import SortedSet
-
-
 class FoodRatings:
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
         self.mp = {}
@@ -109,15 +127,7 @@ class FoodRatings:
 # param_2 = obj.highestRated(cuisine)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-
-```
-
-### **C++**
+#### C++
 
 ```cpp
 using pis = pair<int, string>;
@@ -157,16 +167,8 @@ public:
  */
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

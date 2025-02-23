@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20083.%20%E6%B2%A1%E6%9C%89%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%E9%9B%86%E5%90%88%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 083. 没有重复元素集合的全排列](https://leetcode.cn/problems/VvJkup)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个不含重复数字的整数数组 <code>nums</code> ，返回其 <strong>所有可能的全排列</strong> 。可以 <strong>按任意顺序</strong> 返回答案。</p>
 
@@ -43,17 +50,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 46&nbsp;题相同：<a href="https://leetcode.cn/problems/permutations/">https://leetcode.cn/problems/permutations/</a>&nbsp;</p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-深度优先搜索。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -78,9 +85,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +117,68 @@ class Solution {
 }
 ```
 
-### **JavaScript**
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> res;
+        vector<int> path(n, 0);
+        vector<bool> used(n, false);
+        dfs(0, n, nums, used, path, res);
+        return res;
+    }
+
+    void dfs(int u, int n, vector<int>& nums, vector<bool>& used, vector<int>& path, vector<vector<int>>& res) {
+        if (u == n) {
+            res.emplace_back(path);
+            return;
+        }
+        for (int i = 0; i < n; ++i) {
+            if (!used[i]) {
+                path[u] = nums[i];
+                used[i] = true;
+                dfs(u + 1, n, nums, used, path, res);
+                used[i] = false;
+            }
+        }
+    }
+};
+```
+
+#### Go
+
+```go
+func permute(nums []int) [][]int {
+	n := len(nums)
+	res := make([][]int, 0)
+	path := make([]int, n)
+	used := make([]bool, n)
+	dfs(0, n, nums, used, path, &res)
+	return res
+}
+
+func dfs(u, n int, nums []int, used []bool, path []int, res *[][]int) {
+	if u == n {
+		t := make([]int, n)
+		copy(t, path)
+		*res = append(*res, t)
+		return
+	}
+	for i := 0; i < n; i++ {
+		if !used[i] {
+			path[u] = nums[i]
+			used[i] = true
+			dfs(u+1, n, nums, used, path, res)
+			used[i] = false
+		}
+	}
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -145,71 +211,76 @@ function dfs(u, n, nums, used, path, res) {
 }
 ```
 
-### **C++**
+#### C#
 
-```cpp
-class Solution {
-public:
-    vector<vector<int>> permute(vector<int>& nums) {
-        int n = nums.size();
-        vector<vector<int>> res;
-        vector<int> path(n, 0);
-        vector<bool> used(n, false);
-        dfs(0, n, nums, used, path, res);
-        return res;
+```cs
+using System.Collections.Generic;
+using System.Linq;
+
+public class Solution {
+    public IList<IList<int>> Permute(int[] nums) {
+        var results = new List<IList<int>>();
+        var temp = new List<int>();
+        var visited = new bool[nums.Length];
+        Search(nums, visited, temp, results);
+        return results;
     }
 
-    void dfs(int u, int n, vector<int>& nums, vector<bool>& used, vector<int>& path, vector<vector<int>>& res) {
-        if (u == n) {
-            res.emplace_back(path);
-            return;
+    private void Search(int[] nums, bool[] visited, IList<int> temp, IList<IList<int>> results)
+    {
+        int count = 0;
+        for (var i = 0; i < nums.Length; ++i)
+        {
+            if (visited[i]) continue;
+            ++count;
+            temp.Add(nums[i]);
+            visited[i] = true;
+            Search(nums, visited, temp, results);
+            temp.RemoveAt(temp.Count - 1);
+            visited[i] = false;
         }
-        for (int i = 0; i < n; ++i) {
-            if (!used[i]) {
-                path[u] = nums[i];
-                used[i] = true;
-                dfs(u + 1, n, nums, used, path, res);
-                used[i] = false;
+        if (count == 0 && temp.Any())
+        {
+            results.Add(new List<int>(temp));
+        }
+    }
+}
+```
+
+#### Swift
+
+```swift
+class Solution {
+    func permute(_ nums: [Int]) -> [[Int]] {
+        var res = [[Int]]()
+        var path = [Int]()
+        var used = [Bool](repeating: false, count: nums.count)
+        dfs(0, nums.count, nums, &used, &path, &res)
+        return res
+    }
+
+    private func dfs(
+        _ u: Int, _ n: Int, _ nums: [Int], _ used: inout [Bool], _ path: inout [Int], _ res: inout [[Int]]
+    ) {
+        if u == n {
+            res.append(path)
+            return
+        }
+        for i in 0..<n {
+            if !used[i] {
+                path.append(nums[i])
+                used[i] = true
+                dfs(u + 1, n, nums, &used, &path, &res)
+                used[i] = false
+                path.removeLast()
             }
         }
     }
-};
-```
-
-### **Go**
-
-```go
-func permute(nums []int) [][]int {
-	n := len(nums)
-	res := make([][]int, 0)
-	path := make([]int, n)
-	used := make([]bool, n)
-	dfs(0, n, nums, used, path, &res)
-	return res
 }
-
-func dfs(u, n int, nums []int, used []bool, path []int, res *[][]int) {
-	if u == n {
-		t := make([]int, n)
-		copy(t, path)
-		*res = append(*res, t)
-		return
-	}
-	for i := 0; i < n; i++ {
-		if !used[i] {
-			path[u] = nums[i]
-			used[i] = true
-			dfs(u+1, n, nums, used, path, res)
-			used[i] = false
-		}
-	}
-}
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

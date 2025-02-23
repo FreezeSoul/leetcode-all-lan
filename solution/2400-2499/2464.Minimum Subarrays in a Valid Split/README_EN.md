@@ -1,8 +1,23 @@
-# [2464. Minimum Subarrays in a Valid Split](https://leetcode.com/problems/minimum-subarrays-in-a-valid-split)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2464.Minimum%20Subarrays%20in%20a%20Valid%20Split/README_EN.md
+tags:
+    - Array
+    - Math
+    - Dynamic Programming
+    - Number Theory
+---
+
+<!-- problem:start -->
+
+# [2464. Minimum Subarrays in a Valid Split 🔒](https://leetcode.com/problems/minimum-subarrays-in-a-valid-split)
 
 [中文文档](/solution/2400-2499/2464.Minimum%20Subarrays%20in%20a%20Valid%20Split/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code>.</p>
 
@@ -61,11 +76,21 @@ It can be proved that 2 is the minimum number of subarrays that we can obtain in
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Memoization Search
+
+We design a function $dfs(i)$ to represent the minimum number of partitions starting from index $i$. For index $i$, we can enumerate all partition points $j$, i.e., $i \leq j < n$, where $n$ is the length of the array. For each partition point $j$, we need to determine whether the greatest common divisor of $nums[i]$ and $nums[j]$ is greater than $1$. If it is greater than $1$, we can partition, and the number of partitions is $1 + dfs(j + 1)$; otherwise, the number of partitions is $+\infty$. Finally, we take the minimum of all partition numbers.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -86,7 +111,7 @@ class Solution:
         return ans if ans < inf else -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -126,7 +151,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -153,7 +178,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func validSubarraySplit(nums []int) int {
@@ -184,13 +209,6 @@ func validSubarraySplit(nums []int) int {
 	return -1
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func gcd(a, b int) int {
 	if b == 0 {
 		return a
@@ -199,16 +217,8 @@ func gcd(a, b int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

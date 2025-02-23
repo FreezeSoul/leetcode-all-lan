@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20091.%20%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 091. 粉刷房子](https://leetcode.cn/problems/JEj789)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>假如有一排房子，共 <code>n</code> 个，每个房子可以被粉刷成红色、蓝色或者绿色这三种颜色中的一种，你需要粉刷所有的房子并且使其相邻的两个房子颜色不能相同。</p>
 
@@ -45,15 +52,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 256&nbsp;题相同：<a href="https://leetcode.cn/problems/paint-house/">https://leetcode.cn/problems/paint-house/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,9 +76,7 @@ class Solution:
         return min(r, g, b)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +93,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -104,7 +111,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCost(costs [][]int) int {
@@ -117,32 +124,21 @@ func minCost(costs [][]int) int {
 	}
 	return min(r, min(g, b))
 }
-
-func min(x, y int) int {
-	if x < y {
-		return x
-	}
-	return y
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minCost(costs: number[][]): number {
     let [r, g, b] = [0, 0, 0];
     for (const [_r, _g, _b] of costs) {
-        [r, g, b] = [
-            _r + Math.min(g, b),
-            _g + Math.min(r, b),
-            _b + Math.min(r, g),
-        ];
+        [r, g, b] = [_r + Math.min(g, b), _g + Math.min(r, b), _b + Math.min(r, g)];
     }
     return Math.min(r, g, b);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -160,10 +156,25 @@ impl Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
-
+```swift
+class Solution {
+    func minCost(_ costs: [[Int]]) -> Int {
+        var r = 0, g = 0, b = 0
+        for cost in costs {
+            let _r = r, _g = g, _b = b
+            r = min(_g, _b) + cost[0]
+            g = min(_r, _b) + cost[1]
+            b = min(_r, _g) + cost[2]
+        }
+        return min(r, min(g, b))
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

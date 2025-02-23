@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2535.Difference%20Between%20Element%20Sum%20and%20Digit%20Sum%20of%20an%20Array/README.md
+rating: 1222
+source: 第 328 场周赛 Q1
+tags:
+    - 数组
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2535. 数组元素和与数字和的绝对差](https://leetcode.cn/problems/difference-between-element-sum-and-digit-sum-of-an-array)
 
 [English Version](/solution/2500-2599/2535.Difference%20Between%20Element%20Sum%20and%20Digit%20Sum%20of%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个正整数数组 <code>nums</code> 。</p>
 
@@ -50,146 +63,140 @@ nums 的数字和是 1 + 2 + 3 + 4 = 10 。
 	<li><code>1 &lt;= nums[i] &lt;= 2000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-遍历数组 `nums`，计算元素和 $a$ 与数字和 $b$，最后返回 $|a - b|$ 即可。
+我们遍历数组 $\textit{nums}$，计算元素和 $x$ 和数字和 $y$，最后返回 $|x - y|$ 即可。由于 $x$ 一定大于等于 $y$，所以我们也可以直接返回 $x - y$。
 
-时间复杂度 $O(n)$，空间复杂度 $O(1)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n \times \log_{10} M)$，其中 $n$ 和 $M$ 分别是数组 $\textit{nums}$ 的长度和数组中元素的最大值。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def differenceOfSum(self, nums: List[int]) -> int:
-        a, b = sum(nums), 0
-        for x in nums:
-            while x:
-                b += x % 10
-                x //= 10
-        return abs(a - b)
+        x = y = 0
+        for v in nums:
+            x += v
+            while v:
+                y += v % 10
+                v //= 10
+        return x - y
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int differenceOfSum(int[] nums) {
-        int a = 0, b = 0;
-        for (int x : nums) {
-            a += x;
-            for (; x > 0; x /= 10) {
-                b += x % 10;
+        int x = 0, y = 0;
+        for (int v : nums) {
+            x += v;
+            for (; v > 0; v /= 10) {
+                y += v % 10;
             }
         }
-        return Math.abs(a - b);
+        return x - y;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int differenceOfSum(vector<int>& nums) {
-        int a = 0, b = 0;
-        for (int x : nums) {
-            a += x;
-            for (; x; x /= 10) {
-                b += x % 10;
+        int x = 0, y = 0;
+        for (int v : nums) {
+            x += v;
+            for (; v; v /= 10) {
+                y += v % 10;
             }
         }
-        return abs(a - b);
+        return x - y;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func differenceOfSum(nums []int) int {
-	a, b := 0, 0
-	for _, x := range nums {
-		a += x
-		for ; x > 0; x /= 10 {
-			b += x % 10
+	var x, y int
+	for _, v := range nums {
+		x += v
+		for ; v > 0; v /= 10 {
+			y += v % 10
 		}
 	}
-	return abs(a - b)
-}
-
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
+	return x - y
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function differenceOfSum(nums: number[]): number {
-    return nums.reduce((r, v) => {
-        r += v;
-        while (v !== 0) {
-            r -= v % 10;
-            v = Math.floor(v / 10);
+    let [x, y] = [0, 0];
+    for (let v of nums) {
+        x += v;
+        for (; v; v = Math.floor(v / 10)) {
+            y += v % 10;
         }
-        return r;
-    }, 0);
+    }
+    return x - y;
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
     pub fn difference_of_sum(nums: Vec<i32>) -> i32 {
-        let mut ans = 0;
-        for &num in nums.iter() {
-            let mut num = num;
-            ans += num;
-            while num != 0 {
-                ans -= num % 10;
+        let mut x = 0;
+        let mut y = 0;
+
+        for &v in &nums {
+            x += v;
+            let mut num = v;
+            while num > 0 {
+                y += num % 10;
                 num /= 10;
             }
         }
-        ans
+
+        x - y
     }
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int differenceOfSum(int *nums, int numsSize) {
-    int ans = 0;
+int differenceOfSum(int* nums, int numsSize) {
+    int x = 0, y = 0;
     for (int i = 0; i < numsSize; i++) {
-        ans += nums[i];
-        while (nums[i]) {
-            ans -= nums[i] % 10;
-            nums[i] /= 10;
+        int v = nums[i];
+        x += v;
+        while (v > 0) {
+            y += v % 10;
+            v /= 10;
         }
     }
-    return ans;
+    return x - y;
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

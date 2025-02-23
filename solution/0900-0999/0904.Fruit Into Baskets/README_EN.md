@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0904.Fruit%20Into%20Baskets/README_EN.md
+tags:
+    - Array
+    - Hash Table
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
 # [904. Fruit Into Baskets](https://leetcode.com/problems/fruit-into-baskets)
 
 [中文文档](/solution/0900-0999/0904.Fruit%20Into%20Baskets/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array <code>fruits</code> where <code>fruits[i]</code> is the <strong>type</strong> of fruit the <code>i<sup>th</sup></code> tree produces.</p>
 
@@ -51,11 +65,41 @@ If we had started at the first tree, we would only pick from trees [1,2].
 	<li><code>0 &lt;= fruits[i] &lt; fruits.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Sliding Window
+
+We use a hash table $cnt$ to maintain the types and corresponding quantities of fruits in the current window, and use two pointers $j$ and $i$ to maintain the left and right boundaries of the window.
+
+We traverse the `fruits` array, add the current fruit $x$ to the window, i.e., $cnt[x]++$, then judge whether the types of fruits in the current window exceed $2$. If it exceeds $2$, we need to move the left boundary $j$ of the window to the right until the types of fruits in the window do not exceed $2$. Then we update the answer, i.e., $ans = \max(ans, i - j + 1)$.
+
+After the traversal ends, we can get the final answer.
+
+```
+1 2 3 2 2 1 4
+^   ^
+j   i
+
+
+1 2 3 2 2 1 4
+  ^ ^
+  j i
+
+
+1 2 3 2 2 1 4
+  ^     ^
+  j     i
+```
+
+The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the `fruits` array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -74,23 +118,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def totalFruit(self, fruits: List[int]) -> int:
-        cnt = Counter()
-        j = 0
-        for x in fruits:
-            cnt[x] += 1
-            if len(cnt) > 2:
-                y = fruits[j]
-                cnt[y] -= 1
-                if cnt[y] == 0:
-                    cnt.pop(y)
-                j += 1
-        return len(fruits) - j
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,11 +127,10 @@ class Solution {
         int ans = 0;
         for (int i = 0, j = 0; i < fruits.length; ++i) {
             int x = fruits[i];
-            cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+            cnt.merge(x, 1, Integer::sum);
             while (cnt.size() > 2) {
                 int y = fruits[j++];
-                cnt.put(y, cnt.get(y) - 1);
-                if (cnt.get(y) == 0) {
+                if (cnt.merge(y, -1, Integer::sum) == 0) {
                     cnt.remove(y);
                 }
             }
@@ -114,27 +141,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int totalFruit(int[] fruits) {
-        Map<Integer, Integer> cnt = new HashMap<>();
-        int j = 0, n = fruits.length;
-        for (int x : fruits) {
-            cnt.put(x, cnt.getOrDefault(x, 0) + 1);
-            if (cnt.size() > 2) {
-                int y = fruits[j++];
-                cnt.put(y, cnt.get(y) - 1);
-                if (cnt.get(y) == 0) {
-                    cnt.remove(y);
-                }
-            }
-        }
-        return n - j;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,7 +154,9 @@ public:
             ++cnt[x];
             while (cnt.size() > 2) {
                 int y = fruits[j++];
-                if (--cnt[y] == 0) cnt.erase(y);
+                if (--cnt[y] == 0) {
+                    cnt.erase(y);
+                }
             }
             ans = max(ans, i - j + 1);
         }
@@ -156,25 +165,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int totalFruit(vector<int>& fruits) {
-        unordered_map<int, int> cnt;
-        int j = 0, n = fruits.size();
-        for (int& x : fruits) {
-            ++cnt[x];
-            if (cnt.size() > 2) {
-                int y = fruits[j++];
-                if (--cnt[y] == 0) cnt.erase(y);
-            }
-        }
-        return n - j;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func totalFruit(fruits []int) int {
@@ -193,14 +184,138 @@ func totalFruit(fruits []int) int {
 	}
 	return ans
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### TypeScript
+
+```ts
+function totalFruit(fruits: number[]): number {
+    const n = fruits.length;
+    const cnt: Map<number, number> = new Map();
+    let ans = 0;
+    for (let i = 0, j = 0; i < n; ++i) {
+        cnt.set(fruits[i], (cnt.get(fruits[i]) || 0) + 1);
+        for (; cnt.size > 2; ++j) {
+            cnt.set(fruits[j], cnt.get(fruits[j])! - 1);
+            if (!cnt.get(fruits[j])) {
+                cnt.delete(fruits[j]);
+            }
+        }
+        ans = Math.max(ans, i - j + 1);
+    }
+    return ans;
 }
 ```
+
+#### Rust
+
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn total_fruit(fruits: Vec<i32>) -> i32 {
+        let mut cnt = HashMap::new();
+        let mut ans = 0;
+        let mut j = 0;
+
+        for (i, &x) in fruits.iter().enumerate() {
+            *cnt.entry(x).or_insert(0) += 1;
+
+            while cnt.len() > 2 {
+                let y = fruits[j];
+                j += 1;
+                *cnt.get_mut(&y).unwrap() -= 1;
+                if cnt[&y] == 0 {
+                    cnt.remove(&y);
+                }
+            }
+
+            ans = ans.max(i - j + 1);
+        }
+
+        ans as i32
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Sliding Window Optimization
+
+In Solution 1, we find that the window size sometimes increases and sometimes decreases, which requires us to update the answer each time.
+
+But what this problem actually asks for is the maximum number of fruits, that is, the "largest" window. We don't need to shrink the window, we just need to let the window monotonically increase. So the code omits the operation of updating the answer each time, and only needs to return the size of the window as the answer after the traversal ends.
+
+The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the `fruits` array.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def totalFruit(self, fruits: List[int]) -> int:
+        cnt = Counter()
+        j = 0
+        for x in fruits:
+            cnt[x] += 1
+            if len(cnt) > 2:
+                y = fruits[j]
+                cnt[y] -= 1
+                if cnt[y] == 0:
+                    cnt.pop(y)
+                j += 1
+        return len(fruits) - j
+```
+
+#### Java
+
+```java
+class Solution {
+    public int totalFruit(int[] fruits) {
+        Map<Integer, Integer> cnt = new HashMap<>();
+        int j = 0, n = fruits.length;
+        for (int x : fruits) {
+            cnt.merge(x, 1, Integer::sum);
+            if (cnt.size() > 2) {
+                int y = fruits[j++];
+                if (cnt.merge(y, -1, Integer::sum) == 0) {
+                    cnt.remove(y);
+                }
+            }
+        }
+        return n - j;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        unordered_map<int, int> cnt;
+        int j = 0, n = fruits.size();
+        for (int& x : fruits) {
+            ++cnt[x];
+            if (cnt.size() > 2) {
+                int y = fruits[j++];
+                if (--cnt[y] == 0) {
+                    cnt.erase(y);
+                }
+            }
+        }
+        return n - j;
+    }
+};
+```
+
+#### Go
 
 ```go
 func totalFruit(fruits []int) int {
@@ -221,106 +336,57 @@ func totalFruit(fruits []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function totalFruit(fruits: number[]): number {
     const n = fruits.length;
-    const map = new Map<number, number>();
-    let res = 0;
-    let left = 0;
-    let right = 0;
-    while (right < n) {
-        map.set(fruits[right], (map.get(fruits[right]) ?? 0) + 1);
-        right++;
-        while (map.size > 2) {
-            const k = fruits[left++];
-            map.set(k, map.get(k) - 1);
-            if (map.get(k) === 0) {
-                map.delete(k);
+    const cnt: Map<number, number> = new Map();
+    let j = 0;
+    for (const x of fruits) {
+        cnt.set(x, (cnt.get(x) || 0) + 1);
+        if (cnt.size > 2) {
+            cnt.set(fruits[j], cnt.get(fruits[j])! - 1);
+            if (!cnt.get(fruits[j])) {
+                cnt.delete(fruits[j]);
             }
+            ++j;
         }
-        res = Math.max(res, right - left);
     }
-    return res;
+    return n - j;
 }
 ```
 
-```ts
-function totalFruit(fruits: number[]): number {
-    const n = fruits.length;
-    const map = new Map<number, number>();
-    let i = 0;
-    for (const fruit of fruits) {
-        map.set(fruit, (map.get(fruit) ?? 0) + 1);
-        if (map.size > 2) {
-            const k = fruits[i++];
-            map.set(k, map.get(k) - 1);
-            if (map.get(k) == 0) {
-                map.delete(k);
-            }
-        }
-    }
-    return n - i;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashMap;
+
 impl Solution {
     pub fn total_fruit(fruits: Vec<i32>) -> i32 {
+        let mut cnt = HashMap::new();
+        let mut j = 0;
         let n = fruits.len();
-        let mut map = HashMap::new();
-        let mut res = 0;
-        let mut left = 0;
-        let mut right = 0;
-        while right < n {
-            *map.entry(fruits[right]).or_insert(0) += 1;
-            right += 1;
-            while map.len() > 2 {
-                let k = fruits[left];
-                map.insert(k, map[&k] - 1);
-                if map[&k] == 0 {
-                    map.remove(&k);
-                }
-                left += 1;
-            }
-            res = res.max(right - left);
-        }
-        res as i32
-    }
-}
-```
 
-```rust
-use std::collections::HashMap;
-impl Solution {
-    pub fn total_fruit(fruits: Vec<i32>) -> i32 {
-        let n = fruits.len();
-        let mut map = HashMap::new();
-        let mut i = 0;
-        for &fruit in fruits.iter() {
-            *map.entry(fruit).or_insert(0) += 1;
-            if map.len() > 2 {
-                let k = fruits[i];
-                map.insert(k, map[&k] - 1);
-                if map[&k] == 0 {
-                    map.remove(&k);
+        for &x in &fruits {
+            *cnt.entry(x).or_insert(0) += 1;
+            if cnt.len() > 2 {
+                let y = fruits[j];
+                j += 1;
+                *cnt.get_mut(&y).unwrap() -= 1;
+                if cnt[&y] == 0 {
+                    cnt.remove(&y);
                 }
-                i += 1;
             }
         }
-        (n - i) as i32
+
+        (n - j) as i32
     }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

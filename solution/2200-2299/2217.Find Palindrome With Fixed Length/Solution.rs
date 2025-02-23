@@ -1,7 +1,7 @@
 impl Solution {
     pub fn kth_palindrome(queries: Vec<i32>, int_length: i32) -> Vec<i64> {
-        let is_odd = int_length & 1 == 1;
-        let best_num = i32::pow(10, (int_length / 2 + if is_odd { 0 } else { -1 }) as u32);
+        let is_odd = (int_length & 1) == 1;
+        let best_num = i32::pow(10, (int_length / 2 + (if is_odd { 0 } else { -1 })) as u32);
         let max = best_num * 9;
         queries
             .iter()

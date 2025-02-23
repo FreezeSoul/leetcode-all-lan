@@ -1,8 +1,24 @@
-# [294. Flip Game II](https://leetcode.com/problems/flip-game-ii)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0294.Flip%20Game%20II/README_EN.md
+tags:
+    - Memoization
+    - Math
+    - Dynamic Programming
+    - Backtracking
+    - Game Theory
+---
+
+<!-- problem:start -->
+
+# [294. Flip Game II 🔒](https://leetcode.com/problems/flip-game-ii)
 
 [中文文档](/solution/0200-0299/0294.Flip%20Game%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are playing a Flip Game with your friend.</p>
 
@@ -37,11 +53,17 @@
 <p>&nbsp;</p>
 <strong>Follow up:</strong> Derive your algorithm&#39;s runtime complexity.
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -63,35 +85,7 @@ class Solution:
         return dfs(mask)
 ```
 
-```python
-class Solution:
-    def canWin(self, currentState: str) -> bool:
-        def win(i):
-            if sg[i] != -1:
-                return sg[i]
-            vis = [False] * n
-            for j in range(i - 1):
-                vis[win(j) ^ win(i - j - 2)] = True
-            for j in range(n):
-                if not vis[j]:
-                    sg[i] = j
-                    return j
-            return 0
-
-        n = len(currentState)
-        sg = [-1] * (n + 1)
-        sg[0] = sg[1] = 0
-        ans = i = 0
-        while i < n:
-            j = i
-            while j < n and currentState[j] == '+':
-                j += 1
-            ans ^= win(j - i)
-            i = j + 1
-        return ans > 0
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -128,6 +122,114 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+using ll = long long;
+
+class Solution {
+public:
+    int n;
+    unordered_map<ll, bool> memo;
+
+    bool canWin(string currentState) {
+        n = currentState.size();
+        ll mask = 0;
+        for (int i = 0; i < n; ++i)
+            if (currentState[i] == '+') mask |= 1ll << i;
+        return dfs(mask);
+    }
+
+    bool dfs(ll mask) {
+        if (memo.count(mask)) return memo[mask];
+        for (int i = 0; i < n - 1; ++i) {
+            if ((mask & (1ll << i)) == 0 || (mask & (1ll << (i + 1))) == 0) continue;
+            if (dfs(mask ^ (1ll << i) ^ (1ll << (i + 1)))) continue;
+            memo[mask] = true;
+            return true;
+        }
+        memo[mask] = false;
+        return false;
+    }
+};
+```
+
+#### Go
+
+```go
+func canWin(currentState string) bool {
+	n := len(currentState)
+	memo := map[int]bool{}
+	mask := 0
+	for i, c := range currentState {
+		if c == '+' {
+			mask |= 1 << i
+		}
+	}
+	var dfs func(int) bool
+	dfs = func(mask int) bool {
+		if v, ok := memo[mask]; ok {
+			return v
+		}
+		for i := 0; i < n-1; i++ {
+			if (mask&(1<<i)) == 0 || (mask&(1<<(i+1))) == 0 {
+				continue
+			}
+			if dfs(mask ^ (1 << i) ^ (1 << (i + 1))) {
+				continue
+			}
+			memo[mask] = true
+			return true
+		}
+		memo[mask] = false
+		return false
+	}
+	return dfs(mask)
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def canWin(self, currentState: str) -> bool:
+        def win(i):
+            if sg[i] != -1:
+                return sg[i]
+            vis = [False] * n
+            for j in range(i - 1):
+                vis[win(j) ^ win(i - j - 2)] = True
+            for j in range(n):
+                if not vis[j]:
+                    sg[i] = j
+                    return j
+            return 0
+
+        n = len(currentState)
+        sg = [-1] * (n + 1)
+        sg[0] = sg[1] = 0
+        ans = i = 0
+        while i < n:
+            j = i
+            while j < n and currentState[j] == '+':
+                j += 1
+            ans ^= win(j - i)
+            i = j + 1
+        return ans > 0
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -170,37 +272,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-using ll = long long;
-
-class Solution {
-public:
-    int n;
-    unordered_map<ll, bool> memo;
-
-    bool canWin(string currentState) {
-        n = currentState.size();
-        ll mask = 0;
-        for (int i = 0; i < n; ++i)
-            if (currentState[i] == '+') mask |= 1ll << i;
-        return dfs(mask);
-    }
-
-    bool dfs(ll mask) {
-        if (memo.count(mask)) return memo[mask];
-        for (int i = 0; i < n - 1; ++i) {
-            if ((mask & (1ll << i)) == 0 || (mask & (1ll << (i + 1))) == 0) continue;
-            if (dfs(mask ^ (1ll << i) ^ (1ll << (i + 1)))) continue;
-            memo[mask] = true;
-            return true;
-        }
-        memo[mask] = false;
-        return false;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -214,13 +286,13 @@ public:
             if (sg[i] != -1) return sg[i];
             vector<bool> vis(n);
             for (int j = 0; j < i - 1; ++j) vis[win(j) ^ win(i - j - 2)] = true;
-            for (int j = 0; j < n; ++j) if (!vis[j]) return sg[i] = j;
+            for (int j = 0; j < n; ++j)
+                if (!vis[j]) return sg[i] = j;
             return 0;
         };
 
         int ans = 0, i = 0;
-        while (i < n)
-        {
+        while (i < n) {
             int j = i;
             while (j < n && currentState[j] == '+') ++j;
             ans ^= win(j - i);
@@ -231,39 +303,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func canWin(currentState string) bool {
-	n := len(currentState)
-	memo := map[int]bool{}
-	mask := 0
-	for i, c := range currentState {
-		if c == '+' {
-			mask |= 1 << i
-		}
-	}
-	var dfs func(int) bool
-	dfs = func(mask int) bool {
-		if v, ok := memo[mask]; ok {
-			return v
-		}
-		for i := 0; i < n-1; i++ {
-			if (mask&(1<<i)) == 0 || (mask&(1<<(i+1))) == 0 {
-				continue
-			}
-			if dfs(mask ^ (1 << i) ^ (1 << (i + 1))) {
-				continue
-			}
-			memo[mask] = true
-			return true
-		}
-		memo[mask] = false
-		return false
-	}
-	return dfs(mask)
-}
-```
+#### Go
 
 ```go
 func canWin(currentState string) bool {
@@ -302,10 +342,8 @@ func canWin(currentState string) bool {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

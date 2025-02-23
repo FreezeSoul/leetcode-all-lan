@@ -1,8 +1,18 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/04.12.Paths%20with%20Sum/README_EN.md
+---
+
+<!-- problem:start -->
+
 # [04.12. Paths with Sum](https://leetcode.cn/problems/paths-with-sum-lcci)
 
 [中文文档](/lcci/04.12.Paths%20with%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a binary tree in which each node contains an integer value (which might be positive or negative). Design an algorithm to count the number of paths that sum to a given value. The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).</p>
 
@@ -42,81 +52,159 @@ Given the following tree and &nbsp;<code>sum = 22,</code></p>
 	<li><code>node number &lt;= 10000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Depth-First-Search
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Prefix Sum + Recursion
+
+We can use the idea of prefix sum to recursively traverse the binary tree, and use a hash table $cnt$ to count the occurrence of each prefix sum on the path from the root node to the current node.
+
+We design a recursive function $dfs(node, s)$, where the current node being traversed is $node$, and the prefix sum on the path from the root node to the current node is $s$. The return value of the function is the number of paths with the path sum equal to $sum$ and the path ends at the $node$ node or its subtree nodes. Therefore, the answer is $dfs(root, 0)$.
+
+The recursive process of the function $dfs(node, s)$ is as follows:
+
+-   If the current node $node$ is null, return $0$.
+-   Calculate the prefix sum $s$ on the path from the root node to the current node.
+-   Use $cnt[s - sum]$ to represent the number of paths with the path sum equal to $sum$ and the path ends at the current node, where $cnt[s - sum]$ is the count of the prefix sum equal to $s - sum$ in $cnt$.
+-   Add the count of the prefix sum $s$ by $1$, i.e., $cnt[s] = cnt[s] + 1$.
+-   Recursively traverse the left and right child nodes of the current node, i.e., call the functions $dfs(node.left, s)$ and $dfs(node.right, s)$, and add their return values.
+-   After the return value is calculated, subtract the count of the prefix sum $s$ of the current node by $1$, i.e., execute $cnt[s] = cnt[s] - 1$.
+-   Finally, return the answer.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes in the binary tree.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-Using the idea of recursion, at each recursion to a node.
-
--   If root.val-sum == 0, add 1 to the result
--   Consider two scenarios for inclusion or exclusion of this node from the pathway
-
-Special case: if the parent node of this node is in the path, this node must be included in the path (the path cannot be broken)
+#### Python3
 
 ```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def pathSum(self, root: TreeNode, sum: int) -> int:
-        def dfs(root, sum, flag):
-            nonlocal ans
-            if not root:
+    def pathSum(self, root: Optional[TreeNode], sum: int) -> int:
+        def dfs(root: Optional[TreeNode], s: int) -> int:
+            if root is None:
                 return 0
-            if sum - root.val == 0:
-                ans += 1
-            if flag == 0:
-                dfs(root.left, sum, 0)
-                dfs(root.right, sum, 0)
-            dfs(root.left, sum - root.val, 1)
-            dfs(root.right, sum - root.val, 1)
+            s += root.val
+            ans = cnt[s - sum]
+            cnt[s] += 1
+            ans += dfs(root.left, s)
+            ans += dfs(root.right, s)
+            cnt[s] -= 1
+            return ans
 
-        if not root:
-            return 0
-        ans = 0
-        dfs(root, sum, 0)
-        return ans
+        cnt = Counter({0: 1})
+        return dfs(root, 0)
 ```
 
-### **Java**
-
-Use to 2 recursive processes.
-
--   BFS: (traverse) traverses each tree node.
--   DFS: Starting from each tree node, the nodes sum to see if sum can be satisfied.
-
-Note that node values can be positive or negative, and all possible paths need to be exhausted.
+#### Java
 
 ```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
 class Solution {
-    int ans = 0;
+    private Map<Long, Integer> cnt = new HashMap<>();
+    private int target;
+
     public int pathSum(TreeNode root, int sum) {
-        traverse(root, sum);
+        cnt.put(0L, 1);
+        target = sum;
+        return dfs(root, 0);
+    }
+
+    private int dfs(TreeNode root, long s) {
+        if (root == null) {
+            return 0;
+        }
+        s += root.val;
+        int ans = cnt.getOrDefault(s - target, 0);
+        cnt.merge(s, 1, Integer::sum);
+        ans += dfs(root.left, s);
+        ans += dfs(root.right, s);
+        cnt.merge(s, -1, Integer::sum);
         return ans;
-    }
-
-    void traverse(TreeNode root, int sum) {
-        if (root == null) return;
-        ans += dfs(root, sum, 0);
-        traverse(root.left, sum);
-        traverse(root.right, sum);
-    }
-
-    // check if sum of path is sum.
-    int dfs(TreeNode root, int sum, int cur) {
-        if (root == null) return 0;
-        cur += root.val;
-        int res = 0;
-        if (cur == sum) res++;
-        res += dfs(root.left, sum, cur);
-        res += dfs(root.right, sum, cur);
-        return res;
     }
 }
 ```
 
-### **TypeScript**
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int pathSum(TreeNode* root, int sum) {
+        unordered_map<long long, int> cnt{{0, 1}};
+        auto dfs = [&](this auto&& dfs, TreeNode* root, long long s) -> int {
+            if (!root) {
+                return 0;
+            }
+            s += root->val;
+            int ans = cnt[s - sum];
+            ++cnt[s];
+            ans += dfs(root->left, s);
+            ans += dfs(root->right, s);
+            --cnt[s];
+            return ans;
+        };
+        return dfs(root, 0);
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func pathSum(root *TreeNode, sum int) int {
+	cnt := map[int]int{0: 1}
+	var dfs func(*TreeNode, int) int
+	dfs = func(root *TreeNode, s int) int {
+		if root == nil {
+			return 0
+		}
+		s += root.Val
+		ans := cnt[s-sum]
+		cnt[s]++
+		ans += dfs(root.Left, s)
+		ans += dfs(root.Right, s)
+		cnt[s]--
+		return ans
+	}
+	return dfs(root, 0)
+}
+```
+
+#### TypeScript
 
 ```ts
 /**
@@ -133,27 +221,26 @@ class Solution {
  * }
  */
 
-function dfs(root: TreeNode | null, sum: number): number {
-    let res = 0;
-    if (root == null) {
-        return res;
-    }
-    sum -= root.val;
-    if (sum === 0) {
-        res++;
-    }
-    return res + dfs(root.left, sum) + dfs(root.right, sum);
-}
-
 function pathSum(root: TreeNode | null, sum: number): number {
-    if (root == null) {
-        return 0;
-    }
-    return dfs(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+    const cnt: Map<number, number> = new Map();
+    cnt.set(0, 1);
+    const dfs = (root: TreeNode | null, s: number): number => {
+        if (!root) {
+            return 0;
+        }
+        s += root.val;
+        let ans = cnt.get(s - sum) ?? 0;
+        cnt.set(s, (cnt.get(s) ?? 0) + 1);
+        ans += dfs(root.left, s);
+        ans += dfs(root.right, s);
+        cnt.set(s, (cnt.get(s) ?? 0) - 1);
+        return ans;
+    };
+    return dfs(root, 0);
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -174,48 +261,80 @@ function pathSum(root: TreeNode | null, sum: number): number {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
-use std::collections::VecDeque;
+use std::collections::HashMap;
+use std::rc::Rc;
 impl Solution {
-    fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, mut sum: i32) -> i32 {
-        let mut res = 0;
-        if root.is_none() {
-            return res;
-        }
-        let root = root.as_ref().unwrap().borrow();
-        sum -= root.val;
-        if sum == 0 {
-            res += 1;
-        }
-        res + Self::dfs(&root.left, sum) + Self::dfs(&root.right, sum)
+    pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, sum: i32) -> i32 {
+        let mut cnt = HashMap::new();
+        cnt.insert(0, 1);
+        return Self::dfs(root, sum, 0, &mut cnt);
     }
 
-    pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, sum: i32) -> i32 {
-        let mut queue = VecDeque::new();
-        if root.is_some() {
-            queue.push_back(root);
+    fn dfs(
+        root: Option<Rc<RefCell<TreeNode>>>,
+        sum: i32,
+        s: i32,
+        cnt: &mut HashMap<i32, i32>,
+    ) -> i32 {
+        if let Some(node) = root {
+            let node = node.borrow();
+            let s = s + node.val;
+            let mut ans = *cnt.get(&(s - sum)).unwrap_or(&0);
+            *cnt.entry(s).or_insert(0) += 1;
+            ans += Self::dfs(node.left.clone(), sum, s, cnt);
+            ans += Self::dfs(node.right.clone(), sum, s, cnt);
+            *cnt.entry(s).or_insert(0) -= 1;
+            return ans;
         }
-        let mut res = 0;
-        while let Some(mut root) = queue.pop_front() {
-            res += Self::dfs(&root, sum);
-            let mut root = root.as_mut().unwrap().borrow_mut();
-            if root.left.is_some() {
-                queue.push_back(root.left.take());
-            }
-            if root.right.is_some() {
-                queue.push_back(root.right.take());
-            }
-        }
-        res
+        return 0;
     }
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public var val: Int
+ *     public var left: TreeNode?
+ *     public var right: TreeNode?
+ *     public init() { self.val = 0; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int) { self.val = val; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+ *         self.val = val
+ *         self.left = left
+ *         self.right = right
+ *     }
+ * }
+ */
+class Solution {
+    func pathSum(_ root: TreeNode?, _ sum: Int) -> Int {
+        var cnt: [Int: Int] = [0: 1]
 
+        func dfs(_ root: TreeNode?, _ s: Int) -> Int {
+            guard let root = root else { return 0 }
+
+            var s = s + root.val
+            var ans = cnt[s - sum, default: 0]
+
+            cnt[s, default: 0] += 1
+            ans += dfs(root.left, s)
+            ans += dfs(root.right, s)
+            cnt[s, default: 0] -= 1
+
+            return ans
+        }
+
+        return dfs(root, 0)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

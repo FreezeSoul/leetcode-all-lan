@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0455.Assign%20Cookies/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Two Pointers
+    - Sorting
+---
+
+<!-- problem:start -->
+
 # [455. Assign Cookies](https://leetcode.com/problems/assign-cookies)
 
 [中文文档](/solution/0400-0499/0455.Assign%20Cookies/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Assume you are an awesome parent and want to give your children some cookies. But, you should give each child at most one cookie.</p>
 
@@ -38,11 +53,31 @@ You need to output 2.
 	<li><code>1 &lt;= g[i], s[j] &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<p>&nbsp;</p>
+<p><strong>Note:</strong> This question is the same as <a href="https://leetcode.com/problems/maximum-matching-of-players-with-trainers/description/" target="_blank"> 2410: Maximum Matching of Players With Trainers.</a></p>
+
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sorting + Two Pointers
+
+According to the problem description, we should prioritize giving cookies to children with smaller appetites, so as to satisfy as many children as possible.
+
+Therefore, we first sort the two arrays, and then use two pointers $i$ and $j$ to point to the head of arrays $g$ and $s$ respectively. Each time we compare the size of $g[i]$ and $s[j]$:
+
+-   If $s[j] < g[i]$, it means that the current cookie $s[j]$ cannot satisfy the current child $g[i]$. We should allocate a larger cookie to the current child, so $j$ should move to the right by one. If $j$ goes out of bounds, it means that the current child cannot be satisfied. At this time, the number of successfully allocated children is $i$, and we can return directly.
+-   If $s[j] \ge g[i]$, it means that the current cookie $s[j]$ can satisfy the current child $g[i]$. We allocate the current cookie to the current child, so both $i$ and $j$ should move to the right by one.
+
+If we have traversed the array $g$, it means that all children have been allocated cookies, and we can return the total number of children.
+
+The time complexity is $O(m \times \log m + n \times \log n)$, and the space complexity is $O(\log m + \log n)$. Where $m$ and $n$ are the lengths of arrays $g$ and $s$ respectively.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +94,7 @@ class Solution:
         return len(g)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -81,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findContentChildren(g []int, s []int) int {
@@ -123,7 +158,27 @@ func findContentChildren(g []int, s []int) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function findContentChildren(g: number[], s: number[]): number {
+    g.sort((a, b) => a - b);
+    s.sort((a, b) => a - b);
+    const m = g.length;
+    const n = s.length;
+    for (let i = 0, j = 0; i < m; ++i) {
+        while (j < n && s[j] < g[i]) {
+            ++j;
+        }
+        if (j++ >= n) {
+            return i;
+        }
+    }
+    return m;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -148,30 +203,8 @@ var findContentChildren = function (g, s) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function findContentChildren(g: number[], s: number[]): number {
-    g.sort((a, b) => a - b);
-    s.sort((a, b) => a - b);
-    const m = g.length;
-    const n = s.length;
-    for (let i = 0, j = 0; i < m; ++i) {
-        while (j < n && s[j] < g[i]) {
-            ++j;
-        }
-        if (j++ >= n) {
-            return i;
-        }
-    }
-    return m;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

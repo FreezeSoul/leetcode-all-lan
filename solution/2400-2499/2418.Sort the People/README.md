@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2418.Sort%20the%20People/README.md
+rating: 1193
+source: 第 312 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2418. 按身高排序](https://leetcode.cn/problems/sort-the-people)
 
 [English Version](/solution/2400-2499/2418.Sort%20the%20People/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串数组 <code>names</code> ，和一个由 <strong>互不相同</strong> 的正整数组成的数组 <code>heights</code> 。两个数组的长度均为 <code>n</code> 。</p>
 
@@ -41,11 +56,13 @@
 	<li><code>heights</code> 中的所有值互不相同</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序**
+### 方法一：排序
 
 根据题目描述，我们可以创建一个长度为 $n$ 的下标数组 $idx$，其中 $idx[i]=i$。然后我们对 $idx$ 中的每个下标按照 $heights$ 中对应的身高降序排序，最后遍历排序后的 $idx$ 中的每个下标 $i$，将 $names[i]$ 加入答案数组即可。
 
@@ -55,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -67,15 +82,7 @@ class Solution:
         return [names[i] for i in idx]
 ```
 
-```python
-class Solution:
-    def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
-        return [name for _, name in sorted(zip(heights, names), reverse=True)]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -95,6 +102,92 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
+        int n = names.size();
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&](int i, int j) { return heights[j] < heights[i]; });
+        vector<string> ans;
+        for (int i : idx) {
+            ans.push_back(names[i]);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func sortPeople(names []string, heights []int) (ans []string) {
+	n := len(names)
+	idx := make([]int, n)
+	for i := range idx {
+		idx[i] = i
+	}
+	sort.Slice(idx, func(i, j int) bool { return heights[idx[j]] < heights[idx[i]] })
+	for _, i := range idx {
+		ans = append(ans, names[i])
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function sortPeople(names: string[], heights: number[]): string[] {
+    const n = names.length;
+    const idx = new Array(n);
+    for (let i = 0; i < n; ++i) {
+        idx[i] = i;
+    }
+    idx.sort((i, j) => heights[j] - heights[i]);
+    const ans: string[] = [];
+    for (const i of idx) {
+        ans.push(names[i]);
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn sort_people(names: Vec<String>, heights: Vec<i32>) -> Vec<String> {
+        let mut combine: Vec<(String, i32)> = names.into_iter().zip(heights.into_iter()).collect();
+        combine.sort_by(|a, b| b.1.cmp(&a.1));
+        combine.iter().map(|s| s.0.clone()).collect()
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
+        return [name for _, name in sorted(zip(heights, names), reverse=True)]
+```
+
+#### Java
+
 ```java
 class Solution {
     public String[] sortPeople(String[] names, int[] heights) {
@@ -113,24 +206,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
-        int n = names.size();
-        vector<int> idx(n);
-        iota(idx.begin(), idx.end(), 0);
-        sort(idx.begin(), idx.end(), [&](int i, int j) { return heights[j] < heights[i]; });
-        vector<string> ans;
-        for (int i : idx) {
-            ans.push_back(names[i]);
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -151,22 +227,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func sortPeople(names []string, heights []int) (ans []string) {
-	n := len(names)
-	idx := make([]int, n)
-	for i := range idx {
-		idx[i] = i
-	}
-	sort.Slice(idx, func(i, j int) bool { return heights[idx[j]] < heights[idx[i]] })
-	for _, i := range idx {
-		ans = append(ans, names[i])
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func sortPeople(names []string, heights []int) []string {
@@ -184,23 +245,7 @@ func sortPeople(names []string, heights []int) []string {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function sortPeople(names: string[], heights: number[]): string[] {
-    const n = names.length;
-    const idx = new Array(n);
-    for (let i = 0; i < n; ++i) {
-        idx[i] = i;
-    }
-    idx.sort((i, j) => heights[j] - heights[i]);
-    const ans: string[] = [];
-    for (const i of idx) {
-        ans.push(names[i]);
-    }
-    return ans;
-}
-```
+#### TypeScript
 
 ```ts
 function sortPeople(names: string[], heights: number[]): string[] {
@@ -211,22 +256,8 @@ function sortPeople(names: string[], heights: number[]): string[] {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn sort_people(names: Vec<String>, heights: Vec<i32>) -> Vec<String> {
-        let mut combine: Vec<(String, i32)> = names.into_iter().zip(heights.into_iter()).collect();
-        combine.sort_by(|a, b| b.1.cmp(&a.1));
-        combine.iter().map(|s| s.0.clone()).collect()
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

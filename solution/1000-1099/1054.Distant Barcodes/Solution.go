@@ -1,8 +1,5 @@
 func rearrangeBarcodes(barcodes []int) []int {
-	mx := 0
-	for _, x := range barcodes {
-		mx = max(mx, x)
-	}
+	mx := slices.Max(barcodes)
 	cnt := make([]int, mx+1)
 	for _, x := range barcodes {
 		cnt[x]++
@@ -22,11 +19,4 @@ func rearrangeBarcodes(barcodes []int) []int {
 		}
 	}
 	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0834.Sum%20of%20Distances%20in%20Tree/README.md
+tags:
+    - 树
+    - 深度优先搜索
+    - 图
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [834. 树中距离之和](https://leetcode.cn/problems/sum-of-distances-in-tree)
 
 [English Version](/solution/0800-0899/0834.Sum%20of%20Distances%20in%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个无向、连通的树。树中有 <code>n</code> 个标记为 <code>0...n-1</code> 的节点以及 <code>n-1</code>&nbsp;条边&nbsp;。</p>
 
@@ -53,11 +66,13 @@
 	<li>给定的输入保证为有效的树</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：树形 DP（换根）**
+### 方法一：树形 DP（换根）
 
 我们先跑一遍 DFS，计算出每个节点的子树大小，记录在数组 $size$ 中，并且统计出节点 $0$ 到其他节点的距离之和，记录在 $ans[0]$ 中。
 
@@ -67,13 +82,11 @@
 
 相似题目：
 
--   [2581. 统计可能的树根数目](/solution/2500-2599/2581.Count%20Number%20of%20Possible%20Root%20Nodes/README.md)
+-   [2581. 统计可能的树根数目](https://github.com/doocs/leetcode/blob/main/solution/2500-2599/2581.Count%20Number%20of%20Possible%20Root%20Nodes/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +117,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -153,7 +164,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -195,7 +206,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sumOfDistancesInTree(n int, edges [][]int) []int {
@@ -233,7 +244,7 @@ func sumOfDistancesInTree(n int, edges [][]int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
@@ -257,7 +268,7 @@ function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
     const dfs2 = (i: number, fa: number, t: number) => {
         ans[i] = t;
         for (const j of g[i]) {
-            if (j != fa) {
+            if (j !== fa) {
                 dfs2(j, i, t - size[j] + n - size[j]);
             }
         }
@@ -268,10 +279,8 @@ function sumOfDistancesInTree(n: number, edges: number[][]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

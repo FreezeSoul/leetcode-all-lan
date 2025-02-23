@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1206.Design%20Skiplist/README_EN.md
+tags:
+    - Design
+    - Linked List
+---
+
+<!-- problem:start -->
+
 # [1206. Design Skiplist](https://leetcode.com/problems/design-skiplist)
 
 [中文文档](/solution/1200-1299/1206.Design%20Skiplist/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Design a <strong>Skiplist</strong> without using any built-in libraries.</p>
 
@@ -58,13 +71,33 @@ skiplist.search(1); // return False, 1 has already been erased.</pre>
 	<li>At most <code>5 * 10<sup>4</sup></code> calls will be made to <code>search</code>, <code>add</code>, and <code>erase</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Because the `level` of the nodes is random, multiple `next` pointers are required, and the rest of the operation is like a single linked list.
+<!-- solution:start -->
+
+### Solution 1: Data Structure
+
+The core idea of a skip list is to use multiple "levels" to store data, with each level acting as an index. Data starts from the bottom level linked list and gradually rises to higher levels, eventually forming a multi-level linked list structure. Each level's nodes only contain part of the data, allowing for jumps to reduce search time.
+
+In this problem, we use a $\textit{Node}$ class to represent the nodes of the skip list. Each node contains a $\textit{val}$ field and a $\textit{next}$ array. The length of the array is $\textit{level}$, indicating the next node at each level. We use a $\textit{Skiplist}$ class to implement the skip list operations.
+
+The skip list contains a head node $\textit{head}$ and the current maximum level $\textit{level}$. The head node's value is set to $-1$ to mark the starting position of the list. We use a dynamic array $\textit{next}$ to store pointers to successor nodes.
+
+For the $\textit{search}$ operation, we start from the highest level of the skip list and traverse downwards until we find the target node or determine that the target node does not exist. At each level, we use the $\textit{find\_closest}$ method to jump to the node closest to the target.
+
+For the $\textit{add}$ operation, we first randomly decide the level of the new node. Then, starting from the highest level, we find the node closest to the new value at each level and insert the new node at the appropriate position. If the level of the inserted node is greater than the current maximum level of the skip list, we need to update the level of the skip list.
+
+For the $\textit{erase}$ operation, similar to the search operation, we traverse each level of the skip list to find and delete the target node. When deleting a node, we need to update the $\textit{next}$ pointers at each level. If the highest level of the skip list has no nodes, we need to decrease the level of the skip list.
+
+Additionally, we define a $\textit{random\_level}$ method to randomly decide the level of the new node. This method generates a random number between $[1, \textit{max\_level}]$ until the generated random number is greater than or equal to $\textit{p}$. We also have a $\textit{find\_closest}$ method to find the node closest to the target value at each level.
+
+The time complexity of the above operations is $O(\log n)$, where $n$ is the number of nodes in the skip list. The space complexity is $O(n)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Node:
@@ -133,7 +166,7 @@ class Skiplist:
 # param_3 = obj.erase(num)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Skiplist {
@@ -222,7 +255,88 @@ class Skiplist {
  */
 ```
 
-### **Go**
+#### C++
+
+```cpp
+struct Node {
+    int val;
+    vector<Node*> next;
+    Node(int v, int level)
+        : val(v)
+        , next(level, nullptr) {}
+};
+
+class Skiplist {
+public:
+    const int p = RAND_MAX / 4;
+    const int maxLevel = 32;
+    Node* head;
+    int level;
+
+    Skiplist() {
+        head = new Node(-1, maxLevel);
+        level = 0;
+    }
+
+    bool search(int target) {
+        Node* curr = head;
+        for (int i = level - 1; ~i; --i) {
+            curr = findClosest(curr, i, target);
+            if (curr->next[i] && curr->next[i]->val == target) return true;
+        }
+        return false;
+    }
+
+    void add(int num) {
+        Node* curr = head;
+        int lv = randomLevel();
+        Node* node = new Node(num, lv);
+        level = max(level, lv);
+        for (int i = level - 1; ~i; --i) {
+            curr = findClosest(curr, i, num);
+            if (i < lv) {
+                node->next[i] = curr->next[i];
+                curr->next[i] = node;
+            }
+        }
+    }
+
+    bool erase(int num) {
+        Node* curr = head;
+        bool ok = false;
+        for (int i = level - 1; ~i; --i) {
+            curr = findClosest(curr, i, num);
+            if (curr->next[i] && curr->next[i]->val == num) {
+                curr->next[i] = curr->next[i]->next[i];
+                ok = true;
+            }
+        }
+        while (level > 1 && !head->next[level - 1]) --level;
+        return ok;
+    }
+
+    Node* findClosest(Node* curr, int level, int target) {
+        while (curr->next[level] && curr->next[level]->val < target) curr = curr->next[level];
+        return curr;
+    }
+
+    int randomLevel() {
+        int lv = 1;
+        while (lv < maxLevel && rand() < p) ++lv;
+        return lv;
+    }
+};
+
+/**
+ * Your Skiplist object will be instantiated and called as such:
+ * Skiplist* obj = new Skiplist();
+ * bool param_1 = obj->search(target);
+ * obj->add(num);
+ * bool param_3 = obj->erase(num);
+ */
+```
+
+#### Go
 
 ```go
 func init() { rand.Seed(time.Now().UnixNano()) }
@@ -323,91 +437,102 @@ func randomLevel() int {
  */
 ```
 
-### **C++**
+#### TypeScript
 
-```cpp
-struct Node {
-    int val;
-    vector<Node*> next;
-    Node(int v, int level)
-        : val(v)
-        , next(level, nullptr) { }
-};
+```ts
+class Node {
+    val: number;
+    next: (Node | null)[];
+
+    constructor(val: number, level: number) {
+        this.val = val;
+        this.next = Array(level).fill(null);
+    }
+}
 
 class Skiplist {
-public:
-    const int p = RAND_MAX / 4;
-    const int maxLevel = 32;
-    Node* head;
-    int level;
+    private static maxLevel: number = 32;
+    private static p: number = 0.25;
+    private head: Node;
+    private level: number;
 
-    Skiplist() {
-        head = new Node(-1, maxLevel);
-        level = 0;
+    constructor() {
+        this.head = new Node(-1, Skiplist.maxLevel);
+        this.level = 0;
     }
 
-    bool search(int target) {
-        Node* curr = head;
-        for (int i = level - 1; ~i; --i) {
-            curr = findClosest(curr, i, target);
-            if (curr->next[i] && curr->next[i]->val == target) return true;
+    search(target: number): boolean {
+        let curr = this.head;
+        for (let i = this.level - 1; i >= 0; i--) {
+            curr = this.findClosest(curr, i, target);
+            if (curr.next[i] && curr.next[i]!.val === target) {
+                return true;
+            }
         }
         return false;
     }
 
-    void add(int num) {
-        Node* curr = head;
-        int lv = randomLevel();
-        Node* node = new Node(num, lv);
-        level = max(level, lv);
-        for (int i = level - 1; ~i; --i) {
-            curr = findClosest(curr, i, num);
-            if (i < lv) {
-                node->next[i] = curr->next[i];
-                curr->next[i] = node;
+    add(num: number): void {
+        let curr = this.head;
+        const level = this.randomLevel();
+        const node = new Node(num, level);
+        this.level = Math.max(this.level, level);
+
+        for (let i = this.level - 1; i >= 0; i--) {
+            curr = this.findClosest(curr, i, num);
+            if (i < level) {
+                node.next[i] = curr.next[i];
+                curr.next[i] = node;
             }
         }
     }
 
-    bool erase(int num) {
-        Node* curr = head;
-        bool ok = false;
-        for (int i = level - 1; ~i; --i) {
-            curr = findClosest(curr, i, num);
-            if (curr->next[i] && curr->next[i]->val == num) {
-                curr->next[i] = curr->next[i]->next[i];
+    erase(num: number): boolean {
+        let curr = this.head;
+        let ok = false;
+
+        for (let i = this.level - 1; i >= 0; i--) {
+            curr = this.findClosest(curr, i, num);
+            if (curr.next[i] && curr.next[i]!.val === num) {
+                curr.next[i] = curr.next[i]!.next[i];
                 ok = true;
             }
         }
-        while (level > 1 && !head->next[level - 1]) --level;
+
+        while (this.level > 1 && this.head.next[this.level - 1] === null) {
+            this.level--;
+        }
+
         return ok;
     }
 
-    Node* findClosest(Node* curr, int level, int target) {
-        while (curr->next[level] && curr->next[level]->val < target) curr = curr->next[level];
+    private findClosest(curr: Node, level: number, target: number): Node {
+        while (curr.next[level] && curr.next[level]!.val < target) {
+            curr = curr.next[level]!;
+        }
         return curr;
     }
 
-    int randomLevel() {
-        int lv = 1;
-        while (lv < maxLevel && rand() < p) ++lv;
-        return lv;
+    private randomLevel(): number {
+        let level = 1;
+        while (level < Skiplist.maxLevel && Math.random() < Skiplist.p) {
+            level++;
+        }
+        return level;
     }
-};
+}
 
 /**
  * Your Skiplist object will be instantiated and called as such:
- * Skiplist* obj = new Skiplist();
- * bool param_1 = obj->search(target);
- * obj->add(num);
- * bool param_3 = obj->erase(num);
+ * var obj = new Skiplist()
+ * var param_1 = obj.search(target)
+ * obj.add(num)
+ * var param_3 = obj.erase(num)
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

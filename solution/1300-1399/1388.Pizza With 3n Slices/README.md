@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1388.Pizza%20With%203n%20Slices/README.md
+rating: 2409
+source: 第 22 场双周赛 Q4
+tags:
+    - 贪心
+    - 数组
+    - 动态规划
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1388. 3n 块披萨](https://leetcode.cn/problems/pizza-with-3n-slices)
 
 [English Version](/solution/1300-1399/1388.Pizza%20With%203n%20Slices/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个披萨，它由 3n 块不同大小的部分组成，现在你和你的朋友们需要按照如下规则来分披萨：</p>
 
@@ -51,13 +66,22 @@
 	<li><code>1 &lt;= slices[i] &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
-我们可以将这个问题转化为：在一个环形数组中，选择其中 $n$ 个不相邻的数，使得这 $n$ 个数的和最大。
+我们可以将这个问题转化为：在一个长度为 $3n$ 的环形数组中，选择其中 $n$ 个不相邻的数，使得这 $n$ 个数的和最大。
+
+证明如下：
+
+-   当 $n = 1$ 时，我们可以选择数组中的任意一个数。
+-   当 $n \gt 1$ 时，那么一定存在一个数，使得它的某一侧有两个连续的数没有被选择，而另一侧至少有一个数没有被选择。因此，我们可以将这个数和它两侧的数一起从数组中删除，然后剩下的 $3(n - 1)$ 个数构成一个新的环形数组。问题规模缩小成了在长度为 $3(n - 1)$ 的环形数组中选择 $n - 1$ 个不相邻的数，使得这 $n - 1$ 个数的和最大。
+
+因此，我们需要求解的问题可以转化为：在一个长度为 $3n$ 的环形数组中，选择其中 $n$ 个不相邻的数，使得这 $n$ 个数的和最大。
 
 环形数组中，如果选择了第一个数，那么最后一个数就不能选择，如果选择了最后一个数，那么第一个数就不能选择，因此我们可以将环形数组拆成两个数组，一个是去掉第一个数的，一个是去掉最后一个数的，然后分别求解这两个数组的最大值，最后取两个最大值中的较大值即可。
 
@@ -79,9 +103,7 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -91,8 +113,9 @@ class Solution:
             f = [[0] * (n + 1) for _ in range(m + 1)]
             for i in range(1, m + 1):
                 for j in range(1, n + 1):
-                    f[i][j] = max(f[i - 1][j], (f[i - 2][j - 1]
-                                  if i >= 2 else 0) + nums[i - 1])
+                    f[i][j] = max(
+                        f[i - 1][j], (f[i - 2][j - 1] if i >= 2 else 0) + nums[i - 1]
+                    )
             return f[m][n]
 
         n = len(slices) // 3
@@ -100,9 +123,7 @@ class Solution:
         return max(a, b)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -131,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,7 +179,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxSizeSlices(slices []int) int {
@@ -182,16 +203,9 @@ func maxSizeSlices(slices []int) int {
 	a, b := g(slices[:len(slices)-1]), g(slices[1:])
 	return max(a, b)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxSizeSlices(slices: number[]): number {
@@ -203,10 +217,7 @@ function maxSizeSlices(slices: number[]): number {
             .map(() => Array(n + 1).fill(0));
         for (let i = 1; i <= m; ++i) {
             for (let j = 1; j <= n; ++j) {
-                f[i][j] = Math.max(
-                    f[i - 1][j],
-                    (i > 1 ? f[i - 2][j - 1] : 0) + nums[i - 1],
-                );
+                f[i][j] = Math.max(f[i - 1][j], (i > 1 ? f[i - 2][j - 1] : 0) + nums[i - 1]);
             }
         }
         return f[m][n];
@@ -217,10 +228,8 @@ function maxSizeSlices(slices: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

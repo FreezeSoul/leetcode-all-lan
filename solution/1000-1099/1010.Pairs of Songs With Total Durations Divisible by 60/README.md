@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1010.Pairs%20of%20Songs%20With%20Total%20Durations%20Divisible%20by%2060/README.md
+rating: 1377
+source: 第 128 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1010. 总持续时间可被 60 整除的歌曲](https://leetcode.cn/problems/pairs-of-songs-with-total-durations-divisible-by-60)
 
 [English Version](/solution/1000-1099/1010.Pairs%20of%20Songs%20With%20Total%20Durations%20Divisible%20by%2060/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>在歌曲列表中，第 <code>i</code> 首歌曲的持续时间为 <code>time[i]</code> 秒。</p>
 
@@ -40,11 +54,13 @@
 	<li><code>1 &lt;= time[i] &lt;= 500</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学 + 计数**
+### 方法一：数学 + 计数
 
 如果一个数对 $(a, b)$ 之和能被 $60$ 整除，即 $(a + b) \bmod 60 = 0$，那么 $(a \bmod 60 + b \bmod 60) \bmod 60 = 0$，不妨记 $x=a \bmod 60$, $y = b \bmod 60$，那么有 $(x + y) \bmod 60 = 0$，即 $y=(60 - x) \bmod 60$。
 
@@ -56,9 +72,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,22 +84,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def numPairsDivisibleBy60(self, time: List[int]) -> int:
-        cnt = Counter()
-        ans = 0
-        for x in time:
-            x %= 60
-            y = (60 - x) % 60
-            ans += cnt[y]
-            cnt[x] += 1
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,23 +104,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int numPairsDivisibleBy60(int[] time) {
-        int[] cnt = new int[60];
-        int ans = 0;
-        for (int x : time) {
-            x %= 60;
-            int y = (60 - x) % 60;
-            ans += cnt[y];
-            ++cnt[x];
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,24 +125,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    int numPairsDivisibleBy60(vector<int>& time) {
-        int cnt[60]{};
-        int ans = 0;
-        for (int x : time) {
-            x %= 60;
-            int y = (60 - x) % 60;
-            ans += cnt[y];
-            ++cnt[x];
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func numPairsDivisibleBy60(time []int) (ans int) {
@@ -176,20 +142,7 @@ func numPairsDivisibleBy60(time []int) (ans int) {
 }
 ```
 
-```go
-func numPairsDivisibleBy60(time []int) (ans int) {
-	cnt := [60]int{}
-	for _, x := range time {
-		x %= 60
-		y := (60 - x) % 60
-		ans += cnt[y]
-		cnt[x]++
-	}
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numPairsDivisibleBy60(time: number[]): number {
@@ -207,6 +160,85 @@ function numPairsDivisibleBy60(time: number[]): number {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numPairsDivisibleBy60(self, time: List[int]) -> int:
+        cnt = Counter()
+        ans = 0
+        for x in time:
+            x %= 60
+            y = (60 - x) % 60
+            ans += cnt[y]
+            cnt[x] += 1
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int numPairsDivisibleBy60(int[] time) {
+        int[] cnt = new int[60];
+        int ans = 0;
+        for (int x : time) {
+            x %= 60;
+            int y = (60 - x) % 60;
+            ans += cnt[y];
+            ++cnt[x];
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int numPairsDivisibleBy60(vector<int>& time) {
+        int cnt[60]{};
+        int ans = 0;
+        for (int x : time) {
+            x %= 60;
+            int y = (60 - x) % 60;
+            ans += cnt[y];
+            ++cnt[x];
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func numPairsDivisibleBy60(time []int) (ans int) {
+	cnt := [60]int{}
+	for _, x := range time {
+		x %= 60
+		y := (60 - x) % 60
+		ans += cnt[y]
+		cnt[x]++
+	}
+	return
+}
+```
+
+#### TypeScript
+
 ```ts
 function numPairsDivisibleBy60(time: number[]): number {
     const cnt: number[] = new Array(60).fill(0);
@@ -221,10 +253,8 @@ function numPairsDivisibleBy60(time: number[]): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

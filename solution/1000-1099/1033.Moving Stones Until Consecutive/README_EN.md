@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1033.Moving%20Stones%20Until%20Consecutive/README_EN.md
+rating: 1421
+source: Weekly Contest 134 Q1
+tags:
+    - Brainteaser
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1033. Moving Stones Until Consecutive](https://leetcode.com/problems/moving-stones-until-consecutive)
 
 [中文文档](/solution/1000-1099/1033.Moving%20Stones%20Until%20Consecutive/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are three stones in different positions on the X-axis. You are given three integers <code>a</code>, <code>b</code>, and <code>c</code>, the positions of the stones.</p>
 
@@ -50,11 +65,17 @@
 	<li><code>a</code>, <code>b</code>, and <code>c</code> have different values.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -68,7 +89,7 @@ class Solution:
         return [mi, mx]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -105,7 +126,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numMovesStones(a int, b int, c int) []int {
@@ -122,23 +143,9 @@ func numMovesStones(a int, b int, c int) []int {
 	}
 	return []int{mi, mx}
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function numMovesStones(a: number, b: number, c: number): number[] {
@@ -155,10 +162,8 @@ function numMovesStones(a: number, b: number, c: number): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

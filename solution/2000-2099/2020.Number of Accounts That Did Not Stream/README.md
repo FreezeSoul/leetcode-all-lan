@@ -1,10 +1,20 @@
-# [2020. 无流量的帐户数](https://leetcode.cn/problems/number-of-accounts-that-did-not-stream)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2020.Number%20of%20Accounts%20That%20Did%20Not%20Stream/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [2020. 无流量的帐户数 🔒](https://leetcode.cn/problems/number-of-accounts-that-did-not-stream)
 
 [English Version](/solution/2000-2099/2020.Number%20of%20Accounts%20That%20Did%20Not%20Stream/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Subscriptions</code></p>
 
@@ -78,18 +88,32 @@ Streams table:
 <strong>解释：</strong>用户 4 和 9 在 2021 没有会话。
 用户 11 在 2021 没有订阅。</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+SELECT COUNT(sub.account_id) AS accounts_count
+FROM
+    Subscriptions AS sub
+    LEFT JOIN Streams USING (account_id)
+WHERE
+    YEAR(start_date) <= 2021
+    AND YEAR(end_date) >= 2021
+    AND (YEAR(stream_date) != 2021 OR stream_date > end_date);
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

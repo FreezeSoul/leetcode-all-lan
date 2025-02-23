@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1566.Detect%20Pattern%20of%20Length%20M%20Repeated%20K%20or%20More%20Times/README_EN.md
+rating: 1486
+source: Weekly Contest 204 Q1
+tags:
+    - Array
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [1566. Detect Pattern of Length M Repeated K or More Times](https://leetcode.com/problems/detect-pattern-of-length-m-repeated-k-or-more-times)
 
 [中文文档](/solution/1500-1599/1566.Detect%20Pattern%20of%20Length%20M%20Repeated%20K%20or%20More%20Times/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of positive integers <code>arr</code>, find a pattern of length <code>m</code> that is repeated <code>k</code> or more times.</p>
 
@@ -45,42 +60,58 @@
 	<li><code>2 &lt;= k &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Single Traversal
+
+First, if the length of the array is less than $m \times k$, then there is definitely no pattern of length $m$ that repeats at least $k$ times, so we directly return $\textit{false}$.
+
+Next, we define a variable $\textit{cnt}$ to record the current count of consecutive repetitions. If there are $(k - 1) \times m$ consecutive elements $a_i$ in the array such that $a_i = a_{i - m}$, then we have found a pattern of length $m$ that repeats at least $k$ times, and we return $\textit{true}$. Otherwise, we reset $\textit{cnt}$ to $0$ and continue traversing the array.
+
+Finally, if we finish traversing the array without finding a pattern that meets the conditions, we return $\textit{false}$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def containsPattern(self, arr: List[int], m: int, k: int) -> bool:
-        n = len(arr)
-        for i in range(n - m * k + 1):
-            j = 0
-            while j < m * k:
-                if arr[i + j] != arr[i + (j % m)]:
-                    break
-                j += 1
-            if j == m * k:
-                return True
+        if len(arr) < m * k:
+            return False
+        cnt, target = 0, (k - 1) * m
+        for i in range(m, len(arr)):
+            if arr[i] == arr[i - m]:
+                cnt += 1
+                if cnt == target:
+                    return True
+            else:
+                cnt = 0
         return False
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public boolean containsPattern(int[] arr, int m, int k) {
-        int n = arr.length;
-        for (int i = 0; i <= n - m * k; ++i) {
-            int j = 0;
-            for (; j < m * k; ++j) {
-                if (arr[i + j] != arr[i + (j % m)]) {
-                    break;
+        if (arr.length < m * k) {
+            return false;
+        }
+        int cnt = 0, target = (k - 1) * m;
+        for (int i = m; i < arr.length; ++i) {
+            if (arr[i] == arr[i - m]) {
+                if (++cnt == target) {
+                    return true;
                 }
-            }
-            if (j == m * k) {
-                return true;
+            } else {
+                cnt = 0;
             }
         }
         return false;
@@ -88,22 +119,23 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool containsPattern(vector<int>& arr, int m, int k) {
-        int n = arr.size();
-        for (int i = 0; i <= n - m * k; ++i) {
-            int j = 0;
-            for (; j < m * k; ++j) {
-                if (arr[i + j] != arr[i + (j % m)]) {
-                    break;
+        if (arr.size() < m * k) {
+            return false;
+        }
+        int cnt = 0, target = (k - 1) * m;
+        for (int i = m; i < arr.size(); ++i) {
+            if (arr[i] == arr[i - m]) {
+                if (++cnt == target) {
+                    return true;
                 }
-            }
-            if (j == m * k) {
-                return true;
+            } else {
+                cnt = 0;
             }
         }
         return false;
@@ -111,50 +143,49 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func containsPattern(arr []int, m int, k int) bool {
-	n := len(arr)
-	for i := 0; i <= n-m*k; i++ {
-		j := 0
-		for ; j < m*k; j++ {
-			if arr[i+j] != arr[i+(j%m)] {
-				break
+	cnt, target := 0, (k-1)*m
+	for i := m; i < len(arr); i++ {
+		if arr[i] == arr[i-m] {
+			cnt++
+			if cnt == target {
+				return true
 			}
-		}
-		if j == m*k {
-			return true
+		} else {
+			cnt = 0
 		}
 	}
 	return false
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function containsPattern(arr: number[], m: number, k: number): boolean {
-    const n = arr.length;
-    for (let i = 0; i <= n - m * k; ++i) {
-        let j = 0;
-        for (; j < m * k; ++j) {
-            if (arr[i + j] != arr[i + (j % m)]) {
-                break;
+    if (arr.length < m * k) {
+        return false;
+    }
+    const target = (k - 1) * m;
+    let cnt = 0;
+    for (let i = m; i < arr.length; ++i) {
+        if (arr[i] === arr[i - m]) {
+            if (++cnt === target) {
+                return true;
             }
-        }
-        if (j == m * k) {
-            return true;
+        } else {
+            cnt = 0;
         }
     }
     return false;
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2396.Strictly%20Palindromic%20Number/README_EN.md
+rating: 1328
+source: Biweekly Contest 86 Q2
+tags:
+    - Brainteaser
+    - Math
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [2396. Strictly Palindromic Number](https://leetcode.com/problems/strictly-palindromic-number)
 
 [中文文档](/solution/2300-2399/2396.Strictly%20Palindromic%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>An integer <code>n</code> is <strong>strictly palindromic</strong> if, for <strong>every</strong> base <code>b</code> between <code>2</code> and <code>n - 2</code> (<strong>inclusive</strong>), the string representation of the integer <code>n</code> in base <code>b</code> is <strong>palindromic</strong>.</p>
 
@@ -39,11 +55,25 @@ Therefore, we return false.
 	<li><code>4 &lt;= n &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Quick Thinking
+
+When $n = 4$, its binary representation is $100$, which is not a palindrome;
+
+When $n \gt 4$, its $(n - 2)$-ary representation is $12$, which is not a palindrome.
+
+Therefore, we can directly return `false`.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -51,7 +81,7 @@ class Solution:
         return False
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -61,7 +91,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -72,7 +102,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isStrictlyPalindromic(n int) bool {
@@ -80,7 +110,7 @@ func isStrictlyPalindromic(n int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isStrictlyPalindromic(n: number): boolean {
@@ -88,7 +118,7 @@ function isStrictlyPalindromic(n: number): boolean {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -98,7 +128,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 bool isStrictlyPalindromic(int n) {
@@ -106,11 +136,8 @@ bool isStrictlyPalindromic(int n) {
 }
 ```
 
-### **...**
-
-```
-
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

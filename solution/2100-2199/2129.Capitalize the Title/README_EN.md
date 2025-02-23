@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2129.Capitalize%20the%20Title/README_EN.md
+rating: 1274
+source: Biweekly Contest 69 Q1
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [2129. Capitalize the Title](https://leetcode.com/problems/capitalize-the-title)
 
 [中文文档](/solution/2100-2199/2129.Capitalize%20the%20Title/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>title</code> consisting of one or more words separated by a single space, where each word consists of English letters. <strong>Capitalize</strong> the string by changing the capitalization of each word such that:</p>
 
@@ -52,11 +66,21 @@ The remaining words have a length of at least 3, so the first letter of each rem
 	<li>Each word consists of uppercase and lowercase English letters and is <strong>non-empty</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+Directly simulate the process. Split the string by spaces to get each word, then convert each word to the appropriate case as per the problem statement. Finally, join the words with spaces.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$, where $n$ is the length of the string `title`.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,7 +89,7 @@ class Solution:
         return " ".join(words)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -83,7 +107,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -93,7 +117,9 @@ public:
         istringstream ss(title);
         string ans;
         while (ss >> title) {
-            if (title.size() > 2) title[0] = toupper(title[0]);
+            if (title.size() > 2) {
+                title[0] = toupper(title[0]);
+            }
             ans += title;
             ans += " ";
         }
@@ -103,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func capitalizeTitle(title string) string {
@@ -118,16 +144,39 @@ func capitalizeTitle(title string) string {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function capitalizeTitle(title: string): string {
+    return title
+        .split(' ')
+        .map(s =>
+            s.length < 3 ? s.toLowerCase() : s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase(),
+        )
+        .join(' ');
+}
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public string CapitalizeTitle(string title) {
+        List<string> ans = new List<string>();
+        foreach (string s in title.Split(' ')) {
+            if (s.Length < 3) {
+                ans.Add(s.ToLower());
+            } else {
+                ans.Add(char.ToUpper(s[0]) + s.Substring(1).ToLower());
+            }
+        }
+        return string.Join(" ", ans);
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

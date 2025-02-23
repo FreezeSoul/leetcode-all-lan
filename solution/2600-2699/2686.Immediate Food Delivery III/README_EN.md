@@ -1,8 +1,20 @@
-# [2686. Immediate Food Delivery III](https://leetcode.com/problems/immediate-food-delivery-iii)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2686.Immediate%20Food%20Delivery%20III/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2686. Immediate Food Delivery III 🔒](https://leetcode.com/problems/immediate-food-delivery-iii)
 
 [中文文档](/solution/2600-2699/2686.Immediate%20Food%20Delivery%20III/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Delivery</code></p>
 
@@ -15,17 +27,17 @@
 | order_date                  | date    |
 | customer_pref_delivery_date | date    |
 +-----------------------------+---------+
-delivery_id is the primary key of this table.
+delivery_id is the column with unique values of this table.
 Each row contains information about food delivery to a customer that makes an order at some date and specifies a preferred delivery date (on the order date or after it).
 </pre>
 
 <p>If the customer&#39;s preferred delivery date is the same as the order date, then the order is called <strong>immediate,</strong>&nbsp;otherwise, it is <strong>scheduled</strong>.</p>
 
-<p>Write an SQL query to find the percentage of immediate orders on each unique&nbsp;<code>order_date</code>, <strong>rounded to 2 decimal places</strong>.&nbsp;</p>
+<p>Write a solution&nbsp;to find the percentage of immediate orders on each unique&nbsp;<code>order_date</code>, <strong>rounded to 2 decimal places</strong>.&nbsp;</p>
 
 <p>Return <em>the result table ordered by</em> <code>order_date</code> <em>in <strong>ascending</strong> order.</em></p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -64,19 +76,29 @@ Delivery table:
 order_date is sorted in ascending order.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
 SELECT  order_date
-       ,round(100*SUM(IF(customer_pref_delivery_date = order_date,1,0))/COUNT(*),2) AS immediate_percentage
+       ,ROUND(100*SUM(IF(customer_pref_delivery_date = order_date,1,0))/COUNT(*),2) AS immediate_percentage
 FROM Delivery
 GROUP BY  order_date
 ORDER BY order_date
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

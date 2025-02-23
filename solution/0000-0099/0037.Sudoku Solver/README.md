@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0037.Sudoku%20Solver/README.md
+tags:
+    - 数组
+    - 哈希表
+    - 回溯
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [37. 解数独](https://leetcode.cn/problems/sudoku-solver)
 
 [English Version](/solution/0000-0099/0037.Sudoku%20Solver/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>编写一个程序，通过填充空格来解决数独问题。</p>
 
@@ -47,11 +60,13 @@
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯**
+### 方法一：回溯
 
 我们用数组 `row`、`col`、`box` 分别记录每一行、每一列、每个 3x3 宫格中数字是否出现过。如果数字 `i` 在第 `r` 行、第 `c` 列、第 `b` 个 3x3 宫格中出现过，那么 `row[r][i]`、`col[c][i]`、`box[b][i]` 都为 `true`。
 
@@ -61,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,9 +111,7 @@ class Solution:
         dfs(0)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -147,7 +158,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 using pii = pair<int, int>;
@@ -193,7 +204,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func solveSudoku(board [][]byte) {
@@ -234,10 +245,224 @@ func solveSudoku(board [][]byte) {
 }
 ```
 
-### **...**
+#### C#
 
+```cs
+public class Solution {
+    public void SolveSudoku(char[][] board) {
+        this.board = new ushort?[9,9];
+        for (var i = 0; i < 9; ++i)
+        {
+            for (var j = 0; j < 9; ++j)
+            {
+                if (board[i][j] != '.')
+                {
+                    this.board[i, j] = (ushort) (1 << (board[i][j] - '0' - 1));
+                }
+            }
+        }
+
+        if (SolveSudoku(0, 0))
+        {
+            for (var i = 0; i < 9; ++i)
+            {
+                for (var j = 0; j < 9; ++j)
+                {
+                    if (board[i][j] == '.')
+                    {
+                        board[i][j] = '0';
+                        while (this.board[i, j].Value != 0)
+                        {
+                            board[i][j] = (char)(board[i][j] + 1);
+                            this.board[i, j] >>= 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private ushort?[,] board;
+
+    private bool ValidateHorizontalRule(int row)
+    {
+        ushort temp = 0;
+        for (var i = 0; i < 9; ++i)
+        {
+            if (board[row, i].HasValue)
+            {
+                if ((temp | board[row, i].Value) == temp)
+                {
+                    return false;
+                }
+                temp |= board[row, i].Value;
+            }
+        }
+        return true;
+    }
+
+    private bool ValidateVerticalRule(int column)
+    {
+        ushort temp = 0;
+        for (var i = 0; i < 9; ++i)
+        {
+            if (board[i, column].HasValue)
+            {
+                if ((temp | board[i, column].Value) == temp)
+                {
+                    return false;
+                }
+                temp |= board[i, column].Value;
+            }
+        }
+        return true;
+    }
+
+    private bool ValidateBlockRule(int row, int column)
+    {
+        var startRow = row / 3 * 3;
+        var startColumn = column / 3 * 3;
+        ushort temp = 0;
+        for (var i = startRow; i < startRow + 3; ++i)
+        {
+            for (var j = startColumn; j < startColumn + 3; ++j)
+            {
+                if (board[i, j].HasValue)
+                {
+                    if ((temp | board[i, j].Value) == temp)
+                    {
+                        return false;
+                    }
+                    temp |= board[i, j].Value;
+                }
+            }
+        }
+        return true;
+    }
+
+    private bool SolveSudoku(int i, int j)
+    {
+        while (true)
+        {
+            if (j == 9)
+            {
+                ++i;
+                j = 0;
+            }
+            if (i == 9)
+            {
+                return true;
+            }
+            if (board[i, j].HasValue)
+            {
+                ++j;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        ushort stop = 1 << 9;
+        for (ushort t = 1; t != stop; t <<= 1)
+        {
+            board[i, j] = t;
+            if (ValidateHorizontalRule(i) && ValidateVerticalRule(j) && ValidateBlockRule(i, j))
+            {
+                if (SolveSudoku(i, j + 1))
+                {
+                    return true;
+                }
+            }
+        }
+        board[i, j] = null;
+        return false;
+    }
+}
 ```
 
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param string[][] $board
+     * @return bool
+     */
+
+    public function solveSudoku(&$board) {
+        if (isSolved($board)) {
+            return true;
+        }
+
+        $emptyCell = findEmptyCell($board);
+        $row = $emptyCell[0];
+        $col = $emptyCell[1];
+
+        for ($num = 1; $num <= 9; $num++) {
+            if (isValid($board, $row, $col, $num)) {
+                $board[$row][$col] = (string) $num;
+                if ($this->solveSudoku($board)) {
+                    return true;
+                }
+                $board[$row][$col] = '.';
+            }
+        }
+        return false;
+    }
+}
+
+function isSolved($board) {
+    foreach ($board as $row) {
+        if (in_array('.', $row)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function findEmptyCell($board) {
+    for ($row = 0; $row < 9; $row++) {
+        for ($col = 0; $col < 9; $col++) {
+            if ($board[$row][$col] === '.') {
+                return [$row, $col];
+            }
+        }
+    }
+
+    return null;
+}
+
+function isValid($board, $row, $col, $num) {
+    for ($i = 0; $i < 9; $i++) {
+        if ($board[$row][$i] == $num) {
+            return false;
+        }
+    }
+
+    for ($i = 0; $i < 9; $i++) {
+        if ($board[$i][$col] == $num) {
+            return false;
+        }
+    }
+
+    $startRow = floor($row / 3) * 3;
+    $endCol = floor($col / 3) * 3;
+
+    for ($i = 0; $i < 3; $i++) {
+        for ($j = 0; $j < 3; $j++) {
+            if ($board[$startRow + $i][$endCol + $j] == $num) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

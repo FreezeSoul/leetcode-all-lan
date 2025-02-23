@@ -1,10 +1,21 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0390.Elimination%20Game/README.md
+tags:
+    - 递归
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [390. 消除游戏](https://leetcode.cn/problems/elimination-game)
 
 [English Version](/solution/0300-0399/0390.Elimination%20Game/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>列表 <code>arr</code> 由在范围 <code>[1, n]</code> 中的所有整数组成，并按严格递增排序。请你对 <code>arr</code> 应用下述算法：</p>
 
@@ -49,28 +60,17 @@ arr = [6]
 </div>
 </div>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用 `i` 记录该从左边还是右边进行删除。由于经过每轮删除过后都是一个等差数列，因此我们用 `a1`, `an` 记录首尾元素，`cnt` 记录数列元素个数，`step` 记录元素间的间隔，`step` 初始为 1。
-
--   若从左边删除：
-    -   `a1` 变为 `a1 + step`
-    -   若 `cnt` 为奇数个，`an` 变为 `an - step`，否则 `an` 不变
--   若从右边删除：
-    -   `an` 变为 `an - step`
-    -   若 `cnt` 为奇数个，`a1` 变为 `a1 + step`，否则 `a1` 不变
-
-每次经过一轮删除，数列元素个数 `cnt` 变为 `cnt >> 1`，元素间隔 `step` 变为 `step << 1`，`i` 自增 1。
-
-当元素个数剩下 1 个时，退出循环，返回 `a1` 即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,9 +92,7 @@ class Solution:
         return a1
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -118,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -139,7 +137,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func lastRemaining(n int) int {
@@ -161,10 +159,8 @@ func lastRemaining(n int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2120.Execution%20of%20All%20Suffix%20Instructions%20Staying%20in%20a%20Grid/README.md
+rating: 1379
+source: 第 273 场周赛 Q2
+tags:
+    - 字符串
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2120. 执行所有后缀指令](https://leetcode.cn/problems/execution-of-all-suffix-instructions-staying-in-a-grid)
 
 [English Version](/solution/2100-2199/2120.Execution%20of%20All%20Suffix%20Instructions%20Staying%20in%20a%20Grid/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>现有一个 <code>n x n</code> 大小的网格，左上角单元格坐标 <code>(0, 0)</code> ，右下角单元格坐标 <code>(n - 1, n - 1)</code> 。给你整数 <code>n</code> 和一个整数数组 <code>startPos</code> ，其中 <code>startPos = [start<sub>row</sub>, start<sub>col</sub>]</code> 表示机器人最开始在坐标为 <code>(start<sub>row</sub>, start<sub>col</sub>)</code> 的单元格上。</p>
 
@@ -73,17 +86,17 @@
 	<li><code>s</code> 由 <code>'L'</code>、<code>'R'</code>、<code>'U'</code> 和 <code>'D'</code> 组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-直接模拟。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -104,9 +117,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -139,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -171,7 +182,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func executeInstructions(n int, startPos []int, s string) []int {
@@ -201,16 +212,10 @@ func executeInstructions(n int, startPos []int, s string) []int {
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
-function executeInstructions(
-    n: number,
-    startPos: number[],
-    s: string,
-): number[] {
+function executeInstructions(n: number, startPos: number[], s: string): number[] {
     const m = s.length;
     const ans = new Array(m);
     for (let i = 0; i < m; i++) {
@@ -237,7 +242,7 @@ function executeInstructions(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -251,10 +256,18 @@ impl Solution {
             let mut j = i;
             while j < m {
                 match s[j] {
-                    b'U' => y -= 1,
-                    b'D' => y += 1,
-                    b'L' => x -= 1,
-                    _ => x += 1,
+                    b'U' => {
+                        y -= 1;
+                    }
+                    b'D' => {
+                        y += 1;
+                    }
+                    b'L' => {
+                        x -= 1;
+                    }
+                    _ => {
+                        x += 1;
+                    }
                 }
                 if y == -1 || y == n || x == -1 || x == n {
                     break;
@@ -268,15 +281,15 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-int *executeInstructions(int n, int *startPos, int startPosSize, char *s, int *returnSize) {
+int* executeInstructions(int n, int* startPos, int startPosSize, char* s, int* returnSize) {
     int m = strlen(s);
-    int *ans = malloc(sizeof(int) * m);
+    int* ans = malloc(sizeof(int) * m);
     for (int i = 0; i < m; i++) {
         int y = startPos[0];
         int x = startPos[1];
@@ -302,10 +315,8 @@ int *executeInstructions(int n, int *startPos, int startPosSize, char *s, int *r
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

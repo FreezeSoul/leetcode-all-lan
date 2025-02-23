@@ -1,24 +1,10 @@
 # Write your MySQL query statement below
-select
-    round(
-        sum(
-            if(
-                t1.order_date = t1.customer_pref_delivery_date,
-                1,
-                0
-            )
-        ) / count(1) * 100,
-        2
-    ) as immediate_percentage
-from
-    Delivery t1
-    right join (
-        select
-            customer_id,
-            min(order_date) as order_date
-        from
-            Delivery
-        group by
-            customer_id
-    ) t2 on t1.customer_id = t2.customer_id
-    and t1.order_date = t2.order_date
+SELECT
+    ROUND(AVG(order_date = customer_pref_delivery_date) * 100, 2) AS immediate_percentage
+FROM Delivery
+WHERE
+    (customer_id, order_date) IN (
+        SELECT customer_id, MIN(order_date)
+        FROM Delivery
+        GROUP BY 1
+    );

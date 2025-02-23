@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2594.Minimum%20Time%20to%20Repair%20Cars/README.md
+rating: 1915
+source: 第 100 场双周赛 Q4
+tags:
+    - 数组
+    - 二分查找
+---
+
+<!-- problem:start -->
+
 # [2594. 修车的最少时间](https://leetcode.cn/problems/minimum-time-to-repair-cars)
 
 [English Version](/solution/2500-2599/2594.Minimum%20Time%20to%20Repair%20Cars/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组&nbsp;<code>ranks</code>&nbsp;，表示一些机械工的 <strong>能力值</strong>&nbsp;。<code>ranks<sub>i</sub></code> 是第 <code>i</code> 位机械工的能力值。能力值为&nbsp;<code>r</code>&nbsp;的机械工可以在&nbsp;<code>r * n<sup>2</sup></code>&nbsp;分钟内修好&nbsp;<code>n</code>&nbsp;辆车。</p>
 
@@ -51,11 +64,13 @@
 	<li><code>1 &lt;= cars &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二分查找**
+### 方法一：二分查找
 
 我们注意到，修车时间越长，修理的汽车数目也越多。因此，我们可以将修车时间作为二分查找的目标，二分查找修车时间的最小值。
 
@@ -63,26 +78,22 @@
 
 最终，我们返回左边界即可。
 
-时间复杂度 $(n \times \log n)$，空间复杂度 $O(1)$。其中 $n$ 为机械工的数量。
+时间复杂度 $(n \times \log M)$，空间复杂度 $O(1)$。其中 $n$ 为机械工的数量，而 $M$ 为二分查找的上界。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def repairCars(self, ranks: List[int], cars: int) -> int:
-        def check(t):
+        def check(t: int) -> bool:
             return sum(int(sqrt(t // r)) for r in ranks) >= cars
 
         return bisect_left(range(ranks[0] * cars * cars), True, key=check)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -129,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func repairCars(ranks []int, cars int) int64 {
@@ -143,7 +154,7 @@ func repairCars(ranks []int, cars int) int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function repairCars(ranks: number[], cars: number): number {
@@ -165,10 +176,8 @@ function repairCars(ranks: number[], cars: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

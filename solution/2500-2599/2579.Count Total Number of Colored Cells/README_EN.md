@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2579.Count%20Total%20Number%20of%20Colored%20Cells/README_EN.md
+rating: 1356
+source: Biweekly Contest 99 Q2
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [2579. Count Total Number of Colored Cells](https://leetcode.com/problems/count-total-number-of-colored-cells)
 
 [中文文档](/solution/2500-2599/2579.Count%20Total%20Number%20of%20Colored%20Cells/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There exists an infinitely large two-dimensional grid of uncolored unit cells. You are given a positive integer <code>n</code>, indicating that you must do the following routine for <code>n</code> minutes:</p>
 
@@ -39,17 +53,21 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Mathematics**
+<!-- solution:start -->
+
+### Solution 1: Mathematics
 
 We find that after the $n$th minute, there are a total of $2 \times n - 1$ columns in the grid, and the numbers on each column are respectively $1, 3, 5, \cdots, 2 \times n - 1, 2 \times n - 3, \cdots, 3, 1$. The left and right parts are both arithmetic progressions, and the sum can be obtained by $2 \times n \times (n - 1) + 1$.
 
-Time complexity $O(1)$, space complexity $O(1)$.
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +75,7 @@ class Solution:
         return 2 * n * (n - 1) + 1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -67,7 +85,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -78,7 +96,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func coloredCells(n int) int64 {
@@ -86,7 +104,7 @@ func coloredCells(n int) int64 {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function coloredCells(n: number): number {
@@ -94,10 +112,18 @@ function coloredCells(n: number): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
-
+```rust
+impl Solution {
+    pub fn colored_cells(n: i32) -> i64 {
+        2 * (n as i64) * ((n as i64) - 1) + 1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,20 @@
-# [1056. Confusing Number](https://leetcode.com/problems/confusing-number)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1056.Confusing%20Number/README_EN.md
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
+# [1056. Confusing Number 🔒](https://leetcode.com/problems/confusing-number)
 
 [中文文档](/solution/1000-1099/1056.Confusing%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>confusing number</strong> is a number that when rotated <code>180</code> degrees becomes a different number with <strong>each digit valid</strong>.</p>
 
@@ -53,11 +65,17 @@
 	<li><code>0 &lt;= n &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -72,7 +90,7 @@ class Solution:
         return y != n
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -113,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func confusingNumber(n int) bool {
@@ -131,10 +149,33 @@ func confusingNumber(n int) bool {
 }
 ```
 
-### **...**
+#### PHP
 
-```
-
+```php
+class Solution {
+    /**
+     * @param Integer $n
+     * @return Boolean
+     */
+    function confusingNumber($n) {
+        $d = [0, 1, -1, -1, -1, -1, 9, -1, 8, 6];
+        $x = $n;
+        $y = 0;
+        while ($x > 0) {
+            $v = $x % 10;
+            if ($d[$v] < 0) {
+                return false;
+            }
+            $y = $y * 10 + $d[$v];
+            $x = intval($x / 10);
+        }
+        return $y != $n;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

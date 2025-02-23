@@ -1,14 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0015.3Sum/README.md
+tags:
+    - 数组
+    - 双指针
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [15. 三数之和](https://leetcode.cn/problems/3sum)
 
 [English Version](/solution/0000-0099/0015.3Sum/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>给你一个整数数组 <code>nums</code> ，判断是否存在三元组 <code>[nums[i], nums[j], nums[k]]</code> 满足 <code>i != j</code>、<code>i != k</code> 且 <code>j != k</code> ，同时还满足 <code>nums[i] + nums[j] + nums[k] == 0</code> 。请</p>
-
-<p>你返回所有和为 <code>0</code> 且不重复的三元组。</p>
+<p>给你一个整数数组 <code>nums</code> ，判断是否存在三元组 <code>[nums[i], nums[j], nums[k]]</code> 满足 <code>i != j</code>、<code>i != k</code> 且 <code>j != k</code> ，同时还满足 <code>nums[i] + nums[j] + nums[k] == 0</code> 。请你返回所有和为 <code>0</code> 且不重复的三元组。</p>
 
 <p><strong>注意：</strong>答案中不可以包含重复的三元组。</p>
 
@@ -54,11 +64,13 @@ nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
 	<li><code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 双指针**
+### 方法一：排序 + 双指针
 
 我们注意到，题目不要求我们按照顺序返回三元组，因此我们不妨先对数组进行排序，这样就可以方便地跳过重复的元素。
 
@@ -82,9 +94,7 @@ nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -114,9 +124,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -151,7 +159,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -187,7 +195,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func threeSum(nums []int) (ans [][]int) {
@@ -220,7 +228,7 @@ func threeSum(nums []int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function threeSum(nums: number[]): number[][] {
@@ -228,7 +236,7 @@ function threeSum(nums: number[]): number[][] {
     const ans: number[][] = [];
     const n = nums.length;
     for (let i = 0; i < n - 2 && nums[i] <= 0; i++) {
-        if (i > 0 && nums[i] == nums[i - 1]) {
+        if (i > 0 && nums[i] === nums[i - 1]) {
             continue;
         }
         let j = i + 1;
@@ -241,10 +249,10 @@ function threeSum(nums: number[]): number[][] {
                 --k;
             } else {
                 ans.push([nums[i], nums[j++], nums[k--]]);
-                while (j < k && nums[j] == nums[j - 1]) {
+                while (j < k && nums[j] === nums[j - 1]) {
                     ++j;
                 }
-                while (j < k && nums[k] == nums[k + 1]) {
+                while (j < k && nums[k] === nums[k + 1]) {
                     --k;
                 }
             }
@@ -254,7 +262,52 @@ function threeSum(nums: number[]): number[][] {
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+use std::cmp::Ordering;
+
+impl Solution {
+    pub fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
+        nums.sort();
+        let n = nums.len();
+        let mut res = vec![];
+        let mut i = 0;
+        while i < n - 2 && nums[i] <= 0 {
+            let mut l = i + 1;
+            let mut r = n - 1;
+            while l < r {
+                match (nums[i] + nums[l] + nums[r]).cmp(&0) {
+                    Ordering::Less => {
+                        l += 1;
+                    }
+                    Ordering::Greater => {
+                        r -= 1;
+                    }
+                    Ordering::Equal => {
+                        res.push(vec![nums[i], nums[l], nums[r]]);
+                        l += 1;
+                        r -= 1;
+                        while l < n && nums[l] == nums[l - 1] {
+                            l += 1;
+                        }
+                        while r > 0 && nums[r] == nums[r + 1] {
+                            r -= 1;
+                        }
+                    }
+                }
+            }
+            i += 1;
+            while i < n - 2 && nums[i] == nums[i - 1] {
+                i += 1;
+            }
+        }
+        res
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -292,7 +345,7 @@ var threeSum = function (nums) {
 };
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -327,7 +380,7 @@ public class Solution {
 }
 ```
 
-### **Ruby**
+#### Ruby
 
 ```rb
 # @param {Integer[]} nums
@@ -360,51 +413,48 @@ def three_sum(nums)
 end
 ```
 
-### **Rust**
+#### PHP
 
-```rust
-use std::cmp::Ordering;
-
-impl Solution {
-    pub fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
-        nums.sort();
-        let n = nums.len();
-        let mut res = vec![];
-        let mut i = 0;
-        while i < n - 2 && nums[i] <= 0 {
-            let mut l = i + 1;
-            let mut r = n - 1;
-            while l < r {
-                match (nums[i] + nums[l] + nums[r]).cmp(&0) {
-                    Ordering::Less => l += 1,
-                    Ordering::Greater => r -= 1,
-                    Ordering::Equal => {
-                        res.push(vec![nums[i], nums[l], nums[r]]);
-                        l += 1;
-                        r -= 1;
-                        while l < n && nums[l] == nums[l - 1] {
-                            l += 1;
-                        }
-                        while r > 0 && nums[r] == nums[r + 1] {
-                            r -= 1;
-                        }
+```php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @return Integer[][]
+     */
+    function threeSum($nums) {
+        sort($nums);
+        $ans = [];
+        $n = count($nums);
+        for ($i = 0; $i < $n - 2 && $nums[$i] <= 0; ++$i) {
+            if ($i > 0 && $nums[$i] == $nums[$i - 1]) {
+                continue;
+            }
+            $j = $i + 1;
+            $k = $n - 1;
+            while ($j < $k) {
+                $x = $nums[$i] + $nums[$j] + $nums[$k];
+                if ($x < 0) {
+                    ++$j;
+                } elseif ($x > 0) {
+                    --$k;
+                } else {
+                    $ans[] = [$nums[$i], $nums[$j++], $nums[$k--]];
+                    while ($j < $k && $nums[$j] == $nums[$j - 1]) {
+                        ++$j;
+                    }
+                    while ($j < $k && $nums[$k] == $nums[$k + 1]) {
+                        --$k;
                     }
                 }
             }
-            i += 1;
-            while i < n - 2 && nums[i] == nums[i - 1] {
-                i += 1;
-            }
         }
-        res
+        return $ans;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

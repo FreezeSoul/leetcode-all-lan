@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0400-0499/0412.Fizz%20Buzz/README_EN.md
+tags:
+    - Math
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [412. Fizz Buzz](https://leetcode.com/problems/fizz-buzz)
 
 [中文文档](/solution/0400-0499/0412.Fizz%20Buzz/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>n</code>, return <em>a string array </em><code>answer</code><em> (<strong>1-indexed</strong>) where</em>:</p>
 
@@ -31,11 +45,21 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We iterate through each integer from 1 to $n$. For each integer, we check whether it is a multiple of both 3 and 5, or just a multiple of 3, or just a multiple of 5. Based on the check result, we add the corresponding string to the answer array.
+
+The time complexity is $O(n)$, where $n$ is the integer given in the problem. Ignoring the space consumption of the answer array, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -53,7 +77,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -77,7 +101,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -86,9 +110,15 @@ public:
         vector<string> ans;
         for (int i = 1; i <= n; ++i) {
             string s = "";
-            if (i % 3 == 0) s += "Fizz";
-            if (i % 5 == 0) s += "Buzz";
-            if (s.size() == 0) s = to_string(i);
+            if (i % 3 == 0) {
+                s += "Fizz";
+            }
+            if (i % 5 == 0) {
+                s += "Buzz";
+            }
+            if (s.empty()) {
+                s = to_string(i);
+            }
             ans.push_back(s);
         }
         return ans;
@@ -96,11 +126,10 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func fizzBuzz(n int) []string {
-	var ans []string
+func fizzBuzz(n int) (ans []string) {
 	for i := 1; i <= n; i++ {
 		s := &strings.Builder{}
 		if i%3 == 0 {
@@ -114,11 +143,35 @@ func fizzBuzz(n int) []string {
 		}
 		ans = append(ans, s.String())
 	}
-	return ans
+	return
 }
 ```
 
-### **PHP**
+#### JavaScript
+
+```js
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var fizzBuzz = function (n) {
+    const ans = [];
+    for (let i = 1; i <= n; ++i) {
+        if (i % 15 === 0) {
+            ans.push('FizzBuzz');
+        } else if (i % 3 === 0) {
+            ans.push('Fizz');
+        } else if (i % 5 === 0) {
+            ans.push('Buzz');
+        } else {
+            ans.push(`${i}`);
+        }
+    }
+    return ans;
+};
+```
+
+#### PHP
 
 ```php
 class Solution {
@@ -127,27 +180,27 @@ class Solution {
      * @return String[]
      */
     function fizzBuzz($n) {
-        $rs = [];
-        for ($i = 1; $i <= $n; $i++) {
-            if ($i % 3 != 0 && $i % 5 != 0) {
-                array_push($rs, strval($i));
-            } else if ($i % 3 == 0 && $i % 5 != 0) {
-                array_push($rs, "Fizz");
-            } else if ($i % 3 != 0 && $i % 5 == 0) {
-                array_push($rs, "Buzz");
-            } else {
-                array_push($rs, "FizzBuzz");
+        $ans = [];
+        for ($i = 1; $i <= $n; ++$i) {
+            $s = '';
+            if ($i % 3 == 0) {
+                $s .= 'Fizz';
             }
+            if ($i % 5 == 0) {
+                $s .= 'Buzz';
+            }
+            if (strlen($s) == 0) {
+                $s .= $i;
+            }
+            $ans[] = $s;
         }
-        return $rs;
+        return $ans;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

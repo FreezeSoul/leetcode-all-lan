@@ -1,14 +1,13 @@
 class Solution {
     public int partitionString(String s) {
-        int v = 0;
-        int ans = 1;
-        for (char c : s.toCharArray()) {
-            int i = c - 'a';
-            if (((v >> i) & 1) == 1) {
-                v = 0;
+        int ans = 1, mask = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            int x = s.charAt(i) - 'a';
+            if ((mask >> x & 1) == 1) {
                 ++ans;
+                mask = 0;
             }
-            v |= 1 << i;
+            mask |= 1 << x;
         }
         return ans;
     }

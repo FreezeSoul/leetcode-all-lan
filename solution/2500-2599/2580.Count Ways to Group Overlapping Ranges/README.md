@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2580.Count%20Ways%20to%20Group%20Overlapping%20Ranges/README.md
+rating: 1631
+source: 第 99 场双周赛 Q3
+tags:
+    - 数组
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2580. 统计将重叠区间合并成组的方案数](https://leetcode.cn/problems/count-ways-to-group-overlapping-ranges)
 
 [English Version](/solution/2500-2599/2580.Count%20Ways%20to%20Group%20Overlapping%20Ranges/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二维整数数组&nbsp;<code>ranges</code>&nbsp;，其中&nbsp;<code>ranges[i] = [start<sub>i</sub>, end<sub>i</sub>]</code>&nbsp;表示&nbsp;<code>start<sub>i</sub></code>&nbsp;到&nbsp;<code>end<sub>i</sub></code>&nbsp;之间（包括二者）的所有整数都包含在第&nbsp;<code>i</code>&nbsp;个区间中。</p>
 
@@ -60,11 +73,13 @@
 	<li><code>0 &lt;= start<sub>i</sub> &lt;= end<sub>i</sub> &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：排序 + 计数 + 快速幂**
+### 方法一：排序 + 计数 + 快速幂
 
 我们可以先对区间进行排序，相交的区间进行合并，统计有多少个不相交的区间，记为 $cnt$。
 
@@ -76,9 +91,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -92,6 +105,121 @@ class Solution:
         mod = 10**9 + 7
         return pow(2, cnt, mod)
 ```
+
+#### Java
+
+```java
+class Solution {
+    public int countWays(int[][] ranges) {
+        Arrays.sort(ranges, (a, b) -> a[0] - b[0]);
+        int cnt = 0, mx = -1;
+        for (int[] e : ranges) {
+            if (e[0] > mx) {
+                ++cnt;
+            }
+            mx = Math.max(mx, e[1]);
+        }
+        return qpow(2, cnt, (int) 1e9 + 7);
+    }
+
+    private int qpow(long a, int n, int mod) {
+        long ans = 1;
+        for (; n > 0; n >>= 1) {
+            if ((n & 1) == 1) {
+                ans = ans * a % mod;
+            }
+            a = a * a % mod;
+        }
+        return (int) ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int countWays(vector<vector<int>>& ranges) {
+        sort(ranges.begin(), ranges.end());
+        int cnt = 0, mx = -1;
+        for (auto& e : ranges) {
+            cnt += e[0] > mx;
+            mx = max(mx, e[1]);
+        }
+        using ll = long long;
+        auto qpow = [&](ll a, int n, int mod) {
+            ll ans = 1;
+            for (; n; n >>= 1) {
+                if (n & 1) {
+                    ans = ans * a % mod;
+                }
+                a = a * a % mod;
+            }
+            return ans;
+        };
+        return qpow(2, cnt, 1e9 + 7);
+    }
+};
+```
+
+#### Go
+
+```go
+func countWays(ranges [][]int) int {
+	sort.Slice(ranges, func(i, j int) bool { return ranges[i][0] < ranges[j][0] })
+	cnt, mx := 0, -1
+	for _, e := range ranges {
+		if e[0] > mx {
+			cnt++
+		}
+		if mx < e[1] {
+			mx = e[1]
+		}
+	}
+	qpow := func(a, n, mod int) int {
+		ans := 1
+		for ; n > 0; n >>= 1 {
+			if n&1 == 1 {
+				ans = ans * a % mod
+			}
+			a = a * a % mod
+		}
+		return ans
+	}
+	return qpow(2, cnt, 1e9+7)
+}
+```
+
+#### TypeScript
+
+```ts
+function countWays(ranges: number[][]): number {
+    ranges.sort((a, b) => a[0] - b[0]);
+    let mx = -1;
+    let ans = 1;
+    const mod = 10 ** 9 + 7;
+    for (const [start, end] of ranges) {
+        if (start > mx) {
+            ans = (ans * 2) % mod;
+        }
+        mx = Math.max(mx, end);
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class Solution:
@@ -107,37 +235,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int countWays(int[][] ranges) {
-        Arrays.sort(ranges, (a, b) -> a[0] - b[0]);
-        int cnt = 0, mx = -1;
-        for (int[] e : ranges) {
-            if (e[0] > mx) {
-                ++cnt;
-            }
-            mx = Math.max(mx, e[1]);
-        }
-        return qmi(2, cnt, (int) 1e9 + 7);
-    }
-
-    int qmi(long a, long k, int p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
-            }
-            k >>= 1;
-            a = a * a % p;
-        }
-        return (int) res;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -157,34 +255,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int countWays(vector<vector<int>>& ranges) {
-        sort(ranges.begin(), ranges.end());
-        int cnt = 0, mx = -1;
-        for (auto& e : ranges) {
-            cnt += e[0] > mx;
-            mx = max(mx, e[1]);
-        }
-        return qmi(2, cnt, 1e9 + 7);
-    }
-
-    int qmi(long a, long k, int p) {
-        long res = 1;
-        while (k != 0) {
-            if ((k & 1) == 1) {
-                res = res * a % p;
-            }
-            k >>= 1;
-            a = a * a % p;
-        }
-        return res;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -204,35 +275,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func countWays(ranges [][]int) int {
-	sort.Slice(ranges, func(i, j int) bool { return ranges[i][0] < ranges[j][0] })
-	cnt, mx := 0, -1
-	for _, e := range ranges {
-		if e[0] > mx {
-			cnt++
-		}
-		if mx < e[1] {
-			mx = e[1]
-		}
-	}
-	return qmi(2, cnt, 1e9+7)
-}
-
-func qmi(a, k, p int) int {
-	res := 1
-	for k != 0 {
-		if k&1 == 1 {
-			res = res * a % p
-		}
-		k >>= 1
-		a = a * a % p
-	}
-	return res
-}
-```
+#### Go
 
 ```go
 func countWays(ranges [][]int) int {
@@ -251,28 +294,8 @@ func countWays(ranges [][]int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function countWays(ranges: number[][]): number {
-    ranges.sort((a, b) => a[0] - b[0]);
-    let mx = -1;
-    let ans = 1;
-    const mod = 10 ** 9 + 7;
-    for (const [start, end] of ranges) {
-        if (start > mx) {
-            ans = (ans * 2) % mod;
-        }
-        mx = Math.max(mx, end);
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

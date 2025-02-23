@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0177.Nth%20Highest%20Salary/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
 # [177. Nth Highest Salary](https://leetcode.com/problems/nth-highest-salary)
 
 [中文文档](/solution/0100-0199/0177.Nth%20Highest%20Salary/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Employee</code></p>
 
@@ -13,15 +25,15 @@
 | id          | int  |
 | salary      | int  |
 +-------------+------+
-id is the primary key column for this table.
+id is the primary key (column with unique values) for this table.
 Each row of this table contains information about the salary of an employee.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the <code>n<sup>th</sup></code> highest salary from the <code>Employee</code> table. If there is no <code>n<sup>th</sup></code> highest salary, the query should report <code>null</code>.</p>
+<p>Write a solution to find the <code>n<sup>th</sup></code> highest salary from the <code>Employee</code> table. If there is no <code>n<sup>th</sup></code> highest salary, return&nbsp;<code>null</code>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -64,11 +76,32 @@ n = 2
 +------------------------+
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### Python3
+
+```python
+import pandas as pd
+
+
+def nth_highest_salary(employee: pd.DataFrame, N: int) -> pd.DataFrame:
+    unique_salaries = employee.salary.unique()
+    if len(unique_salaries) < N:
+        return pd.DataFrame([np.NaN], columns=[f"getNthHighestSalary({N})"])
+    else:
+        salary = sorted(unique_salaries, reverse=True)[N - 1]
+        return pd.DataFrame([salary], columns=[f"getNthHighestSalary({N})"])
+```
+
+#### MySQL
 
 ```sql
 CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
@@ -77,9 +110,9 @@ BEGIN
   RETURN (
       # Write your MySQL query statement below.
       SELECT (
-          SELECT DISTINCT Salary
+          SELECT DISTINCT salary
           FROM Employee
-          ORDER BY Salary DESC
+          ORDER BY salary DESC
           LIMIT 1 OFFSET N
       )
   );
@@ -87,3 +120,7 @@ END
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

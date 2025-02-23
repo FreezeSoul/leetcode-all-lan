@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2540.Minimum%20Common%20Value/README_EN.md
+rating: 1249
+source: Biweekly Contest 96 Q1
+tags:
+    - Array
+    - Hash Table
+    - Two Pointers
+    - Binary Search
+---
+
+<!-- problem:start -->
+
 # [2540. Minimum Common Value](https://leetcode.com/problems/minimum-common-value)
 
 [中文文档](/solution/2500-2599/2540.Minimum%20Common%20Value/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given two integer arrays <code>nums1</code> and <code>nums2</code>, sorted in non-decreasing order, return <em>the <strong>minimum integer common</strong> to both arrays</em>. If there is no common integer amongst <code>nums1</code> and <code>nums2</code>, return <code>-1</code>.</p>
 
@@ -34,11 +51,21 @@
 	<li>Both <code>nums1</code> and <code>nums2</code> are sorted in <strong>non-decreasing</strong> order.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
+
+Traverse the two arrays. If the elements pointed to by the two pointers are equal, return that element. If the elements pointed to by the two pointers are not equal, move the pointer pointing to the smaller element to the right by one bit until an equal element is found or the array is traversed.
+
+The time complexity is $O(m + n)$, where $m$ and $n$ are the lengths of the two arrays respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -55,7 +82,7 @@ class Solution:
         return -1
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -76,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -98,7 +125,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getCommon(nums1 []int, nums2 []int) int {
@@ -117,7 +144,7 @@ func getCommon(nums1 []int, nums2 []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function getCommon(nums1: number[], nums2: number[]): number {
@@ -139,7 +166,7 @@ function getCommon(nums1: number[], nums2: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -163,10 +190,10 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
-int getCommon(int *nums1, int nums1Size, int *nums2, int nums2Size) {
+int getCommon(int* nums1, int nums1Size, int* nums2, int nums2Size) {
     int i = 0;
     int j = 0;
     while (i < nums1Size && j < nums2Size) {
@@ -183,10 +210,43 @@ int getCommon(int *nums1, int nums1Size, int *nums2, int nums2Size) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn get_common(nums1: Vec<i32>, nums2: Vec<i32>) -> i32 {
+        let mut iter1 = nums1.iter();
+        let mut iter2 = nums2.iter();
+        let mut num1 = iter1.next();
+        let mut num2 = iter2.next();
+
+        while let (Some(n1), Some(n2)) = (num1, num2) {
+            if n1 == n2 {
+                return *n1;
+            } else if n1 < n2 {
+                num1 = iter1.next();
+            } else {
+                num2 = iter2.next();
+            }
+        }
+
+        -1
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

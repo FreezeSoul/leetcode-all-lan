@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1705.Maximum%20Number%20of%20Eaten%20Apples/README_EN.md
+rating: 1929
+source: Weekly Contest 221 Q2
+tags:
+    - Greedy
+    - Array
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [1705. Maximum Number of Eaten Apples](https://leetcode.com/problems/maximum-number-of-eaten-apples)
 
 [中文文档](/solution/1700-1799/1705.Maximum%20Number%20of%20Eaten%20Apples/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a special kind of apple tree that grows apples every day for <code>n</code> days. On the <code>i<sup>th</sup></code> day, the tree grows <code>apples[i]</code> apples that will rot after <code>days[i]</code> days, that is on day <code>i + days[i]</code> the apples will be rotten and cannot be eaten. On some days, the apple tree does not grow any apples, which are denoted by <code>apples[i] == 0</code> and <code>days[i] == 0</code>.</p>
 
@@ -44,11 +60,23 @@
 	<li><code>days[i] = 0</code> if and only if <code>apples[i] = 0</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy + Priority Queue
+
+We can greedily choose the apples that are closest to rotting among the unrotten apples, so that we can eat as many apples as possible.
+
+Therefore, we can use a priority queue (min-heap) to store the rotting time of the apples and the corresponding number of apples. Each time, we take out the apples with the smallest rotting time from the priority queue, then decrement their quantity by one. If the quantity is not zero after decrementing, we put them back into the priority queue. If the apples have already rotted, we remove them from the priority queue.
+
+The time complexity is $O(n \times \log n + M)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{days}$, and $M = \max(\textit{days})$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -71,7 +99,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -100,26 +128,31 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
-using pii = pair<int, int>;
-
 class Solution {
 public:
     int eatenApples(vector<int>& apples, vector<int>& days) {
+        using pii = pair<int, int>;
         priority_queue<pii, vector<pii>, greater<pii>> q;
         int n = days.size();
         int ans = 0, i = 0;
         while (i < n || !q.empty()) {
-            if (i < n && apples[i]) q.emplace(i + days[i] - 1, apples[i]);
-            while (!q.empty() && q.top().first < i) q.pop();
+            if (i < n && apples[i]) {
+                q.emplace(i + days[i] - 1, apples[i]);
+            }
+            while (!q.empty() && q.top().first < i) {
+                q.pop();
+            }
             if (!q.empty()) {
                 auto [t, v] = q.top();
                 q.pop();
                 --v;
                 ++ans;
-                if (v && t > i) q.emplace(t, v);
+                if (v && t > i) {
+                    q.emplace(t, v);
+                }
             }
             ++i;
         }
@@ -128,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func eatenApples(apples []int, days []int) int {
@@ -159,17 +192,15 @@ type pair struct {
 
 type hp []pair
 
-func (a hp) Len() int            { return len(a) }
-func (a hp) Swap(i, j int)       { a[i], a[j] = a[j], a[i] }
-func (a hp) Less(i, j int) bool  { return a[i].first < a[j].first }
-func (a *hp) Push(x interface{}) { *a = append(*a, x.(pair)) }
-func (a *hp) Pop() interface{}   { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
-```
-
-### **...**
-
-```
-
+func (a hp) Len() int           { return len(a) }
+func (a hp) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a hp) Less(i, j int) bool { return a[i].first < a[j].first }
+func (a *hp) Push(x any)        { *a = append(*a, x.(pair)) }
+func (a *hp) Pop() any          { l := len(*a); t := (*a)[l-1]; *a = (*a)[:l-1]; return t }
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

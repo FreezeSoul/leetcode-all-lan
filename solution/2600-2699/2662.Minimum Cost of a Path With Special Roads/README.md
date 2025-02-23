@@ -1,40 +1,84 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2662.Minimum%20Cost%20of%20a%20Path%20With%20Special%20Roads/README.md
+rating: 2153
+source: 第 343 场周赛 Q3
+tags:
+    - 图
+    - 数组
+    - 最短路
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2662. 前往目标的最小代价](https://leetcode.cn/problems/minimum-cost-of-a-path-with-special-roads)
 
 [English Version](/solution/2600-2699/2662.Minimum%20Cost%20of%20a%20Path%20With%20Special%20Roads/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组 <code>start</code> ，其中 <code>start = [startX, startY]</code> 表示你的初始位置位于二维空间上的 <code>(startX, startY)</code> 。另给你一个数组 <code>target</code> ，其中 <code>target = [targetX, targetY]</code> 表示你的目标位置 <code>(targetX, targetY)</code> 。</p>
 
-<p>从位置 <code>(x1, y1)</code> 到空间中任一其他位置 <code>(x2, y2)</code> 的代价是 <code>|x2 - x1| + |y2 - y1|</code> 。</p>
+<p>从位置 <code>(x1, y1)</code> 到空间中任一其他位置 <code>(x2, y2)</code> 的 <strong>代价</strong> 是 <code>|x2 - x1| + |y2 - y1|</code> 。</p>
 
-<p>给你一个二维数组 <code>specialRoads</code> ，表示空间中存在的一些特殊路径。其中 <code>specialRoads[i] = [x1<sub>i</sub>, y1<sub>i</sub>, x2<sub>i</sub>, y2<sub>i</sub>, cost<sub>i</sub>]</code> 表示第 <code>i</code> 条特殊路径可以从 <code>(x1<sub>i</sub>, y1<sub>i</sub>)</code> 到 <code>(x2<sub>i</sub>, y2<sub>i</sub>)</code> ，但成本等于 <code>cost<sub>i</sub></code> 。你可以使用每条特殊路径任意次数。</p>
+<p>给你一个二维数组 <code>specialRoads</code> ，表示空间中存在的一些 <strong>特殊路径</strong>。其中 <code>specialRoads[i] = [x1<sub>i</sub>, y1<sub>i</sub>, x2<sub>i</sub>, y2<sub>i</sub>, cost<sub>i</sub>]</code> 表示第 <code>i</code> 条特殊路径可以从 <code>(x1<sub>i</sub>, y1<sub>i</sub>)</code> 到 <code>(x2<sub>i</sub>, y2<sub>i</sub>)</code> ，但成本等于 <code>cost<sub>i</sub></code> 。你可以使用每条特殊路径任意次数。</p>
 
-<p>返回从 <code>(startX, startY)</code> 到 <code>(targetX, targetY)</code> 所需的最小代价。</p>
+<p>返回从 <code>(startX, startY)</code> 到 <code>(targetX, targetY)</code> 所需的 <strong>最小</strong> 代价。</p>
 
 <p>&nbsp;</p>
 
-<p><strong>示例 1：</strong></p>
+<p><strong class="example">示例 1：</strong></p>
 
-<pre><strong>输入：</strong>start = [1,1], target = [4,5], specialRoads = [[1,2,3,3,2],[3,4,4,5,1]]
-<strong>输出：</strong>5
-<strong>解释：</strong>从 (1,1) 到 (4,5) 的最优路径如下：
-- (1,1) -&gt; (1,2) ，移动的代价是 |1 - 1| + |2 - 1| = 1 。
-- (1,2) -&gt; (3,3) ，移动使用第一条特殊路径，代价是 2 。
-- (3,3) -&gt; (3,4) ，移动的代价是 |3 - 3| + |4 - 3| = 1.
-- (3,4) -&gt; (4,5) ，移动使用第二条特殊路径，代价是 1 。
-总代价是 1 + 2 + 1 + 1 = 5 。
-可以证明无法以小于 5 的代价完成从 (1,1) 到 (4,5) 。
-</pre>
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">start = [1,1], target = [4,5], specialRoads = [[1,2,3,3,2],[3,4,4,5,1]]</span></p>
 
-<p><strong>示例 2：</strong></p>
+<p><span class="example-io"><b>输出：</b>5</span></p>
 
-<pre><strong>输入：</strong>start = [3,2], target = [5,7], specialRoads = [[3,2,3,4,4],[3,3,5,5,5],[3,4,5,6,6]]
-<strong>输出：</strong>7
-<strong>解释：</strong>最优路径是不使用任何特殊路径，直接以 |5 - 3| + |7 - 2| = 7 的代价从初始位置到达目标位置。
-</pre>
+<p><b>解释：</b></p>
+
+<ol>
+	<li>(1,1) 到 (1,2) 花费为 |1 - 1| + |2 - 1| = 1。</li>
+	<li>(1,2) 到 (3,3)。使用&nbsp;<code><span class="example-io">specialRoads[0]</span></code><span class="example-io">&nbsp;花费为</span><span class="example-io">&nbsp;2。</span></li>
+	<li><span class="example-io">(3,3) </span>到<span class="example-io"> (3,4) </span>花费为<span class="example-io"> |3 - 3| + |4 - 3| = 1。</span></li>
+	<li><span class="example-io">(3,4) </span>到<span class="example-io"> (4,5)。</span>使用<span class="example-io"> </span><code><span class="example-io">specialRoads[1]</span></code><span class="example-io"> 花费为</span><span class="example-io"> 1。</span></li>
+</ol>
+
+<p><span class="example-io">所以总花费是 1 + 2 + 1 + 1 = 5。</span></p>
+</div>
+
+<p><strong class="example">示例 2：</strong></p>
+
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">start = [3,2], target = [5,7], specialRoads = [[5,7,3,2,1],[3,2,3,4,4],[3,3,5,5,5],[3,4,5,6,6]]</span></p>
+
+<p><span class="example-io"><b>输出：</b></span><span class="example-io">7</span></p>
+
+<p><b>解释：</b></p>
+
+<p>不使用任何特殊路径，直接从开始到结束位置是最优的，花费为&nbsp;|5 - 3| + |7 - 2| = 7。</p>
+
+<p>注意&nbsp;<span class="example-io"><code>specialRoads[0]</code>&nbsp;直接从 (5,7) 到 (3,2)。</span></p>
+</div>
+
+<p><strong class="example">示例 3：</strong></p>
+
+<div class="example-block">
+<p><strong>输入：</strong><span class="example-io">start = [1,1], target = [10,4], specialRoads = [[4,2,1,1,3],[1,2,7,4,4],[10,3,6,1,2],[6,1,1,2,3]]</span></p>
+
+<p><span class="example-io"><b>输出：</b></span><span class="example-io">8</span></p>
+
+<p><b>解释：</b></p>
+
+<ol>
+	<li>(1,1) 到 (1,2) 花费为 |1 - 1| + |2 - 1| = 1。</li>
+	<li>(1,2) 到 (7,4)。使用&nbsp;<code><span class="example-io">specialRoads[1]</span></code><span class="example-io">&nbsp;花费为</span><span class="example-io">&nbsp;4。</span></li>
+	<li>(7,4) 到 (10,4) 花费为 |10 - 7| + |4 - 4| = 3。</li>
+</ol>
+</div>
 
 <p>&nbsp;</p>
 
@@ -51,11 +95,13 @@
 	<li><code>1 &lt;= cost<sub>i</sub> &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：Dijkstra**
+### 方法一：Dijkstra
 
 我们可以发现，对于访问到的每个坐标点 $(x, y)$，假设从起点到 $(x, y)$ 的最小代价为 $d$。如果选择直接移动到 $(targetX, targetY)$，那么总代价就是 $d + |x - targetX| + |y - targetY|$。如果选择经过某条特殊路径 $(x_1, y_1) \rightarrow (x_2, y_2)$，那么我们需要可以花费 $|x - x_1| + |y - y_1| + cost$ 的代价，从 $(x, y)$ 移动到 $(x_2, y_2)$。
 
@@ -71,13 +117,13 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def minimumCost(self, start: List[int], target: List[int], specialRoads: List[List[int]]) -> int:
+    def minimumCost(
+        self, start: List[int], target: List[int], specialRoads: List[List[int]]
+    ) -> int:
         def dist(x1: int, y1: int, x2: int, y2: int) -> int:
             return abs(x1 - x2) + abs(y1 - y2)
 
@@ -90,15 +136,12 @@ class Solution:
                 continue
             vis.add((x, y))
             ans = min(ans, d + dist(x, y, *target))
-            vis.add((x, y))
             for x1, y1, x2, y2, cost in specialRoads:
                 heappush(q, (d + dist(x, y, x1, y1) + cost, x2, y2))
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -132,7 +175,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -165,7 +208,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumCost(start []int, target []int, specialRoads [][]int) int {
@@ -201,33 +244,22 @@ func abs(x int) int {
 	return x
 }
 
-func min(a, b int) int {
-	if a > b {
-		return b
-	}
-	return a
-}
-
 type tuple struct {
 	d, x, y int
 }
 type hp []tuple
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].d < h[j].d }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(tuple)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].d < h[j].d }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(tuple)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function minimumCost(
-    start: number[],
-    target: number[],
-    specialRoads: number[][],
-): number {
+function minimumCost(start: number[], target: number[], specialRoads: number[][]): number {
     const dist = (x1: number, y1: number, x2: number, y2: number): number => {
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     };
@@ -263,8 +295,7 @@ class Heap<T = number> {
     constructor(data: T[] | Compare<T>, compare?: (lhs: T, rhs: T) => number);
     constructor(
         data: T[] | Compare<T> = [],
-        compare: Compare<T> = (lhs: T, rhs: T) =>
-            lhs < rhs ? -1 : lhs > rhs ? 1 : 0,
+        compare: Compare<T> = (lhs: T, rhs: T) => (lhs < rhs ? -1 : lhs > rhs ? 1 : 0),
     ) {
         if (typeof data === 'function') {
             compare = data;
@@ -319,10 +350,8 @@ class Heap<T = number> {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

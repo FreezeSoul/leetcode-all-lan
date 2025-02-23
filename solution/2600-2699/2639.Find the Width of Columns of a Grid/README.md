@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2639.Find%20the%20Width%20of%20Columns%20of%20a%20Grid/README.md
+rating: 1282
+source: 第 102 场双周赛 Q1
+tags:
+    - 数组
+    - 矩阵
+---
+
+<!-- problem:start -->
+
 # [2639. 查询网格图中每一列的宽度](https://leetcode.cn/problems/find-the-width-of-columns-of-a-grid)
 
 [English Version](/solution/2600-2699/2639.Find%20the%20Width%20of%20Columns%20of%20a%20Grid/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong>&nbsp;开始的&nbsp;<code>m x n</code>&nbsp;整数矩阵&nbsp;<code>grid</code>&nbsp;。矩阵中某一列的宽度是这一列数字的最大 <strong>字符串长度</strong>&nbsp;。</p>
 
@@ -46,15 +59,17 @@
 	<li><code>-10<sup>9</sup> &lt;= grid[r][c] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
-我们记矩阵的列数为 $n$，创建一个长度为 $n$ 的数组 $ans$，其中 $ans[i]$ 表示第 $i$ 列的宽度。初始时，$ans[i]$ 的值均为 $0$。
+我们记矩阵的列数为 $n$，创建一个长度为 $n$ 的数组 $ans$，其中 $ans[i]$ 表示第 $i$ 列的宽度。初始时 $ans[i] = 0$。
 
-遍历矩阵中的每一行，对于每一行中的每个元素，计算其字符串长度 $w$，并更新 $ans[j]$ 的值为 $max(ans[j], w)$。
+遍历矩阵中的每一行，对于每一行中的每个元素，计算其字符串长度 $w$，并更新 $ans[j]$ 的值为 $\max(ans[j], w)$。
 
 遍历完所有行后，数组 $ans$ 中的每个元素即为对应列的宽度。
 
@@ -62,20 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def findColumnWidth(self, grid: List[List[int]]) -> List[int]:
-        ans = [0] * len(grid[0])
-        for row in grid:
-            for j, x in enumerate(row):
-                w = len(str(x))
-                ans[j] = max(ans[j], w)
-        return ans
-```
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +85,7 @@ class Solution:
         return [max(len(str(x)) for x in col) for col in zip(*grid)]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -103,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +122,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findColumnWidth(grid [][]int) []int {
@@ -135,16 +135,9 @@ func findColumnWidth(grid [][]int) []int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findColumnWidth(grid: number[][]): number[] {
@@ -160,10 +153,27 @@ function findColumnWidth(grid: number[][]): number[] {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn find_column_width(grid: Vec<Vec<i32>>) -> Vec<i32> {
+        let mut ans = vec![0; grid[0].len()];
 
+        for row in grid.iter() {
+            for (j, num) in row.iter().enumerate() {
+                let width = num.to_string().len() as i32;
+                ans[j] = std::cmp::max(ans[j], width);
+            }
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

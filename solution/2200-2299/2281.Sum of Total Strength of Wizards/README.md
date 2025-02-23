@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2281.Sum%20of%20Total%20Strength%20of%20Wizards/README.md
+rating: 2621
+source: 第 294 场周赛 Q4
+tags:
+    - 栈
+    - 数组
+    - 前缀和
+    - 单调栈
+---
+
+<!-- problem:start -->
+
 # [2281. 巫师的总力量和](https://leetcode.cn/problems/sum-of-total-strength-of-wizards)
 
 [English Version](/solution/2200-2299/2281.Sum%20of%20Total%20Strength%20of%20Wizards/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>作为国王的统治者，你有一支巫师军队听你指挥。</p>
 
@@ -62,19 +77,21 @@
 	<li><code>1 &lt;= strength[i] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：单调栈 + 前缀和**
+### 方法一：单调栈 + 前缀和
 
-相似题目：[907. 子数组的最小值之和](/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README.md)
+相似题目：
+
+-   [907. 子数组的最小值之和](https://github.com/doocs/leetcode/blob/main/solution/0900-0999/0907.Sum%20of%20Subarray%20Minimums/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -108,9 +125,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -162,7 +177,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -192,16 +207,16 @@ public:
         for (int i = 0; i < n; ++i) {
             int v = strength[i];
             int l = left[i] + 1, r = right[i] - 1;
-            long a = (long)(i - l + 1) * (ss[r + 2] - ss[i + 1]);
-            long b = (long)(r - i + 1) * (ss[i + 1] - ss[l]);
+            long a = (long) (i - l + 1) * (ss[r + 2] - ss[i + 1]);
+            long b = (long) (r - i + 1) * (ss[i + 1] - ss[l]);
             ans = (ans + v * ((a - b) % mod)) % mod;
         }
-        return (int)(ans + mod) % mod;
+        return (int) (ans + mod) % mod;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func totalStrength(strength []int) int {
@@ -252,16 +267,8 @@ func totalStrength(strength []int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

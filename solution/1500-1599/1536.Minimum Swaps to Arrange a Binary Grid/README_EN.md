@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1536.Minimum%20Swaps%20to%20Arrange%20a%20Binary%20Grid/README_EN.md
+rating: 1880
+source: Weekly Contest 200 Q3
+tags:
+    - Greedy
+    - Array
+    - Matrix
+---
+
+<!-- problem:start -->
+
 # [1536. Minimum Swaps to Arrange a Binary Grid](https://leetcode.com/problems/minimum-swaps-to-arrange-a-binary-grid)
 
 [中文文档](/solution/1500-1599/1536.Minimum%20Swaps%20to%20Arrange%20a%20Binary%20Grid/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an <code>n x n</code> binary <code>grid</code>, in one step you can choose two <strong>adjacent rows</strong> of the grid and swap them.</p>
 
@@ -44,26 +60,200 @@
 	<li><code>grid[i][j]</code> is either <code>0</code> or <code>1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+We process row by row. For the $i$-th row, the position of the last '1' must be less than or equal to $i$. We find the first row that meets the condition in $[i, n)$, denoted as $k$. Then, starting from the $k$-th row, we swap the adjacent two rows upwards until the $i$-th row.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the side length of the grid.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-
+class Solution:
+    def minSwaps(self, grid: List[List[int]]) -> int:
+        n = len(grid)
+        pos = [-1] * n
+        for i in range(n):
+            for j in range(n - 1, -1, -1):
+                if grid[i][j] == 1:
+                    pos[i] = j
+                    break
+        ans = 0
+        for i in range(n):
+            k = -1
+            for j in range(i, n):
+                if pos[j] <= i:
+                    ans += j - i
+                    k = j
+                    break
+            if k == -1:
+                return -1
+            while k > i:
+                pos[k], pos[k - 1] = pos[k - 1], pos[k]
+                k -= 1
+        return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
-
+class Solution {
+    public int minSwaps(int[][] grid) {
+        int n = grid.length;
+        int[] pos = new int[n];
+        Arrays.fill(pos, -1);
+        for (int i = 0; i < n; ++i) {
+            for (int j = n - 1; j >= 0; --j) {
+                if (grid[i][j] == 1) {
+                    pos[i] = j;
+                    break;
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int k = -1;
+            for (int j = i; j < n; ++j) {
+                if (pos[j] <= i) {
+                    ans += j - i;
+                    k = j;
+                    break;
+                }
+            }
+            if (k == -1) {
+                return -1;
+            }
+            for (; k > i; --k) {
+                int t = pos[k];
+                pos[k] = pos[k - 1];
+                pos[k - 1] = t;
+            }
+        }
+        return ans;
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int minSwaps(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<int> pos(n, -1);
+        for (int i = 0; i < n; ++i) {
+            for (int j = n - 1; j >= 0; --j) {
+                if (grid[i][j] == 1) {
+                    pos[i] = j;
+                    break;
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int k = -1;
+            for (int j = i; j < n; ++j) {
+                if (pos[j] <= i) {
+                    ans += j - i;
+                    k = j;
+                    break;
+                }
+            }
+            if (k == -1) {
+                return -1;
+            }
+            for (; k > i; --k) {
+                swap(pos[k], pos[k - 1]);
+            }
+        }
+        return ans;
+    }
+};
 ```
 
+#### Go
+
+```go
+func minSwaps(grid [][]int) (ans int) {
+	n := len(grid)
+	pos := make([]int, n)
+	for i := range pos {
+		pos[i] = -1
+	}
+	for i := 0; i < n; i++ {
+		for j := n - 1; j >= 0; j-- {
+			if grid[i][j] == 1 {
+				pos[i] = j
+				break
+			}
+		}
+	}
+	for i := 0; i < n; i++ {
+		k := -1
+		for j := i; j < n; j++ {
+			if pos[j] <= i {
+				ans += j - i
+				k = j
+				break
+			}
+		}
+		if k == -1 {
+			return -1
+		}
+		for ; k > i; k-- {
+			pos[k], pos[k-1] = pos[k-1], pos[k]
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function minSwaps(grid: number[][]): number {
+    const n = grid.length;
+    const pos: number[] = Array(n).fill(-1);
+    for (let i = 0; i < n; ++i) {
+        for (let j = n - 1; ~j; --j) {
+            if (grid[i][j] === 1) {
+                pos[i] = j;
+                break;
+            }
+        }
+    }
+    let ans = 0;
+    for (let i = 0; i < n; ++i) {
+        let k = -1;
+        for (let j = i; j < n; ++j) {
+            if (pos[j] <= i) {
+                ans += j - i;
+                k = j;
+                break;
+            }
+        }
+        if (k === -1) {
+            return -1;
+        }
+        for (; k > i; --k) {
+            [pos[k], pos[k - 1]] = [pos[k - 1], pos[k]];
+        }
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2501.Longest%20Square%20Streak%20in%20an%20Array/README.md
+rating: 1479
+source: 第 323 场周赛 Q2
+tags:
+    - 数组
+    - 哈希表
+    - 二分查找
+    - 动态规划
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2501. 数组中最长的方波](https://leetcode.cn/problems/longest-square-streak-in-an-array)
 
 [English Version](/solution/2500-2599/2501.Longest%20Square%20Streak%20in%20an%20Array/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>nums</code> 。如果 <code>nums</code> 的子序列满足下述条件，则认为该子序列是一个 <strong>方波</strong> ：</p>
 
@@ -46,34 +62,21 @@
 	<li><code>2 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表 + 枚举**
+### 方法一：哈希表 + 枚举
 
 我们先用哈希表记录数组中的所有元素，然后枚举数组中的每个元素作为子序列的第一个元素，将该元素不断平方，并判断平方后的结果是否在哈希表中，如果在，则将平方后的结果作为下一个元素，继续判断，直到平方后的结果不在哈希表中，此时判断子序列的长度是否大于 $1$，如果是，则更新答案。
 
-时间复杂度 $O(n \times \log \log M)$，空间复杂度 $O(n)$。其中 $n$ 为数组 `nums` 的长度，而 $M$ 为数组 `nums` 中的最大元素。
-
-**方法二：记忆化搜索**
-
-与方法一类似，我们先用哈希表记录数组中的所有元素。然后设计一个函数 $dfs(x)$，表示以 $x$ 为第一个元素的方波的长度。那么答案就是 $max(dfs(x))$，其中 $x$ 为数组 `nums` 中的元素。
-
-函数 $dfs(x)$ 的计算过程如下：
-
--   如果 $x$ 不在哈希表中，则返回 $0$。
--   否则，返回 $1 + dfs(x^2)$。
-
-过程中我们可以使用记忆化搜索，即使用哈希表记录函数 $dfs(x)$ 的值，避免重复计算。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 `nums` 的长度。
+时间复杂度 $O(n \times \log \log M)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{nums}$ 的长度，而 $M$ 为数组 $\textit{nums}$ 中的元素的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -90,23 +93,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def longestSquareStreak(self, nums: List[int]) -> int:
-        @cache
-        def dfs(x):
-            if x not in s:
-                return 0
-            return 1 + dfs(x * x)
-
-        s = set(nums)
-        ans = max(dfs(x) for x in nums)
-        return -1 if ans < 2 else ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -130,6 +117,90 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int longestSquareStreak(vector<int>& nums) {
+        unordered_set<long long> s(nums.begin(), nums.end());
+        int ans = -1;
+        for (int& v : nums) {
+            int t = 0;
+            long long x = v;
+            while (s.count(x)) {
+                x *= x;
+                ++t;
+            }
+            if (t > 1) ans = max(ans, t);
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func longestSquareStreak(nums []int) int {
+	s := map[int]bool{}
+	for _, v := range nums {
+		s[v] = true
+	}
+	ans := -1
+	for _, v := range nums {
+		t := 0
+		for s[v] {
+			v *= v
+			t++
+		}
+		if t > 1 && t > ans {
+			ans = t
+		}
+	}
+	return ans
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：记忆化搜索
+
+与方法一类似，我们先用哈希表记录数组中的所有元素。然后设计一个函数 $\textit{dfs}(x)$，表示以 $x$ 为第一个元素的方波的长度。那么答案就是 $\max(\textit{dfs}(x))$，其中 $x$ 为数组 $\textit{nums}$ 中的元素。
+
+函数 $\textit{dfs}(x)$ 的计算过程如下：
+
+-   如果 $x$ 不在哈希表中，则返回 $0$。
+-   否则，返回 $1 + \textit{dfs}(x^2)$。
+
+过程中我们可以使用记忆化搜索，即使用哈希表记录函数 $\textit{dfs}(x)$ 的值，避免重复计算。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组 $\textit{nums}$ 的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def longestSquareStreak(self, nums: List[int]) -> int:
+        @cache
+        def dfs(x):
+            if x not in s:
+                return 0
+            return 1 + dfs(x * x)
+
+        s = set(nums)
+        ans = max(dfs(x) for x in nums)
+        return -1 if ans < 2 else ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -161,27 +232,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int longestSquareStreak(vector<int>& nums) {
-        unordered_set<long long> s(nums.begin(), nums.end());
-        int ans = -1;
-        for (int& v : nums) {
-            int t = 0;
-            long long x = v;
-            while (s.count(x)) {
-                x *= x;
-                ++t;
-            }
-            if (t > 1) ans = max(ans, t);
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -204,28 +255,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func longestSquareStreak(nums []int) int {
-	s := map[int]bool{}
-	for _, v := range nums {
-		s[v] = true
-	}
-	ans := -1
-	for _, v := range nums {
-		t := 0
-		for s[v] {
-			v *= v
-			t++
-		}
-		if t > 1 && t > ans {
-			ans = t
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func longestSquareStreak(nums []int) (ans int) {
@@ -257,10 +287,138 @@ func longestSquareStreak(nums []int) (ans int) {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function longestSquareStreak(nums: number[]): number {
+    const set = new Set(nums);
+    const cache = new Map<number, number>();
+    const dfs = (x: number): number => {
+        if (cache.has(x)) return cache.get(x)!;
+        if (!set.has(x)) return 0;
+        cache.set(x, 1 + dfs(x ** 2));
+        return cache.get(x)!;
+    };
+
+    for (const x of set) dfs(x);
+    const ans = Math.max(...cache.values());
+
+    return ans > 1 ? ans : -1;
+}
 ```
 
+#### JavaScript
+
+```js
+function longestSquareStreak(nums) {
+    const set = new Set(nums);
+    const cache = new Map();
+    const dfs = x => {
+        if (cache.has(x)) return cache.get(x);
+        if (!set.has(x)) return 0;
+        cache.set(x, 1 + dfs(x ** 2));
+        return cache.get(x);
+    };
+
+    for (const x of set) dfs(x);
+    const ans = Math.max(...cache.values());
+
+    return ans > 1 ? ans : -1;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法三：计数
+
+<!-- tabs:start -->
+
+#### TypeScript
+
+```ts
+function longestSquareStreak(nums: number[]): number {
+    const cnt: Record<number, number> = {};
+    const squares = new Set<number>();
+
+    for (const x of new Set(nums)) {
+        cnt[x] = (cnt[x] ?? -1) + 1;
+        cnt[x ** 2] = (cnt[x ** 2] ?? -1) + 1;
+    }
+
+    for (const key in cnt) {
+        const x = +key;
+        if (cnt[x] || cnt[x ** 2]) {
+            squares.add(x);
+        }
+    }
+
+    if (squares.size <= 1) return -1;
+
+    const iterator = squares[Symbol.iterator]();
+    let [max, c, x] = [0, 0, iterator.next().value];
+
+    while (x !== undefined) {
+        if (squares.has(x)) {
+            squares.delete(x);
+            x **= 2;
+            c++;
+        } else {
+            max = Math.max(max, c);
+            x = iterator.next().value;
+            c = 0;
+        }
+    }
+
+    return max;
+}
+```
+
+#### JavaScript
+
+```js
+function longestSquareStreak(nums) {
+    const cnt = {};
+    const squares = new Set();
+
+    for (const x of new Set(nums)) {
+        cnt[x] = (cnt[x] ?? -1) + 1;
+        cnt[x ** 2] = (cnt[x ** 2] ?? -1) + 1;
+    }
+
+    for (const key in cnt) {
+        const x = +key;
+        if (cnt[x] || cnt[x ** 2]) {
+            squares.add(x);
+        }
+    }
+
+    if (squares.size <= 1) return -1;
+
+    const iterator = squares[Symbol.iterator]();
+    let [max, c, x] = [0, 0, iterator.next().value];
+
+    while (x !== undefined) {
+        if (squares.has(x)) {
+            squares.delete(x);
+            x **= 2;
+            c++;
+        } else {
+            max = Math.max(max, c);
+            x = iterator.next().value;
+            c = 0;
+        }
+    }
+
+    return max;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

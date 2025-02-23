@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2433.Find%20The%20Original%20Array%20of%20Prefix%20Xor/README_EN.md
+rating: 1366
+source: Weekly Contest 314 Q2
+tags:
+    - Bit Manipulation
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2433. Find The Original Array of Prefix Xor](https://leetcode.com/problems/find-the-original-array-of-prefix-xor)
 
 [中文文档](/solution/2400-2499/2433.Find%20The%20Original%20Array%20of%20Prefix%20Xor/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an <strong>integer</strong> array <code>pref</code> of size <code>n</code>. Find and return <em>the array </em><code>arr</code><em> of size </em><code>n</code><em> that satisfies</em>:</p>
 
@@ -44,11 +59,39 @@
 	<li><code>0 &lt;= pref[i] &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Bit Manipulation
+
+According to the problem statement, we have equation one:
+
+$$
+pref[i]=arr[0] \oplus arr[1] \oplus \cdots \oplus arr[i]
+$$
+
+So, we also have equation two:
+
+$$
+pref[i-1]=arr[0] \oplus arr[1] \oplus \cdots \oplus arr[i-1]
+$$
+
+We perform a bitwise XOR operation on equations one and two, and get:
+
+$$
+pref[i] \oplus pref[i-1]=arr[i]
+$$
+
+That is, each item in the answer array is obtained by performing a bitwise XOR operation on the adjacent two items in the prefix XOR array.
+
+The time complexity is $O(n)$, where $n$ is the length of the prefix XOR array. Ignoring the space consumption of the answer, the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +99,7 @@ class Solution:
         return [a ^ b for a, b in pairwise([0] + pref)]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -72,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -88,7 +131,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findArray(pref []int) []int {
@@ -101,24 +144,7 @@ func findArray(pref []int) []int {
 }
 ```
 
-### **C**
-
-```c
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-int *findArray(int *pref, int prefSize, int *returnSize) {
-    int *res = (int *) malloc(sizeof(int) * prefSize);
-    res[0] = pref[0];
-    for (int i = 1; i < prefSize; i++) {
-        res[i] = pref[i - 1] ^ pref[i];
-    }
-    *returnSize = prefSize;
-    return res;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findArray(pref: number[]): number[] {
@@ -130,7 +156,7 @@ function findArray(pref: number[]): number[] {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -146,10 +172,25 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
-
+```c
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* findArray(int* pref, int prefSize, int* returnSize) {
+    int* res = (int*) malloc(sizeof(int) * prefSize);
+    res[0] = pref[0];
+    for (int i = 1; i < prefSize; i++) {
+        res[i] = pref[i - 1] ^ pref[i];
+    }
+    *returnSize = prefSize;
+    return res;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

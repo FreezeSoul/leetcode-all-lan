@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1835.Find%20XOR%20Sum%20of%20All%20Pairs%20Bitwise%20AND/README_EN.md
+rating: 1825
+source: Weekly Contest 237 Q4
+tags:
+    - Bit Manipulation
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [1835. Find XOR Sum of All Pairs Bitwise AND](https://leetcode.com/problems/find-xor-sum-of-all-pairs-bitwise-and)
 
 [中文文档](/solution/1800-1899/1835.Find%20XOR%20Sum%20of%20All%20Pairs%20Bitwise%20AND/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>The <strong>XOR sum</strong> of a list is the bitwise <code>XOR</code> of all its elements. If the list only contains one element, then its <strong>XOR sum</strong> will be equal to this element.</p>
 
@@ -42,11 +58,38 @@ The XOR sum = 0 XOR 1 XOR 2 XOR 0 XOR 2 XOR 1 = 0.
 	<li><code>0 &lt;= arr1[i], arr2[j] &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Bitwise Operation
+
+Assume that the elements of array $arr1$ are $a_1, a_2, ..., a_n$, and the elements of array $arr2$ are $b_1, b_2, ..., b_m$. Then, the answer to the problem is:
+
+$$
+\begin{aligned}
+\textit{ans} &= (a_1 \wedge b_1) \oplus (a_1 \wedge b_2) ... (a_1 \wedge b_m) \\
+&\quad \oplus (a_2 \wedge b_1) \oplus (a_2 \wedge b_2) ... (a_2 \wedge b_m) \\
+&\quad \oplus \cdots \\
+&\quad \oplus (a_n \wedge b_1) \oplus (a_n \wedge b_2) ... (a_n \wedge b_m) \\
+\end{aligned}
+$$
+
+Since in Boolean algebra, the XOR operation is addition without carry, and the AND operation is multiplication, the above formula can be simplified as:
+
+$$
+\textit{ans} = (a_1 \oplus a_2 \oplus \cdots \oplus a_n) \wedge (b_1 \oplus b_2 \oplus \cdots \oplus b_m)
+$$
+
+That is, the bitwise AND of the XOR sum of array $arr1$ and the XOR sum of array $arr2$.
+
+The time complexity is $O(n + m)$, where $n$ and $m$ are the lengths of arrays $arr1$ and $arr2$, respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,7 +99,7 @@ class Solution:
         return a & b
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -73,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -86,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func getXORSum(arr1 []int, arr2 []int) int {
@@ -101,10 +144,18 @@ func getXORSum(arr1 []int, arr2 []int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function getXORSum(arr1: number[], arr2: number[]): number {
+    const a = arr1.reduce((acc, x) => acc ^ x);
+    const b = arr2.reduce((acc, x) => acc ^ x);
+    return a & b;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

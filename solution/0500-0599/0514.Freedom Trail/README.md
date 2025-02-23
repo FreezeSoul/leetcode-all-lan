@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0514.Freedom%20Trail/README.md
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [514. 自由之路](https://leetcode.cn/problems/freedom-trail)
 
 [English Version](/solution/0500-0599/0514.Freedom%20Trail/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>电子游戏“辐射4”中，任务 <strong>“通向自由”</strong> 要求玩家到达名为 “<strong>Freedom Trail Ring”</strong> 的金属表盘，并使用表盘拼写特定关键词才能开门。</p>
 
@@ -54,11 +67,13 @@
 	<li><strong>保证</strong> 字符串&nbsp;<code>key</code>&nbsp;一定可以由字符串 &nbsp;<code>ring</code>&nbsp;旋转拼出</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们首先预处理出字符串 $ring$ 中每个字符 $c$ 出现的位置列表，记录在数组 $pos[c]$ 中。不妨假设字符串 $key$ 和 $ring$ 的长度分别为 $m$ 和 $n$。
 
@@ -66,7 +81,7 @@
 
 我们可以先初始化 $f[0][j]$，其中 $j$ 是字符 $key[0]$ 在 $ring$ 中出现的位置。由于 $ring$ 的第 $j$ 个字符与 $12:00$ 方向对齐，因此我们只需要 $1$ 步即可拼写出 $key[0]$。此外，我们还需要 $min(j, n - j)$ 步将 $ring$ 旋转到 $12:00$ 方向。因此 $f[0][j]=min(j, n - j) + 1$。
 
-接下来，我们考虑当 $i \geq 1$ 时，状态如何转移。我们可以枚举 $key[i]$ 在 $ring$ 中的位置列表 $pos[key[i]]$，并枚举 $key[i-1]$ 在 $ring$ 中的位置列表 $pos[key[i-1]]$，然后更新 $f[i][j]$，即 $f[i][j]=\min_{k \in pos[key[i-1]]} f[i-1][k] + \min(\text{abs}(j - k), n - \text{abs}(j - k)) + 1$。
+接下来，我们考虑当 $i \geq 1$ 时，状态如何转移。我们可以枚举 $key[i]$ 在 $ring$ 中的位置列表 $pos[key[i]]$，并枚举 $key[i-1]$ 在 $ring$ 中的位置列表 $pos[key[i-1]]$，然后更新 $f[i][j]$，即 $f[i][j]=\min_{k \in pos[key[i-1]]} f[i-1][k] + \min(\textit{abs}(j - k), n - \textit{abs}(j - k)) + 1$。
 
 最后，我们返回 $\min_{0 \leq j \lt n} f[m - 1][j]$ 即可。
 
@@ -74,9 +89,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -97,9 +110,7 @@ class Solution:
         return min(f[-1][j] for j in pos[key[-1]])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -135,7 +146,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -154,7 +165,7 @@ public:
         for (int i = 1; i < m; ++i) {
             for (int j : pos[key[i] - 'a']) {
                 for (int k : pos[key[i - 1] - 'a']) {
-                    f[i][j] = min(f[i][j], f[i - 1][k] + min(abs(j - k), n - abs(j -  k)) + 1);
+                    f[i][j] = min(f[i][j], f[i - 1][k] + min(abs(j - k), n - abs(j - k)) + 1);
                 }
             }
         }
@@ -167,7 +178,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findRotateSteps(ring string, key string) int {
@@ -200,13 +211,6 @@ func findRotateSteps(ring string, key string) int {
 	return ans
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -215,10 +219,44 @@ func abs(x int) int {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
+```ts
+function findRotateSteps(ring: string, key: string): number {
+    const m: number = key.length;
+    const n: number = ring.length;
+    const pos: number[][] = Array.from({ length: 26 }, () => []);
+    for (let i = 0; i < n; ++i) {
+        const j: number = ring.charCodeAt(i) - 'a'.charCodeAt(0);
+        pos[j].push(i);
+    }
 
+    const f: number[][] = Array.from({ length: m }, () => Array(n).fill(1 << 30));
+    for (const j of pos[key.charCodeAt(0) - 'a'.charCodeAt(0)]) {
+        f[0][j] = Math.min(j, n - j) + 1;
+    }
+
+    for (let i = 1; i < m; ++i) {
+        for (const j of pos[key.charCodeAt(i) - 'a'.charCodeAt(0)]) {
+            for (const k of pos[key.charCodeAt(i - 1) - 'a'.charCodeAt(0)]) {
+                f[i][j] = Math.min(
+                    f[i][j],
+                    f[i - 1][k] + Math.min(Math.abs(j - k), n - Math.abs(j - k)) + 1,
+                );
+            }
+        }
+    }
+
+    let ans: number = 1 << 30;
+    for (const j of pos[key.charCodeAt(m - 1) - 'a'.charCodeAt(0)]) {
+        ans = Math.min(ans, f[m - 1][j]);
+    }
+    return ans;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

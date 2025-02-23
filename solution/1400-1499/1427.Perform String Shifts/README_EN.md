@@ -1,8 +1,22 @@
-# [1427. Perform String Shifts](https://leetcode.com/problems/perform-string-shifts)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1400-1499/1427.Perform%20String%20Shifts/README_EN.md
+tags:
+    - Array
+    - Math
+    - String
+---
+
+<!-- problem:start -->
+
+# [1427. Perform String Shifts 🔒](https://leetcode.com/problems/perform-string-shifts)
 
 [中文文档](/solution/1400-1499/1427.Perform%20String%20Shifts/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>s</code> containing lowercase English letters, and a matrix <code>shift</code>, where <code>shift[i] = [direction<sub>i</sub>, amount<sub>i</sub>]</code>:</p>
 
@@ -48,25 +62,31 @@
 	<li><code>0 &lt;= amount<sub>i</sub> &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Simulation
+
+We can denote the length of the string $s$ as $n$. Next, we traverse the array $shift$, accumulate to get the final offset $x$, then take $x$ modulo $n$, the final result is to move the first $n - x$ characters of $s$ to the end.
+
+The time complexity is $O(n + m)$, where $n$ and $m$ are the lengths of the string $s$ and the array $shift$ respectively. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def stringShift(self, s: str, shift: List[List[int]]) -> str:
-        x = 0
-        for a, b in shift:
-            if a == 0:
-                b = -b
-            x += b
+        x = sum((b if a else -b) for a, b in shift)
         x %= len(s)
         return s[-x:] + s[:-x]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -74,7 +94,7 @@ class Solution {
         int x = 0;
         for (var e : shift) {
             if (e[0] == 0) {
-                e[1] = -e[1];
+                e[1] *= -1;
             }
             x += e[1];
         }
@@ -85,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -105,7 +125,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func stringShift(s string, shift [][]int) string {
@@ -122,10 +142,24 @@ func stringShift(s string, shift [][]int) string {
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function stringShift(s: string, shift: number[][]): string {
+    let x = 0;
+    for (const [a, b] of shift) {
+        x += a === 0 ? -b : b;
+    }
+    x %= s.length;
+    if (x < 0) {
+        x += s.length;
+    }
+    return s.slice(-x) + s.slice(0, -x);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

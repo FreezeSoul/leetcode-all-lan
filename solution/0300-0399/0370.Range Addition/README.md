@@ -1,10 +1,21 @@
-# [370. 区间加法](https://leetcode.cn/problems/range-addition)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0370.Range%20Addition/README.md
+tags:
+    - 数组
+    - 前缀和
+---
+
+<!-- problem:start -->
+
+# [370. 区间加法 🔒](https://leetcode.cn/problems/range-addition)
 
 [English Version](/solution/0300-0399/0370.Range%20Addition/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>假设你有一个长度为&nbsp;<em><strong>n</strong></em>&nbsp;的数组，初始情况下所有的数字均为&nbsp;<strong>0</strong>，你将会被给出&nbsp;<em><strong>k</strong></em>​​​​​​<em>​</em> 个更新的操作。</p>
 
@@ -33,11 +44,13 @@
 [-2,0,3,5,3]
 </pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：差分数组**
+### 方法一：差分数组
 
 差分数组模板题。
 
@@ -45,24 +58,9 @@
 
 时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为数组长度。
 
-**方法二：树状数组 + 差分思想**
-
-时间复杂度 $O(n\times \log n)$。
-
-树状数组，也称作“二叉索引树”（Binary Indexed Tree）或 Fenwick 树。 它可以高效地实现如下两个操作：
-
-1. **单点更新** `update(x, delta)`： 把序列 $x$ 位置的数加上一个值 $delta$；
-1. **前缀和查询** `query(x)`：查询序列 $[1,...x]$ 区间的区间和，即位置 $x$ 的前缀和。
-
-这两个操作的时间复杂度均为 $O(\log n)$。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-差分数组：
+#### Python3
 
 ```python
 class Solution:
@@ -75,45 +73,7 @@ class Solution:
         return list(accumulate(d))
 ```
 
-树状数组：
-
-```python
-class BinaryIndexedTree:
-    def __init__(self, n):
-        self.n = n
-        self.c = [0] * (n + 1)
-
-    @staticmethod
-    def lowbit(x):
-        return x & -x
-
-    def update(self, x, delta):
-        while x <= self.n:
-            self.c[x] += delta
-            x += BinaryIndexedTree.lowbit(x)
-
-    def query(self, x):
-        s = 0
-        while x:
-            s += self.c[x]
-            x -= BinaryIndexedTree.lowbit(x)
-        return s
-
-
-class Solution:
-    def getModifiedArray(self, length: int, updates: List[List[int]]) -> List[int]:
-        tree = BinaryIndexedTree(length)
-        for start, end, inc in updates:
-            tree.update(start + 1, inc)
-            tree.update(end + 2, -inc)
-        return [tree.query(i + 1) for i in range(length)]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-差分数组：
+#### Java
 
 ```java
 class Solution {
@@ -134,129 +94,29 @@ class Solution {
 }
 ```
 
-树状数组：
-
-```java
-class Solution {
-    public int[] getModifiedArray(int length, int[][] updates) {
-        BinaryIndexedTree tree = new BinaryIndexedTree(length);
-        for (int[] e : updates) {
-            int start = e[0], end = e[1], inc = e[2];
-            tree.update(start + 1, inc);
-            tree.update(end + 2, -inc);
-        }
-        int[] ans = new int[length];
-        for (int i = 0; i < length; ++i) {
-            ans[i] = tree.query(i + 1);
-        }
-        return ans;
-    }
-}
-
-class BinaryIndexedTree {
-    private int n;
-    private int[] c;
-
-    public BinaryIndexedTree(int n) {
-        this.n = n;
-        c = new int[n + 1];
-    }
-
-    public void update(int x, int delta) {
-        while (x <= n) {
-            c[x] += delta;
-            x += lowbit(x);
-        }
-    }
-
-    public int query(int x) {
-        int s = 0;
-        while (x > 0) {
-            s += c[x];
-            x -= lowbit(x);
-        }
-        return s;
-    }
-
-    public static int lowbit(int x) {
-        return x & -x;
-    }
-}
-```
-
-### **C++**
-
-差分数组：
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> getModifiedArray(int length, vector<vector<int>>& updates) {
         vector<int> d(length);
-        for (auto& e : updates) {
+        for (const auto& e : updates) {
             int l = e[0], r = e[1], c = e[2];
             d[l] += c;
-            if (r + 1 < length) d[r + 1] -= c;
+            if (r + 1 < length) {
+                d[r + 1] -= c;
+            }
         }
-        for (int i = 1; i < length; ++i) d[i] += d[i - 1];
+        for (int i = 1; i < length; ++i) {
+            d[i] += d[i - 1];
+        }
         return d;
     }
 };
 ```
 
-树状数组：
-
-```cpp
-class BinaryIndexedTree {
-public:
-    int n;
-    vector<int> c;
-
-    BinaryIndexedTree(int _n): n(_n), c(_n + 1){}
-
-    void update(int x, int delta) {
-        while (x <= n)
-        {
-            c[x] += delta;
-            x += lowbit(x);
-        }
-    }
-
-    int query(int x) {
-        int s = 0;
-        while (x > 0)
-        {
-            s += c[x];
-            x -= lowbit(x);
-        }
-        return s;
-    }
-
-    int lowbit(int x) {
-        return x & -x;
-    }
-};
-
-class Solution {
-public:
-    vector<int> getModifiedArray(int length, vector<vector<int>>& updates) {
-        BinaryIndexedTree* tree = new BinaryIndexedTree(length);
-        for (auto& e : updates)
-        {
-            int start = e[0], end = e[1], inc = e[2];
-            tree->update(start + 1, inc);
-            tree->update(end + 2, -inc);
-        }
-        vector<int> ans;
-        for (int i = 0; i < length; ++i) ans.push_back(tree->query(i + 1));
-        return ans;
-    }
-};
-```
-
-### **Go**
-
-差分数组：
+#### Go
 
 ```go
 func getModifiedArray(length int, updates [][]int) []int {
@@ -275,55 +135,25 @@ func getModifiedArray(length int, updates [][]int) []int {
 }
 ```
 
-树状数组：
+#### TypeScript
 
-```go
-type BinaryIndexedTree struct {
-	n int
-	c []int
-}
-
-func newBinaryIndexedTree(n int) *BinaryIndexedTree {
-	c := make([]int, n+1)
-	return &BinaryIndexedTree{n, c}
-}
-
-func (this *BinaryIndexedTree) lowbit(x int) int {
-	return x & -x
-}
-
-func (this *BinaryIndexedTree) update(x, delta int) {
-	for x <= this.n {
-		this.c[x] += delta
-		x += this.lowbit(x)
-	}
-}
-
-func (this *BinaryIndexedTree) query(x int) int {
-	s := 0
-	for x > 0 {
-		s += this.c[x]
-		x -= this.lowbit(x)
-	}
-	return s
-}
-
-func getModifiedArray(length int, updates [][]int) []int {
-	tree := newBinaryIndexedTree(length)
-	for _, e := range updates {
-		start, end, inc := e[0], e[1], e[2]
-		tree.update(start+1, inc)
-		tree.update(end+2, -inc)
-	}
-	ans := make([]int, length)
-	for i := range ans {
-		ans[i] = tree.query(i + 1)
-	}
-	return ans
+```ts
+function getModifiedArray(length: number, updates: number[][]): number[] {
+    const d: number[] = Array(length).fill(0);
+    for (const [l, r, c] of updates) {
+        d[l] += c;
+        if (r + 1 < length) {
+            d[r + 1] -= c;
+        }
+    }
+    for (let i = 1; i < length; ++i) {
+        d[i] += d[i - 1];
+    }
+    return d;
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -332,7 +162,7 @@ func getModifiedArray(length int, updates [][]int) []int {
  * @return {number[]}
  */
 var getModifiedArray = function (length, updates) {
-    const d = new Array(length).fill(0);
+    const d = Array(length).fill(0);
     for (const [l, r, c] of updates) {
         d[l] += c;
         if (r + 1 < length) {
@@ -346,10 +176,267 @@ var getModifiedArray = function (length, updates) {
 };
 ```
 
-### **...**
+<!-- tabs:end -->
 
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：树状数组 + 差分思想
+
+时间复杂度 $O(n\times \log n)$。
+
+树状数组，也称作“二叉索引树”（Binary Indexed Tree）或 Fenwick 树。 它可以高效地实现如下两个操作：
+
+1. **单点更新** `update(x, delta)`： 把序列 $x$ 位置的数加上一个值 $delta$；
+1. **前缀和查询** `query(x)`：查询序列 $[1,...x]$ 区间的区间和，即位置 $x$ 的前缀和。
+
+这两个操作的时间复杂度均为 $O(\log n)$。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class BinaryIndexedTree:
+    __slots__ = "n", "c"
+
+    def __init__(self, n: int):
+        self.n = n
+        self.c = [0] * (n + 1)
+
+    def update(self, x: int, delta: int) -> None:
+        while x <= self.n:
+            self.c[x] += delta
+            x += x & -x
+
+    def query(self, x: int) -> int:
+        s = 0
+        while x:
+            s += self.c[x]
+            x -= x & -x
+        return s
+
+
+class Solution:
+    def getModifiedArray(self, length: int, updates: List[List[int]]) -> List[int]:
+        tree = BinaryIndexedTree(length)
+        for l, r, c in updates:
+            tree.update(l + 1, c)
+            tree.update(r + 2, -c)
+        return [tree.query(i + 1) for i in range(length)]
 ```
 
+#### Java
+
+```java
+class BinaryIndexedTree {
+    private int n;
+    private int[] c;
+
+    public BinaryIndexedTree(int n) {
+        this.n = n;
+        this.c = new int[n + 1];
+    }
+
+    public void update(int x, int delta) {
+        for (; x <= n; x += x & -x) {
+            c[x] += delta;
+        }
+    }
+
+    public int query(int x) {
+        int s = 0;
+        for (; x > 0; x -= x & -x) {
+            s += c[x];
+        }
+        return s;
+    }
+}
+
+class Solution {
+    public int[] getModifiedArray(int length, int[][] updates) {
+        var tree = new BinaryIndexedTree(length);
+        for (var e : updates) {
+            int l = e[0], r = e[1], c = e[2];
+            tree.update(l + 1, c);
+            tree.update(r + 2, -c);
+        }
+        int[] ans = new int[length];
+        for (int i = 0; i < length; ++i) {
+            ans[i] = tree.query(i + 1);
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class BinaryIndexedTree {
+private:
+    int n;
+    vector<int> c;
+
+public:
+    BinaryIndexedTree(int n)
+        : n(n)
+        , c(n + 1) {}
+
+    void update(int x, int delta) {
+        for (; x <= n; x += x & -x) {
+            c[x] += delta;
+        }
+    }
+
+    int query(int x) {
+        int s = 0;
+        for (; x > 0; x -= x & -x) {
+            s += c[x];
+        }
+        return s;
+    }
+};
+
+class Solution {
+public:
+    vector<int> getModifiedArray(int length, vector<vector<int>>& updates) {
+        BinaryIndexedTree* tree = new BinaryIndexedTree(length);
+        for (const auto& e : updates) {
+            int l = e[0], r = e[1], c = e[2];
+            tree->update(l + 1, c);
+            tree->update(r + 2, -c);
+        }
+        vector<int> ans;
+        for (int i = 0; i < length; ++i) {
+            ans.push_back(tree->query(i + 1));
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+type BinaryIndexedTree struct {
+	n int
+	c []int
+}
+
+func NewBinaryIndexedTree(n int) *BinaryIndexedTree {
+	return &BinaryIndexedTree{n: n, c: make([]int, n+1)}
+}
+
+func (bit *BinaryIndexedTree) update(x, delta int) {
+	for ; x <= bit.n; x += x & -x {
+		bit.c[x] += delta
+	}
+}
+
+func (bit *BinaryIndexedTree) query(x int) int {
+	s := 0
+	for ; x > 0; x -= x & -x {
+		s += bit.c[x]
+	}
+	return s
+}
+
+func getModifiedArray(length int, updates [][]int) (ans []int) {
+	bit := NewBinaryIndexedTree(length)
+	for _, e := range updates {
+		l, r, c := e[0], e[1], e[2]
+		bit.update(l+1, c)
+		bit.update(r+2, -c)
+	}
+	for i := 1; i <= length; i++ {
+		ans = append(ans, bit.query(i))
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+class BinaryIndexedTree {
+    private n: number;
+    private c: number[];
+
+    constructor(n: number) {
+        this.n = n;
+        this.c = Array(n + 1).fill(0);
+    }
+
+    update(x: number, delta: number): void {
+        for (; x <= this.n; x += x & -x) {
+            this.c[x] += delta;
+        }
+    }
+
+    query(x: number): number {
+        let s = 0;
+        for (; x > 0; x -= x & -x) {
+            s += this.c[x];
+        }
+        return s;
+    }
+}
+
+function getModifiedArray(length: number, updates: number[][]): number[] {
+    const bit = new BinaryIndexedTree(length);
+    for (const [l, r, c] of updates) {
+        bit.update(l + 1, c);
+        bit.update(r + 2, -c);
+    }
+    return Array.from({ length }, (_, i) => bit.query(i + 1));
+}
+```
+
+#### JavaScript
+
+```js
+/**
+ * @param {number} length
+ * @param {number[][]} updates
+ * @return {number[]}
+ */
+var getModifiedArray = function (length, updates) {
+    class BinaryIndexedTree {
+        constructor(n) {
+            this.n = n;
+            this.c = Array(n + 1).fill(0);
+        }
+
+        update(x, delta) {
+            while (x <= this.n) {
+                this.c[x] += delta;
+                x += x & -x;
+            }
+        }
+
+        query(x) {
+            let s = 0;
+            while (x > 0) {
+                s += this.c[x];
+                x -= x & -x;
+            }
+            return s;
+        }
+    }
+
+    const bit = new BinaryIndexedTree(length);
+    for (const [l, r, c] of updates) {
+        bit.update(l + 1, c);
+        bit.update(r + 2, -c);
+    }
+    return Array.from({ length }, (_, i) => bit.query(i + 1));
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

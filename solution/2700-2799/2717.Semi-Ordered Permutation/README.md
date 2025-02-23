@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2700-2799/2717.Semi-Ordered%20Permutation/README.md
+rating: 1295
+source: 第 348 场周赛 Q2
+tags:
+    - 数组
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2717. 半有序排列](https://leetcode.cn/problems/semi-ordered-permutation)
 
 [English Version](/solution/2700-2799/2717.Semi-Ordered%20Permutation/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始、长度为 <code>n</code> 的整数排列 <code>nums</code> 。</p>
 
@@ -61,11 +74,13 @@
 	<li><code>nums</code> 是一个 <strong>排列</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：寻找 1 和 n 的位置**
+### 方法一：寻找 1 和 n 的位置
 
 我们可以先找到 $1$ 和 $n$ 的下标 $i$ 和 $j$，然后根据 $i$ 和 $j$ 的相对位置，判断需要交换的次数。
 
@@ -75,9 +90,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -89,9 +102,7 @@ class Solution:
         return i + n - j - k
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -112,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -127,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func semiOrderedPermutation(nums []int) int {
@@ -149,7 +160,7 @@ func semiOrderedPermutation(nums []int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function semiOrderedPermutation(nums: number[]): number {
@@ -161,10 +172,31 @@ function semiOrderedPermutation(nums: number[]): number {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn semi_ordered_permutation(nums: Vec<i32>) -> i32 {
+        let n = nums.len();
+        let (mut i, mut j) = (0, 0);
 
+        for k in 0..n {
+            if nums[k] == 1 {
+                i = k;
+            }
+            if nums[k] == (n as i32) {
+                j = k;
+            }
+        }
+
+        let k = if i < j { 1 } else { 2 };
+        (i + n - j - k) as i32
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

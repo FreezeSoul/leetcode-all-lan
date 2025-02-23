@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1347.Minimum%20Number%20of%20Steps%20to%20Make%20Two%20Strings%20Anagram/README.md
+rating: 1330
+source: 第 175 场周赛 Q2
+tags:
+    - 哈希表
+    - 字符串
+    - 计数
+---
+
+<!-- problem:start -->
+
 # [1347. 制造字母异位词的最小步骤数](https://leetcode.cn/problems/minimum-number-of-steps-to-make-two-strings-anagram)
 
 [English Version](/solution/1300-1399/1347.Minimum%20Number%20of%20Steps%20to%20Make%20Two%20Strings%20Anagram/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个长度相等的字符串&nbsp;<code>s</code> 和 <code>t</code>。每一个步骤中，你可以选择将&nbsp;<code>t</code>&nbsp;中的 <strong>任一字符</strong> 替换为 <strong>另一个字符</strong>。</p>
 
@@ -57,21 +71,21 @@
 	<li><code>s</code> 和 <code>t</code>&nbsp;只包含小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数组或哈希表**
+### 方法一：计数
 
-我们可以使用数组或哈希表 `cnt` 统计字符串 $s$ 中每个字符出现的次数，然后遍历字符串 $t$，对于 $t$ 中的每个字符，如果 $cnt$ 中对应的字符出现的次数大于 $0$，则将 $cnt$ 中对应的字符出现的次数减 $1$，否则将答案加 $1$。
+我们可以使用一个哈希表或者数组 $\textit{cnt}$ 来统计字符串 $\textit{s}$ 中每个字符出现的次数，然后遍历字符串 $\textit{t}$，对于每个字符，我们在 $\textit{cnt}$ 中将其出现的次数减一，如果减一后的值小于 $0$，说明这个字符在字符串 $\textit{t}$ 中出现的次数比在字符串 $\textit{s}$ 中多，我们需要将这个字符替换掉，将答案加一。
 
-时间复杂度 $O(n)$，空间复杂度 $O(C)$。其中 $n$ 为字符串 $s$ 的长度，而 $C$ 为字符集的大小。本题中 $C=26$。
+遍历结束后，返回答案即可。
 
-<!-- tabs:start -->
+时间复杂度 $O(m + n)$，空间复杂度 $O(|\Sigma|)$，其中 $m$ 和 $n$ 分别是字符串 $\textit{s}$ 和 $\textit{t}$ 的长度，而 $|\Sigma|$ 是字符集的大小，本题中字符集为小写字母，因此 $|\Sigma| = 26$。
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,28 +93,24 @@ class Solution:
         cnt = Counter(s)
         ans = 0
         for c in t:
-            if cnt[c] > 0:
-                cnt[c] -= 1
-            else:
-                ans += 1
+            cnt[c] -= 1
+            ans += cnt[c] < 0
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int minSteps(String s, String t) {
         int[] cnt = new int[26];
-        for (int i = 0; i < s.length(); ++i) {
-            ++cnt[s.charAt(i) - 'a'];
+        for (char c : s.toCharArray()) {
+            cnt[c - 'a']++;
         }
         int ans = 0;
-        for (int i = 0; i < t.length(); ++i) {
-            if (--cnt[t.charAt(i) - 'a'] < 0) {
-                ++ans;
+        for (char c : t.toCharArray()) {
+            if (--cnt[c - 'a'] < 0) {
+                ans++;
             }
         }
         return ans;
@@ -108,24 +118,28 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int minSteps(string s, string t) {
         int cnt[26]{};
-        for (char& c : s) ++cnt[c - 'a'];
+        for (char c : s) {
+            ++cnt[c - 'a'];
+        }
         int ans = 0;
-        for (char& c : t) {
-            ans += --cnt[c - 'a'] < 0;
+        for (char c : t) {
+            if (--cnt[c - 'a'] < 0) {
+                ++ans;
+            }
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSteps(s string, t string) (ans int) {
@@ -143,7 +157,25 @@ func minSteps(s string, t string) (ans int) {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function minSteps(s: string, t: string): number {
+    const cnt: number[] = Array(26).fill(0);
+    for (const c of s) {
+        ++cnt[c.charCodeAt(0) - 97];
+    }
+    let ans = 0;
+    for (const c of t) {
+        if (--cnt[c.charCodeAt(0) - 97] < 0) {
+            ++ans;
+        }
+    }
+    return ans;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -152,24 +184,22 @@ func minSteps(s string, t string) (ans int) {
  * @return {number}
  */
 var minSteps = function (s, t) {
-    const cnt = new Array(26).fill(0);
+    const cnt = Array(26).fill(0);
     for (const c of s) {
-        const i = c.charCodeAt(0) - 'a'.charCodeAt(0);
-        ++cnt[i];
+        ++cnt[c.charCodeAt(0) - 97];
     }
     let ans = 0;
     for (const c of t) {
-        const i = c.charCodeAt(0) - 'a'.charCodeAt(0);
-        ans += --cnt[i] < 0;
+        if (--cnt[c.charCodeAt(0) - 97] < 0) {
+            ++ans;
+        }
     }
     return ans;
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

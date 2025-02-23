@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0149.Max%20Points%20on%20a%20Line/README_EN.md
+tags:
+    - Geometry
+    - Array
+    - Hash Table
+    - Math
+---
+
+<!-- problem:start -->
+
 # [149. Max Points on a Line](https://leetcode.com/problems/max-points-on-a-line)
 
 [中文文档](/solution/0100-0199/0149.Max%20Points%20on%20a%20Line/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of <code>points</code> where <code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code> represents a point on the <strong>X-Y</strong> plane, return <em>the maximum number of points that lie on the same straight line</em>.</p>
 
@@ -31,11 +46,17 @@
 	<li>All the <code>points</code> are <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -56,28 +77,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def maxPoints(self, points: List[List[int]]) -> int:
-        def gcd(a, b):
-            return a if b == 0 else gcd(b, a % b)
-
-        n = len(points)
-        ans = 1
-        for i in range(n):
-            x1, y1 = points[i]
-            cnt = Counter()
-            for j in range(i + 1, n):
-                x2, y2 = points[j]
-                dx, dy = x2 - x1, y2 - y1
-                g = gcd(dx, dy)
-                k = (dx // g, dy // g)
-                cnt[k] += 1
-                ans = max(ans, cnt[k] + 1)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -105,6 +105,126 @@ class Solution {
 }
 ```
 
+#### C++
+
+```cpp
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        int n = points.size();
+        int ans = 1;
+        for (int i = 0; i < n; ++i) {
+            int x1 = points[i][0], y1 = points[i][1];
+            for (int j = i + 1; j < n; ++j) {
+                int x2 = points[j][0], y2 = points[j][1];
+                int cnt = 2;
+                for (int k = j + 1; k < n; ++k) {
+                    int x3 = points[k][0], y3 = points[k][1];
+                    int a = (y2 - y1) * (x3 - x1);
+                    int b = (y3 - y1) * (x2 - x1);
+                    cnt += a == b;
+                }
+                ans = max(ans, cnt);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func maxPoints(points [][]int) int {
+	n := len(points)
+	ans := 1
+	for i := 0; i < n; i++ {
+		x1, y1 := points[i][0], points[i][1]
+		for j := i + 1; j < n; j++ {
+			x2, y2 := points[j][0], points[j][1]
+			cnt := 2
+			for k := j + 1; k < n; k++ {
+				x3, y3 := points[k][0], points[k][1]
+				a := (y2 - y1) * (x3 - x1)
+				b := (y3 - y1) * (x2 - x1)
+				if a == b {
+					cnt++
+				}
+			}
+			if ans < cnt {
+				ans = cnt
+			}
+		}
+	}
+	return ans
+}
+```
+
+#### C#
+
+```cs
+public class Solution {
+    public int MaxPoints(int[][] points) {
+        int n = points.Length;
+        int ans = 1;
+        for (int i = 0; i < n; ++i) {
+            int x1 = points[i][0], y1 = points[i][1];
+            for (int j = i + 1; j < n; ++j) {
+                int x2 = points[j][0], y2 = points[j][1];
+                int cnt = 2;
+                for (int k = j + 1; k < n; ++k) {
+                    int x3 = points[k][0], y3 = points[k][1];
+                    int a = (y2 - y1) * (x3 - x1);
+                    int b = (y3 - y1) * (x2 - x1);
+                    if (a == b) {
+                        ++cnt;
+                    }
+                }
+                if (ans < cnt) {
+                    ans = cnt;
+                }
+            }
+        }
+        return ans;
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        def gcd(a, b):
+            return a if b == 0 else gcd(b, a % b)
+
+        n = len(points)
+        ans = 1
+        for i in range(n):
+            x1, y1 = points[i]
+            cnt = Counter()
+            for j in range(i + 1, n):
+                x2, y2 = points[j]
+                dx, dy = x2 - x1, y2 - y1
+                g = gcd(dx, dy)
+                k = (dx // g, dy // g)
+                cnt[k] += 1
+                ans = max(ans, cnt[k] + 1)
+        return ans
+```
+
+#### Java
+
 ```java
 class Solution {
     public int maxPoints(int[][] points) {
@@ -131,32 +251,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int maxPoints(vector<vector<int>>& points) {
-        int n = points.size();
-        int ans = 1;
-        for (int i = 0; i < n; ++i) {
-            int x1 = points[i][0], y1 = points[i][1];
-            for (int j = i + 1; j < n; ++j) {
-                int x2 = points[j][0], y2 = points[j][1];
-                int cnt = 2;
-                for (int k = j + 1; k < n; ++k) {
-                    int x3 = points[k][0], y3 = points[k][1];
-                    int a = (y2 - y1) * (x3 - x1);
-                    int b = (y3 - y1) * (x2 - x1);
-                    cnt += a == b;
-                }
-                ans = max(ans, cnt);
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -184,33 +279,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func maxPoints(points [][]int) int {
-	n := len(points)
-	ans := 1
-	for i := 0; i < n; i++ {
-		x1, y1 := points[i][0], points[i][1]
-		for j := i + 1; j < n; j++ {
-			x2, y2 := points[j][0], points[j][1]
-			cnt := 2
-			for k := j + 1; k < n; k++ {
-				x3, y3 := points[k][0], points[k][1]
-				a := (y2 - y1) * (x3 - x1)
-				b := (y3 - y1) * (x2 - x1)
-				if a == b {
-					cnt++
-				}
-			}
-			if ans < cnt {
-				ans = cnt
-			}
-		}
-	}
-	return ans
-}
-```
+#### Go
 
 ```go
 func maxPoints(points [][]int) int {
@@ -242,40 +311,8 @@ func gcd(a, b int) int {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int MaxPoints(int[][] points) {
-        int n = points.Length;
-        int ans = 1;
-        for (int i = 0; i < n; ++i) {
-            int x1 = points[i][0], y1 = points[i][1];
-            for (int j = i + 1; j < n; ++j) {
-                int x2 = points[j][0], y2 = points[j][1];
-                int cnt = 2;
-                for (int k = j + 1; k < n; ++k) {
-                    int x3 = points[k][0], y3 = points[k][1];
-                    int a = (y2 - y1) * (x3 - x1);
-                    int b = (y3 - y1) * (x2 - x1);
-                    if (a == b) {
-                        ++cnt;
-                    }
-                }
-                if (ans < cnt) {
-                    ans = cnt;
-                }
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

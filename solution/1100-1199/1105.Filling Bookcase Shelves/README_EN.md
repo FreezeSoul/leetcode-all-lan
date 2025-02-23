@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1105.Filling%20Bookcase%20Shelves/README_EN.md
+rating: 2014
+source: Weekly Contest 143 Q3
+tags:
+    - Array
+    - Dynamic Programming
+---
+
+<!-- problem:start -->
+
 # [1105. Filling Bookcase Shelves](https://leetcode.com/problems/filling-bookcase-shelves)
 
 [中文文档](/solution/1100-1199/1105.Filling%20Bookcase%20Shelves/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array <code>books</code> where <code>books[i] = [thickness<sub>i</sub>, height<sub>i</sub>]</code> indicates the thickness and height of the <code>i<sup>th</sup></code> book. You are also given an integer <code>shelfWidth</code>.</p>
 
@@ -45,11 +60,28 @@ Notice that book number 2 does not have to be on the first shelf.
 	<li><code>1 &lt;= height<sub>i</sub> &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Dynamic Programming
+
+We define $f[i]$ as the minimum height for placing the first $i$ books, initially $f[0] = 0$, and the answer is $f[n]$.
+
+Consider $f[i]$, the last book is $books[i - 1]$, its thickness is $w$, and its height is $h$.
+
+-   If this book is placed on a new layer alone, then $f[i] = f[i - 1] + h$;
+-   If this book can be placed on the same layer with the last few books in front, we enumerate the first book $books[j-1]$ on the same layer from back to front, where $j \in [1, i - 1]$, accumulate the thickness of the book to $w$, if $w > shelfWidth$, it means that $books[j-1]$ can no longer be placed on the same layer with $books[i-1]$, stop enumeration; otherwise, we update the maximum height $h = \max(h, books[j-1][1])$ of the current layer, then $f[i] = \min(f[i], f[j - 1] + h)$.
+
+The final answer is $f[n]$.
+
+The time complexity is $O(n^2)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $books$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -67,7 +99,7 @@ class Solution:
         return f[n]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -91,7 +123,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minHeightShelves(books [][]int, shelfWidth int) int {
@@ -137,23 +169,9 @@ func minHeightShelves(books [][]int, shelfWidth int) int {
 	}
 	return f[n]
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minHeightShelves(books: number[][], shelfWidth: number): number {
@@ -175,7 +193,7 @@ function minHeightShelves(books: number[][], shelfWidth: number): number {
 }
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -199,10 +217,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

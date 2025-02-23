@@ -1,8 +1,23 @@
-# [1151. Minimum Swaps to Group All 1's Together](https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1151.Minimum%20Swaps%20to%20Group%20All%201%27s%20Together/README_EN.md
+rating: 1508
+source: Biweekly Contest 6 Q2
+tags:
+    - Array
+    - Sliding Window
+---
+
+<!-- problem:start -->
+
+# [1151. Minimum Swaps to Group All 1's Together 🔒](https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together)
 
 [中文文档](/solution/1100-1199/1151.Minimum%20Swaps%20to%20Group%20All%201%27s%20Together/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a&nbsp;binary array <code>data</code>, return&nbsp;the minimum number of swaps required to group all <code>1</code>&rsquo;s present in the array together in <strong>any place</strong> in the array.</p>
 
@@ -43,18 +58,27 @@ The minimum is 1.
 	<li><code>data[i]</code> is either <code>0</code> or <code>1</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Sliding Window
+
+First, we count the number of $1$s in the array, denoted as $k$. Then we use a sliding window of size $k$, moving the right boundary of the window from left to right, and count the number of $1$s in the window, denoted as $t$. Each time we move the window, we update the value of $t$. Finally, when the right boundary of the window moves to the end of the array, the number of $1$s in the window is the maximum, denoted as $mx$. The final answer is $k - mx$.
+
+The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def minSwaps(self, data: List[int]) -> int:
         k = data.count(1)
-        t = sum(data[:k])
-        mx = t
+        mx = t = sum(data[:k])
         for i in range(k, len(data)):
             t += data[i]
             t -= data[i - k]
@@ -62,7 +86,7 @@ class Solution:
         return k - mx
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -86,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -111,7 +135,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minSwaps(data []int) int {
@@ -131,16 +155,9 @@ func minSwaps(data []int) int {
 	}
 	return k - mx
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minSwaps(data: number[]): number {
@@ -155,10 +172,26 @@ function minSwaps(data: number[]): number {
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public int MinSwaps(int[] data) {
+        int k = data.Count(x => x == 1);
+        int t = data.Take(k).Sum();
+        int mx = t;
+        for (int i = k; i < data.Length; ++i) {
+            t += data[i];
+            t -= data[i - k];
+            mx = Math.Max(mx, t);
+        }
+        return k - mx;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

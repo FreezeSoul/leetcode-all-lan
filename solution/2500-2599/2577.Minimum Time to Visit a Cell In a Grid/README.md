@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2577.Minimum%20Time%20to%20Visit%20a%20Cell%20In%20a%20Grid/README.md
+rating: 2381
+source: 第 334 场周赛 Q4
+tags:
+    - 广度优先搜索
+    - 图
+    - 数组
+    - 矩阵
+    - 最短路
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [2577. 在网格图中访问一个格子的最少时间](https://leetcode.cn/problems/minimum-time-to-visit-a-cell-in-a-grid)
 
 [English Version](/solution/2500-2599/2577.Minimum%20Time%20to%20Visit%20a%20Cell%20In%20a%20Grid/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个&nbsp;<code>m x n</code>&nbsp;的矩阵&nbsp;<code>grid</code>&nbsp;，每个元素都为 <strong>非负</strong>&nbsp;整数，其中&nbsp;<code>grid[row][col]</code>&nbsp;表示可以访问格子&nbsp;<code>(row, col)</code>&nbsp;的&nbsp;<strong>最早</strong>&nbsp;时间。也就是说当你访问格子&nbsp;<code>(row, col)</code>&nbsp;时，最少已经经过的时间为&nbsp;<code>grid[row][col]</code>&nbsp;。</p>
 
@@ -56,11 +73,13 @@
 	<li><code>grid[0][0] == 0</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：最短路 + 优先队列（小根堆）**
+### 方法一：最短路 + 优先队列（小根堆）
 
 我们观察发现，如果在格子 $(0, 0)$ 处无法移动，即 $grid[0][1] \gt 1$ 且 $grid[1][0] \gt 1$，那么我们在格子 $(0, 0)$ 无法再移动，此时返回 $-1$ 即可。而对于其他情况，我们都可以移动。
 
@@ -74,9 +93,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -103,9 +120,7 @@ class Solution:
                         heappush(q, (nt, x, y))
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -146,7 +161,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -187,7 +202,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minimumTime(grid [][]int) int {
@@ -231,17 +246,85 @@ func minimumTime(grid [][]int) int {
 type tuple struct{ t, i, j int }
 type hp []tuple
 
-func (h hp) Len() int            { return len(h) }
-func (h hp) Less(i, j int) bool  { return h[i].t < h[j].t }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(tuple)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+func (h hp) Len() int           { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].t < h[j].t }
+func (h hp) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)        { *h = append(*h, v.(tuple)) }
+func (h *hp) Pop() any          { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function minimumTime(grid: number[][]): number {
+    if (grid[0][1] > 1 && grid[1][0] > 1) return -1;
+
+    const [m, n] = [grid.length, grid[0].length];
+    const DIRS = [-1, 0, 1, 0, -1];
+    const q = new MinPriorityQueue({ priority: ([x]) => x });
+    const dist: number[][] = Array.from({ length: m }, () =>
+        new Array(n).fill(Number.POSITIVE_INFINITY),
+    );
+    dist[0][0] = 0;
+    q.enqueue([0, 0, 0]);
+
+    while (true) {
+        const [t, i, j] = q.dequeue().element;
+        if (i === m - 1 && j === n - 1) return t;
+
+        for (let k = 0; k < 4; k++) {
+            const [x, y] = [i + DIRS[k], j + DIRS[k + 1]];
+            if (x < 0 || x >= m || y < 0 || y >= n) continue;
+
+            let nt = t + 1;
+            if (nt < grid[x][y]) {
+                nt = grid[x][y] + ((grid[x][y] - nt) % 2);
+            }
+            if (nt < dist[x][y]) {
+                dist[x][y] = nt;
+                q.enqueue([nt, x, y]);
+            }
+        }
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+function minimumTime(grid) {
+    if (grid[0][1] > 1 && grid[1][0] > 1) return -1;
+
+    const [m, n] = [grid.length, grid[0].length];
+    const DIRS = [-1, 0, 1, 0, -1];
+    const q = new MinPriorityQueue({ priority: ([x]) => x });
+    const dist = Array.from({ length: m }, () => new Array(n).fill(Number.POSITIVE_INFINITY));
+    dist[0][0] = 0;
+    q.enqueue([0, 0, 0]);
+
+    while (true) {
+        const [t, i, j] = q.dequeue().element;
+        if (i === m - 1 && j === n - 1) return t;
+
+        for (let k = 0; k < 4; k++) {
+            const [x, y] = [i + DIRS[k], j + DIRS[k + 1]];
+            if (x < 0 || x >= m || y < 0 || y >= n) continue;
+
+            let nt = t + 1;
+            if (nt < grid[x][y]) {
+                nt = grid[x][y] + ((grid[x][y] - nt) % 2);
+            }
+            if (nt < dist[x][y]) {
+                dist[x][y] = nt;
+                q.enqueue([nt, x, y]);
+            }
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

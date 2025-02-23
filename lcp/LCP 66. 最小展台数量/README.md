@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2066.%20%E6%9C%80%E5%B0%8F%E5%B1%95%E5%8F%B0%E6%95%B0%E9%87%8F/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 66. 最小展台数量](https://leetcode.cn/problems/600YaG)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 力扣嘉年华将举办一系列展览活动，后勤部将负责为每场展览提供所需要的展台。
 已知后勤部得到了一份需求清单，记录了近期展览所需要的展台类型， `demand[i][j]` 表示第 `i` 天展览时第 `j` 个展台的类型。
@@ -35,11 +43,13 @@
 -   `1 <= demand.length,demand[i].length <= 100`
 -   `demand[i][j]` 仅为小写字母
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：计数**
+### 方法一：计数
 
 我们用哈希表或数组 $cnt$ 记录当前可用的展台以及数量。
 
@@ -51,9 +61,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -71,9 +79,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +105,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -124,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minNumBooths(demand []string) (ans int) {
@@ -145,10 +151,31 @@ func minNumBooths(demand []string) (ans int) {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func minNumBooths(_ demand: [String]) -> Int {
+        var maxBooths = [Int](repeating: 0, count: 26)
 
+        for day in demand {
+            var dailyCount = [Int](repeating: 0, count: 26)
+            for char in day {
+                let index = Int(char.asciiValue! - Character("a").asciiValue!)
+                dailyCount[index] += 1
+            }
+            for i in 0..<26 {
+                maxBooths[i] = max(maxBooths[i], dailyCount[i])
+            }
+        }
+
+        return maxBooths.reduce(0, +)
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,27 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1147.Longest%20Chunked%20Palindrome%20Decomposition/README.md
+rating: 1912
+source: 第 148 场周赛 Q4
+tags:
+    - 贪心
+    - 双指针
+    - 字符串
+    - 动态规划
+    - 哈希函数
+    - 滚动哈希
+---
+
+<!-- problem:start -->
+
 # [1147. 段式回文](https://leetcode.cn/problems/longest-chunked-palindrome-decomposition)
 
 [English Version](/solution/1100-1199/1147.Longest%20Chunked%20Palindrome%20Decomposition/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>你会得到一个字符串&nbsp;<code>text</code>&nbsp;。你应该把它分成 <code>k</code>&nbsp;个子字符串&nbsp;<code>(subtext1, subtext2，…， subtextk)</code>&nbsp;，要求满足:</p>
 
@@ -39,7 +56,7 @@
 <pre>
 <strong>输入：</strong>text = "antaprezatepzapreanta"
 <strong>输出：</strong>11
-<strong>解释：</strong>我们可以把字符串拆分成 "(a)(nt)(a)(pre)(za)(tpe)(za)(pre)(a)(nt)(a)"。
+<strong>解释：</strong>我们可以把字符串拆分成 "(a)(nt)(a)(pre)(za)(tep)(za)(pre)(a)(nt)(a)"。
 </pre>
 
 <p>&nbsp;</p>
@@ -51,11 +68,13 @@
 	<li><code>text</code>&nbsp;仅由小写英文字符组成</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心 + 双指针**
+### 方法一：贪心 + 双指针
 
 我们可以从字符串的两端开始，寻找长度最短的、相同且不重叠的前后缀：
 
@@ -70,31 +89,9 @@
 
 时间复杂度 $O(n^2)$，空间复杂度 $O(n)$ 或 $O(1)$。其中 $n$ 为字符串的长度。
 
-**方法二：字符串哈希**
-
-**字符串哈希**是把一个任意长度的字符串映射成一个非负整数，并且其冲突的概率几乎为 $0$。字符串哈希用于计算字符串哈希值，快速判断两个字符串是否相等。
-
-因此，在方法一的基础上，我们可以使用字符串哈希的方法，在 $O(1)$ 时间内比较两个字符串是否相等。
-
-时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串的长度。
-
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```python
-class Solution:
-    def longestDecomposition(self, text: str) -> int:
-        n = len(text)
-        if n < 2:
-            return n
-        for i in range(n // 2 + 1):
-            if text[:i] == text[-i:]:
-                return 2 + self.longestDecomposition(text[i:-i])
-        return 1
-```
+#### Python3
 
 ```python
 class Solution:
@@ -105,7 +102,7 @@ class Solution:
             k = 1
             ok = False
             while i + k - 1 < j - k + 1:
-                if text[i: i + k] == text[j - k + 1: j + 1]:
+                if text[i : i + k] == text[j - k + 1 : j + 1]:
                     ans += 2
                     i += k
                     j -= k
@@ -118,62 +115,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def longestDecomposition(self, text: str) -> int:
-        def get(l, r):
-            return (h[r] - h[l - 1] * p[r - l + 1]) % mod
-
-        n = len(text)
-        base = 131
-        mod = int(1e9) + 7
-        h = [0] * (n + 10)
-        p = [1] * (n + 10)
-        for i, c in enumerate(text):
-            t = ord(c) - ord('a') + 1
-            h[i + 1] = (h[i] * base) % mod + t
-            p[i + 1] = (p[i] * base) % mod
-
-
-        ans = 0
-        i, j = 0, n - 1
-        while i <= j:
-            k = 1
-            ok = False
-            while i + k - 1 < j - k + 1:
-                if get(i + 1, i + k) == get(j - k + 2, j + 1):
-                    ans += 2
-                    i += k
-                    j -= k
-                    ok = True
-                    break
-                k += 1
-            if not ok:
-                ans += 1
-                break
-        return ans
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```java
-class Solution {
-    public int longestDecomposition(String text) {
-        int n = text.length();
-        if (n < 2) {
-            return n;
-        }
-        for (int i = 1; i <= n >> 1; ++i) {
-            if (text.substring(0, i).equals(text.substring(n - i))) {
-                return 2 + longestDecomposition(text.substring(i, n - i));
-            }
-        }
-        return 1;
-    }
-}
-```
+#### Java
 
 ```java
 class Solution {
@@ -208,6 +150,146 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    int longestDecomposition(string text) {
+        int ans = 0;
+        auto check = [&](int i, int j, int k) -> bool {
+            while (k--) {
+                if (text[i++] != text[j++]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        for (int i = 0, j = text.size() - 1; i <= j;) {
+            bool ok = false;
+            for (int k = 1; i + k - 1 < j - k + 1; ++k) {
+                if (check(i, j - k + 1, k)) {
+                    ans += 2;
+                    i += k;
+                    j -= k;
+                    ok = true;
+                    break;
+                }
+            }
+            if (!ok) {
+                ans += 1;
+                break;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func longestDecomposition(text string) (ans int) {
+	for i, j := 0, len(text)-1; i <= j; {
+		ok := false
+		for k := 1; i+k-1 < j-k+1; k++ {
+			if text[i:i+k] == text[j-k+1:j+1] {
+				ans += 2
+				i += k
+				j -= k
+				ok = true
+				break
+			}
+		}
+		if !ok {
+			ans++
+			break
+		}
+	}
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function longestDecomposition(text: string): number {
+    let ans = 0;
+    for (let i = 0, j = text.length - 1; i <= j; ) {
+        let ok = false;
+        for (let k = 1; i + k - 1 < j - k + 1; ++k) {
+            if (text.slice(i, i + k) === text.slice(j - k + 1, j + 1)) {
+                ans += 2;
+                i += k;
+                j -= k;
+                ok = true;
+                break;
+            }
+        }
+        if (!ok) {
+            ++ans;
+            break;
+        }
+    }
+    return ans;
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二：字符串哈希
+
+**字符串哈希**是把一个任意长度的字符串映射成一个非负整数，并且其冲突的概率几乎为 $0$。字符串哈希用于计算字符串哈希值，快速判断两个字符串是否相等。
+
+因此，在方法一的基础上，我们可以使用字符串哈希的方法，在 $O(1)$ 时间内比较两个字符串是否相等。
+
+时间复杂度 $O(n)$，空间复杂度 $O(n)$。其中 $n$ 为字符串的长度。
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def longestDecomposition(self, text: str) -> int:
+        def get(l, r):
+            return (h[r] - h[l - 1] * p[r - l + 1]) % mod
+
+        n = len(text)
+        base = 131
+        mod = int(1e9) + 7
+        h = [0] * (n + 10)
+        p = [1] * (n + 10)
+        for i, c in enumerate(text):
+            t = ord(c) - ord('a') + 1
+            h[i + 1] = (h[i] * base) % mod + t
+            p[i + 1] = (p[i] * base) % mod
+
+        ans = 0
+        i, j = 0, n - 1
+        while i <= j:
+            k = 1
+            ok = False
+            while i + k - 1 < j - k + 1:
+                if get(i + 1, i + k) == get(j - k + 2, j + 1):
+                    ans += 2
+                    i += k
+                    j -= k
+                    ok = True
+                    break
+                k += 1
+            if not ok:
+                ans += 1
+                break
+        return ans
+```
+
+#### Java
 
 ```java
 class Solution {
@@ -251,57 +333,7 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    int longestDecomposition(string text) {
-        int n = text.size();
-        if (n < 2) return n;
-        for (int i = 1; i <= n >> 1; ++i) {
-            if (text.substr(0, i) == text.substr(n - i)) {
-                return 2 + longestDecomposition(text.substr(i, n - i - i));
-            }
-        }
-        return 1;
-    }
-};
-```
-
-```cpp
-class Solution {
-public:
-    int longestDecomposition(string text) {
-        int ans = 0;
-        auto check = [&](int i, int j, int k) -> bool {
-            while (k--) {
-                if (text[i++] != text[j++]) {
-                    return false;
-                }
-            }
-            return true;
-        };
-        for (int i = 0, j = text.size() - 1; i <= j;) {
-            bool ok = false;
-            for (int k = 1; i + k - 1 < j - k + 1; ++k) {
-                if (check(i, j - k + 1, k)) {
-                    ans += 2;
-                    i += k;
-                    j -= k;
-                    ok = true;
-                    break;
-                }
-            }
-            if (!ok) {
-                ans += 1;
-                break;
-            }
-        }
-        return ans;
-    }
-};
-```
+#### C++
 
 ```cpp
 class Solution {
@@ -345,44 +377,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func longestDecomposition(text string) int {
-	n := len(text)
-	if n < 2 {
-		return n
-	}
-	for i := 1; i <= n>>1; i++ {
-		if text[:i] == text[n-i:] {
-			return 2 + longestDecomposition(text[i:n-i])
-		}
-	}
-	return 1
-}
-```
-
-```go
-func longestDecomposition(text string) (ans int) {
-	for i, j := 0, len(text)-1; i <= j; {
-		ok := false
-		for k := 1; i+k-1 < j-k+1; k++ {
-			if text[i:i+k] == text[j-k+1:j+1] {
-				ans += 2
-				i += k
-				j -= k
-				ok = true
-				break
-			}
-		}
-		if !ok {
-			ans++
-			break
-		}
-	}
-	return
-}
-```
+#### Go
 
 ```go
 func longestDecomposition(text string) (ans int) {
@@ -420,50 +415,8 @@ func longestDecomposition(text string) (ans int) {
 }
 ```
 
-### **TypeScript**
-
-```ts
-function longestDecomposition(text: string): number {
-    const n: number = text.length;
-    if (n < 2) {
-        return n;
-    }
-    for (let i: number = 1; i <= n >> 1; i++) {
-        if (text.slice(0, i) === text.slice(n - i)) {
-            return 2 + longestDecomposition(text.slice(i, n - i));
-        }
-    }
-    return 1;
-}
-```
-
-```ts
-function longestDecomposition(text: string): number {
-    let ans = 0;
-    for (let i = 0, j = text.length - 1; i <= j; ) {
-        let ok = false;
-        for (let k = 1; i + k - 1 < j - k + 1; ++k) {
-            if (text.slice(i, i + k) === text.slice(j - k + 1, j + 1)) {
-                ans += 2;
-                i += k;
-                j -= k;
-                ok = true;
-                break;
-            }
-        }
-        if (!ok) {
-            ++ans;
-            break;
-        }
-    }
-    return ans;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

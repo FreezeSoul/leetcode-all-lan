@@ -1,18 +1,18 @@
 class Solution {
     public int smallestDivisor(int[] nums, int threshold) {
-        int left = 1, right = 1000000;
-        while (left < right) {
-            int mid = (left + right) >> 1;
+        int l = 1, r = 1000000;
+        while (l < r) {
+            int mid = (l + r) >> 1;
             int s = 0;
-            for (int v : nums) {
-                s += (v + mid - 1) / mid;
+            for (int x : nums) {
+                s += (x + mid - 1) / mid;
             }
             if (s <= threshold) {
-                right = mid;
+                r = mid;
             } else {
-                left = mid + 1;
+                l = mid + 1;
             }
         }
-        return left;
+        return l;
     }
 }

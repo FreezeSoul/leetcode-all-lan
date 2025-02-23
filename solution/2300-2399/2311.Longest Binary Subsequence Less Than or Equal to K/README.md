@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2311.Longest%20Binary%20Subsequence%20Less%20Than%20or%20Equal%20to%20K/README.md
+rating: 1839
+source: 第 298 场周赛 Q3
+tags:
+    - 贪心
+    - 记忆化搜索
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [2311. 小于等于 K 的最长二进制子序列](https://leetcode.cn/problems/longest-binary-subsequence-less-than-or-equal-to-k)
 
 [English Version](/solution/2300-2399/2311.Longest%20Binary%20Subsequence%20Less%20Than%20or%20Equal%20to%20K/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个二进制字符串&nbsp;<code>s</code>&nbsp;和一个正整数&nbsp;<code>k</code>&nbsp;。</p>
 
@@ -47,11 +62,13 @@
 	<li><code>1 &lt;= k &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 最长二进制子序列必然包含原字符串中所有的 $0$，在此基础上，我们从右到左遍历 $s$，若遇到 $1$，判断子序列能否添加 $1$，使得子序列对应的二进制数字 $v \leq k$。
 
@@ -59,9 +76,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +91,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -117,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func longestSubsequence(s string, k int) (ans int) {
@@ -133,7 +146,7 @@ func longestSubsequence(s string, k int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function longestSubsequence(s: string, k: number): number {
@@ -150,26 +163,7 @@ function longestSubsequence(s: string, k: number): number {
 }
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public int LongestSubsequence(string s, int k) {
-        int ans = 0, v = 0;
-        for (int i = s.Length - 1; i >= 0; --i) {
-            if (s[i] == '0') {
-                ++ans;
-            } else if (ans < 30 && (v | 1 << ans) <= k) {
-                v |= 1 << ans;
-                ++ans;
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -191,10 +185,27 @@ var longestSubsequence = function (s, k) {
 };
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public int LongestSubsequence(string s, int k) {
+        int ans = 0, v = 0;
+        for (int i = s.Length - 1; i >= 0; --i) {
+            if (s[i] == '0') {
+                ++ans;
+            } else if (ans < 30 && (v | 1 << ans) <= k) {
+                v |= 1 << ans;
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

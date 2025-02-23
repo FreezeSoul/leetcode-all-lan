@@ -1,8 +1,22 @@
-# [158. Read N Characters Given read4 II - Call Multiple Times](https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times)
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0100-0199/0158.Read%20N%20Characters%20Given%20read4%20II%20-%20Call%20Multiple%20Times/README_EN.md
+tags:
+    - Array
+    - Interactive
+    - Simulation
+---
+
+<!-- problem:start -->
+
+# [158. Read N Characters Given read4 II - Call Multiple Times 🔒](https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times)
 
 [中文文档](/solution/0100-0199/0158.Read%20N%20Characters%20Given%20read4%20II%20-%20Call%20Multiple%20Times/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a <code>file</code> and assume that you can only read the file using a given method <code>read4</code>, implement a method <code>read</code> to read <code>n</code> characters. Your method <code>read</code> may be <strong>called multiple times</strong>.</p>
 
@@ -97,15 +111,22 @@ sol.read(buf, 1); // We have reached the end of file, no more characters can be 
 	<li><code>1 &lt;= queries[i] &lt;= 500</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # The read4 API is already defined for you.
 # def read4(buf4: List[str]) -> int:
+
 
 class Solution:
     def __init__(self):
@@ -127,7 +148,7 @@ class Solution:
         return j
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -164,7 +185,7 @@ public class Solution extends Reader4 {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -179,7 +200,7 @@ public:
      * @param n   Number of characters to read
      * @return    The number of actual characters read
      */
-    int read(char *buf, int n) {
+    int read(char* buf, int n) {
         int j = 0;
         while (j < n) {
             if (i == size) {
@@ -193,13 +214,13 @@ public:
     }
 
 private:
-    char *buf4 = new char[4];
+    char* buf4 = new char[4];
     int i = 0;
     int size = 0;
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -239,16 +260,8 @@ var solution = func(read4 func([]byte) int) func([]byte, int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

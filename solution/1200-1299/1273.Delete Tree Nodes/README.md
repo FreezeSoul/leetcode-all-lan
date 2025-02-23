@@ -1,10 +1,25 @@
-# [1273. 删除树节点](https://leetcode.cn/problems/delete-tree-nodes)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1200-1299/1273.Delete%20Tree%20Nodes/README.md
+rating: 1732
+source: 第 14 场双周赛 Q3
+tags:
+    - 树
+    - 深度优先搜索
+    - 广度优先搜索
+    - 数组
+---
+
+<!-- problem:start -->
+
+# [1273. 删除树节点 🔒](https://leetcode.cn/problems/delete-tree-nodes)
 
 [English Version](/solution/1200-1299/1273.Delete%20Tree%20Nodes/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵以节点 0 为根节点的树，定义如下：</p>
 
@@ -60,11 +75,13 @@
 	<li>题目输入数据 <strong>保证</strong> 是一棵 <strong>有效的树</strong> 。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 我们先将树转换成图 $g$，其中 $g[i]$ 表示节点 $i$ 的所有子节点。
 
@@ -76,9 +93,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -99,9 +114,7 @@ class Solution:
         return dfs(0)[1]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -133,7 +146,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -160,7 +173,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func deleteTreeNodes(nodes int, parent []int, value []int) int {
@@ -186,10 +199,8 @@ func deleteTreeNodes(nodes int, parent []int, value []int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

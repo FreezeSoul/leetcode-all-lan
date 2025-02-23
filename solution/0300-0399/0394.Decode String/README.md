@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0394.Decode%20String/README.md
+tags:
+    - 栈
+    - 递归
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [394. 字符串解码](https://leetcode.cn/problems/decode-string)
 
 [English Version](/solution/0300-0399/0394.Decode%20String/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个经过编码的字符串，返回它解码后的字符串。</p>
 
@@ -55,26 +67,17 @@
 	<li><code>s</code>&nbsp;中所有整数的取值范围为<meta charset="UTF-8" />&nbsp;<code>[1, 300]</code>&nbsp;</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-用栈 s1 存储左括号前的数字 num，栈 s2 存储左括号前的字符串 res。
-
-遍历字符串 s 中每个字符 c：
-
--   若 c 是数字，则累乘数字 num
--   若 `c == '['`，则将左括号前的数字 num 存入 s1，左括号前的字符串 res 存入 s2，并将 num 重新置为 0，res 置为空串
--   若 `c == ']'`，则 `res = s2.pop() + res * s1.pop()`
--   若 c 是字符，则累加字符串 res
-
-最后返回 res 即可。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -95,9 +98,7 @@ class Solution:
         return res
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -129,7 +130,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function decodeString(s: string): string {
@@ -156,10 +157,8 @@ function decodeString(s: string): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

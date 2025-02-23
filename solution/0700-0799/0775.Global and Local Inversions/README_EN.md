@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0775.Global%20and%20Local%20Inversions/README_EN.md
+tags:
+    - Array
+    - Math
+---
+
+<!-- problem:start -->
+
 # [775. Global and Local Inversions](https://leetcode.com/problems/global-and-local-inversions)
 
 [中文文档](/solution/0700-0799/0775.Global%20and%20Local%20Inversions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> of length <code>n</code> which represents a permutation of all the integers in the range <code>[0, n - 1]</code>.</p>
 
@@ -50,11 +63,17 @@
 	<li><code>nums</code> is a permutation of all the numbers in the range <code>[0, n - 1]</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -65,6 +84,66 @@ class Solution:
                 return False
         return True
 ```
+
+#### Java
+
+```java
+class Solution {
+    public boolean isIdealPermutation(int[] nums) {
+        int mx = 0;
+        for (int i = 2; i < nums.length; ++i) {
+            mx = Math.max(mx, nums[i - 2]);
+            if (mx > nums[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    bool isIdealPermutation(vector<int>& nums) {
+        int mx = 0;
+        for (int i = 2; i < nums.size(); ++i) {
+            mx = max(mx, nums[i - 2]);
+            if (mx > nums[i]) return false;
+        }
+        return true;
+    }
+};
+```
+
+#### Go
+
+```go
+func isIdealPermutation(nums []int) bool {
+	mx := 0
+	for i := 2; i < len(nums); i++ {
+		mx = max(mx, nums[i-2])
+		if mx > nums[i] {
+			return false
+		}
+	}
+	return true
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
 
 ```python
 class BinaryIndexedTree:
@@ -91,30 +170,15 @@ class Solution:
         tree = BinaryIndexedTree(n)
         cnt = 0
         for i, v in enumerate(nums):
-            cnt += (i < n - 1 and v > nums[i + 1])
-            cnt -= (i - tree.query(v))
+            cnt += i < n - 1 and v > nums[i + 1]
+            cnt -= i - tree.query(v)
             if cnt < 0:
                 return False
             tree.update(v + 1, 1)
         return True
 ```
 
-### **Java**
-
-```java
-class Solution {
-    public boolean isIdealPermutation(int[] nums) {
-        int mx = 0;
-        for (int i = 2; i < nums.length; ++i) {
-            mx = Math.max(mx, nums[i - 2]);
-            if (mx > nums[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-```
+#### Java
 
 ```java
 class BinaryIndexedTree {
@@ -158,26 +222,14 @@ class Solution {
 }
 ```
 
-### **C++**
-
-```cpp
-class Solution {
-public:
-    bool isIdealPermutation(vector<int>& nums) {
-        int mx = 0;
-        for (int i = 2; i < nums.size(); ++i) {
-            mx = max(mx, nums[i - 2]);
-            if (mx > nums[i]) return false;
-        }
-        return true;
-    }
-};
-```
+#### C++
 
 ```cpp
 class BinaryIndexedTree {
 public:
-    BinaryIndexedTree(int _n) : n(_n), c(_n + 1) {}
+    BinaryIndexedTree(int _n)
+        : n(_n)
+        , c(_n + 1) {}
 
     void update(int x, int delta) {
         while (x <= n) {
@@ -216,27 +268,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-func isIdealPermutation(nums []int) bool {
-	mx := 0
-	for i := 2; i < len(nums); i++ {
-		mx = max(mx, nums[i-2])
-		if mx > nums[i] {
-			return false
-		}
-	}
-	return true
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 func isIdealPermutation(nums []int) bool {
@@ -283,10 +315,8 @@ func (this BinaryIndexedTree) query(x int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

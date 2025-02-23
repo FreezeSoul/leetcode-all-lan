@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1601.Maximum%20Number%20of%20Achievable%20Transfer%20Requests/README.md
+rating: 2118
+source: 第 208 场周赛 Q4
+tags:
+    - 位运算
+    - 数组
+    - 回溯
+    - 枚举
+---
+
+<!-- problem:start -->
+
 # [1601. 最多可达成的换楼请求数目](https://leetcode.cn/problems/maximum-number-of-achievable-transfer-requests)
 
 [English Version](/solution/1600-1699/1601.Maximum%20Number%20of%20Achievable%20Transfer%20Requests/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>我们有&nbsp;<code>n</code>&nbsp;栋楼，编号从&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;。每栋楼有若干员工。由于现在是换楼的季节，部分员工想要换一栋楼居住。</p>
 
@@ -61,11 +76,13 @@
 	<li><code>0 &lt;= from<sub>i</sub>, to<sub>i</sub> &lt; n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：二进制枚举**
+### 方法一：二进制枚举
 
 我们注意到，换楼请求列表长度不超过 $16$，因此我们可以使用二进制枚举的方法枚举所有的换楼请求列表。具体地，我们可以使用一个长度为 $16$ 的二进制数来表示一种换楼请求列表，其中第 $i$ 位为 $1$ 表示第 $i$ 个换楼请求被选中，为 $0$ 表示第 $i$ 个换楼请求不被选中。
 
@@ -75,9 +92,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -98,9 +113,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -141,7 +154,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -177,7 +190,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumRequests(n int, requests [][]int) (ans int) {
@@ -208,14 +221,14 @@ func maximumRequests(n int, requests [][]int) (ans int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maximumRequests(n: number, requests: number[][]): number {
     const m = requests.length;
     let ans = 0;
     const check = (mask: number): boolean => {
-        const cnt = new Array(n).fill(0);
+        const cnt = Array(n).fill(0);
         for (let i = 0; i < m; ++i) {
             if ((mask >> i) & 1) {
                 const [f, t] = requests[i];
@@ -244,7 +257,7 @@ function bitCount(i: number): number {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -285,10 +298,58 @@ function bitCount(i) {
 }
 ```
 
-### **...**
+#### C#
 
-```
+```cs
+public class Solution {
+    private int m;
+    private int n;
+    private int[][] requests;
 
+    public int MaximumRequests(int n, int[][] requests) {
+        m = requests.Length;
+        this.n = n;
+        this.requests = requests;
+        int ans = 0;
+        for (int mask = 0; mask < (1 << m); ++mask) {
+            int cnt = CountBits(mask);
+            if (ans < cnt && Check(mask)) {
+                ans = cnt;
+            }
+        }
+        return ans;
+    }
+
+    private bool Check(int mask) {
+        int[] cnt = new int[n];
+        for (int i = 0; i < m; ++i) {
+            if (((mask >> i) & 1) == 1) {
+                int f = requests[i][0], t = requests[i][1];
+                --cnt[f];
+                ++cnt[t];
+            }
+        }
+        foreach (int v in cnt) {
+            if (v != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int CountBits(int n) {
+        int count = 0;
+        while (n > 0) {
+            n -= n & -n;
+            ++count;
+        }
+        return count;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0592.Fraction%20Addition%20and%20Subtraction/README_EN.md
+tags:
+    - Math
+    - String
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [592. Fraction Addition and Subtraction](https://leetcode.com/problems/fraction-addition-and-subtraction)
 
 [中文文档](/solution/0500-0599/0592.Fraction%20Addition%20and%20Subtraction/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>expression</code> representing an expression of fraction addition and subtraction, return the calculation result in string format.</p>
 
@@ -41,11 +55,17 @@
 	<li>The numerator and denominator of the <strong>final result</strong> are guaranteed to be valid and in the range of <strong>32-bit</strong> int.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -70,7 +90,7 @@ class Solution:
         return f'{x}/{y}'
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -105,7 +125,7 @@ class Solution {
 }
 ```
 
-### **Go**
+#### Go
 
 ```go
 func fractionAddition(expression string) string {
@@ -152,10 +172,56 @@ func gcd(a, b int) int {
 }
 ```
 
-### **...**
+#### JavaScript
 
-```
+```js
+/**
+ * @param {string} expression
+ * @return {string}
+ */
+var fractionAddition = function (expression) {
+    let x = 0,
+        y = 1;
 
+    if (!expression.startsWith('-') && !expression.startsWith('+')) {
+        expression = '+' + expression;
+    }
+
+    let i = 0;
+    const n = expression.length;
+
+    while (i < n) {
+        const sign = expression[i] === '-' ? -1 : 1;
+        i++;
+
+        let j = i;
+        while (j < n && expression[j] !== '+' && expression[j] !== '-') {
+            j++;
+        }
+
+        const [a, b] = expression.slice(i, j).split('/').map(Number);
+        x = x * b + sign * a * y;
+        y *= b;
+        i = j;
+    }
+
+    const gcd = (a, b) => {
+        while (b !== 0) {
+            [a, b] = [b, a % b];
+        }
+        return Math.abs(a);
+    };
+
+    const z = gcd(x, y);
+    x = Math.floor(x / z);
+    y = Math.floor(y / z);
+
+    return `${x}/${y}`;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

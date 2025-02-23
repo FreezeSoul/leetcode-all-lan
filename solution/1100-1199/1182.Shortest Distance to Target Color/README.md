@@ -1,10 +1,24 @@
-# [1182. 与目标颜色间的最短距离](https://leetcode.cn/problems/shortest-distance-to-target-color)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1182.Shortest%20Distance%20to%20Target%20Color/README.md
+rating: 1626
+source: 第 8 场双周赛 Q3
+tags:
+    - 数组
+    - 二分查找
+    - 动态规划
+---
+
+<!-- problem:start -->
+
+# [1182. 与目标颜色间的最短距离 🔒](https://leetcode.cn/problems/shortest-distance-to-target-color)
 
 [English Version](/solution/1100-1199/1182.Shortest%20Distance%20to%20Target%20Color/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个数组&nbsp;<code>colors</code>，里面有&nbsp;&nbsp;<code>1</code>、<code>2</code>、&nbsp;<code>3</code> 三种颜色。</p>
 
@@ -46,11 +60,13 @@
 	<li><code>1 &lt;= queries[i][1] &lt;= 3</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：预处理**
+### 方法一：预处理
 
 我们可以预处理出每个位置到左边最近的颜色 $1$,$2$,$3$ 的距离，以及每个位置到右边最近的颜色 $1$,$2$,$3$ 的距离，记录在数组 $left$ 和 $right$ 中。初始时 $left[0][0] = left[0][1] = left[0][2] = -\infty$，而 $right[n][0] = right[n][1] = right[n][2] = \infty$，其中 $n$ 是数组 $colors$ 的长度。
 
@@ -60,13 +76,13 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def shortestDistanceColor(self, colors: List[int], queries: List[List[int]]) -> List[int]:
+    def shortestDistanceColor(
+        self, colors: List[int], queries: List[List[int]]
+    ) -> List[int]:
         n = len(colors)
         right = [[inf] * 3 for _ in range(n + 1)]
         for i in range(n - 1, -1, -1):
@@ -85,9 +101,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -121,7 +135,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,7 +170,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestDistanceColor(colors []int, queries [][]int) (ans []int) {
@@ -188,22 +202,12 @@ func shortestDistanceColor(colors []int, queries [][]int) (ans []int) {
 	}
 	return
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-function shortestDistanceColor(
-    colors: number[],
-    queries: number[][],
-): number[] {
+function shortestDistanceColor(colors: number[], queries: number[][]): number[] {
     const n = colors.length;
     const inf = 1 << 30;
     const right: number[][] = Array(n + 1)
@@ -233,10 +237,8 @@ function shortestDistanceColor(
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

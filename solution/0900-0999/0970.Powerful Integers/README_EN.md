@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0900-0999/0970.Powerful%20Integers/README_EN.md
+tags:
+    - Hash Table
+    - Math
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [970. Powerful Integers](https://leetcode.com/problems/powerful-integers)
 
 [中文文档](/solution/0900-0999/0970.Powerful%20Integers/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given three integers <code>x</code>, <code>y</code>, and <code>bound</code>, return <em>a list of all the <strong>powerful integers</strong> that have a value less than or equal to</em> <code>bound</code>.</p>
 
@@ -41,9 +55,13 @@
 	<li><code>0 &lt;= bound &lt;= 10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Solution 1: Hash Table + Enumeration**
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Enumeration
 
 According to the description of the problem, a powerful integer can be represented as $x^i + y^j$, where $i \geq 0$, $j \geq 0$.
 
@@ -57,7 +75,7 @@ The time complexity is $O(\log^2 bound)$, and the space complexity is $O(\log^2 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,7 +95,7 @@ class Solution:
         return list(ans)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +117,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -122,7 +140,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func powerfulIntegers(x int, y int, bound int) (ans []int) {
@@ -145,7 +163,7 @@ func powerfulIntegers(x int, y int, bound int) (ans []int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function powerfulIntegers(x: number, y: number, bound: number): number[] {
@@ -165,7 +183,7 @@ function powerfulIntegers(x: number, y: number, bound: number): number[] {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -191,10 +209,8 @@ var powerfulIntegers = function (x, y, bound) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

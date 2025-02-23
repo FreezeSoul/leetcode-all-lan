@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2694.Event%20Emitter/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2694. 事件发射器](https://leetcode.cn/problems/event-emitter)
 
 [English Version](/solution/2600-2699/2694.Event%20Emitter/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个 <code>EventEmitter</code> 类。这个接口与 Node.js 或 DOM 的 Event Target 接口相似，但有一些差异。<code>EventEmitter</code> 应该允许订阅事件和触发事件。</p>
 
@@ -20,7 +30,9 @@
 <p><strong>示例 1：</strong></p>
 
 <pre>
-<b>输入：</b>actions = ["EventEmitter", "emit", "subscribe", "subscribe", "emit"], values = [[], ["firstEvent", "function cb1() { return 5; }"],  ["firstEvent", "function cb1() { return 5; }"], ["firstEvent"]]
+<b>输入：
+</b>actions = ["EventEmitter", "emit", "subscribe", "subscribe", "emit"], 
+values = [[], ["firstEvent", "function cb1() { return 5; }"],  ["firstEvent", "function cb1() { return 5; }"], ["firstEvent"]]
 <b>输出：</b>[[],["emitted",[]],["subscribed"],["subscribed"],["emitted",[5,6]]]
 <b>解释：</b>
 const emitter = new EventEmitter();
@@ -33,7 +45,9 @@ emitter.emit("firstEvent"); // [5, 6], 返回 cb1 和 cb2 的输出
 <p><strong>示例 2：</strong></p>
 
 <pre>
-<b>输入：</b>actions = ["EventEmitter", "subscribe", "emit", "emit"], values = [[], ["firstEvent", "function cb1(...args) { return args.join(','); }"], ["firstEvent", [1,2,3]], ["firstEvent", [3,4,6]]]
+<b>输入：
+</b>actions = ["EventEmitter", "subscribe", "emit", "emit"], 
+values = [[], ["firstEvent", "function cb1(...args) { return args.join(','); }"], ["firstEvent", [1,2,3]], ["firstEvent", [3,4,6]]]
 <b>输出：</b>[[],["subscribed"],["emitted",["1,2,3"]],["emitted",["3,4,6"]]]
 <strong>解释：</strong>注意 emit 方法应该能够接受一个可选的参数数组。
 
@@ -46,7 +60,9 @@ emitter.emit("firstEvent", [3, 4, 6]); // ["3,4,6"]
 <p><strong>示例 3：</strong></p>
 
 <pre>
-<b>输入：</b>actions = ["EventEmitter", "subscribe", "emit", "unsubscribe", "emit"], values = [[], ["firstEvent", "(...args) =&gt; args.join(',')"], ["firstEvent", [1,2,3]], [0], ["firstEvent", [4,5,6]]]
+<b>输入：
+</b>actions = ["EventEmitter", "subscribe", "emit", "unsubscribe", "emit"], 
+values = [[], ["firstEvent", "(...args) =&gt; args.join(',')"], ["firstEvent", [1,2,3]], [0], ["firstEvent", [4,5,6]]]
 <b>输出：</b>[[],["subscribed"],["emitted",["1,2,3"]],["unsubscribed",0],["emitted",[]]]
 <b>解释：</b>
 const emitter = new EventEmitter();
@@ -55,6 +71,20 @@ emitter.emit("firstEvent", [1, 2, 3]); // ["1,2,3"]
 sub.unsubscribe(); // undefined
 emitter.emit("firstEvent", [4, 5, 6]); // [], 没有订阅者
 </pre>
+
+<p><strong>示例 4：</strong></p>
+
+<pre>
+<b>输入：
+</b>actions = ["EventEmitter", "subscribe", "subscribe", "unsubscribe", "emit"], 
+values = [[], ["firstEvent", "x =&gt; x + 1"], ["firstEvent", "x =&gt; x + 2"], [0], ["firstEvent", [5]]]
+<b>输出：</b>[[],["subscribed"],["subscribed"],["unsubscribed",0],["emitted",[7]]]
+<b>解释：</b>
+const emitter = new EventEmitter();
+const sub1 = emitter.subscribe("firstEvent", x =&gt; x + 1);
+const sub2 = emitter.subscribe("firstEvent", x =&gt; x + 2);
+sub1.unsubscribe(); // undefined
+emitter.emit("firstEvent", [5]); // [7]</pre>
 
 <p>&nbsp;</p>
 
@@ -70,15 +100,17 @@ emitter.emit("firstEvent", [4, 5, 6]); // [], 没有订阅者
 	<li><code>unsubscribe</code> 操作接收一个参数，即之前进行订阅的顺序（从 0 开始）。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 type Callback = (...args: any[]) => any;
@@ -90,10 +122,7 @@ class EventEmitter {
     private d: Map<string, Set<Callback>> = new Map();
 
     subscribe(eventName: string, callback: Callback): Subscription {
-        this.d.set(
-            eventName,
-            (this.d.get(eventName) || new Set()).add(callback),
-        );
+        this.d.set(eventName, (this.d.get(eventName) || new Set()).add(callback));
         return {
             unsubscribe: () => {
                 this.d.get(eventName)?.delete(callback);
@@ -124,3 +153,7 @@ class EventEmitter {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

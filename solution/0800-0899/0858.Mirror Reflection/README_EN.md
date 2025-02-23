@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0858.Mirror%20Reflection/README_EN.md
+tags:
+    - Geometry
+    - Math
+    - Number Theory
+---
+
+<!-- problem:start -->
+
 # [858. Mirror Reflection](https://leetcode.com/problems/mirror-reflection)
 
 [中文文档](/solution/0800-0899/0858.Mirror%20Reflection/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is a special square room with mirrors on each of the four walls. Except for the southwest corner, there are receptors on each of the remaining corners, numbered <code>0</code>, <code>1</code>, and <code>2</code>.</p>
 
@@ -35,26 +49,110 @@
 	<li><code>1 &lt;= q &lt;= p &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-
+class Solution:
+    def mirrorReflection(self, p: int, q: int) -> int:
+        g = gcd(p, q)
+        p = (p // g) % 2
+        q = (q // g) % 2
+        if p == 1 and q == 1:
+            return 1
+        return 0 if p == 1 else 2
 ```
 
-### **Java**
+#### Java
 
 ```java
+class Solution {
+    public int mirrorReflection(int p, int q) {
+        int g = gcd(p, q);
+        p = (p / g) % 2;
+        q = (q / g) % 2;
+        if (p == 1 && q == 1) {
+            return 1;
+        }
+        return p == 1 ? 0 : 2;
+    }
 
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+}
 ```
 
-### **...**
+#### C++
 
+```cpp
+class Solution {
+public:
+    int mirrorReflection(int p, int q) {
+        int g = __gcd(p, q);
+        p = (p / g) % 2;
+        q = (q / g) % 2;
+        if (p == 1 && q == 1) {
+            return 1;
+        }
+        return p == 1 ? 0 : 2;
+    }
+};
 ```
 
+#### Go
+
+```go
+func mirrorReflection(p int, q int) int {
+	g := gcd(p, q)
+	p = (p / g) % 2
+	q = (q / g) % 2
+	if p == 1 && q == 1 {
+		return 1
+	}
+	if p == 1 {
+		return 0
+	}
+	return 2
+}
+
+func gcd(a, b int) int {
+	if b == 0 {
+		return a
+	}
+	return gcd(b, a%b)
+}
+```
+
+#### TypeScript
+
+```ts
+function mirrorReflection(p: number, q: number): number {
+    const g = gcd(p, q);
+    p = Math.floor(p / g) % 2;
+    q = Math.floor(q / g) % 2;
+    if (p === 1 && q === 1) {
+        return 1;
+    }
+    return p === 1 ? 0 : 2;
+}
+
+function gcd(a: number, b: number): number {
+    return b === 0 ? a : gcd(b, a % b);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

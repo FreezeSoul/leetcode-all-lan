@@ -1,12 +1,22 @@
-# [2533. 好二进制字符串的数量](https://leetcode.cn/problems/number-of-good-binary-strings)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2533.Number%20of%20Good%20Binary%20Strings/README.md
+tags:
+    - 动态规划
+---
+
+<!-- problem:start -->
+
+# [2533. 好二进制字符串的数量 🔒](https://leetcode.cn/problems/number-of-good-binary-strings)
 
 [English Version](/solution/2500-2599/2533.Number%20of%20Good%20Binary%20Strings/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p><span style="">给你四个整数 </span><code>minLenght</code>、<code>maxLength</code>、<code>oneGroup</code><span style=""> 和 </span><code>zeroGroup</code><span style=""> 。</span></p>
+<p><span style="">给你四个整数 </span><code>minLength</code>、<code>maxLength</code>、<code>oneGroup</code><span style=""> 和 </span><code>zeroGroup</code><span style=""> 。</span></p>
 
 <p><strong>好 </strong>二进制字符串满足下述条件：</p>
 
@@ -24,7 +34,7 @@
 	</li>
 </ul>
 
-<p>请返回好二进制字符串的个数。答案可能很大<strong>，</strong>请返回对 <code>10<sup>9</sup> + 7</code> 取余后的结果。</p>
+<p>请返回 <strong>好</strong> 二进制字符串的个数。答案可能很大<strong>，</strong>请返回对 <code>10<sup>9</sup> + 7</code> <strong>取余</strong> 后的结果。</p>
 
 <p><strong>注意：</strong><code>0</code> 可以被认为是所有数字的倍数。</p>
 
@@ -56,11 +66,13 @@
 	<li><code>1 &lt;= oneGroup, zeroGroup &lt;= maxLength</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们定义 $f[i]$ 表示长度为 $i$ 的字符串中满足条件的个数。状态转移方程为：
 
@@ -77,13 +89,13 @@ $$
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
-    def goodBinaryStrings(self, minLength: int, maxLength: int, oneGroup: int, zeroGroup: int) -> int:
+    def goodBinaryStrings(
+        self, minLength: int, maxLength: int, oneGroup: int, zeroGroup: int
+    ) -> int:
         mod = 10**9 + 7
         f = [1] + [0] * maxLength
         for i in range(1, len(f)):
@@ -95,9 +107,7 @@ class Solution:
         return sum(f[minLength:]) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -122,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -149,7 +159,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func goodBinaryStrings(minLength int, maxLength int, oneGroup int, zeroGroup int) (ans int) {
@@ -172,10 +182,33 @@ func goodBinaryStrings(minLength int, maxLength int, oneGroup int, zeroGroup int
 }
 ```
 
-### **...**
+#### TypeScript
 
-```
-
+```ts
+function goodBinaryStrings(
+    minLength: number,
+    maxLength: number,
+    oneGroup: number,
+    zeroGroup: number,
+): number {
+    const mod = 10 ** 9 + 7;
+    const f: number[] = Array(maxLength + 1).fill(0);
+    f[0] = 1;
+    for (let i = 1; i <= maxLength; ++i) {
+        if (i >= oneGroup) {
+            f[i] += f[i - oneGroup];
+        }
+        if (i >= zeroGroup) {
+            f[i] += f[i - zeroGroup];
+        }
+        f[i] %= mod;
+    }
+    return f.slice(minLength).reduce((a, b) => a + b, 0) % mod;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

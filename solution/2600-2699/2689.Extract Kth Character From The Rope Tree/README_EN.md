@@ -1,8 +1,22 @@
-# [2689. Extract Kth Character From The Rope Tree](https://leetcode.com/problems/extract-kth-character-from-the-rope-tree)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2689.Extract%20Kth%20Character%20From%20The%20Rope%20Tree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
+# [2689. Extract Kth Character From The Rope Tree 🔒](https://leetcode.com/problems/extract-kth-character-from-the-rope-tree)
 
 [中文文档](/solution/2600-2699/2689.Extract%20Kth%20Character%20From%20The%20Rope%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given the <code>root</code> of a binary tree and an integer <code>k</code>. Besides the left and right children, every node of this tree has two other properties, a <strong>string</strong> <code>node.val</code> containing only lowercase English letters (possibly empty) and a non-negative integer <code>node.len</code>. There are two types of nodes in this tree:</p>
 
@@ -69,11 +83,17 @@ You can see that S[root] = &quot;ropetree&quot;. So S[root][7], which represents
 	<li><code>1 &lt;= k &lt;= S[root].length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a rope tree node.
@@ -95,7 +115,7 @@ class Solution:
         return dfs(root)[k - 1]
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -141,7 +161,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -160,7 +180,7 @@ class Solution {
 class Solution {
 public:
     char getKthCharacter(RopeTreeNode* root, int k) {
-        function<string(RopeTreeNode* root)> dfs = [&](RopeTreeNode* root) -> string {
+        function<string(RopeTreeNode * root)> dfs = [&](RopeTreeNode* root) -> string {
             if (root == nullptr) {
                 return "";
             }
@@ -176,7 +196,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -204,10 +224,8 @@ func getKthCharacter(root *RopeTreeNode, k int) byte {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

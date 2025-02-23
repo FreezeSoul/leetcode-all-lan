@@ -1,29 +1,27 @@
 class Solution {
     public List<Integer> findAnagrams(String s, String p) {
+        int m = s.length();
+        int n = p.length();
         List<Integer> ans = new ArrayList<>();
-        int m = s.length(), n = p.length();
-        if (n > m) {
+        if (m < n) {
             return ans;
         }
-        int[] window = new int[26];
-        for (int i = 0; i < n; i++) {
-            window[p.charAt(i) - 'a']++;
-            window[s.charAt(i) - 'a']--;
+        int[] cnt1 = new int[26];
+        int[] cnt2 = new int[26];
+        for (int i = 0; i < n; ++i) {
+            ++cnt1[s.charAt(i) - 'a'];
+            ++cnt2[p.charAt(i) - 'a'];
         }
-        if (check(window)) {
+        if (Arrays.equals(cnt1, cnt2)) {
             ans.add(0);
         }
-        for (int i = n; i < m; i++) {
-            window[s.charAt(i) - 'a']--;
-            window[s.charAt(i - n) - 'a']++;
-            if (check(window)) {
+        for (int i = n; i < m; ++i) {
+            ++cnt1[s.charAt(i) - 'a'];
+            --cnt1[s.charAt(i - n) - 'a'];
+            if (Arrays.equals(cnt1, cnt2)) {
                 ans.add(i - n + 1);
             }
         }
         return ans;
-    }
-
-    private boolean check(int[] window) {
-        return Arrays.stream(window).allMatch(cnt -> cnt == 0);
     }
 }

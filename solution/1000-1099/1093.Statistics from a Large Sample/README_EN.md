@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1093.Statistics%20from%20a%20Large%20Sample/README_EN.md
+rating: 1471
+source: Weekly Contest 142 Q1
+tags:
+    - Array
+    - Math
+    - Probability and Statistics
+---
+
+<!-- problem:start -->
+
 # [1093. Statistics from a Large Sample](https://leetcode.com/problems/statistics-from-a-large-sample)
 
 [中文文档](/solution/1000-1099/1093.Statistics%20from%20a%20Large%20Sample/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a large sample of integers in the range <code>[0, 255]</code>. Since the sample is so large, it is represented by an array <code>count</code>&nbsp;where <code>count[k]</code> is the <strong>number of times</strong> that <code>k</code> appears in the sample.</p>
 
@@ -58,11 +74,17 @@ The mode is 1 as it appears the most in the sample.
 	<li>The mode of the sample that <code>count</code> represents is <strong>unique</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -92,7 +114,7 @@ class Solution:
         return [mi, mx, s / cnt, median, mode]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -131,7 +153,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -165,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func sampleStats(count []int) []float64 {
@@ -198,23 +220,9 @@ func sampleStats(count []int) []float64 {
 	}
 	return []float64{float64(mi), float64(mx), float64(s) / float64(cnt), median, float64(mode)}
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function sampleStats(count: number[]): number[] {
@@ -241,17 +249,13 @@ function sampleStats(count: number[]): number[] {
         }
     }
     const median =
-        cnt % 2 === 1
-            ? find((cnt >> 1) + 1)
-            : (find(cnt >> 1) + find((cnt >> 1) + 1)) / 2;
+        cnt % 2 === 1 ? find((cnt >> 1) + 1) : (find(cnt >> 1) + find((cnt >> 1) + 1)) / 2;
     return [mi, mx, s / cnt, median, mode];
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

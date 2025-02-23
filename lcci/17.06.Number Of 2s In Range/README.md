@@ -1,10 +1,18 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/17.06.Number%20Of%202s%20In%20Range/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 17.06. 2 出现的次数](https://leetcode.cn/problems/number-of-2s-in-range-lcci)
 
 [English Version](/lcci/17.06.Number%20Of%202s%20In%20Range/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>编写一个方法，计算从 0 到 n (含 n) 中数字 2 出现的次数。</p>
 <p><strong>示例:</strong></p>
@@ -16,11 +24,13 @@
 	<li><code>n &lt;= 10^9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数位 DP**
+### 方法一：数位 DP
 
 这道题实际上是求在给定区间 $[l,..r]$ 中，数字中出现 $2$ 个数。个数与数的位数以及每一位上的数字有关。我们可以用数位 DP 的思路来解决这道题。数位 DP 中，数的大小对复杂度的影响很小。
 
@@ -49,13 +59,13 @@ $$
 
 时间复杂度 $O(\log n)$。
 
-相似题目：[233. 数字 1 的个数](/solution/0200-0299/0233.Number%20of%20Digit%20One/README.md)
+相似题目：
+
+-   [233. 数字 1 的个数](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0233.Number%20of%20Digit%20One/README.md)
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +89,7 @@ class Solution:
         return dfs(l, 0, True)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +128,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -158,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numberOf2sInRange(n int) int {
@@ -172,7 +180,7 @@ func numberOf2sInRange(n int) int {
 	}
 	l := 0
 	for n > 0 {
-        l++
+		l++
 		a[l] = n % 10
 		n /= 10
 	}
@@ -205,10 +213,49 @@ func numberOf2sInRange(n int) int {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    private var a = [Int](repeating: 0, count: 12)
+    private var dp = [[Int]](repeating: [Int](repeating: -1, count: 12), count: 12)
 
+    func numberOf2sInRange(_ n: Int) -> Int {
+        var n = n
+        var len = 0
+        while n > 0 {
+            len += 1
+            a[len] = n % 10
+            n /= 10
+        }
+        for i in 0..<12 {
+            dp[i] = [Int](repeating: -1, count: 12)
+        }
+        return dfs(len, 0, true)
+    }
+
+    private func dfs(_ pos: Int, _ cnt: Int, _ limit: Bool) -> Int {
+        if pos <= 0 {
+            return cnt
+        }
+        if !limit && dp[pos][cnt] != -1 {
+            return dp[pos][cnt]
+        }
+        let up = limit ? a[pos] : 9
+        var ans = 0
+        for i in 0...up {
+            ans += dfs(pos - 1, cnt + (i == 2 ? 1 : 0), limit && i == up)
+        }
+        if !limit {
+            dp[pos][cnt] = ans
+        }
+        return ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

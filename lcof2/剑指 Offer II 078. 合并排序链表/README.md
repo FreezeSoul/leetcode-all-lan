@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20078.%20%E5%90%88%E5%B9%B6%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 078. 合并排序链表](https://leetcode.cn/problems/vvXgSW)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个链表数组，每个链表都已经按升序排列。</p>
 
@@ -56,17 +63,17 @@
 
 <p><meta charset="UTF-8" />注意：本题与主站 23&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/merge-k-sorted-lists/">https://leetcode.cn/problems/merge-k-sorted-lists/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-合并前后两个链表，结果放在后一个链表位置上，依次循环下去。最后返回链表数组的最后一个元素。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -98,9 +105,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -144,7 +149,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -186,7 +191,7 @@ private:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -197,39 +202,39 @@ private:
  * }
  */
 func mergeKLists(lists []*ListNode) *ListNode {
-    n := len(lists)
-    if n == 0 {
-        return nil
-    }
-    for i := 1; i < n; i++ {
-        lists[i] = mergeTwoLists(lists[i-1], lists[i])
-    }
-    return lists[n-1]
+	n := len(lists)
+	if n == 0 {
+		return nil
+	}
+	for i := 1; i < n; i++ {
+		lists[i] = mergeTwoLists(lists[i-1], lists[i])
+	}
+	return lists[n-1]
 }
 
- func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
-    dummy := &ListNode{}
-    cur := dummy
-    for l1 != nil && l2 != nil {
-        if l1.Val <= l2.Val {
-            cur.Next = l1
-            l1 = l1.Next
-        } else {
-            cur.Next = l2
-            l2 = l2.Next
-        }
-        cur = cur.Next
-    }
-    if l1 != nil {
-        cur.Next = l1
-    } else if l2 != nil {
-        cur.Next = l2
-    }
-    return dummy.Next
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	dummy := &ListNode{}
+	cur := dummy
+	for l1 != nil && l2 != nil {
+		if l1.Val <= l2.Val {
+			cur.Next = l1
+			l1 = l1.Next
+		} else {
+			cur.Next = l2
+			l2 = l2.Next
+		}
+		cur = cur.Next
+	}
+	if l1 != nil {
+		cur.Next = l1
+	} else if l2 != nil {
+		cur.Next = l2
+	}
+	return dummy.Next
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -272,48 +277,7 @@ function mergeTwoLists(l1, l2) {
 }
 ```
 
-### **Ruby**
-
-```rb
-# Definition for singly-linked list.
-# class ListNode
-#     attr_accessor :val, :next
-#     def initialize(val = 0, _next = nil)
-#         @val = val
-#         @next = _next
-#     end
-# end
-# @param {ListNode[]} lists
-# @return {ListNode}
-def merge_k_lists(lists)
-    n = lists.length
-    i = 1
-    while i < n
-        lists[i] = merge_two_lists(lists[i - 1], lists[i])
-        i += 1
-    end
-    lists[n - 1]
-end
-
-def merge_two_lists(l1, l2)
-  dummy = ListNode.new()
-  cur = dummy
-  while l1 && l2
-      if l1.val <= l2.val
-          cur.next = l1
-          l1 = l1.next
-      else
-          cur.next = l2
-          l2 = l2.next
-      end
-      cur = cur.next
-  end
-  cur.next = l1 || l2
-  dummy.next
-end
-```
-
-### **C#**
+#### C#
 
 ```cs
 /**
@@ -358,10 +322,97 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Ruby
 
+```rb
+# Definition for singly-linked list.
+# class ListNode
+#     attr_accessor :val, :next
+#     def initialize(val = 0, _next = nil)
+#         @val = val
+#         @next = _next
+#     end
+# end
+# @param {ListNode[]} lists
+# @return {ListNode}
+def merge_k_lists(lists)
+    n = lists.length
+    i = 1
+    while i < n
+        lists[i] = merge_two_lists(lists[i - 1], lists[i])
+        i += 1
+    end
+    lists[n - 1]
+end
+
+def merge_two_lists(l1, l2)
+  dummy = ListNode.new()
+  cur = dummy
+  while l1 && l2
+      if l1.val <= l2.val
+          cur.next = l1
+          l1 = l1.next
+      else
+          cur.next = l2
+          l2 = l2.next
+      end
+      cur = cur.next
+  end
+  cur.next = l1 || l2
+  dummy.next
+end
 ```
 
+#### Swift
+
+```swift
+/** class ListNode {
+*    var val: Int
+*    var next: ListNode?
+*    init() { self.val = 0; self.next = nil }
+*    init(_ val: Int) { self.val = val; self.next = nil }
+*    init(_ val: Int, _ next: ListNode?) { self.val = val; self.next = next }
+* }
+*/
+
+class Solution {
+    func mergeKLists(_ lists: [ListNode?]) -> ListNode? {
+        let n = lists.count
+        if n == 0 {
+            return nil
+        }
+
+        var mergedList: ListNode? = lists[0]
+        for i in 1..<n {
+            mergedList = mergeLists(mergedList, lists[i])
+        }
+        return mergedList
+    }
+
+    private func mergeLists(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+        let dummy = ListNode()
+        var cur = dummy
+        var l1 = l1
+        var l2 = l2
+
+        while let node1 = l1, let node2 = l2 {
+            if node1.val <= node2.val {
+                cur.next = node1
+                l1 = node1.next
+            } else {
+                cur.next = node2
+                l2 = node2.next
+            }
+            cur = cur.next!
+        }
+        cur.next = l1 ?? l2
+        return dummy.next
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

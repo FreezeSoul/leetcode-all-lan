@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9838.%20%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 38. 字符串的排列](https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>输入一个字符串，打印出该字符串中字符的所有排列。</p>
 
@@ -24,11 +32,13 @@
 
 <p><code>1 &lt;= s 的长度 &lt;= 8</code></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：回溯 + 哈希表**
+### 方法一：回溯 + 哈希表
 
 我们设计一个函数 $dfs(i)$，表示当前排列到了第 $i$ 个位置，我们需要在第 $i$ 个位置上填入一个字符，这个字符可以从 $s[i..n-1]$ 中任意选择。
 
@@ -45,9 +55,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -70,9 +78,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -108,7 +114,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -136,7 +142,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func permutation(s string) (ans []string) {
@@ -162,7 +168,61 @@ func permutation(s string) (ans []string) {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function permutation(s: string): string[] {
+    const n = s.length;
+    const cs = s.split('');
+    const set = new Set<string>();
+    const dfs = (i: number) => {
+        if (i === n) {
+            set.add(cs.join(''));
+            return;
+        }
+        dfs(i + 1);
+        for (let j = i + 1; j < n; j++) {
+            [cs[i], cs[j]] = [cs[j], cs[i]];
+            dfs(i + 1);
+            [cs[i], cs[j]] = [cs[j], cs[i]];
+        }
+    };
+    dfs(0);
+    return [...set];
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::HashSet;
+impl Solution {
+    fn dfs(i: usize, cs: &mut Vec<char>, res: &mut Vec<String>) {
+        if i == cs.len() {
+            res.push(cs.iter().collect());
+            return;
+        }
+        let mut set = HashSet::new();
+        for j in i..cs.len() {
+            if set.contains(&cs[j]) {
+                continue;
+            }
+            set.insert(cs[j]);
+            cs.swap(i, j);
+            Self::dfs(i + 1, cs, res);
+            cs.swap(i, j);
+        }
+    }
+
+    pub fn permutation(s: String) -> Vec<String> {
+        let mut res = Vec::new();
+        Self::dfs(0, &mut s.chars().collect(), &mut res);
+        res
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -193,61 +253,7 @@ var permutation = function (s) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function permutation(s: string): string[] {
-    const n = s.length;
-    const cs = s.split('');
-    const set = new Set<string>();
-    const dfs = (i: number) => {
-        if (i === n) {
-            set.add(cs.join(''));
-            return;
-        }
-        dfs(i + 1);
-        for (let j = i + 1; j < n; j++) {
-            [cs[i], cs[j]] = [cs[j], cs[i]];
-            dfs(i + 1);
-            [cs[i], cs[j]] = [cs[j], cs[i]];
-        }
-    };
-    dfs(0);
-    return [...set];
-}
-```
-
-### **Rust**
-
-```rust
-use std::collections::HashSet;
-impl Solution {
-    fn dfs(i: usize, cs: &mut Vec<char>, res: &mut Vec<String>) {
-        if i == cs.len() {
-            res.push(cs.iter().collect());
-            return;
-        }
-        let mut set = HashSet::new();
-        for j in i..cs.len() {
-            if set.contains(&cs[j]) {
-                continue;
-            }
-            set.insert(cs[j]);
-            cs.swap(i, j);
-            Self::dfs(i + 1, cs, res);
-            cs.swap(i, j);
-        }
-    }
-
-    pub fn permutation(s: String) -> Vec<String> {
-        let mut res = Vec::new();
-        Self::dfs(0, &mut s.chars().collect(), &mut res);
-        res
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -277,4 +283,45 @@ public class Solution {
 }
 ```
 
+#### Swift
+
+```swift
+class Solution {
+    private var ans: [String] = []
+    private var cs: [Character] = []
+
+    func permutation(_ s: String) -> [String] {
+        cs = Array(s)
+        dfs(0)
+        return ans
+    }
+
+    private func dfs(_ i: Int) {
+        if i == cs.count - 1 {
+            ans.append(String(cs))
+            return
+        }
+        var vis: Set<Character> = []
+        for j in i..<cs.count {
+            if !vis.contains(cs[j]) {
+                vis.insert(cs[j])
+                swap(i, j)
+                dfs(i + 1)
+                swap(i, j)
+            }
+        }
+    }
+
+    private func swap(_ i: Int, _ j: Int) {
+        let t = cs[i]
+        cs[i] = cs[j]
+        cs[j] = t
+    }
+}
+```
+
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

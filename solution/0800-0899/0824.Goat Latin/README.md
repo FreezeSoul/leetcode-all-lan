@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0824.Goat%20Latin/README.md
+tags:
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [824. 山羊拉丁文](https://leetcode.cn/problems/goat-latin)
 
 [English Version](/solution/0800-0899/0824.Goat%20Latin/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个由若干单词组成的句子&nbsp;<code>sentence</code> ，单词间由空格分隔。每个单词仅由大写和小写英文字母组成。</p>
 
@@ -12,6 +22,7 @@
 
 <ul>
 	<li>如果单词以元音开头（<code>'a'</code>, <code>'e'</code>, <code>'i'</code>, <code>'o'</code>, <code>'u'</code>），在单词后添加<code>"ma"</code>。
+
     <ul>
     	<li>例如，单词 <code>"apple"</code> 变为 <code>"applema"</code> 。</li>
     </ul>
@@ -26,6 +37,7 @@
     	<li>例如，在第一个单词后添加 <code>"a"</code> ，在第二个单词后添加 <code>"aa"</code> ，以此类推。</li>
     </ul>
     </li>
+
 </ul>
 
 <p>返回将 <code>sentence</code> 转换为山羊拉丁文后的句子。</p>
@@ -57,15 +69,17 @@
 	<li><code>sentence</code> 中的所有单词由单个空格分隔</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -80,9 +94,7 @@ class Solution:
         return ' '.join(ans)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -111,7 +123,7 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function toGoatLatin(sentence: string): string {
@@ -130,7 +142,7 @@ function toGoatLatin(sentence: string): string {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::HashSet;
@@ -158,10 +170,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

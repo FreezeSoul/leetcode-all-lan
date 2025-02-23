@@ -1,8 +1,15 @@
+---
+comments: true
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof2/%E5%89%91%E6%8C%87%20Offer%20II%20059.%20%E6%95%B0%E6%8D%AE%E6%B5%81%E7%9A%84%E7%AC%AC%20K%20%E5%A4%A7%E6%95%B0%E5%80%BC/README.md
+---
+
+<!-- problem:start -->
+
 # [剑指 Offer II 059. 数据流的第 K 大数值](https://leetcode.cn/problems/jBjn9C)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个找到数据流中第 <code>k</code> 大元素的类（class）。注意是排序后的第 <code>k</code> 大元素，不是第 <code>k</code> 个不同的元素。</p>
 
@@ -50,17 +57,17 @@ kthLargest.add(4);   // return 8
 
 <p><meta charset="UTF-8" />注意：本题与主站 703&nbsp;题相同：&nbsp;<a href="https://leetcode.cn/problems/kth-largest-element-in-a-stream/">https://leetcode.cn/problems/kth-largest-element-in-a-stream/</a></p>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-小根堆存放最大的 k 个元素，那么堆顶就是第 k 大的元素。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class KthLargest:
@@ -82,9 +89,7 @@ class KthLargest:
 # param_1 = obj.add(val)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class KthLargest {
@@ -115,7 +120,7 @@ class KthLargest {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class KthLargest {
@@ -142,7 +147,7 @@ public:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type KthLargest struct {
@@ -194,10 +199,10 @@ type IntHeap []int
 func (h IntHeap) Len() int           { return len(h) }
 func (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }
 func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-func (h *IntHeap) Push(x interface{}) {
+func (h *IntHeap) Push(x any) {
 	*h = append(*h, x.(int))
 }
-func (h *IntHeap) Pop() interface{} {
+func (h *IntHeap) Pop() any {
 	old := *h
 	n := len(old)
 	x := old[n-1]
@@ -220,10 +225,41 @@ func (h *IntHeap) Top() int {
  */
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+import Collections
 
+class KthLargest {
+    private var h: Heap<Int>
+    private var size: Int
+
+    init(_ k: Int, _ nums: [Int]) {
+        h = Heap()
+        size = k
+        for x in nums {
+            add(x)
+        }
+    }
+
+    func add(_ val: Int) -> Int {
+        h.insert(val)
+        if h.count > size {
+            h.removeMin()
+        }
+        return h.min!
+    }
+}
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * let obj = KthLargest(k, nums)
+ * let ret_1: Int = obj.add(val)
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
-# [588. 设计内存文件系统](https://leetcode.cn/problems/design-in-memory-file-system)
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0588.Design%20In-Memory%20File%20System/README.md
+tags:
+    - 设计
+    - 字典树
+    - 哈希表
+    - 字符串
+    - 排序
+---
+
+<!-- problem:start -->
+
+# [588. 设计内存文件系统 🔒](https://leetcode.cn/problems/design-in-memory-file-system)
 
 [English Version](/solution/0500-0599/0588.Design%20In-Memory%20File%20System/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个内存文件系统，模拟以下功能：</p>
 
@@ -63,23 +77,24 @@ fileSystem.readContentFromFile("/a/b/c/d"); // 返回 "hello"</pre>
 	<li><code>path</code>&nbsp;和&nbsp;<code>filePath</code>&nbsp;都是绝对路径，除非是根目录&nbsp;<code>‘/’</code>&nbsp;自身，其他路径都是以&nbsp;<code>‘/’</code>&nbsp;开头且 <strong>不</strong> 以&nbsp;<code>‘/’</code>&nbsp;结束。</li>
 	<li>你可以假定所有操作的参数都是有效的，即用户不会获取不存在文件的内容，或者获取不存在文件夹和文件的列表。</li>
 	<li>你可以假定所有文件夹名字和文件名字都只包含小写字母，且同一文件夹下不会有相同名字的文件夹或文件。</li>
+	<li>你可以假定&nbsp;<code>addContentToFile</code> 中的文件的父目录都存在。</li>
 	<li><code>1 &lt;= content.length &lt;= 50</code></li>
 	<li><code>ls</code>,&nbsp;<code>mkdir</code>,&nbsp;<code>addContentToFile</code>, and&nbsp;<code>readContentFromFile</code>&nbsp;最多被调用&nbsp;<code>300</code>&nbsp;次</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：前缀树**
+### 方法一：前缀树
 
 哈希表实现前缀树。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Trie:
@@ -145,9 +160,7 @@ class FileSystem:
 # param_4 = obj.readContentFromFile(filePath)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Trie {
@@ -235,7 +248,7 @@ class FileSystem {
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type Trie struct {
@@ -331,10 +344,8 @@ func (this *FileSystem) ReadContentFromFile(filePath string) string {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

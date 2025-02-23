@@ -1,8 +1,20 @@
-# [2687. Bikes Last Time Used](https://leetcode.com/problems/bikes-last-time-used)
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2687.Bikes%20Last%20Time%20Used/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [2687. Bikes Last Time Used 🔒](https://leetcode.com/problems/bikes-last-time-used)
 
 [中文文档](/solution/2600-2699/2687.Bikes%20Last%20Time%20Used/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code><font face="monospace">Bikes</font></code></p>
 
@@ -15,15 +27,17 @@
 | start_time  | datetime |
 | end_time    | datetime |
 +-------------+----------+
-ride_id is the primary key for this table.
+ride_id column contains unique values.
 Each row contains a ride information that includes ride_id, bike number, start and end time of the ride.
+It is guaranteed that start_time and end_time are valid datetime values.
+
 </pre>
 
-<p>Write an SQL query to find the <strong>last</strong> <strong>time</strong> when each bike was used.</p>
+<p>Write a solution to find the <strong>last</strong> <strong>time</strong> when each bike was used.</p>
 
-<p>Return<em> the result table ordered by the bikes that were <strong>most recently used</strong>.&nbsp;</em></p>
+<p>Return the result table ordered by the bikes that were <strong>most recently used</strong>.&nbsp;</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -59,19 +73,30 @@ Returning output in order by the bike that were most recently used.
 
 <p>&nbsp;</p>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
 # Write your MySQL query statement below
-SELECT  bike_number
-       ,MAX(end_time) AS end_time
+SELECT
+    bike_number,
+    MAX(end_time) AS end_time
 FROM Bikes
-GROUP BY  bike_number
-ORDER BY end_time DESC
+GROUP BY bike_number
+ORDER BY end_time DESC;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

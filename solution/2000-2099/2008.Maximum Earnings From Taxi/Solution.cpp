@@ -1,21 +1,21 @@
-using ll = long long;
-
 class Solution {
 public:
     long long maxTaxiEarnings(int n, vector<vector<int>>& rides) {
         sort(rides.begin(), rides.end());
         int m = rides.size();
-        vector<ll> f(m);
-        vector<int> x(3);
-        function<ll(int)> dfs = [&](int i) -> ll {
-            if (i >= m) return 0;
-            if (f[i]) return f[i];
-            int s = rides[i][0], e = rides[i][1], t = rides[i][2];
-            x[0] = e;
-            int j = lower_bound(rides.begin() + i + 1, rides.end(), x, [&](auto& l, auto& r) -> bool { return l[0] < r[0]; }) - rides.begin();
-            ll ans = max(dfs(i + 1), dfs(j) + e - s + t);
-            f[i] = ans;
-            return ans;
+        long long f[m];
+        memset(f, -1, sizeof(f));
+        function<long long(int)> dfs = [&](int i) -> long long {
+            if (i >= m) {
+                return 0;
+            }
+            if (f[i] != -1) {
+                return f[i];
+            }
+            auto& r = rides[i];
+            int st = r[0], ed = r[1], tip = r[2];
+            int j = lower_bound(rides.begin() + i + 1, rides.end(), ed, [](auto& a, int val) { return a[0] < val; }) - rides.begin();
+            return f[i] = max(dfs(i + 1), dfs(j) + ed - st + tip);
         };
         return dfs(0);
     }

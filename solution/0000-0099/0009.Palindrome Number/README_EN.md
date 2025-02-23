@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0009.Palindrome%20Number/README_EN.md
+tags:
+    - Math
+---
+
+<!-- problem:start -->
+
 # [9. Palindrome Number](https://leetcode.com/problems/palindrome-number)
 
 [中文文档](/solution/0000-0099/0009.Palindrome%20Number/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an integer <code>x</code>, return <code>true</code><em> if </em><code>x</code><em> is a </em><span data-keyword="palindrome-integer"><em><strong>palindrome</strong></em></span><em>, and </em><code>false</code><em> otherwise</em>.</p>
 
@@ -41,11 +53,39 @@
 <p>&nbsp;</p>
 <strong>Follow up:</strong> Could you solve it without converting the integer to a string?
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Reverse Half of the Number
+
+First, we determine special cases:
+
+-   If $x < 0$, then $x$ is not a palindrome, directly return `false`;
+-   If $x > 0$ and the last digit of $x$ is $0$, then $x$ is not a palindrome, directly return `false`;
+-   If the last digit of $x$ is not $0$, then $x$ might be a palindrome, continue the following steps.
+
+We reverse the second half of $x$ and compare it with the first half. If they are equal, then $x$ is a palindrome, otherwise, $x$ is not a palindrome.
+
+For example, for $x = 1221$, we can reverse the second half from "21" to "12" and compare it with the first half "12". Since they are equal, we know that $x$ is a palindrome.
+
+Let's see how to reverse the second half.
+
+For the number $1221$, if we perform $1221 \bmod 10$, we will get the last digit $1$. To get the second last digit, we can first remove the last digit from $1221$ by dividing by $10$, $1221 / 10 = 122$, then get the remainder of the previous result divided by $10$, $122 \bmod 10 = 2$, to get the second last digit.
+
+If we continue this process, we will get more reversed digits.
+
+By continuously multiplying the last digit to the variable $y$, we can get the number in reverse order.
+
+In the code implementation, we can repeatedly "take out" the last digit of $x$ and "add" it to the end of $y$, loop until $y \ge x$. If at this time $x = y$, or $x = y / 10$, then $x$ is a palindrome.
+
+The time complexity is $O(\log_{10}(n))$, where $n$ is $x$. For each iteration, we will divide the input by $10$, so the time complexity is $O(\log_{10}(n))$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +99,7 @@ class Solution:
         return x in (y, y // 10)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -76,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -94,7 +134,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isPalindrome(x int) bool {
@@ -109,7 +149,40 @@ func isPalindrome(x int) bool {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function isPalindrome(x: number): boolean {
+    if (x < 0 || (x > 0 && x % 10 === 0)) {
+        return false;
+    }
+    let y = 0;
+    for (; y < x; x = ~~(x / 10)) {
+        y = y * 10 + (x % 10);
+    }
+    return x === y || x === ~~(y / 10);
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn is_palindrome(mut x: i32) -> bool {
+        if x < 0 || (x != 0 && x % 10 == 0) {
+            return false;
+        }
+        let mut y = 0;
+        while x > y {
+            y = y * 10 + x % 10;
+            x /= 10;
+        }
+        x == y || x == y / 10
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -128,67 +201,47 @@ var isPalindrome = function (x) {
 };
 ```
 
-### **TypeScript**
+#### C#
 
-```ts
-function isPalindrome(x: number): boolean {
-    if (x < 0 || (x > 0 && x % 10 === 0)) {
-        return false;
-    }
-    let y = 0;
-    for (; y < x; x = ~~(x / 10)) {
-        y = y * 10 + (x % 10);
-    }
-    return x === y || x === ~~(y / 10);
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn is_palindrome(x: i32) -> bool {
-        if x < 0 {
+```cs
+public class Solution {
+    public bool IsPalindrome(int x) {
+        if (x < 0 || (x > 0 && x % 10 == 0)) {
             return false;
         }
-        let s = x.to_string();
-        let bs = s.as_bytes();
-        let n = bs.len();
-        let mut l = 0;
-        let mut r = n - 1;
-        while l < r {
-            if bs[l] != bs[r] {
-                return false;
-            }
-            l += 1;
-            r -= 1;
+        int y = 0;
+        for (; y < x; x /= 10) {
+            y = y * 10 + x % 10;
         }
-        true
+        return x == y || x == y / 10;
     }
 }
 ```
 
-```rust
-impl Solution {
-    pub fn is_palindrome(mut x: i32) -> bool {
-        if x < 0 || (x % 10 == 0 && x != 0) {
+#### PHP
+
+```php
+class Solution {
+    /**
+     * @param Integer $x
+     * @return Boolean
+     */
+    function isPalindrome($x) {
+        if ($x < 0 || ($x && $x % 10 == 0)) {
             return false;
         }
-        let mut y = 0;
-        while x > y {
-            y *= 10;
-            y += x % 10;
-            x /= 10;
+        $y = 0;
+        while ($x > $y) {
+            $y = $y * 10 + ($x % 10);
+            $x = (int) ($x / 10);
         }
-        x == y || x == y / 10
+        return $x == $y || $x == (int) ($y / 10);
     }
 }
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

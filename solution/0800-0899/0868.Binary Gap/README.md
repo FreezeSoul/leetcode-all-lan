@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0800-0899/0868.Binary%20Gap/README.md
+tags:
+    - 位运算
+---
+
+<!-- problem:start -->
+
 # [868. 二进制间距](https://leetcode.cn/problems/binary-gap)
 
 [English Version](/solution/0800-0899/0868.Binary%20Gap/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个正整数 <code>n</code>，找到并返回 <code>n</code> 的二进制表示中两个 <strong>相邻</strong> 1 之间的<strong> 最长距离 </strong>。如果不存在两个相邻的 1，返回 <code>0</code> 。</p>
 
@@ -52,131 +62,127 @@
 	<li><code>1 &lt;= n &lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：位运算
+
+我们用两个指针 $\textit{pre}$ 和 $\textit{cur}$ 分别表示上一个和当前的 $1$ 的位置，初始时 $\textit{pre} = 100$, $\textit{cur} = 0$，然后遍历 $n$ 的二进制表示，当遇到 $1$ 时，计算当前位置和上一个 $1$ 的位置之间的距离，并更新答案。
+
+时间复杂度 $O(\log n)$，其中 $n$ 是题目给定的整数。空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def binaryGap(self, n: int) -> int:
-        ans, j = 0, -1
-        for i in range(32):
+        ans = 0
+        pre, cur = inf, 0
+        while n:
             if n & 1:
-                if j != -1:
-                    ans = max(ans, i - j)
-                j = i
+                ans = max(ans, cur - pre)
+                pre = cur
+            cur += 1
             n >>= 1
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int binaryGap(int n) {
         int ans = 0;
-        for (int i = 0, j = -1; n != 0; ++i, n >>= 1) {
-            if ((n & 1) == 1) {
-                if (j != -1) {
-                    ans = Math.max(ans, i - j);
-                }
-                j = i;
+        for (int pre = 100, cur = 0; n != 0; n >>= 1) {
+            if (n % 2 == 1) {
+                ans = Math.max(ans, cur - pre);
+                pre = cur;
             }
+            ++cur;
         }
         return ans;
     }
 }
 ```
 
-### **TypeScript**
-
-```ts
-function binaryGap(n: number): number {
-    let res = 0;
-    let j = -1;
-    for (let i = 0; n !== 0; i++) {
-        if (n & 1) {
-            if (j !== -1) {
-                res = Math.max(res, i - j);
-            }
-            j = i;
-        }
-        n >>= 1;
-    }
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn binary_gap(mut n: i32) -> i32 {
-        let mut res = 0;
-        let mut i = 0;
-        let mut j = -1;
-        while n != 0 {
-            if n & 1 == 1 {
-                if j != -1 {
-                    res = res.max(i - j);
-                }
-                j = i;
-            }
-            n >>= 1;
-            i += 1;
-        }
-        res
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int binaryGap(int n) {
         int ans = 0;
-        for (int i = 0, j = -1; n; ++i, n >>= 1) {
+        for (int pre = 100, cur = 0; n != 0; n >>= 1) {
             if (n & 1) {
-                if (j != -1) ans = max(ans, i - j);
-                j = i;
+                ans = max(ans, cur - pre);
+                pre = cur;
             }
+            ++cur;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func binaryGap(n int) int {
-	ans := 0
-	for i, j := 0, -1; n != 0; i, n = i+1, n>>1 {
-		if (n & 1) == 1 {
-			if j != -1 && ans < i-j {
-				ans = i - j
-			}
-			j = i
+func binaryGap(n int) (ans int) {
+	for pre, cur := 100, 0; n != 0; n >>= 1 {
+		if n&1 == 1 {
+			ans = max(ans, cur-pre)
+			pre = cur
 		}
+		cur++
 	}
-	return ans
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function binaryGap(n: number): number {
+    let ans = 0;
+    for (let pre = 100, cur = 0; n; n >>= 1) {
+        if (n & 1) {
+            ans = Math.max(ans, cur - pre);
+            pre = cur;
+        }
+        ++cur;
+    }
+    return ans;
+}
 ```
 
+#### Rust
+
+```rust
+impl Solution {
+    pub fn binary_gap(mut n: i32) -> i32 {
+        let mut ans = 0;
+        let mut pre = 100;
+        let mut cur = 0;
+        while n != 0 {
+            if n % 2 == 1 {
+                ans = ans.max(cur - pre);
+                pre = cur;
+            }
+            cur += 1;
+            n >>= 1;
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

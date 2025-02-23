@@ -1,8 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcp/LCP%2072.%20%E8%A1%A5%E7%BB%99%E9%A9%AC%E8%BD%A6/README.md
+---
+
+<!-- problem:start -->
+
 # [LCP 72. 补给马车](https://leetcode.cn/problems/hqCnmP)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 远征队即将开启未知的冒险之旅，不过在此之前，将对补给车队进行最后的检查。`supplies[i]` 表示编号为 `i` 的补给马车装载的物资数量。
 考虑到车队过长容易被野兽偷袭，他们决定将车队的长度变为原来的一半（向下取整），计划为：
@@ -35,11 +43,13 @@
 -   `2 <= supplies.length <= 1000`
 -   `1 <= supplies[i] <= 1000`
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 根据题目描述，我们每次遍历 `supplies`，找到物资之和最小的两辆相邻马车，将它们车辆的物资整合为一辆，重复上述操作直到车队长度符合要求。
 
@@ -47,9 +57,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +84,7 @@ class Solution:
         return supplies
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +116,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -143,7 +149,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func supplyWagon(supplies []int) []int {
@@ -173,7 +179,7 @@ func supplyWagon(supplies []int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function supplyWagon(supplies: number[]): number[] {
@@ -203,10 +209,8 @@ function supplyWagon(supplies: number[]): number[] {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

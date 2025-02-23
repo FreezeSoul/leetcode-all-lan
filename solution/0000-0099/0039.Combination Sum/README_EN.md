@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0039.Combination%20Sum/README_EN.md
+tags:
+    - Array
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [39. Combination Sum](https://leetcode.com/problems/combination-sum)
 
 [中文文档](/solution/0000-0099/0039.Combination%20Sum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given an array of <strong>distinct</strong> integers <code>candidates</code> and a target integer <code>target</code>, return <em>a list of all <strong>unique combinations</strong> of </em><code>candidates</code><em> where the chosen numbers sum to </em><code>target</code><em>.</em> You may return the combinations in <strong>any order</strong>.</p>
 
@@ -46,13 +59,33 @@ These are the only two combinations.
 	<li><code>1 &lt;= target &lt;= 40</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS.
+<!-- solution:start -->
+
+### Solution 1: Sorting + Pruning + Backtracking
+
+We can first sort the array to facilitate pruning.
+
+Next, we design a function $dfs(i, s)$, which means starting the search from index $i$ with a remaining target value of $s$. Here, $i$ and $s$ are both non-negative integers, the current search path is $t$, and the answer is $ans$.
+
+In the function $dfs(i, s)$, we first check whether $s$ is $0$. If it is, we add the current search path $t$ to the answer $ans$, and then return. If $s \lt candidates[i]$, it means that the elements of the current index and the following indices are all greater than the remaining target value $s$, and the path is invalid, so we return directly. Otherwise, we start the search from index $i$, and the search index range is $j \in [i, n)$, where $n$ is the length of the array $candidates$. During the search, we add the element of the current index to the search path $t$, recursively call the function $dfs(j, s - candidates[j])$, and after the recursion ends, we remove the element of the current index from the search path $t$.
+
+In the main function, we just need to call the function $dfs(0, target)$ to get the answer.
+
+The time complexity is $O(2^n \times n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $candidates$. Due to pruning, the actual time complexity is much less than $O(2^n \times n)$.
+
+Similar problems:
+
+-   [40. Combination Sum II](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0040.Combination%20Sum%20II/README_EN.md)
+-   [77. Combinations](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0077.Combinations/README_EN.md)
+-   [216. Combination Sum III](https://github.com/doocs/leetcode/blob/main/solution/0200-0299/0216.Combination%20Sum%20III/README_EN.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -75,28 +108,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        def dfs(i: int, s: int):
-            if s == 0:
-                ans.append(t[:])
-                return
-            if i >= len(candidates) or s < candidates[i]:
-                return
-            dfs(i + 1, s)
-            t.append(candidates[i])
-            dfs(i, s - candidates[i])
-            t.pop()
-
-        candidates.sort()
-        t = []
-        ans = []
-        dfs(0, target)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -128,36 +140,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    private List<List<Integer>> ans = new ArrayList<>();
-    private List<Integer> t = new ArrayList<>();
-    private int[] candidates;
-
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        Arrays.sort(candidates);
-        this.candidates = candidates;
-        dfs(0, target);
-        return ans;
-    }
-
-    private void dfs(int i, int s) {
-        if (s == 0) {
-            ans.add(new ArrayList(t));
-            return;
-        }
-        if (i >= candidates.length || s < candidates[i]) {
-            return;
-        }
-        dfs(i + 1, s);
-        t.add(candidates[i]);
-        dfs(i, s - candidates[i]);
-        t.remove(t.size() - 1);
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -186,33 +169,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end());
-        vector<vector<int>> ans;
-        vector<int> t;
-        function<void(int, int)> dfs = [&](int i, int s) {
-            if (s == 0) {
-                ans.emplace_back(t);
-                return;
-            }
-            if (i >= candidates.size() || s < candidates[i]) {
-                return;
-            }
-            dfs(i + 1, s);
-            t.push_back(candidates[i]);
-            dfs(i, s - candidates[i]);
-            t.pop_back();
-        };
-        dfs(0, target);
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func combinationSum(candidates []int, target int) (ans [][]int) {
@@ -221,9 +178,7 @@ func combinationSum(candidates []int, target int) (ans [][]int) {
 	var dfs func(i, s int)
 	dfs = func(i, s int) {
 		if s == 0 {
-			cp := make([]int, len(t))
-			copy(cp, t)
-			ans = append(ans, cp)
+			ans = append(ans, slices.Clone(t))
 			return
 		}
 		if s < candidates[i] {
@@ -240,32 +195,7 @@ func combinationSum(candidates []int, target int) (ans [][]int) {
 }
 ```
 
-```go
-func combinationSum(candidates []int, target int) (ans [][]int) {
-	sort.Ints(candidates)
-	t := []int{}
-	var dfs func(i, s int)
-	dfs = func(i, s int) {
-		if s == 0 {
-			cp := make([]int, len(t))
-			copy(cp, t)
-			ans = append(ans, cp)
-			return
-		}
-		if i >= len(candidates) || s < candidates[i] {
-			return
-		}
-		dfs(i+1, s)
-		t = append(t, candidates[i])
-		dfs(i, s-candidates[i])
-		t = t[:len(t)-1]
-	}
-	dfs(0, target)
-	return
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function combinationSum(candidates: number[], target: number): number[][] {
@@ -291,30 +221,7 @@ function combinationSum(candidates: number[], target: number): number[][] {
 }
 ```
 
-```ts
-function combinationSum(candidates: number[], target: number): number[][] {
-    candidates.sort((a, b) => a - b);
-    const ans: number[][] = [];
-    const t: number[] = [];
-    const dfs = (i: number, s: number) => {
-        if (s === 0) {
-            ans.push(t.slice());
-            return;
-        }
-        if (i >= candidates.length || s < candidates[i]) {
-            return;
-        }
-        dfs(i + 1, s);
-        t.push(candidates[i]);
-        dfs(i, s - candidates[i]);
-        t.pop();
-    };
-    dfs(0, target);
-    return ans;
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -342,32 +249,7 @@ impl Solution {
 }
 ```
 
-```rust
-impl Solution {
-    fn dfs(i: usize, s: i32, candidates: &Vec<i32>, t: &mut Vec<i32>, ans: &mut Vec<Vec<i32>>) {
-        if s == 0 {
-            ans.push(t.clone());
-            return;
-        }
-        if i >= candidates.len() || s < candidates[i] {
-            return;
-        }
-        Self::dfs(i + 1, s, candidates, t, ans);
-        t.push(candidates[i]);
-        Self::dfs(i, s - candidates[i], candidates, t, ans);
-        t.pop();
-    }
-
-    pub fn combination_sum(mut candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
-        candidates.sort();
-        let mut ans = Vec::new();
-        Self::dfs(0, target, &candidates, &mut vec![], &mut ans);
-        ans
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -399,6 +281,181 @@ public class Solution {
 }
 ```
 
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Sorting + Pruning + Backtracking(Another Form)
+
+We can also change the implementation logic of the function $dfs(i, s)$ to another form. In the function $dfs(i, s)$, we first check whether $s$ is $0$. If it is, we add the current search path $t$ to the answer $ans$, and then return. If $i \geq n$ or $s \lt candidates[i]$, the path is invalid, so we return directly. Otherwise, we consider two situations, one is not selecting the element of the current index, that is, recursively calling the function $dfs(i + 1, s)$, and the other is selecting the element of the current index, that is, recursively calling the function $dfs(i, s - candidates[i])$.
+
+The time complexity is $O(2^n \times n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $candidates$. Due to pruning, the actual time complexity is much less than $O(2^n \times n)$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        def dfs(i: int, s: int):
+            if s == 0:
+                ans.append(t[:])
+                return
+            if i >= len(candidates) or s < candidates[i]:
+                return
+            dfs(i + 1, s)
+            t.append(candidates[i])
+            dfs(i, s - candidates[i])
+            t.pop()
+
+        candidates.sort()
+        t = []
+        ans = []
+        dfs(0, target)
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    private List<List<Integer>> ans = new ArrayList<>();
+    private List<Integer> t = new ArrayList<>();
+    private int[] candidates;
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        this.candidates = candidates;
+        dfs(0, target);
+        return ans;
+    }
+
+    private void dfs(int i, int s) {
+        if (s == 0) {
+            ans.add(new ArrayList(t));
+            return;
+        }
+        if (i >= candidates.length || s < candidates[i]) {
+            return;
+        }
+        dfs(i + 1, s);
+        t.add(candidates[i]);
+        dfs(i, s - candidates[i]);
+        t.remove(t.size() - 1);
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> ans;
+        vector<int> t;
+        function<void(int, int)> dfs = [&](int i, int s) {
+            if (s == 0) {
+                ans.emplace_back(t);
+                return;
+            }
+            if (i >= candidates.size() || s < candidates[i]) {
+                return;
+            }
+            dfs(i + 1, s);
+            t.push_back(candidates[i]);
+            dfs(i, s - candidates[i]);
+            t.pop_back();
+        };
+        dfs(0, target);
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+func combinationSum(candidates []int, target int) (ans [][]int) {
+	sort.Ints(candidates)
+	t := []int{}
+	var dfs func(i, s int)
+	dfs = func(i, s int) {
+		if s == 0 {
+			ans = append(ans, slices.Clone(t))
+			return
+		}
+		if i >= len(candidates) || s < candidates[i] {
+			return
+		}
+		dfs(i+1, s)
+		t = append(t, candidates[i])
+		dfs(i, s-candidates[i])
+		t = t[:len(t)-1]
+	}
+	dfs(0, target)
+	return
+}
+```
+
+#### TypeScript
+
+```ts
+function combinationSum(candidates: number[], target: number): number[][] {
+    candidates.sort((a, b) => a - b);
+    const ans: number[][] = [];
+    const t: number[] = [];
+    const dfs = (i: number, s: number) => {
+        if (s === 0) {
+            ans.push(t.slice());
+            return;
+        }
+        if (i >= candidates.length || s < candidates[i]) {
+            return;
+        }
+        dfs(i + 1, s);
+        t.push(candidates[i]);
+        dfs(i, s - candidates[i]);
+        t.pop();
+    };
+    dfs(0, target);
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    fn dfs(i: usize, s: i32, candidates: &Vec<i32>, t: &mut Vec<i32>, ans: &mut Vec<Vec<i32>>) {
+        if s == 0 {
+            ans.push(t.clone());
+            return;
+        }
+        if i >= candidates.len() || s < candidates[i] {
+            return;
+        }
+        Self::dfs(i + 1, s, candidates, t, ans);
+        t.push(candidates[i]);
+        Self::dfs(i, s - candidates[i], candidates, t, ans);
+        t.pop();
+    }
+
+    pub fn combination_sum(mut candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
+        candidates.sort();
+        let mut ans = Vec::new();
+        Self::dfs(0, target, &candidates, &mut vec![], &mut ans);
+        ans
+    }
+}
+```
+
+#### C#
+
 ```cs
 public class Solution {
     private List<IList<int>> ans = new List<IList<int>>();
@@ -428,10 +485,48 @@ public class Solution {
 }
 ```
 
-### **...**
+#### PHP
 
-```
+```php
+class Solution {
+    /**
+     * @param integer[] $candidates
+     * @param integer $target
+     * @return integer[][]
+     */
 
+    function combinationSum($candidates, $target) {
+        $result = [];
+        $currentCombination = [];
+        $startIndex = 0;
+
+        sort($candidates);
+        $this->findCombinations($candidates, $target, $startIndex, $currentCombination, $result);
+        return $result;
+    }
+
+    function findCombinations($candidates, $target, $startIndex, $currentCombination, &$result) {
+        if ($target === 0) {
+            $result[] = $currentCombination;
+            return;
+        }
+
+        for ($i = $startIndex; $i < count($candidates); $i++) {
+            $num = $candidates[$i];
+            if ($num > $target) {
+                break;
+            }
+            $currentCombination[] = $num;
+
+            $this->findCombinations($candidates, $target - $num, $i, $currentCombination, $result);
+            array_pop($currentCombination);
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

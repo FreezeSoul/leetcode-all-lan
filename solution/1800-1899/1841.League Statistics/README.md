@@ -1,10 +1,20 @@
-# [1841. 联赛信息统计](https://leetcode.cn/problems/league-statistics)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1800-1899/1841.League%20Statistics/README.md
+tags:
+    - 数据库
+---
+
+<!-- problem:start -->
+
+# [1841. 联赛信息统计 🔒](https://leetcode.cn/problems/league-statistics)
 
 [English Version](/solution/1800-1899/1841.League%20Statistics/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>表: <code>Teams</code></p>
 
@@ -95,18 +105,60 @@ Dortmund (team_id=4) 有2场比赛: 2胜. 总分数 = 3 + 3 = 6.
 Arsenal (team_id=6) 有2场比赛: 2平. 总分数 = 1 + 1 = 2.
 Dortmund 是积分榜上的第一支球队. Ajax和Arsenal 有同样的分数, 但Arsenal的goal_diff高于Ajax, 所以Arsenal在表中的顺序在Ajaxzhi'qian.</pre>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **SQL**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    Scores AS (
+        SELECT
+            home_team_id AS team_id,
+            CASE
+                WHEN home_team_goals > away_team_goals THEN 3
+                WHEN home_team_goals < away_team_goals THEN 0
+                ELSE 1
+            END AS score,
+            home_team_goals AS goals,
+            away_team_goals AS away_goals
+        FROM Matches
+        UNION ALL
+        SELECT
+            away_team_id AS team_id,
+            CASE
+                WHEN home_team_goals > away_team_goals THEN 0
+                WHEN home_team_goals < away_team_goals THEN 3
+                ELSE 1
+            END AS score,
+            away_team_goals AS goals,
+            home_team_goals AS away_goals
+        FROM Matches
+    )
+SELECT
+    team_name,
+    COUNT(1) AS matches_played,
+    SUM(score) AS points,
+    SUM(goals) AS goal_for,
+    SUM(away_goals) AS goal_against,
+    (SUM(goals) - SUM(away_goals)) AS goal_diff
+FROM
+    Scores AS s
+    JOIN Teams AS t ON s.team_id = t.team_id
+GROUP BY s.team_id
+ORDER BY points DESC, goal_diff DESC, team_name;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2300-2399/2316.Count%20Unreachable%20Pairs%20of%20Nodes%20in%20an%20Undirected%20Graph/README.md
+rating: 1604
+source: 第 81 场双周赛 Q2
+tags:
+    - 深度优先搜索
+    - 广度优先搜索
+    - 并查集
+    - 图
+---
+
+<!-- problem:start -->
+
 # [2316. 统计无向图中无法互相到达点对数](https://leetcode.cn/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph)
 
 [English Version](/solution/2300-2399/2316.Count%20Unreachable%20Pairs%20of%20Nodes%20in%20an%20Undirected%20Graph/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数&nbsp;<code>n</code>&nbsp;，表示一张<strong>&nbsp;无向图</strong>&nbsp;中有 <code>n</code>&nbsp;个节点，编号为&nbsp;<code>0</code>&nbsp;到&nbsp;<code>n - 1</code>&nbsp;。同时给你一个二维整数数组&nbsp;<code>edges</code>&nbsp;，其中&nbsp;<code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code>&nbsp;表示节点&nbsp;<code>a<sub>i</sub></code> 和&nbsp;<code>b<sub>i</sub></code>&nbsp;之间有一条&nbsp;<strong>无向</strong>&nbsp;边。</p>
 
@@ -45,11 +60,13 @@
 	<li>不会有重复边。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 对于无向图中的任意两个节点，如果它们之间存在一条路径，那么它们之间就是互相可达的。
 
@@ -59,48 +76,41 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def countPairs(self, n: int, edges: List[List[int]]) -> int:
-        def dfs(i):
-            vis.add(i)
-            cnt = 1
-            for j in g[i]:
-                if j not in vis:
-                    cnt += dfs(j)
-            return cnt
+        def dfs(i: int) -> int:
+            if vis[i]:
+                return 0
+            vis[i] = True
+            return 1 + sum(dfs(j) for j in g[i])
 
-        g = defaultdict(list)
+        g = [[] for _ in range(n)]
         for a, b in edges:
             g[a].append(b)
             g[b].append(a)
-        vis = set()
+        vis = [False] * n
         ans = s = 0
         for i in range(n):
-            if i not in vis:
-                t = dfs(i)
-                ans += s * t
-                s += t
+            t = dfs(i)
+            ans += s * t
+            s += t
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
-    private boolean[] vis;
     private List<Integer>[] g;
+    private boolean[] vis;
 
     public long countPairs(int n, int[][] edges) {
-        vis = new boolean[n];
         g = new List[n];
-        Arrays.setAll(g, k -> new ArrayList<>());
+        vis = new boolean[n];
+        Arrays.setAll(g, i -> new ArrayList<>());
         for (var e : edges) {
             int a = e[0], b = e[1];
             g[a].add(b);
@@ -108,65 +118,64 @@ class Solution {
         }
         long ans = 0, s = 0;
         for (int i = 0; i < n; ++i) {
-            if (!vis[i]) {
-                long t = dfs(i);
-                ans += s * t;
-                s += t;
-            }
+            int t = dfs(i);
+            ans += s * t;
+            s += t;
         }
         return ans;
     }
 
     private int dfs(int i) {
+        if (vis[i]) {
+            return 0;
+        }
         vis[i] = true;
         int cnt = 1;
         for (int j : g[i]) {
-            if (!vis[j]) {
-                cnt += dfs(j);
-            }
+            cnt += dfs(j);
         }
         return cnt;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     long long countPairs(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> g(n);
+        vector<int> g[n];
         for (auto& e : edges) {
             int a = e[0], b = e[1];
-            g[a].emplace_back(b);
-            g[b].emplace_back(a);
+            g[a].push_back(b);
+            g[b].push_back(a);
         }
-        vector<bool> vis(n);
-        function<int(int)> dfs = [&](int i) -> int {
+        bool vis[n];
+        memset(vis, 0, sizeof(vis));
+        function<int(int)> dfs = [&](int i) {
+            if (vis[i]) {
+                return 0;
+            }
             vis[i] = true;
             int cnt = 1;
             for (int j : g[i]) {
-                if (!vis[j]) {
-                    cnt += dfs(j);
-                }
+                cnt += dfs(j);
             }
             return cnt;
         };
         long long ans = 0, s = 0;
         for (int i = 0; i < n; ++i) {
-            if (!vis[i]) {
-                long long t = dfs(i);
-                ans += s * t;
-                s += t;
-            }
+            int t = dfs(i);
+            ans += s * t;
+            s += t;
         }
         return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func countPairs(n int, edges [][]int) (ans int64) {
@@ -179,64 +188,98 @@ func countPairs(n int, edges [][]int) (ans int64) {
 	vis := make([]bool, n)
 	var dfs func(int) int
 	dfs = func(i int) int {
+		if vis[i] {
+			return 0
+		}
 		vis[i] = true
 		cnt := 1
 		for _, j := range g[i] {
-			if !vis[j] {
-				cnt += dfs(j)
-			}
+			cnt += dfs(j)
 		}
 		return cnt
 	}
 	var s int64
 	for i := 0; i < n; i++ {
-		if !vis[i] {
-			t := int64(dfs(i))
-			ans += s * t
-			s += t
-		}
+		t := int64(dfs(i))
+		ans += s * t
+		s += t
 	}
 	return
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function countPairs(n: number, edges: number[][]): number {
-    const g = Array.from({ length: n }, () => []);
+    const g: number[][] = Array.from({ length: n }, () => []);
     for (const [a, b] of edges) {
         g[a].push(b);
         g[b].push(a);
     }
-    const vis = new Array(n).fill(false);
-    const dfs = (i: number) => {
+    const vis: boolean[] = Array(n).fill(false);
+    const dfs = (i: number): number => {
+        if (vis[i]) {
+            return 0;
+        }
         vis[i] = true;
         let cnt = 1;
         for (const j of g[i]) {
-            if (!vis[j]) {
-                cnt += dfs(j);
-            }
+            cnt += dfs(j);
         }
         return cnt;
     };
-    let ans = 0;
-    let s = 0;
+    let [ans, s] = [0, 0];
     for (let i = 0; i < n; ++i) {
-        if (!vis[i]) {
-            const t = dfs(i);
-            ans += s * t;
-            s += t;
-        }
+        const t = dfs(i);
+        ans += s * t;
+        s += t;
     }
     return ans;
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn count_pairs(n: i32, edges: Vec<Vec<i32>>) -> i64 {
+        let n = n as usize;
+        let mut g = vec![vec![]; n];
+        let mut vis = vec![false; n];
+        for e in edges {
+            let u = e[0] as usize;
+            let v = e[1] as usize;
+            g[u].push(v);
+            g[v].push(u);
+        }
 
+        fn dfs(g: &Vec<Vec<usize>>, vis: &mut Vec<bool>, u: usize) -> i64 {
+            if vis[u] {
+                return 0;
+            }
+            vis[u] = true;
+            let mut cnt = 1;
+            for &v in &g[u] {
+                cnt += dfs(g, vis, v);
+            }
+            cnt
+        }
+
+        let mut ans = 0;
+        let mut s = 0;
+        for u in 0..n {
+            let t = dfs(&g, &mut vis, u);
+            ans += t * s;
+            s += t;
+        }
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

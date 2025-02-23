@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1982.Find%20Array%20Given%20Subset%20Sums/README_EN.md
+rating: 2872
+source: Weekly Contest 255 Q4
+tags:
+    - Array
+    - Divide and Conquer
+---
+
+<!-- problem:start -->
+
 # [1982. Find Array Given Subset Sums](https://leetcode.com/problems/find-array-given-subset-sums)
 
 [中文文档](/solution/1900-1999/1982.Find%20Array%20Given%20Subset%20Sums/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code> representing the length of an unknown array that you are trying to recover. You are also given an array <code>sums</code> containing the values of all <code>2<sup>n</sup></code> <strong>subset sums</strong> of the unknown array (in no particular order).</p>
 
@@ -55,16 +70,19 @@ Note that any permutation of [1,2,-3] and also any permutation of [-1,-2,3] will
 	<li><code>-10<sup>4</sup> &lt;= sums[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
-from sortedcontainers import SortedList
-
-
 class Solution:
     def recoverArray(self, n: int, sums: List[int]) -> List[int]:
         m = -min(sums)
@@ -87,32 +105,7 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def recoverArray(self, n: int, sums: List[int]) -> List[int]:
-        sums.sort()
-        ans = []
-        for i in range(n, 0, -1):
-            k = 1 << i
-            d = sums[k - 1] - sums[k - 2]
-            cnt = Counter(sums[:k])
-            sums1, sums2 = [], []
-            sign = 1
-            for s in sums[:k]:
-                if not cnt[s]:
-                    continue
-                cnt[s] -= 1
-                cnt[s + d] -= 1
-                sums1.append(s)
-                sums2.append(s + d)
-                if s + d == 0:
-                    sign = -1
-            ans.append(sign * d)
-            sums = sums1 if sign == 1 else sums2
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -168,43 +161,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int[] recoverArray(int n, int[] sums) {
-        Arrays.sort(sums);
-        int[] sums1 = new int[1 << n];
-        int[] sums2 = new int[1 << n];
-        Map<Integer, Integer> cnt = new HashMap<>();
-        int[] ans = new int[n];
-        for (int i = n; i > 0; --i) {
-            int k = 1 << i;
-            int d = sums[k - 1] - sums[k - 2];
-            cnt.clear();
-            for (int j = 0; j < k; ++j) {
-                cnt.merge(sums[j], 1, Integer::sum);
-            }
-            int sign = 1;
-            for (int j = 0, p = 0; j < k; ++j) {
-                if (cnt.getOrDefault(sums[j], 0) == 0) {
-                    continue;
-                }
-                cnt.merge(sums[j], -1, Integer::sum);
-                cnt.merge(sums[j] + d, -1, Integer::sum);
-                sums1[p] = sums[j];
-                sums2[p++] = sums[j] + d;
-                if (sums[j] + d == 0) {
-                    sign = -1;
-                }
-            }
-            ans[i - 1] = sign * d;
-            System.arraycopy(sign == 1 ? sums1 : sums2, 0, sums, 0, k / 2);
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -254,53 +211,11 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<int> recoverArray(int n, vector<int>& sums) {
-        sort(sums.begin(), sums.end());
-        vector<int> ans(n);
-        unordered_map<int, int> cnt;
-        for (int i = n; i; --i) {
-            cnt.clear();
-            int k = 1 << i;
-            int d = sums[k - 1] - sums[k - 2];
-            for (int j = 0; j < k; ++j) {
-                cnt[sums[j]]++;
-            }
-            vector<int> sums1, sums2;
-            int sign = 1;
-            for (int j = 0; j < k; ++j) {
-                if (cnt[sums[j]] == 0) {
-                    continue;
-                }
-                --cnt[sums[j]];
-                --cnt[sums[j] + d];
-                sums1.push_back(sums[j]);
-                sums2.push_back(sums[j] + d);
-                if (sums2.back() == 0) {
-                    sign = -1;
-                }
-            }
-            ans[i - 1] = sign * d;
-            for (int j = 0; j < k / 2; ++j) {
-                sums[j] = sign == 1 ? sums1[j] : sums2[j];
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func recoverArray(n int, sums []int) []int {
-	m := 0
-	for _, x := range sums {
-		m = min(m, x)
-	}
-	m = -m
+	m := -slices.Min(sums)
 	rbt := redblacktree.NewWithIntComparator()
 	merge := func(key int, value int) {
 		if v, ok := rbt.Get(key); ok {
@@ -353,14 +268,124 @@ func recoverArray(n int, sums []int) []int {
 	return ans
 
 }
+```
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def recoverArray(self, n: int, sums: List[int]) -> List[int]:
+        sums.sort()
+        ans = []
+        for i in range(n, 0, -1):
+            k = 1 << i
+            d = sums[k - 1] - sums[k - 2]
+            cnt = Counter(sums[:k])
+            sums1, sums2 = [], []
+            sign = 1
+            for s in sums[:k]:
+                if not cnt[s]:
+                    continue
+                cnt[s] -= 1
+                cnt[s + d] -= 1
+                sums1.append(s)
+                sums2.append(s + d)
+                if s + d == 0:
+                    sign = -1
+            ans.append(sign * d)
+            sums = sums1 if sign == 1 else sums2
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[] recoverArray(int n, int[] sums) {
+        Arrays.sort(sums);
+        int[] sums1 = new int[1 << n];
+        int[] sums2 = new int[1 << n];
+        Map<Integer, Integer> cnt = new HashMap<>();
+        int[] ans = new int[n];
+        for (int i = n; i > 0; --i) {
+            int k = 1 << i;
+            int d = sums[k - 1] - sums[k - 2];
+            cnt.clear();
+            for (int j = 0; j < k; ++j) {
+                cnt.merge(sums[j], 1, Integer::sum);
+            }
+            int sign = 1;
+            for (int j = 0, p = 0; j < k; ++j) {
+                if (cnt.getOrDefault(sums[j], 0) == 0) {
+                    continue;
+                }
+                cnt.merge(sums[j], -1, Integer::sum);
+                cnt.merge(sums[j] + d, -1, Integer::sum);
+                sums1[p] = sums[j];
+                sums2[p++] = sums[j] + d;
+                if (sums[j] + d == 0) {
+                    sign = -1;
+                }
+            }
+            ans[i - 1] = sign * d;
+            System.arraycopy(sign == 1 ? sums1 : sums2, 0, sums, 0, k / 2);
+        }
+        return ans;
+    }
 }
 ```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> recoverArray(int n, vector<int>& sums) {
+        sort(sums.begin(), sums.end());
+        vector<int> ans(n);
+        unordered_map<int, int> cnt;
+        for (int i = n; i; --i) {
+            cnt.clear();
+            int k = 1 << i;
+            int d = sums[k - 1] - sums[k - 2];
+            for (int j = 0; j < k; ++j) {
+                cnt[sums[j]]++;
+            }
+            vector<int> sums1, sums2;
+            int sign = 1;
+            for (int j = 0; j < k; ++j) {
+                if (cnt[sums[j]] == 0) {
+                    continue;
+                }
+                --cnt[sums[j]];
+                --cnt[sums[j] + d];
+                sums1.push_back(sums[j]);
+                sums2.push_back(sums[j] + d);
+                if (sums2.back() == 0) {
+                    sign = -1;
+                }
+            }
+            ans[i - 1] = sign * d;
+            for (int j = 0; j < k / 2; ++j) {
+                sums[j] = sign == 1 ? sums1[j] : sums2[j];
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
 
 ```go
 func recoverArray(n int, sums []int) (ans []int) {
@@ -396,10 +421,8 @@ func recoverArray(n int, sums []int) (ans []int) {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0600-0699/0655.Print%20Binary%20Tree/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [655. Print Binary Tree](https://leetcode.com/problems/print-binary-tree)
 
 [中文文档](/solution/0600-0699/0655.Print%20Binary%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree, construct a <strong>0-indexed</strong> <code>m x n</code> string matrix <code>res</code> that represents a <strong>formatted layout</strong> of the tree. The formatted layout matrix should be constructed using the following rules:</p>
 
@@ -46,11 +61,17 @@
 	<li>The depth of the tree will be in the range <code>[1, 10]</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -80,43 +101,7 @@ class Solution:
         return ans
 ```
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def printTree(self, root: Optional[TreeNode]) -> List[List[str]]:
-        def height(root):
-            q = deque([root])
-            h = -1
-            while q:
-                h += 1
-                for _ in range(len(q)):
-                    root = q.popleft()
-                    if root.left:
-                        q.append(root.left)
-                    if root.right:
-                        q.append(root.right)
-            return h
-
-        h = height(root)
-        m, n = h + 1, 2 ** (h + 1) - 1
-        ans = [[""] * n for _ in range(m)]
-        q = deque([(root, 0, (n - 1) // 2)])
-        while q:
-            node, r, c = q.popleft()
-            ans[r][c] = str(node.val)
-            if node.left:
-                q.append((node.left, r + 1, c - 2 ** (h - r - 1)))
-            if node.right:
-                q.append((node.right, r + 1, c + 2 ** (h - r - 1)))
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 /**
@@ -167,6 +152,251 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<string>> printTree(TreeNode* root) {
+        int h = height(root);
+        int m = h + 1, n = (1 << (h + 1)) - 1;
+        vector<vector<string>> ans(m, vector<string>(n, ""));
+        dfs(root, ans, h, 0, (n - 1) / 2);
+        return ans;
+    }
+
+    void dfs(TreeNode* root, vector<vector<string>>& ans, int h, int r, int c) {
+        if (!root) return;
+        ans[r][c] = to_string(root->val);
+        dfs(root->left, ans, h, r + 1, c - pow(2, h - r - 1));
+        dfs(root->right, ans, h, r + 1, c + pow(2, h - r - 1));
+    }
+
+    int height(TreeNode* root) {
+        if (!root) return -1;
+        return 1 + max(height(root->left), height(root->right));
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func printTree(root *TreeNode) [][]string {
+	var height func(root *TreeNode) int
+	height = func(root *TreeNode) int {
+		if root == nil {
+			return -1
+		}
+		return 1 + max(height(root.Left), height(root.Right))
+	}
+	h := height(root)
+	m, n := h+1, (1<<(h+1))-1
+	ans := make([][]string, m)
+	for i := range ans {
+		ans[i] = make([]string, n)
+		for j := range ans[i] {
+			ans[i][j] = ""
+		}
+	}
+	var dfs func(root *TreeNode, r, c int)
+	dfs = func(root *TreeNode, r, c int) {
+		if root == nil {
+			return
+		}
+		ans[r][c] = strconv.Itoa(root.Val)
+		dfs(root.Left, r+1, c-int(math.Pow(float64(2), float64(h-r-1))))
+		dfs(root.Right, r+1, c+int(math.Pow(float64(2), float64(h-r-1))))
+	}
+
+	dfs(root, 0, (n-1)/2)
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function printTree(root: TreeNode | null): string[][] {
+    const getHeight = (root: TreeNode | null, h: number) => {
+        if (root == null) {
+            return h - 1;
+        }
+        return Math.max(getHeight(root.left, h + 1), getHeight(root.right, h + 1));
+    };
+
+    const height = getHeight(root, 0);
+    const m = height + 1;
+    const n = 2 ** (height + 1) - 1;
+    const res: string[][] = Array.from({ length: m }, () => new Array(n).fill(''));
+    const dfs = (root: TreeNode | null, i: number, j: number) => {
+        if (root === null) {
+            return;
+        }
+        const { val, left, right } = root;
+        res[i][j] = val + '';
+        dfs(left, i + 1, j - 2 ** (height - i - 1));
+        dfs(right, i + 1, j + 2 ** (height - i - 1));
+    };
+    dfs(root, 0, (n - 1) >>> 1);
+    return res;
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::rc::Rc;
+impl Solution {
+    fn get_height(root: &Option<Rc<RefCell<TreeNode>>>, h: u32) -> u32 {
+        if let Some(node) = root {
+            let node = node.borrow();
+            return Self::get_height(&node.left, h + 1).max(Self::get_height(&node.right, h + 1));
+        }
+        h - 1
+    }
+
+    fn dfs(
+        root: &Option<Rc<RefCell<TreeNode>>>,
+        i: usize,
+        j: usize,
+        res: &mut Vec<Vec<String>>,
+        height: u32,
+    ) {
+        if root.is_none() {
+            return;
+        }
+        let node = root.as_ref().unwrap().borrow();
+        res[i][j] = node.val.to_string();
+        Self::dfs(
+            &node.left,
+            i + 1,
+            j - (2usize).pow(height - (i as u32) - 1),
+            res,
+            height,
+        );
+        Self::dfs(
+            &node.right,
+            i + 1,
+            j + (2usize).pow(height - (i as u32) - 1),
+            res,
+            height,
+        );
+    }
+
+    pub fn print_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<String>> {
+        let height = Self::get_height(&root, 0);
+        let m = (height + 1) as usize;
+        let n = (2usize).pow(height + 1) - 1;
+        let mut res = vec![vec![String::new(); n]; m];
+        Self::dfs(&root, 0, (n - 1) >> 1, &mut res, height);
+        res
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def printTree(self, root: Optional[TreeNode]) -> List[List[str]]:
+        def height(root):
+            q = deque([root])
+            h = -1
+            while q:
+                h += 1
+                for _ in range(len(q)):
+                    root = q.popleft()
+                    if root.left:
+                        q.append(root.left)
+                    if root.right:
+                        q.append(root.right)
+            return h
+
+        h = height(root)
+        m, n = h + 1, 2 ** (h + 1) - 1
+        ans = [[""] * n for _ in range(m)]
+        q = deque([(root, 0, (n - 1) // 2)])
+        while q:
+            node, r, c = q.popleft()
+            ans[r][c] = str(node.val)
+            if node.left:
+                q.append((node.left, r + 1, c - 2 ** (h - r - 1)))
+            if node.right:
+                q.append((node.right, r + 1, c + 2 ** (h - r - 1)))
+        return ans
+```
+
+#### Java
 
 ```java
 /**
@@ -246,43 +476,7 @@ class Tuple {
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    vector<vector<string>> printTree(TreeNode* root) {
-        int h = height(root);
-        int m = h + 1, n = (1 << (h + 1)) - 1;
-        vector<vector<string>> ans(m, vector<string>(n, ""));
-        dfs(root, ans, h, 0, (n - 1) / 2);
-        return ans;
-    }
-
-    void dfs(TreeNode* root, vector<vector<string>>& ans, int h, int r, int c) {
-        if (!root) return;
-        ans[r][c] = to_string(root->val);
-        dfs(root->left, ans, h, r + 1, c - pow(2, h - r - 1));
-        dfs(root->right, ans, h, r + 1, c + pow(2, h - r - 1));
-    }
-
-    int height(TreeNode* root) {
-        if (!root) return -1;
-        return 1 + max(height(root->left), height(root->right));
-    }
-};
-```
+#### C++
 
 ```cpp
 /**
@@ -318,7 +512,7 @@ public:
 
     int height(TreeNode* root) {
         int h = -1;
-        queue<TreeNode*> q {{root}};
+        queue<TreeNode*> q{{root}};
         while (!q.empty()) {
             ++h;
             for (int n = q.size(); n; --n) {
@@ -333,55 +527,7 @@ public:
 };
 ```
 
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func printTree(root *TreeNode) [][]string {
-	var height func(root *TreeNode) int
-	height = func(root *TreeNode) int {
-		if root == nil {
-			return -1
-		}
-		return 1 + max(height(root.Left), height(root.Right))
-	}
-	h := height(root)
-	m, n := h+1, (1<<(h+1))-1
-	ans := make([][]string, m)
-	for i := range ans {
-		ans[i] = make([]string, n)
-		for j := range ans[i] {
-			ans[i][j] = ""
-		}
-	}
-	var dfs func(root *TreeNode, r, c int)
-	dfs = func(root *TreeNode, r, c int) {
-		if root == nil {
-			return
-		}
-		ans[r][c] = strconv.Itoa(root.Val)
-		dfs(root.Left, r+1, c-int(math.Pow(float64(2), float64(h-r-1))))
-		dfs(root.Right, r+1, c+int(math.Pow(float64(2), float64(h-r-1))))
-	}
-
-	dfs(root, 0, (n-1)/2)
-	return ans
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
+#### Go
 
 ```go
 /**
@@ -445,129 +591,8 @@ type tuple struct {
 }
 ```
 
-### **TypeScript**
-
-```ts
-/**
- * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
- */
-
-function printTree(root: TreeNode | null): string[][] {
-    const getHeight = (root: TreeNode | null, h: number) => {
-        if (root == null) {
-            return h - 1;
-        }
-        return Math.max(
-            getHeight(root.left, h + 1),
-            getHeight(root.right, h + 1),
-        );
-    };
-
-    const height = getHeight(root, 0);
-    const m = height + 1;
-    const n = 2 ** (height + 1) - 1;
-    const res: string[][] = Array.from({ length: m }, () =>
-        new Array(n).fill(''),
-    );
-    const dfs = (root: TreeNode | null, i: number, j: number) => {
-        if (root === null) {
-            return;
-        }
-        const { val, left, right } = root;
-        res[i][j] = val + '';
-        dfs(left, i + 1, j - 2 ** (height - i - 1));
-        dfs(right, i + 1, j + 2 ** (height - i - 1));
-    };
-    dfs(root, 0, (n - 1) >>> 1);
-    return res;
-}
-```
-
-### **Rust**
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
-use std::rc::Rc;
-use std::cell::RefCell;
-impl Solution {
-    fn get_height(root: &Option<Rc<RefCell<TreeNode>>>, h: u32) -> u32 {
-        if let Some(node) = root {
-            let node = node.borrow();
-            return Self::get_height(&node.left, h + 1).max(Self::get_height(&node.right, h + 1));
-        }
-        h - 1
-    }
-
-    fn dfs(
-        root: &Option<Rc<RefCell<TreeNode>>>,
-        i: usize,
-        j: usize,
-        res: &mut Vec<Vec<String>>,
-        height: u32,
-    ) {
-        if root.is_none() {
-            return;
-        }
-        let node = root.as_ref().unwrap().borrow();
-        res[i][j] = node.val.to_string();
-        Self::dfs(
-            &node.left,
-            i + 1,
-            j - 2usize.pow(height - (i as u32) - 1),
-            res,
-            height,
-        );
-        Self::dfs(
-            &node.right,
-            i + 1,
-            j + 2usize.pow(height - (i as u32) - 1),
-            res,
-            height,
-        );
-    }
-
-    pub fn print_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<String>> {
-        let height = Self::get_height(&root, 0);
-        let m = (height + 1) as usize;
-        let n = 2usize.pow(height + 1) - 1;
-        let mut res = vec![vec![String::new(); n]; m];
-        Self::dfs(&root, 0, (n - 1) >> 1, &mut res, height);
-        res
-    }
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

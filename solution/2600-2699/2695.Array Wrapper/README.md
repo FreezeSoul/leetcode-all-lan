@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2695.Array%20Wrapper/README.md
+tags:
+    - JavaScript
+---
+
+<!-- problem:start -->
+
 # [2695. 包装数组](https://leetcode.cn/problems/array-wrapper)
 
 [English Version](/solution/2600-2699/2695.Array%20Wrapper/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>创建一个名为 <code>ArrayWrapper</code> 的类，它在其构造函数中接受一个整数数组作为参数。该类应具有以下两个特性：</p>
 
@@ -57,15 +67,17 @@ obj1 + obj2; // 0
 	<li><code>注意：nums 是传递给构造函数的数组。</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### TypeScript
 
 ```ts
 class ArrayWrapper {
@@ -82,7 +94,7 @@ class ArrayWrapper {
     }
 
     toString() {
-        return `[${this.nums.join(',')}]`;
+        return `[${this.nums}]`;
     }
 }
 
@@ -96,3 +108,7 @@ class ArrayWrapper {
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

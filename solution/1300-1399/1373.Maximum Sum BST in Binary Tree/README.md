@@ -1,10 +1,26 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1300-1399/1373.Maximum%20Sum%20BST%20in%20Binary%20Tree/README.md
+rating: 1913
+source: 第 21 场双周赛 Q4
+tags:
+    - 树
+    - 深度优先搜索
+    - 二叉搜索树
+    - 动态规划
+    - 二叉树
+---
+
+<!-- problem:start -->
+
 # [1373. 二叉搜索子树的最大键值和](https://leetcode.cn/problems/maximum-sum-bst-in-binary-tree)
 
 [English Version](/solution/1300-1399/1373.Maximum%20Sum%20BST%20in%20Binary%20Tree/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一棵以 <code>root</code> 为根的 <strong>二叉树</strong> ，请你返回 <strong>任意</strong> 二叉搜索子树的最大键值和。</p>
 
@@ -69,11 +85,13 @@
 	<li>每个节点的键值在 <code>[-4 * 10^4 , 4 * 10^4]</code> 之间。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS**
+### 方法一：DFS
 
 判断一棵树是否是二叉搜索树，需要满足以下四个条件：
 
@@ -105,9 +123,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -135,9 +151,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 /**
@@ -181,7 +195,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -200,10 +214,9 @@ public:
     int maxSumBST(TreeNode* root) {
         int ans = 0;
         const int inf = 1 << 30;
-
-        function<vector<int>(TreeNode*)> dfs = [&](TreeNode* root) {
+        auto dfs = [&](this auto&& dfs, TreeNode* root) -> array<int, 4> {
             if (!root) {
-                return vector<int>{1, inf, -inf, 0};
+                return {1, inf, -inf, 0};
             }
             auto l = dfs(root->left);
             auto r = dfs(root->right);
@@ -211,9 +224,9 @@ public:
             if (l[0] && r[0] && l[2] < v && v < r[1]) {
                 int s = l[3] + r[3] + v;
                 ans = max(ans, s);
-                return vector<int>{1, min(l[1], v), max(r[2], v), s};
+                return {1, min(l[1], v), max(r[2], v), s};
             }
-            return vector<int>(4);
+            return {0};
         };
         dfs(root);
         return ans;
@@ -221,7 +234,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -250,23 +263,9 @@ func maxSumBST(root *TreeNode) (ans int) {
 	dfs(root)
 	return
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -304,10 +303,8 @@ function maxSumBST(root: TreeNode | null): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

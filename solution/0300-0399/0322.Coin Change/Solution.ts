@@ -1,10 +1,17 @@
 function coinChange(coins: number[], amount: number): number {
-    let dp = new Array(amount + 1).fill(amount + 1);
-    dp[0] = 0;
-    for (const coin of coins) {
-        for (let j = coin; j <= amount; ++j) {
-            dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+    const m = coins.length;
+    const n = amount;
+    const f: number[][] = Array(m + 1)
+        .fill(0)
+        .map(() => Array(n + 1).fill(1 << 30));
+    f[0][0] = 0;
+    for (let i = 1; i <= m; ++i) {
+        for (let j = 0; j <= n; ++j) {
+            f[i][j] = f[i - 1][j];
+            if (j >= coins[i - 1]) {
+                f[i][j] = Math.min(f[i][j], f[i][j - coins[i - 1]] + 1);
+            }
         }
     }
-    return dp[amount] > amount ? -1 : dp[amount];
+    return f[m][n] > n ? -1 : f[m][n];
 }

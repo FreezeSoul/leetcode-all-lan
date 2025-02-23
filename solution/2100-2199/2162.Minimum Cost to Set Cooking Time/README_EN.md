@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2162.Minimum%20Cost%20to%20Set%20Cooking%20Time/README_EN.md
+rating: 1851
+source: Biweekly Contest 71 Q3
+tags:
+    - Math
+    - Enumeration
+---
+
+<!-- problem:start -->
+
 # [2162. Minimum Cost to Set Cooking Time](https://leetcode.com/problems/minimum-cost-to-set-cooking-time)
 
 [中文文档](/solution/2100-2199/2162.Minimum%20Cost%20to%20Set%20Cooking%20Time/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A generic microwave supports cooking times for:</p>
 
@@ -65,11 +80,17 @@ Note other possible ways are 0076, 076, 0116, and 116, but none of them produces
 	<li><code>1 &lt;= targetSeconds &lt;= 6039</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -97,7 +118,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -129,7 +150,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -156,7 +177,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCostSetTime(startAt int, moveCost int, pushCost int, targetSeconds int) int {
@@ -182,25 +203,10 @@ func minCostSetTime(startAt int, moveCost int, pushCost int, targetSeconds int) 
 	}
 	return min(f(m, s), f(m-1, s+60))
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

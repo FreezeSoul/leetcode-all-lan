@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2600-2699/2614.Prime%20In%20Diagonal/README_EN.md
+rating: 1375
+source: Weekly Contest 340 Q1
+tags:
+    - Array
+    - Math
+    - Matrix
+    - Number Theory
+---
+
+<!-- problem:start -->
+
 # [2614. Prime In Diagonal](https://leetcode.com/problems/prime-in-diagonal)
 
 [中文文档](/solution/2600-2699/2614.Prime%20In%20Diagonal/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a 0-indexed two-dimensional integer array <code>nums</code>.</p>
 
@@ -45,9 +62,13 @@
 	<li><code>1 &lt;= nums<span style="font-size: 10.8333px;">[i][j]</span>&nbsp;&lt;= 4*10<sup>6</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Math + Simulation**
+<!-- solution:start -->
+
+### Solution 1: Math + Simulation
 
 We implement a function `is_prime` to check whether a number is prime.
 
@@ -57,7 +78,7 @@ The time complexity is $O(n \times \sqrt{M})$, where $n$ and $M$ are the number 
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,7 +98,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -109,7 +130,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -142,7 +163,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func diagonalPrime(nums [][]int) (ans int) {
@@ -169,19 +190,47 @@ func isPrime(x int) bool {
 	}
 	return true
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+#### Rust
+
+```rust
+impl Solution {
+    pub fn diagonal_prime(nums: Vec<Vec<i32>>) -> i32 {
+        let mut ans = 0;
+        let n = nums.len();
+
+        for (i, row) in nums.iter().enumerate() {
+            if Self::is_prime(row[i]) && row[i] > ans {
+                ans = row[i];
+            }
+            if Self::is_prime(row[n - i - 1]) && row[n - i - 1] > ans {
+                ans = row[n - i - 1];
+            }
+        }
+
+        ans
+    }
+
+    fn is_prime(n: i32) -> bool {
+        if n < 2 {
+            return false;
+        }
+
+        let upper = (n as f64).sqrt() as i32;
+        for i in 2..=upper {
+            if n % i == 0 {
+                return false;
+            }
+        }
+
+        true
+    }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

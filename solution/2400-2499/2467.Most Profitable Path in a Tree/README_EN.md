@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2400-2499/2467.Most%20Profitable%20Path%20in%20a%20Tree/README_EN.md
+rating: 2053
+source: Biweekly Contest 91 Q3
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Array
+---
+
+<!-- problem:start -->
+
 # [2467. Most Profitable Path in a Tree](https://leetcode.com/problems/most-profitable-path-in-a-tree)
 
 [中文文档](/solution/2400-2499/2467.Most%20Profitable%20Path%20in%20a%20Tree/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There is an undirected tree with <code>n</code> nodes labeled from <code>0</code> to <code>n - 1</code>, rooted at node <code>0</code>. You are given a 2D integer array <code>edges</code> of length <code>n - 1</code> where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that there is an edge between nodes <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code> in the tree.</p>
 
@@ -74,15 +92,35 @@ Thus, Alice opens the gate at node 0 only. Hence, her net income is -7280.
 	<li><code>amount[i]</code> is an <strong>even</strong> integer in the range <code>[-10<sup>4</sup>, 10<sup>4</sup>]</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two DFS Traversals
+
+According to the problem, we know that Bob's moving path is fixed, that is, starting from node $bob$ and finally reaching node $0$. Therefore, we can first run a DFS to find out the time it takes for Bob to reach each node, which we record in the array $ts$.
+
+Then we run another DFS to find the maximum score for each of Alice's moving paths. We denote the time for Alice to reach node $i$ as $t$, and the current cumulative score as $v$. After Alice passes node $i$, the cumulative score has three cases:
+
+1. The time $t$ for Alice to reach node $i$ is the same as the time $ts[i]$ for Bob to reach node $i$. In this case, Alice and Bob open the door at node $i$ at the same time, and the score Alice gets is $v + \frac{amount[i]}{2}$.
+2. The time $t$ for Alice to reach node $i$ is less than the time $ts[i]$ for Bob to reach node $i$. In this case, Alice opens the door at node $i$, and the score Alice gets is $v + amount[i]$.
+3. The time $t$ for Alice to reach node $i$ is greater than the time $ts[i]$ for Bob to reach node $i$. In this case, Alice does not open the door at node $i$, and the score Alice gets is $v$, which remains unchanged.
+
+When Alice reaches a leaf node, update the maximum score.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the number of nodes.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
-    def mostProfitablePath(self, edges: List[List[int]], bob: int, amount: List[int]) -> int:
+    def mostProfitablePath(
+        self, edges: List[List[int]], bob: int, amount: List[int]
+    ) -> int:
         def dfs1(i, fa, t):
             if i == 0:
                 ts[i] = min(ts[i], t)
@@ -119,7 +157,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -179,7 +217,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -210,13 +248,16 @@ public:
         ts[bob] = 0;
         int ans = INT_MIN;
         function<void(int i, int fa, int t, int v)> dfs2 = [&](int i, int fa, int t, int v) {
-            if (t == ts[i]) v += amount[i] >> 1;
-            else if (t < ts[i]) v += amount[i];
+            if (t == ts[i])
+                v += amount[i] >> 1;
+            else if (t < ts[i])
+                v += amount[i];
             if (g[i].size() == 1 && g[i][0] == fa) {
                 ans = max(ans, v);
                 return;
             }
-            for (int j : g[i]) if (j != fa) dfs2(j, i, t + 1, v);
+            for (int j : g[i])
+                if (j != fa) dfs2(j, i, t + 1, v);
         };
         dfs2(0, -1, 0, 0);
         return ans;
@@ -224,7 +265,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func mostProfitablePath(edges [][]int, bob int, amount []int) int {
@@ -276,32 +317,10 @@ func mostProfitablePath(edges [][]int, bob int, amount []int) int {
 	dfs2(0, -1, 0, 0)
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-```
-
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

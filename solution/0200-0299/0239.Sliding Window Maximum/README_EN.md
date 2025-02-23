@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Hard
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0239.Sliding%20Window%20Maximum/README_EN.md
+tags:
+    - Queue
+    - Array
+    - Sliding Window
+    - Monotonic Queue
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum)
 
 [中文文档](/solution/0200-0299/0239.Sliding%20Window%20Maximum/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an array of integers&nbsp;<code>nums</code>, there is a sliding window of size <code>k</code> which is moving from the very left of the array to the very right. You can only see the <code>k</code> numbers in the window. Each time the sliding window moves right by one position.</p>
 
@@ -41,16 +57,28 @@ Window position                Max
 	<li><code>1 &lt;= k &lt;= nums.length</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Priority Queue (Max-Heap)
+
+We can use a priority queue (max-heap) to maintain the maximum value in the sliding window.
+
+First, add the first $k-1$ elements to the priority queue. Then, starting from the $k$-th element, add the new element to the priority queue and check if the top element of the heap is out of the window. If it is, remove the top element. Then, add the top element of the heap to the result array.
+
+The time complexity is $O(n \times \log k)$, and the space complexity is $O(k)$. Here, $n$ is the length of the array.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        q = [(-v, i) for i, v in enumerate(nums[:k - 1])]
+        q = [(-v, i) for i, v in enumerate(nums[: k - 1])]
         heapify(q)
         ans = []
         for i in range(k - 1, len(nums)):
@@ -61,28 +89,13 @@ class Solution:
         return ans
 ```
 
-```python
-class Solution:
-    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        q = deque()
-        ans = []
-        for i, v in enumerate(nums):
-            if q and i - k + 1 > q[0]:
-                q.popleft()
-            while q and nums[q[-1]] <= v:
-                q.pop()
-            q.append(i)
-            if i >= k - 1:
-                ans.append(nums[q[0]])
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[0] == b[0] ? a[1] - b[1] : b[0] - a[0]);
+        PriorityQueue<int[]> q
+            = new PriorityQueue<>((a, b) -> a[0] == b[0] ? a[1] - b[1] : b[0] - a[0]);
         int n = nums.length;
         for (int i = 0; i < k - 1; ++i) {
             q.offer(new int[] {nums[i], i});
@@ -100,30 +113,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public int[] maxSlidingWindow(int[] nums, int k) {
-        int n = nums.length;
-        int[] ans = new int[n - k + 1];
-        Deque<Integer> q = new ArrayDeque<>();
-        for (int i = 0, j = 0; i < n; ++i) {
-            if (!q.isEmpty() && i - k + 1 > q.peekFirst()) {
-                q.pollFirst();
-            }
-            while (!q.isEmpty() && nums[q.peekLast()] <= nums[i]) {
-                q.pollLast();
-            }
-            q.offer(i);
-            if (i >= k - 1) {
-                ans[j++] = nums[q.peekFirst()];
-            }
-        }
-        return ans;
-    }
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -147,30 +137,7 @@ public:
 };
 ```
 
-```cpp
-class Solution {
-public:
-    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-        deque<int> q;
-        vector<int> ans;
-        for (int i = 0; i < nums.size(); ++i) {
-            if (!q.empty() && i - k + 1 > q.front()) {
-                q.pop_front();
-            }
-            while (!q.empty() && nums[q.back()] <= nums[i]) {
-                q.pop_back();
-            }
-            q.push_back(i);
-            if (i >= k - 1) {
-                ans.emplace_back(nums[q.front()]);
-            }
-        }
-        return ans;
-    }
-};
-```
-
-### **Go**
+#### Go
 
 ```go
 func maxSlidingWindow(nums []int, k int) (ans []int) {
@@ -197,19 +164,105 @@ func (h hp) Less(i, j int) bool {
 	a, b := h[i], h[j]
 	return a.v > b.v || (a.v == b.v && i < j)
 }
-func (h hp) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *hp) Push(v interface{}) { *h = append(*h, v.(pair)) }
-func (h *hp) Pop() interface{}   { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+func (h hp) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v any)   { *h = append(*h, v.(pair)) }
+func (h *hp) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
 ```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2: Monotonic Queue
+
+To find the maximum value in a sliding window, a common method is to use a monotonic queue.
+
+We can maintain a queue $q$ that is monotonically decreasing from the front to the back, storing the indices of the elements. As we traverse the array $\textit{nums}$, for the current element $\textit{nums}[i]$, we first check if the front element of the queue is out of the window. If it is, we remove the front element. Then, we compare the current element $\textit{nums}[i]$ with the elements at the back of the queue. If the elements at the back are less than or equal to the current element, we remove them until the element at the back is greater than the current element or the queue is empty. Then, we add the index of the current element to the queue. At this point, the front element of the queue is the maximum value of the current sliding window. Note that we add the front element of the queue to the result array when the index $i$ is greater than or equal to $k-1$.
+
+The time complexity is $O(n)$, and the space complexity is $O(k)$. Here, $n$ is the length of the array $\textit{nums}$.
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        q = deque()
+        ans = []
+        for i, x in enumerate(nums):
+            if q and i - q[0] >= k:
+                q.popleft()
+            while q and nums[q[-1]] <= x:
+                q.pop()
+            q.append(i)
+            if i >= k - 1:
+                ans.append(nums[q[0]])
+        return ans
+```
+
+#### Java
+
+```java
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        int[] ans = new int[n - k + 1];
+        Deque<Integer> q = new ArrayDeque<>();
+        for (int i = 0; i < n; ++i) {
+            if (!q.isEmpty() && i - q.peekFirst() >= k) {
+                q.pollFirst();
+            }
+            while (!q.isEmpty() && nums[q.peekLast()] <= nums[i]) {
+                q.pollLast();
+            }
+            q.offerLast(i);
+            if (i >= k - 1) {
+                ans[i - k + 1] = nums[q.peekFirst()];
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> q;
+        vector<int> ans;
+        for (int i = 0; i < nums.size(); ++i) {
+            if (q.size() && i - q.front() >= k) {
+                q.pop_front();
+            }
+            while (q.size() && nums[q.back()] <= nums[i]) {
+                q.pop_back();
+            }
+            q.push_back(i);
+            if (i >= k - 1) {
+                ans.push_back(nums[q.front()]);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
 
 ```go
 func maxSlidingWindow(nums []int, k int) (ans []int) {
 	q := []int{}
-	for i, v := range nums {
-		if len(q) > 0 && i-k+1 > q[0] {
+	for i, x := range nums {
+		if len(q) > 0 && i-q[0] >= k {
 			q = q[1:]
 		}
-		for len(q) > 0 && nums[q[len(q)-1]] <= v {
+		for len(q) > 0 && nums[q[len(q)-1]] <= x {
 			q = q[:len(q)-1]
 		}
 		q = append(q, i)
@@ -217,11 +270,67 @@ func maxSlidingWindow(nums []int, k int) (ans []int) {
 			ans = append(ans, nums[q[0]])
 		}
 	}
-	return ans
+	return
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function maxSlidingWindow(nums: number[], k: number): number[] {
+    const ans: number[] = [];
+    const q = new Deque();
+    for (let i = 0; i < nums.length; ++i) {
+        if (!q.isEmpty() && i - q.front()! >= k) {
+            q.popFront();
+        }
+        while (!q.isEmpty() && nums[q.back()!] <= nums[i]) {
+            q.popBack();
+        }
+        q.pushBack(i);
+        if (i >= k - 1) {
+            ans.push(nums[q.front()!]);
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+use std::collections::VecDeque;
+
+impl Solution {
+    pub fn max_sliding_window(nums: Vec<i32>, k: i32) -> Vec<i32> {
+        let k = k as usize;
+        let mut ans = Vec::new();
+        let mut q: VecDeque<usize> = VecDeque::new();
+
+        for i in 0..nums.len() {
+            if let Some(&front) = q.front() {
+                if i >= front + k {
+                    q.pop_front();
+                }
+            }
+            while let Some(&back) = q.back() {
+                if nums[back] <= nums[i] {
+                    q.pop_back();
+                } else {
+                    break;
+                }
+            }
+            q.push_back(i);
+            if i >= k - 1 {
+                ans.push(nums[*q.front().unwrap()]);
+            }
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -230,28 +339,26 @@ func maxSlidingWindow(nums []int, k int) (ans []int) {
  * @return {number[]}
  */
 var maxSlidingWindow = function (nums, k) {
-    let ans = [];
-    let q = [];
+    const ans = [];
+    const q = new Deque();
     for (let i = 0; i < nums.length; ++i) {
-        if (q && i - k + 1 > q[0]) {
-            q.shift();
+        if (!q.isEmpty() && i - q.front() >= k) {
+            q.popFront();
         }
-        while (q && nums[q[q.length - 1]] <= nums[i]) {
-            q.pop();
+        while (!q.isEmpty() && nums[q.back()] <= nums[i]) {
+            q.popBack();
         }
-        q.push(i);
+        q.pushBack(i);
         if (i >= k - 1) {
-            ans.push(nums[q[0]]);
+            ans.push(nums[q.front()]);
         }
     }
     return ans;
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

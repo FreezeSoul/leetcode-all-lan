@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1624.Largest%20Substring%20Between%20Two%20Equal%20Characters/README.md
+rating: 1281
+source: 第 211 场周赛 Q1
+tags:
+    - 哈希表
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [1624. 两个相同字符之间的最长子字符串](https://leetcode.cn/problems/largest-substring-between-two-equal-characters)
 
 [English Version](/solution/1600-1699/1624.Largest%20Substring%20Between%20Two%20Equal%20Characters/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个字符串 <code>s</code>，请你返回 <strong>两个相同字符之间的最长子字符串的长度</strong> <em>，</em>计算长度时不含这两个字符。如果不存在这样的子字符串，返回 <code>-1</code> 。</p>
 
@@ -48,11 +61,13 @@
 	<li><code>s</code> 只含小写英文字母</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数组或哈希表**
+### 方法一：数组或哈希表
 
 用数组或哈希表记录字符串 $s$ 每个字符第一次出现的位置。由于本题中字符串 $s$ 只含小写英文字母，因此可以用一个长度为 $26$ 的数组 $d$ 来记录，初始时数组元素值均为 $-1$。
 
@@ -62,9 +77,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -79,9 +92,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -123,7 +134,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxLengthBetweenEqualCharacters(s string) int {
@@ -142,39 +153,9 @@ func maxLengthBetweenEqualCharacters(s string) int {
 	}
 	return ans
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **C**
-
-```c
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-
-int maxLengthBetweenEqualCharacters(char *s) {
-    int pos[26];
-    memset(pos, -1, sizeof(pos));
-    int n = strlen(s);
-    int res = -1;
-    for (int i = 0; i < n; i++) {
-        char c = s[i];
-        int j = c - 'a';
-        if (pos[j] == -1) {
-            pos[j] = i;
-        } else {
-            res = max(res, i - pos[j] - 1);
-        }
-    }
-    return res;
-}
-```
-
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxLengthBetweenEqualCharacters(s: string): number {
@@ -193,7 +174,7 @@ function maxLengthBetweenEqualCharacters(s: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -216,10 +197,31 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C
 
-```
+```c
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 
+int maxLengthBetweenEqualCharacters(char* s) {
+    int pos[26];
+    memset(pos, -1, sizeof(pos));
+    int n = strlen(s);
+    int res = -1;
+    for (int i = 0; i < n; i++) {
+        char c = s[i];
+        int j = c - 'a';
+        if (pos[j] == -1) {
+            pos[j] = i;
+        } else {
+            res = max(res, i - pos[j] - 1);
+        }
+    }
+    return res;
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,20 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0700-0799/0790.Domino%20and%20Tromino%20Tiling/README.md
+tags:
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [790. 多米诺和托米诺平铺](https://leetcode.cn/problems/domino-and-tromino-tiling)
 
 [English Version](/solution/0700-0799/0790.Domino%20and%20Tromino%20Tiling/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有两种形状的瓷砖：一种是&nbsp;<code>2 x 1</code> 的多米诺形，另一种是形如&nbsp;"L" 的托米诺形。两种形状都可以旋转。</p>
 
@@ -41,11 +51,13 @@
 	<li><code>1 &lt;= n &lt;= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划**
+### 方法一：动态规划
 
 我们首先要读懂题意，题目实际上是让我们求铺满 $2\times n$ 的面板的方案数，其中面板上的每个正方形只能被一个瓷砖覆盖。
 
@@ -78,9 +90,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -93,7 +103,12 @@ class Solution:
                 return 1
             ans = 0
             if i == j:
-                ans = dfs(i + 2, j + 2) + dfs(i + 1, j + 1) + dfs(i + 2, j + 1) + dfs(i + 1, j + 2)
+                ans = (
+                    dfs(i + 2, j + 2)
+                    + dfs(i + 1, j + 1)
+                    + dfs(i + 2, j + 1)
+                    + dfs(i + 1, j + 2)
+                )
             elif i > j:
                 ans = dfs(i, j + 2) + dfs(i + 1, j + 2)
             else:
@@ -104,24 +119,7 @@ class Solution:
         return dfs(0, 0)
 ```
 
-```python
-class Solution:
-    def numTilings(self, n: int) -> int:
-        f = [1, 0, 0, 0]
-        mod = 10**9 + 7
-        for i in range(1, n + 1):
-            g = [0] * 4
-            g[0] = (f[0] + f[1] + f[2] + f[3]) % mod
-            g[1] = (f[2] + f[3]) % mod
-            g[2] = (f[1] + f[3]) % mod
-            g[3] = f[0]
-            f = g
-        return f[0]
-```
-
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -141,7 +139,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -163,7 +161,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numTilings(n int) int {
@@ -182,10 +180,35 @@ func numTilings(n int) int {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def numTilings(self, n: int) -> int:
+        f = [1, 0, 0, 0]
+        mod = 10**9 + 7
+        for i in range(1, n + 1):
+            g = [0] * 4
+            g[0] = (f[0] + f[1] + f[2] + f[3]) % mod
+            g[1] = (f[2] + f[3]) % mod
+            g[2] = (f[1] + f[3]) % mod
+            g[3] = f[0]
+            f = g
+        return f[0]
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1071.Greatest%20Common%20Divisor%20of%20Strings/README_EN.md
+rating: 1397
+source: Weekly Contest 139 Q1
+tags:
+    - Math
+    - String
+---
+
+<!-- problem:start -->
+
 # [1071. Greatest Common Divisor of Strings](https://leetcode.com/problems/greatest-common-divisor-of-strings)
 
 [中文文档](/solution/1000-1099/1071.Greatest%20Common%20Divisor%20of%20Strings/README.md)
 
 ## Description
 
-<p>For two strings <code>s</code> and <code>t</code>, we say &quot;<code>t</code> divides <code>s</code>&quot; if and only if <code>s = t + ... + t</code> (i.e., <code>t</code> is concatenated with itself one or more times).</p>
+<!-- description:start -->
+
+<p>For two strings <code>s</code> and <code>t</code>, we say &quot;<code>t</code> divides <code>s</code>&quot; if and only if <code>s = t + t + t + ... + t + t</code> (i.e., <code>t</code> is concatenated with itself one or more times).</p>
 
 <p>Given two strings <code>str1</code> and <code>str2</code>, return <em>the largest string </em><code>x</code><em> such that </em><code>x</code><em> divides both </em><code>str1</code><em> and </em><code>str2</code>.</p>
 
@@ -38,11 +53,17 @@
 	<li><code>str1</code> and <code>str2</code> consist of English uppercase letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -60,16 +81,7 @@ class Solution:
         return ''
 ```
 
-```python
-class Solution:
-    def gcdOfStrings(self, str1: str, str2: str) -> str:
-        if str1 + str2 != str2 + str1:
-            return ''
-        n = gcd(len(str1), len(str2))
-        return str1[:n]
-```
-
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -87,7 +99,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,7 +112,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func gcdOfStrings(str1 string, str2 string) string {
@@ -119,10 +131,50 @@ func gcd(a, b int) int {
 }
 ```
 
-### **...**
+#### Rust
 
-```
+```rust
+impl Solution {
+    pub fn gcd_of_strings(str1: String, str2: String) -> String {
+        if str1.clone() + &str2 != str2.clone() + &str1 {
+            return String::from("");
+        }
+        fn gcd(a: usize, b: usize) -> usize {
+            if b == 0 {
+                return a;
+            }
+            gcd(b, a % b)
+        }
 
+        let (m, n) = (str1.len().max(str2.len()), str1.len().min(str2.len()));
+        str1[..gcd(m, n)].to_string()
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+class Solution:
+    def gcdOfStrings(self, str1: str, str2: str) -> str:
+        if str1 + str2 != str2 + str1:
+            return ''
+        n = gcd(len(str1), len(str2))
+        return str1[:n]
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

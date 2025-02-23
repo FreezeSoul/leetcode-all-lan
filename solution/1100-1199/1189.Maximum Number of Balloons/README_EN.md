@@ -1,8 +1,24 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1100-1199/1189.Maximum%20Number%20of%20Balloons/README_EN.md
+rating: 1181
+source: Weekly Contest 154 Q1
+tags:
+    - Hash Table
+    - String
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [1189. Maximum Number of Balloons](https://leetcode.com/problems/maximum-number-of-balloons)
 
 [中文文档](/solution/1100-1199/1189.Maximum%20Number%20of%20Balloons/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>text</code>, you want to use the characters of <code>text</code> to form as many instances of the word <strong>&quot;balloon&quot;</strong> as possible.</p>
 
@@ -42,11 +58,26 @@
 	<li><code>text</code> consists of lower case English letters only.</li>
 </ul>
 
+<p>&nbsp;</p>
+<p><strong>Note:</strong> This question is the same as <a href="https://leetcode.com/problems/rearrange-characters-to-make-target-string/description/" target="_blank"> 2287: Rearrange Characters to Make Target String.</a></p>
+
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+We count the frequency of each letter in the string `text`, and then divide the frequency of the letters 'o' and 'l' by 2, because the word `balloon` contains the letters 'o' and 'l' twice.
+
+Next, we traverse each letter in the word `balon`, and find the minimum frequency of each letter in the string `text`. This minimum frequency is the maximum number of times the word `balloon` can appear in the string `text`.
+
+The time complexity is $O(n)$, and the space complexity is $O(C)$. Here, $n$ is the length of the string `text`, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -57,7 +88,7 @@ class Solution:
         return min(cnt[c] for c in 'balon')
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -77,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -99,7 +130,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxNumberOfBalloons(text string) int {
@@ -119,7 +150,7 @@ func maxNumberOfBalloons(text string) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function maxNumberOfBalloons(text: string): number {
@@ -131,7 +162,7 @@ function maxNumberOfBalloons(text: string): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -139,11 +170,21 @@ impl Solution {
         let mut arr = [0; 5];
         for c in text.chars() {
             match c {
-                'b' => arr[0] += 1,
-                'a' => arr[1] += 1,
-                'l' => arr[2] += 1,
-                'o' => arr[3] += 1,
-                'n' => arr[4] += 1,
+                'b' => {
+                    arr[0] += 1;
+                }
+                'a' => {
+                    arr[1] += 1;
+                }
+                'l' => {
+                    arr[2] += 1;
+                }
+                'o' => {
+                    arr[3] += 1;
+                }
+                'n' => {
+                    arr[4] += 1;
+                }
                 _ => {}
             }
         }
@@ -158,7 +199,7 @@ impl Solution {
 }
 ```
 
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -169,11 +210,17 @@ class Solution {
     function maxNumberOfBalloons($text) {
         $cnt1 = $cnt2 = $cnt3 = $cnt4 = $cnt5 = 0;
         for ($i = 0; $i < strlen($text); $i++) {
-            if ($text[$i] == "b") $cnt1 += 1;
-            else if ($text[$i] == "a") $cnt2 += 1;
-            else if ($text[$i] == "l") $cnt3 += 1;
-            else if ($text[$i] == "o") $cnt4 += 1;
-            else if ($text[$i] == "n") $cnt5 += 1;
+            if ($text[$i] == 'b') {
+                $cnt1 += 1;
+            } elseif ($text[$i] == 'a') {
+                $cnt2 += 1;
+            } elseif ($text[$i] == 'l') {
+                $cnt3 += 1;
+            } elseif ($text[$i] == 'o') {
+                $cnt4 += 1;
+            } elseif ($text[$i] == 'n') {
+                $cnt5 += 1;
+            }
         }
         $cnt3 = floor($cnt3 / 2);
         $cnt4 = floor($cnt4 / 2);
@@ -182,10 +229,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

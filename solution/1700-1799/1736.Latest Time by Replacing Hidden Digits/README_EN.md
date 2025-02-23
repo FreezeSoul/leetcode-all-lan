@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1736.Latest%20Time%20by%20Replacing%20Hidden%20Digits/README_EN.md
+rating: 1264
+source: Weekly Contest 225 Q1
+tags:
+    - Greedy
+    - String
+---
+
+<!-- problem:start -->
+
 # [1736. Latest Time by Replacing Hidden Digits](https://leetcode.com/problems/latest-time-by-replacing-hidden-digits)
 
 [中文文档](/solution/1700-1799/1736.Latest%20Time%20by%20Replacing%20Hidden%20Digits/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given a string <code>time</code> in the form of <code> hh:mm</code>, where some of the digits in the string are hidden (represented by <code>?</code>).</p>
 
@@ -41,11 +56,26 @@
 	<li>It is guaranteed that you can produce a valid time from the given string.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Greedy
+
+We process each digit of the string in order, following these rules:
+
+1. First digit: If the value of the second digit is determined and falls within the range $[4, 9]$, then the first digit can only be $1$. Otherwise, the first digit can be up to $2$.
+1. Second digit: If the value of the first digit is determined and is $2$, then the second digit can be up to $3$. Otherwise, the second digit can be up to $9$.
+1. Third digit: The third digit can be up to $5$.
+1. Fourth digit: The fourth digit can be up to $9$.
+
+The time complexity is $O(1)$, and the space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,7 +92,7 @@ class Solution:
         return ''.join(t)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -85,7 +115,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -108,7 +138,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maximumTime(time string) string {
@@ -137,7 +167,7 @@ func maximumTime(time string) string {
 }
 ```
 
-### **JavaScript**
+#### JavaScript
 
 ```js
 /**
@@ -162,10 +192,8 @@ var maximumTime = function (time) {
 };
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

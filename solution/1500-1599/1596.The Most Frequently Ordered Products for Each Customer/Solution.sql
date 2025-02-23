@@ -1,24 +1,18 @@
 # Write your MySQL query statement below
-select
-    customer_id,
-    p.product_id,
-    p.product_name
-from
-    (
-        select
+WITH
+    T AS (
+        SELECT
             customer_id,
             product_id,
-            rank() over(
-                partition by customer_id
-                order by
-                    count(1) desc
-            ) rk
-        from
-            Orders
-        group by
-            customer_id,
-            product_id
-    ) o
-    join Products p on o.product_id = p.product_id
-where
-    rk = 1;
+            RANK() OVER (
+                PARTITION BY customer_id
+                ORDER BY COUNT(1) DESC
+            ) AS rk
+        FROM Orders
+        GROUP BY 1, 2
+    )
+SELECT customer_id, product_id, product_name
+FROM
+    T
+    JOIN Products USING (product_id)
+WHERE rk = 1;

@@ -1,10 +1,18 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/lcci/16.24.Pairs%20With%20Sum/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 16.24. 数对和](https://leetcode.cn/problems/pairs-with-sum-lcci)
 
 [中文文档](/lcci/16.24.Pairs%20With%20Sum/README.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>设计一个算法，找出数组中两数之和为指定值的所有整数对。一个数只能属于一个数对。</p>
 <p><strong>示例 1:</strong></p>
@@ -18,11 +26,13 @@
 	<li><code>nums.length &lt;= 100000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：哈希表**
+### 方法一：哈希表
 
 我们可以使用哈希表来存储数组中的元素，键为数组中的元素，值为该元素出现的次数。
 
@@ -34,9 +44,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -53,9 +61,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -78,7 +84,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -100,7 +106,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func pairSums(nums []int, target int) (ans [][]int) {
@@ -118,7 +124,7 @@ func pairSums(nums []int, target int) (ans [][]int) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function pairSums(nums: number[], target: number): number[][] {
@@ -142,10 +148,33 @@ function pairSums(nums: number[], target: number): number[][] {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class Solution {
+    func pairSums(_ nums: [Int], _ target: Int) -> [[Int]] {
+        var countMap = [Int: Int]()
+        var ans = [[Int]]()
 
+        for x in nums {
+            let y = target - x
+            if let yCount = countMap[y], yCount > 0 {
+                ans.append([x, y])
+                countMap[y] = yCount - 1
+                if countMap[y] == 0 {
+                    countMap.removeValue(forKey: y)
+                }
+            } else {
+                countMap[x, default: 0] += 1
+            }
+        }
+        return ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

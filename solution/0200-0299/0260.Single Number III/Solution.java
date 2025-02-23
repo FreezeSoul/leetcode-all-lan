@@ -1,17 +1,17 @@
 class Solution {
     public int[] singleNumber(int[] nums) {
-        int eor = 0;
+        int xs = 0;
         for (int x : nums) {
-            eor ^= x;
+            xs ^= x;
         }
-        int lowbit = eor & (-eor);
-        int[] ans = new int[2];
+        int lb = xs & -xs;
+        int a = 0;
         for (int x : nums) {
-            if ((x & lowbit) == 0) {
-                ans[0] ^= x;
+            if ((x & lb) != 0) {
+                a ^= x;
             }
         }
-        ans[1] = eor ^ ans[0];
-        return ans;
+        int b = xs ^ a;
+        return new int[] {a, b};
     }
 }

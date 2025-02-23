@@ -1,8 +1,20 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0058.Length%20of%20Last%20Word/README_EN.md
+tags:
+    - String
+---
+
+<!-- problem:start -->
+
 # [58. Length of Last Word](https://leetcode.com/problems/length-of-last-word)
 
 [中文文档](/solution/0000-0099/0058.Length%20of%20Last%20Word/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a string <code>s</code> consisting of words and spaces, return <em>the length of the <strong>last</strong> word in the string.</em></p>
 
@@ -42,17 +54,21 @@
 	<li>There will be at least one word in <code>s</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-**Approach 1: Reverse traversal + two pointers**
+<!-- solution:start -->
 
-We start traversing from the end of the string $s$, finding the last character of the last word, which is not a space, and the subscript is $i$. Then continue to traverse forward to find the first space character, which is the character before the first character of the last word, and mark it as $j$. Then the length of the last word is $i - j$.
+### Solution 1: Reverse Traversal + Two Pointers
 
-Time complexity $O(n)$, where $n$ is the length of the string $s$. Space complexity $O(1)$.
+We start traversing from the end of the string $s$, find the first character that is not a space, which is the last character of the last word, and mark the index as $i$. Then continue to traverse forward, find the first character that is a space, which is the character before the first character of the last word, and mark it as $j$. Then the length of the last word is $i - j$.
+
+The time complexity is $O(n)$, where $n$ is the length of the string $s$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -66,7 +82,7 @@ class Solution:
         return i - j
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -84,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -103,7 +119,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func lengthOfLastWord(s string) int {
@@ -119,7 +135,40 @@ func lengthOfLastWord(s string) int {
 }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function lengthOfLastWord(s: string): number {
+    let i = s.length - 1;
+    while (i >= 0 && s[i] === ' ') {
+        --i;
+    }
+    let j = i;
+    while (j >= 0 && s[j] !== ' ') {
+        --j;
+    }
+    return i - j;
+}
+```
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn length_of_last_word(s: String) -> i32 {
+        let s = s.trim_end();
+        let n = s.len();
+        for (i, c) in s.char_indices().rev() {
+            if c == ' ' {
+                return (n - i - 1) as i32;
+            }
+        }
+        n as i32
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -139,23 +188,7 @@ var lengthOfLastWord = function (s) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function lengthOfLastWord(s: string): number {
-    let i = s.length - 1;
-    while (i >= 0 && s[i] === ' ') {
-        --i;
-    }
-    let j = i;
-    while (j >= 0 && s[j] !== ' ') {
-        --j;
-    }
-    return i - j;
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
@@ -173,24 +206,7 @@ public class Solution {
 }
 ```
 
-### **Rust**
-
-```rust
-impl Solution {
-    pub fn length_of_last_word(s: String) -> i32 {
-        let s = s.trim_end();
-        let n = s.len();
-        for (i, c) in s.char_indices().rev() {
-            if c == ' ' {
-                return (n - i - 1) as i32;
-            }
-        }
-        n as i32
-    }
-}
-```
-
-### **PHP**
+#### PHP
 
 ```php
 class Solution {
@@ -200,10 +216,10 @@ class Solution {
      */
     function lengthOfLastWord($s) {
         $count = 0;
-        while ($s[strlen($s) - 1] == " ") {
+        while ($s[strlen($s) - 1] == ' ') {
             $s = substr($s, 0, -1);
         }
-        while (strlen($s) != 0 && $s[strlen($s) - 1] != " ") {
+        while (strlen($s) != 0 && $s[strlen($s) - 1] != ' ') {
             $count++;
             $s = substr($s, 0, -1);
         }
@@ -212,10 +228,8 @@ class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

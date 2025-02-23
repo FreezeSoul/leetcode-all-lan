@@ -1,19 +1,19 @@
 class Solution {
 public:
     int halveArray(vector<int>& nums) {
-        priority_queue<double> q;
-        long long s = 0;
-        for (int& v : nums) {
-            s += v;
-            q.push(v);
+        priority_queue<double> pq;
+        double s = 0;
+        for (int x : nums) {
+            s += x;
+            pq.push((double) x);
         }
-        double d = s / 2.0;
+        s /= 2.0;
         int ans = 0;
-        while (d > 0) {
-            double t = q.top() / 2;
-            q.pop();
-            d -= t;
-            q.push(t);
+        while (s > 0) {
+            double t = pq.top() / 2.0;
+            pq.pop();
+            s -= t;
+            pq.push(t);
             ++ans;
         }
         return ans;

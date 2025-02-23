@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9818.%20%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E8%8A%82%E7%82%B9/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 18. 删除链表的节点](https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。</p>
 
@@ -31,9 +41,13 @@
 	<li>若使用 C 或 C++ 语言，你不需要 <code>free</code> 或 <code>delete</code> 被删除的节点</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-**方法一：模拟**
+<!-- solution:start -->
+
+### 方法一：模拟
 
 我们先创建一个虚拟头节点 `dummy`，令 `dummy.next = head`，然后创建一个指针 `cur` 指向 `dummy`。
 
@@ -45,7 +59,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -64,7 +78,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -89,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 /**
@@ -115,7 +129,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 /**
@@ -137,34 +151,7 @@ func deleteNode(head *ListNode, val int) *ListNode {
 }
 ```
 
-### **JavaScript**
-
-```js
-/**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-/**
- * @param {ListNode} head
- * @param {number} val
- * @return {ListNode}
- */
-var deleteNode = function (head, val) {
-    const dummy = new ListNode(0, head);
-    for (let cur = dummy; cur.next; cur = cur.next) {
-        if (cur.next.val == val) {
-            cur.next = cur.next.next;
-            break;
-        }
-    }
-    return dummy.next;
-};
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -198,7 +185,34 @@ impl Solution {
 }
 ```
 
-### **C#**
+#### JavaScript
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} val
+ * @return {ListNode}
+ */
+var deleteNode = function (head, val) {
+    const dummy = new ListNode(0, head);
+    for (let cur = dummy; cur.next; cur = cur.next) {
+        if (cur.next.val == val) {
+            cur.next = cur.next.next;
+            break;
+        }
+    }
+    return dummy.next;
+};
+```
+
+#### C#
 
 ```cs
 /**
@@ -223,10 +237,41 @@ public class Solution {
 }
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     var val: Int
+ *     var next: ListNode?
+ *     init(_ val: Int, _ next: ListNode? = nil) {
+ *         self.val = val
+ *         self.next = next
+ *     }
+ * }
+ */
 
+class Solution {
+    func deleteNode(_ head: ListNode?, _ val: Int) -> ListNode? {
+        let dummy = ListNode(0, head)
+        var current: ListNode? = dummy
+
+        while current?.next != nil {
+            if current?.next?.val == val {
+                current?.next = current?.next?.next
+                break
+            }
+            current = current?.next
+        }
+
+        return dummy.next
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

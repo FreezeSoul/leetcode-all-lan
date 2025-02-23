@@ -1,13 +1,18 @@
 class Solution {
     public int[] twoSum(int[] numbers, int target) {
-        int i = 0, j = numbers.length - 1;
-        for (;;) {
-            if (numbers[i] + numbers[j] < target) {
-                i++;
-            } else if (numbers[i] + numbers[j] > target) {
-                j--;
-            } else {
-                return new int[] {i, j};
+        for (int i = 0, n = numbers.length;; ++i) {
+            int x = target - numbers[i];
+            int l = i + 1, r = n - 1;
+            while (l < r) {
+                int mid = (l + r) >> 1;
+                if (numbers[mid] >= x) {
+                    r = mid;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            if (numbers[l] == x) {
+                return new int[] {i, l};
             }
         }
     }

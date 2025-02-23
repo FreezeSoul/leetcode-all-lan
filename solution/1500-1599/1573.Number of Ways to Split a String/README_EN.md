@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1573.Number%20of%20Ways%20to%20Split%20a%20String/README_EN.md
+rating: 1590
+source: Biweekly Contest 34 Q2
+tags:
+    - Math
+    - String
+---
+
+<!-- problem:start -->
+
 # [1573. Number of Ways to Split a String](https://leetcode.com/problems/number-of-ways-to-split-a-string)
 
 [中文文档](/solution/1500-1599/1573.Number%20of%20Ways%20to%20Split%20a%20String/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given a binary string <code>s</code>, you can split <code>s</code> into 3 <strong>non-empty</strong> strings <code>s1</code>, <code>s2</code>, and <code>s3</code> where <code>s1 + s2 + s3 = s</code>.</p>
 
@@ -47,11 +62,31 @@
 	<li><code>s[i]</code> is either <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+First, we traverse the string $s$ and count the number of characters $1$, denoted as $cnt$. If $cnt$ cannot be divided by $3$, then it is impossible to split the string, so we directly return $0$. If $cnt$ is $0$, it means there are no characters $1$ in the string. We can choose any two positions out of $n-1$ positions to split the string into three substrings, so the number of ways is $C_{n-1}^2$.
+
+If $cnt \gt 0$, we update $cnt$ to $\frac{cnt}{3}$, which is the number of characters $1$ in each substring.
+
+Next, we find the minimum index of the right boundary of the first substring, denoted as $i_1$, and the maximum index of the right boundary of the first substring (exclusive), denoted as $i_2$. Similarly, we find the minimum index of the right boundary of the second substring, denoted as $j_1$, and the maximum index of the right boundary of the second substring (exclusive), denoted as $j_2$. Then the number of ways is $(i_2 - i_1) \times (j_2 - j_1)$.
+
+Note that the answer may be very large, so we need to take the modulo $10^9+7$.
+
+The time complexity is $O(n)$, and the space complexity is $O(1)$. Here, $n$ is the length of the string $s$.
+
+Similar problems:
+
+-   [927. Three Equal Parts](https://github.com/doocs/leetcode/blob/main/solution/0900-0999/0927.Three%20Equal%20Parts/README_EN.md)
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -62,6 +97,7 @@ class Solution:
                 t += int(c == '1')
                 if t == x:
                     return i
+
         cnt, m = divmod(sum(c == '1' for c in s), 3)
         if m:
             return 0
@@ -74,7 +110,7 @@ class Solution:
         return (i2 - i1) * (j2 - j1) % (10**9 + 7)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -115,7 +151,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -137,7 +173,7 @@ public:
         cnt /= 3;
         auto find = [&](int x) {
             int t = 0;
-            for (int i = 0; ; ++i) {
+            for (int i = 0;; ++i) {
                 t += s[i] == '1';
                 if (t == x) {
                     return i;
@@ -151,7 +187,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func numWays(s string) int {
@@ -188,10 +224,8 @@ func numWays(s string) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

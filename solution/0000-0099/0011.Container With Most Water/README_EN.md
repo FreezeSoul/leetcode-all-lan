@@ -1,8 +1,22 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0011.Container%20With%20Most%20Water/README_EN.md
+tags:
+    - Greedy
+    - Array
+    - Two Pointers
+---
+
+<!-- problem:start -->
+
 # [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water)
 
 [中文文档](/solution/0000-0099/0011.Container%20With%20Most%20Water/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>height</code> of length <code>n</code>. There are <code>n</code> vertical lines drawn such that the two endpoints of the <code>i<sup>th</sup></code> line are <code>(i, 0)</code> and <code>(i, height[i])</code>.</p>
 
@@ -37,41 +51,57 @@
 	<li><code>0 &lt;= height[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Two Pointers
+
+We use two pointers $l$ and $r$ to point to the left and right ends of the array, respectively, i.e., $l = 0$ and $r = n - 1$, where $n$ is the length of the array.
+
+Next, we use a variable $\textit{ans}$ to record the maximum capacity of the container, initially set to $0$.
+
+Then, we start a loop. In each iteration, we calculate the current capacity of the container, i.e., $\textit{min}(height[l], height[r]) \times (r - l)$, and compare it with $\textit{ans}$, assigning the larger value to $\textit{ans}$. Then, we compare the values of $height[l]$ and $height[r]$. If $\textit{height}[l] < \textit{height}[r]$, moving the $r$ pointer will not improve the result because the height of the container is determined by the shorter vertical line, so we move the $l$ pointer. Otherwise, we move the $r$ pointer.
+
+After the iteration, we return $\textit{ans}$.
+
+The time complexity is $O(n)$, where $n$ is the length of the array $\textit{height}$. The space complexity is $O(1)$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def maxArea(self, height: List[int]) -> int:
-        i, j = 0, len(height) - 1
+        l, r = 0, len(height) - 1
         ans = 0
-        while i < j:
-            t = (j - i) * min(height[i], height[j])
+        while l < r:
+            t = min(height[l], height[r]) * (r - l)
             ans = max(ans, t)
-            if height[i] < height[j]:
-                i += 1
+            if height[l] < height[r]:
+                l += 1
             else:
-                j -= 1
+                r -= 1
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
     public int maxArea(int[] height) {
-        int i = 0, j = height.length - 1;
+        int l = 0, r = height.length - 1;
         int ans = 0;
-        while (i < j) {
-            int t = Math.min(height[i], height[j]) * (j - i);
+        while (l < r) {
+            int t = Math.min(height[l], height[r]) * (r - l);
             ans = Math.max(ans, t);
-            if (height[i] < height[j]) {
-                ++i;
+            if (height[l] < height[r]) {
+                ++l;
             } else {
-                --j;
+                --r;
             }
         }
         return ans;
@@ -79,21 +109,21 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     int maxArea(vector<int>& height) {
-        int i = 0, j = height.size() - 1;
+        int l = 0, r = height.size() - 1;
         int ans = 0;
-        while (i < j) {
-            int t = min(height[i], height[j]) * (j - i);
+        while (l < r) {
+            int t = min(height[l], height[r]) * (r - l);
             ans = max(ans, t);
-            if (height[i] < height[j]) {
-                ++i;
+            if (height[l] < height[r]) {
+                ++l;
             } else {
-                --j;
+                --r;
             }
         }
         return ans;
@@ -101,39 +131,65 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func maxArea(height []int) (ans int) {
-	i, j := 0, len(height)-1
-	for i < j {
-		t := min(height[i], height[j]) * (j - i)
+	l, r := 0, len(height)-1
+	for l < r {
+		t := min(height[l], height[r]) * (r - l)
 		ans = max(ans, t)
-		if height[i] < height[j] {
-			i++
+		if height[l] < height[r] {
+			l++
 		} else {
-			j--
+			r--
 		}
 	}
 	return
 }
+```
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
+#### TypeScript
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
+```ts
+function maxArea(height: number[]): number {
+    let [l, r] = [0, height.length - 1];
+    let ans = 0;
+    while (l < r) {
+        const t = Math.min(height[l], height[r]) * (r - l);
+        ans = Math.max(ans, t);
+        if (height[l] < height[r]) {
+            ++l;
+        } else {
+            --r;
+        }
+    }
+    return ans;
 }
 ```
 
-### **JavaScript**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn max_area(height: Vec<i32>) -> i32 {
+        let mut l = 0;
+        let mut r = height.len() - 1;
+        let mut ans = 0;
+        while l < r {
+            ans = ans.max(height[l].min(height[r]) * ((r - l) as i32));
+            if height[l] < height[r] {
+                l += 1;
+            } else {
+                r -= 1;
+            }
+        }
+        ans
+    }
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -141,56 +197,35 @@ func min(a, b int) int {
  * @return {number}
  */
 var maxArea = function (height) {
-    let i = 0;
-    let j = height.length - 1;
+    let [l, r] = [0, height.length - 1];
     let ans = 0;
-    while (i < j) {
-        const t = Math.min(height[i], height[j]) * (j - i);
+    while (l < r) {
+        const t = Math.min(height[l], height[r]) * (r - l);
         ans = Math.max(ans, t);
-        if (height[i] < height[j]) {
-            ++i;
+        if (height[l] < height[r]) {
+            ++l;
         } else {
-            --j;
+            --r;
         }
     }
     return ans;
 };
 ```
 
-### **TypeScript**
-
-```ts
-function maxArea(height: number[]): number {
-    let i = 0;
-    let j = height.length - 1;
-    let ans = 0;
-    while (i < j) {
-        const t = Math.min(height[i], height[j]) * (j - i);
-        ans = Math.max(ans, t);
-        if (height[i] < height[j]) {
-            ++i;
-        } else {
-            --j;
-        }
-    }
-    return ans;
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 public class Solution {
     public int MaxArea(int[] height) {
-        int i = 0, j = height.Length - 1;
+        int l = 0, r = height.Length - 1;
         int ans = 0;
-        while (i < j) {
-            int t = Math.Min(height[i], height[j]) * (j - i);
+        while (l < r) {
+            int t = Math.Min(height[l], height[r]) * (r - l);
             ans = Math.Max(ans, t);
-            if (height[i] < height[j]) {
-                ++i;
+            if (height[l] < height[r]) {
+                ++l;
             } else {
-                --j;
+                --r;
             }
         }
         return ans;
@@ -198,31 +233,34 @@ public class Solution {
 }
 ```
 
-### **Rust**
+#### PHP
 
-```rust
-impl Solution {
-    pub fn max_area(height: Vec<i32>) -> i32 {
-        let mut i = 0;
-        let mut j = height.len() - 1;
-        let mut res = 0;
-        while i < j {
-            res = res.max(height[i].min(height[j]) * (j - i) as i32);
-            if height[i] <= height[j] {
-                i += 1;
+```php
+class Solution {
+    /**
+     * @param Integer[] $height
+     * @return Integer
+     */
+    function maxArea($height) {
+        $l = 0;
+        $r = count($height) - 1;
+        $ans = 0;
+        while ($l < $r) {
+            $t = min($height[$l], $height[$r]) * ($r - $l);
+            $ans = max($ans, $t);
+            if ($height[$l] < $height[$r]) {
+                ++$l;
             } else {
-                j -= 1;
+                --$r;
             }
         }
-        res
+        return $ans;
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

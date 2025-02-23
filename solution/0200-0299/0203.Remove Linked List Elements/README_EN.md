@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0203.Remove%20Linked%20List%20Elements/README_EN.md
+tags:
+    - Recursion
+    - Linked List
+---
+
+<!-- problem:start -->
+
 # [203. Remove Linked List Elements](https://leetcode.com/problems/remove-linked-list-elements)
 
 [中文文档](/solution/0200-0299/0203.Remove%20Linked%20List%20Elements/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>head</code> of a linked list and an integer <code>val</code>, remove all the nodes of the linked list that has <code>Node.val == val</code>, and return <em>the new head</em>.</p>
 
@@ -37,11 +50,17 @@
 	<li><code>0 &lt;= val &lt;= 50</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for singly-linked list.
@@ -61,7 +80,7 @@ class Solution:
         return dummy.next
 ```
 
-### **Java**
+#### Java
 
 ```java
 /**
@@ -89,7 +108,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -110,37 +129,7 @@ public:
 };
 ```
 
-### **C#**
-
-```cs
-public class Solution {
-    public ListNode RemoveElements(ListNode head, int val) {
-        ListNode newHead = null;
-        ListNode newTail = null;
-        var current = head;
-        while (current != null)
-        {
-            if (current.val != val)
-            {
-                if (newHead == null)
-                {
-                    newHead = newTail = current;
-                }
-                else
-                {
-                    newTail.next = current;
-                    newTail = current;
-                }
-            }
-            current = current.next;
-        }
-        if (newTail != null) newTail.next = null;
-        return newHead;
-    }
-}
-```
-
-### **Go**
+#### Go
 
 ```go
 func removeElements(head *ListNode, val int) *ListNode {
@@ -158,7 +147,7 @@ func removeElements(head *ListNode, val int) *ListNode {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 /**
@@ -187,7 +176,7 @@ function removeElements(head: ListNode | null, val: number): ListNode | null {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for singly-linked list.
@@ -223,10 +212,38 @@ impl Solution {
 }
 ```
 
-### **...**
+#### C#
 
-```
-
+```cs
+public class Solution {
+    public ListNode RemoveElements(ListNode head, int val) {
+        ListNode newHead = null;
+        ListNode newTail = null;
+        var current = head;
+        while (current != null)
+        {
+            if (current.val != val)
+            {
+                if (newHead == null)
+                {
+                    newHead = newTail = current;
+                }
+                else
+                {
+                    newTail.next = current;
+                    newTail = current;
+                }
+            }
+            current = current.next;
+        }
+        if (newTail != null) newTail.next = null;
+        return newHead;
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

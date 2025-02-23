@@ -1,14 +1,14 @@
 func findMiddleIndex(nums []int) int {
-	var left, right int
+	l, r := 0, 0
 	for _, x := range nums {
-		right += x
+		r += x
 	}
 	for i, x := range nums {
-		right -= x
-		if left == right {
+		r -= x
+		if l == r {
 			return i
 		}
-		left += x
+		l += x
 	}
 	return -1
 }

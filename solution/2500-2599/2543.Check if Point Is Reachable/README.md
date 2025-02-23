@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2543.Check%20if%20Point%20Is%20Reachable/README.md
+rating: 2220
+source: 第 96 场双周赛 Q4
+tags:
+    - 数学
+    - 数论
+---
+
+<!-- problem:start -->
+
 # [2543. 判断一个点是否可以到达](https://leetcode.cn/problems/check-if-point-is-reachable)
 
 [English Version](/solution/2500-2599/2543.Check%20if%20Point%20Is%20Reachable/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个无穷大的网格图。一开始你在&nbsp;<code>(1, 1)</code>&nbsp;，你需要通过有限步移动到达点&nbsp;<code>(targetX, targetY)</code>&nbsp;。</p>
 
@@ -43,11 +56,13 @@
 	<li><code>1 &lt;= targetX, targetY&nbsp;&lt;= 10<sup>9</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：数学**
+### 方法一：数学
 
 我们注意到，前两种移动方式不会改变横、纵坐标的最大公约数，而后两种移动方式可以使得横、纵坐标的最大公约数乘上 $2$ 的幂次。也就是说，最后的横、纵坐标的最大公约数必须是 $2$ 的幂次。最大公约数不是 $2$ 的幂次，那么就无法到达。
 
@@ -57,13 +72,11 @@
 
 只要 $x$ 或 $y$ 是偶数，我们就将其除以 $2$，直到 $x$ 和 $y$ 均为奇数。此时，若 $x \neq y$，不妨设 $x \gt y$，那么 $\frac{x+y}{2} \lt x$。由于 $x+y$ 是偶数，我们可以通过操作从 $(x, y)$ 移动到 $(x+y, y)$，再移动到 $(\frac{x+y}{2}, y)$。也就是说，我们总能让 $x$ 和 $y$ 不断变小。循环结束时，如果 $x=y=1$，说明可以到达。
 
-时间复杂度 $O(\log(min(targetX, targetY)))$，空间复杂度 $O(1)$。
+时间复杂度 $O(\log(\min(targetX, targetY)))$，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -72,9 +85,7 @@ class Solution:
         return x & (x - 1) == 0
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -89,7 +100,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -101,7 +112,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func isReachable(targetX int, targetY int) bool {
@@ -117,7 +128,7 @@ func gcd(a, b int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function isReachable(targetX: number, targetY: number): boolean {
@@ -130,10 +141,8 @@ function gcd(a: number, b: number): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

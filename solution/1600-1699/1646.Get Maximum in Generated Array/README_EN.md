@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1600-1699/1646.Get%20Maximum%20in%20Generated%20Array/README_EN.md
+rating: 1301
+source: Weekly Contest 214 Q1
+tags:
+    - Array
+    - Simulation
+---
+
+<!-- problem:start -->
+
 # [1646. Get Maximum in Generated Array](https://leetcode.com/problems/get-maximum-in-generated-array)
 
 [中文文档](/solution/1600-1699/1646.Get%20Maximum%20in%20Generated%20Array/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer <code>n</code>. A <strong>0-indexed</strong> integer array <code>nums</code> of length <code>n + 1</code> is generated in the following way:</p>
 
@@ -56,11 +71,17 @@ Hence, nums = [0,1,1,2,1,3,2,3], and the maximum is max(0,1,1,2,1,3,2,3) = 3.
 	<li><code>0 &lt;= n &lt;= 100</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -74,7 +95,7 @@ class Solution:
         return max(nums)
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -112,10 +133,10 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func getMaximumGenerated(n int) (ans int) {
+func getMaximumGenerated(n int) int {
 	if n < 2 {
 		return n
 	}
@@ -127,20 +148,12 @@ func getMaximumGenerated(n int) (ans int) {
 		} else {
 			nums[i] = nums[i/2] + nums[i/2+1]
 		}
-		ans = max(ans, nums[i])
 	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return slices.Max(nums)
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function getMaximumGenerated(n: number): number {
@@ -150,17 +163,14 @@ function getMaximumGenerated(n: number): number {
     const nums: number[] = new Array(n + 1).fill(0);
     nums[1] = 1;
     for (let i = 2; i < n + 1; ++i) {
-        nums[i] =
-            i % 2 === 0 ? nums[i >> 1] : nums[i >> 1] + nums[(i >> 1) + 1];
+        nums[i] = i % 2 === 0 ? nums[i >> 1] : nums[i >> 1] + nums[(i >> 1) + 1];
     }
     return Math.max(...nums);
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

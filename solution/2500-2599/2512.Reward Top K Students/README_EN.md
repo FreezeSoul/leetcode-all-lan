@@ -1,8 +1,26 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2512.Reward%20Top%20K%20Students/README_EN.md
+rating: 1636
+source: Biweekly Contest 94 Q2
+tags:
+    - Array
+    - Hash Table
+    - String
+    - Sorting
+    - Heap (Priority Queue)
+---
+
+<!-- problem:start -->
+
 # [2512. Reward Top K Students](https://leetcode.com/problems/reward-top-k-students)
 
 [中文文档](/solution/2500-2599/2512.Reward%20Top%20K%20Students/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two string arrays <code>positive_feedback</code> and <code>negative_feedback</code>, containing the words denoting positive and negative feedback, respectively. Note that <strong>no</strong> word is both positive and negative.</p>
 
@@ -51,11 +69,25 @@ Since student 2 has more points, [2,1] is returned.
 	<li><code>1 &lt;= k &lt;= n</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1: Hash Table + Sorting
+
+We can store the positive words in a hash table $ps$ and the negative words in a hash table $ns$.
+
+Then, we traverse the $report$ and for each student, we store their score in an array $arr$, where each element is a tuple $(t, sid)$, where $t$ represents the student's score and $sid$ represents the student's ID.
+
+Finally, we sort the array $arr$ in descending order by score, and if the scores are the same, we sort by ID in ascending order. Then, we take the IDs of the top $k$ students.
+
+The time complexity is $O(n \times \log n + (|ps| + |ns| + n) \times |s|)$, and the space complexity is $O((|ps|+|ns|) \times |s| + n)$. Here, $n$ is the number of students, $|ps|$ and $|ns|$ are the number of positive and negative words, respectively, and $|s|$ is the average length of a word.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -82,7 +114,7 @@ class Solution:
         return [v[1] for v in arr[:k]]
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -97,7 +129,7 @@ class Solution {
             ns.add(s);
         }
         int n = report.length;
-        int[][] arr = new int[n][2];
+        int[][] arr = new int[n][0];
         for (int i = 0; i < n; ++i) {
             int sid = student_id[i];
             int t = 0;
@@ -120,7 +152,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -163,7 +195,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func topStudents(positive_feedback []string, negative_feedback []string, report []string, student_id []int, k int) (ans []int) {
@@ -195,7 +227,7 @@ func topStudents(positive_feedback []string, negative_feedback []string, report 
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function topStudents(
@@ -235,7 +267,7 @@ function topStudents(
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::{HashMap, HashSet};
@@ -276,10 +308,8 @@ impl Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

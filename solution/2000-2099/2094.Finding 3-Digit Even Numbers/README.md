@@ -1,10 +1,25 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2000-2099/2094.Finding%203-Digit%20Even%20Numbers/README.md
+rating: 1454
+source: 第 270 场周赛 Q1
+tags:
+    - 数组
+    - 哈希表
+    - 枚举
+    - 排序
+---
+
+<!-- problem:start -->
+
 # [2094. 找出 3 位偶数](https://leetcode.cn/problems/finding-3-digit-even-numbers)
 
 [English Version](/solution/2000-2099/2094.Finding%203-Digit%20Even%20Numbers/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数数组 <code>digits</code> ，其中每个元素是一个数字（<code>0 - 9</code>）。数组中可能存在重复元素。</p>
 
@@ -59,185 +74,182 @@
 	<li><code>0 &lt;= digits[i] &lt;= 9</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一：计数 + 枚举
+
+我们先统计 $\textit{digits}$ 中每个数字出现的次数，记录在数组或哈希表 $\textit{cnt}$ 中。
+
+然后，我们在 $[100, 1000)$ 的范围内枚举所有的偶数，判断这个偶数的每一位数字是否都不超过 $\textit{cnt}$ 中对应的数字的次数。如果是，则将这个偶数加入答案数组中。
+
+最后，返回答案数组。
+
+时间复杂度 $O(k \times 10^k)$，其中 $k$ 是目标偶数的位数，本题中 $k = 3$。忽略答案的空间消耗，空间复杂度 $O(1)$。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
     def findEvenNumbers(self, digits: List[int]) -> List[int]:
+        cnt = Counter(digits)
         ans = []
-        counter = Counter(digits)
-        for i in range(100, 1000, 2):
-            t = []
-            k = i
-            while k:
-                t.append(k % 10)
-                k //= 10
-            cnt = Counter(t)
-            if all([counter[i] >= cnt[i] for i in range(10)]):
-                ans.append(i)
+        for x in range(100, 1000, 2):
+            cnt1 = Counter()
+            y = x
+            while y:
+                y, v = divmod(y, 10)
+                cnt1[v] += 1
+            if all(cnt[i] >= cnt1[i] for i in range(10)):
+                ans.append(x)
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
     public int[] findEvenNumbers(int[] digits) {
-        int[] counter = count(digits);
+        int[] cnt = new int[10];
+        for (int x : digits) {
+            ++cnt[x];
+        }
         List<Integer> ans = new ArrayList<>();
-        for (int i = 100; i < 1000; i += 2) {
-            int[] t = new int[3];
-            for (int j = 0, k = i; k > 0; ++j) {
-                t[j] = k % 10;
-                k /= 10;
+        for (int x = 100; x < 1000; x += 2) {
+            int[] cnt1 = new int[10];
+            for (int y = x; y > 0; y /= 10) {
+                ++cnt1[y % 10];
             }
-            int[] cnt = count(t);
-            if (check(counter, cnt)) {
-                ans.add(i);
+            boolean ok = true;
+            for (int i = 0; i < 10 && ok; ++i) {
+                ok = cnt[i] >= cnt1[i];
             }
-        }
-        return ans.stream().mapToInt(Integer::valueOf).toArray();
-    }
-
-    private boolean check(int[] cnt1, int[] cnt2) {
-        for (int i = 0; i < 10; ++i) {
-            if (cnt1[i] < cnt2[i]) {
-                return false;
+            if (ok) {
+                ans.add(x);
             }
         }
-        return true;
-    }
-
-    private int[] count(int[] nums) {
-        int[] counter = new int[10];
-        for (int num : nums) {
-            ++counter[num];
-        }
-        return counter;
+        return ans.stream().mapToInt(i -> i).toArray();
     }
 }
 ```
 
-### **TypeScript**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
-
-```ts
-function findEvenNumbers(digits: number[]): number[] {
-    let record = new Array(10).fill(0);
-    for (let digit of digits) {
-        record[digit]++;
-    }
-    let ans = [];
-    for (let i = 100; i < 1000; i += 2) {
-        if (check(record, String(i))) {
-            ans.push(i);
-        }
-    }
-    return ans;
-}
-
-function check(target: Array<number>, digits: string): boolean {
-    let record = new Array(10).fill(0);
-    for (let digit of digits) {
-        record[digit]++;
-    }
-
-    for (let i = 0; i < 10; i++) {
-        if (record[i] > target[i]) return false;
-    }
-    return true;
-}
-```
-
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<int> findEvenNumbers(vector<int>& digits) {
-        vector<int> counter = count(digits);
+        int cnt[10]{};
+        for (int x : digits) {
+            ++cnt[x];
+        }
         vector<int> ans;
-        for (int i = 100; i < 1000; i += 2) {
-            vector<int> t(3);
-            for (int j = 0, k = i; k > 0; ++j) {
-                t[j] = k % 10;
-                k /= 10;
+        for (int x = 100; x < 1000; x += 2) {
+            int cnt1[10]{};
+            for (int y = x; y; y /= 10) {
+                ++cnt1[y % 10];
             }
-            vector<int> cnt = count(t);
-            if (check(counter, cnt)) ans.push_back(i);
+            bool ok = true;
+            for (int i = 0; i < 10 && ok; ++i) {
+                ok = cnt[i] >= cnt1[i];
+            }
+            if (ok) {
+                ans.push_back(x);
+            }
         }
         return ans;
-    }
-
-    vector<int> count(vector<int>& nums) {
-        vector<int> counter(10);
-        for (int num : nums) ++counter[num];
-        return counter;
-    }
-
-    bool check(vector<int>& cnt1, vector<int>& cnt2) {
-        for (int i = 0; i < 10; ++i)
-            if (cnt1[i] < cnt2[i])
-                return false;
-        return true;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func findEvenNumbers(digits []int) []int {
-	counter := count(digits)
-	var ans []int
-	for i := 100; i < 1000; i += 2 {
-		t := make([]int, 3)
-		k := i
-		for j := 0; k > 0; j++ {
-			t[j] = k % 10
-			k /= 10
-		}
-		cnt := count(t)
-		if check(counter, cnt) {
-			ans = append(ans, i)
-		}
+func findEvenNumbers(digits []int) (ans []int) {
+	cnt := [10]int{}
+	for _, x := range digits {
+		cnt[x]++
 	}
-	return ans
-}
-
-func count(nums []int) []int {
-	counter := make([]int, 10)
-	for _, num := range nums {
-		counter[num]++
-	}
-	return counter
-}
-
-func check(cnt1, cnt2 []int) bool {
-	for i := 0; i < 10; i++ {
-		if cnt1[i] < cnt2[i] {
-			return false
+	for x := 100; x < 1000; x += 2 {
+		cnt1 := [10]int{}
+		for y := x; y > 0; y /= 10 {
+			cnt1[y%10]++
+		}
+		ok := true
+		for i := 0; i < 10 && ok; i++ {
+			ok = cnt[i] >= cnt1[i]
+		}
+		if ok {
+			ans = append(ans, x)
 		}
 	}
-	return true
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function findEvenNumbers(digits: number[]): number[] {
+    const cnt: number[] = Array(10).fill(0);
+    for (const x of digits) {
+        ++cnt[x];
+    }
+    const ans: number[] = [];
+    for (let x = 100; x < 1000; x += 2) {
+        const cnt1: number[] = Array(10).fill(0);
+        for (let y = x; y; y = Math.floor(y / 10)) {
+            ++cnt1[y % 10];
+        }
+        let ok = true;
+        for (let i = 0; i < 10 && ok; ++i) {
+            ok = cnt[i] >= cnt1[i];
+        }
+        if (ok) {
+            ans.push(x);
+        }
+    }
+    return ans;
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} digits
+ * @return {number[]}
+ */
+var findEvenNumbers = function (digits) {
+    const cnt = Array(10).fill(0);
+    for (const x of digits) {
+        ++cnt[x];
+    }
+    const ans = [];
+    for (let x = 100; x < 1000; x += 2) {
+        const cnt1 = Array(10).fill(0);
+        for (let y = x; y; y = Math.floor(y / 10)) {
+            ++cnt1[y % 10];
+        }
+        let ok = true;
+        for (let i = 0; i < 10 && ok; ++i) {
+            ok = cnt[i] >= cnt1[i];
+        }
+        if (ok) {
+            ans.push(x);
+        }
+    }
+    return ans;
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

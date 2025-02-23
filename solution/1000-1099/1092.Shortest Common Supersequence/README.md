@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1092.Shortest%20Common%20Supersequence/README.md
+rating: 1976
+source: 第 141 场周赛 Q4
+tags:
+    - 字符串
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [1092. 最短公共超序列](https://leetcode.cn/problems/shortest-common-supersequence)
 
 [English Version](/solution/1000-1099/1092.Shortest%20Common%20Supersequence/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个字符串&nbsp;<code>str1</code> 和&nbsp;<code>str2</code>，返回同时以&nbsp;<code>str1</code>&nbsp;和&nbsp;<code>str2</code>&nbsp;作为 <strong>子序列</strong> 的最短字符串。如果答案不止一个，则可以返回满足条件的 <strong>任意一个</strong> 答案。</p>
 
@@ -39,11 +52,13 @@ str2 = "cab" 是 "cabac" 的一个子串，因为我们可以删去 "cabac" 末�
 	<li><code>str1</code> 和&nbsp;<code>str2</code>&nbsp;都由小写英文字母组成。</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：动态规划 + 构造**
+### 方法一：动态规划 + 构造
 
 我们先用动态规划求出两个字符串的最长公共子序列，然后根据最长公共子序列构造出最短公共超序列。
 
@@ -52,7 +67,7 @@ str2 = "cab" 是 "cabac" 的一个子串，因为我们可以删去 "cabac" 末�
 $$
 f[i][j] =
 \begin{cases}
-0 & i = 0 \text{ or } j = 0 \\
+0 & i = 0 \textit{ or } j = 0 \\
 f[i - 1][j - 1] + 1 & str1[i - 1] = str2[j - 1] \\
 \max(f[i - 1][j], f[i][j - 1]) & str1[i - 1] \neq str2[j - 1]
 \end{cases}
@@ -85,9 +100,7 @@ ans:    c   a   b   a   c
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -122,9 +135,7 @@ class Solution:
         return ''.join(ans[::-1])
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -163,7 +174,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -201,7 +212,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func shortestCommonSupersequence(str1 string, str2 string) string {
@@ -246,16 +257,9 @@ func shortestCommonSupersequence(str1 string, str2 string) string {
 	}
 	return string(ans)
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function shortestCommonSupersequence(str1: string, str2: string): string {
@@ -294,10 +298,8 @@ function shortestCommonSupersequence(str1: string, str2: string): string {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

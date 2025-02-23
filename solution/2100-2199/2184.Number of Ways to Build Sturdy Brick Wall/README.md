@@ -1,10 +1,23 @@
-# [2184. 建造坚实的砖墙的方法数](https://leetcode.cn/problems/number-of-ways-to-build-sturdy-brick-wall)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2100-2199/2184.Number%20of%20Ways%20to%20Build%20Sturdy%20Brick%20Wall/README.md
+tags:
+    - 位运算
+    - 数组
+    - 动态规划
+    - 状态压缩
+---
+
+<!-- problem:start -->
+
+# [2184. 建造坚实的砖墙的方法数 🔒](https://leetcode.cn/problems/number-of-ways-to-build-sturdy-brick-wall)
 
 [English Version](/solution/2100-2199/2184.Number%20of%20Ways%20to%20Build%20Sturdy%20Brick%20Wall/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你两个整数&nbsp;<code>height</code>&nbsp;与<code>width</code>&nbsp;，表示你要建造的砖墙的高和宽。再给你一个下标从 <strong>0</strong> 开始的数组 <code>bricks</code> ，其中第 <code>i</code> 块砖的高度是 <code>1</code> ，宽度为 <code>bricks[i]</code> 。每种砖的数量都是 <strong>无限 </strong>的，并且砖 <strong>不可以</strong> 进行旋转。</p>
 
@@ -42,11 +55,13 @@
 	<li><code>bricks</code>&nbsp;中所有数字<strong> 互不相同</strong></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：DFS + 动态规划**
+### 方法一：DFS + 动态规划
 
 首先通过 DFS 构造出所有合法的排列。然后所有排列进行两两比较，找出每种排列相邻的合法排列，记录在 `g` 数组中。
 
@@ -60,9 +75,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -116,9 +129,7 @@ class Solution:
         return sum(dp[-1]) % mod
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -198,7 +209,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -250,8 +261,10 @@ public:
         int i = 1, j = 1;
         while (i < a.size() && j < b.size()) {
             if (s1 == s2) return false;
-            if (s1 < s2) s1 += a[i++];
-            else s2 += b[j++];
+            if (s1 < s2)
+                s1 += a[i++];
+            else
+                s2 += b[j++];
         }
         return true;
     }
@@ -271,22 +284,20 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func buildWall(height int, width int, bricks []int) int {
 	mod := int(1e9) + 7
 	res := [][]int{}
 	t := []int{}
-	var dfs func(v int)
+	var dfs func(int)
 	dfs = func(v int) {
 		if v > width {
 			return
 		}
 		if v == width {
-			cp := make([]int, len(t))
-			copy(cp, t)
-			res = append(res, cp)
+			res = append(res, slices.Clone(t))
 			return
 		}
 		for _, x := range bricks {
@@ -350,16 +361,8 @@ func buildWall(height int, width int, bricks []int) int {
 }
 ```
 
-### **TypeScript**
-
-```ts
-
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

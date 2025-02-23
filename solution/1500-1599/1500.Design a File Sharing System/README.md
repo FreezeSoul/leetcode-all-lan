@@ -1,14 +1,28 @@
-# [1500. 设计文件分享系统](https://leetcode.cn/problems/design-a-file-sharing-system)
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1500-1599/1500.Design%20a%20File%20Sharing%20System/README.md
+tags:
+    - 设计
+    - 哈希表
+    - 数据流
+    - 排序
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
+# [1500. 设计文件分享系统 🔒](https://leetcode.cn/problems/design-a-file-sharing-system)
 
 [English Version](/solution/1500-1599/1500.Design%20a%20File%20Sharing%20System/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
-<p>我们需要使用一套文件分享系统来分享一个非常大的文件，该文件由&nbsp;<code>m</code> 个从&nbsp;<code>1</code>&nbsp;到&nbsp;<code>m</code>&nbsp;编号的文件块组成。</p>
+<p>我们需要使用一套文件分享系统来分享一个非常大的文件，该文件由&nbsp;<code>m</code> 个从&nbsp;<code>1</code>&nbsp;到&nbsp;<code>m</code>&nbsp;编号的 <strong>文件块</strong> 组成。</p>
 
-<p>当用户加入系统时，系统应为其注册<strong>一个独有</strong>的 ID。这个独有的 ID 应当被相应的用户使用<strong>一次</strong>，但是当用户离开系统时，其&nbsp;ID 应可以被（后续新注册的用户）<strong>再次使用</strong>。</p>
+<p>当用户加入系统时，系统应为其注册&nbsp;<strong>一个独有&nbsp;</strong>的 ID。这个独有的 ID 应当被相应的用户使用&nbsp;<strong>一次</strong>，但是当用户离开系统时，其&nbsp;ID 应可以被（后续新注册的用户）<strong>再次使用</strong>。</p>
 
 <p>用户可以请求文件中的某个指定的文件块，系统应当返回拥有这个文件块的所有用户的 ID。如果用户收到&nbsp;ID 的非空列表，就表示成功接收到请求的文件块。</p>
 
@@ -80,15 +94,17 @@ fileSharing.join([]);        // 一个不拥有任何文件块的用户加入系
 	<li>如果系统用于分享&nbsp;<code>n</code>&nbsp;个文件，其中第 &nbsp;<code>i</code>&nbsp;个文件由&nbsp;<code>m[i]</code>&nbsp;组成，你需要如何修改？</li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class FileSharing:
@@ -130,9 +146,7 @@ class FileSharing:
 # param_3 = obj.request(userID,chunkID)
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class FileSharing {
@@ -191,10 +205,8 @@ class FileSharing {
  */
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

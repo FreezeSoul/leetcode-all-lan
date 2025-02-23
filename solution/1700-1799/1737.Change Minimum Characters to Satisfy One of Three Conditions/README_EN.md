@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1700-1799/1737.Change%20Minimum%20Characters%20to%20Satisfy%20One%20of%20Three%20Conditions/README_EN.md
+rating: 1952
+source: Weekly Contest 225 Q2
+tags:
+    - Hash Table
+    - String
+    - Counting
+    - Prefix Sum
+---
+
+<!-- problem:start -->
+
 # [1737. Change Minimum Characters to Satisfy One of Three Conditions](https://leetcode.com/problems/change-minimum-characters-to-satisfy-one-of-three-conditions)
 
 [中文文档](/solution/1700-1799/1737.Change%20Minimum%20Characters%20to%20Satisfy%20One%20of%20Three%20Conditions/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given two strings <code>a</code> and <code>b</code> that consist of lowercase letters. In one operation, you can change any character in <code>a</code> or <code>b</code> to <strong>any lowercase letter</strong>.</p>
 
@@ -45,13 +62,27 @@ The best way was done in 2 operations (either condition 1 or condition 3).
 	<li><code>a</code> and <code>b</code> consist only of lowercase letters.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-Prefix Sum
+<!-- solution:start -->
+
+### Solution 1: Counting + Enumeration
+
+First, we count the number of occurrences of each letter in strings $a$ and $b$, denoted as $cnt_1$ and $cnt_2$.
+
+Then, we consider condition $3$, i.e., every letter in $a$ and $b$ is the same. We just need to enumerate the final letter $c$, and then count the number of letters in $a$ and $b$ that are not $c$. This is the number of characters that need to be changed.
+
+Next, we consider conditions $1$ and $2$, i.e., every letter in $a$ is less than every letter in $b$, or every letter in $b$ is less than every letter in $a$. For condition $1$, we make all characters in string $a$ less than character $c$, and all characters in string $b$ not less than $c$. We enumerate $c$ to find the smallest answer. Condition $2$ is similar.
+
+The final answer is the minimum of the above three cases.
+
+The time complexity is $O(m + n + C^2)$, where $m$ and $n$ are the lengths of strings $a$ and $b$ respectively, and $C$ is the size of the character set. In this problem, $C = 26$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -77,7 +108,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -117,7 +148,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +176,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minCharacters(a string, b string) int {
@@ -178,16 +209,9 @@ func minCharacters(a string, b string) int {
 	f(cnt2, cnt1)
 	return ans
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minCharacters(a: string, b: string): number {
@@ -211,12 +235,7 @@ function minCharacters(a: string, b: string): number {
         pre1 += count1[i];
         pre2 += count2[i];
         // case1， case2， case3
-        ans = Math.min(
-            ans,
-            m - pre1 + pre2,
-            pre1 + n - pre2,
-            m + n - count1[i] - count2[i],
-        );
+        ans = Math.min(ans, m - pre1 + pre2, pre1 + n - pre2, m + n - count1[i] - count2[i]);
     }
     ans = Math.min(ans, m + n - count1[25] - count2[25]);
 
@@ -224,10 +243,8 @@ function minCharacters(a: string, b: string): number {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

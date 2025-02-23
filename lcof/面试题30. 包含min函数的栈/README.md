@@ -1,6 +1,16 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/lcof/%E9%9D%A2%E8%AF%95%E9%A2%9830.%20%E5%8C%85%E5%90%ABmin%E5%87%BD%E6%95%B0%E7%9A%84%E6%A0%88/README.md
+---
+
+<!-- problem:start -->
+
 # [面试题 30. 包含 min 函数的栈](https://leetcode.cn/problems/bao-han-minhan-shu-de-zhan-lcof/)
 
 ## 题目描述
+
+<!-- description:start -->
 
 <p>定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。</p>
 
@@ -30,7 +40,11 @@ minStack.min();   --&gt; 返回 -2.
 
 <p>注意：本题与主站 155 题相同：<a href="https://leetcode.cn/problems/min-stack/">https://leetcode.cn/problems/min-stack/</a></p>
 
-**方法一：双栈**
+## 解法
+
+<!-- solution:start -->
+
+### 方法一：双栈
 
 我们用两个栈来实现，其中`stk1` 用来存储数据，`stk2` 用来存储当前栈中的最小值。初始时，`stk2` 中存储一个极大值。
 
@@ -43,9 +57,7 @@ minStack.min();   --&gt; 返回 -2.
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class MinStack:
@@ -76,9 +88,7 @@ class MinStack:
 # param_4 = obj.getMin()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class MinStack {
@@ -119,7 +129,7 @@ class MinStack {
  */
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class MinStack {
@@ -162,7 +172,7 @@ private:
  */
 ```
 
-### **Go**
+#### Go
 
 ```go
 type MinStack struct {
@@ -193,13 +203,6 @@ func (this *MinStack) GetMin() int {
 	return this.stk2[len(this.stk2)-1]
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 /**
  * Your MinStack object will be instantiated and called as such:
  * obj := Constructor();
@@ -210,7 +213,7 @@ func min(a, b int) int {
  */
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 class MinStack {
@@ -236,9 +239,7 @@ class MinStack {
     }
 
     getMin(): number {
-        return this.mins.length == 0
-            ? Infinity
-            : this.mins[this.mins.length - 1];
+        return this.mins.length == 0 ? Infinity : this.mins[this.mins.length - 1];
     }
 }
 
@@ -252,7 +253,7 @@ class MinStack {
  */
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 use std::collections::VecDeque;
@@ -261,16 +262,17 @@ struct MinStack {
     min_stack: VecDeque<i32>,
 }
 
-
 /**
  * `&self` means the method takes an immutable reference.
  * If you need a mutable reference, change it to `&mut self` instead.
  */
 impl MinStack {
-
     /** initialize your data structure here. */
     fn new() -> Self {
-        Self { stack: VecDeque::new(), min_stack: VecDeque::new() }
+        Self {
+            stack: VecDeque::new(),
+            min_stack: VecDeque::new(),
+        }
     }
 
     fn push(&mut self, x: i32) {
@@ -295,18 +297,64 @@ impl MinStack {
         *self.min_stack.back().unwrap()
     }
 }
+```
+
+#### JavaScript
+
+```js
+/**
+ * initialize your data structure here.
+ */
+var MinStack = function () {
+    this.stack = [];
+    this.minStack = [];
+};
+
+/**
+ * @param {number} x
+ * @return {void}
+ */
+MinStack.prototype.push = function (x) {
+    this.stack.unshift(x);
+    if (!this.minStack.length || this.minStack[0] >= x) {
+        this.minStack.unshift(x);
+    }
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function () {
+    if (this.stack.shift() === this.minStack[0]) {
+        this.minStack.shift();
+    }
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function () {
+    return this.stack[0];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.min = function () {
+    return this.minStack[0];
+};
 
 /**
  * Your MinStack object will be instantiated and called as such:
- * let obj = MinStack::new();
- * obj.push(x);
- * obj.pop();
- * let ret_3: i32 = obj.top();
- * let ret_4: i32 = obj.get_min();
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.min()
  */
 ```
 
-### **C#**
+#### C#
 
 ```cs
 public class MinStack {
@@ -347,10 +395,49 @@ public class MinStack {
  */
 ```
 
-### **...**
+#### Swift
 
-```
+```swift
+class MinStack {
+    private var stack: [Int]
+    private var minStack: [Int]
 
+    init() {
+        stack = []
+        minStack = [Int.max]
+    }
+
+    func push(_ x: Int) {
+        stack.append(x)
+        minStack.append(min(x, minStack.last!))
+    }
+
+    func pop() {
+        stack.removeLast()
+        minStack.removeLast()
+    }
+
+    func top() -> Int {
+        return stack.last!
+    }
+
+    func getMin() -> Int {
+        return minStack.last!
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * let obj = MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * let param_3 = obj.top();
+ * let param_4 = obj.getMin();
+ */
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

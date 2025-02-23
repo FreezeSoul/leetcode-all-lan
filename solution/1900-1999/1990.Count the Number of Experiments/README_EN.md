@@ -1,8 +1,20 @@
-# [1990. Count the Number of Experiments](https://leetcode.com/problems/count-the-number-of-experiments)
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1900-1999/1990.Count%20the%20Number%20of%20Experiments/README_EN.md
+tags:
+    - Database
+---
+
+<!-- problem:start -->
+
+# [1990. Count the Number of Experiments 🔒](https://leetcode.com/problems/count-the-number-of-experiments)
 
 [中文文档](/solution/1900-1999/1990.Count%20the%20Number%20of%20Experiments/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Table: <code>Experiments</code></p>
 
@@ -14,19 +26,19 @@
 | platform        | enum |
 | experiment_name | enum |
 +-----------------+------+
-experiment_id is the primary key for this table.
-platform is an enum with one of the values (&#39;Android&#39;, &#39;IOS&#39;, &#39;Web&#39;).
-experiment_name is an enum with one of the values (&#39;Reading&#39;, &#39;Sports&#39;, &#39;Programming&#39;).
+experiment_id is the column with unique values for this table.
+platform is an enum (category) type of values (&#39;Android&#39;, &#39;IOS&#39;, &#39;Web&#39;).
+experiment_name is an enum (category) type of values (&#39;Reading&#39;, &#39;Sports&#39;, &#39;Programming&#39;).
 This table contains information about the ID of an experiment done with a random person, the platform used to do the experiment, and the name of the experiment.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>Write an SQL query to report the <strong>number of experiments</strong> done on each of the three platforms for each of the three given experiments. Notice that all the pairs of (platform, experiment) should be included in the output <strong>including</strong> the pairs with <strong>zero experiments</strong>.</p>
+<p>Write a solution to report the <strong>number of experiments</strong> done on each of the three platforms for each of the three given experiments. Notice that all the pairs of (platform, experiment) should be included in the output <strong>including</strong> the pairs with <strong>zero experiments</strong>.</p>
 
 <p>Return the result table in <strong>any order</strong>.</p>
 
-<p>The query result format is in the following example.</p>
+<p>The&nbsp;result format is in the following example.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
@@ -64,14 +76,50 @@ On the platform &quot;IOS&quot;, we had one &quot;Sports&quot; experiment and on
 On the platform &quot;Web&quot;, we had two &quot;Reading&quot; experiments and one &quot;Programming&quot; experiment.
 </pre>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **SQL**
+#### MySQL
 
 ```sql
-
+# Write your MySQL query statement below
+WITH
+    P AS (
+        SELECT 'Android' AS platform
+        UNION
+        SELECT 'IOS'
+        UNION
+        SELECT 'Web'
+    ),
+    Exp AS (
+        SELECT 'Reading' AS experiment_name
+        UNION
+        SELECT 'Sports'
+        UNION
+        SELECT 'Programming'
+    ),
+    T AS (
+        SELECT *
+        FROM
+            P,
+            Exp
+    )
+SELECT platform, experiment_name, COUNT(experiment_id) AS num_experiments
+FROM
+    T AS t
+    LEFT JOIN Experiments USING (platform, experiment_name)
+GROUP BY 1, 2;
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

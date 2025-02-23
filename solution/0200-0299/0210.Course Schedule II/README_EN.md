@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0210.Course%20Schedule%20II/README_EN.md
+tags:
+    - Depth-First Search
+    - Breadth-First Search
+    - Graph
+    - Topological Sort
+---
+
+<!-- problem:start -->
+
 # [210. Course Schedule II](https://leetcode.com/problems/course-schedule-ii)
 
 [中文文档](/solution/0200-0299/0210.Course%20Schedule%20II/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>There are a total of <code>numCourses</code> courses you have to take, labeled from <code>0</code> to <code>numCourses - 1</code>. You are given an array <code>prerequisites</code> where <code>prerequisites[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that you <strong>must</strong> take course <code>b<sub>i</sub></code> first if you want to take course <code>a<sub>i</sub></code>.</p>
 
@@ -49,11 +64,17 @@ So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
 	<li>All the pairs <code>[a<sub>i</sub>, b<sub>i</sub>]</code> are <strong>distinct</strong>.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -75,7 +96,7 @@ class Solution:
         return ans if len(ans) == numCourses else []
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -110,7 +131,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -145,7 +166,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findOrder(numCourses int, prerequisites [][]int) []int {
@@ -181,11 +202,11 @@ func findOrder(numCourses int, prerequisites [][]int) []int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findOrder(numCourses: number, prerequisites: number[][]): number[] {
-    const g: number[][] = new Array(numCourses).fill(0).map(() => []);
+    const g: number[][] = Array.from({ length: numCourses }, () => []);
     const indeg: number[] = new Array(numCourses).fill(0);
     for (const [a, b] of prerequisites) {
         g[b].push(a);
@@ -193,7 +214,7 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
     }
     const q: number[] = [];
     for (let i = 0; i < numCourses; ++i) {
-        if (indeg[i] == 0) {
+        if (indeg[i] === 0) {
             q.push(i);
         }
     }
@@ -202,7 +223,7 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
         const i = q.shift()!;
         ans.push(i);
         for (const j of g[i]) {
-            if (--indeg[j] == 0) {
+            if (--indeg[j] === 0) {
                 q.push(j);
             }
         }
@@ -211,7 +232,50 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
 }
 ```
 
-### **C#**
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
+        let n = num_courses as usize;
+        let mut adjacency = vec![vec![]; n];
+        let mut entry = vec![0; n];
+        // init
+        for iter in prerequisites.iter() {
+            let (a, b) = (iter[0], iter[1]);
+            adjacency[b as usize].push(a);
+            entry[a as usize] += 1;
+        }
+        // construct deque & reslut
+        let mut deque = std::collections::VecDeque::new();
+        for index in 0..n {
+            if entry[index] == 0 {
+                deque.push_back(index);
+            }
+        }
+        let mut result = vec![];
+        // bfs
+        while !deque.is_empty() {
+            let head = deque.pop_front().unwrap();
+            result.push(head as i32);
+            // update degree of entry
+            for &out_entry in adjacency[head].iter() {
+                entry[out_entry as usize] -= 1;
+                if entry[out_entry as usize] == 0 {
+                    deque.push_back(out_entry as usize);
+                }
+            }
+        }
+        if result.len() == n {
+            result
+        } else {
+            vec![]
+        }
+    }
+}
+```
+
+#### C#
 
 ```cs
 public class Solution {
@@ -248,10 +312,8 @@ public class Solution {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

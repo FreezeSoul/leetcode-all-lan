@@ -1,8 +1,23 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0500-0599/0513.Find%20Bottom%20Left%20Tree%20Value/README_EN.md
+tags:
+    - Tree
+    - Depth-First Search
+    - Breadth-First Search
+    - Binary Tree
+---
+
+<!-- problem:start -->
+
 # [513. Find Bottom Left Tree Value](https://leetcode.com/problems/find-bottom-left-tree-value)
 
 [中文文档](/solution/0500-0599/0513.Find%20Bottom%20Left%20Tree%20Value/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>Given the <code>root</code> of a binary tree, return the leftmost value in the last row of the tree.</p>
 
@@ -29,11 +44,17 @@
 	<li><code>-2<sup>31</sup> &lt;= Node.val &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
+
+<!-- solution:start -->
+
+### Solution 1
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 # Definition for a binary tree node.
@@ -57,31 +78,7 @@ class Solution:
         return ans
 ```
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def findBottomLeftValue(self, root: Optional[TreeNode]) -> int:
-        def dfs(root, curr):
-            if root is None:
-                return
-            dfs(root.left, curr + 1)
-            dfs(root.right, curr + 1)
-            nonlocal ans, mx
-            if mx < curr:
-                mx = curr
-                ans = root.val
-
-        ans = mx = 0
-        dfs(root, 1)
-        return ans
-```
-
-### **Java**
+#### Java
 
 ```java
 /**
@@ -120,6 +117,191 @@ class Solution {
     }
 }
 ```
+
+#### C++
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        queue<TreeNode*> q{{root}};
+        int ans = 0;
+        while (!q.empty()) {
+            ans = q.front()->val;
+            for (int i = q.size(); i; --i) {
+                TreeNode* node = q.front();
+                q.pop();
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func findBottomLeftValue(root *TreeNode) int {
+	q := []*TreeNode{root}
+	ans := 0
+	for len(q) > 0 {
+		ans = q[0].Val
+		for i := len(q); i > 0; i-- {
+			node := q[0]
+			q = q[1:]
+			if node.Left != nil {
+				q = append(q, node.Left)
+			}
+			if node.Right != nil {
+				q = append(q, node.Right)
+			}
+		}
+	}
+	return ans
+}
+```
+
+#### TypeScript
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function findBottomLeftValue(root: TreeNode | null): number {
+    let ans = 0;
+    const q = [root];
+    while (q.length) {
+        ans = q[0].val;
+        for (let i = q.length; i; --i) {
+            const node = q.shift();
+            if (node.left) {
+                q.push(node.left);
+            }
+            if (node.right) {
+                q.push(node.right);
+            }
+        }
+    }
+    return ans;
+}
+```
+
+#### Rust
+
+```rust
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::collections::VecDeque;
+use std::rc::Rc;
+impl Solution {
+    pub fn find_bottom_left_value(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        let mut queue = VecDeque::new();
+        queue.push_back(root);
+        let mut res = 0;
+        while !queue.is_empty() {
+            res = queue.front().unwrap().as_ref().unwrap().borrow_mut().val;
+            for _ in 0..queue.len() {
+                let node = queue.pop_front().unwrap();
+                let mut node = node.as_ref().unwrap().borrow_mut();
+                if node.left.is_some() {
+                    queue.push_back(node.left.take());
+                }
+                if node.right.is_some() {
+                    queue.push_back(node.right.take());
+                }
+            }
+        }
+        res
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### Solution 2
+
+<!-- tabs:start -->
+
+#### Python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def findBottomLeftValue(self, root: Optional[TreeNode]) -> int:
+        def dfs(root, curr):
+            if root is None:
+                return
+            dfs(root.left, curr + 1)
+            dfs(root.right, curr + 1)
+            nonlocal ans, mx
+            if mx < curr:
+                mx = curr
+                ans = root.val
+
+        ans = mx = 0
+        dfs(root, 1)
+        return ans
+```
+
+#### Java
 
 ```java
 /**
@@ -160,41 +342,72 @@ class Solution {
 }
 ```
 
-### **TypeScript**
+#### C++
 
-```ts
+```cpp
 /**
  * Definition for a binary tree node.
- * class TreeNode {
- *     val: number
- *     left: TreeNode | null
- *     right: TreeNode | null
- *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.left = (left===undefined ? null : left)
- *         this.right = (right===undefined ? null : right)
- *     }
- * }
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
  */
+class Solution {
+public:
+    int ans = 0;
+    int mx = 0;
+    int findBottomLeftValue(TreeNode* root) {
+        dfs(root, 1);
+        return ans;
+    }
 
-function findBottomLeftValue(root: TreeNode | null): number {
-    let ans = 0;
-    const q = [root];
-    while (q.length) {
-        ans = q[0].val;
-        for (let i = q.length; i; --i) {
-            const node = q.shift();
-            if (node.left) {
-                q.push(node.left);
-            }
-            if (node.right) {
-                q.push(node.right);
-            }
+    void dfs(TreeNode* root, int curr) {
+        if (!root) return;
+        dfs(root->left, curr + 1);
+        dfs(root->right, curr + 1);
+        if (mx < curr) {
+            mx = curr;
+            ans = root->val;
         }
     }
-    return ans;
+};
+```
+
+#### Go
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func findBottomLeftValue(root *TreeNode) int {
+	ans, mx := 0, 0
+	var dfs func(*TreeNode, int)
+	dfs = func(root *TreeNode, curr int) {
+		if root == nil {
+			return
+		}
+		dfs(root.Left, curr+1)
+		dfs(root.Right, curr+1)
+		if mx < curr {
+			mx = curr
+			ans = root.Val
+		}
+	}
+	dfs(root, 1)
+	return ans
 }
 ```
+
+#### TypeScript
 
 ```ts
 /**
@@ -231,133 +444,7 @@ function findBottomLeftValue(root: TreeNode | null): number {
 }
 ```
 
-### **C++**
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    int findBottomLeftValue(TreeNode* root) {
-        queue<TreeNode*> q {{root}};
-        int ans = 0;
-        while (!q.empty()) {
-            ans = q.front()->val;
-            for (int i = q.size(); i; --i) {
-                TreeNode* node = q.front();
-                q.pop();
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
-            }
-        }
-        return ans;
-    }
-};
-```
-
-```cpp
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    int ans = 0;
-    int mx = 0;
-    int findBottomLeftValue(TreeNode* root) {
-        dfs(root, 1);
-        return ans;
-    }
-
-    void dfs(TreeNode* root, int curr) {
-        if (!root) return;
-        dfs(root->left, curr + 1);
-        dfs(root->right, curr + 1);
-        if (mx < curr)
-        {
-            mx = curr;
-            ans = root->val;
-        }
-    }
-};
-```
-
-### **Go**
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func findBottomLeftValue(root *TreeNode) int {
-	q := []*TreeNode{root}
-	ans := 0
-	for len(q) > 0 {
-		ans = q[0].Val
-		for i := len(q); i > 0; i-- {
-			node := q[0]
-			q = q[1:]
-			if node.Left != nil {
-				q = append(q, node.Left)
-			}
-			if node.Right != nil {
-				q = append(q, node.Right)
-			}
-		}
-	}
-	return ans
-}
-```
-
-```go
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-func findBottomLeftValue(root *TreeNode) int {
-	ans, mx := 0, 0
-	var dfs func(*TreeNode, int)
-	dfs = func(root *TreeNode, curr int) {
-		if root == nil {
-			return
-		}
-		dfs(root.Left, curr+1)
-		dfs(root.Right, curr+1)
-		if mx < curr {
-			mx = curr
-			ans = root.Val
-		}
-	}
-	dfs(root, 1)
-	return ans
-}
-```
-
-### **Rust**
+#### Rust
 
 ```rust
 // Definition for a binary tree node.
@@ -378,54 +465,9 @@ func findBottomLeftValue(root *TreeNode) int {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::VecDeque;
-impl Solution {
-    pub fn find_bottom_left_value(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        let mut queue = VecDeque::new();
-        queue.push_back(root);
-        let mut res = 0;
-        while !queue.is_empty() {
-            res = queue.front().unwrap().as_ref().unwrap().borrow_mut().val;
-            for _ in 0..queue.len() {
-                let node = queue.pop_front().unwrap();
-                let mut node = node.as_ref().unwrap().borrow_mut();
-                if node.left.is_some() {
-                    queue.push_back(node.left.take());
-                }
-                if node.right.is_some() {
-                    queue.push_back(node.right.take());
-                }
-            }
-        }
-        res
-    }
-}
-```
-
-```rust
-// Definition for a binary tree node.
-// #[derive(Debug, PartialEq, Eq)]
-// pub struct TreeNode {
-//   pub val: i32,
-//   pub left: Option<Rc<RefCell<TreeNode>>>,
-//   pub right: Option<Rc<RefCell<TreeNode>>>,
-// }
-//
-// impl TreeNode {
-//   #[inline]
-//   pub fn new(val: i32) -> Self {
-//     TreeNode {
-//       val,
-//       left: None,
-//       right: None
-//     }
-//   }
-// }
 use std::rc::Rc;
-use std::cell::RefCell;
-use std::collections::VecDeque;
 impl Solution {
     fn dfs(root: &Option<Rc<RefCell<TreeNode>>>, cur: i32, max: &mut i32, res: &mut i32) {
         if root.is_none() {
@@ -443,16 +485,14 @@ impl Solution {
     pub fn find_bottom_left_value(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let mut max = 0;
         let mut res = 0;
-        Self::dfs(&root, 1, &mut max,&mut res);
+        Self::dfs(&root, 1, &mut max, &mut res);
         res
     }
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

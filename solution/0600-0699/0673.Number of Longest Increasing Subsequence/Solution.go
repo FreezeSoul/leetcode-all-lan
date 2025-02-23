@@ -1,25 +1,24 @@
-func findNumberOfLIS(nums []int) int {
-	maxLen, ans, n := 0, 0, len(nums)
-	dp, cnt := make([]int, n), make([]int, n)
-	for i := 0; i < n; i++ {
-		dp[i] = 1
-		cnt[i] = 1
-		for j := 0; j < i; j++ {
-			if nums[i] > nums[j] {
-				if dp[j]+1 > dp[i] {
-					dp[i] = dp[j] + 1
+func findNumberOfLIS(nums []int) (ans int) {
+	n, mx := len(nums), 0
+	f := make([]int, n)
+	cnt := make([]int, n)
+	for i, x := range nums {
+		for j, y := range nums[:i] {
+			if y < x {
+				if f[i] < f[j]+1 {
+					f[i] = f[j] + 1
 					cnt[i] = cnt[j]
-				} else if dp[j]+1 == dp[i] {
+				} else if f[i] == f[j]+1 {
 					cnt[i] += cnt[j]
 				}
 			}
 		}
-		if dp[i] > maxLen {
-			maxLen = dp[i]
+		if mx < f[i] {
+			mx = f[i]
 			ans = cnt[i]
-		} else if dp[i] == maxLen {
+		} else if mx == f[i] {
 			ans += cnt[i]
 		}
 	}
-	return ans
+	return
 }

@@ -1,8 +1,21 @@
+---
+comments: true
+difficulty: Medium
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0000-0099/0093.Restore%20IP%20Addresses/README_EN.md
+tags:
+    - String
+    - Backtracking
+---
+
+<!-- problem:start -->
+
 # [93. Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses)
 
 [中文文档](/solution/0000-0099/0093.Restore%20IP%20Addresses/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>A <strong>valid IP address</strong> consists of exactly four integers separated by single dots. Each integer is between <code>0</code> and <code>255</code> (<strong>inclusive</strong>) and cannot have leading zeros.</p>
 
@@ -42,167 +55,229 @@
 	<li><code>s</code> consists of digits only.</li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-DFS.
+<!-- solution:start -->
+
+### Solution 1: DFS
+
+We define a function $dfs(i)$, which represents the list of IP addresses that can be formed starting from the $i$th position of string $s$.
+
+The execution steps of function $dfs(i)$ are as follows:
+
+If $i$ is greater than or equal to the length of string $s$, it means that we have completed the splicing of four segments of the IP address. At this point, we need to check whether it meets the requirements of the four segments of the IP address. If it does, add the current $IP$ to the answer.
+
+If $i$ is less than the length of string $s$, it means that we still need to splice a segment of the IP address. At this point, we need to determine the value of this segment of the IP address. If the value is greater than $255$, or the current position $i$ is $0$ and the value of several positions after $i$ is greater than $0$, it means that it does not meet the requirements, so we return directly. Otherwise, add it to the IP address list, and continue to search for the next segment of the IP address.
+
+The time complexity is $O(n \times 3^4)$, and the space complexity is $O(n)$. Here, $n$ is the length of string $s$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
     def restoreIpAddresses(self, s: str) -> List[str]:
-        def check(s):
-            if not (0 <= int(s) <= 255):
+        def check(i: int, j: int) -> int:
+            if s[i] == "0" and i != j:
                 return False
-            if s[0] == '0' and len(s) > 1:
-                return False
-            return True
+            return 0 <= int(s[i : j + 1]) <= 255
 
-        def dfs(s, t):
-            if len(t) == 4:
-                if not s:
-                    ans.append('.'.join(t))
+        def dfs(i: int):
+            if i >= n and len(t) == 4:
+                ans.append(".".join(t))
                 return
-            for i in range(1, min(4, len(s) + 1)):
-                if check(s[:i]):
-                    t.append(s[:i])
-                    dfs(s[i:], t)
+            if i >= n or len(t) >= 4:
+                return
+            for j in range(i, min(i + 3, n)):
+                if check(i, j):
+                    t.append(s[i : j + 1])
+                    dfs(j + 1)
                     t.pop()
 
+        n = len(s)
         ans = []
-        dfs(s, [])
+        t = []
+        dfs(0)
         return ans
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
-    private List<String> ans;
+    private int n;
+    private String s;
+    private List<String> ans = new ArrayList<>();
+    private List<String> t = new ArrayList<>();
 
     public List<String> restoreIpAddresses(String s) {
-        ans = new ArrayList<>();
-        dfs(s, new ArrayList<>());
+        n = s.length();
+        this.s = s;
+        dfs(0);
         return ans;
     }
 
-    private void dfs(String s, List<String> t) {
-        if (t.size() == 4) {
-            if ("".equals(s)) {
-                ans.add(String.join(".", t));
-            }
+    private void dfs(int i) {
+        if (i >= n && t.size() == 4) {
+            ans.add(String.join(".", t));
             return;
         }
-        for (int i = 1; i < Math.min(4, s.length() + 1); ++i) {
-            String c = s.substring(0, i);
-            if (check(c)) {
-                t.add(c);
-                dfs(s.substring(i), t);
-                t.remove(t.size() - 1);
+        if (i >= n || t.size() >= 4) {
+            return;
+        }
+        int x = 0;
+        for (int j = i; j < Math.min(i + 3, n); ++j) {
+            x = x * 10 + s.charAt(j) - '0';
+            if (x > 255 || (s.charAt(i) == '0' && i != j)) {
+                break;
             }
+            t.add(s.substring(i, j + 1));
+            dfs(j + 1);
+            t.remove(t.size() - 1);
         }
-    }
-
-    private boolean check(String s) {
-        if ("".equals(s)) {
-            return false;
-        }
-        int num = Integer.parseInt(s);
-        if (num > 255) {
-            return false;
-        }
-        if (s.charAt(0) == '0' && s.length() > 1) {
-            return false;
-        }
-        return true;
     }
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     vector<string> restoreIpAddresses(string s) {
+        int n = s.size();
         vector<string> ans;
         vector<string> t;
-        dfs(s, t, ans);
-        return ans;
-    }
-
-    void dfs(string s, vector<string>& t, vector<string>& ans) {
-        if (t.size() == 4) {
-            if (s == "") {
-                string p = "";
-                for (auto e : t) p += e + ".";
-                p.pop_back();
-                ans.push_back(p);
+        function<void(int)> dfs = [&](int i) {
+            if (i >= n && t.size() == 4) {
+                ans.push_back(t[0] + "." + t[1] + "." + t[2] + "." + t[3]);
+                return;
             }
-            return;
-        }
-        for (int i = 1; i < min(4, (int)s.size() + 1); ++i) {
-            string c = s.substr(0, i);
-            if (check(c)) {
-                t.push_back(c);
-                dfs(s.substr(i, s.size() - i), t, ans);
+            if (i >= n || t.size() >= 4) {
+                return;
+            }
+            int x = 0;
+            for (int j = i; j < min(n, i + 3); ++j) {
+                x = x * 10 + s[j] - '0';
+                if (x > 255 || (j > i && s[i] == '0')) {
+                    break;
+                }
+                t.push_back(s.substr(i, j - i + 1));
+                dfs(j + 1);
                 t.pop_back();
             }
-        }
-    }
-
-    bool check(string s) {
-        if (s == "") return false;
-        int num = stoi(s);
-        if (num > 255) return false;
-        if (s[0] == '0' && s.size() > 1) return false;
-        return true;
+        };
+        dfs(0);
+        return ans;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
-func restoreIpAddresses(s string) []string {
-	check := func(s string) bool {
-		if i, _ := strconv.Atoi(s); i > 255 {
-			return false
-		}
-		if s[0] == '0' && len(s) > 1 {
-			return false
-		}
-		return true
-	}
-	var ans []string
-	var dfs func(s string, t []string)
-	dfs = func(s string, t []string) {
-		if len(t) == 4 {
-			if s == "" {
-				ans = append(ans, strings.Join(t, "."))
-			}
+func restoreIpAddresses(s string) (ans []string) {
+	n := len(s)
+	t := []string{}
+	var dfs func(int)
+	dfs = func(i int) {
+		if i >= n && len(t) == 4 {
+			ans = append(ans, strings.Join(t, "."))
 			return
 		}
-		for i := 1; i < 4 && i < len(s)+1; i++ {
-			if check(s[0:i]) {
-				t = append(t, s[0:i])
-				dfs(s[i:], t)
-				t = t[0 : len(t)-1]
+		if i >= n || len(t) == 4 {
+			return
+		}
+		x := 0
+		for j := i; j < i+3 && j < n; j++ {
+			x = x*10 + int(s[j]-'0')
+			if x > 255 || (j > i && s[i] == '0') {
+				break
 			}
+			t = append(t, s[i:j+1])
+			dfs(j + 1)
+			t = t[:len(t)-1]
 		}
 	}
-	var t []string
-	dfs(s, t)
-	return ans
+	dfs(0)
+	return
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function restoreIpAddresses(s: string): string[] {
+    const n = s.length;
+    const ans: string[] = [];
+    const t: string[] = [];
+    const dfs = (i: number): void => {
+        if (i >= n && t.length === 4) {
+            ans.push(t.join('.'));
+            return;
+        }
+        if (i >= n || t.length === 4) {
+            return;
+        }
+        let x = 0;
+        for (let j = i; j < i + 3 && j < n; ++j) {
+            x = x * 10 + s[j].charCodeAt(0) - '0'.charCodeAt(0);
+            if (x > 255 || (j > i && s[i] === '0')) {
+                break;
+            }
+            t.push(x.toString());
+            dfs(j + 1);
+            t.pop();
+        }
+    };
+    dfs(0);
+    return ans;
+}
 ```
 
+#### C#
+
+```cs
+public class Solution {
+    private IList<string> ans = new List<string>();
+    private IList<string> t = new List<string>();
+    private int n;
+    private string s;
+
+    public IList<string> RestoreIpAddresses(string s) {
+        n = s.Length;
+        this.s = s;
+        dfs(0);
+        return ans;
+    }
+
+    private void dfs(int i) {
+        if (i >= n && t.Count == 4) {
+            ans.Add(string.Join(".", t));
+            return;
+        }
+        if (i >= n || t.Count == 4) {
+            return;
+        }
+        int x = 0;
+        for (int j = i; j < i + 3 && j < n; ++j) {
+            x = x * 10 + (s[j] - '0');
+            if (x > 255 || (j > i && s[i] == '0')) {
+                break;
+            }
+            t.Add(x.ToString());
+            dfs(j + 1);
+            t.RemoveAt(t.Count - 1);
+        }
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

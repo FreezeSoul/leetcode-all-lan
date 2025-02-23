@@ -1,8 +1,25 @@
+---
+comments: true
+difficulty: Easy
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2200-2299/2206.Divide%20Array%20Into%20Equal%20Pairs/README_EN.md
+rating: 1223
+source: Biweekly Contest 74 Q1
+tags:
+    - Bit Manipulation
+    - Array
+    - Hash Table
+    - Counting
+---
+
+<!-- problem:start -->
+
 # [2206. Divide Array Into Equal Pairs](https://leetcode.com/problems/divide-array-into-equal-pairs)
 
 [中文文档](/solution/2200-2299/2206.Divide%20Array%20Into%20Equal%20Pairs/README.md)
 
 ## Description
+
+<!-- description:start -->
 
 <p>You are given an integer array <code>nums</code> consisting of <code>2 * n</code> integers.</p>
 
@@ -44,13 +61,23 @@ There is no way to divide nums into 4 / 2 = 2 pairs such that the pairs satisfy 
 	<li><code>1 &lt;= nums[i] &lt;= 500</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## Solutions
 
-The first step is to count the number of times each number appears in the array. Since the question asks for pairs of numbers that are part of putting two equal elements together, in other words to see if each number occurs an even number of times.
+<!-- solution:start -->
+
+### Solution 1: Counting
+
+According to the problem description, as long as each element in the array appears an even number of times, the array can be divided into $n$ pairs.
+
+Therefore, we can use a hash table or an array $\textit{cnt}$ to record the number of occurrences of each element, then traverse $\textit{cnt}$. If any element appears an odd number of times, return $\textit{false}$; otherwise, return $\textit{true}$.
+
+The time complexity is $O(n)$, and the space complexity is $O(n)$. Here, $n$ is the length of the array $\textit{nums}$.
 
 <!-- tabs:start -->
 
-### **Python3**
+#### Python3
 
 ```python
 class Solution:
@@ -59,7 +86,7 @@ class Solution:
         return all(v % 2 == 0 for v in cnt.values())
 ```
 
-### **Java**
+#### Java
 
 ```java
 class Solution {
@@ -78,32 +105,36 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
 public:
     bool divideArray(vector<int>& nums) {
-        vector<int> cnt(510);
-        for (int& v : nums) ++cnt[v];
-        for (int& v : cnt)
-            if (v % 2)
+        int cnt[510]{};
+        for (int x : nums) {
+            ++cnt[x];
+        }
+        for (int i = 1; i <= 500; ++i) {
+            if (cnt[i] % 2) {
                 return false;
+            }
+        }
         return true;
     }
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func divideArray(nums []int) bool {
-	cnt := make([]int, 510)
-	for _, v := range nums {
-		cnt[v]++
+	cnt := [510]int{}
+	for _, x := range nums {
+		cnt[x]++
 	}
 	for _, v := range cnt {
-		if v%2 == 1 {
+		if v%2 != 0 {
 			return false
 		}
 	}
@@ -111,16 +142,52 @@ func divideArray(nums []int) bool {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
-
+function divideArray(nums: number[]): boolean {
+    const cnt: Record<number, number> = {};
+    for (const x of nums) {
+        cnt[x] = (cnt[x] || 0) + 1;
+    }
+    return Object.values(cnt).every(x => x % 2 === 0);
+}
 ```
 
-### **...**
+#### Rust
 
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn divide_array(nums: Vec<i32>) -> bool {
+        let mut cnt = HashMap::new();
+        for x in nums {
+            *cnt.entry(x).or_insert(0) += 1;
+        }
+        cnt.values().all(|&v| v % 2 == 0)
+    }
+}
 ```
 
+#### JavaScript
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var divideArray = function (nums) {
+    const cnt = {};
+    for (const x of nums) {
+        cnt[x] = (cnt[x] || 0) + 1;
+    }
+    return Object.values(cnt).every(x => x % 2 === 0);
+};
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

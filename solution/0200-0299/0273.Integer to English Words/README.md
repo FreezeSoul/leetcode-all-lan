@@ -1,10 +1,22 @@
+---
+comments: true
+difficulty: 困难
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0200-0299/0273.Integer%20to%20English%20Words/README.md
+tags:
+    - 递归
+    - 数学
+    - 字符串
+---
+
+<!-- problem:start -->
+
 # [273. 整数转换英文表示](https://leetcode.cn/problems/integer-to-english-words)
 
 [English Version](/solution/0200-0299/0273.Integer%20to%20English%20Words/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>将非负整数 <code>num</code> 转换为其对应的英文表示。</p>
 
@@ -39,15 +51,17 @@
 	<li><code>0 &lt;= num &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
+
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -113,9 +127,7 @@ class Solution:
         return ''.join(res).strip()
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -191,46 +203,7 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    private String[] lt20 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
-        "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-        "Seventeen", "Eighteen", "Nineteen"};
-    private String[] tens
-        = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
-    private String[] thousands = {"Billion", "Million", "Thousand", ""};
-
-    public String numberToWords(int num) {
-        if (num == 0) {
-            return "Zero";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1000000000, j = 0; i > 0; i /= 1000, ++j) {
-            if (num / i == 0) {
-                continue;
-            }
-            sb.append(transfer(num / i)).append(thousands[j]).append(' ');
-            num %= i;
-        }
-        return sb.toString().trim();
-    }
-
-    private String transfer(int num) {
-        if (num == 0) {
-            return "";
-        }
-        if (num < 20) {
-            return lt20[num] + " ";
-        }
-        if (num < 100) {
-            return tens[num / 10] + " " + transfer(num % 10);
-        }
-        return lt20[num / 100] + " Hundred " + transfer(num % 100);
-    }
-}
-```
-
-### **C#**
+#### C#
 
 ```cs
 using System.Collections.Generic;
@@ -323,10 +296,111 @@ public class Solution {
 }
 ```
 
-### **...**
+#### TypeScript
 
+```ts
+function numberToWords(num: number): string {
+    if (num === 0) return 'Zero';
+
+    // prettier-ignore
+    const f = (x: number): string => {
+    const dict1 = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen',]
+    const dict2 = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety',]
+    let ans = ''
+
+    if (x <= 19) ans = dict1[x] ?? ''
+    else if (x < 100) ans = `${dict2[Math.floor(x / 10)]} ${f(x % 10)}`
+    else if (x < 10 ** 3) ans = `${dict1[Math.floor(x / 100)]} Hundred ${f(x % 100)}`
+    else if (x < 10 ** 6) ans = `${f(Math.floor(x / 10 ** 3))} Thousand ${f(x % 10 ** 3)}`
+    else if (x < 10 ** 9) ans = `${f(Math.floor(x / 10 ** 6))} Million ${f(x % 10 ** 6)}`
+    else ans = `${f(Math.floor(x / 10 ** 9))} Billion ${f(x % 10 ** 9)}`
+
+    return ans.trim()
+  }
+
+    return f(num);
+}
 ```
 
+#### JavaScript
+
+```js
+function numberToWords(num) {
+    if (num === 0) return 'Zero';
+
+    // prettier-ignore
+    const f = (x) => {
+    const dict1 = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen',]
+    const dict2 = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety',]
+    let ans = ''
+
+    if (x <= 19) ans = dict1[x] ?? ''
+    else if (x < 100) ans = `${dict2[Math.floor(x / 10)]} ${f(x % 10)}`
+    else if (x < 10 ** 3) ans = `${dict1[Math.floor(x / 100)]} Hundred ${f(x % 100)}`
+    else if (x < 10 ** 6) ans = `${f(Math.floor(x / 10 ** 3))} Thousand ${f(x % 10 ** 3)}`
+    else if (x < 10 ** 9) ans = `${f(Math.floor(x / 10 ** 6))} Million ${f(x % 10 ** 6)}`
+    else ans = `${f(Math.floor(x / 10 ** 9))} Billion ${f(x % 10 ** 9)}`
+
+    return ans.trim()
+  }
+
+    return f(num);
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Java
+
+```java
+class Solution {
+    private String[] lt20 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
+        "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+        "Seventeen", "Eighteen", "Nineteen"};
+    private String[] tens
+        = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    private String[] thousands = {"Billion", "Million", "Thousand", ""};
+
+    public String numberToWords(int num) {
+        if (num == 0) {
+            return "Zero";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1000000000, j = 0; i > 0; i /= 1000, ++j) {
+            if (num / i == 0) {
+                continue;
+            }
+            sb.append(transfer(num / i)).append(thousands[j]).append(' ');
+            num %= i;
+        }
+        return sb.toString().trim();
+    }
+
+    private String transfer(int num) {
+        if (num == 0) {
+            return "";
+        }
+        if (num < 20) {
+            return lt20[num] + " ";
+        }
+        if (num < 100) {
+            return tens[num / 10] + " " + transfer(num % 10);
+        }
+        return lt20[num / 100] + " Hundred " + transfer(num % 100);
+    }
+}
+```
+
+<!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

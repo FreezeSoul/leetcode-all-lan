@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/1000-1099/1046.Last%20Stone%20Weight/README.md
+rating: 1172
+source: 第 137 场周赛 Q1
+tags:
+    - 数组
+    - 堆（优先队列）
+---
+
+<!-- problem:start -->
+
 # [1046. 最后一块石头的重量](https://leetcode.cn/problems/last-stone-weight)
 
 [English Version](/solution/1000-1099/1046.Last%20Stone%20Weight/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>有一堆石头，每块石头的重量都是正整数。</p>
 
@@ -39,11 +52,13 @@
 	<li><code>1 <= stones[i] <= 1000</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：优先队列（大根堆）**
+### 方法一：优先队列（大根堆）
 
 我们将数组 `stones` 所有元素放入大根堆，然后执行循环操作，每次弹出两个元素 $y$ 和 $x$，如果 $x \neq y$，将 $y - x$ 放入大根堆。当堆元素个数小于 $2$ 时，退出循环。
 
@@ -53,9 +68,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -69,9 +82,7 @@ class Solution:
         return 0 if not h else -h[0]
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -92,7 +103,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -116,7 +127,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func lastStoneWeight(stones []int) int {
@@ -136,9 +147,9 @@ func lastStoneWeight(stones []int) int {
 
 type hp struct{ sort.IntSlice }
 
-func (h hp) Less(i, j int) bool  { return h.IntSlice[i] > h.IntSlice[j] }
-func (h *hp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
-func (h *hp) Pop() interface{} {
+func (h hp) Less(i, j int) bool { return h.IntSlice[i] > h.IntSlice[j] }
+func (h *hp) Push(v any)        { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *hp) Pop() any {
 	a := h.IntSlice
 	v := a[len(a)-1]
 	h.IntSlice = a[:len(a)-1]
@@ -148,7 +159,26 @@ func (h *hp) push(v int) { heap.Push(h, v) }
 func (h *hp) pop() int   { return heap.Pop(h).(int) }
 ```
 
-### **JavaScript**
+#### TypeScript
+
+```ts
+function lastStoneWeight(stones: number[]): number {
+    const pq = new MaxPriorityQueue();
+    for (const x of stones) {
+        pq.enqueue(x);
+    }
+    while (pq.size() > 1) {
+        const y = pq.dequeue().element;
+        const x = pq.dequeue().element;
+        if (x !== y) {
+            pq.enqueue(y - x);
+        }
+    }
+    return pq.isEmpty() ? 0 : pq.dequeue().element;
+}
+```
+
+#### JavaScript
 
 ```js
 /**
@@ -171,29 +201,8 @@ var lastStoneWeight = function (stones) {
 };
 ```
 
-### **TypeScript**
-
-```ts
-function lastStoneWeight(stones: number[]): number {
-    const pq = new MaxPriorityQueue();
-    for (const x of stones) {
-        pq.enqueue(x);
-    }
-    while (pq.size() > 1) {
-        const y = pq.dequeue().element;
-        const x = pq.dequeue().element;
-        if (x !== y) {
-            pq.enqueue(y - x);
-        }
-    }
-    return pq.isEmpty() ? 0 : pq.dequeue().element;
-}
-```
-
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

@@ -1,10 +1,24 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2562.Find%20the%20Array%20Concatenation%20Value/README.md
+rating: 1259
+source: 第 332 场周赛 Q1
+tags:
+    - 数组
+    - 双指针
+    - 模拟
+---
+
+<!-- problem:start -->
+
 # [2562. 找出数组的串联值](https://leetcode.cn/problems/find-the-array-concatenation-value)
 
 [English Version](/solution/2500-2599/2562.Find%20the%20Array%20Concatenation%20Value/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个下标从 <strong>0</strong> 开始的整数数组&nbsp;<code>nums</code> 。</p>
 
@@ -71,21 +85,21 @@ nums 只有一个元素，所以我们选中 13 并将其加到串联值上，�
 	<li><code>1 &lt;= nums[i] &lt;= 10<sup>4</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：模拟**
+### 方法一：模拟
 
 从数组两端开始，每次取出一个元素，将其与另一个元素拼接，然后将拼接后的结果加到答案中。重复这个过程，直到数组为空。
 
-时间复杂度 $O(n \times \log M)$，空间复杂度 $O(n \times \log M)$。其中 $n$ 和 $M$ 分别是数组的长度和数组中的最大值。
+时间复杂度 $O(n \times \log M)$，空间复杂度 $O(\log M)$。其中 $n$ 和 $M$ 分别是数组的长度和数组中的最大值。
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -100,9 +114,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -120,7 +132,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -139,7 +151,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func findTheArrayConcVal(nums []int) (ans int64) {
@@ -155,7 +167,7 @@ func findTheArrayConcVal(nums []int) (ans int64) {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function findTheArrayConcVal(nums: number[]): number {
@@ -175,7 +187,7 @@ function findTheArrayConcVal(nums: number[]): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -197,7 +209,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 int getLen(int num) {
@@ -209,7 +221,7 @@ int getLen(int num) {
     return res;
 }
 
-long long findTheArrayConcVal(int *nums, int numsSize) {
+long long findTheArrayConcVal(int* nums, int numsSize) {
     long long ans = 0;
     int i = 0;
     int j = numsSize - 1;
@@ -225,10 +237,41 @@ long long findTheArrayConcVal(int *nums, int numsSize) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn find_the_array_conc_val(nums: Vec<i32>) -> i64 {
+        let mut ans = 0;
+        let mut n = nums.len();
+
+        for i in 0..n / 2 {
+            ans += format!("{}{}", nums[i], nums[n - i - 1])
+                .parse::<i64>()
+                .unwrap();
+        }
+
+        if n % 2 != 0 {
+            ans += nums[n / 2] as i64;
+        }
+
+        ans
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

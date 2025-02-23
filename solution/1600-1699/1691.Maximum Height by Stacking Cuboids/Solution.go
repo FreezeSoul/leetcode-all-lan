@@ -1,4 +1,4 @@
-func maxHeight(cuboids [][]int) (ans int) {
+func maxHeight(cuboids [][]int) int {
 	for _, c := range cuboids {
 		sort.Ints(c)
 	}
@@ -15,14 +15,6 @@ func maxHeight(cuboids [][]int) (ans int) {
 			}
 		}
 		f[i] += cuboids[i][2]
-		ans = max(ans, f[i])
 	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return slices.Max(f)
 }

@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 简单
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/2500-2599/2566.Maximum%20Difference%20by%20Remapping%20a%20Digit/README.md
+rating: 1396
+source: 第 98 场双周赛 Q1
+tags:
+    - 贪心
+    - 数学
+---
+
+<!-- problem:start -->
+
 # [2566. 替换一个数字后的最大差值](https://leetcode.cn/problems/maximum-difference-by-remapping-a-digit)
 
 [English Version](/solution/2500-2599/2566.Maximum%20Difference%20by%20Remapping%20a%20Digit/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给你一个整数&nbsp;<code>num</code>&nbsp;。你知道 Danny Mittal 会偷偷将 <code>0</code>&nbsp;到 <code>9</code>&nbsp;中的一个数字 <strong>替换</strong> 成另一个数字。</p>
 
@@ -50,11 +63,13 @@
 	<li><code>1 &lt;= num &lt;= 10<sup>8</sup></code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-**方法一：贪心**
+### 方法一：贪心
 
 我们先将数字转为字符串 $s$。
 
@@ -68,9 +83,7 @@
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -83,9 +96,7 @@ class Solution:
         return num - mi
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -102,7 +113,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -133,7 +144,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func minMaxDifference(num int) int {
@@ -162,7 +173,7 @@ func minMaxDifference(num int) int {
 }
 ```
 
-### **TypeScript**
+#### TypeScript
 
 ```ts
 function minMaxDifference(num: number): number {
@@ -177,7 +188,7 @@ function minMaxDifference(num: number): number {
 }
 ```
 
-### **Rust**
+#### Rust
 
 ```rust
 impl Solution {
@@ -197,7 +208,7 @@ impl Solution {
 }
 ```
 
-### **C**
+#### C
 
 ```c
 int getLen(int num) {
@@ -211,7 +222,7 @@ int getLen(int num) {
 
 int minMaxDifference(int num) {
     int n = getLen(num);
-    int *nums = malloc(sizeof(int) * n);
+    int* nums = malloc(sizeof(int) * n);
     int t = num;
     for (int i = n - 1; i >= 0; i--) {
         nums[i] = t % 10;
@@ -238,10 +249,53 @@ int minMaxDifference(int num) {
 }
 ```
 
-### **...**
+<!-- tabs:end -->
 
-```
+<!-- solution:end -->
 
+<!-- solution:start -->
+
+### 方法二
+
+<!-- tabs:start -->
+
+#### Rust
+
+```rust
+impl Solution {
+    pub fn min_max_difference(num: i32) -> i32 {
+        let mut s = num.to_string().into_bytes();
+        let first = s[0];
+        for i in 0..s.len() {
+            if s[i] == first {
+                s[i] = b'0';
+            }
+        }
+        let mi = String::from_utf8_lossy(&s).parse::<i32>().unwrap();
+
+        let mut t = num.to_string().into_bytes();
+        for i in 0..t.len() {
+            if t[i] != b'9' {
+                let second = t[i];
+
+                for j in 0..t.len() {
+                    if t[j] == second {
+                        t[j] = b'9';
+                    }
+                }
+
+                let mx = String::from_utf8_lossy(&t).parse::<i32>().unwrap();
+                return mx - mi;
+            }
+        }
+
+        num - mi
+    }
+}
 ```
 
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->

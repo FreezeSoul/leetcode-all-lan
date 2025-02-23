@@ -1,10 +1,23 @@
+---
+comments: true
+difficulty: 中等
+edit_url: https://github.com/doocs/leetcode/edit/main/solution/0300-0399/0397.Integer%20Replacement/README.md
+tags:
+    - 贪心
+    - 位运算
+    - 记忆化搜索
+    - 动态规划
+---
+
+<!-- problem:start -->
+
 # [397. 整数替换](https://leetcode.cn/problems/integer-replacement)
 
 [English Version](/solution/0300-0399/0397.Integer%20Replacement/README_EN.md)
 
 ## 题目描述
 
-<!-- 这里写题目描述 -->
+<!-- description:start -->
 
 <p>给定一个正整数&nbsp;<code>n</code> ，你可以做如下操作：</p>
 
@@ -49,17 +62,17 @@
 	<li><code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code></li>
 </ul>
 
+<!-- description:end -->
+
 ## 解法
 
-<!-- 这里可写通用的实现逻辑 -->
+<!-- solution:start -->
 
-偶数直接除以 2，对于奇数，若二进制形式如 `0bxxx11`，并且不为 3，则进行加 1，否则进行减 1。
+### 方法一
 
 <!-- tabs:start -->
 
-### **Python3**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Python3
 
 ```python
 class Solution:
@@ -76,9 +89,7 @@ class Solution:
         return ans
 ```
 
-### **Java**
-
-<!-- 这里可写当前语言的特殊实现逻辑 -->
+#### Java
 
 ```java
 class Solution {
@@ -99,7 +110,7 @@ class Solution {
 }
 ```
 
-### **C++**
+#### C++
 
 ```cpp
 class Solution {
@@ -121,7 +132,7 @@ public:
 };
 ```
 
-### **Go**
+#### Go
 
 ```go
 func integerReplacement(n int) int {
@@ -140,10 +151,8 @@ func integerReplacement(n int) int {
 }
 ```
 
-### **...**
-
-```
-
-```
-
 <!-- tabs:end -->
+
+<!-- solution:end -->
+
+<!-- problem:end -->
